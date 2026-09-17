@@ -22,6 +22,7 @@ from app.domain.operations import transaction_lock
 from app.domain.work_graph import canonical_work, graph_lock
 from app.importing.filesystem import relative_parts
 from app.importing.inspection import InspectedFile, InspectionSnapshot
+from app.importing.metadata import ExportMetadata, initial_sidecars
 from app.importing.naming import (
     ImportGroup,
     ImportPlan,
@@ -85,6 +86,7 @@ class FrozenDocument(StrictModel):
     unselected_groups: list[str]
     publication_available: bool
     pending_checks: list[str]
+    initial_sidecars: dict[str, dict[str, str]] = Field(default_factory=dict)
 
 
 class FrozenPlanView(BaseModel):
@@ -216,7 +218,7 @@ async def freeze_plan(inspection_id: UUID, body: FreezeInput, admin: Admin, db: 
         raise HTTPException(422, "Choose each inspected group once")
     observed = {group["key"]: group for group in row.snapshot["groups"]}
     files = {file["path"]: file for file in row.snapshot["files"]}
-    groups = []
+    groups, sidecars = [], {}
     await graph_lock(db)
     for selection in body.selections:
         group = observed.get(selection.group_key)
@@ -257,14 +259,39 @@ async def freeze_plan(inspection_id: UUID, body: FreezeInput, admin: Admin, db: 
                     original_year=work.publication_year,
                     edition_year=version.publication_year if version.medium == "ebook" else None,
                     recording_year=version.publication_year if version.medium == "audio" else None,
+                    isbn=next(
+                        (
+                            version.identifiers[key]
+                            for key in ("isbn13", "isbn10", "isbn")
+                            if isinstance(version.identifiers.get(key), str)
+                        ),
+                        None,
+                    ),
+                    asin=version.identifiers.get("asin")
+                    if isinstance(version.identifiers.get("asin"), str)
+                    else None,
                 ),
                 files=[PlannedSourceFile(**file) for file in group["files"]],
             )
         )
+        try:
+            sidecars[str(groups[-1].id)] = initial_sidecars(
+                ExportMetadata(
+                    medium=version.medium,
+                    naming=groups[-1].metadata,
+                    description=work.description,
+                )
+            )
+        except ValueError as error:
+            raise HTTPException(
+                422,
+                "Resolved book metadata cannot be exported; correct invalid or oversized fields",
+            ) from error
     plan = plan_import(groups, profile)
     selected_files = sorted({file.path for group in groups for file in group.files})
     document = {
-        "schema_version": 1,
+        "schema_version": 2,
+        "initial_sidecars": sidecars,
         "inspection_revision": row.snapshot["revision"],
         "profile": profile.model_dump(),
         "plan": plan.model_dump(mode="json"),

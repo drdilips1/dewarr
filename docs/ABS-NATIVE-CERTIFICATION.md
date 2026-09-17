@@ -16,7 +16,7 @@ Use the installed ABS-compatible Node executable on other hosts. The clone comma
 
 Tested: ABS 2.36.1, commit `4b67c170ce46fd6ba770dc55c189ca13fef89b02`, macOS arm64, Node 24, Python 3.13.14 and ffmpeg/ffprobe 8.1.2. The upstream server failed to start under this host's Node 26.7 because its `buffer-equal-constant-time` dependency expects `SlowBuffer`. No upstream dependency patch or audit fix was applied. Optional SQLite Unicode extension was not loaded. This does not certify the production Docker image, other runtimes or all ABS API behavior.
 
-## Seven passing item cases
+## Eight passing item cases
 
 | Case | Verified result |
 |---|---|
@@ -27,15 +27,16 @@ Tested: ABS 2.36.1, commit `4b67c170ce46fd6ba770dc55c189ca13fef89b02`, macOS arm
 | Two-track recording, series position 1.5 | One audio item with both files and decimal series sequence |
 | Nested Jordan Lee recording | One leaf item; OPF supplies correct title, author and series despite extra folder depth |
 | Nested Casey Reed recording | Separate leaf item with correct narrator and metadata |
+| Unicode title and XML metacharacters | Exact clean title survives production OPF export and real ABS parsing |
 
-All media are generated original synthetic EPUBs or short silent audio. The harness uses the production filesystem publisher primitive to hardlink complete items, writes fixture OPF metadata, retries each publication and checks source hashes/inodes. It checks the real API's authorization, library listing, manual scan, paginated membership, expanded batch items and individual item retrieval through our adapter. It verifies exact media paths, counts, ownership classification, author/title/narrator/year and series metadata. A second manual scan preserves item IDs and count. The server uses a URL prefix to exercise prefixed adapter endpoints.
+All media are generated original synthetic EPUBs or short silent audio. The harness uses the production filesystem publisher primitive to hardlink complete items, writes OPF through the production initial metadata exporter, retries each publication and checks source hashes/inodes. It checks the real API's authorization, library listing, manual scan, paginated membership, expanded batch items and individual item retrieval through our adapter. It verifies exact media paths, counts, ownership classification, author/title/narrator/year and series metadata. A second manual scan preserves item IDs and count. The server uses a URL prefix to exercise prefixed adapter endpoints.
 
-The default ABS metadata precedence applies the OPF fixture after folder and audio-tag metadata. The fixture deliberately supplies a different embedded audio title and asserts that the OPF title wins. This does not establish that an arbitrary user's library has compatible precedence.
+The default ABS metadata precedence applies the generated OPF after folder and audio-tag metadata. The fixture deliberately supplies a different embedded audio title and asserts that the OPF title wins. This does not establish that an arbitrary user's library has compatible precedence.
 
 ## Explicit boundaries
 
-The script disables the watcher and triggers manual scans. Watcher-driven imports, production sidecar generation, backend mapping verification, DB publication reservations/permissions and the app's final import-confirmation workflow remain pending. So do broader format, companion/omnibus, non-Latin, disc-order, deletion/move, user-progress, permission and crash/scanner matrices. The two-track case verifies membership, not the complete playback-order matrix.
+The script disables the watcher and triggers manual scans. The actual backend path-existence endpoint passes an absent → visible → absent empty-folder challenge, verifying the worker/ABS root mapping. Library media settings and OPF precedence are read through the real API. Watcher-driven imports, generated covers, DB publication reservations/permissions and the app's final import-confirmation workflow remain pending. So do broader format, companion/omnibus, wider international metadata, disc-order, deletion/move, user-progress, permission and crash/scanner matrices. The two-track case verifies membership, not the complete playback-order matrix.
 
-Nested layouts remain preview-only in the app. No complete stage or acceptance gate is marked passed from these seven checks. Logs and sanitized JSON evidence are saved in ignored `.local/evidence/abs-native.*`; server credentials and fixture databases are not retained in the JSON report.
+Nested layouts remain preview-only in the app. No complete stage or acceptance gate is marked passed from these eight checks. Logs and sanitized JSON evidence are saved in ignored `.local/evidence/abs-native.*`; server credentials and fixture databases are not retained in the JSON report.
 
 Reference: [pinned ABS source](https://github.com/advplyr/audiobookshelf/tree/v2.36.1), [OPF parser](https://github.com/advplyr/audiobookshelf/blob/v2.36.1/server/utils/parsers/parseOpfMetadata.js), [library metadata defaults](https://github.com/advplyr/audiobookshelf/blob/v2.36.1/server/models/Library.js).

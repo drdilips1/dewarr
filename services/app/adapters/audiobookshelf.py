@@ -1,6 +1,7 @@
 import hashlib
 import json
 import re
+from pathlib import PurePosixPath
 from typing import Any
 
 from pydantic import BaseModel, Field, ValidationError
@@ -43,6 +44,27 @@ class ABSItem(BaseModel):
     invalid: bool = False
     full_audio: bool = False
     full_ebook: bool = False
+
+
+class ABSImportConfiguration(BaseModel):
+    library_id: str
+    folders: list[str]
+    audiobooks_only: bool
+    watcher_enabled: bool
+    metadata_precedence: list[str]
+
+
+def backend_path(value):
+    if (
+        not isinstance(value, str)
+        or not value.startswith("/")
+        or value == "/"
+        or "\\" in value
+        or any(part in {".", "..", ""} for part in value[1:].split("/"))
+        or any(ord(character) < 32 for character in value)
+    ):
+        raise ValueError("Backend library path must be a confined absolute POSIX path")
+    return str(PurePosixPath(value))
 
 
 def parse_item(value: dict) -> ABSItem:
@@ -132,6 +154,74 @@ def parse_item(value: dict) -> ABSItem:
 
 class Audiobookshelf(JsonEndpoint):
     page_size = 100
+
+    async def import_configuration(self, library_id: str) -> ABSImportConfiguration:
+        response = await self.request("GET", f"api/libraries/{external_id(library_id)}")
+        try:
+            if response["id"] != library_id or response["mediaType"] != "book":
+                raise ValueError("Unexpected library identity or type")
+            folders = response["folders"]
+            if not isinstance(folders, list) or not folders:
+                raise ValueError("Missing library roots")
+            roots = [
+                backend_path(folder.get("fullPath") or folder.get("path")) for folder in folders
+            ]
+            settings = response["settings"]
+            audio_only, disabled = settings["audiobooksOnly"], settings["disableWatcher"]
+            precedence = settings["metadataPrecedence"]
+            if (
+                type(audio_only) is not bool
+                or type(disabled) is not bool
+                or not isinstance(precedence, list)
+                or not all(isinstance(value, str) for value in precedence)
+                or len(set(precedence)) != len(precedence)
+            ):
+                raise ValueError("Invalid import settings")
+            return ABSImportConfiguration(
+                library_id=library_id,
+                folders=roots,
+                audiobooks_only=audio_only,
+                watcher_enabled=not disabled,
+                metadata_precedence=precedence,
+            )
+        except (KeyError, TypeError, ValueError, AttributeError) as error:
+            raise AdapterError(
+                FailureKind.PARSER,
+                "Audiobookshelf library import settings are incomplete or unsupported.",
+            ) from error
+
+    async def path_exists(self, root: str, name: str) -> bool:
+        # This read-only upstream POST also requires ABS upload permission.
+        backend_path(root)
+        if not re.fullmatch(r"book-search-check-[a-f0-9]{32}", name):
+            raise ValueError("Only generated mapping challenge names are permitted")
+        try:
+            response = await self.request(
+                "POST", "api/filesystem/pathexists", json={"folderPath": root, "directory": name}
+            )
+        except AdapterError as error:
+            if error.kind == FailureKind.PERMISSION:
+                raise AdapterError(
+                    FailureKind.PERMISSION,
+                    "ABS upload permission is required for its folder-mapping check. "
+                    "Inventory-only connections can still sync.",
+                ) from error
+            raise
+        if type(response.get("exists")) is not bool:
+            raise AdapterError(
+                FailureKind.PARSER, "Audiobookshelf did not return a path check result."
+            )
+        return response["exists"]
+
+    async def server_version(self) -> str:
+        response = await self.request("GET", "status")
+        if response.get("app") != "audiobookshelf" or not isinstance(
+            response.get("serverVersion"), str
+        ):
+            raise AdapterError(
+                FailureKind.PARSER, "Audiobookshelf did not identify its server version."
+            )
+        return response["serverVersion"]
 
     async def authorize(self) -> tuple[Capabilities, str]:
         response = await self.request("POST", "api/authorize", json={})

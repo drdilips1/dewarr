@@ -4159,6 +4159,16 @@
             },
             "type": "array",
             "title": "Pending Checks"
+          },
+          "initial_sidecars": {
+            "additionalProperties": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "type": "object",
+            "title": "Initial Sidecars"
           }
         },
         "additionalProperties": false,

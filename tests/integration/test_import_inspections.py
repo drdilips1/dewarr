@@ -106,6 +106,10 @@ async def test_inspection_worker_snapshot_and_frozen_plan_survive_replay(
     document = plans[0].json()["document"]
     assert document["files"][0]["sha256"] == record["snapshot"]["files"][0]["sha256"]
     assert document["plan"]["expected_items"] == 1
+    assert document["schema_version"] == 2
+    exported = document["initial_sidecars"][document["groups"][0]["id"]]
+    assert set(exported) == {"metadata.opf"}
+    assert document["groups"][0]["metadata"]["title"] in exported["metadata.opf"]
     assert not document["publication_available"]
     await client.put(
         "/api/organization/settings",

@@ -480,7 +480,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await expect(
     page.getByRole("region", { name: "Destination ebooks" }),
   ).toContainText(
-    "Filesystem route verified; ABS compatibility is still required",
+    "Filesystem and ABS folder mapping verified; publication workflow is still required",
   );
   await page.screenshot({
     path: testInfo.outputPath("destinations-mobile.png"),

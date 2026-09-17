@@ -37,9 +37,8 @@ export default function Destinations() {
         </div>
       </div>
       <p className="notice">
-        Filesystem checks are available. Publishing from the app remains
-        disabled until the import workflow and Audiobookshelf compatibility
-        checks are complete.
+        Filesystem and Audiobookshelf folder checks are available. Publishing
+        from the app remains disabled until the import workflow is complete.
       </p>
       {!query.data.roots.length && (
         <p className="notice">
@@ -221,8 +220,8 @@ function DestinationEditor({
           />
         </label>
         <p className="muted">
-          The absolute root path inside Audiobookshelf. Its container may see a
-          different path from the worker.
+          The absolute folder root configured in Audiobookshelf. The test
+          verifies that Audiobookshelf and the worker see the same directory.
         </p>
         <label>
           Import method
@@ -270,13 +269,15 @@ function DestinationEditor({
       </div>
       <p className="muted">
         The test creates and removes its own temporary files and empty folders.
-        It checks an actual selected file's link route without changing its
-        bytes.
+        It checks the selected file's link route and verifies the folder mapping
+        through Audiobookshelf. The ABS connection needs upload permission for
+        its path check; no book is uploaded.
       </p>
       <Notice error={probe.error || status.error} />
-      {status.data?.operation && (
-        <p role="status">{status.data.operation.message}</p>
-      )}
+      {status.data?.operation &&
+        status.data.operation.message !== report?.message && (
+          <p role="status">{status.data.operation.message}</p>
+        )}
       {report && (
         <p className={report.status === "verified" ? "success" : "notice"}>
           {String(report.message)}

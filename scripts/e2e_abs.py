@@ -5,6 +5,8 @@ from pathlib import Path
 
 from fastapi import FastAPI, Header, HTTPException, Request
 
+from app.config import get_settings
+
 app = FastAPI()
 catalog_state = {"narrator": "Sample Narrator"}
 item = json.loads(
@@ -13,7 +15,7 @@ item = json.loads(
 
 
 @app.api_route("/abs/{path:path}", methods=["GET", "POST"])
-async def endpoint(path: str, authorization: str = Header(default="")):
+async def endpoint(path: str, request: Request, authorization: str = Header(default="")):
     if authorization != "Bearer browser-abs-fixture-token":
         raise HTTPException(401)
     if path == "api/authorize":
@@ -23,6 +25,35 @@ async def endpoint(path: str, authorization: str = Header(default="")):
         }
     if path == "api/libraries":
         return {"libraries": [{"id": "library-one", "name": "Fixture books", "mediaType": "book"}]}
+    if path == "status":
+        return {"app": "audiobookshelf", "serverVersion": "2.36.1"}
+    if path == "api/libraries/library-one":
+        return {
+            "id": "library-one",
+            "mediaType": "book",
+            "folders": [{"fullPath": "/fixture/books"}],
+            "settings": {
+                "audiobooksOnly": False,
+                "disableWatcher": False,
+                "metadataPrecedence": [
+                    "folderStructure",
+                    "audioMetatags",
+                    "opfFile",
+                    "absMetadata",
+                ],
+            },
+        }
+    if path == "api/filesystem/pathexists":
+        body = await request.json()
+        if (
+            body["folderPath"] != "/fixture/books"
+            or not body["directory"].startswith("book-search-check-")
+            or "/" in body["directory"]
+        ):
+            raise HTTPException(400)
+        return {
+            "exists": (get_settings().import_destinations["ebooks"] / body["directory"]).is_dir()
+        }
     if path == "api/libraries/library-one/items":
         return {"results": [{"id": item["id"], "updatedAt": 1}], "total": 1}
     if path == "api/items/batch/get":

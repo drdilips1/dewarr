@@ -18,6 +18,8 @@ from app.db.models import (
 )
 from app.importing import destinations
 from app.jobs.queue import get_queue
+from app.security import encrypt_secrets
+from tests.abs_import_fixture import ImportBackendFixture
 from tests.integration.test_import_inspections import submit
 from tests.media_fixtures import epub
 
@@ -31,6 +33,8 @@ async def route(client, admin, database, tmp_path, monkeypatch):
     epub(source / "pack/book.epub")
     target.mkdir()
     stage.mkdir(mode=0o700)
+    backend = ImportBackendFixture(target)
+    monkeypatch.setattr(destinations, "Audiobookshelf", backend.client)
     settings = get_settings()
     monkeypatch.setattr(settings, "import_sources", {"fixture": source})
     monkeypatch.setattr(settings, "import_destinations", {"ebooks": target})
@@ -40,7 +44,7 @@ async def route(client, admin, database, tmp_path, monkeypatch):
             kind="audiobookshelf",
             name="Synthetic backend",
             base_url="http://fixture",
-            encrypted_secrets="fixture-not-a-credential",
+            encrypted_secrets=encrypt_secrets({"token": "private-import-token"}),
             enabled=True,
         )
         work = Work(title="First Harbor", authors=["Alex Morgan"])
@@ -82,6 +86,7 @@ async def route(client, admin, database, tmp_path, monkeypatch):
     )
     assert response.status_code == 200, response.text
     return {
+        "backend": backend,
         "destination": response.json(),
         "plan_id": plan.json()["id"],
         "source": source,
@@ -139,6 +144,73 @@ async def test_stale_edits_and_source_configuration_invalidate_probe(client, adm
     view = (await client.get("/api/organization/destinations")).json()[0]
     assert view["probe"] is None
     assert (await start_probe(client, route, key="new-source-path")).status_code == 409
+
+
+async def test_changed_backend_credentials_invalidate_recorded_mapping(
+    client, admin, database, route
+):
+    await start_probe(client, route)
+    await get_queue().run_worker_async(wait=False, concurrency=1)
+    assert (await client.get("/api/organization/destinations")).json()[0]["probe"][
+        "status"
+    ] == "verified"
+    async with database() as db, db.begin():
+        library = await db.get(Library, UUID(route["library_id"]))
+        integration = await db.get(Integration, library.integration_id)
+        integration.credential_generation += 1
+    current = (await client.get("/api/organization/destinations")).json()[0]
+    assert current["probe"] is None and current["revision"] != route["destination"]["revision"]
+    assert (await start_probe(client, route, key="changed-credentials")).status_code == 409
+
+
+async def test_credential_change_during_remote_challenge_discards_result(
+    client, admin, database, route
+):
+    changed = False
+
+    async def rotate(name):
+        nonlocal changed
+        if (route["target"] / name).exists() and not changed:
+            async with database() as db, db.begin():
+                library = await db.get(Library, UUID(route["library_id"]))
+                integration = await db.get(Integration, library.integration_id)
+                integration.credential_generation += 1
+            changed = True
+
+    route["backend"].before_exists = rotate
+    response = await start_probe(client, route)
+    await get_queue().run_worker_async(wait=False, concurrency=1)
+    assert changed and not list(route["target"].iterdir())
+    assert (await client.get("/api/organization/destinations")).json()[0]["probe"] is None
+    async with database() as db:
+        operation = await db.get(Operation, UUID(response.json()["id"]))
+        assert operation.status == "failed" and "discarded" in operation.message
+
+
+async def test_wrong_backend_mount_is_a_durable_actionable_failure(client, admin, route, tmp_path):
+    different = tmp_path.resolve() / "wrong-mount"
+    different.mkdir()
+    route["backend"].root = different
+    await start_probe(client, route)
+    await get_queue().run_worker_async(wait=False, concurrency=1)
+    report = (await client.get("/api/organization/destinations")).json()[0]["probe"]
+    assert report["status"] == "failed" and "same library folder" in report["message"]
+    assert not list(route["target"].iterdir()) and not list(route["stage"].iterdir())
+
+
+async def test_unreadable_backend_secret_finishes_with_repair_message(
+    client, admin, database, route
+):
+    response = await start_probe(client, route)
+    async with database() as db, db.begin():
+        library = await db.get(Library, UUID(route["library_id"]))
+        integration = await db.get(Integration, library.integration_id)
+        integration.encrypted_secrets = "invalid-encrypted-fixture"
+    await get_queue().run_worker_async(wait=False, concurrency=1)
+    async with database() as db:
+        operation = await db.get(Operation, UUID(response.json()["id"]))
+        assert operation.status == "failed" and "save the connection token" in operation.message
+    assert not route["backend"].path_checks and not list(route["target"].iterdir())
 
 
 async def test_destination_edit_during_probe_discards_stale_evidence(

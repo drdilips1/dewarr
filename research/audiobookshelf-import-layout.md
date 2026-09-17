@@ -1,6 +1,6 @@
 # Audiobookshelf import and organization contract
 
-Planning specification, September 17, 2026. Source inspection and current documentation inform this design; seven synthetic cases now pass against a running ABS 2.36.1 server; see [the bounded certification evidence](../docs/ABS-NATIVE-CERTIFICATION.md). The full compatibility matrix remains pending. This refines [the architecture](../PRODUCT-ARCHITECTURE.md) and [collection handling](metadata-and-collections.md). No existing library is being reorganized.
+Planning specification, September 17, 2026. Source inspection and current documentation inform this design; eight synthetic cases now pass against a running ABS 2.36.1 server; see [the bounded certification evidence](../docs/ABS-NATIVE-CERTIFICATION.md). The full compatibility matrix remains pending. This refines [the architecture](../PRODUCT-ARCHITECTURE.md) and [collection handling](metadata-and-collections.md). No existing library is being reorganized.
 
 ## Backend constraints we must respect
 

@@ -1428,6 +1428,12 @@ export interface components {
       publication_available: boolean;
       /** Pending Checks */
       pending_checks: string[];
+      /** Initial Sidecars */
+      initial_sidecars?: {
+        [key: string]: {
+          [key: string]: string;
+        };
+      };
     };
     /** FrozenPlanView */
     FrozenPlanView: {

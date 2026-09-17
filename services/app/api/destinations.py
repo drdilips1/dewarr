@@ -56,8 +56,8 @@ class DestinationView(StrictModel):
     publication_available: bool = False
 
 
-def view(row):
-    configuration = destination_configuration(row)
+async def view(db, row):
+    configuration = await destination_configuration(db, row)
     revision = fingerprint(configuration)
     probe = row.probe if row.probe and row.probe.get("configuration_revision") == revision else None
     if probe and str(get_settings().import_sources.get(probe.get("source_key"))) != probe.get(
@@ -86,7 +86,7 @@ async def destination_roots(admin: Admin):
 @router.get("/destinations", response_model=list[DestinationView])
 async def destinations(admin: Admin, db: Database):
     return [
-        view(row)
+        await view(db, row)
         for row in (
             await db.scalars(select(ImportDestination).order_by(ImportDestination.root_key))
         ).all()
@@ -106,7 +106,7 @@ async def save_destination(root_key: str, body: DestinationInput, admin: Admin, 
     row = await db.scalar(
         select(ImportDestination).where(ImportDestination.root_key == root_key).with_for_update()
     )
-    if row and view(row).revision != body.expected_revision:
+    if row and (await view(db, row)).revision != body.expected_revision:
         raise HTTPException(409, "Destination settings changed; reload before saving")
     if not row:
         if body.expected_revision:
@@ -119,7 +119,7 @@ async def save_destination(root_key: str, body: DestinationInput, admin: Admin, 
     await db.flush()
     db.add(AuditEvent(actor_id=admin.id, action="organization.destination.saved", entity_id=row.id))
     await db.commit()
-    return view(row)
+    return await view(db, row)
 
 
 class ProbeInput(StrictModel):
@@ -139,9 +139,9 @@ async def probe_destination(
     row = await db.scalar(
         select(ImportDestination).where(ImportDestination.id == destination_id).with_for_update()
     )
-    if not row or not view(row).configured:
+    if not row or not (await view(db, row)).configured:
         raise HTTPException(422, "Configure destination and private staging roots first")
-    if view(row).revision != body.expected_revision:
+    if (await view(db, row)).revision != body.expected_revision:
         raise HTTPException(409, "Destination settings changed; review them before probing")
     frozen = await db.scalar(
         select(FrozenImportPlan).where(
@@ -151,7 +151,7 @@ async def probe_destination(
     if not frozen:
         raise HTTPException(404, "Import plan not found")
     document = frozen.document
-    configuration = destination_configuration(row)
+    configuration = await destination_configuration(db, row)
     source = document["source"]
     if str(get_settings().import_sources.get(source["key"])) != source["path"]:
         raise HTTPException(409, "Download root changed; inspect the files again")

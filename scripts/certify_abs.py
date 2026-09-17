@@ -19,13 +19,14 @@ import tempfile
 import time
 from pathlib import Path
 from uuid import uuid4
-from xml.sax.saxutils import escape, quoteattr
 
 import httpx
 
 from app.adapters.audiobookshelf import Audiobookshelf
+from app.importing.backend import verify_backend
 from app.importing.inspection import inspect_download
-from app.importing.naming import fingerprint
+from app.importing.metadata import ExportMetadata, initial_sidecars
+from app.importing.naming import NamingMetadata, fingerprint
 from app.importing.publication import PublicationSpec, PublishFile, publish_item
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -33,23 +34,6 @@ sys.path.insert(0, str(ROOT))
 from tests.media_fixtures import audio, epub  # noqa: E402
 
 ABS_COMMIT = "4b67c170ce46fd6ba770dc55c189ca13fef89b02"
-
-
-def sidecar(title, narrator=None, sequence="1"):
-    """Fixture OPF only; production metadata export is a separate contract."""
-    narrator_xml = f'<dc:creator opf:role="nrt">{escape(narrator)}</dc:creator>' if narrator else ""
-    return (
-        '<?xml version="1.0" encoding="UTF-8"?>'
-        '<package xmlns="http://www.idpf.org/2007/opf" version="2.0">'
-        '<metadata xmlns:dc="http://purl.org/dc/elements/1.1/" '
-        'xmlns:opf="http://www.idpf.org/2007/opf">'
-        f"<dc:title>{escape(title)}</dc:title>"
-        '<dc:creator opf:role="aut">Alex Morgan</dc:creator>'
-        f"{narrator_xml}<dc:language>en</dc:language><dc:date>2024</dc:date>"
-        '<meta name="calibre:series" content="Harbor Stories"/>'
-        f'<meta name="calibre:series_index" content={quoteattr(sequence)}/>'
-        "</metadata></package>"
-    )
 
 
 def publish_fixture(root, name, folder, *, title="First Harbor", narrator=None, tracks=1):
@@ -85,7 +69,21 @@ def publish_fixture(root, name, folder, *, title="First Harbor", narrator=None, 
         staging_root=root / "staging",
         folder=folder,
         files=files,
-        sidecars={"metadata.opf": sidecar(title, narrator, "1.5" if tracks > 1 else "1")},
+        sidecars=initial_sidecars(
+            ExportMetadata(
+                medium="audio" if narrator else "ebook",
+                naming=NamingMetadata(
+                    title=title,
+                    authors=["Alex Morgan"],
+                    narrators=[narrator] if narrator else [],
+                    series="Harbor Stories",
+                    sequence="1.5" if tracks > 1 else "1",
+                    language="en",
+                    recording_year=2024 if narrator else None,
+                    edition_year=None if narrator else 2024,
+                ),
+            )
+        ),
     )
     receipt = publish_item(spec)
     assert receipt["state"] == "published"
@@ -169,7 +167,15 @@ async def exercise(base, root, process):
                     narrator=narrator,
                 )
             )
+        expected.append(
+            publish_fixture(
+                root, "unicode", "Alex Morgan/Harbor Stories/海と港", title="海と港 & Roads <One>"
+            )
+        )
         async with Audiobookshelf(base, token) as adapter:
+            backend_report = await verify_backend(
+                adapter, library_id, str(root / "library"), root / "library", "ebook"
+            )
             capabilities, _ = await adapter.authorize()
             assert "scan" in capabilities.operations
             assert [item["id"] for item in await adapter.libraries()] == [library_id]
@@ -211,7 +217,14 @@ async def exercise(base, root, process):
             second_page, second_total = await adapter.page(library_id, 0)
             assert second_total == total
             assert {row["id"] for row in page} == {row["id"] for row in second_page}
-            return {"server_version": status["serverVersion"], "cases": report}
+            return {
+                "server_version": status["serverVersion"],
+                "cases": report,
+                "backend_checks": {
+                    "root_mapping": backend_report["root_mapping"],
+                    "scan_capable": backend_report["scan_capable"],
+                },
+            }
 
 
 def main():
@@ -272,7 +285,7 @@ def main():
             node=subprocess.check_output([args.node, "--version"], text=True).strip(),
             platform=platform.platform(),
             boundaries="Native server/API/manual scanner and publisher primitives only",
-            exclusions=["watcher", "Docker", "production metadata exporter", "import workflow"],
+            exclusions=["watcher", "Docker", "import workflow"],
         )
         args.evidence.write_text(json.dumps(report, indent=2) + "\n")
         print(f"ABS {report['server_version']}: {len(report['cases'])} cases passed")
