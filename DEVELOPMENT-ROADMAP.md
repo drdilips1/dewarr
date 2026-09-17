@@ -1,6 +1,6 @@
 # Product and development handoff
 
-September 17, 2026 · v1.2 planning guide, not a claim of implemented functionality.
+September 17, 2026 · v1.3 planning guide, not a claim of implemented functionality.
 
 Build a self-hosted book discovery, curation and acquisition app above Audiobookshelf. The experience should feel familiar to a Seerr user: browse attractive shelves, open one book page, see what is already owned, inspect available versions and sources, and request missing media. The app also owns organizing its newly downloaded files so that Audiobookshelf can serve them correctly.
 
@@ -117,3 +117,5 @@ At each stage start, split its packages into reviewable tickets with an owner, a
 The [capability activation and readiness matrix](IMPLEMENTATION-PLAN.md#10-capability-activation-and-integration-readiness) specifies when each user-facing workflow can be enabled, its installation prerequisites and its useful fallback. It also assigns unresolved integration questions to work packages and provides a ticket template for the development handoff.
 
 Use the [end-to-end product walkthrough](PRD.md#15-end-to-end-product-acceptance-walkthrough) as the common trilogy/list/pack fixture throughout development. The [stage evidence scopes](ACCEPTANCE-PLAN.md#7-stage-evidence-scopes) separate early subsets from full release acceptance, so catalog work is not blocked by a downloader that belongs to a later stage. Production v1 still requires the complete integrated evidence.
+
+The v1.3 handoff also fixes [settings precedence and in-flight changes](PRD.md#effective-settings-and-changes-during-acquisition-fr-20fr-23-fr-27-fr-33): show effective values, retain each request reason's constraints, freeze submitted choices and import manifests, and recheck current permissions before side effects. Sample naming previews are usable before filesystem setup; only inspected, validated plans can qualify for publication. Unsupported archives stay reviewable without being mistaken for supported book containers or directly hardlinkable media.

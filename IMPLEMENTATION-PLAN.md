@@ -1,6 +1,6 @@
 # End-to-end development plan
 
-Planning baseline v1.2 · September 17, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
+Planning baseline v1.3 · September 17, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
 
 This plan implements [the PRD](PRD.md) using [the researched decisions](IMPLEMENTATION-DECISIONS.md). [Acceptance Plan](ACCEPTANCE-PLAN.md) specifies the evidence required at each gate. A stage is complete only when its exit gate passes; this document does not report completed engineering or tested compatibility.
 
@@ -186,7 +186,7 @@ Acceptance scenarios often span several stages. The [stage evidence scopes](ACCE
 
 | Ticket | Deliverable |
 |---|---|
-| S04-01 | Completed-file inspection, directory grouping, embedded metadata reading and conservative work/version matching. Create per-book manifests and hold ambiguous children. |
+| S04-01 | Completed-file inspection, directory grouping, embedded metadata reading and conservative work/version matching. Create per-book manifests and hold ambiguous children. Distinguish book containers from generic archives; unsupported/encrypted/incomplete archives stay held. Optional extraction must satisfy the PRD storage and confinement contract. |
 | S04-02 | Naming preset/token model, conditional punctuation, source-to-destination preview, medium roots, version separation and stable collision suffixes. Freeze each accepted import plan. |
 | S04-03 | Validate mount/path mappings and actual hardlink capability; implement confined paths, source validation, external staging, no-replace publish and journaled crash reconciliation. Copy fallback requires an explicit policy. |
 | S04-04 | Generate independent OPF/cover sidecars with initial-export authority; reject unsafe inode-changing operations; track generated-file ownership separately from preexisting destination content. |
@@ -223,7 +223,7 @@ Acceptance scenarios often span several stages. The [stage evidence scopes](ACCE
 | S06-01 | Native AudiobookBay adapter, supported-host configuration, markup fixtures, detail/coverage/magnet handling and parser-health errors. |
 | S06-02 | Prowlarr per-indexer capabilities/categories/search/resolution; origin attribution; native-MAM overlap suppression; unsupported transport handling. |
 | S06-03 | Incremental federated search, per-source budgets, normalized+raw fields, release equivalence and per-origin availability. Preserve distinct credentials/download routes even when results describe the same transfer. |
-| S06-04 | Complete profiles, inheritance and effective-policy explanations. Default source/format preferences, minimum requirements, unknown-value handling and deterministic ranking; manual sorting separate from stored policy. |
+| S06-04 | Complete profiles, inheritance and effective-policy explanations using the PRD precedence and in-flight change table. Default source/format preferences, minimum requirements, unknown-value handling and deterministic ranking; manual sorting separate from stored policy. Preserve each reason's constraints when sharing fulfillment. |
 | S06-05 | Just book / Prefer packs / Complete series selection, aliases, published/main-series set, verified coverage and bounded size/expansion controls. Replan uncovered wanted children after inspection without refetching satisfied children. |
 | S06-06 | Source comparison, rejection explanations, edition/recording distinction, series coverage and omnibus UI with a truthful shared-asset link. |
 
@@ -452,7 +452,8 @@ Stage completion and installation configuration are separate checks. A certified
 |---|---|---|---|
 | Catalog browsing and local curation | S02 | Account permissions and catalog/list contracts | Catalog remains useful without a downloader or paid metadata account |
 | In-library indicators | S03 | Successful scoped inventory and verified media classification | Explicit unknown/stale state; no claim of confirmed absence from a failed sync |
-| Naming preview and fixture import | S04 | Confined paths, actual link/copy probe and manifest validation | Preview explains missing metadata and unsupported paths |
+| Sample naming preview and saved preferences | S04 foundation | Validated template language and explicit synthetic/example inputs | No filesystem access required; destinations/item counts are predicted and no import is enabled |
+| Inspected download plan and fixture import | S04 | Verified files, confined paths, actual link/copy probe and manifest validation for import | Hold uncertain children; distinguish a planned mapping from publication readiness |
 | Publication to the serving library | S04 | Certified layout, no-replace primitive and confirmation path | Completed files remain pending; unsupported nesting offers the certified conventional preset |
 | Manual MAM acquisition | S05 | Authenticated source route, supported client, destination and durable dispatch/import path | Catalog and source search remain independently usable where their own connections work |
 | Multi-source automatic selection | S06 | Each participating adapter certified, complete eligibility rules and bounded pack expansion | Healthy sources can return results; failed or unsupported sources show their reason |

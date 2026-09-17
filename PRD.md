@@ -1,6 +1,6 @@
 # Product requirements: book discovery and acquisition
 
-Version 1.2 planning baseline · September 17, 2026 · Working product name: Book discovery app.
+Version 1.3 planning baseline · September 17, 2026 · Working product name: Book discovery app.
 
 Status: ready for staged development. No application code or production deployment is implied by this document. User requirements from the conversation take precedence. This PRD defines product behavior; [Implementation Decisions](IMPLEMENTATION-DECISIONS.md) defines the researched engineering baseline; [Development Plan](IMPLEMENTATION-PLAN.md) defines delivery; [Acceptance Plan](ACCEPTANCE-PLAN.md) defines verification. Earlier research remains rationale, not an alternative product direction.
 
@@ -291,6 +291,23 @@ Multiple EPUB/PDF representations of one verified edition count as one edition. 
 
 Cancellation of a client transfer is separate from deletion of its files. No default request/list action deletes source or published media. Library permission revocation hides affected inventory promptly and invalidates cached user views; it does not turn hidden assets into evidence that files were deleted.
 
+### Effective settings and changes during acquisition: FR-20–FR-23, FR-27, FR-33
+
+Resolve ordinary preferences from the most specific explicitly set value: request override → list override, when the request originates from a list → selected reusable profile → user default → installation default. An unset value inherits; an explicitly empty allowed-format set is invalid rather than meaning “allow everything.” Administrator restrictions, granted destinations, supported capabilities and filesystem integrity rules apply independently and cannot be relaxed by a more specific preference. Metadata field locks follow their separate provenance rules.
+
+Show the effective settings and their origin in the request preview. Conflicting requirements from different lists remain separate reasons/targets unless one fulfillment can satisfy both. One list's profile must never silently replace another list's exact narrator or format requirement. If both can use the same transfer, retain both policy snapshots and explanations.
+
+| Change point | Required behavior |
+|---|---|
+| Before request submission | Preview resolves current defaults; submitting a stale preview revalidates it |
+| Wanted/searching, before external dispatch | A policy edit previews affected unsatisfied targets; applying it creates a revision and invalidates stale selections |
+| Transfer submitting or running | Keep the submitted release and original policy snapshot; no automatic torrent replacement or second transfer |
+| Import not yet planned | Resolve current organization settings and show the new plan before publication eligibility is evaluated |
+| Import plan frozen or partially published | Resume the recorded manifest; changed templates do not alter destinations on retry. Replanning unstarted entries is an explicit revision, with new collision and ownership checks |
+| Already available | Changes affect future acquisitions; existing media stay in place and are not upgraded implicitly |
+
+Recheck current permissions, suppressions, capacity and capability immediately before each external side effect even when its plan is frozen. A revoked permission pauses dependent work; it does not authorize completing an old plan under obsolete access. Policy snapshots preserve intent, not permanent permission.
+
 ### Source search, ranking and series expansion: FR-16–FR-26
 
 Catalog search returns books even when no release search has run. Opening Sources starts an independently tracked source search and shows each source's freshness and completion. Direct-source search preserves MAM-specific fields; selecting an unmatched result can create a provisional work. Source results never replace the catalog's edition model.
@@ -323,6 +340,10 @@ The metadata resolver runs at the correct level: work synopsis and genre; editio
 The conventional target is `Author / optional Series / Sequence - Title - Version / media files`. The requested nested preset is `Author / optional Series / Sequence - Title / Version / media files`. Different complete recordings and distinct ebook editions use separate leaf items; the app aggregates them under one book. Nested layout is selectable only after ABS compatibility certification. [Illustrated layouts and token rules](research/audiobookshelf-import-layout.md) define the concrete import contract.
 
 The naming preview must show at least: one standalone ebook, one multi-track audiobook, two recordings of one work, a partially owned series pack, and a title with missing metadata. It displays source → destination, each ABS item boundary, metadata omissions and hardlink/copy outcome. Empty conditional segments disappear; extensions remain true; stable disambiguators prevent collisions. Generated sidecars stay in item leaves. Structural parent folders never receive shared media or covers that could change scanning behavior.
+
+Separate three levels of preview: sample naming examples need no filesystem access; an inspected-download plan uses verified files and selected roots; a publication-ready plan additionally requires current path/link/capacity checks and supported ABS boundaries. Sample previews label link behavior and ABS item counts as predicted, never verified. Saving a naming preference does not enable importing.
+
+Default acquisition eligibility favors directly usable media files. Generic ZIP/RAR/7z packages require an explicit supported extraction capability and sufficient separate storage; until implemented they remain reviewable, with automatic selection disabled. EPUB/CBZ and other recognized book containers are media formats, not generic packs to unpack into loose content. If extraction is enabled, preserve the seeded archive, extract into isolated app-owned staging with bounded entries/bytes/depth and confined paths, and run normal per-child inspection afterward. Extracted media cannot be hardlinked to compressed archive bytes; report its actual storage cost and link provenance. Encrypted, incomplete multipart or unsupported archives are held with a reason. This contract does not require archive extraction for v1.
 
 ### Discovery and simple customization: FR-09–FR-12, FR-35
 

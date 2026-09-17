@@ -1,6 +1,6 @@
 # Acceptance, compatibility and release verification
 
-Planning baseline v1.0 · September 17, 2026.
+Planning baseline v1.3 · September 17, 2026.
 
 **Status: acceptance definitions; implementation evidence is tracked in [Implementation Status](docs/IMPLEMENTATION-STATUS.md).** Some foundation subsets have now been tested; no full scenario is yet certified complete. This document maps [PRD requirements](PRD.md) to the gates in [Development Plan](IMPLEMENTATION-PLAN.md). Research/source inspection is evidence for a design choice, not a passing runtime test.
 
@@ -143,3 +143,18 @@ An AT scenario is a release-level collection of assertions. Early stages prove t
 | S10 | The complete relevant expansion scenario plus v1 regression for affected modules | Other independently scoped expansion releases |
 
 The [integrated PRD walkthrough](PRD.md#15-end-to-end-product-acceptance-walkthrough) provides one shared demonstration across stages. It supplements the negative-case matrix; a successful happy path does not waive a failed duplicate, privacy, source-integrity or recovery assertion.
+
+## 8. Policy and preview contract assertions
+
+These refine existing scenarios, without introducing additional release stages or changing the AT identifiers.
+
+| Existing scenario | Additional required assertion | Delivery |
+|---|---|---|
+| AT-12 | Resolve request/list/profile/user/installation preferences in documented order; enforce administrator restrictions independently; show inherited origins; reject an empty eligible-format set | S05 baseline, S06 complete |
+| AT-13 | Two lists with conflicting exact-version constraints retain independent requirements; compatible reasons may share a transfer without losing either policy snapshot | S06–S07 |
+| AT-15–AT-19 | Sample naming preview needs no library mount and makes no verified-link claim; inspected and publication-ready plans have distinct prerequisites | S04 |
+| AT-15–AT-19, AT-27 | EPUB/CBZ are preserved as book containers; unsupported archives are held. Any enabled extractor proves traversal/link confinement, bounded resource use, unchanged archive bytes and honest additional-storage accounting | S04; extraction assertions only when capability enabled |
+| AT-21–AT-23 | Editing a list profile previews unsatisfied targets; it never silently replaces a running transfer or acquires an already satisfied title | S07–S08 |
+| AT-30 | A naming change during an interrupted import does not change frozen destinations; permission revocation before publication pauses it despite a valid historical plan | S04 publication subset; S09 full regression |
+
+Preserve the distinction between proposed behavior and implementation evidence when evaluating these assertions. A saved profile and a successful sample preview cannot close the importer stage.

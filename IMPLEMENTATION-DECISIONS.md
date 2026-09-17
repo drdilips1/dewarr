@@ -314,3 +314,11 @@ The September 17 planning refresh rechecked the named upstream project pages. Th
 - The [Hardcover getting-started page](https://docs.hardcover.app/api/getting-started/) is dated July 2025 and describes a changing API. Treat token formats, expiry, scopes, quotas and supported queries as capability checks, not timeless constants. Keep tokens opaque; handle GraphQL `errors` and partial `data` even on HTTP 200. Do not interpret a permission-limited or partial list response as authoritative removal. Freeze tested operation fixtures in S02/S07 and require write capability separately in S08.
 
 These observations reinforce the architecture rather than expanding first-release scope. Runtime capability checks and recorded acceptance evidence take precedence over a README's generalized feature claims.
+
+### v1.3 implementation clarifications
+
+The PRD now defines effective preference precedence, immutable submitted choices, versioned import plans and explicit revalidation of current permissions. These are application design decisions, not guarantees supplied by upstream APIs. Implement them in shared domain services used by both manual requests and list automation.
+
+The current [ABS directory documentation](https://audiobookshelf.org/docs/documentation/libraries/book-library/directory-structure/) defines book folders and warns that media in structural ancestors can combine items unexpectedly. It documents narrator braces and disc/track parsing. Therefore a visually plausible path is only a prediction: the import gate must inspect actual item boundaries and metadata under the selected scanner settings. Custom names require supported sidecar metadata where filename parsing is insufficient.
+
+The [ABS ebook documentation](https://audiobookshelf.org/docs/documentation/libraries/book-library/ebooks/) distinguishes one primary ebook from supplementary files, gives EPUB primary priority and describes format-dependent progress support. Keep distinct editions in distinct item leaves when independent identity/progress is required. Multiple file formats alone do not establish different editions. Generic archive extraction remains a separate optional capability; no successful sample naming preview establishes file, format or scanner compatibility.
