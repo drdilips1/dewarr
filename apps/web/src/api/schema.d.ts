@@ -693,6 +693,75 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/requests/preview": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Preview */
+    post: operations["preview_api_requests_preview_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/requests": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** All Requests */
+    get: operations["all_requests_api_requests_get"];
+    put?: never;
+    /** Create */
+    post: operations["create_api_requests_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/requests/{intent_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Request Detail */
+    get: operations["request_detail_api_requests__intent_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/requests/{intent_id}/reasons/{reason_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** Cancel Reason */
+    delete: operations["cancel_reason_api_requests__intent_id__reasons__reason_id__delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1208,6 +1277,105 @@ export interface components {
       /** Work Ids */
       work_ids: string[];
     };
+    /** PreviewView */
+    PreviewView: {
+      /** Targets */
+      targets: components["schemas"]["TargetView"][];
+      /**
+       * Download Available
+       * @default false
+       */
+      download_available: boolean;
+    };
+    /** ReasonView */
+    ReasonView: {
+      /** Label */
+      label: string;
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Kind */
+      kind: string;
+      /** Active */
+      active: boolean;
+      /** List Id */
+      list_id: string | null;
+    };
+    /** RequestInput */
+    RequestInput: {
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      specification: components["schemas"]["RequestSpec"];
+      reason?: components["schemas"]["RequestReason"];
+    };
+    /** RequestPage */
+    RequestPage: {
+      /** Items */
+      items: components["schemas"]["RequestView"][];
+      /** Total */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+    };
+    /** RequestReason */
+    RequestReason: {
+      /** List Id */
+      list_id?: string | null;
+    };
+    /** RequestSpec */
+    RequestSpec: {
+      /**
+       * Mode
+       * @enum {string}
+       */
+      mode: "ebook" | "audio" | "both" | "either";
+      /** Preferred Medium */
+      preferred_medium?: ("ebook" | "audio") | null;
+      /** Language */
+      language?: string | null;
+      /** Ebook Version Id */
+      ebook_version_id?: string | null;
+      /** Audio Version Id */
+      audio_version_id?: string | null;
+      /** Ebook Library Id */
+      ebook_library_id?: string | null;
+      /** Audio Library Id */
+      audio_library_id?: string | null;
+      /** Abridged */
+      abridged?: boolean | null;
+      /**
+       * Standalone
+       * @default false
+       */
+      standalone: boolean;
+    };
+    /** RequestView */
+    RequestView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      specification: components["schemas"]["RequestSpec"];
+      /** Targets */
+      targets: components["schemas"]["TargetView"][];
+      /** Reasons */
+      reasons: components["schemas"]["ReasonView"][];
+      /** Description */
+      description: string;
+    };
     /** ReviewInput */
     ReviewInput: {
       /** Expected Revision */
@@ -1292,6 +1460,20 @@ export interface components {
       editions_more: boolean;
       /** Series */
       series: components["schemas"]["SeriesData"][];
+    };
+    /** SubmittedView */
+    SubmittedView: {
+      request: components["schemas"]["RequestView"];
+      operation: components["schemas"]["OperationView"];
+    };
+    /** TargetView */
+    TargetView: {
+      /** Slot */
+      slot: string;
+      /** State */
+      state: string;
+      /** Message */
+      message: string;
     };
     /** UserInput */
     UserInput: {
@@ -2899,6 +3081,170 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  preview_api_requests_preview_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RequestInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PreviewView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  all_requests_api_requests_get: {
+    parameters: {
+      query?: {
+        work_id?: string | null;
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RequestPage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_api_requests_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RequestInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SubmittedView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  request_detail_api_requests__intent_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        intent_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RequestView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  cancel_reason_api_requests__intent_id__reasons__reason_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        intent_id: string;
+        reason_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RequestView"];
+        };
       };
       /** @description Validation Error */
       422: {

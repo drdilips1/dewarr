@@ -19,6 +19,8 @@ async def recover_stalled_jobs() -> None:
                 "library.sync",
                 "library.schedule",
                 "metadata.enrich",
+                "acquisition.evaluate",
+                "acquisition.reconcile",
             ):
                 stalled = await queue.job_manager.get_stalled_jobs(
                     task_name=task_name,

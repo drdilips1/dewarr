@@ -7,6 +7,7 @@ from sqlalchemy import delete, func, or_, select
 from app.api.catalog import WorkView, work_view
 from app.api.dependencies import CurrentUser, Database, Member
 from app.db.models import BookList, ListEntry, Work
+from app.domain.acquisition import withdraw_list_reasons
 from app.domain.availability import availability_for
 from app.domain.visibility import visible_work
 
@@ -130,6 +131,8 @@ async def edit_list(list_id: UUID, body: ListInput, user: Member, db: Database):
 async def remove_list(list_id: UUID, user: Member, db: Database):
     item = await visible_list(list_id, user, db, edit=True)
     await db.delete(item)
+    await db.flush()
+    await withdraw_list_reasons(db, user, list_id)
     await db.commit()
 
 
@@ -157,6 +160,7 @@ async def remove_entry(list_id: UUID, work_id: UUID, user: Member, db: Database)
     await db.execute(
         delete(ListEntry).where(ListEntry.list_id == list_id, ListEntry.work_id == work_id)
     )
+    await withdraw_list_reasons(db, user, list_id, work_id)
     await db.commit()
 
 

@@ -26,6 +26,9 @@ export default function Activity({ admin }: { admin: boolean }) {
         "assets",
         "catalog",
         "work",
+        "works",
+        "requests",
+        "request-preview",
         "libraries",
         "connections",
       ]) {
@@ -83,7 +86,11 @@ export default function Activity({ admin }: { admin: boolean }) {
                     ? "Background worker check"
                     : item.kind === "library.sync"
                       ? "Audiobookshelf inventory sync"
-                      : item.kind}
+                      : item.kind === "acquisition.evaluate"
+                        ? "Wanted media check"
+                        : item.kind === "metadata.enrich"
+                          ? "Automatic metadata lookup"
+                          : item.kind}
                 </h2>
                 <p>{item.message}</p>
               </div>

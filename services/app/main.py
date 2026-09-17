@@ -9,7 +9,17 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
-from app.api import auth, catalog, identity, integrations, library, lists, metadata, operations
+from app.api import (
+    auth,
+    catalog,
+    identity,
+    integrations,
+    library,
+    lists,
+    metadata,
+    operations,
+    requests,
+)
 from app.config import get_settings
 from app.db.session import get_engine
 from app.jobs.queue import get_queue
@@ -80,6 +90,7 @@ def create_app() -> FastAPI:
     app.include_router(library.router, prefix="/api")
     app.include_router(metadata.router, prefix="/api")
     app.include_router(identity.router, prefix="/api")
+    app.include_router(requests.router, prefix="/api")
     dist: Path = get_settings().web_dist
     if (dist / "assets").is_dir():
         app.mount("/assets", StaticFiles(directory=dist / "assets"), name="assets")

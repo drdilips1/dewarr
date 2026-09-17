@@ -200,6 +200,61 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     fullPage: true,
   });
   await page.setViewportSize({ width: 1440, height: 1000 });
+  const wanted = page.getByRole("region", {
+    name: "Wanted media",
+    exact: true,
+  });
+  await wanted.getByLabel("Media to request").selectOption("both");
+  const requestPreview = wanted.getByLabel("Request preview", { exact: true });
+  await expect(requestPreview).toContainText("Ebook · Wanted");
+  await expect(requestPreview).toContainText("Audiobook · Wanted");
+  await wanted.getByRole("button", { name: "Save to wanted" }).click();
+  await expect(wanted.getByRole("status")).toHaveText(
+    "Your media request was saved.",
+  );
+  await expect(wanted.locator("article")).toHaveCount(1);
+  await page.reload();
+  await expect(wanted.locator("article")).toHaveCount(1);
+  await wanted
+    .locator("article")
+    .getByRole("button", { name: "Cancel your request", exact: true })
+    .click();
+  await expect(wanted.locator("article")).toContainText("Ebook · Cancelled");
+  await expect(wanted.locator("article")).toContainText(
+    "Audiobook · Cancelled",
+  );
+  await page
+    .getByRole("button", { name: "Request this recording", exact: true })
+    .click();
+  await expect(
+    wanted.getByRole("heading", { name: "Wanted media" }),
+  ).toBeFocused();
+  await expect(wanted).toContainText("Sample Narrator");
+  await expect(requestPreview).toContainText("Audiobook · Wanted");
+  await wanted.getByRole("button", { name: "Save to wanted" }).click();
+  await expect(wanted.getByRole("status")).toHaveText(
+    "Your media request was saved.",
+  );
+  await expect(wanted.locator("article")).toHaveCount(2);
+  await expect(
+    wanted.locator("article").filter({ hasText: "Sample Narrator" }),
+  ).toContainText("Audiobook · Wanted");
+  await page.screenshot({
+    path: testInfo.outputPath("wanted-desktop.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await wanted.scrollIntoViewIfNeeded();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("wanted-mobile.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.request.post("http://127.0.0.1:13379/fixture/catalog/narrator", {
     data: { narrator: "Changed Narrator" },
   });

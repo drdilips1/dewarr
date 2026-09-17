@@ -78,13 +78,14 @@ async def test_correction_upgrade_backfills_sources_and_refuses_to_discard_histo
             )
             await db.commit()
         await get_engine().dispose()
+        async with database() as db:
+            current_revision = await db.scalar(text("SELECT version_num FROM alembic_version"))
         refused = await migrate("downgrade", "0004_metadata")
         assert refused.returncode != 0
         assert "Correction history cannot be preserved" in refused.stderr
         async with database() as db:
             assert (
-                await db.scalar(text("SELECT version_num FROM alembic_version"))
-                == "0005_corrections"
+                await db.scalar(text("SELECT version_num FROM alembic_version")) == current_revision
             )
             assert await db.scalar(select(IdentityChange.id)) is not None
     finally:

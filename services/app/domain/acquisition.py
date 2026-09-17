@@ -1,0 +1,644 @@
+"""Shared request requirements, inventory checks and pre-dispatch reservations.
+
+This module performs no downloader mutations. Source selection and dispatch consume
+these persisted requirements after their integration/import gates are implemented.
+"""
+
+from typing import Literal
+from uuid import UUID
+
+from fastapi import HTTPException
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from sqlalchemy import func, select
+
+from app.config import get_settings
+from app.db.models import (
+    AcquisitionIntent,
+    AcquisitionReason,
+    AcquisitionReservation,
+    AcquisitionTarget,
+    AssetContains,
+    AuditEvent,
+    BookList,
+    Integration,
+    Library,
+    LibraryAsset,
+    ListEntry,
+    Operation,
+    ProviderObject,
+    Version,
+    Work,
+    WorkMetadataSource,
+)
+from app.domain.corrections import revision
+from app.domain.operations import transaction_lock
+from app.domain.visibility import visible_library, visible_work
+from app.jobs.queue import enqueue
+
+Medium = Literal["ebook", "audio"]
+
+
+def language(value):
+    if not value:
+        return None
+    parts = value.casefold().replace("_", "-").split("-")
+    parts[0] = {
+        "eng": "en",
+        "fra": "fr",
+        "fre": "fr",
+        "deu": "de",
+        "ger": "de",
+        "spa": "es",
+        "ita": "it",
+        "por": "pt",
+        "jpn": "ja",
+    }.get(parts[0], parts[0])
+    return "-".join(parts)
+
+
+def language_accepts(required, observed):
+    required, observed = language(required), language(observed)
+    return not required or bool(
+        observed and (observed == required or observed.startswith(required + "-"))
+    )
+
+
+class RequestSpec(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    mode: Literal["ebook", "audio", "both", "either"]
+    preferred_medium: Medium | None = None
+    language: str | None = Field(
+        default=None, pattern=r"^[a-zA-Z]{2,3}([-_][a-zA-Z0-9]{2,8})*$", max_length=20
+    )
+    ebook_version_id: UUID | None = None
+    audio_version_id: UUID | None = None
+    ebook_library_id: UUID | None = None
+    audio_library_id: UUID | None = None
+    abridged: bool | None = None
+    standalone: bool = False
+
+    @field_validator("language")
+    @classmethod
+    def canonical_language(cls, value):
+        return language(value)
+
+    @model_validator(mode="after")
+    def applicable_constraints(self):
+        if self.mode == "either" and not self.preferred_medium:
+            raise ValueError("Choose which medium to search first when neither is available")
+        if self.mode != "either" and self.preferred_medium:
+            raise ValueError("A first-medium preference only applies to Either")
+        if self.mode == "ebook" and (
+            self.audio_version_id or self.audio_library_id or self.abridged is not None
+        ):
+            raise ValueError("Audiobook constraints do not apply to an ebook-only request")
+        if self.mode == "audio" and (self.ebook_version_id or self.ebook_library_id):
+            raise ValueError("Ebook constraints do not apply to an audio-only request")
+        return self
+
+    def media(self, slot):
+        if slot == "either":
+            return [self.preferred_medium, "audio" if self.preferred_medium == "ebook" else "ebook"]
+        return [slot]
+
+    def slots(self):
+        return ["ebook", "audio"] if self.mode == "both" else [self.mode]
+
+    def rule(self, medium):
+        return {
+            "medium": medium,
+            "language": self.language,
+            "version_id": str(getattr(self, medium + "_version_id") or "") or None,
+            "abridged": self.abridged if medium == "audio" else None,
+            "standalone": self.standalone,
+        }
+
+
+class RequestReason(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    list_id: UUID | None = None
+
+
+def intersect_rules(left, right):
+    """Intersection is safe only before source selection; it never relaxes either request."""
+    if left["medium"] != right["medium"]:
+        return None
+    result = dict(left)
+    for field in ("version_id", "abridged"):
+        a, b = left[field], right[field]
+        if a is not None and b is not None and a != b:
+            return None
+        result[field] = a if a is not None else b
+    a, b = left["language"], right["language"]
+    if language_accepts(a, b):
+        result["language"] = b
+    elif language_accepts(b, a):
+        result["language"] = a
+    else:
+        return None
+    result["standalone"] = left["standalone"] or right["standalone"]
+    return result
+
+
+async def validate_request(db, user, work_id, spec, reason=None):
+    work = await db.scalar(
+        select(Work).where(
+            Work.id == work_id,
+            Work.redirect_to.is_(None),
+            visible_work(user),
+        )
+    )
+    if not work:
+        raise HTTPException(404, "Book not found or merged; select its current record")
+    for medium in ("ebook", "audio"):
+        library_id = getattr(spec, medium + "_library_id")
+        if library_id and not await db.scalar(
+            select(Library.id)
+            .join(Integration)
+            .where(
+                Library.id == library_id,
+                Library.accessible.is_(True),
+                Integration.enabled.is_(True),
+                visible_library(user),
+            )
+        ):
+            raise HTTPException(404, "Destination library is not accessible")
+        version_id = getattr(spec, medium + "_version_id")
+        if not version_id:
+            continue
+        version = await db.get(Version, version_id)
+        # An internal UUID is not proof that this account may inspect a private recording.
+        catalog = await db.scalar(
+            select(ProviderObject.id)
+            .join(WorkMetadataSource)
+            .where(
+                ProviderObject.version_id == version_id,
+                WorkMetadataSource.accepted.is_(True),
+            )
+            .limit(1)
+        )
+        asset = await db.scalar(
+            select(LibraryAsset.id)
+            .join(Library)
+            .join(Integration)
+            .where(
+                LibraryAsset.version_id == version_id,
+                Library.accessible.is_(True),
+                Integration.enabled.is_(True),
+                visible_library(user),
+            )
+            .limit(1)
+        )
+        if (
+            not version
+            or version.work_id != work_id
+            or version.medium != medium
+            or not (catalog or asset)
+        ):
+            raise HTTPException(
+                404, "Requested edition or recording is not available in this catalog"
+            )
+        if (
+            spec.language
+            and version.language
+            and not language_accepts(spec.language, version.language)
+        ):
+            raise HTTPException(422, "The selected version conflicts with the requested language")
+        if (
+            medium == "audio"
+            and spec.abridged is not None
+            and version.abridged is not None
+            and version.abridged != spec.abridged
+        ):
+            raise HTTPException(
+                422, "The selected recording conflicts with the abridgment requirement"
+            )
+    if reason and reason.list_id:
+        owned = await db.scalar(
+            select(BookList.id)
+            .join(ListEntry)
+            .where(
+                BookList.id == reason.list_id,
+                BookList.owner_id == user.id,
+                ListEntry.work_id == work_id,
+            )
+        )
+        if not owned:
+            raise HTTPException(404, "Select a book from a list you own")
+    return work
+
+
+async def inventory_candidates(db, user, work_id):
+    coverage = (
+        select(func.count())
+        .select_from(AssetContains)
+        .where(AssetContains.asset_id == LibraryAsset.id)
+        .correlate(LibraryAsset)
+        .scalar_subquery()
+    )
+    return (
+        await db.execute(
+            select(LibraryAsset, Version, coverage)
+            .outerjoin(Version, LibraryAsset.version_id == Version.id)
+            .join(Library)
+            .join(Integration)
+            .join(AssetContains)
+            .where(
+                AssetContains.work_id == work_id,
+                AssetContains.verified.is_(True),
+                LibraryAsset.full_content.is_(True),
+                Library.accessible.is_(True),
+                Integration.enabled.is_(True),
+                visible_library(user),
+            )
+            .order_by(LibraryAsset.id)
+        )
+    ).all()
+
+
+def asset_satisfies(asset, version, count, rule):
+    if asset.medium != rule["medium"]:
+        return False
+    if rule["version_id"] and (not version or str(version.id) != rule["version_id"]):
+        return False
+    if not language_accepts(rule["language"], version.language if version else None):
+        return False
+    if rule["abridged"] is not None and (not version or version.abridged != rule["abridged"]):
+        return False
+    return not rule["standalone"] or count == 1
+
+
+async def assess(db, user, work_id, spec):
+    rows = await inventory_candidates(db, user, work_id)
+    outcomes = []
+    for slot in spec.slots():
+        media = spec.media(slot)
+        matched = [
+            (asset, version)
+            for medium in media
+            for asset, version, count in rows
+            if asset_satisfies(asset, version, count, spec.rule(medium))
+        ]
+        present = next((asset for asset, _ in matched if asset.state == "present"), None)
+        if present:
+            outcomes.append(
+                {
+                    "slot": slot,
+                    "state": "satisfied",
+                    "message": "Already available in your library",
+                    "asset_id": present.id,
+                    "medium": present.medium,
+                }
+            )
+        elif any(
+            asset.state in {"stale", "missing-suspected", "scope-unavailable"}
+            for asset, _ in matched
+        ):
+            outcomes.append(
+                {
+                    "slot": slot,
+                    "state": "awaiting-inventory",
+                    "message": "Refresh library inventory before acquiring another copy",
+                    "asset_id": None,
+                    "medium": media[0],
+                }
+            )
+        elif any(
+            asset.state in {"missing-confirmed", "intentionally-removed"} for asset, _ in matched
+        ):
+            outcomes.append(
+                {
+                    "slot": slot,
+                    "state": "paused",
+                    "message": "A previous copy is missing; decide whether to replace it",
+                    "asset_id": None,
+                    "medium": media[0],
+                }
+            )
+        else:
+            outcomes.append(
+                {
+                    "slot": slot,
+                    "state": "wanted",
+                    "message": "Requested media is missing",
+                    "asset_id": None,
+                    "medium": media[0],
+                }
+            )
+    return outcomes
+
+
+async def release_unused(db, work_id):
+    await db.flush()
+    reservations = (
+        await db.scalars(
+            select(AcquisitionReservation).where(
+                AcquisitionReservation.work_id == work_id,
+                AcquisitionReservation.state == "planned",
+            )
+        )
+    ).all()
+    for reservation in reservations:
+        specifications = (
+            await db.scalars(
+                select(AcquisitionIntent.specification)
+                .join(AcquisitionTarget)
+                .where(
+                    AcquisitionTarget.reservation_id == reservation.id,
+                    AcquisitionTarget.state == "wanted",
+                )
+            )
+        ).all()
+        if not specifications:
+            reservation.state = "released"
+        else:
+            rules = [
+                RequestSpec.model_validate(spec).rule(reservation.requirements["medium"])
+                for spec in specifications
+            ]
+            merged = rules[0]
+            for rule in rules[1:]:
+                merged = intersect_rules(merged, rule)
+                if merged is None:
+                    raise HTTPException(409, "Reservation requirements need reconciliation")
+            reservation.requirements = merged
+
+
+async def reserve(db, user, intent, spec, slot):
+    for medium in spec.media(slot):
+        destination = getattr(spec, medium + "_library_id")
+        scope = str(destination) if destination else "unconfigured:" + str(user.id)
+        rule = spec.rule(medium)
+        candidates = (
+            await db.scalars(
+                select(AcquisitionReservation)
+                .where(
+                    AcquisitionReservation.work_id == intent.work_id,
+                    AcquisitionReservation.scope == scope,
+                    AcquisitionReservation.state == "planned",
+                )
+                .order_by(AcquisitionReservation.created_at, AcquisitionReservation.id)
+            )
+        ).all()
+        for candidate in candidates:
+            compatible = intersect_rules(candidate.requirements, rule)
+            if not compatible:
+                continue
+            if compatible["version_id"]:
+                version = await db.get(Version, UUID(compatible["version_id"]))
+                if (
+                    not version
+                    or (
+                        version.language
+                        and not language_accepts(compatible["language"], version.language)
+                    )
+                    or (
+                        compatible["abridged"] is not None
+                        and version.abridged is not None
+                        and version.abridged != compatible["abridged"]
+                    )
+                ):
+                    continue
+            candidate.requirements = compatible
+            return candidate
+    medium = spec.media(slot)[0]
+    destination = getattr(spec, medium + "_library_id")
+    reservation = AcquisitionReservation(
+        work_id=intent.work_id,
+        destination_id=destination,
+        scope=str(destination) if destination else "unconfigured:" + str(user.id),
+        requirements=spec.rule(medium),
+    )
+    db.add(reservation)
+    await db.flush()
+    return reservation
+
+
+async def evaluate(db, user, intent):
+    spec = RequestSpec.model_validate(intent.specification)
+    reasons = (
+        await db.scalars(
+            select(AcquisitionReason).where(
+                AcquisitionReason.intent_id == intent.id,
+                AcquisitionReason.active.is_(True),
+            )
+        )
+    ).all()
+    # Deleting a list or removing its member must not leave a durable acquisition reason alive.
+    for reason in reasons:
+        if reason.kind == "list" and not await db.scalar(
+            select(BookList.id)
+            .join(ListEntry)
+            .where(
+                BookList.id == reason.list_id,
+                BookList.owner_id == intent.owner_id,
+                ListEntry.work_id == intent.work_id,
+            )
+        ):
+            reason.active = False
+    active = any(reason.active for reason in reasons)
+    allowed = bool(user and user.active and user.role != "viewer")
+    if allowed:
+        try:
+            await validate_request(db, user, intent.work_id, spec)
+        except HTTPException:
+            allowed = False
+    outcomes = await assess(db, user, intent.work_id, spec) if allowed and active else []
+    targets = {
+        target.slot: target
+        for target in (
+            await db.scalars(
+                select(AcquisitionTarget).where(
+                    AcquisitionTarget.intent_id == intent.id,
+                )
+            )
+        ).all()
+    }
+    for slot in spec.slots():
+        target = targets.get(slot)
+        if not target:
+            target = AcquisitionTarget(intent_id=intent.id, slot=slot)
+            db.add(target)
+        target.reservation_id, target.satisfied_asset_id = None, None
+        if not active or not allowed:
+            target.state = "cancelled" if not active else "paused"
+            target.message = (
+                "No active request reasons" if not active else "Request access needs attention"
+            )
+            continue
+        outcome = next(item for item in outcomes if item["slot"] == slot)
+        target.state, target.message = outcome["state"], outcome["message"]
+        target.satisfied_asset_id = outcome["asset_id"]
+        if target.state != "wanted":
+            continue
+        reservation = await reserve(db, user, intent, spec, slot)
+        target.reservation_id = reservation.id
+        target.message = "Saved to wanted; automatic downloading is not available yet"
+    await release_unused(db, intent.work_id)
+
+
+async def submit(db, user, work_id, spec, reason, key):
+    if get_settings().recovery_mode:
+        raise HTTPException(409, "Request evaluation is paused for recovery")
+    payload = {
+        "work_id": str(work_id),
+        "specification": spec.model_dump(mode="json"),
+        "reason": reason.model_dump(mode="json"),
+    }
+    await transaction_lock(db, f"operation:{user.id}:{key}")
+    await db.refresh(user)
+    if not user.active or user.role == "viewer":
+        raise HTTPException(403, "Your account no longer has permission to create requests")
+    existing = await db.scalar(
+        select(Operation).where(Operation.owner_id == user.id, Operation.idempotency_key == key)
+    )
+    if existing:
+        if existing.kind != "acquisition.evaluate" or existing.payload.get("command") != payload:
+            raise HTTPException(409, "This operation key was already used for another command")
+        return await db.get(AcquisitionIntent, UUID(existing.payload["intent_id"])), existing
+    if reason.list_id:
+        # List edits acquire list → work locks in the same order. This also prevents
+        # deleting a list while its new reason is acquiring the FK's key-share lock.
+        if not await db.scalar(
+            select(BookList.id)
+            .where(
+                BookList.id == reason.list_id,
+                BookList.owner_id == user.id,
+            )
+            .with_for_update()
+        ):
+            raise HTTPException(404, "List not found")
+    await transaction_lock(db, "acquisition:" + str(work_id))
+    await db.refresh(user)
+    if not user.active or user.role == "viewer":
+        raise HTTPException(403, "Your account no longer has permission to create requests")
+    await validate_request(db, user, work_id, spec, reason)
+    fingerprint = revision(spec.model_dump(mode="json"))
+    intent = await db.scalar(
+        select(AcquisitionIntent).where(
+            AcquisitionIntent.owner_id == user.id,
+            AcquisitionIntent.work_id == work_id,
+            AcquisitionIntent.fingerprint == fingerprint,
+        )
+    )
+    if not intent:
+        intent = AcquisitionIntent(
+            owner_id=user.id,
+            work_id=work_id,
+            fingerprint=fingerprint,
+            specification=spec.model_dump(mode="json"),
+        )
+        db.add(intent)
+        await db.flush()
+    kind, reference = ("list", str(reason.list_id)) if reason.list_id else ("manual", "manual")
+    record = await db.scalar(
+        select(AcquisitionReason).where(
+            AcquisitionReason.intent_id == intent.id,
+            AcquisitionReason.kind == kind,
+            AcquisitionReason.reference == reference,
+        )
+    )
+    if not record:
+        record = AcquisitionReason(
+            intent_id=intent.id, kind=kind, reference=reference, list_id=reason.list_id
+        )
+        db.add(record)
+    record.active = True
+    await db.flush()
+    await evaluate(db, user, intent)
+    operation = Operation(
+        owner_id=user.id,
+        kind="acquisition.evaluate",
+        idempotency_key=key,
+        payload={"intent_id": str(intent.id), "command": payload},
+        message="Waiting to recheck requested media against library inventory",
+    )
+    db.add(operation)
+    await db.flush()
+    operation.job_id = await enqueue(db, "acquisition.evaluate", operation_id=str(operation.id))
+    db.add(AuditEvent(actor_id=user.id, action="acquisition.requested", entity_id=intent.id))
+    await db.flush()
+    await db.refresh(operation)
+    return intent, operation
+
+
+async def withdraw_list_reasons(db, user, list_id, work_id=None):
+    conditions = [
+        AcquisitionReason.kind == "list",
+        AcquisitionReason.reference == str(list_id),
+        AcquisitionIntent.owner_id == user.id,
+    ]
+    if work_id:
+        conditions.append(AcquisitionIntent.work_id == work_id)
+    intents = (
+        (
+            await db.scalars(
+                select(AcquisitionIntent)
+                .join(AcquisitionReason)
+                .where(*conditions)
+                .order_by(AcquisitionIntent.work_id, AcquisitionIntent.id)
+            )
+        )
+        .unique()
+        .all()
+    )
+    for intent in intents:
+        await transaction_lock(db, "acquisition:" + str(intent.work_id))
+        reasons = (
+            await db.scalars(
+                select(AcquisitionReason).where(
+                    AcquisitionReason.intent_id == intent.id,
+                    AcquisitionReason.kind == "list",
+                    AcquisitionReason.reference == str(list_id),
+                )
+            )
+        ).all()
+        for reason in reasons:
+            reason.active = False
+        await db.flush()
+        await evaluate(db, user, intent)
+
+
+async def reconcile_requests():
+    """Repair persisted targets after inventory, permissions or catalog evidence change.
+
+    Use bounded keyset pages and one short transaction per intent. A retry may
+    revisit records safely; no external side effect is performed by this sweep.
+    New requests evaluate on submission, including those inserted behind our cursor.
+    """
+    from app.db.models import User
+    from app.db.session import session_factory
+
+    if get_settings().recovery_mode:
+        return
+    factory = session_factory()
+    async with factory() as db:
+        ceiling = await db.scalar(
+            select(AcquisitionIntent.id).order_by(AcquisitionIntent.id.desc()).limit(1)
+        )
+    if ceiling is None:
+        return
+    cursor = None
+    while True:
+        async with factory() as db:
+            statement = (
+                select(AcquisitionIntent.id)
+                .where(AcquisitionIntent.id <= ceiling)
+                .order_by(AcquisitionIntent.id)
+                .limit(100)
+            )
+            if cursor is not None:
+                statement = statement.where(AcquisitionIntent.id > cursor)
+            batch = (await db.scalars(statement)).all()
+        if not batch:
+            return
+        for intent_id in batch:
+            async with factory() as db, db.begin():
+                intent = await db.get(AcquisitionIntent, intent_id)
+                if intent is None:
+                    continue
+                await transaction_lock(db, "acquisition:" + str(intent.work_id))
+                await db.refresh(intent)
+                user = await db.get(User, intent.owner_id)
+                await evaluate(db, user, intent)
+        cursor = batch[-1]

@@ -46,6 +46,43 @@ async def enrich_metadata(operation_id: str) -> None:
     await enrich(UUID(operation_id))
 
 
+@tasks.task(name="acquisition.evaluate", queue="acquisition", retry=3)
+async def evaluate_acquisition(operation_id: str) -> None:
+    if get_settings().recovery_mode:
+        raise RuntimeError("Request evaluation is paused for recovery")
+    from app.db.models import AcquisitionIntent
+    from app.domain.acquisition import evaluate
+    from app.domain.operations import transaction_lock
+
+    async with session_factory()() as db, db.begin():
+        operation = await db.get(Operation, UUID(operation_id))
+        if (
+            not operation
+            or operation.kind != "acquisition.evaluate"
+            or operation.status == "completed"
+        ):
+            return
+        intent = await db.get(AcquisitionIntent, UUID(operation.payload["intent_id"]))
+        await transaction_lock(db, "acquisition:" + str(intent.work_id))
+        await db.refresh(operation, with_for_update=True)
+        if operation.status == "completed":
+            return
+        user = await db.get(User, intent.owner_id)
+        await evaluate(db, user, intent)
+        operation.status, operation.message = (
+            "completed",
+            "Wanted media rechecked against your library",
+        )
+
+
+@tasks.periodic(cron="*/5 * * * *")
+@tasks.task(name="acquisition.reconcile", queue="acquisition", retry=3)
+async def reconcile_acquisition(timestamp: int) -> None:
+    from app.domain.acquisition import reconcile_requests
+
+    await reconcile_requests()
+
+
 @tasks.periodic(cron="*/5 * * * *")
 @tasks.task(name="library.schedule", queue="system", retry=3)
 async def schedule_inventory(timestamp: int) -> None:

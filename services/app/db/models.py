@@ -305,3 +305,56 @@ class WorkMetadataSource(Identity, Base):
     fetched_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     accepted: Mapped[bool] = mapped_column(Boolean, default=True)
     manual_match: Mapped[bool] = mapped_column(Boolean, default=False)
+
+
+class AcquisitionIntent(Identity, Base):
+    __tablename__ = "acquisition_intents"
+    __table_args__ = (UniqueConstraint("owner_id", "work_id", "fingerprint"),)
+    owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
+    work_id: Mapped[UUID] = mapped_column(ForeignKey("works.id"), index=True)
+    fingerprint: Mapped[str] = mapped_column(String(64))
+    specification: Mapped[dict[str, Any]] = mapped_column(JSONB)
+
+
+class AcquisitionReason(Identity, Base):
+    __tablename__ = "acquisition_reasons"
+    __table_args__ = (
+        UniqueConstraint("intent_id", "kind", "reference"),
+        CheckConstraint("kind IN ('manual', 'list')"),
+    )
+    intent_id: Mapped[UUID] = mapped_column(ForeignKey("acquisition_intents.id"), index=True)
+    kind: Mapped[str] = mapped_column(String(20))
+    reference: Mapped[str] = mapped_column(String(200))
+    active: Mapped[bool] = mapped_column(Boolean, default=True)
+    list_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("book_lists.id", ondelete="SET NULL"), index=True
+    )
+
+
+class AcquisitionReservation(Identity, Base):
+    __tablename__ = "acquisition_reservations"
+    __table_args__ = (CheckConstraint("state IN ('planned', 'released')"),)
+    work_id: Mapped[UUID] = mapped_column(ForeignKey("works.id"), index=True)
+    destination_id: Mapped[UUID | None] = mapped_column(ForeignKey("libraries.id"))
+    scope: Mapped[str] = mapped_column(String(80))
+    requirements: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    state: Mapped[str] = mapped_column(String(20), default="planned")
+
+
+class AcquisitionTarget(Identity, Base):
+    __tablename__ = "acquisition_targets"
+    __table_args__ = (
+        UniqueConstraint("intent_id", "slot"),
+        CheckConstraint("slot IN ('ebook', 'audio', 'either')"),
+        CheckConstraint(
+            "state IN ('wanted', 'satisfied', 'awaiting-inventory', 'paused', 'cancelled')"
+        ),
+    )
+    intent_id: Mapped[UUID] = mapped_column(ForeignKey("acquisition_intents.id"), index=True)
+    slot: Mapped[str] = mapped_column(String(10))
+    state: Mapped[str] = mapped_column(String(30), default="wanted")
+    message: Mapped[str] = mapped_column(String(300))
+    reservation_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("acquisition_reservations.id"), index=True
+    )
+    satisfied_asset_id: Mapped[UUID | None] = mapped_column(ForeignKey("library_assets.id"))

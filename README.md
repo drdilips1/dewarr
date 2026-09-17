@@ -2,7 +2,7 @@
 
 A self-hosted ebook/audiobook discovery, curation and acquisition application above Audiobookshelf, with native MAM/AudiobookBay, optional Prowlarr, direct qBittorrent, and Hardcover/Goodreads list automation.
 
-**Status:** implementation is in progress. Accounts, catalog/lists and durable workers are implemented; Audiobookshelf inventory/grants and metadata provider search, editions, protected edits, reversible corrections and automatic secondary enrichment have fixture-tested API/UI flows. Source acquisition, downloading, file importing and external list automation remain pending. See [Implementation Status](docs/IMPLEMENTATION-STATUS.md) for precise coverage and evidence, and [Development Guide](docs/DEVELOPMENT.md) to run the current build. The full PRD remains the goal.
+**Status:** implementation is in progress. Accounts, catalog/lists and durable workers are implemented; Audiobookshelf inventory/grants and metadata provider search, editions, protected edits, reversible corrections and automatic secondary enrichment have fixture-tested API/UI flows. Wanted requests support media/version requirements, independent reasons, compatible reservations and inventory reconciliation; saving a request does not download it. Source acquisition, downloading, file importing and external list automation remain pending. See [Implementation Status](docs/IMPLEMENTATION-STATUS.md) for precise coverage and evidence, and [Development Guide](docs/DEVELOPMENT.md) to run the current build. The full PRD remains the goal.
 
 ## Development handoff
 

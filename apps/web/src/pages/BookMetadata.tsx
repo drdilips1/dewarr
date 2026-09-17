@@ -21,9 +21,11 @@ type Field =
 export default function BookMetadata({
   work,
   admin,
+  onWantVersion,
 }: {
   work: Work;
   admin: boolean;
+  onWantVersion?: (version: components["schemas"]["VersionView"]) => void;
 }) {
   const client = useQueryClient();
   const [offset, setOffset] = useState(0);
@@ -251,6 +253,16 @@ export default function BookMetadata({
                     for review.
                   </p>
                 )}
+                {onWantVersion &&
+                  ["ebook", "audio"].includes(version.medium) && (
+                    <button
+                      type="button"
+                      onClick={() => onWantVersion(version)}
+                    >
+                      Request this{" "}
+                      {version.medium === "audio" ? "recording" : "edition"}
+                    </button>
+                  )}
               </article>
             ))}
           </div>

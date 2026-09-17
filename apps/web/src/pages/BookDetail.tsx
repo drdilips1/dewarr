@@ -6,6 +6,7 @@ import { api, result } from "../api/client";
 import { LibraryAssets } from "./MyLibrary";
 import { Loading, Notice } from "../components";
 import BookMetadata from "./BookMetadata";
+import Wanted, { type WantedVersion } from "./Wanted";
 
 export default function BookDetail({
   canEdit,
@@ -15,8 +16,23 @@ export default function BookDetail({
   admin: boolean;
 }) {
   const { id = "" } = useParams();
+  return <BookDetailContent key={id} id={id} canEdit={canEdit} admin={admin} />;
+}
+
+function BookDetailContent({
+  id,
+  canEdit,
+  admin,
+}: {
+  id: string;
+  canEdit: boolean;
+  admin: boolean;
+}) {
   const [listId, setListId] = useState("");
   const [saved, setSaved] = useState(false);
+  const [wantedVersion, setWantedVersion] = useState<WantedVersion | null>(
+    null,
+  );
   const book = useQuery({
     queryKey: ["work", id],
     queryFn: async () =>
@@ -158,7 +174,19 @@ export default function BookDetail({
           ) : null}
         </div>
       </div>
-      <BookMetadata work={work} admin={admin} />
+      {canEdit && (
+        <Wanted
+          key={wantedVersion?.id || id}
+          workId={id}
+          version={wantedVersion}
+          clearVersion={() => setWantedVersion(null)}
+        />
+      )}
+      <BookMetadata
+        work={work}
+        admin={admin}
+        onWantVersion={canEdit ? setWantedVersion : undefined}
+      />
       <h2 className="library-access">Your library copies</h2>
       <LibraryAssets workId={id} admin={admin} />
     </>
