@@ -351,7 +351,7 @@ Before each release candidate, freeze dependency versions and migration set, run
 
 ## 7. Initial development handoff
 
-Start with S00-01 through S00-05, then S01-01 and S01-03 as the first substantive engineering proof: schema plus atomic domain/job commit. Freeze adapter DTOs and the work/version/asset vocabulary before implementing feature screens. The first release-worthy demonstration is S05; the first end-to-end automated-list demonstration is S07; public v1 requires S09.
+For a new checkout without implemented foundations, start with S00-01 through S00-05, then S01-01 and S01-03 as the first substantive engineering proof: schema plus atomic domain/job commit. For this existing workspace, follow section 8 and close verified gaps instead of rebuilding those foundations. Freeze adapter DTOs and the work/version/asset vocabulary before implementing dependent feature screens. The first release-worthy acquisition demonstration is S05; the first end-to-end automated-list demonstration is S07; public v1 requires S09.
 
 Acceptance definitions are maintained in [Acceptance Plan](ACCEPTANCE-PLAN.md); actual implementation and test coverage are tracked separately in [Implementation Status](docs/IMPLEMENTATION-STATUS.md). A passing subset does not complete an entire stage or acceptance scenario.
 
@@ -443,3 +443,55 @@ Use the [PRD walkthrough](PRD.md#15-end-to-end-product-acceptance-walkthrough) a
 | S09 | Execute from clean install and restored app state; attach full compatibility and release evidence |
 
 Preserve a fixture-only run in CI and a separately recorded run against the supported external service versions. A parser fixture cannot certify live account authentication; a live search cannot certify a filesystem import. No evaluation or replacement of the user's existing stack is a prerequisite for planning or building these fixtures.
+
+## 10. Capability activation and integration readiness
+
+Stage completion and installation configuration are separate checks. A certified release still verifies the particular user's credentials, destination permissions and filesystem. Persist capability state on the server and enforce it in command handlers; hiding a button is insufficient. Feature activation does not silently create requests from existing lists.
+
+| Capability | Earliest delivery | Required before enabling it | Useful behavior while unavailable |
+|---|---|---|---|
+| Catalog browsing and local curation | S02 | Account permissions and catalog/list contracts | Catalog remains useful without a downloader or paid metadata account |
+| In-library indicators | S03 | Successful scoped inventory and verified media classification | Explicit unknown/stale state; no claim of confirmed absence from a failed sync |
+| Naming preview and fixture import | S04 | Confined paths, actual link/copy probe and manifest validation | Preview explains missing metadata and unsupported paths |
+| Publication to the serving library | S04 | Certified layout, no-replace primitive and confirmation path | Completed files remain pending; unsupported nesting offers the certified conventional preset |
+| Manual MAM acquisition | S05 | Authenticated source route, supported client, destination and durable dispatch/import path | Catalog and source search remain independently usable where their own connections work |
+| Multi-source automatic selection | S06 | Each participating adapter certified, complete eligibility rules and bounded pack expansion | Healthy sources can return results; failed or unsupported sources show their reason |
+| Automatic external-list acquisition | S07 | Successful baseline/backfill decision, authorized policy, durable reasons and S05–S06 lifecycle | Continue list observation and browsing while acquisition is paused |
+| Outbound Hardcover list changes | S08 | Supported account mutation scope, explicit opt-in and reconciliation ledger | Inbound sync continues; pending outbound changes retain an actionable state |
+| Production release | S09 | Complete v1 evidence, install/upgrade/restore and operator documentation | Earlier milestones retain their actual alpha/beta labels |
+
+An unavailable connection is not necessarily a global outage. Pause only dependent operations. In contrast, recovery mode after restoring app state pauses new external dispatch across the installation until reconciliation completes. Keep the reason and next action visible in Activity.
+
+### Integration questions resolved through evidence
+
+The product direction is settled. These remaining implementation questions have named resolution work; they do not require another open-ended product discovery phase.
+
+| Question | Resolution package | Evidence and fallback |
+|---|---|---|
+| Which Seerr presentation components are economical to reuse? | S00-01, S02-03 | Record exact files, notices and dependency cost; independently implement presentation where reuse adds framework coupling |
+| Which provider fields identify a recording reliably? | S02-01, S02-02 | Provider fixtures plus account capability checks; preserve unknown narrator/version rather than inventing equivalence |
+| Does the desired book/version nesting create distinct ABS items? | S04-06 | Actual scanner fixtures with multiple recordings/editions; ship conventional distinct leaves if nesting fails |
+| Can the deployment create hardlinks and publish without replacing content? | S04-03 | Probe the actual configured paths and competing publishers; require corrected mounts or an explicit supported copy policy |
+| Which source and format rules win when preferences conflict? | S05 baseline, S06 ranking packages | Implement the documented ordered presets and selection explanations; no hidden numerical-weight setup |
+| What limits keep automatic pack and backlog expansion bounded? | S06 series policies, S07-05 | Measure representative packs/backlogs; ship visible finite limits before activation; unknown coverage stays reviewable |
+| What can a connected Hardcover account read or write? | S07-01, S08-03 | Verify scopes, pagination and mutation responses; inbound-only when writes are unsupported |
+| What happens when Goodreads RSS is partial? | S07 Goodreads adapter | Observation-ledger tests; preserve prior membership and never infer removal from omission |
+
+### Reviewable ticket template
+
+Split stage packages into implementation tickets using this record. A ticket is ready when its inputs and expected behavior are concrete; its owner can be one developer filling several roles.
+
+```text
+Ticket: <stage package and subtask>
+User outcome: <one observable result>
+Requirements: <FR/NFR IDs>; acceptance assertions: <AT IDs and subset>
+Dependencies: <required contract/revision; actual external capability if needed>
+Scope: <owned modules, API/UI behavior, migration and operational changes>
+Inputs/outputs: <typed records and durable transition>
+Success fixture: <observable database, UI and external result>
+Failure fixtures: <relevant retry, ambiguity, permission and interruption cases>
+Activation: <server-enforced conditions and unavailable behavior>
+Completion evidence: <revision, commands/results, demo and remaining limits>
+```
+
+Assign estimates after this split. Separate implementation effort from provider access or compatibility waits, and revise forecasts after each accepted stage. The critical path is identity/inventory → certified import → manual acquisition → aggregated selection → list automation → release qualification. Discovery presentation can advance against the agreed contracts while those integrations are built; its final acceptance still requires working data and user flows.
