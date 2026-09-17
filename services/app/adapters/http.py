@@ -30,10 +30,15 @@ def configured_url(value: str) -> str:
 
 
 class JsonEndpoint:
-    def __init__(self, base_url: str, token: str, *, transport=None):
+    def __init__(self, base_url: str, token: str | None = None, *, transport=None):
+        self.response_headers = {}
         self.client = httpx.AsyncClient(
             base_url=configured_url(base_url) + "/",
-            headers={"Authorization": f"Bearer {token}", "Accept": "application/json"},
+            headers={
+                **({"Authorization": f"Bearer {token}"} if token else {}),
+                "Accept": "application/json",
+                "User-Agent": "BookSearch/0.1 (self-hosted catalog client)",
+            },
             timeout=httpx.Timeout(30, connect=10),
             trust_env=False,
             follow_redirects=False,
@@ -47,6 +52,7 @@ class JsonEndpoint:
         await self.client.aclose()
 
     async def request(self, method: str, path: str, *, params=None, json=None, empty=False):
+        self.response_headers = {}
         try:
             async with (
                 asyncio.timeout(45),
@@ -57,6 +63,7 @@ class JsonEndpoint:
                     json=json,
                 ) as response,
             ):
+                self.response_headers = dict(response.headers)
                 status = response.status_code
                 kinds = {
                     401: FailureKind.AUTHENTICATION,

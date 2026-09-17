@@ -69,7 +69,9 @@ class Work(Identity, Base):
 
 class Version(Identity, Base):
     __tablename__ = "versions"
-    __table_args__ = (CheckConstraint("medium IN ('ebook', 'audio')"),)
+    __table_args__ = (
+        CheckConstraint("medium IN ('ebook', 'audio', 'print', 'unknown')", name="version_medium"),
+    )
     work_id: Mapped[UUID] = mapped_column(ForeignKey("works.id"), index=True)
     medium: Mapped[str] = mapped_column(String(10))
     title: Mapped[str | None] = mapped_column(Text)
@@ -234,3 +236,47 @@ Index(
     postgresql_using="gin",
     postgresql_ops={"title": "gin_trgm_ops"},
 )
+
+
+class CatalogAccount(Base):
+    __tablename__ = "catalog_accounts"
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    encrypted_token: Mapped[str] = mapped_column(Text)
+    enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    generation: Mapped[int] = mapped_column(Integer, default=0)
+    status: Mapped[str] = mapped_column(String(40), default="untested")
+    last_error: Mapped[str | None] = mapped_column(String(500))
+    last_success_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class MetadataSettings(Base):
+    __tablename__ = "metadata_settings"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    preferences: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+
+
+class ProviderCache(Base):
+    __tablename__ = "provider_cache"
+    key: Mapped[str] = mapped_column(String(64), primary_key=True)
+    value: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    fetched_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+
+
+class ProviderBudget(Base):
+    __tablename__ = "provider_budgets"
+    key: Mapped[str] = mapped_column(String(100), primary_key=True)
+    next_request_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    blocked_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class WorkMetadataSource(Identity, Base):
+    __tablename__ = "work_metadata_sources"
+    __table_args__ = (UniqueConstraint("work_id", "provider", "external_id"),)
+    work_id: Mapped[UUID] = mapped_column(ForeignKey("works.id"), index=True)
+    provider: Mapped[str] = mapped_column(String(40))
+    external_id: Mapped[str] = mapped_column(String(200), index=True)
+    snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    fetched_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    accepted: Mapped[bool] = mapped_column(Boolean, default=True)
+    manual_match: Mapped[bool] = mapped_column(Boolean, default=False)

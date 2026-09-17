@@ -4,6 +4,8 @@ Planning baseline v1.1 · September 17, 2026 · Implementation has started; see 
 
 This plan implements [the PRD](PRD.md) using [the researched decisions](IMPLEMENTATION-DECISIONS.md). [Acceptance Plan](ACCEPTANCE-PLAN.md) specifies the evidence required at each gate. A stage is complete only when its exit gate passes; this document does not report completed engineering or tested compatibility.
 
+The [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md) provides a concise handoff across these documents, including the product boundary, P0/P1 decisions and milestone demonstrations.
+
 ## 1. Delivery strategy
 
 Deliver a working vertical slice early, then expand source coverage and automation. Build durable domain state, identity and inventory before dispatch; certify importing before connecting automatic acquisition. Hardening, accessibility, authorization and migration testing start with their first affected feature rather than waiting for the final stage.

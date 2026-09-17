@@ -29,6 +29,8 @@ const ActivityPage = lazy(() => import("./pages/Activity"));
 const Connections = lazy(() => import("./pages/Connections"));
 const MyLibrary = lazy(() => import("./pages/MyLibrary"));
 const Accounts = lazy(() => import("./pages/Accounts"));
+const ProviderSearch = lazy(() => import("./pages/ProviderSearch"));
+const MetadataSettings = lazy(() => import("./pages/MetadataSettings"));
 
 export default function App() {
   const client = useQueryClient();
@@ -259,6 +261,14 @@ function Shell({ auth }: { auth: Auth }) {
             <BookOpen size={19} />
             My Library
           </NavLink>
+          <NavLink to="/search">
+            <Search size={19} />
+            Search books
+          </NavLink>
+          <NavLink to="/metadata">
+            <Settings size={19} />
+            Metadata
+          </NavLink>
           {auth.user.role === "admin" && (
             <NavLink to="/connections">
               <Settings size={19} />
@@ -322,7 +332,24 @@ function Shell({ auth }: { auth: Auth }) {
               />
               <Route
                 path="/books/:id"
-                element={<BookDetail canEdit={auth.user.role !== "viewer"} />}
+                element={
+                  <BookDetail
+                    canEdit={auth.user.role !== "viewer"}
+                    admin={auth.user.role === "admin"}
+                  />
+                }
+              />
+              <Route
+                path="/search"
+                element={
+                  <ProviderSearch canEdit={auth.user.role !== "viewer"} />
+                }
+              />
+              <Route
+                path="/metadata"
+                element={
+                  <MetadataSettings admin={auth.user.role === "admin"} />
+                }
               />
               <Route
                 path="/lists"

@@ -1208,7 +1208,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MatchInput"
+                "$ref": "#/components/schemas/app__api__library__MatchInput"
               }
             }
           }
@@ -1216,6 +1216,551 @@
         "responses": {
           "204": {
             "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metadata/account": {
+      "get": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Get Account",
+        "operationId": "get_account_api_metadata_account_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountView"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Save Account",
+        "operationId": "save_account_api_metadata_account_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metadata/account/test": {
+      "post": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Test Account",
+        "operationId": "test_account_api_metadata_account_test_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountView"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metadata/preferences": {
+      "get": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Get Preferences",
+        "operationId": "get_preferences_api_metadata_preferences_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetadataPreferences"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Save Preferences",
+        "operationId": "save_preferences_api_metadata_preferences_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MetadataPreferences"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetadataPreferences"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metadata/search": {
+      "get": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Search",
+        "operationId": "search_api_metadata_search_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300,
+              "title": "Q"
+            }
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "automatic",
+                "hardcover",
+                "openlibrary"
+              ],
+              "type": "string",
+              "default": "automatic",
+              "title": "Provider"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metadata/books/{provider}/{external_id}": {
+      "get": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Preview",
+        "operationId": "preview_api_metadata_books__provider___external_id__get",
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "hardcover",
+                "openlibrary"
+              ],
+              "type": "string",
+              "title": "Provider"
+            }
+          },
+          {
+            "name": "external_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "External Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookPreview"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metadata/books/{provider}/{external_id}/import": {
+      "post": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Add Catalog Book",
+        "operationId": "add_catalog_book_api_metadata_books__provider___external_id__import_post",
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "hardcover",
+                "openlibrary"
+              ],
+              "type": "string",
+              "title": "Provider"
+            }
+          },
+          {
+            "name": "external_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "External Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metadata/works/{work_id}": {
+      "get": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Work Metadata",
+        "operationId": "work_metadata_api_metadata_works__work_id__get",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 40,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetadataView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Edit Metadata",
+        "operationId": "edit_metadata_api_metadata_works__work_id__patch",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MetadataEdit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metadata/works/{work_id}/source": {
+      "post": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Match Source",
+        "operationId": "match_source_api_metadata_works__work_id__source_post",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/app__api__metadata__MatchInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metadata/works/{work_id}/source/editions": {
+      "post": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Load Editions",
+        "operationId": "load_editions_api_metadata_works__work_id__source_editions_post",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/app__api__metadata__MatchInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkView"
+                }
+              }
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -1292,6 +1837,78 @@
           "base_url"
         ],
         "title": "ABSConnectionInput"
+      },
+      "AccountInput": {
+        "properties": {
+          "token": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 8192,
+                "minLength": 1,
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Token"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": true
+          }
+        },
+        "type": "object",
+        "title": "AccountInput"
+      },
+      "AccountView": {
+        "properties": {
+          "configured": {
+            "type": "boolean",
+            "title": "Configured"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "last_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Error"
+          },
+          "last_success_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Success At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "configured",
+          "enabled",
+          "status"
+        ],
+        "title": "AccountView"
       },
       "AssetPage": {
         "properties": {
@@ -1473,6 +2090,159 @@
         "type": "object",
         "title": "Availability"
       },
+      "BookData": {
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "hardcover",
+              "openlibrary"
+            ],
+            "title": "Provider"
+          },
+          "external_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "External Id"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 600,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Authors"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "publication_year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Publication Year"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "cover_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cover Url"
+          },
+          "subjects": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Subjects"
+          },
+          "editions": {
+            "items": {
+              "$ref": "#/components/schemas/EditionData"
+            },
+            "type": "array",
+            "title": "Editions"
+          },
+          "editions_more": {
+            "type": "boolean",
+            "title": "Editions More",
+            "default": false
+          },
+          "editions_offset": {
+            "type": "integer",
+            "title": "Editions Offset",
+            "default": 0
+          },
+          "series": {
+            "items": {
+              "$ref": "#/components/schemas/SeriesData"
+            },
+            "type": "array",
+            "title": "Series"
+          },
+          "canonical_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Canonical Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "provider",
+          "external_id",
+          "title"
+        ],
+        "title": "BookData"
+      },
+      "BookPreview": {
+        "properties": {
+          "book": {
+            "$ref": "#/components/schemas/BookData"
+          },
+          "stale": {
+            "type": "boolean",
+            "title": "Stale",
+            "default": false
+          },
+          "warning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Warning"
+          }
+        },
+        "type": "object",
+        "required": [
+          "book"
+        ],
+        "title": "BookPreview"
+      },
       "BootstrapInput": {
         "properties": {
           "username": {
@@ -1623,6 +2393,208 @@
           "password"
         ],
         "title": "Credentials"
+      },
+      "EditValues": {
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "authors": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "maxItems": 30
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Authors"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 30000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "publication_year": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 9999.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Publication Year"
+          },
+          "cover_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cover Url"
+          }
+        },
+        "type": "object",
+        "title": "EditValues"
+      },
+      "EditionData": {
+        "properties": {
+          "external_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "External Id"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "medium": {
+            "type": "string",
+            "enum": [
+              "ebook",
+              "audio",
+              "print",
+              "unknown"
+            ],
+            "title": "Medium",
+            "default": "unknown"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "narrators": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Narrators"
+          },
+          "publication_year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Publication Year"
+          },
+          "publisher": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Publisher"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "identifiers": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Identifiers"
+          },
+          "cover_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cover Url"
+          },
+          "abridged": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Abridged"
+          }
+        },
+        "type": "object",
+        "required": [
+          "external_id"
+        ],
+        "title": "EditionData"
       },
       "EntryInput": {
         "properties": {
@@ -1872,26 +2844,126 @@
         ],
         "title": "ListView"
       },
-      "MatchInput": {
+      "MetadataEdit": {
         "properties": {
-          "work_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
+          "values": {
+            "$ref": "#/components/schemas/EditValues"
+          },
+          "unlock": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "title",
+                "authors",
+                "description",
+                "publication_year",
+                "language",
+                "cover_url"
+              ]
+            },
+            "type": "array",
+            "maxItems": 6,
+            "title": "Unlock"
+          }
+        },
+        "type": "object",
+        "title": "MetadataEdit"
+      },
+      "MetadataPreferences": {
+        "properties": {
+          "primary": {
+            "type": "string",
+            "enum": [
+              "hardcover",
+              "openlibrary"
             ],
-            "title": "Work Id"
+            "title": "Primary",
+            "default": "hardcover"
+          },
+          "language": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 2,
+            "title": "Language",
+            "default": "en"
+          },
+          "covers": {
+            "type": "string",
+            "enum": [
+              "automatic",
+              "hardcover",
+              "openlibrary"
+            ],
+            "title": "Covers",
+            "default": "automatic"
+          },
+          "field_providers": {
+            "additionalProperties": {
+              "type": "string",
+              "enum": [
+                "hardcover",
+                "openlibrary"
+              ]
+            },
+            "type": "object",
+            "title": "Field Providers"
+          }
+        },
+        "type": "object",
+        "title": "MetadataPreferences"
+      },
+      "MetadataView": {
+        "properties": {
+          "fields": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Fields"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SourceView"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "versions": {
+            "items": {
+              "$ref": "#/components/schemas/VersionView"
+            },
+            "type": "array",
+            "title": "Versions"
+          },
+          "versions_total": {
+            "type": "integer",
+            "title": "Versions Total"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "cover_choices": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Cover Choices"
           }
         },
         "type": "object",
         "required": [
-          "work_id"
+          "fields",
+          "sources",
+          "versions",
+          "versions_total",
+          "offset",
+          "limit",
+          "cover_choices"
         ],
-        "title": "MatchInput"
+        "title": "MetadataView"
       },
       "OperationView": {
         "properties": {
@@ -1952,6 +3024,91 @@
         ],
         "title": "OrderInput"
       },
+      "SearchPage": {
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "hardcover",
+              "openlibrary"
+            ],
+            "title": "Provider"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/BookData"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          },
+          "stale": {
+            "type": "boolean",
+            "title": "Stale",
+            "default": false
+          },
+          "warning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Warning"
+          }
+        },
+        "type": "object",
+        "required": [
+          "provider",
+          "items",
+          "page",
+          "has_more"
+        ],
+        "title": "SearchPage"
+      },
+      "SeriesData": {
+        "properties": {
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "compilation": {
+            "type": "boolean",
+            "title": "Compilation",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "external_id",
+          "name"
+        ],
+        "title": "SeriesData"
+      },
       "SetupView": {
         "properties": {
           "needs_setup": {
@@ -1964,6 +3121,64 @@
           "needs_setup"
         ],
         "title": "SetupView"
+      },
+      "SourceView": {
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "hardcover",
+              "openlibrary"
+            ],
+            "title": "Provider"
+          },
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "fetched_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Fetched At"
+          },
+          "cover_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cover Url"
+          },
+          "editions_more": {
+            "type": "boolean",
+            "title": "Editions More"
+          },
+          "series": {
+            "items": {
+              "$ref": "#/components/schemas/SeriesData"
+            },
+            "type": "array",
+            "title": "Series"
+          }
+        },
+        "type": "object",
+        "required": [
+          "provider",
+          "external_id",
+          "title",
+          "fetched_at",
+          "cover_url",
+          "editions_more",
+          "series"
+        ],
+        "title": "SourceView"
       },
       "UserInput": {
         "properties": {
@@ -2077,6 +3292,85 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "VersionView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "medium": {
+            "type": "string",
+            "title": "Medium"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "narrators": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Narrators"
+          },
+          "publication_year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Publication Year"
+          },
+          "identifiers": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Identifiers"
+          },
+          "owned": {
+            "type": "boolean",
+            "title": "Owned"
+          },
+          "needs_review": {
+            "type": "boolean",
+            "title": "Needs Review"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "medium",
+          "title",
+          "language",
+          "narrators",
+          "publication_year",
+          "identifiers",
+          "owned",
+          "needs_review"
+        ],
+        "title": "VersionView"
       },
       "WorkInput": {
         "properties": {
@@ -2252,6 +3546,56 @@
           "availability"
         ],
         "title": "WorkView"
+      },
+      "app__api__library__MatchInput": {
+        "properties": {
+          "work_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Work Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "work_id"
+        ],
+        "title": "MatchInput"
+      },
+      "app__api__metadata__MatchInput": {
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "hardcover",
+              "openlibrary"
+            ],
+            "title": "Provider"
+          },
+          "external_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "External Id"
+          },
+          "confirm_match": {
+            "type": "boolean",
+            "title": "Confirm Match",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "provider",
+          "external_id"
+        ],
+        "title": "MatchInput"
       }
     }
   }

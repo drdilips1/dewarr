@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     web_dist: Path = Path("apps/web/dist")
     recovery_mode: bool = False
     db_pool_size: int = 5
+    hardcover_url: str = "https://api.hardcover.app"
+    openlibrary_url: str = "https://openlibrary.org"
 
     @field_validator("public_url")
     @classmethod

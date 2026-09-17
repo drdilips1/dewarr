@@ -3,6 +3,7 @@ import { expect, test } from "@playwright/test";
 test("setup, catalog, private list and durable worker are usable together", async ({
   page,
 }, testInfo) => {
+  test.setTimeout(60_000);
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
@@ -103,6 +104,70 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await page.getByRole("link", { name: "Catalog", exact: true }).click();
   const owned = page.getByRole("link", { name: /The Synthetic Archive/ });
   await expect(owned).toContainText("In library");
+  await page.getByRole("link", { name: "Metadata", exact: true }).click();
+  await page.getByLabel("Hardcover API token").fill("browser-hardcover-token");
+  await page.getByRole("button", { name: "Save catalog connection" }).click();
+  await page.getByRole("button", { name: "Test catalog connection" }).click();
+  await expect(page.getByRole("status")).toHaveText(
+    "Hardcover catalog access verified.",
+  );
+  await page.getByRole("link", { name: "Search books", exact: true }).click();
+  await page
+    .getByLabel("Title, author or identifier")
+    .fill("The Catalog Journey");
+  await page.getByRole("button", { name: "Search books", exact: true }).click();
+  await page
+    .getByRole("button", { name: /The Catalog Journey Catalog Author/ })
+    .click();
+  const preview = page.getByRole("region", { name: "Catalog preview" });
+  await expect(preview).toBeFocused();
+  await expect(preview.getByText("2 catalog editions loaded.")).toBeVisible();
+  await preview.getByRole("button", { name: "Add to catalog" }).click();
+  await expect(
+    page.getByRole("heading", { name: "The Catalog Journey", level: 1 }),
+  ).toBeVisible();
+  await expect(page.getByText("Narrated by Sample Narrator")).toBeVisible();
+  await expect(
+    page.getByText("Not confirmed in library", { exact: true }),
+  ).toBeVisible();
+  await page
+    .getByText("Metadata sources and protected edits", { exact: true })
+    .click();
+  await page.getByRole("button", { name: "Edit book details" }).click();
+  await page
+    .getByLabel("Book title", { exact: true })
+    .fill("My protected catalog title");
+  await page.getByRole("button", { name: "Save protected edits" }).click();
+  await expect(
+    page.getByRole("heading", { name: "My protected catalog title", level: 1 }),
+  ).toBeVisible();
+  const refreshed = page.waitForResponse(
+    (response) =>
+      response.url().endsWith("/source") &&
+      response.request().method() === "POST",
+  );
+  await page
+    .getByRole("button", { name: "Refresh Hardcover", exact: true })
+    .click();
+  expect((await refreshed).status()).toBe(200);
+  await expect(
+    page.getByRole("heading", { name: "My protected catalog title", level: 1 }),
+  ).toBeVisible();
+  await page.screenshot({
+    path: testInfo.outputPath("catalog-metadata-desktop.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("catalog-metadata-mobile.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.getByRole("link", { name: "Accounts", exact: true }).click();
   await page.getByLabel("Name", { exact: true }).fill("Guest reader");
   await page.getByLabel("Username", { exact: true }).fill("guest");

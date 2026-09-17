@@ -1,0 +1,187 @@
+from datetime import UTC, datetime
+
+import pytest
+
+from app.adapters.catalog_providers import HC_BOOK, HC_EDITIONS, Hardcover, OpenLibrary
+from app.adapters.contracts import AdapterError, FailureKind
+from app.domain.catalog_network import retry_delay
+
+
+@pytest.mark.asyncio
+async def test_hardcover_separates_authors_narrators_and_catalog_formats():
+    async def request(method, path, *, json):
+        assert method == "POST" and path == "v1/graphql"
+        if json["query"] == HC_BOOK:
+            return {
+                "data": {
+                    "books": [
+                        {
+                            "id": 42,
+                            "title": "A Book",
+                            "release_year": 1999,
+                            "cached_contributors": [
+                                {"author": {"name": "Author One"}},
+                                {"contribution": "Narrator", "author": {"name": "Reader One"}},
+                            ],
+                            "book_series": [
+                                {
+                                    "position": 1.5,
+                                    "compilation": False,
+                                    "series": {"id": 7, "name": "Series"},
+                                }
+                            ],
+                        }
+                    ]
+                }
+            }
+        if json["query"] == HC_EDITIONS:
+            return {
+                "data": {
+                    "editions": [
+                        {
+                            "id": i,
+                            "book_id": 42,
+                            "title": "A Book",
+                            "reading_format": {"format": format_name},
+                            "cached_contributors": [
+                                {"contribution": "Narrator", "author": {"name": "Reader One"}}
+                            ],
+                            "language": {"code2": "en"},
+                            "release_year": 2001,
+                        }
+                        for i, format_name in enumerate(
+                            ["Audio", "Ebook", "Physical", "Unspecified"], 1
+                        )
+                    ]
+                }
+            }
+        return {
+            "data": {
+                "search": {
+                    "results": (
+                        '{"found": 1, "hits": [{"document": {"id": 42, "title": "A Book", '
+                        '"author_names": ["Author One", "Reader One"], '
+                        '"contribution_types": ["Author", "Narrator"]}}]}'
+                    )
+                }
+            }
+        }
+
+    adapter = Hardcover(request)
+    result = await adapter.search("A Book", 1)
+    assert result.items[0].authors == ["Author One"]
+    book = await adapter.fetch("42")
+    assert book.authors == ["Author One"]
+    assert book.series[0].position == "1.5"
+    assert [edition.medium for edition in book.editions] == ["audio", "ebook", "print", "unknown"]
+    assert book.editions[0].narrators == ["Reader One"]
+    assert all(not edition.narrators for edition in book.editions[1:])
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "value",
+    [
+        {"data": None},
+        {"data": {"search": {"results": {"hits": [], "found": "bad"}}}},
+        {"data": {"search": {"results": "not-json"}}},
+        {
+            "data": {
+                "search": {
+                    "results": {
+                        "hits": [
+                            {
+                                "document": {
+                                    "id": 4,
+                                    "title": "x",
+                                    "image": {"url": "https://127.0.0.1/private"},
+                                }
+                            }
+                        ],
+                        "found": 1,
+                    }
+                }
+            },
+            "errors": [{"message": "secret upstream failure"}],
+        },
+    ],
+)
+async def test_malformed_and_partial_graphql_never_becomes_empty_success(value):
+    async def request(*args, **kwargs):
+        return value
+
+    with pytest.raises(AdapterError) as caught:
+        await Hardcover(request).search("query", 1)
+    assert caught.value.kind == FailureKind.PARSER
+    assert "secret" not in str(caught.value)
+
+
+@pytest.mark.asyncio
+async def test_openlibrary_does_not_infer_ebook_from_print_scan():
+    async def request(method, path, **kwargs):
+        if path == "works/OL1W.json":
+            return {
+                "key": "/works/OL1W",
+                "title": "Book",
+                "authors": [{"author": {"key": "/authors/OL2A"}}],
+                "description": {"value": "Text"},
+            }
+        if path == "authors/OL2A.json":
+            return {"name": "Writer"}
+        if path.endswith("editions.json"):
+            return {
+                "entries": [
+                    {
+                        "key": "/books/OL3M",
+                        "physical_format": "Paperback",
+                        "ocaid": "scan",
+                        "publish_date": "June 2000",
+                    }
+                ]
+            }
+        return {
+            "docs": [{"key": "/works/OL1W", "title": "Book", "author_name": ["Writer"]}],
+            "numFound": 1,
+        }
+
+    adapter = OpenLibrary(request)
+    assert (await adapter.search("Book", 1)).items[0].external_id == "OL1W"
+    book = await adapter.fetch("OL1W")
+    assert book.editions[0].medium == "unknown"
+    assert book.authors == ["Writer"]
+    assert book.description == "Text"
+
+
+def test_quota_headers_respect_all_exhausted_buckets():
+    now = datetime(2026, 9, 17, tzinfo=UTC)
+    assert retry_delay({"ratelimit": '"Free";r=0;t=40, "daily";r=0;t=3600'}, now) == 3600
+    assert retry_delay({"retry-after": "120"}, now) == 120
+    assert (
+        retry_delay(
+            {"x-ratelimit-remaining": "0", "x-ratelimit-reset": str(now.timestamp() + 80)}, now
+        )
+        == 80
+    )
+    assert retry_delay({"ratelimit": '"Free";r=5;t=40'}, now) == 0
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("count, has_more", [(50, False), (51, True)])
+async def test_editions_use_lookahead_before_claiming_another_page(count, has_more):
+    async def request(method, path, *, json):
+        if json["query"] == HC_BOOK:
+            return {"data": {"books": [{"id": 42, "title": "Book", "cached_contributors": None}]}}
+        assert json["variables"]["offset"] == 50
+        return {
+            "data": {
+                "editions": [
+                    {"id": index + 51, "book_id": 42, "cached_contributors": None}
+                    for index in range(count)
+                ]
+            }
+        }
+
+    book = await Hardcover(request).fetch("42", 50)
+    assert len(book.editions) == 50
+    assert book.editions_more is has_more
+    assert book.editions_offset == 50

@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import FastAPI, Header, HTTPException, Request
 
 app = FastAPI()
 item = json.loads(
@@ -29,3 +29,78 @@ async def endpoint(path: str, authorization: str = Header(default="")):
     if path == f"api/items/{item['id']}":
         return item
     raise HTTPException(404)
+
+
+@app.post("/catalog/v1/graphql")
+async def catalog(request: Request, authorization: str = Header(default="")):
+    if authorization != "Bearer browser-hardcover-token":
+        raise HTTPException(401)
+    body = await request.json()
+    query = body.get("query", "")
+    if "CatalogBook(" in query:
+        return {
+            "data": {
+                "books": [
+                    {
+                        "id": 42,
+                        "title": "The Catalog Journey",
+                        "release_year": 2020,
+                        "description": "A synthetic book for catalog and metadata verification.",
+                        "cached_contributors": [{"author": {"name": "Catalog Author"}}],
+                        "book_series": [
+                            {
+                                "position": 1,
+                                "compilation": False,
+                                "series": {"id": 10, "name": "The Journey Series"},
+                            }
+                        ],
+                    }
+                ]
+            }
+        }
+    if "CatalogEditions(" in query:
+        return {
+            "data": {
+                "editions": [
+                    {
+                        "id": 51,
+                        "book_id": 42,
+                        "title": "The Catalog Journey",
+                        "reading_format": {"format": "Ebook"},
+                        "language": {"code2": "en"},
+                    },
+                    {
+                        "id": 52,
+                        "book_id": 42,
+                        "title": "The Catalog Journey",
+                        "reading_format": {"format": "Audio"},
+                        "language": {"code2": "en"},
+                        "cached_contributors": [
+                            {"contribution": "Narrator", "author": {"name": "Sample Narrator"}}
+                        ],
+                    },
+                ]
+            }
+        }
+    if "CatalogSearch(" in query:
+        return {
+            "data": {
+                "search": {
+                    "results": {
+                        "found": 1,
+                        "hits": [
+                            {
+                                "document": {
+                                    "id": 42,
+                                    "title": "The Catalog Journey",
+                                    "author_names": ["Catalog Author"],
+                                    "contribution_types": ["Author"],
+                                    "release_year": 2020,
+                                }
+                            }
+                        ],
+                    }
+                }
+            }
+        }
+    raise HTTPException(400)

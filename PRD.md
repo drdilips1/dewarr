@@ -6,6 +6,8 @@ Status: ready for staged development. No application code or production deployme
 
 Read sections 1–6 for the product and UX, section 7 for tracked requirements, and sections 13–14 for precise behavior and release decisions. Implementation evidence is recorded separately in [Implementation Status](docs/IMPLEMENTATION-STATUS.md); planned functionality must not be presented as shipped.
 
+For a compact development handoff, see the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md).
+
 ## 1. Product purpose
 
 Build a self-hosted discovery, curation and acquisition application for ebooks and audiobooks. It sits above Audiobookshelf, knows what the connected library contains, presents books through familiar Seerr-style browsing, searches multiple download sources, and completes acquisition through qBittorrent and an organized library import.

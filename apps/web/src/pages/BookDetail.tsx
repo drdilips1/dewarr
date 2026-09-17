@@ -5,8 +5,15 @@ import { Link, useParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import { LibraryAssets } from "./MyLibrary";
 import { Loading, Notice } from "../components";
+import BookMetadata from "./BookMetadata";
 
-export default function BookDetail({ canEdit }: { canEdit: boolean }) {
+export default function BookDetail({
+  canEdit,
+  admin,
+}: {
+  canEdit: boolean;
+  admin: boolean;
+}) {
   const { id = "" } = useParams();
   const [listId, setListId] = useState("");
   const [saved, setSaved] = useState(false);
@@ -44,11 +51,20 @@ export default function BookDetail({ canEdit }: { canEdit: boolean }) {
         Back to catalog
       </Link>
       <div className="book-detail">
-        <div className="detail-cover type-cover">
-          <BookOpen size={34} />
-          <span>{work.title}</span>
-          <small>{work.authors.join(" · ")}</small>
-        </div>
+        {work.cover_url ? (
+          <img
+            className="detail-cover"
+            src={work.cover_url}
+            alt={`Cover of ${work.title}`}
+            referrerPolicy="no-referrer"
+          />
+        ) : (
+          <div className="detail-cover type-cover">
+            <BookOpen size={34} />
+            <span>{work.title}</span>
+            <small>{work.authors.join(" · ")}</small>
+          </div>
+        )}
         <div>
           <p className="eyebrow">
             {work.provisional ? "CATALOG ENTRY" : "BOOK"}
@@ -142,6 +158,7 @@ export default function BookDetail({ canEdit }: { canEdit: boolean }) {
           ) : null}
         </div>
       </div>
+      <BookMetadata work={work} admin={admin} />
       <h2 className="library-access">Your library copies</h2>
       <LibraryAssets workId={id} />
     </>

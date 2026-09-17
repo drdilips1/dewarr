@@ -104,6 +104,17 @@ async def works(
 @router.post("/works", response_model=WorkView, status_code=201)
 async def add_work(body: WorkInput, user: Member, db: Database):
     work = Work(**body.model_dump())
+    work.metadata_fields = {
+        "fields": {
+            field: {
+                "value": value,
+                "provider": "manual",
+                "locked": True,
+                "reason": "Entered by user",
+            }
+            for field, value in body.model_dump(exclude_unset=True).items()
+        }
+    }
     work.match_key = work_key(work.title, work.authors)
     db.add(work)
     await db.flush()
