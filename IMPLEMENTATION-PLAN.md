@@ -1,6 +1,6 @@
 # End-to-end development plan
 
-Planning baseline v1.0 · September 17, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
+Planning baseline v1.1 · September 17, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
 
 This plan implements [the PRD](PRD.md) using [the researched decisions](IMPLEMENTATION-DECISIONS.md). [Acceptance Plan](ACCEPTANCE-PLAN.md) specifies the evidence required at each gate. A stage is complete only when its exit gate passes; this document does not report completed engineering or tested compatibility.
 
@@ -25,6 +25,23 @@ Deliver a working vertical slice early, then expand source coverage and automati
 S02 and S03 can run as parallel workstreams once S01 contracts stabilize. Source parsing fixtures, discovery layouts and list adapters can be developed early against contracts, but cannot bypass import or automation gates. The dependency table describes integration gates, not a requirement to keep all contributors sequential.
 
 Do not commit to calendar dates before S01 exposes actual integration effort and team throughput. After S01, estimate remaining work packages using observed velocity; track provider/parser uncertainty separately from normal UI work. A date forecast never replaces a gate.
+
+There are **61 work packages**: 55 through v1.0 (S00–S09) and six independently scoped expansion packages (S10). These are planning units, not equal-sized tickets or estimates. The first valuable release is the S05 manual acquisition path; the defining list-to-library product journey is complete at S07; the full v1 experience includes S08 and S09.
+
+```mermaid
+flowchart LR
+    S00["S00 Scaffold"] --> S01["S01 Identity and durability"]
+    S01 --> S02["S02 Catalog and UI"]
+    S01 --> S03["S03 ABS inventory"]
+    S02 --> S04["S04 Import certification"]
+    S03 --> S04
+    S04 --> S05["S05 MAM and qBit · Alpha"]
+    S05 --> S06["S06 Sources and series"]
+    S06 --> S07["S07 List automation · Beta"]
+    S07 --> S08["S08 Discovery and curation"]
+    S08 --> S09["S09 Production v1"]
+    S09 --> S10["S10 Expansion releases"]
+```
 
 ## 2. Engineering boundaries
 
@@ -149,7 +166,7 @@ Ticket IDs below are stable planning references. Each ticket should acquire a co
 
 | Ticket | Deliverable |
 |---|---|
-| S03-01 | ABS connection/capability test, inventory pagination, item details, deep links and optional events. Separate scan authority from inventory access. |
+| S03-01 | ABS connection/capability test, inventory pagination, item details, deep links and change-event support where the backend permits it. Polling repairs gaps and supports connections without event capability. Separate scan authority from inventory access. |
 | S03-02 | Reconciliation generations with complete/partial markers; periodic full repair after event gaps; stale, suspected missing and confirmed missing transitions. |
 | S03-03 | Asset-to-work/version matching, technical media classification, companion-document exclusions and omnibus containment model. Keep match corrections durable. |
 | S03-04 | Overall and medium-specific availability projections, granted-library filtering, pending states and version counts in cards/detail/library. |
@@ -221,7 +238,7 @@ Ticket IDs below are stable planning references. Each ticket should acquire a co
 | S07-03 | Local membership/subscription reconciliation, explicit detach/remove semantics, source-owned memberships and durable exclusions. List deletion never deletes library files. |
 | S07-04 | Browse/manual/automatic modes; ebook/audio/both/either and profile inheritance; backlog preview versus future-only first-successful-sync baseline. Start paused if no valid baseline can be established. |
 | S07-05 | Scheduled due-sync jobs, initially around 30 minutes with jitter, shared budgets, adaptive backoff, bounded backfill batches and request reasons. Recheck inventory, reservations and suppressions at dispatch time, not just list ingest. Polling cadence is adjustable and subordinate to provider limits. |
-| S07-06 | List status/policy summary, per-item pending/owned/attention, manual selection, pause/resume, backlog cancellation and clear next actions. |
+| S07-06 | List status/policy summary, per-item pending/owned/attention, manual selection, pause/resume, backlog cancellation and clear next actions. Pausing acquisition continues list observation; resuming previews accumulated additions. Policy changes preview their effect on existing unsatisfied entries. |
 
 **Demo:** add a new title to a connected list → the app acquires the missing requested medium → imports and confirms it. Repeating sync, following an overlapping list and restarting workers add no duplicate transfer. Already-owned books remain checked and skipped according to media requirements.
 
@@ -333,3 +350,75 @@ Before each release candidate, freeze dependency versions and migration set, run
 Start with S00-01 through S00-05, then S01-01 and S01-03 as the first substantive engineering proof: schema plus atomic domain/job commit. Freeze adapter DTOs and the work/version/asset vocabulary before implementing feature screens. The first release-worthy demonstration is S05; the first end-to-end automated-list demonstration is S07; public v1 requires S09.
 
 Acceptance definitions are maintained in [Acceptance Plan](ACCEPTANCE-PLAN.md); actual implementation and test coverage are tracked separately in [Implementation Status](docs/IMPLEMENTATION-STATUS.md). A passing subset does not complete an entire stage or acceptance scenario.
+
+## 8. Execution and handoff contracts
+
+### Starting from this repository
+
+Use the existing foundation and preserve unrelated work. Inventory the current implementation against the stage gates before assigning tickets; code existence alone is not completion. The status document records verified evidence, while uncommitted integration work still needs review and validation. Do not restart completed foundation work merely because the stage contains other unfinished packages.
+
+The next integration sequence is:
+
+1. Close S01 identity, authorization and durable-operation gaps needed by inventory. Preserve stable UUIDs, manual corrections, private-library visibility and generation fencing.
+2. Complete S03 ABS connections and inventory through HTTP contract fixtures and actual-version certification. Show work-level ownership and per-medium/version details in the UI.
+3. Complete S02 metadata/provider resolution and local list UX against the same work/version contracts. Catalog ingestion from ABS must remain useful before optional metadata accounts are connected.
+4. Implement S04 on synthetic completed downloads, including two narrators and a series pack. Prove file integrity, item boundaries and restart recovery before enabling MAM/qBittorrent dispatch.
+5. Deliver S05's manual vertical slice, then S06 aggregation, S07 automation, S08 curation and S09 release qualification.
+
+S00 infrastructure and CI gaps remain release blockers even when feature work advances. This ordering accounts for existing code; it does not change stage dependencies or waive gates.
+
+### Cross-module artifacts required at handoff
+
+| Producer → consumer | Required artifact | Invariant the consumer may rely on |
+|---|---|---|
+| Catalog → search/automation | Work/version DTO, provider references, accepted mapping evidence and manual locks | Version fields are not copied from unrelated recordings |
+| Inventory → policy engine | Visibility-scoped asset coverage, media/version constraints, freshness and pending state | Unknown/stale is distinguishable from confirmed absent |
+| Lists → requests | Stable membership reason, user/destination scope, policy revision and baseline/backfill decision | Repeated observations do not create new acquisition reasons |
+| Source search → selector | Normalized result plus raw origin fields, freshness, capability and coverage evidence | Missing fields remain unknown; private origin routes remain distinct |
+| Selector → downloader | Frozen release choice, eligibility explanation, target reservations and attempt ledger | Compatible concurrent requests have been serialized and reconciled |
+| Downloader → inspector | Associated client transfer and validated completed-file inventory | Unrelated torrents are not claimed; source paths remain client-owned |
+| Inspector → publisher | Versioned per-child manifest with immutable source mapping and destination plan | Ambiguous children are held; collisions and file boundaries are explicit |
+| Publisher → inventory | Publication evidence and expected backend item/file bindings | File publication is not yet ownership confirmation |
+| Inventory → completion/write-back | Confirmed accessible coverage and satisfied target set | Download success never implies read status; write-back failure cannot undo ownership |
+
+Each artifact has a typed schema, version/compatibility policy and representative fixture. A module does not invent another module's state to unblock its UI. Cross-process messages reference durable records rather than carrying secrets or treating transient events as authoritative.
+
+### API delivery map
+
+These are resource families, not a claim that endpoints already exist. Exact URLs are frozen in the generated OpenAPI contract with their implementation stage.
+
+| Resource family | Read behavior | Commands | First complete stage |
+|---|---|---|---|
+| Accounts/connections | Current user, roles, capabilities, sanitized health | Bootstrap/login, connection test/edit, grants | S01/S03 |
+| Catalog/versions/series | Paginated search, details, provenance, availability | Refresh, protected edit, resolve/undo mapping | S02/S03 |
+| Inventory | Granted libraries/assets, freshness, deep links | Sync, relink, resolve missing state | S03 |
+| Organization | Presets, tokens, path diagnostics, manifest preview | Validate, approve import plan, retry held child | S04 |
+| Searches/releases | Incremental results, source errors, raw detail, ranking explanation | Start/refresh/cancel search | S05/S06 |
+| Profiles/requests | Effective policy, satisfied/pending targets, request reasons | Preview/submit/cancel request, update profile | S05/S06 |
+| Lists/subscriptions | Memberships, completeness, policy and backfill preview | Follow/sync, activate/pause/resume, exclude, bulk request | S07 |
+| Discovery/sharing | Attributed shelves, accessible community/local lists | Share, follow, explicit supported write-back | S08 |
+| Activity/recovery | Operations, child states, redacted evidence, recovery mode | Retry appropriate stage, reconcile restore, export diagnostics | S01 shell/S09 complete |
+
+Commands return durable operation references where work outlives the HTTP request. Idempotency keys bind to actor, operation type and canonical payload: reusing a key with different content is a conflict, not permission to return unrelated work. Frontend refresh/reconnection polls or subscribes to that operation; it never repeats a side-effecting command to recover a screen.
+
+### Per-ticket completion record
+
+Before starting a package, write its scope, upstream dependencies, affected FR/AT IDs, representative success/failure fixtures and expected demo. Split packages if their acceptance cannot be reviewed independently. Record role ownership without requiring a particular team size.
+
+On completion, attach the implementation revision, migration/API changes, automated evidence, relevant real-service evidence, UI states and remaining limitations. Record tests as passed, failed or not run. A stub adapter, disabled button or passing mock cannot close the real integration gate. Keep these statuses separate: implementation complete, fixture verified, live compatibility verified, stage accepted.
+
+Estimate remaining work after the first measured stage using observed completed packages, then revise for integration uncertainty. Track normal engineering effort separately from elapsed waits for provider accounts or runtime certification. Do not convert the 61 package count into a calendar promise.
+
+### Milestone demonstrations and release decisions
+
+| Milestone | Demonstration | Release decision |
+|---|---|---|
+| Connected catalog | Browse synchronized inventory; show two narrators under one work; hide ungranted assets | Inventory preview only |
+| Safe import | Organize a synthetic pack; recover an interrupted child; verify source integrity and actual ABS items | Certify the tested layout/mount/backend combination |
+| Manual acquisition alpha | Search MAM, submit, recover ambiguous add, import and receive an ABS-confirmed badge | S05; no list automation yet |
+| Multi-source acquisition | Compare MAM/ABB/Prowlarr, explain selection, import a partially owned pack | S06; independent source degradation |
+| Automated list beta | Add a title; acquire missing media; repeat sync/restart without duplicate work; resume paused lists predictably | S07; explicit activation and bounded backfill |
+| Complete discovery beta | Browse related/community content, curate/share lists, use defaults and supported optional write-back | S08; full requested UX present |
+| Production v1 | Install, upgrade, restore behind external state, repair failed import, pass mapped release criteria | S09; zero open P0/P1 release blockers |
+
+The requested product is complete for v1 only at the final row. S10 is a visible continuation roadmap with independent requirements and evidence; it must not absorb unfinished FR-01–FR-36 work.

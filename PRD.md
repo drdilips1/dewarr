@@ -1,8 +1,10 @@
 # Product requirements: book discovery and acquisition
 
-Version 1.0 planning baseline · September 17, 2026 · Working product name: Book discovery app.
+Version 1.1 planning baseline · September 17, 2026 · Working product name: Book discovery app.
 
 Status: ready for staged development. No application code or production deployment is implied by this document. User requirements from the conversation take precedence. This PRD defines product behavior; [Implementation Decisions](IMPLEMENTATION-DECISIONS.md) defines the researched engineering baseline; [Development Plan](IMPLEMENTATION-PLAN.md) defines delivery; [Acceptance Plan](ACCEPTANCE-PLAN.md) defines verification. Earlier research remains rationale, not an alternative product direction.
+
+Read sections 1–6 for the product and UX, section 7 for tracked requirements, and sections 13–14 for precise behavior and release decisions. Implementation evidence is recorded separately in [Implementation Status](docs/IMPLEMENTATION-STATUS.md); planned functionality must not be presented as shipped.
 
 ## 1. Product purpose
 
@@ -243,3 +245,104 @@ Scope changes update the requirement, dependent tickets, acceptance scenarios an
 Users supply authorized provider connections and access to their existing services. Automatic import requires worker access to completed files and a supported destination; hardlinks require compatible mounts. Account scopes, MAM routing/session behavior and provider quotas are validated at connection time. The current user-server versions are not yet known. No assumption requires changing their production stack during planning.
 
 Research-date certification targets and evidence are in [Implementation Decisions](IMPLEMENTATION-DECISIONS.md). Product naming, logo and exact visual assets remain open and do not block implementation. Calendar estimates follow initial engineering velocity; milestone completion is defined by evidence, not an unsupported date commitment.
+
+## 13. Detailed behavior contracts
+
+These contracts refine the existing FRs without creating a separate scope. They apply equally to manual requests, bulk actions and list automation.
+
+### Ownership and request satisfaction: FR-10, FR-14, FR-21–FR-22
+
+All assets in this table must be complete, correctly matched and visible through the requesting user's library grants. An EPUB extension or a tracker claim alone is insufficient evidence.
+
+| Observed state | Work badge | Request | Required outcome |
+|---|---|---|---|
+| Full ebook only | In library · Ebook | Ebook or Either | Satisfied; no acquisition |
+| Full ebook only | In library · Ebook | Both | Ebook satisfied; request audio only |
+| Full audiobook only | In library · Audio | Ebook | Request ebook; preserve ownership badge |
+| Recording A only | In library · Audio | Any acceptable recording | Satisfied if language/abridgment constraints pass |
+| Recording A only | In library · Audio | Recording B specifically | Acquire B; A remains owned and untouched |
+| Companion PDF only | No complete book confirmed | Ebook | Still missing; PDF is supplementary |
+| Transfer/import pending | Downloading or Awaiting library | Compatible request | Attach reason to existing work; do not start again |
+| Last confirmed inventory is stale | In library · Last checked… | New automatic request | Preserve last-known display; reconcile before automatic dispatch |
+| Every asset confirmed missing | Unavailable · Previously in library | Automatic list refresh | Show attention; replacement requires explicit policy/action |
+| Verified omnibus contains the work | In library · In collection | Any complete copy | Satisfied; link to actual shared backend item |
+| Same omnibus | In library · In collection | Standalone copy explicitly | Standalone target remains unsatisfied |
+
+Multiple EPUB/PDF representations of one verified edition count as one edition. Distinct recordings by the same narrator remain distinct when supported by evidence. Unknown recording identity is displayed as unknown, never quietly merged into a named recording. User-facing edition counts represent known catalog versions, not every edition ever published.
+
+### List and request controls: FR-12, FR-22, FR-31–FR-34
+
+| User action or upstream event | Membership behavior | Acquisition behavior |
+|---|---|---|
+| Follow a list | Import authorized observations | Browse-only initially |
+| Enable automatic, future additions | Establish successful baseline first | Acquire newly observed eligible memberships after baseline |
+| Enable automatic, include current entries | Preview owned, pending, missing and unresolved | Create bounded backlog after activation; recheck each target before dispatch |
+| Pause list acquisition | Continue inbound list refresh | Hold undispatched reasons from that list; preserve completed and running transfers |
+| Resume list acquisition | Retain checkpoint and exclusions | Reconcile additions observed while paused through a catch-up preview; no silent backlog |
+| Change desired medium/profile | Update policy version and visible summary | Preview effect on current unsatisfied entries; never upgrade owned assets implicitly |
+| Remove local membership or confirmed external membership | Remove that membership/reason | Cancel undispatched work only when no other active reason needs it |
+| Goodreads entry omitted from feed | Preserve observed membership | No cancellation or file deletion inferred |
+| Exclude a book from this list | Keep it visibly excluded | Durable list-scoped suppression; other lists retain independent reasons |
+| Ignore future acquisition globally | Preserve catalog/history | Explicit work/media/version-scoped suppression, shown wherever it blocks a request |
+| Cancel a shared download | Show affected authorized requests | Separate explicit command; one list removal is insufficient authority |
+| Successful acquisition | Ownership updates after ABS confirmation | Never change reading status or remove the source list entry automatically |
+
+Cancellation of a client transfer is separate from deletion of its files. No default request/list action deletes source or published media. Library permission revocation hides affected inventory promptly and invalidates cached user views; it does not turn hidden assets into evidence that files were deleted.
+
+### Source search, ranking and series expansion: FR-16–FR-26
+
+Catalog search returns books even when no release search has run. Opening Sources starts an independently tracked source search and shows each source's freshness and completion. Direct-source search preserves MAM-specific fields; selecting an unmatched result can create a provisional work. Source results never replace the catalog's edition model.
+
+Automatic selection is an ordered decision, not an opaque combined score:
+
+1. Check work identity, medium, required language/version, source permission, supported transport, blocked formats and capacity limits.
+2. Determine eligible coverage within the requested series scope; distinguish claimed contents from verified assets.
+3. Apply the selected ordered preferences. Balanced starts with qualifying coverage, format, source, fresh availability and source-local popularity. Most seeded can place known seed counts earlier without weakening eligibility.
+4. Break remaining ties deterministically using stable source/release identifiers. Store the policy revision, observations and explanation with the selection.
+
+Unknown seeds display as unknown. Source-local popularity is never treated as a universal score comparable across trackers. A user can reorder priorities without editing numeric weights. Per-view table sorting does not alter the saved policy.
+
+| Series policy | Search/selection scope | Completion meaning |
+|---|---|---|
+| Just this book | Only the requested work; avoid acquiring a broader pack automatically | Requested media/version for this work confirmed |
+| Prefer series packs — default | Eligible individual or pack including the target, bounded to known main-series scope and configured transfer limits | Original target satisfied; additional verified children recorded independently |
+| Complete series | Missing eligible published main-series works from a dated catalog snapshot | Each required work/media target satisfied; gaps remain visible |
+
+Future books, novellas, related series and author-wide collections are not silently included. A new release can be discovered later through explicit follow/list policy; selecting Complete series is not perpetual monitoring of everything an author publishes. Pack selection records additional included titles and expected total size. Unknown or excessive expansion is held for review under the effective limits. Runtime defaults for size/concurrency are validated during S06 and documented before enabling automation.
+
+After a pack finishes, inspect the actual files. Each identifiable child has an independent import entry; already-satisfied children can be skipped while the complete original torrent remains available for seeding. A missing claimed child stays wanted. An indivisible omnibus becomes one asset with verified contained works, never fabricated standalone files.
+
+### Metadata and organization UX: FR-07–FR-08, FR-25–FR-30
+
+Setup requires only connection details, destinations, an import preset and desired media. Normal metadata controls are Automatic, primary provider and preferred language. Advanced settings expose field groups and individual exceptions with inherited values, provenance, preview and Reset. Changes to provider priority refresh app metadata without renaming existing files or overwriting ABS edits.
+
+The metadata resolver runs at the correct level: work synopsis and genre; edition publisher/ISBN/year; recording narrator/abridgment/year; inspected file codec/duration; tracker release description/size/swarm fields. It never borrows recording details from a different edition merely to fill blanks. Ratings retain provider and sample context.
+
+The conventional target is `Author / optional Series / Sequence - Title - Version / media files`. The requested nested preset is `Author / optional Series / Sequence - Title / Version / media files`. Different complete recordings and distinct ebook editions use separate leaf items; the app aggregates them under one book. Nested layout is selectable only after ABS compatibility certification. [Illustrated layouts and token rules](research/audiobookshelf-import-layout.md) define the concrete import contract.
+
+The naming preview must show at least: one standalone ebook, one multi-track audiobook, two recordings of one work, a partially owned series pack, and a title with missing metadata. It displays source → destination, each ABS item boundary, metadata omissions and hardlink/copy outcome. Empty conditional segments disappear; extensions remain true; stable disambiguators prevent collisions. Generated sidecars stay in item leaves. Structural parent folders never receive shared media or covers that could change scanning behavior.
+
+### Discovery and simple customization: FR-09–FR-12, FR-35
+
+Discover supports independent shelves for provider-attributed trends where available, followed/community lists, newly available library titles, series continuation and related titles. Each recommendation identifies its reason, such as a shared author, series or subject. An unavailable upstream recommendation endpoint falls back to honest local signals, not an invented “trending” label. Opening a community list previews its titles and acquisition impact before following it automatically.
+
+The product uses five main destinations: Discover, Search, My Library, Lists and Activity. Book detail has Overview, Editions & Narrators, Sources, Lists and Activity. Acquisition settings stay behind the relevant action or Settings; raw tracker descriptions stay in Sources. Basic tasks never require learning metadata priority matrices, internal UUIDs, regexes or template syntax.
+
+Usability acceptance uses task walkthroughs with defaults: connect ABS; find an owned book; request its missing medium; follow a list without historic downloads; inspect a series pack; fix one ambiguous child. Measure completion and confusion in S08, and resolve any task that requires unexplained advanced configuration.
+
+## 14. Decisions resolved before development and remaining gates
+
+| Priority | Decision | Baseline | Must be proved before |
+|---|---|---|---|
+| P0 | Product boundary | New discovery/acquisition app; ABS remains player; Seerr visual reuse only | Schema and feature implementation |
+| P0 | Identity and ownership | Work → catalog version → representation; releases/assets separate; either medium establishes ownership | Automatic selection |
+| P0 | Source-file integrity | Hardlink-required default; independent sidecars; no overwrite or source mutation | Any automated publication |
+| P0 | Durability | Atomic intent/job creation; reservations; reconcile ambiguous external effects | Downloader dispatch |
+| P0 | Privacy and authority | Server-enforced grants; scoped secrets; manual edits protected | Multi-user use |
+| P1 | Provider strategy | Hardcover first, targeted fallback, native rich MAM, ABB and optional Prowlarr | Source/list integration gates |
+| P1 | Lists | Inbound first, explicit backfill, RSS omission ignored; optional Hardcover list write-back | List automation |
+| P1 | Series handling | Prefer bounded eligible packs; per-child verified imports; truthful omnibus coverage | Pack automation |
+| P1 | Folder/version layout | Conventional leaves first; desired nesting is a certified preset | Enable each layout |
+| P1 | Recovery | No implicit upgrade/deletion replacement; restore dispatch-paused | Production release |
+
+These are selected defaults, not questions the user must answer before development. Actual server versions, account capabilities, proxy behavior and filesystem support are setup/certification gates. A failing gate restricts the affected capability while preserving useful browsing and inventory. Brand/name, exact artwork and additional providers can be settled later without changing the core contracts.

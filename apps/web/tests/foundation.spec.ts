@@ -59,6 +59,71 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await expect(page.getByText("completed", { exact: true })).toBeVisible({
     timeout: 10_000,
   });
+  await page.getByRole("link", { name: "Connections", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Connect Audiobookshelf", exact: true })
+    .click();
+  await page.getByLabel("Connection name").fill("Fixture ABS");
+  await page.getByLabel(/^Server URL/).fill("http://127.0.0.1:13379/abs");
+  await page
+    .getByLabel("API token", { exact: true })
+    .fill("browser-abs-fixture-token");
+  await page.getByRole("button", { name: "Save connection" }).click();
+  await page
+    .getByRole("button", { name: "Test connection", exact: true })
+    .click();
+  await expect(page.getByRole("status")).toContainText("Fixture ABS connected");
+  await page.getByRole("button", { name: "Sync library", exact: true }).click();
+  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  const inventory = page.locator("article").filter({
+    has: page.getByRole("heading", { name: "Audiobookshelf inventory sync" }),
+  });
+  await expect(inventory.getByText("completed", { exact: true })).toBeVisible({
+    timeout: 15000,
+  });
+  await page.getByRole("link", { name: "My Library", exact: true }).click();
+  await expect(
+    page.getByRole("link", { name: "The First Harbor", exact: true }),
+  ).toHaveCount(2);
+  await expect(
+    page.getByRole("link", { name: "Open in Audiobookshelf" }).first(),
+  ).toHaveAttribute("href", "http://127.0.0.1:13379/abs/item/fixture-harbor");
+  await page.screenshot({
+    path: testInfo.outputPath("library-desktop.png"),
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "Correct match" }).first().click();
+  await page
+    .getByLabel("Search catalog", { exact: true })
+    .fill("The Synthetic Archive");
+  await page
+    .getByRole("combobox", { name: "Book", exact: true })
+    .selectOption({ label: "The Synthetic Archive — Example Author" });
+  await page.getByRole("button", { name: "Confirm match" }).click();
+  await page.getByRole("link", { name: "Catalog", exact: true }).click();
+  const owned = page.getByRole("link", { name: /The Synthetic Archive/ });
+  await expect(owned).toContainText("In library");
+  await page.getByRole("link", { name: "Accounts", exact: true }).click();
+  await page.getByLabel("Name", { exact: true }).fill("Guest reader");
+  await page.getByLabel("Username", { exact: true }).fill("guest");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("guest reader password");
+  await page.getByRole("button", { name: "Create account" }).click();
+  await expect(page.getByText("guest", { exact: true })).toBeVisible();
+  await page.getByRole("link", { name: "Connections", exact: true }).click();
+  await page.getByRole("checkbox", { name: "Guest reader" }).check();
+  const granted = page.waitForResponse(
+    (response) =>
+      response.url().endsWith("/grants") &&
+      response.request().method() === "PUT",
+  );
+  await page.getByRole("button", { name: "Save access" }).click();
+  expect((await granted).status()).toBe(204);
+  await page.screenshot({
+    path: testInfo.outputPath("connections-desktop.png"),
+    fullPage: true,
+  });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole("link", { name: "Catalog", exact: true }).click();
   await expect(
@@ -82,4 +147,26 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await expect(
     page.getByRole("heading", { name: "Welcome back" }),
   ).toBeVisible();
+  await page.getByLabel("Username", { exact: true }).fill("guest");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("guest reader password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.getByRole("link", { name: "My Library", exact: true }).click();
+  await expect(
+    page.getByRole("link", { name: "Open in Audiobookshelf" }),
+  ).toHaveCount(2);
+  await expect(
+    page.getByRole("link", { name: "Connections", exact: true }),
+  ).toHaveCount(0);
+  await page.screenshot({
+    path: testInfo.outputPath("library-mobile.png"),
+    fullPage: true,
+  });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  expect(errors).toEqual([]);
 });

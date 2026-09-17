@@ -2,12 +2,12 @@
 
 A self-hosted ebook/audiobook discovery, curation and acquisition application above Audiobookshelf, with native MAM/AudiobookBay, optional Prowlarr, direct qBittorrent, and Hardcover/Goodreads list automation.
 
-**Status:** implementation is in progress. The initial API/UI, accounts, local catalog/lists and transactional worker foundation are implemented; source integrations, downloading, importing and automation remain pending. See [Implementation Status](docs/IMPLEMENTATION-STATUS.md) for precise coverage and evidence, and [Development Guide](docs/DEVELOPMENT.md) to run the current build. The full PRD remains the goal.
+**Status:** implementation is in progress. The initial API/UI, accounts, local catalog/lists and transactional worker foundation are implemented; Audiobookshelf connections/inventory and grants now have fixture-tested API/UI flows. Source acquisition, downloading, importing and external list automation remain pending. See [Implementation Status](docs/IMPLEMENTATION-STATUS.md) for precise coverage and evidence, and [Development Guide](docs/DEVELOPMENT.md) to run the current build. The full PRD remains the goal.
 
 ## Development handoff
 
-1. [Product Requirements](PRD.md): purpose, scope, user journeys, UX, 36 v1 functional requirements, six post-v1 requirements and 12 nonfunctional requirements.
-2. [End-to-End Development Plan](IMPLEMENTATION-PLAN.md): S00–S10 stages, work packages, dependencies, engineering boundaries, ownership and exit gates.
+1. [Product Requirements](PRD.md): purpose, scope, user journeys, UX, 36 v1 functional requirements, six post-v1 requirements and 12 nonfunctional requirements. Includes ownership decision tables, list lifecycle, ranking/series rules and resolved P0/P1 decisions.
+2. [End-to-End Development Plan](IMPLEMENTATION-PLAN.md): S00–S10 stages, 61 work packages, dependencies, engineering boundaries, ownership and exit gates. Includes module handoffs, API delivery map and milestone demonstrations.
 3. [Acceptance Plan](ACCEPTANCE-PLAN.md): requirement coverage, scenario matrix, fixtures, crash recovery, compatibility and release evidence.
 4. [Implementation Decisions](IMPLEMENTATION-DECISIONS.md): researched technical choices D01–D13 and primary-source evidence.
 5. [Product Architecture](PRODUCT-ARCHITECTURE.md): system overview, integration responsibilities and code-reuse direction.
@@ -21,4 +21,4 @@ The PRD controls product behavior; the implementation decisions control the rese
 - [Initial discovery research](research/book-discovery-architecture.md) — historical; its earlier acquisition-manager recommendation is superseded.
 - [Source snapshot](research/source-snapshot.json)
 
-Start implementation at S00. The first full manual acquisition milestone is S05, list-driven automation is S07, and production v1 requires S09. S10 capabilities are separate later releases.
+For a new checkout, begin with S00. For this existing implementation, use the plan's [execution and handoff contracts](IMPLEMENTATION-PLAN.md#8-execution-and-handoff-contracts) and verified status to continue incomplete work. The first full manual acquisition milestone is S05, list-driven automation is S07, and production v1 requires S09. S10 capabilities are separate later releases.

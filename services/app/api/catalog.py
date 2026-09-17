@@ -7,6 +7,8 @@ from sqlalchemy import Text, cast, func, or_, select
 from app.api.dependencies import CurrentUser, Database, Member
 from app.db.models import AuditEvent, Work
 from app.domain.availability import Availability, availability_for
+from app.domain.identity import work_key
+from app.domain.visibility import visible_work
 
 router = APIRouter(prefix="/catalog", tags=["catalog"])
 
@@ -74,7 +76,7 @@ async def works(
     offset: int = Query(default=0, ge=0),
     limit: int = Query(default=40, ge=1, le=100),
 ):
-    conditions = [Work.redirect_to.is_(None)]
+    conditions = [Work.redirect_to.is_(None), visible_work(user)]
     if q.strip():
         pattern = (
             "%" + q.strip().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
@@ -102,6 +104,7 @@ async def works(
 @router.post("/works", response_model=WorkView, status_code=201)
 async def add_work(body: WorkInput, user: Member, db: Database):
     work = Work(**body.model_dump())
+    work.match_key = work_key(work.title, work.authors)
     db.add(work)
     await db.flush()
     db.add(AuditEvent(actor_id=user.id, action="catalog.work.created", entity_id=work.id))
@@ -111,7 +114,7 @@ async def add_work(body: WorkInput, user: Member, db: Database):
 
 @router.get("/works/{work_id}", response_model=WorkView)
 async def work_detail(work_id: UUID, user: CurrentUser, db: Database):
-    work = await db.get(Work, work_id)
+    work = await db.scalar(select(Work).where(Work.id == work_id, visible_work(user)))
     if not work:
         raise HTTPException(404, "Book not found")
     availability = await availability_for(db, user, [work.id])

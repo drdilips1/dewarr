@@ -15,6 +15,7 @@ class FailureKind(StrEnum):
     PARSER = "parser"
     UNSUPPORTED = "unsupported"
     UNCERTAIN = "uncertain"
+    NOT_FOUND = "not_found"
 
 
 class AdapterError(Exception):

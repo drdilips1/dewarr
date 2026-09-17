@@ -3,6 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { ArrowLeft, BookOpen, Check, Headphones } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { api, result } from "../api/client";
+import { LibraryAssets } from "./MyLibrary";
 import { Loading, Notice } from "../components";
 
 export default function BookDetail({ canEdit }: { canEdit: boolean }) {
@@ -82,6 +83,11 @@ export default function BookDetail({ canEdit }: { canEdit: boolean }) {
               </span>
             ) : null}
           </div>
+          {work.availability.stale && (
+            <p className="muted">
+              Last known availability. The library needs a fresh sync.
+            </p>
+          )}
           <p className="description">
             {work.description || "No description has been added to this title."}
           </p>
@@ -136,6 +142,8 @@ export default function BookDetail({ canEdit }: { canEdit: boolean }) {
           ) : null}
         </div>
       </div>
+      <h2 className="library-access">Your library copies</h2>
+      <LibraryAssets workId={id} />
     </>
   );
 }

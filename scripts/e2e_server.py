@@ -38,6 +38,20 @@ with psycopg.connect(url.replace("postgresql+psycopg://", "postgresql://")) as c
         "book_queue.procrastinate_workers RESTART IDENTITY CASCADE"
     )
 processes = [
+    subprocess.Popen(
+        [
+            "uv",
+            "run",
+            "uvicorn",
+            "e2e_abs:app",
+            "--app-dir",
+            "scripts",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "13379",
+        ]
+    ),
     subprocess.Popen(["uv", "run", "python", "-m", "app.jobs.worker"]),
     subprocess.Popen(
         [
@@ -67,6 +81,6 @@ def shutdown(signum=None, frame=None):
 signal.signal(signal.SIGTERM, shutdown)
 signal.signal(signal.SIGINT, shutdown)
 try:
-    processes[1].wait()
+    processes[-1].wait()
 finally:
     shutdown()

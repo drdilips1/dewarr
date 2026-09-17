@@ -1,14 +1,14 @@
-import hashlib
 from datetime import datetime
 from uuid import UUID
 
 from fastapi import APIRouter, Header, HTTPException
 from pydantic import BaseModel, ConfigDict
-from sqlalchemy import select, text
+from sqlalchemy import select
 
 from app.api.dependencies import Admin, CurrentUser, Database
 from app.config import get_settings
 from app.db.models import Operation
+from app.domain.operations import transaction_lock
 from app.jobs.queue import enqueue
 
 router = APIRouter(tags=["operations"])
@@ -44,11 +44,7 @@ async def probe(
 ):
     if get_settings().recovery_mode:
         raise HTTPException(409, "Dispatch is paused for recovery")
-    lock_key = int.from_bytes(
-        hashlib.sha256(f"{admin.id}:{idempotency_key}".encode()).digest()[:8],
-        signed=True,
-    )
-    await db.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": lock_key})
+    await transaction_lock(db, f"operation:{admin.id}:{idempotency_key}")
     existing = await db.scalar(
         select(Operation).where(
             Operation.owner_id == admin.id,
@@ -56,6 +52,8 @@ async def probe(
         )
     )
     if existing:
+        if existing.kind != "system.probe":
+            raise HTTPException(409, "This operation key was already used for another command")
         return existing
     operation = Operation(
         owner_id=admin.id,

@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.models import AssetContains, LibraryAsset, LibraryGrant, User
+from app.db.models import AssetContains, Integration, Library, LibraryAsset, LibraryGrant, User
 
 
 class Availability(BaseModel):
@@ -25,11 +25,15 @@ async def availability_for(
     query = (
         select(AssetContains.work_id, LibraryAsset.medium, LibraryAsset.state)
         .join(LibraryAsset, AssetContains.asset_id == LibraryAsset.id)
+        .join(Library, LibraryAsset.library_id == Library.id)
+        .join(Integration, Library.integration_id == Integration.id)
         .where(
             AssetContains.work_id.in_(work_ids),
             AssetContains.verified.is_(True),
             LibraryAsset.full_content.is_(True),
             LibraryAsset.state.in_(["present", "stale"]),
+            Library.accessible.is_(True),
+            Integration.enabled.is_(True),
         )
     )
     if user.role != "admin":

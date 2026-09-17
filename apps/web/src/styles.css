@@ -851,3 +851,68 @@ nav a.active {
     transition: none !important;
   }
 }
+
+.connection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 20px;
+}
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.button-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 14px;
+}
+.break-text {
+  overflow-wrap: anywhere;
+}
+.library-access {
+  margin-top: 36px;
+}
+.library-filters {
+  display: flex;
+  align-items: end;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.check-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.check-label input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+.activity-meta .button-row {
+  justify-content: flex-end;
+}
+@media (max-width: 760px) {
+  nav {
+    flex-wrap: wrap;
+  }
+  .activity-meta .button-row {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 720px) {
+  .library-copy > .grow {
+    flex-basis: 100%;
+  }
+  .library-copy .activity-meta {
+    margin-left: 0;
+    width: 100%;
+  }
+}

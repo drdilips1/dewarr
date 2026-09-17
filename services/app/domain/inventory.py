@@ -1,0 +1,472 @@
+from datetime import UTC, datetime, timedelta
+from uuid import UUID, uuid4
+
+from sqlalchemy import delete, select, update
+
+from app.adapters.audiobookshelf import ABSItem, Audiobookshelf
+from app.adapters.contracts import AdapterError, FailureKind
+from app.config import get_settings
+from app.db.models import (
+    AssetContains,
+    Integration,
+    InventoryObservation,
+    InventoryRun,
+    Library,
+    LibraryAsset,
+    Operation,
+    ProviderObject,
+)
+from app.db.session import session_factory
+from app.domain.identity import normalized, resolve_abs_version, resolve_abs_work, version_changed
+from app.domain.operations import transaction_lock
+from app.security import decrypt_secrets
+
+
+class LeaseLost(Exception):
+    pass
+
+
+async def fence(db, integration_id, token, generation):
+    integration = await db.scalar(
+        select(Integration).where(Integration.id == integration_id).with_for_update()
+    )
+    if (
+        not integration
+        or not integration.enabled
+        or integration.lease_token != token
+        or integration.credential_generation != generation
+    ):
+        raise LeaseLost()
+    integration.lease_until = datetime.now(UTC) + timedelta(minutes=3)
+    return integration
+
+
+def summary_fingerprint(items: list[dict]) -> dict[str, tuple]:
+    return {
+        item["id"]: (item.get("updatedAt"), item.get("isMissing"), item.get("isInvalid"))
+        for item in items
+    }
+
+
+async def collect_library(client, external_library_id, run_id, integration_id, token, generation):
+    seen, expected, page = {}, None, 0
+    while True:
+        records, total = await client.page(external_library_id, page)
+        if expected is not None and expected != total:
+            raise AdapterError(
+                FailureKind.UNCERTAIN, "Library size changed during sync. Try again."
+            )
+        expected = total
+        fingerprint = summary_fingerprint(records)
+        if len(fingerprint) != len(records) or seen.keys() & fingerprint.keys():
+            raise AdapterError(
+                FailureKind.UNCERTAIN, "Library pagination repeated an item. Sync was held."
+            )
+        expanded = await client.expanded(list(fingerprint)) if fingerprint else []
+        if any(item.library_id != external_library_id for item in expanded):
+            raise AdapterError(
+                FailureKind.UNCERTAIN, "A library item moved during sync. Try again."
+            )
+        async with session_factory()() as db, db.begin():
+            await fence(db, integration_id, token, generation)
+            db.add_all(
+                [
+                    InventoryObservation(
+                        run_id=run_id,
+                        library_external_id=external_library_id,
+                        item_external_id=item.id,
+                        snapshot=item.model_dump(mode="json"),
+                    )
+                    for item in expanded
+                ]
+            )
+        seen.update(fingerprint)
+        if len(seen) == total:
+            break
+        page += 1
+    # ABS pagination is not a transactional snapshot. Verify membership and update
+    # markers again before publishing this run or inferring an absence.
+    second, page = {}, 0
+    while True:
+        records, total = await client.page(external_library_id, page)
+        fingerprint = summary_fingerprint(records)
+        if (
+            total != expected
+            or len(fingerprint) != len(records)
+            or second.keys() & fingerprint.keys()
+        ):
+            raise AdapterError(
+                FailureKind.UNCERTAIN, "Library changed during verification. Try again."
+            )
+        second.update(fingerprint)
+        async with session_factory()() as db, db.begin():
+            await fence(db, integration_id, token, generation)
+        if len(second) == total:
+            break
+        page += 1
+    if second != seen:
+        raise AdapterError(FailureKind.UNCERTAIN, "Library changed during verification. Try again.")
+    return set(seen)
+
+
+async def apply_item(db, library, item, generation, integration_id, seen):
+    now = datetime.now(UTC)
+    for medium in ("ebook", "audio"):
+        files = getattr(item, medium)
+        if not files:
+            continue
+        namespace = f"abs:{integration_id}"
+        link = await db.scalar(
+            select(ProviderObject).where(
+                ProviderObject.provider == namespace,
+                ProviderObject.kind == f"item:{medium}",
+                ProviderObject.external_id == item.id,
+            )
+        )
+        asset = await db.scalar(
+            select(LibraryAsset).where(
+                LibraryAsset.library_id == library.id,
+                LibraryAsset.external_id == item.id,
+                LibraryAsset.medium == medium,
+            )
+        )
+        if not link and item.old_id and item.old_id not in seen:
+            link = await db.scalar(
+                select(ProviderObject).where(
+                    ProviderObject.provider == namespace,
+                    ProviderObject.kind == f"item:{medium}",
+                    ProviderObject.external_id == item.old_id,
+                )
+            )
+            if link:
+                link.external_id = item.id
+                asset = await db.scalar(
+                    select(LibraryAsset).where(
+                        LibraryAsset.library_id == library.id,
+                        LibraryAsset.external_id == item.old_id,
+                        LibraryAsset.medium == medium,
+                    )
+                )
+                if asset:
+                    asset.external_id = item.id
+        if not link:
+            link = ProviderObject(provider=namespace, kind=f"item:{medium}", external_id=item.id)
+            db.add(link)
+        # Serialize same-title resolution across independent backend connections.
+        await transaction_lock(db, "identity:" + normalized(item.title))
+        work = await resolve_abs_work(db, item, link)
+        if version_changed(item, link, medium):
+            work = None
+            link.match_status = "needs-review"
+        if not asset:
+            asset = LibraryAsset(library_id=library.id, external_id=item.id, medium=medium)
+            db.add(asset)
+            await db.flush()
+        asset.title, asset.metadata_snapshot = item.title, item.model_dump(mode="json")
+        asset.files = [file.model_dump() for file in files]
+        asset.last_seen_at, asset.seen_generation = now, generation
+        asset.match_status = link.match_status if work else "needs-review"
+        asset.full_content = bool(work and getattr(item, f"full_{medium}"))
+        asset.state = "missing-suspected" if item.missing or item.invalid else "present"
+        asset.missing_since = (asset.missing_since or now) if item.missing or item.invalid else None
+        if work:
+            version = await resolve_abs_version(db, work, item, medium, link)
+            asset.version_id = version.id
+            coverage = await db.get(AssetContains, (asset.id, work.id))
+            if not coverage:
+                db.add(AssetContains(asset_id=asset.id, work_id=work.id, verified=True))
+            else:
+                coverage.verified = True
+            link.snapshot = item.model_dump(mode="json")
+        else:
+            await db.execute(
+                update(AssetContains)
+                .where(AssetContains.asset_id == asset.id)
+                .values(verified=False)
+            )
+
+
+async def publish_library(
+    client,
+    run_id,
+    library_info,
+    integration_id,
+    token,
+    credential_generation,
+    scope,
+    seen,
+    locations,
+):
+    async with session_factory()() as db, db.begin():
+        await fence(db, integration_id, token, credential_generation)
+        library = await db.scalar(
+            select(Library)
+            .where(
+                Library.integration_id == integration_id,
+                Library.external_id == library_info["id"],
+            )
+            .with_for_update()
+        )
+        if not library:
+            library = Library(
+                integration_id=integration_id,
+                external_id=library_info["id"],
+                name=library_info["name"],
+                accessible=False,
+                generation=0,
+            )
+            db.add(library)
+            await db.flush()
+        same_scope = library.scope_fingerprint == scope
+        library.generation += 1
+        library.name = library_info["name"]
+        library_id, generation = library.id, library.generation
+    offset = 0
+    while True:
+        async with session_factory()() as db, db.begin():
+            await fence(db, integration_id, token, credential_generation)
+            records = (
+                await db.scalars(
+                    select(InventoryObservation)
+                    .where(
+                        InventoryObservation.run_id == run_id,
+                        InventoryObservation.library_external_id == library_info["id"],
+                    )
+                    .order_by(InventoryObservation.item_external_id)
+                    .offset(offset)
+                    .limit(100)
+                )
+            ).all()
+            if not records:
+                break
+            library = await db.get(Library, library_id)
+            for record in sorted(records, key=lambda record: normalized(record.snapshot["title"])):
+                await apply_item(
+                    db,
+                    library,
+                    ABSItem.model_validate(record.snapshot),
+                    generation,
+                    integration_id,
+                    seen,
+                )
+        offset += len(records)
+    # Absence confirmation uses direct read-only lookups outside any transaction.
+    async with session_factory()() as db:
+        absent = (
+            await db.scalars(
+                select(LibraryAsset).where(
+                    LibraryAsset.library_id == library_id,
+                    LibraryAsset.seen_generation != generation,
+                )
+            )
+        ).all()
+        candidates = [
+            (asset.id, asset.external_id, asset.medium, asset.missing_since) for asset in absent
+        ]
+    confirmed, moved = set(), set()
+    now = datetime.now(UTC)
+    for asset_id, external, medium, since in candidates:
+        destination = locations.get(external)
+        if destination and destination != library_info["id"]:
+            detail = await client.item(external)
+            if detail.library_id != destination:
+                raise AdapterError(FailureKind.UNCERTAIN, "A moved item changed during sync.")
+            moved.add(asset_id)
+            async with session_factory()() as db, db.begin():
+                await fence(db, integration_id, token, credential_generation)
+            continue
+        if not same_scope or not since or (now - since).total_seconds() < 300:
+            continue
+        try:
+            detail = await client.item(external)
+            if detail.library_id == library_info["id"] and not getattr(detail, medium):
+                confirmed.add(asset_id)
+            elif external not in seen:
+                raise AdapterError(
+                    FailureKind.UNCERTAIN, "An omitted library item still exists. Sync was held."
+                )
+        except AdapterError as error:
+            if error.kind == FailureKind.NOT_FOUND:
+                confirmed.add(asset_id)
+            else:
+                raise
+        async with session_factory()() as db, db.begin():
+            await fence(db, integration_id, token, credential_generation)
+    async with session_factory()() as db, db.begin():
+        await fence(db, integration_id, token, credential_generation)
+        library = await db.get(Library, library_id)
+        for asset_id, _, _, _ in candidates:
+            asset = await db.get(LibraryAsset, asset_id)
+            if asset.state == "intentionally-removed":
+                continue
+            if asset_id in moved:
+                asset.state = "moved"
+                asset.missing_since = None
+            elif not same_scope:
+                asset.state = "scope-unavailable"
+            else:
+                asset.missing_since = asset.missing_since or now
+                asset.state = "missing-confirmed" if asset_id in confirmed else "missing-suspected"
+        library.last_complete_sync = now
+        library.scope_fingerprint, library.accessible = scope, True
+
+
+async def synchronize(operation_id: UUID, *, client_factory=Audiobookshelf):
+    token = uuid4()
+    async with session_factory()() as db, db.begin():
+        operation = await db.scalar(
+            select(Operation).where(Operation.id == operation_id).with_for_update()
+        )
+        if not operation or operation.status in {"completed", "cancelled"}:
+            return
+        integration = await db.scalar(
+            select(Integration).where(Integration.id == operation.integration_id).with_for_update()
+        )
+        if not integration or not integration.enabled or get_settings().recovery_mode:
+            operation.status, operation.message = "cancelled", "Sync paused or connection disabled"
+            return
+        now = datetime.now(UTC)
+        if integration.lease_until and integration.lease_until > now:
+            raise AdapterError(FailureKind.UNAVAILABLE, "Another sync is still active")
+        integration.lease_token, integration.lease_until = token, now + timedelta(minutes=3)
+        operation.status, operation.message = "running", "Reading Audiobookshelf library inventory"
+        operation.payload = {**operation.payload, "lease_token": str(token)}
+        # An expired owner cannot resume its staged snapshot after a new claim.
+        abandoned = select(InventoryRun.id).where(
+            InventoryRun.integration_id == integration.id,
+            InventoryRun.status == "collecting",
+        )
+        await db.execute(
+            delete(InventoryObservation).where(InventoryObservation.run_id.in_(abandoned))
+        )
+        await db.execute(
+            update(InventoryRun)
+            .where(InventoryRun.id.in_(abandoned))
+            .values(status="interrupted", completed_at=now)
+        )
+        integration_id, generation = integration.id, integration.credential_generation
+        endpoint, secret = (
+            integration.base_url,
+            decrypt_secrets(integration.encrypted_secrets)["token"],
+        )
+        run = InventoryRun(
+            integration_id=integration_id,
+            operation_id=operation_id,
+            credential_generation=generation,
+        )
+        db.add(run)
+        await db.flush()
+        run_id = run.id
+    try:
+        async with client_factory(endpoint, secret) as client:
+            capabilities, scope = await client.authorize()
+            libraries = await client.libraries()
+            seen_by_library, locations = {}, {}
+            for library in libraries:
+                seen = await collect_library(
+                    client, library["id"], run_id, integration_id, token, generation
+                )
+                if locations.keys() & seen:
+                    raise AdapterError(
+                        FailureKind.UNCERTAIN, "An item appeared in multiple libraries."
+                    )
+                locations.update({item_id: library["id"] for item_id in seen})
+                seen_by_library[library["id"]] = seen
+            for library in libraries:
+                seen = seen_by_library[library["id"]]
+                # Recheck permissions and library identity before publishing removals.
+                _, current_scope = await client.authorize()
+                if current_scope != scope:
+                    raise AdapterError(
+                        FailureKind.PERMISSION,
+                        "Account access changed during sync. Run a fresh sync.",
+                    )
+                await publish_library(
+                    client,
+                    run_id,
+                    library,
+                    integration_id,
+                    token,
+                    generation,
+                    scope,
+                    seen,
+                    locations,
+                )
+            _, final_scope = await client.authorize()
+            if final_scope != scope:
+                raise AdapterError(
+                    FailureKind.PERMISSION, "Account access changed during sync. Run a fresh sync."
+                )
+            current_libraries = await client.libraries()
+            if {library["id"] for library in current_libraries} != {
+                library["id"] for library in libraries
+            }:
+                raise AdapterError(
+                    FailureKind.UNCERTAIN, "Library access changed during sync. Try again."
+                )
+        async with session_factory()() as db, db.begin():
+            integration = await fence(db, integration_id, token, generation)
+            await db.execute(
+                update(Library)
+                .where(
+                    Library.integration_id == integration_id,
+                    Library.external_id.not_in([library["id"] for library in libraries]),
+                )
+                .values(accessible=False)
+            )
+            integration.status, integration.last_error = "connected", None
+            integration.capabilities = capabilities.model_dump(mode="json")
+            integration.last_success_at = datetime.now(UTC)
+            integration.next_sync_at = datetime.now(UTC) + timedelta(minutes=30)
+            integration.lease_token, integration.lease_until = None, None
+            run = await db.get(InventoryRun, run_id)
+            run.status, run.completed_at = "completed", datetime.now(UTC)
+            operation = await db.get(Operation, operation_id)
+            operation.status, operation.message = (
+                "completed",
+                f"Synced {len(libraries)} Audiobookshelf libraries",
+            )
+            await db.execute(
+                delete(InventoryObservation).where(InventoryObservation.run_id == run_id)
+            )
+    except (AdapterError, LeaseLost) as error:
+        async with session_factory()() as db, db.begin():
+            integration = await db.get(Integration, integration_id, with_for_update=True)
+            operation = await db.get(Operation, operation_id)
+            run = await db.get(InventoryRun, run_id)
+            run.status, run.completed_at = "failed", datetime.now(UTC)
+            if operation.payload.get("lease_token") == str(token):
+                operation.status = "cancelled" if isinstance(error, LeaseLost) else "failed"
+                operation.message = (
+                    "Connection changed during sync; start a new sync"
+                    if isinstance(error, LeaseLost)
+                    else str(error)
+                )
+            if integration and integration.lease_token == token:
+                integration.lease_token, integration.lease_until = None, None
+                if isinstance(error, AdapterError):
+                    integration.status, integration.last_error = error.kind.value, str(error)
+                    integration.next_sync_at = (
+                        None
+                        if error.kind
+                        in {FailureKind.AUTHENTICATION, FailureKind.PERMISSION, FailureKind.PARSER}
+                        else datetime.now(UTC) + timedelta(minutes=5)
+                    )
+                    if error.kind in {FailureKind.PERMISSION, FailureKind.AUTHENTICATION}:
+                        await db.execute(
+                            update(Library)
+                            .where(Library.integration_id == integration_id)
+                            .values(accessible=False)
+                        )
+                    library_ids = select(Library.id).where(Library.integration_id == integration_id)
+                    await db.execute(
+                        update(LibraryAsset)
+                        .where(
+                            LibraryAsset.library_id.in_(library_ids),
+                            LibraryAsset.state == "present",
+                        )
+                        .values(state="stale")
+                    )
+            await db.execute(
+                delete(InventoryObservation).where(InventoryObservation.run_id == run_id)
+            )

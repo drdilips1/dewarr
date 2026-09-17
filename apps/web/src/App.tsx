@@ -8,6 +8,7 @@ import {
   List,
   LogOut,
   Search,
+  Settings,
   Users,
 } from "lucide-react";
 import {
@@ -25,6 +26,8 @@ const Catalog = lazy(() => import("./pages/Catalog"));
 const BookDetail = lazy(() => import("./pages/BookDetail"));
 const Lists = lazy(() => import("./pages/Lists"));
 const ActivityPage = lazy(() => import("./pages/Activity"));
+const Connections = lazy(() => import("./pages/Connections"));
+const MyLibrary = lazy(() => import("./pages/MyLibrary"));
 const Accounts = lazy(() => import("./pages/Accounts"));
 
 export default function App() {
@@ -252,6 +255,16 @@ function Shell({ auth }: { auth: Auth }) {
             <Library size={19} />
             Catalog
           </NavLink>
+          <NavLink to="/library">
+            <BookOpen size={19} />
+            My Library
+          </NavLink>
+          {auth.user.role === "admin" && (
+            <NavLink to="/connections">
+              <Settings size={19} />
+              Connections
+            </NavLink>
+          )}
           <NavLink to="/lists">
             <List size={19} />
             Lists
@@ -328,6 +341,20 @@ function Shell({ auth }: { auth: Auth }) {
                 element={
                   auth.user.role === "admin" ? (
                     <Accounts />
+                  ) : (
+                    <Navigate to="/" replace />
+                  )
+                }
+              />
+              <Route
+                path="/library"
+                element={<MyLibrary admin={auth.user.role === "admin"} />}
+              />
+              <Route
+                path="/connections"
+                element={
+                  auth.user.role === "admin" ? (
+                    <Connections />
                   ) : (
                     <Navigate to="/" replace />
                   )

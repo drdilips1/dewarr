@@ -12,14 +12,15 @@ async def recover_stalled_jobs() -> None:
     queue = get_queue()
     while True:
         # Each side-effecting workflow must supply its own reconciliation path.
-        # The diagnostic is idempotent and has no external mutation to reconcile.
+        # These jobs are idempotent diagnostics or fenced, read-only inventory workflows.
         try:
-            stalled = await queue.job_manager.get_stalled_jobs(
-                task_name="system.probe",
-                seconds_since_heartbeat=60,
-            )
-            for job in stalled:
-                await queue.job_manager.retry_job(job)
+            for task_name in ("system.probe", "library.sync", "library.schedule"):
+                stalled = await queue.job_manager.get_stalled_jobs(
+                    task_name=task_name,
+                    seconds_since_heartbeat=60,
+                )
+                for job in stalled:
+                    await queue.job_manager.retry_job(job)
         except Exception as error:
             # A temporary DB outage must not silently stop the recovery loop.
             logger.error("Stalled-job recovery unavailable (%s)", type(error).__name__)

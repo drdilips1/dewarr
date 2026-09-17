@@ -1,8 +1,11 @@
+from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
+from procrastinate import RetryStrategy
 from sqlalchemy import select
 
-from app.db.models import AuditEvent, Operation
+from app.config import get_settings
+from app.db.models import AuditEvent, Integration, Operation, User
 from app.db.session import session_factory
 from app.jobs.queue import tasks
 
@@ -24,3 +27,43 @@ async def system_probe(operation_id: str) -> None:
                 entity_id=operation.id,
             )
         )
+
+
+@tasks.task(name="library.sync", queue="inventory", retry=RetryStrategy(max_attempts=5, wait=60))
+async def library_sync(operation_id: str) -> None:
+    from app.domain.inventory import synchronize
+
+    await synchronize(UUID(operation_id))
+
+
+@tasks.periodic(cron="*/5 * * * *")
+@tasks.task(name="library.schedule", queue="system", retry=3)
+async def schedule_inventory(timestamp: int) -> None:
+    if get_settings().recovery_mode:
+        return
+    from app.domain.operations import enqueue_sync
+
+    async with session_factory()() as db, db.begin():
+        admin = await db.scalar(
+            select(User)
+            .where(User.role == "admin", User.active.is_(True))
+            .order_by(User.created_at)
+            .limit(1)
+        )
+        if not admin:
+            return
+        records = (
+            await db.scalars(
+                select(Integration)
+                .where(
+                    Integration.kind == "audiobookshelf",
+                    Integration.enabled.is_(True),
+                    Integration.next_sync_at <= datetime.now(UTC),
+                )
+                .order_by(Integration.id)
+                .limit(20)
+            )
+        ).all()
+        for record in records:
+            await enqueue_sync(db, admin.id, record.id, f"inventory:{record.id}:{timestamp}")
+            record.next_sync_at = datetime.now(UTC) + timedelta(minutes=30)

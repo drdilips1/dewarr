@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Clock } from "lucide-react";
 import { api, result } from "../api/client";
@@ -9,8 +10,29 @@ export default function Activity({ admin }: { admin: boolean }) {
     queryKey: ["activity"],
     queryFn: async () => result(await api.GET("/api/activity")),
     refetchInterval: (query) =>
-      query.state.data?.some((item) => item.status === "queued") ? 2000 : false,
+      query.state.data?.some((item) =>
+        ["queued", "running"].includes(item.status),
+      )
+        ? 2000
+        : false,
   });
+  useEffect(() => {
+    if (
+      activity.data?.some(
+        (item) => item.kind === "library.sync" && item.status === "completed",
+      )
+    ) {
+      for (const key of [
+        "assets",
+        "catalog",
+        "work",
+        "libraries",
+        "connections",
+      ]) {
+        void client.invalidateQueries({ queryKey: [key] });
+      }
+    }
+  }, [activity.data, client]);
   const probe = useMutation({
     mutationFn: async () =>
       result(
@@ -59,7 +81,9 @@ export default function Activity({ admin }: { admin: boolean }) {
                 <h2>
                   {item.kind === "system.probe"
                     ? "Background worker check"
-                    : item.kind}
+                    : item.kind === "library.sync"
+                      ? "Audiobookshelf inventory sync"
+                      : item.kind}
                 </h2>
                 <p>{item.message}</p>
               </div>

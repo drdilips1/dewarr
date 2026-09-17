@@ -1,6 +1,6 @@
 # Implementation decisions and readiness plan
 
-Research date: September 17, 2026. This is the selected implementation baseline following the user's request to research and determine the P0/P1 decisions. It complements [the product architecture](PRODUCT-ARCHITECTURE.md), [metadata and collections](research/metadata-and-collections.md), and [ABS import layouts](research/audiobookshelf-import-layout.md). Where earlier documents leave a decision open, this baseline supplies the choice. No application implementation, deployment, or live user-library changes have occurred.
+Research date: September 17, 2026. This is the selected implementation baseline following the user's request to research and determine the P0/P1 decisions. It complements [the product architecture](PRODUCT-ARCHITECTURE.md), [metadata and collections](research/metadata-and-collections.md), and [ABS import layouts](research/audiobookshelf-import-layout.md). Where earlier documents leave a decision open, this baseline supplies the choice. Implementation has started; [Implementation Status](docs/IMPLEMENTATION-STATUS.md) records verified coverage. Research alone establishes neither runtime compatibility nor changes to a live user library.
 
 **Evidence boundary:** official documentation, released source, and recorded source snapshots were inspected. Design choices below are our engineering conclusions, not claims that upstream projects prescribe this architecture. Runtime compatibility and account-specific source behavior require the acceptance checks listed here. Research has resolved the direction; those checks are implementation work, not unanswered product questions.
 
@@ -302,3 +302,15 @@ Release criteria are no unintended duplicate acquisitions under these fixtures, 
 Repository snapshots for the initial app comparison remain in [source-snapshot.json](research/source-snapshot.json). Versioned upstream links above document the additional inspected behavior. All timing/concurrency/profile defaults in this document are our selections and can be adjusted; upstream API quotas and permissions remain provider-controlled.
 
 Research cannot establish the user's actual ABS/qBittorrent versions, mount topology, available disk space, account scopes or permitted MAM query rate. Connection diagnostics and compatibility fixtures resolve those during implementation/setup. We do not need those answers to build the schema, UI and adapters. Nested version layouts stay gated until proven. Public/commercial metadata redistribution is not assumed to be covered by personal API access; the current scope is user-authorized self-hosted discovery and acquisition.
+
+### Planning refresh: upstream evidence and capability drift
+
+The September 17 planning refresh rechecked the named upstream project pages. This confirms reference boundaries, not compatibility:
+
+- [Seerr](https://github.com/seerr-team/seerr) supplies familiar discovery/request presentation patterns. The plan reuses selected visual components, with book-native models and API contracts.
+- [MouseSearch](https://github.com/sevenlayercookie/MouseSearch) documents organization of its acquired torrents through hardlinks or copies and remote/local path mapping. Those behaviors inform our importer; per-book manifests, inventory confirmation and restart guarantees remain our implementation responsibilities.
+- [Shelfmark](https://github.com/calibrain/shelfmark) documents multi-source search and provider/client configuration, while explicitly placing library ownership tracking and background monitoring outside its scope. Its adapters are bounded references; our inventory and list automation belong in our own domain.
+- [BookOrbit](https://github.com/bookorbit/bookorbit) documents multiple metadata providers and an AGPL license with additional attribution terms. Provider orchestration remains a design reference; any actual code reuse requires inspecting the exact source and associated terms under D05.
+- The [Hardcover getting-started page](https://docs.hardcover.app/api/getting-started/) is dated July 2025 and describes a changing API. Treat token formats, expiry, scopes, quotas and supported queries as capability checks, not timeless constants. Keep tokens opaque; handle GraphQL `errors` and partial `data` even on HTTP 200. Do not interpret a permission-limited or partial list response as authoritative removal. Freeze tested operation fixtures in S02/S07 and require write capability separately in S08.
+
+These observations reinforce the architecture rather than expanding first-release scope. Runtime capability checks and recorded acceptance evidence take precedence over a README's generalized feature claims.

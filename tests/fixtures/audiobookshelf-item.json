@@ -1,0 +1,65 @@
+{
+  "id": "fixture-harbor",
+  "libraryId": "library-one",
+  "mediaType": "book",
+  "media": {
+    "metadata": {
+      "title": "The First Harbor",
+      "authors": [
+        {
+          "name": "Alex Morgan"
+        }
+      ],
+      "narrators": [
+        "Jordan Lee"
+      ],
+      "language": "en",
+      "publishedYear": "2024"
+    },
+    "audioFiles": [
+      {
+        "ino": "inode-fixture-harbor-m4b",
+        "metadata": {
+          "path": "/private/library/fixture-harbor/book.m4b",
+          "ext": ".m4b",
+          "size": 1000,
+          "mtimeMs": 12345
+        },
+        "duration": 3600
+      }
+    ],
+    "ebookFile": {
+      "ino": "inode-fixture-harbor-epub",
+      "metadata": {
+        "path": "/private/library/fixture-harbor/book.epub",
+        "ext": ".epub",
+        "size": 1000,
+        "mtimeMs": 12345
+      },
+      "ebookFormat": "epub"
+    }
+  },
+  "libraryFiles": [
+    {
+      "ino": "inode-fixture-harbor-m4b",
+      "metadata": {
+        "path": "/private/library/fixture-harbor/book.m4b",
+        "ext": ".m4b",
+        "size": 1000,
+        "mtimeMs": 12345
+      }
+    },
+    {
+      "ino": "inode-fixture-harbor-epub",
+      "metadata": {
+        "path": "/private/library/fixture-harbor/book.epub",
+        "ext": ".epub",
+        "size": 1000,
+        "mtimeMs": 12345
+      }
+    }
+  ],
+  "updatedAt": 1,
+  "isMissing": false,
+  "isInvalid": false
+}

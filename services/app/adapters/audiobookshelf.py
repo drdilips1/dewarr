@@ -1,0 +1,252 @@
+import hashlib
+import json
+import re
+from typing import Any
+
+from pydantic import BaseModel, Field, ValidationError
+
+from app.adapters.contracts import AdapterError, Capabilities, FailureKind
+from app.adapters.http import JsonEndpoint
+
+
+def external_id(value: Any) -> str:
+    if not isinstance(value, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,200}", value):
+        raise AdapterError(
+            FailureKind.PARSER, "Audiobookshelf returned an invalid item identifier."
+        )
+    return value
+
+
+class ABSFile(BaseModel):
+    path: str
+    size: int = Field(ge=0)
+    format: str
+    inode: str | None = None
+    modified: float | None = None
+
+
+class ABSItem(BaseModel):
+    id: str
+    library_id: str
+    old_id: str | None = None
+    title: str = Field(min_length=1, max_length=600)
+    authors: list[str]
+    narrators: list[str]
+    language: str | None = Field(default=None, max_length=20)
+    description: str | None = None
+    year: int | None = None
+    abridged: bool | None = None
+    identifiers: dict[str, str] = Field(default_factory=dict)
+    audio: list[ABSFile] = Field(default_factory=list)
+    ebook: list[ABSFile] = Field(default_factory=list)
+    missing: bool = False
+    invalid: bool = False
+    full_audio: bool = False
+    full_ebook: bool = False
+
+
+def parse_item(value: dict) -> ABSItem:
+    try:
+        media = value["media"]
+        metadata = media["metadata"]
+        if value.get("mediaType") != "book" or not isinstance(metadata, dict):
+            raise ValueError("Unexpected media type")
+        files = value["libraryFiles"]
+        if not isinstance(files, list):
+            raise ValueError("Missing file evidence")
+        indexed = {file["metadata"]["path"]: file for file in files}
+
+        def file_evidence(file: dict) -> ABSFile:
+            source = file["metadata"]
+            if source["path"] not in indexed:
+                raise ValueError("Unlisted media file")
+            return ABSFile(
+                path=source["path"],
+                size=source["size"],
+                format=(file.get("ebookFormat") or source.get("ext", "")).lstrip(".").lower(),
+                inode=str(file["ino"]) if file.get("ino") is not None else None,
+                modified=source.get("mtimeMs"),
+            )
+
+        all_audio = media.get("audioFiles", [])
+        if not isinstance(all_audio, list):
+            raise ValueError("Invalid audio file list")
+        active = [file for file in all_audio if not file.get("exclude")]
+        audio = [file_evidence(file) for file in active]
+        primary = media.get("ebookFile")
+        ebook = [file_evidence(primary)] if primary else []
+        primary_supplementary = primary and indexed[primary["metadata"]["path"]].get(
+            "isSupplementary", False
+        )
+        # A PDF next to an audiobook is conservatively treated as supporting material.
+        full_ebook = bool(
+            ebook
+            and ebook[0].size > 0
+            and not primary_supplementary
+            and not (audio and ebook[0].format == "pdf")
+        )
+        full_audio = bool(
+            audio
+            and all(file.size > 0 for file in audio)
+            and all(
+                not file.get("isInvalid")
+                and not file.get("error")
+                and (file.get("duration") or 0) > 0
+                for file in active
+            )
+        )
+        author_records = metadata.get("authors", [])
+        if not isinstance(author_records, list):
+            raise ValueError("Invalid authors")
+        authors = [record["name"] for record in author_records]
+        narrators = metadata.get("narrators") or []
+        if not all(isinstance(name, str) for name in authors + narrators):
+            raise ValueError("Invalid contributor names")
+        year = str(metadata.get("publishedYear") or "")
+        return ABSItem(
+            id=external_id(value["id"]),
+            library_id=external_id(value["libraryId"]),
+            old_id=external_id(value["oldLibraryItemId"])
+            if value.get("oldLibraryItemId")
+            else None,
+            title=metadata["title"],
+            authors=authors,
+            narrators=narrators,
+            language=metadata.get("language"),
+            description=metadata.get("descriptionPlain"),
+            year=int(year) if re.fullmatch(r"\d{4}", year) else None,
+            abridged=metadata.get("abridged"),
+            identifiers={key: str(metadata[key]) for key in ("isbn", "asin") if metadata.get(key)},
+            audio=audio,
+            ebook=ebook,
+            missing=bool(value.get("isMissing")),
+            invalid=bool(value.get("isInvalid")),
+            full_audio=full_audio,
+            full_ebook=full_ebook,
+        )
+    except (KeyError, TypeError, ValueError, ValidationError) as error:
+        raise AdapterError(
+            FailureKind.PARSER, "Audiobookshelf item metadata or file evidence is incomplete."
+        ) from error
+
+
+class Audiobookshelf(JsonEndpoint):
+    page_size = 100
+
+    async def authorize(self) -> tuple[Capabilities, str]:
+        response = await self.request("POST", "api/authorize", json={})
+        user = response.get("user")
+        if (
+            not isinstance(user, dict)
+            or not isinstance(user.get("id"), str)
+            or not isinstance(user.get("permissions", {}), dict)
+        ):
+            raise AdapterError(
+                FailureKind.PARSER, "Audiobookshelf did not return account capabilities."
+            )
+        operations = {"inventory", "item", "deep_link"}
+        if user.get("type") in {"root", "admin"}:
+            operations.add("scan")
+        scope = hashlib.sha256(
+            json.dumps(
+                {
+                    "id": user["id"],
+                    "type": user.get("type"),
+                    "permissions": user.get("permissions", {}),
+                },
+                sort_keys=True,
+            ).encode()
+        ).hexdigest()
+        settings = response.get("serverSettings") or {}
+        if not isinstance(settings, dict):
+            raise AdapterError(FailureKind.PARSER, "Audiobookshelf returned invalid capabilities.")
+        version = settings.get("version") or response.get("serverVersion")
+        if version is not None and not isinstance(version, str):
+            raise AdapterError(FailureKind.PARSER, "Audiobookshelf returned an invalid version.")
+        return Capabilities(
+            version=version,
+            operations=operations,
+            limitations=[]
+            if "scan" in operations
+            else ["Library detection relies on Audiobookshelf's watcher."],
+        ), scope
+
+    async def libraries(self) -> list[dict]:
+        response = await self.request("GET", "api/libraries")
+        values = response.get("libraries")
+        if not isinstance(values, list):
+            raise AdapterError(
+                FailureKind.PARSER, "Audiobookshelf returned an invalid library list."
+            )
+        result = []
+        seen = set()
+        for library in values:
+            if not isinstance(library, dict) or not isinstance(library.get("name"), str):
+                raise AdapterError(
+                    FailureKind.PARSER, "Audiobookshelf returned an invalid library."
+                )
+            key = external_id(library.get("id"))
+            if key in seen:
+                raise AdapterError(
+                    FailureKind.PARSER, "Audiobookshelf returned duplicate libraries."
+                )
+            seen.add(key)
+            if library.get("mediaType") == "book":
+                result.append({"id": key, "name": library["name"][:200]})
+        return result
+
+    async def page(self, library_id: str, page: int) -> tuple[list[dict], int]:
+        response = await self.request(
+            "GET",
+            f"api/libraries/{external_id(library_id)}/items",
+            params={
+                "page": page,
+                "limit": self.page_size,
+                "minified": 1,
+                "sort": "addedAt",
+                "desc": 0,
+            },
+        )
+        results, total = response.get("results"), response.get("total")
+        if not isinstance(results, list) or type(total) is not int or total < 0 or total > 100000:
+            raise AdapterError(
+                FailureKind.PARSER, "Audiobookshelf returned invalid pagination data."
+            )
+        expected = min(self.page_size, max(0, total - page * self.page_size))
+        if len(results) != expected:
+            raise AdapterError(
+                FailureKind.UNCERTAIN, "Library contents changed during sync. Try again."
+            )
+        for item in results:
+            if not isinstance(item, dict):
+                raise AdapterError(
+                    FailureKind.PARSER, "Audiobookshelf returned an invalid item list."
+                )
+            external_id(item.get("id"))
+        return results, total
+
+    async def expanded(self, ids: list[str]) -> list[ABSItem]:
+        response = await self.request(
+            "POST",
+            "api/items/batch/get",
+            json={
+                "libraryItemIds": [external_id(value) for value in ids],
+            },
+        )
+        values = response.get("libraryItems")
+        if not isinstance(values, list) or len(values) != len(ids):
+            raise AdapterError(FailureKind.UNCERTAIN, "Library item details changed during sync.")
+        items = [parse_item(value) for value in values]
+        if {item.id for item in items} != set(ids):
+            raise AdapterError(
+                FailureKind.UNCERTAIN, "Library item details did not match the requested page."
+            )
+        return items
+
+    async def item(self, item_id: str) -> ABSItem:
+        return parse_item(
+            await self.request("GET", f"api/items/{external_id(item_id)}", params={"expanded": 1})
+        )
+
+    async def scan(self, library_id: str) -> None:
+        await self.request("POST", f"api/libraries/{external_id(library_id)}/scan", empty=True)

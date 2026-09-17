@@ -8,6 +8,7 @@ from app.api.catalog import WorkView, work_view
 from app.api.dependencies import CurrentUser, Database, Member
 from app.db.models import BookList, ListEntry, Work
 from app.domain.availability import availability_for
+from app.domain.visibility import visible_work
 
 router = APIRouter(prefix="/lists", tags=["lists"])
 
@@ -65,7 +66,12 @@ async def visible_list(list_id: UUID, user: CurrentUser, db: Database, *, edit=F
 async def list_all(user: CurrentUser, db: Database):
     rows = (
         await db.execute(
-            select(BookList, func.count(ListEntry.id))
+            select(
+                BookList,
+                func.count(ListEntry.id).filter(
+                    ListEntry.work_id.in_(select(Work.id).where(visible_work(user)))
+                ),
+            )
             .outerjoin(ListEntry, ListEntry.list_id == BookList.id)
             .where(or_(BookList.owner_id == user.id, BookList.shared.is_(True)))
             .group_by(BookList.id)
@@ -91,7 +97,7 @@ async def detail(list_id: UUID, user: CurrentUser, db: Database):
         await db.scalars(
             select(Work)
             .join(ListEntry, ListEntry.work_id == Work.id)
-            .where(ListEntry.list_id == list_id)
+            .where(ListEntry.list_id == list_id, visible_work(user))
             .order_by(ListEntry.position, ListEntry.id)
             .limit(10000)
         )
@@ -109,7 +115,12 @@ async def edit_list(list_id: UUID, body: ListInput, user: Member, db: Database):
     for key, value in body.model_dump().items():
         setattr(item, key, value)
     count = await db.scalar(
-        select(func.count()).select_from(ListEntry).where(ListEntry.list_id == list_id)
+        select(func.count())
+        .select_from(ListEntry)
+        .where(
+            ListEntry.list_id == list_id,
+            ListEntry.work_id.in_(select(Work.id).where(visible_work(user))),
+        )
     )
     await db.commit()
     return list_view(item, count or 0, user.id)
@@ -125,7 +136,7 @@ async def remove_list(list_id: UUID, user: Member, db: Database):
 @router.post("/{list_id}/entries", status_code=204)
 async def add_entry(list_id: UUID, body: EntryInput, user: Member, db: Database):
     await visible_list(list_id, user, db, edit=True)
-    if not await db.get(Work, body.work_id):
+    if not await db.scalar(select(Work.id).where(Work.id == body.work_id, visible_work(user))):
         raise HTTPException(404, "Book not found")
     if not await db.scalar(
         select(ListEntry.id).where(

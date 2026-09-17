@@ -298,10 +298,217 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/integrations": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Connections */
+    get: operations["connections_api_integrations_get"];
+    put?: never;
+    /** Create Connection */
+    post: operations["create_connection_api_integrations_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/integrations/{integration_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Update Connection */
+    put: operations["update_connection_api_integrations__integration_id__put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/integrations/{integration_id}/test": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Test Connection */
+    post: operations["test_connection_api_integrations__integration_id__test_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/integrations/{integration_id}/sync": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Sync Connection */
+    post: operations["sync_connection_api_integrations__integration_id__sync_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/library/libraries": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Libraries */
+    get: operations["libraries_api_library_libraries_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/library/libraries/{library_id}/grants": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Replace Grants */
+    put: operations["replace_grants_api_library_libraries__library_id__grants_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/library/assets": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Assets */
+    get: operations["assets_api_library_assets_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/library/assets/{asset_id}/match": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Match Asset */
+    post: operations["match_asset_api_library_assets__asset_id__match_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    /** ABSConnectionInput */
+    ABSConnectionInput: {
+      /**
+       * Kind
+       * @default audiobookshelf
+       * @constant
+       */
+      kind: "audiobookshelf";
+      /** Name */
+      name: string;
+      /** Base Url */
+      base_url: string;
+      /** Public Url */
+      public_url?: string | null;
+      /** Token */
+      token?: string | null;
+      /**
+       * Enabled
+       * @default true
+       */
+      enabled: boolean;
+    };
+    /** AssetPage */
+    AssetPage: {
+      /** Items */
+      items: components["schemas"]["AssetView"][];
+      /** Total */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+    };
+    /** AssetView */
+    AssetView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Library Id
+       * Format: uuid
+       */
+      library_id: string;
+      /** Library Name */
+      library_name: string;
+      /** Title */
+      title: string;
+      /** Medium */
+      medium: string;
+      /** State */
+      state: string;
+      /** Full Content */
+      full_content: boolean;
+      /** Match Status */
+      match_status: string;
+      /** Work Ids */
+      work_ids: string[];
+      /** Version Id */
+      version_id: string | null;
+      /** Narrators */
+      narrators: string[];
+      /** Formats */
+      formats: string[];
+      /** Last Seen At */
+      last_seen_at: string | null;
+      /** Open Url */
+      open_url: string;
+    };
     /** AuthView */
     AuthView: {
       user: components["schemas"]["UserView"];
@@ -342,6 +549,36 @@ export interface components {
       /** Display Name */
       display_name: string;
     };
+    /** ConnectionView */
+    ConnectionView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Kind */
+      kind: string;
+      /** Name */
+      name: string;
+      /** Base Url */
+      base_url: string;
+      /** Public Url */
+      public_url: string;
+      /** Enabled */
+      enabled: boolean;
+      /** Status */
+      status: string;
+      /** Has Token */
+      has_token: boolean;
+      /** Version */
+      version: string | null;
+      /** Scan Supported */
+      scan_supported: boolean;
+      /** Last Error */
+      last_error: string | null;
+      /** Last Success At */
+      last_success_at: string | null;
+    };
     /** Credentials */
     Credentials: {
       /** Username */
@@ -357,10 +594,36 @@ export interface components {
        */
       work_id: string;
     };
+    /** GrantInput */
+    GrantInput: {
+      /** User Ids */
+      user_ids: string[];
+    };
     /** HTTPValidationError */
     HTTPValidationError: {
       /** Detail */
       detail?: components["schemas"]["ValidationError"][];
+    };
+    /** LibraryView */
+    LibraryView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Name */
+      name: string;
+      /**
+       * Integration Id
+       * Format: uuid
+       */
+      integration_id: string;
+      /** Accessible */
+      accessible: boolean;
+      /** Last Complete Sync */
+      last_complete_sync: string | null;
+      /** Granted User Ids */
+      granted_user_ids: string[];
     };
     /** ListDetail */
     ListDetail: {
@@ -427,6 +690,11 @@ export interface components {
       count: number;
       /** Editable */
       editable: boolean;
+    };
+    /** MatchInput */
+    MatchInput: {
+      /** Work Id */
+      work_id: string | null;
     };
     /** OperationView */
     OperationView: {
@@ -1149,6 +1417,279 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["OrderInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  connections_api_integrations_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ConnectionView"][];
+        };
+      };
+    };
+  };
+  create_connection_api_integrations_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ABSConnectionInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ConnectionView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_connection_api_integrations__integration_id__put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        integration_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ABSConnectionInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ConnectionView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  test_connection_api_integrations__integration_id__test_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        integration_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ConnectionView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  sync_connection_api_integrations__integration_id__sync_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        integration_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OperationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  libraries_api_library_libraries_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["LibraryView"][];
+        };
+      };
+    };
+  };
+  replace_grants_api_library_libraries__library_id__grants_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        library_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["GrantInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  assets_api_library_assets_get: {
+    parameters: {
+      query?: {
+        work_id?: string | null;
+        library_id?: string | null;
+        needs_review?: boolean;
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AssetPage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  match_asset_api_library_assets__asset_id__match_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        asset_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MatchInput"];
       };
     };
     responses: {

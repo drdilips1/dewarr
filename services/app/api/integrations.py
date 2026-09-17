@@ -1,0 +1,165 @@
+from datetime import UTC, datetime
+from typing import Literal
+from uuid import UUID
+
+from fastapi import APIRouter, Header, HTTPException
+from pydantic import BaseModel, Field, SecretStr, field_validator
+from sqlalchemy import select, update
+
+from app.adapters.audiobookshelf import Audiobookshelf
+from app.adapters.contracts import AdapterError
+from app.adapters.http import configured_url
+from app.api.dependencies import Admin, Database
+from app.api.operations import OperationView
+from app.config import get_settings
+from app.db.models import AuditEvent, Integration, Library
+from app.domain.operations import enqueue_sync
+from app.security import decrypt_secrets, encrypt_secrets
+
+router = APIRouter(prefix="/integrations", tags=["integrations"])
+
+
+class ABSConnectionInput(BaseModel):
+    kind: Literal["audiobookshelf"] = "audiobookshelf"
+    name: str = Field(min_length=1, max_length=120, pattern=r"\S")
+    base_url: str = Field(max_length=2000)
+    public_url: str | None = Field(default=None, max_length=2000)
+    token: SecretStr | None = Field(default=None, min_length=1, max_length=8192)
+    enabled: bool = True
+
+    @field_validator("base_url", "public_url")
+    @classmethod
+    def validate_endpoint(cls, value):
+        return configured_url(value) if value is not None else None
+
+
+class ConnectionView(BaseModel):
+    id: UUID
+    kind: str
+    name: str
+    base_url: str
+    public_url: str
+    enabled: bool
+    status: str
+    has_token: bool
+    version: str | None
+    scan_supported: bool
+    last_error: str | None
+    last_success_at: datetime | None
+
+
+def connection_view(value: Integration) -> ConnectionView:
+    return ConnectionView(
+        id=value.id,
+        kind=value.kind,
+        name=value.name,
+        base_url=value.base_url,
+        public_url=value.config.get("public_url") or value.base_url,
+        enabled=value.enabled,
+        status=value.status,
+        has_token=bool(value.encrypted_secrets),
+        version=value.capabilities.get("version"),
+        scan_supported="scan" in value.capabilities.get("operations", []),
+        last_error=value.last_error,
+        last_success_at=value.last_success_at,
+    )
+
+
+async def connection_or_404(db, identifier):
+    value = await db.get(Integration, identifier)
+    if not value or value.kind != "audiobookshelf":
+        raise HTTPException(404, "Connection not found")
+    return value
+
+
+@router.get("", response_model=list[ConnectionView])
+async def connections(admin: Admin, db: Database):
+    records = (
+        await db.scalars(
+            select(Integration).where(Integration.owner_id.is_(None)).order_by(Integration.name)
+        )
+    ).all()
+    return [connection_view(record) for record in records]
+
+
+@router.post("", response_model=ConnectionView, status_code=201)
+async def create_connection(body: ABSConnectionInput, admin: Admin, db: Database):
+    if not body.token:
+        raise HTTPException(422, "Enter an Audiobookshelf API token")
+    record = Integration(
+        kind=body.kind,
+        name=body.name.strip(),
+        base_url=body.base_url,
+        config={"public_url": body.public_url or body.base_url, "created_by": str(admin.id)},
+        encrypted_secrets=encrypt_secrets({"token": body.token.get_secret_value()}),
+        enabled=body.enabled,
+    )
+    db.add(record)
+    await db.flush()
+    db.add(AuditEvent(actor_id=admin.id, action="integration.created", entity_id=record.id))
+    await db.commit()
+    return connection_view(record)
+
+
+@router.put("/{integration_id}", response_model=ConnectionView)
+async def update_connection(
+    integration_id: UUID, body: ABSConnectionInput, admin: Admin, db: Database
+):
+    record = await connection_or_404(db, integration_id)
+    await db.refresh(record, with_for_update=True)
+    record.name, record.base_url, record.enabled = body.name.strip(), body.base_url, body.enabled
+    record.config = {**record.config, "public_url": body.public_url or body.base_url}
+    if body.token:
+        record.encrypted_secrets = encrypt_secrets({"token": body.token.get_secret_value()})
+    record.credential_generation += 1
+    record.lease_token, record.lease_until = None, None
+    record.status, record.last_error, record.next_sync_at = "untested", None, None
+    record.capabilities = {}
+    await db.execute(
+        update(Library).where(Library.integration_id == record.id).values(accessible=False)
+    )
+    db.add(AuditEvent(actor_id=admin.id, action="integration.updated", entity_id=record.id))
+    await db.commit()
+    return connection_view(record)
+
+
+@router.post("/{integration_id}/test", response_model=ConnectionView)
+async def test_connection(integration_id: UUID, admin: Admin, db: Database):
+    record = await connection_or_404(db, integration_id)
+    if not record.enabled:
+        raise HTTPException(409, "Enable this connection before testing it")
+    generation, endpoint = record.credential_generation, record.base_url
+    secret = decrypt_secrets(record.encrypted_secrets)["token"]
+    await db.rollback()
+    try:
+        async with Audiobookshelf(endpoint, secret) as client:
+            capabilities, _ = await client.authorize()
+            await client.libraries()
+        status, message = "connected", None
+    except AdapterError as error:
+        capabilities, status, message = None, error.kind.value, str(error)
+    record = await connection_or_404(db, integration_id)
+    await db.refresh(record, with_for_update=True)
+    if record.credential_generation != generation:
+        raise HTTPException(409, "Connection settings changed while the test was running")
+    record.status, record.last_error = status, message
+    if capabilities:
+        record.capabilities = capabilities.model_dump(mode="json")
+    await db.commit()
+    return connection_view(record)
+
+
+@router.post("/{integration_id}/sync", response_model=OperationView, status_code=202)
+async def sync_connection(
+    integration_id: UUID,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    record = await connection_or_404(db, integration_id)
+    if not record.enabled or get_settings().recovery_mode:
+        raise HTTPException(409, "Sync is paused or this connection is disabled")
+    operation = await enqueue_sync(db, admin.id, record.id, idempotency_key)
+    record.next_sync_at = datetime.now(UTC)
+    await db.commit()
+    return operation
