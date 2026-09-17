@@ -12,6 +12,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from app.api import (
     auth,
     catalog,
+    destinations,
     identity,
     imports,
     integrations,
@@ -95,6 +96,7 @@ def create_app() -> FastAPI:
     app.include_router(requests.router, prefix="/api")
     app.include_router(organization.router, prefix="/api")
     app.include_router(imports.router, prefix="/api")
+    app.include_router(destinations.router, prefix="/api")
     dist: Path = get_settings().web_dist
     if (dist / "assets").is_dir():
         app.mount("/assets", StaticFiles(directory=dist / "assets"), name="assets")

@@ -466,6 +466,33 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   );
   await page.reload();
   await expect(savedPlan).toContainText("book.epub → ebooks/");
+  await savedPlan.getByRole("link", { name: "Check destination" }).click();
+  await page
+    .getByRole("combobox", { name: "Audiobookshelf library", exact: true })
+    .selectOption({ index: 1 });
+  await page.getByLabel("Audiobookshelf folder path").fill("/fixture/books");
+  await page
+    .getByRole("button", { name: "Save destination", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Test destination route", exact: true })
+    .click();
+  await expect(
+    page.getByRole("region", { name: "Destination ebooks" }),
+  ).toContainText(
+    "Filesystem route verified; ABS compatibility is still required",
+  );
+  await page.screenshot({
+    path: testInfo.outputPath("destinations-mobile.png"),
+    fullPage: true,
+  });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.goBack();
+  await expect(savedPlan).toContainText("book.epub → ebooks/");
   await page.screenshot({
     path: testInfo.outputPath("inspection-mobile.png"),
     fullPage: true,

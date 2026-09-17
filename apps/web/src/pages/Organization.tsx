@@ -108,10 +108,15 @@ function Editor({
       </div>
       <p className="notice">
         Naming previews and completed-file inspection are available. Library
-        destination setup and file publication are still being built.
+        destination checks are available; file publication is still being built.
       </p>
       <p>
         <Link to="/organization/inspections">Inspect completed downloads</Link>
+      </p>
+      <p>
+        <Link to="/organization/destinations">
+          Configure library destinations
+        </Link>
       </p>
       <section className="panel editor" aria-label="Organization settings">
         <h2>Folder layout</h2>

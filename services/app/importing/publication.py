@@ -1,0 +1,608 @@
+"""Journaled, no-replace publication of one complete item from a frozen manifest.
+
+All recovery bookkeeping stays in the private staging root, never in an ABS library.
+"""
+
+import ctypes
+import errno
+import fcntl
+import hashlib
+import json
+import os
+import stat
+import sys
+import time
+from collections.abc import Callable
+from contextlib import ExitStack, contextmanager
+from pathlib import Path, PurePosixPath
+from typing import Literal
+from uuid import UUID, uuid4
+
+from pydantic import Field, model_validator
+
+from app.importing.filesystem import (
+    InspectionError,
+    beneath,
+    digest,
+    directory,
+    identity,
+    relative_parts,
+)
+from app.importing.naming import StrictModel, collision_key, fingerprint
+
+
+class PublicationError(InspectionError):
+    pass
+
+
+class PublicationBusy(PublicationError):
+    pass
+
+
+class PublishFile(StrictModel):
+    source: str
+    name: str
+    sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
+    identity: dict[str, int]
+
+    @model_validator(mode="after")
+    def confined(self):
+        relative_parts(self.source)
+        if len(relative_parts(self.name)) != 1:
+            raise ValueError("Published media filenames must be within the item leaf")
+        return self
+
+
+class PublicationSpec(StrictModel):
+    entry_id: UUID
+    plan_revision: str = Field(pattern=r"^[a-f0-9]{64}$")
+    source_root: Path
+    source_relative: str
+    source_directory: dict[str, int]
+    destination_root: Path
+    staging_root: Path
+    folder: str
+    mode: Literal["hardlink", "copy"] = "hardlink"
+    files: list[PublishFile] = Field(min_length=1, max_length=5000)
+    sidecars: dict[str, str] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def confined(self):
+        relative_parts(self.source_relative)
+        relative_parts(self.folder)
+        names = [file.name for file in self.files]
+        for name in self.sidecars:
+            if name not in {"metadata.opf", "reader.txt", "desc.txt"}:
+                raise ValueError(
+                    "Only independently generated supported metadata sidecars are allowed"
+                )
+        if sum(len(value.encode()) for value in self.sidecars.values()) > 1024 * 1024:
+            raise ValueError("Generated sidecars exceed the supported limit")
+        names.extend(self.sidecars)
+        if len({collision_key(name) for name in names}) != len(names):
+            raise ValueError("Published filenames collide")
+        for root in (self.source_root, self.destination_root, self.staging_root):
+            if not root.is_absolute() or str(root) == "/" or ".." in root.parts:
+                raise ValueError("Use absolute non-root paths")
+        for left, right in (
+            (self.source_root, self.destination_root),
+            (self.source_root, self.staging_root),
+            (self.destination_root, self.staging_root),
+        ):
+            if left.is_relative_to(right) or right.is_relative_to(left):
+                raise ValueError("Source, library and staging roots must not overlap")
+        return self
+
+
+def object_id(fd):
+    value = os.fstat(fd)
+    return {"device": value.st_dev, "inode": value.st_ino}
+
+
+def same_object(fd, expected):
+    return object_id(fd) == {key: expected[key] for key in ("device", "inode")}
+
+
+def no_replace(source_fd, source_name, destination_fd, destination_name):
+    # Interface constants from Linux renameat2 and Darwin renameatx_np.
+    libc = ctypes.CDLL(None, use_errno=True)
+    symbol, flag = ("renameatx_np", 4) if sys.platform == "darwin" else ("renameat2", 1)
+    function = getattr(libc, symbol, None)
+    if function is None or sys.platform not in {"darwin", "linux"}:
+        raise PublicationError("This platform has no supported no-replace publication operation")
+    function.argtypes = [
+        ctypes.c_int,
+        ctypes.c_char_p,
+        ctypes.c_int,
+        ctypes.c_char_p,
+        ctypes.c_uint,
+    ]
+    function.restype = ctypes.c_int
+    result = function(
+        source_fd, os.fsencode(source_name), destination_fd, os.fsencode(destination_name), flag
+    )
+    if result:
+        code = ctypes.get_errno()
+        raise OSError(code, os.strerror(code))
+
+
+def sync_directory(fd):
+    os.fsync(fd)
+
+
+@contextmanager
+def private_staging(path):
+    with directory(path) as fd:
+        info = os.fstat(fd)
+        if info.st_uid != os.geteuid() or stat.S_IMODE(info.st_mode) & 0o077:
+            raise PublicationError("Staging root must be owned by the worker and private (0700)")
+        yield fd
+
+
+@contextmanager
+def publication_lock(staging, key):
+    name = "lock-" + hashlib.sha256(key.encode()).hexdigest()
+    flags = os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK
+    try:
+        fd = os.open(name, flags | os.O_CREAT | os.O_EXCL, 0o600, dir_fd=staging)
+    except FileExistsError:
+        fd = os.open(name, flags, dir_fd=staging)
+    try:
+        info = os.fstat(fd)
+        if not stat.S_ISREG(info.st_mode) or info.st_uid != os.geteuid() or info.st_nlink != 1:
+            raise PublicationError("Invalid publication lock file")
+        try:
+            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError as error:
+            raise PublicationBusy("Another worker is publishing to this library") from error
+        yield
+    finally:
+        os.close(fd)
+
+
+def write_all(fd, data):
+    view = memoryview(data)
+    while view:
+        size = os.write(fd, view)
+        if not size:
+            raise PublicationError("Could not write generated import data")
+        view = view[size:]
+
+
+def write_receipt(staging, name, receipt, *, create=False):
+    data = json.dumps(receipt, sort_keys=True, separators=(",", ":")).encode()
+    temporary = f"receipt-{uuid4().hex}.tmp"
+    fd = os.open(
+        temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=staging
+    )
+    try:
+        write_all(fd, data)
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+    try:
+        if create:
+            no_replace(staging, temporary, staging, name)
+        else:
+            os.replace(temporary, name, src_dir_fd=staging, dst_dir_fd=staging)
+        sync_directory(staging)
+    finally:
+        try:
+            os.unlink(temporary, dir_fd=staging)
+        except FileNotFoundError:
+            pass
+
+
+def read_receipt(staging, name):
+    try:
+        with beneath(staging, name) as fd:
+            if os.fstat(fd).st_size > 8 * 1024 * 1024:
+                raise PublicationError("Publication receipt exceeds its size limit")
+            with os.fdopen(os.dup(fd), "rb") as stream:
+                return json.load(stream)
+    except FileNotFoundError:
+        return None
+
+
+def checked_source(source, file, deadline):
+    with beneath(source, file.source) as fd:
+        before = identity(os.fstat(fd))
+        # Creating/removing a hardlink changes ctime legitimately; content and inode remain fixed.
+        keys = ("device", "inode", "size", "mtime_ns")
+        if any(before[key] != file.identity[key] for key in keys):
+            raise PublicationError("Source identity or size changed since inspection")
+        if digest(fd, deadline) != file.sha256:
+            raise PublicationError("Source bytes changed since inspection")
+        after = identity(os.fstat(fd))
+        if any(after[key] != before[key] for key in keys):
+            raise PublicationError("Source changed while being verified")
+
+
+def verify_item(folder, spec, deadline):
+    expected = {file.name for file in spec.files} | set(spec.sidecars)
+    if set(os.listdir(folder)) != expected:
+        raise PublicationError("Item contains missing or unplanned files")
+    for file in spec.files:
+        with beneath(folder, file.name) as fd:
+            if os.fstat(fd).st_size != file.identity["size"] or digest(fd, deadline) != file.sha256:
+                raise PublicationError("Published media does not match its frozen manifest")
+            if spec.mode == "hardlink" and not same_object(fd, file.identity):
+                raise PublicationError("Published media is not the expected hardlink")
+    for name, content in spec.sidecars.items():
+        with beneath(folder, name) as fd:
+            if digest(fd, deadline) != hashlib.sha256(content.encode()).hexdigest():
+                raise PublicationError("Generated metadata differs from its frozen manifest")
+
+
+def conflicting_name(fd, name):
+    key = collision_key(name)
+    return next((existing for existing in os.listdir(fd) if collision_key(existing) == key), None)
+
+
+@contextmanager
+def destination_parent(root, relative):
+    parts = relative_parts(relative)
+    fd = os.dup(root)
+    try:
+        for part in parts[:-1]:
+            existing = conflicting_name(fd, part)
+            if existing is not None and existing != part:
+                raise PublicationError("Destination folder conflicts with an existing case variant")
+            try:
+                os.mkdir(part, mode=0o755, dir_fd=fd)
+                sync_directory(fd)
+            except FileExistsError:
+                pass
+            child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=fd)
+            os.close(fd)
+            fd = child
+            # Structural ancestors may not contain files that ABS could absorb into a book.
+            with os.scandir(fd) as entries:
+                if any(not entry.is_dir(follow_symlinks=False) for entry in entries):
+                    raise PublicationError("A structural destination folder already contains files")
+        yield fd, parts[-1]
+    finally:
+        os.close(fd)
+
+
+def prepare_stage(staging, receipt_name, receipt, spec):
+    name = receipt["stage_name"]
+    if receipt.get("stage_identity"):
+        with beneath(staging, name, folder=True) as fd:
+            if not same_object(fd, receipt["stage_identity"]):
+                raise PublicationError("Staged item identity changed")
+        return
+    # A crash between mkdir and identity journaling leaves an unconfirmed, unwatched orphan.
+    # Allocate another private staging path; never adopt or remove an unrecognized directory.
+    while True:
+        try:
+            os.mkdir(name, mode=0o755, dir_fd=staging)
+            break
+        except FileExistsError:
+            receipt.setdefault("unconfirmed_stages", []).append(name)
+            name = "item-" + uuid4().hex
+            receipt["stage_name"] = name
+            write_receipt(staging, receipt_name, receipt)
+    with beneath(staging, name, folder=True) as fd:
+        receipt["stage_identity"] = object_id(fd)
+    write_receipt(staging, receipt_name, receipt)
+
+
+def stage_files(staging, stage, source, receipt_name, receipt, spec, deadline, checkpoint):
+    for file in spec.files:
+        checkpoint("before-file")
+        checked_source(source, file, deadline)
+        try:
+            with beneath(stage, file.name) as current:
+                if (
+                    os.fstat(current).st_size == file.identity["size"]
+                    and digest(current, deadline) == file.sha256
+                ):
+                    if spec.mode == "hardlink" and not same_object(current, file.identity):
+                        raise PublicationError("Staged media is not the expected hardlink")
+                    continue
+                owned = receipt.get("partial_files", {}).get(file.name)
+                if not owned or not same_object(current, owned) or os.fstat(current).st_nlink != 1:
+                    raise PublicationError("Existing staged file cannot be safely resumed")
+            os.unlink(file.name, dir_fd=stage)
+        except FileNotFoundError:
+            pass
+        if spec.mode == "hardlink":
+            parent, _, basename = file.source.rpartition("/")
+            with ExitStack() as stack:
+                src_parent = (
+                    stack.enter_context(beneath(source, parent, folder=True)) if parent else source
+                )
+                os.link(
+                    basename,
+                    file.name,
+                    src_dir_fd=src_parent,
+                    dst_dir_fd=stage,
+                    follow_symlinks=False,
+                )
+            with beneath(stage, file.name) as linked:
+                if not same_object(linked, file.identity):
+                    raise PublicationError("Source changed while creating its hardlink")
+        else:
+            with beneath(source, file.source) as original:
+                if not same_object(original, file.identity):
+                    raise PublicationError("Source changed before copying")
+                output = os.open(
+                    file.name,
+                    os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
+                    0o644,
+                    dir_fd=stage,
+                )
+                try:
+                    receipt.setdefault("partial_files", {})[file.name] = object_id(output)
+                    write_receipt(staging, receipt_name, receipt)
+                    checkpoint("copy-created")
+                    while True:
+                        if time.monotonic() > deadline:
+                            raise PublicationError("Copy exceeded its time budget")
+                        block = os.read(original, 1024 * 1024)
+                        if not block:
+                            break
+                        write_all(output, block)
+                    os.fsync(output)
+                finally:
+                    os.close(output)
+        sync_directory(stage)
+        checkpoint("file-staged")
+    for name, content in spec.sidecars.items():
+        try:
+            output = os.open(
+                name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o644, dir_fd=stage
+            )
+        except FileExistsError:
+            with beneath(stage, name) as fd:
+                if digest(fd, deadline) != hashlib.sha256(content.encode()).hexdigest():
+                    # Sidecar byte writes can be interrupted. Only remove a journaled own inode.
+                    owned = receipt.get("partial_files", {}).get(name)
+                    if not owned or not same_object(fd, owned) or os.fstat(fd).st_nlink != 1:
+                        raise PublicationError(
+                            "Existing sidecar conflicts with this import"
+                        ) from None
+                    os.unlink(name, dir_fd=stage)
+                    output = os.open(
+                        name,
+                        os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
+                        0o644,
+                        dir_fd=stage,
+                    )
+                else:
+                    continue
+        try:
+            receipt.setdefault("partial_files", {})[name] = object_id(output)
+            write_receipt(staging, receipt_name, receipt)
+            write_all(output, content.encode())
+            os.fsync(output)
+        finally:
+            os.close(output)
+    sync_directory(stage)
+
+
+def publish_item(
+    spec: PublicationSpec, *, checkpoint: Callable[[str], None] = lambda _: None, timeout=600
+):
+    deadline = time.monotonic() + timeout
+    spec_hash = fingerprint(spec.model_dump(mode="json"))
+    receipt_name = str(spec.entry_id) + ".json"
+    with (
+        private_staging(spec.staging_root) as staging,
+        directory(spec.destination_root) as destination,
+    ):
+        if same_object(staging, object_id(destination)):
+            raise PublicationError("Staging and library refer to the same directory")
+        with publication_lock(staging, json.dumps(object_id(destination), sort_keys=True)):
+            receipt = read_receipt(staging, receipt_name)
+            if receipt is None:
+                receipt = {
+                    "schema_version": 1,
+                    "entry_id": str(spec.entry_id),
+                    "spec_hash": spec_hash,
+                    "stage_name": "item-" + uuid4().hex,
+                    "state": "preparing",
+                    "destination_identity": object_id(destination),
+                }
+                write_receipt(staging, receipt_name, receipt, create=True)
+            if receipt.get("spec_hash") != spec_hash or receipt.get(
+                "destination_identity"
+            ) != object_id(destination):
+                raise PublicationError("Publication settings or destination identity changed")
+            # Inspect an existing leaf before touching source or staging: a previous publication
+            # may have succeeded even when DB acknowledgement or receipt update was interrupted.
+            try:
+                with beneath(destination, spec.folder, folder=True) as existing:
+                    if not receipt.get("stage_identity") or not same_object(
+                        existing, receipt["stage_identity"]
+                    ):
+                        raise PublicationError("Destination exists and belongs to another item")
+                    verify_item(existing, spec, deadline)
+                    receipt["state"] = "published"
+                    write_receipt(staging, receipt_name, receipt)
+                    return receipt
+            except FileNotFoundError:
+                if receipt["state"] == "published":
+                    raise PublicationError(
+                        "Previously published item is missing; resolve before replacing it"
+                    ) from None
+            with (
+                directory(spec.source_root) as source_root,
+                beneath(source_root, spec.source_relative, folder=True) as source,
+            ):
+                if not same_object(source, spec.source_directory):
+                    raise PublicationError("Completed-download directory identity changed")
+                for file in spec.files:
+                    checked_source(source, file, deadline)
+                needed = (
+                    sum(file.identity["size"] for file in spec.files) if spec.mode == "copy" else 0
+                )
+                space = os.fstatvfs(staging)
+                if space.f_bavail * space.f_frsize < needed + 1024 * 1024:
+                    raise PublicationError("Not enough free space for this import")
+                prepare_stage(staging, receipt_name, receipt, spec)
+                checkpoint("stage-created")
+                with beneath(staging, receipt["stage_name"], folder=True) as stage:
+                    stage_files(
+                        staging, stage, source, receipt_name, receipt, spec, deadline, checkpoint
+                    )
+                    verify_item(stage, spec, deadline)
+                    for file in spec.files:
+                        checked_source(source, file, deadline)
+                    receipt["state"] = "prepared"
+                    write_receipt(staging, receipt_name, receipt)
+                    checkpoint("prepared")
+                    with destination_parent(destination, spec.folder) as (parent, leaf):
+                        if conflicting_name(parent, leaf) is not None:
+                            raise PublicationError("Destination name is already occupied")
+                        # Recheck current permissions/lease immediately before rename.
+                        checkpoint("before-publish")
+                        with directory(spec.destination_root) as current:
+                            if not same_object(current, receipt["destination_identity"]):
+                                raise PublicationError(
+                                    "Destination mount changed before publication"
+                                )
+                        relative_parent = str(PurePosixPath(spec.folder).parent)
+                        with ExitStack() as recheck:
+                            current_parent = (
+                                recheck.enter_context(
+                                    beneath(destination, relative_parent, folder=True)
+                                )
+                                if relative_parent != "."
+                                else destination
+                            )
+                            if object_id(current_parent) != object_id(parent):
+                                raise PublicationError(
+                                    "Destination parent moved before publication"
+                                )
+                            current_stage = recheck.enter_context(
+                                beneath(staging, receipt["stage_name"], folder=True)
+                            )
+                            if not same_object(current_stage, receipt["stage_identity"]):
+                                raise PublicationError(
+                                    "Staged directory changed before publication"
+                                )
+                        no_replace(staging, receipt["stage_name"], parent, leaf)
+                        sync_directory(parent)
+                        sync_directory(staging)
+                        checkpoint("published-before-receipt")
+                        receipt["state"] = "published"
+                        write_receipt(staging, receipt_name, receipt)
+                        return receipt
+
+
+def probe_destination(
+    source_root: Path,
+    source_relative: str,
+    file: PublishFile,
+    destination_root: Path,
+    staging_root: Path,
+):
+    """Probe an actual selected file's link route, plus empty-directory no-replace rename."""
+    if any(
+        left.is_relative_to(right) or right.is_relative_to(left)
+        for left, right in (
+            (source_root, destination_root),
+            (source_root, staging_root),
+            (destination_root, staging_root),
+        )
+    ):
+        raise PublicationError("Source, staging and library roots must not overlap")
+    token = uuid4().hex
+    staged, target, linked = f"probe-{token}", f".book-search-probe-{token}", f"link-{token}"
+    report = {"hardlink": False, "copy": False, "no_replace": False}
+    created = {"link": None, "stage": None, "target": None, "write": None}
+    write_name = "write-" + token
+    with (
+        directory(source_root) as source_mount,
+        beneath(source_mount, source_relative, folder=True) as source,
+        private_staging(staging_root) as staging,
+        directory(destination_root) as destination,
+        ExitStack() as handles,
+    ):
+        checked_source(source, file, time.monotonic() + 120)
+        if same_object(staging, object_id(destination)):
+            raise PublicationError("Staging and library refer to the same directory")
+        report.update(
+            destination_identity=object_id(destination), staging_identity=object_id(staging)
+        )
+        try:
+            output = os.open(
+                write_name,
+                os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
+                0o600,
+                dir_fd=staging,
+            )
+            created["write"] = object_id(output)
+            handles.callback(os.close, os.dup(output))
+            try:
+                write_all(output, b"book-search destination probe\n")
+                os.fsync(output)
+            finally:
+                os.close(output)
+            with beneath(staging, write_name) as checked:
+                report["copy"] = os.read(checked, 100) == b"book-search destination probe\n"
+            parent, _, name = file.source.rpartition("/")
+            with ExitStack() as stack:
+                source_parent = (
+                    stack.enter_context(beneath(source, parent, folder=True)) if parent else source
+                )
+                try:
+                    os.link(
+                        name,
+                        linked,
+                        src_dir_fd=source_parent,
+                        dst_dir_fd=staging,
+                        follow_symlinks=False,
+                    )
+                    linked_info = os.stat(linked, dir_fd=staging, follow_symlinks=False)
+                    created["link"] = {
+                        "device": linked_info.st_dev,
+                        "inode": linked_info.st_ino,
+                    }
+                    with beneath(staging, linked) as fd:
+                        report["hardlink"] = same_object(fd, file.identity)
+                except OSError as error:
+                    report["hardlink_error"] = errno.errorcode.get(error.errno, "IO_ERROR")
+            os.mkdir(staged, mode=0o700, dir_fd=staging)
+            stage_handle = handles.enter_context(beneath(staging, staged, folder=True))
+            created["stage"] = object_id(stage_handle)
+            no_replace(staging, staged, destination, target)
+            created["target"], created["stage"] = created["stage"], None
+            os.mkdir(staged, mode=0o700, dir_fd=staging)
+            stage_handle = handles.enter_context(beneath(staging, staged, folder=True))
+            created["stage"] = object_id(stage_handle)
+            try:
+                no_replace(staging, staged, destination, target)
+            except OSError as error:
+                if error.errno not in {errno.EEXIST, errno.ENOTEMPTY}:
+                    raise
+                report["no_replace"] = True
+            if not report["no_replace"]:
+                raise PublicationError("Filesystem failed the no-replace collision probe")
+            sync_directory(destination)
+            sync_directory(staging)
+            space = os.fstatvfs(destination)
+            report["available_bytes"] = space.f_bavail * space.f_frsize
+            return report
+        finally:
+            changed = False
+            for fd, name, folder, owned in (
+                (staging, linked, False, created["link"]),
+                (staging, staged, True, created["stage"]),
+                (destination, target, True, created["target"]),
+                (staging, write_name, False, created["write"]),
+            ):
+                if not owned:
+                    continue
+                try:
+                    observed = os.stat(name, dir_fd=fd, follow_symlinks=False)
+                    if {"device": observed.st_dev, "inode": observed.st_ino} != owned:
+                        changed = True
+                        continue
+                    (os.rmdir if folder else os.unlink)(name, dir_fd=fd)
+                except FileNotFoundError:
+                    pass
+            if changed:
+                raise PublicationError("Probe object changed; unrecognized replacement preserved")

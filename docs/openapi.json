@@ -2805,6 +2805,172 @@
           }
         }
       }
+    },
+    "/api/organization/destination-roots": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Destination Roots",
+        "operationId": "destination_roots_api_organization_destination_roots_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "title": "Response Destination Roots Api Organization Destination Roots Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organization/destinations": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Destinations",
+        "operationId": "destinations_api_organization_destinations_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DestinationView"
+                  },
+                  "type": "array",
+                  "title": "Response Destinations Api Organization Destinations Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organization/destinations/{root_key}": {
+      "put": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Save Destination",
+        "operationId": "save_destination_api_organization_destinations__root_key__put",
+        "parameters": [
+          {
+            "name": "root_key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Root Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DestinationInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DestinationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organization/destinations/{destination_id}/probe": {
+      "post": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Probe Destination",
+        "operationId": "probe_destination_api_organization_destinations__destination_id__probe_post",
+        "parameters": [
+          {
+            "name": "destination_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Destination Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProbeInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -3538,6 +3704,137 @@
           "password"
         ],
         "title": "Credentials"
+      },
+      "DestinationInput": {
+        "properties": {
+          "library_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Library Id"
+          },
+          "medium": {
+            "type": "string",
+            "enum": [
+              "ebook",
+              "audio"
+            ],
+            "title": "Medium"
+          },
+          "backend_path": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 2,
+            "title": "Backend Path"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "hardlink",
+              "copy"
+            ],
+            "title": "Mode",
+            "default": "hardlink"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": true
+          },
+          "expected_revision": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "library_id",
+          "medium",
+          "backend_path"
+        ],
+        "title": "DestinationInput"
+      },
+      "DestinationView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "root_key": {
+            "type": "string",
+            "title": "Root Key"
+          },
+          "library_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Library Id"
+          },
+          "medium": {
+            "type": "string",
+            "title": "Medium"
+          },
+          "backend_path": {
+            "type": "string",
+            "title": "Backend Path"
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          },
+          "configured": {
+            "type": "boolean",
+            "title": "Configured"
+          },
+          "probe": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Probe"
+          },
+          "publication_available": {
+            "type": "boolean",
+            "title": "Publication Available",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "root_key",
+          "library_id",
+          "medium",
+          "backend_path",
+          "mode",
+          "enabled",
+          "revision",
+          "configured",
+          "probe"
+        ],
+        "title": "DestinationView"
       },
       "EditValues": {
         "properties": {
@@ -5383,6 +5680,27 @@
           "targets"
         ],
         "title": "PreviewView"
+      },
+      "ProbeInput": {
+        "properties": {
+          "plan_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Plan Id"
+          },
+          "expected_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Expected Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "plan_id",
+          "expected_revision"
+        ],
+        "title": "ProbeInput"
       },
       "ReasonView": {
         "properties": {

@@ -2,7 +2,7 @@
 
 September 17, 2026. Implemented S04 foundation; the importer stage is not complete.
 
-The administrator can edit naming presets, inspect a completed download directory, map proposed file groups to existing catalog versions, and save an immutable review plan. No endpoint publishes, renames, hardlinks, copies or modifies media. An inspected file or saved plan never establishes library ownership.
+The administrator can edit naming presets, inspect a completed download directory, map proposed file groups to existing catalog versions, save an immutable review plan, and configure/test a destination. No endpoint publishes media into the library. Destination tests create and remove their own temporary hardlinks, a small copy sentinel and empty folders. An inspected file, saved plan or successful filesystem check never establishes library ownership.
 
 ## Naming
 
@@ -33,6 +33,23 @@ The API needs the mapping but does not need the media mount. The default mapping
 
 Choose **Inspect completed downloads** from Organization. Confirm that the download has finished, inspect it, then use the proposed groups to find the corresponding catalog book/version. Confirm full-book contents when known. Unconfirmed completeness produces a held plan entry. This manual assertion does not replace the future qBittorrent completion/association check. Catalog identity is never inferred merely from a folder name.
 
+## Configure destinations and actual capability probes
+
+Use the same mappings in API and worker settings. The worker needs access to the actual mounts; the API still needs no media mount.
+
+```dotenv
+BOOK_IMPORT_DESTINATIONS='{"ebooks":"/data/library/ebooks","audiobooks":"/data/library/audiobooks"}'
+BOOK_IMPORT_STAGING_ROOT=/data/import-staging
+```
+
+Create staging with mode `0700`, owned by the worker UID. It must be outside every scanned library and download root, on the destination filesystem. Destination and staging mounts need worker write access. Source mounts must permit the actual hardlink operation when hardlinks are selected; the earlier read-only example supports inspection only. Merely putting all paths below `/data` does not prove Docker mount compatibility. The actual probe decides whether the selected route works. One staging root currently limits destinations to a compatible publication filesystem; per-filesystem staging remains future work.
+
+Open **Organization → Configure library destinations**. Bind each configured root to an accessible ABS library, its absolute path as ABS sees it, media type and import method. Hardlink required is the default; copy is explicit and consumes extra storage. A backend path binding is currently a declared mapping, not certified proof that both containers see the same directory.
+
+From a saved import plan choose **Check destination**, save the binding and run **Test destination route**. A durable worker operation checks the selected source hash, creates a temporary hardlink, writes/re-reads a copy sentinel, tests atomic no-replace directory publication and collision refusal, and reports available space. It removes only temporary objects it actually created. A filesystem check is not a full-file copy test, an import reservation, or ABS permission/layout confirmation. Hardlink failure never silently chooses copying. Source/staging/library overlap is rejected using configured paths; bind-mount aliases and roots not declared to the app still require the backend mapping gate.
+
+Settings are revision protected. Jobs fence obsolete worker attempts and recheck account, library, connection and route configuration before accepting results. Changing roots, source mappings or bindings invalidates previous probe evidence. A successful check keeps `publication_available=false` until the complete import workflow exists.
+
 ## File evidence
 
 The worker opens each directory component relative to an already-open descriptor, refuses symlinks/special files, hashes regular files and compares identity/size/timestamps before and after inspection. It enumerates the tree again before committing a snapshot. Files are opened read-only. Limits currently bound a batch to 10,000 entries, 20 directory levels, 200 GiB and a 300-second inspection budget. Blocking operating-system I/O is not made cancellable by the wall-clock budget; production mount and resource behavior still needs certification.
@@ -55,6 +72,10 @@ Grouping uses directory boundaries and observed album/author/narrator/format evi
 | `GET /api/organization/inspections/{id}` | Owner-scoped result, file evidence and proposed groups |
 | `POST /api/organization/inspections/{id}/plans` | Validate selected catalog versions and profile/inspection revisions; save immutable plan |
 | `GET /api/organization/plans/{id}` | Reload the recorded plan independently of later settings changes |
+| `GET /api/organization/destination-roots` | Configured destination keys |
+| `GET /api/organization/destinations` | Bindings and current probe evidence |
+| `PUT /api/organization/destinations/{root_key}` | Save library/path/media/method binding with expected revision |
+| `POST /api/organization/destinations/{id}/probe` | Queue a real worker filesystem check using an owned frozen plan and idempotency key |
 
 Administrator access is enforced server-side. Each inspection belongs to its initiating administrator. Queue enqueue and inspection creation share one PostgreSQL transaction. Worker attempts use generation tokens; a superseded attempt cannot commit over the newer one. Check actor/root configuration before and after filesystem work. Stalled read-only jobs are eligible for existing worker recovery. Deterministic file failures expose an actionable state; a new inspection command retries after repair.
 
@@ -62,8 +83,22 @@ Frozen plans retain source identity/hash evidence, original version/work binding
 
 Migrations 0008 and 0009 add organization settings, download inspections and frozen plans. Populated settings/history guard against lossy downgrade; restore a pre-upgrade backup for such rollback. A new installation can round-trip the empty schema.
 
+Migration 0010 adds destination bindings and fenced probe state, with the same populated-state downgrade guard.
+
+## Filesystem publisher primitive
+
+`app.importing.publication.publish_item` implements and tests complete-item staging, source identity/hash revalidation, hardlink or explicit copy, independently generated sidecar files, journaled interruptions and atomic no-replace publication. It is not exposed by the API or a publication worker. Its tests and certification harness operate only on synthetic media.
+
+All receipts, locks and partial staging stay outside scanned roots. Existing destination folders are never adopted by filename alone or overwritten. Recovery recognizes a published item through recorded directory identity and an exact file/hash manifest, including when the seeded download has subsequently gone away. Staged copy recovery removes only the recorded partial inode; unknown files and unconfirmed staging directories remain untouched for review. A missing or changed published item is held instead of silently recreated. Source media bytes, names, modes and timestamps are not rewritten; hardlink creation necessarily changes link counts and inode change time.
+
+The implementation uses Linux [renameat2 with RENAME_NOREPLACE](https://man7.org/linux/man-pages/man2/rename.2.html) and Darwin [renameatx_np with RENAME_EXCL](https://github.com/apple-oss-distributions/xnu/blob/main/bsd/sys/stdio.h). Only Darwin has been executed locally. Ordinary overwrite-capable rename is not a fallback. Kernel I/O interruption, Linux/container behavior, bind aliases, full recovery/cleanup for orphaned probe/staging objects, cross-process database reservations, per-child ownership checks, production metadata export and ABS reconciliation remain gate work.
+
 ## Verification and remaining gate
 
 The current corpus exercises naming, actual generated EPUB/MP3/M4B inspection, source integrity, symlinks/FIFOs/traversal, malformed/entity-bearing EPUB metadata, probe bounds, changing files, concurrent commands, worker redelivery/supersession, revocation, frozen-plan persistence and downgrade guards. The browser follows inspection → catalog/version mapping → saved plan → reload on a mobile viewport.
 
-Next: configured library destinations/path mapping, real link/copy probes, source revalidation against frozen manifests, no-replace staging/publication and recovery journals, sidecars, actual ABS item confirmation, fuller grouping/format coverage and existing-owned child reconciliation. These remain required before enabling the MAM/qBittorrent acquisition path. No S04 acceptance gate is claimed complete.
+The publisher adds 25 tests for hardlink/copy integrity, interrupted/replayed publication, concurrent workers, collisions, stale sources and symlink escapes. Six destination integration tests cover actual probes, concurrent commands, stale configuration, obsolete workers, access and downgrade guards. The browser additionally saves a destination and verifies its actual route on a mobile viewport.
+
+The [native ABS certification](ABS-NATIVE-CERTIFICATION.md) passed seven pinned-server scanner cases through the actual publisher and inventory adapter. Production sidecar export, watcher behavior and integrated import confirmation remain unverified; nested layout is still preview-only.
+
+Next: verified backend root mappings and capabilities, publication database state/reservations, generation/permission/recovery fencing at external writes, production sidecars, actual ABS item confirmation in the app, fuller grouping/format coverage and existing-owned child reconciliation. These remain required before enabling the MAM/qBittorrent acquisition path. No S04 acceptance gate is claimed complete.

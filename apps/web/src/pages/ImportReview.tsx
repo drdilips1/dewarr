@@ -310,6 +310,9 @@ function Review({ inspection }: { inspection: Inspection }) {
       {frozen.data && (
         <article className="panel editor" aria-label="Saved import plan">
           <h3>Import plan saved</h3>
+          <Link to={`/organization/destinations?plan=${frozen.data.id}`}>
+            Check destination
+          </Link>
           <p>
             {frozen.data.document.plan.expected_items} planned item folders ·{" "}
             {frozen.data.document.plan.held_items} need attention

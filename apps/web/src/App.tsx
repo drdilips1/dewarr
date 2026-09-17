@@ -32,6 +32,7 @@ const Accounts = lazy(() => import("./pages/Accounts"));
 const ProviderSearch = lazy(() => import("./pages/ProviderSearch"));
 const Organization = lazy(() => import("./pages/Organization"));
 const ImportReview = lazy(() => import("./pages/ImportReview"));
+const Destinations = lazy(() => import("./pages/Destinations"));
 const MetadataSettings = lazy(() => import("./pages/MetadataSettings"));
 
 export default function App() {
@@ -357,6 +358,16 @@ function Shell({ auth }: { auth: Auth }) {
                 path="/metadata"
                 element={
                   <MetadataSettings admin={auth.user.role === "admin"} />
+                }
+              />
+              <Route
+                path="/organization/destinations"
+                element={
+                  auth.user.role === "admin" ? (
+                    <Destinations />
+                  ) : (
+                    <Navigate to="/" replace />
+                  )
                 }
               />
               <Route

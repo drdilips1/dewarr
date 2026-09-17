@@ -934,6 +934,74 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organization/destination-roots": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Destination Roots */
+    get: operations["destination_roots_api_organization_destination_roots_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organization/destinations": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Destinations */
+    get: operations["destinations_api_organization_destinations_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organization/destinations/{root_key}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Save Destination */
+    put: operations["save_destination_api_organization_destinations__root_key__put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organization/destinations/{destination_id}/probe": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Probe Destination */
+    post: operations["probe_destination_api_organization_destinations__destination_id__probe_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1201,6 +1269,70 @@ export interface components {
       username: string;
       /** Password */
       password: string;
+    };
+    /** DestinationInput */
+    DestinationInput: {
+      /**
+       * Library Id
+       * Format: uuid
+       */
+      library_id: string;
+      /**
+       * Medium
+       * @enum {string}
+       */
+      medium: "ebook" | "audio";
+      /** Backend Path */
+      backend_path: string;
+      /**
+       * Mode
+       * @default hardlink
+       * @enum {string}
+       */
+      mode: "hardlink" | "copy";
+      /**
+       * Enabled
+       * @default true
+       */
+      enabled: boolean;
+      /** Expected Revision */
+      expected_revision?: string | null;
+    };
+    /** DestinationView */
+    DestinationView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Root Key */
+      root_key: string;
+      /**
+       * Library Id
+       * Format: uuid
+       */
+      library_id: string;
+      /** Medium */
+      medium: string;
+      /** Backend Path */
+      backend_path: string;
+      /** Mode */
+      mode: string;
+      /** Enabled */
+      enabled: boolean;
+      /** Revision */
+      revision: string;
+      /** Configured */
+      configured: boolean;
+      /** Probe */
+      probe: {
+        [key: string]: unknown;
+      } | null;
+      /**
+       * Publication Available
+       * @default false
+       */
+      publication_available: boolean;
     };
     /** EditValues */
     EditValues: {
@@ -1902,6 +2034,16 @@ export interface components {
        * @default false
        */
       download_available: boolean;
+    };
+    /** ProbeInput */
+    ProbeInput: {
+      /**
+       * Plan Id
+       * Format: uuid
+       */
+      plan_id: string;
+      /** Expected Revision */
+      expected_revision: string;
     };
     /** ReasonView */
     ReasonView: {
@@ -4234,6 +4376,118 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["FrozenPlanView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  destination_roots_api_organization_destination_roots_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": string[];
+        };
+      };
+    };
+  };
+  destinations_api_organization_destinations_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DestinationView"][];
+        };
+      };
+    };
+  };
+  save_destination_api_organization_destinations__root_key__put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        root_key: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DestinationInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DestinationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  probe_destination_api_organization_destinations__destination_id__probe_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        destination_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ProbeInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OperationView"];
         };
       };
       /** @description Validation Error */

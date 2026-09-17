@@ -25,8 +25,10 @@ class Settings(BaseSettings):
     hardcover_url: str = "https://api.hardcover.app"
     openlibrary_url: str = "https://openlibrary.org"
     import_sources: dict[str, Path] = {}
+    import_destinations: dict[str, Path] = {}
+    import_staging_root: Path | None = None
 
-    @field_validator("import_sources")
+    @field_validator("import_sources", "import_destinations")
     @classmethod
     def validate_import_sources(cls, sources):
         import re
@@ -37,6 +39,13 @@ class Settings(BaseSettings):
             if not path.is_absolute() or str(path) == "/" or ".." in path.parts:
                 raise ValueError("Download roots must be absolute directories below /")
         return sources
+
+    @field_validator("import_staging_root")
+    @classmethod
+    def validate_staging_root(cls, path):
+        if path is not None and (not path.is_absolute() or str(path) == "/" or ".." in path.parts):
+            raise ValueError("Use an absolute staging directory below /")
+        return path
 
     @field_validator("public_url")
     @classmethod

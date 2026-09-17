@@ -21,6 +21,13 @@ from tests.media_fixtures import epub  # noqa: E402
 media_fixture = tempfile.TemporaryDirectory(prefix="book-search-browser-media-")
 media_root = Path(media_fixture.name).resolve()
 epub(media_root / "completed/book.epub", title="The Catalog Journey", author="Catalog Author")
+destination_root = media_root / "library"
+staging_root = media_root / "staging"
+destination_root.mkdir()
+staging_root.mkdir(mode=0o700)
+download_root = media_root / "downloads"
+download_root.mkdir()
+(media_root / "completed").rename(download_root / "completed")
 os.chdir(root)
 url = os.environ.get(
     "BOOK_E2E_DATABASE_URL",
@@ -38,7 +45,9 @@ os.environ.update(
         "BOOK_COOKIE_SECURE": "false",
         "BOOK_HARDCOVER_URL": "http://127.0.0.1:13379/catalog",
         "BOOK_OPENLIBRARY_URL": "http://127.0.0.1:13379/openlibrary",
-        "BOOK_IMPORT_SOURCES": json.dumps({"synthetic": str(media_root)}),
+        "BOOK_IMPORT_SOURCES": json.dumps({"synthetic": str(download_root)}),
+        "BOOK_IMPORT_DESTINATIONS": json.dumps({"ebooks": str(destination_root)}),
+        "BOOK_IMPORT_STAGING_ROOT": str(staging_root),
     }
 )
 subprocess.run(["uv", "run", "alembic", "upgrade", "head"], check=True)

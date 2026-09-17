@@ -1,6 +1,6 @@
 # Audiobookshelf inventory integration
 
-Current implementation checkpoint, September 17, 2026. This is a partial S03 delivery; the complete PRD remains active. Tests use synthetic data and real PostgreSQL. No actual ABS installation has yet been certified.
+Current implementation checkpoint, September 17, 2026. This is a partial S03 delivery; the complete PRD remains active. Tests use synthetic data and real PostgreSQL. Seven actual ABS 2.36.1 native scanner/API cases now pass; see [certification evidence and limits](ABS-NATIVE-CERTIFICATION.md). Full compatibility certification remains pending.
 
 ## Connection and UX
 
@@ -43,4 +43,4 @@ Expired workers lose the right to publish. A replacement run discards abandoned 
 
 `tests/contracts/test_audiobookshelf.py` exercises HTTP fixtures, database transitions, duplicate/concurrent commands, stale owners, interrupted pagination, permissions, manual links, missing assets and stable-ID library moves. The Playwright journey starts an isolated synthetic ABS HTTP service plus the actual app API/worker and validates connections, inventory, corrections and grants in the browser.
 
-Manual match/unmatch now has administrator correction history and guarded undo; see [Identity corrections](IDENTITY-CORRECTIONS.md). Still required: actual-version ABS inventory/scanner certification; change-event handling; broader file/identifier move detection; canonical work merge/split; repair/ignore/replacement intents; full cross-provider identity reconciliation. File import, hardlink/layout certification and qBittorrent acquisition belong to later gates and are not established by these inventory tests.
+Manual match/unmatch now has administrator correction history and guarded undo; see [Identity corrections](IDENTITY-CORRECTIONS.md). Still required: complete actual-version ABS inventory/scanner certification beyond the seven native cases; change-event handling; broader file/identifier move detection; canonical work merge/split; repair/ignore/replacement intents; full cross-provider identity reconciliation. File import, hardlink/layout certification and qBittorrent acquisition belong to later gates and are not established by these inventory tests.

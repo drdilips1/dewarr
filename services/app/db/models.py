@@ -393,3 +393,20 @@ class FrozenImportPlan(Identity, Base):
     owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
     revision: Mapped[str] = mapped_column(String(64))
     document: Mapped[dict[str, Any]] = mapped_column(JSONB)
+
+
+class ImportDestination(Identity, Base):
+    __tablename__ = "import_destinations"
+    __table_args__ = (
+        CheckConstraint("medium IN ('ebook', 'audio')"),
+        CheckConstraint("mode IN ('hardlink', 'copy')"),
+    )
+    root_key: Mapped[str] = mapped_column(String(60), unique=True)
+    library_id: Mapped[UUID] = mapped_column(ForeignKey("libraries.id"))
+    medium: Mapped[str] = mapped_column(String(10))
+    backend_path: Mapped[str] = mapped_column(String(1024))
+    mode: Mapped[str] = mapped_column(String(10), default="hardlink")
+    enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    probe: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
+    probe_operation_id: Mapped[UUID | None] = mapped_column(ForeignKey("operations.id"))
+    probe_token: Mapped[UUID | None] = mapped_column()
