@@ -2419,6 +2419,392 @@
           }
         }
       }
+    },
+    "/api/organization/settings": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Settings",
+        "operationId": "settings_api_organization_settings_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsView"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Save Settings",
+        "operationId": "save_settings_api_organization_settings_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveSettings"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organization/defaults": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Defaults",
+        "operationId": "defaults_api_organization_defaults_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamingProfile"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organization/preview": {
+      "post": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Preview",
+        "operationId": "preview_api_organization_preview_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreviewInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportPlan"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organization/download-roots": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Download Roots",
+        "operationId": "download_roots_api_organization_download_roots_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "title": "Response Download Roots Api Organization Download Roots Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organization/inspections": {
+      "post": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Create Inspection",
+        "operationId": "create_inspection_api_organization_inspections_post",
+        "parameters": [
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InspectInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InspectionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Inspections",
+        "operationId": "inspections_api_organization_inspections_get",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InspectionView"
+                  },
+                  "title": "Response Inspections Api Organization Inspections Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organization/inspections/{inspection_id}": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Inspection",
+        "operationId": "inspection_api_organization_inspections__inspection_id__get",
+        "parameters": [
+          {
+            "name": "inspection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Inspection Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InspectionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organization/inspections/{inspection_id}/plans": {
+      "post": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Freeze Plan",
+        "operationId": "freeze_plan_api_organization_inspections__inspection_id__plans_post",
+        "parameters": [
+          {
+            "name": "inspection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Inspection Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FreezeInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FrozenPlanView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organization/plans/{plan_id}": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Frozen Plan",
+        "operationId": "frozen_plan_api_organization_plans__plan_id__get",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Plan Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FrozenPlanView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -3369,6 +3755,166 @@
         ],
         "title": "EntryInput"
       },
+      "FileMapping": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "destination": {
+            "type": "string",
+            "title": "Destination"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source",
+          "destination",
+          "role"
+        ],
+        "title": "FileMapping"
+      },
+      "FreezeInput": {
+        "properties": {
+          "inspection_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Inspection Revision"
+          },
+          "profile_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Profile Revision"
+          },
+          "selections": {
+            "items": {
+              "$ref": "#/components/schemas/GroupSelection"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Selections"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "inspection_revision",
+          "profile_revision",
+          "selections"
+        ],
+        "title": "FreezeInput"
+      },
+      "FrozenDocument": {
+        "properties": {
+          "schema_version": {
+            "type": "integer",
+            "title": "Schema Version"
+          },
+          "inspection_revision": {
+            "type": "string",
+            "title": "Inspection Revision"
+          },
+          "profile": {
+            "$ref": "#/components/schemas/NamingProfile"
+          },
+          "plan": {
+            "$ref": "#/components/schemas/ImportPlan"
+          },
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/ImportGroup"
+            },
+            "type": "array",
+            "title": "Groups"
+          },
+          "source": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Source"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/InspectedFile"
+            },
+            "type": "array",
+            "title": "Files"
+          },
+          "unselected_groups": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Unselected Groups"
+          },
+          "publication_available": {
+            "type": "boolean",
+            "title": "Publication Available"
+          },
+          "pending_checks": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Pending Checks"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "schema_version",
+          "inspection_revision",
+          "profile",
+          "plan",
+          "groups",
+          "source",
+          "files",
+          "unselected_groups",
+          "publication_available",
+          "pending_checks"
+        ],
+        "title": "FrozenDocument"
+      },
+      "FrozenPlanView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "inspection_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Inspection Id"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "document": {
+            "$ref": "#/components/schemas/FrozenDocument"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "inspection_id",
+          "revision",
+          "created_at",
+          "document"
+        ],
+        "title": "FrozenPlanView"
+      },
       "GrantInput": {
         "properties": {
           "user_ids": {
@@ -3387,6 +3933,38 @@
         ],
         "title": "GrantInput"
       },
+      "GroupSelection": {
+        "properties": {
+          "group_key": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Group Key"
+          },
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Version Id"
+          },
+          "full_content": {
+            "type": "boolean",
+            "title": "Full Content"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "group_key",
+          "work_id",
+          "version_id",
+          "full_content"
+        ],
+        "title": "GroupSelection"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -3399,6 +3977,423 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "ImportGroup": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Version Id"
+          },
+          "medium": {
+            "type": "string",
+            "enum": [
+              "ebook",
+              "audio"
+            ],
+            "title": "Medium"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/NamingMetadata"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/PlannedSourceFile"
+            },
+            "type": "array",
+            "maxItems": 5000,
+            "minItems": 1,
+            "title": "Files"
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "import",
+              "skip-owned",
+              "needs-review"
+            ],
+            "title": "Decision",
+            "default": "import"
+          },
+          "full_content": {
+            "type": "boolean",
+            "title": "Full Content",
+            "default": true
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "work_id",
+          "version_id",
+          "medium",
+          "metadata",
+          "files"
+        ],
+        "title": "ImportGroup"
+      },
+      "ImportPlan": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PlannedItem"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "expected_items": {
+            "type": "integer",
+            "title": "Expected Items"
+          },
+          "held_items": {
+            "type": "integer",
+            "title": "Held Items"
+          },
+          "skipped_items": {
+            "type": "integer",
+            "title": "Skipped Items"
+          },
+          "publication_available": {
+            "type": "boolean",
+            "title": "Publication Available",
+            "default": false
+          },
+          "profile_revision": {
+            "type": "string",
+            "title": "Profile Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "items",
+          "expected_items",
+          "held_items",
+          "skipped_items",
+          "profile_revision"
+        ],
+        "title": "ImportPlan"
+      },
+      "InspectInput": {
+        "properties": {
+          "source_key": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]{1,60}$",
+            "title": "Source Key"
+          },
+          "relative_path": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "title": "Relative Path"
+          },
+          "completed_download": {
+            "type": "boolean",
+            "const": true,
+            "title": "Completed Download"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source_key",
+          "relative_path",
+          "completed_download"
+        ],
+        "title": "InspectInput"
+      },
+      "InspectedFile": {
+        "properties": {
+          "path": {
+            "type": "string",
+            "title": "Path"
+          },
+          "extension": {
+            "type": "string",
+            "title": "Extension"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "medium": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Medium"
+          },
+          "identity": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Identity"
+          },
+          "sha256": {
+            "type": "string",
+            "title": "Sha256"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "technical": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Technical"
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metadata"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path",
+          "extension",
+          "state",
+          "medium",
+          "identity",
+          "sha256"
+        ],
+        "title": "InspectedFile"
+      },
+      "InspectedGroup": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "medium": {
+            "type": "string",
+            "title": "Medium"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Authors"
+          },
+          "narrators": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Narrators"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/PlannedSourceFile"
+            },
+            "type": "array",
+            "title": "Files"
+          },
+          "identity": {
+            "type": "string",
+            "title": "Identity"
+          },
+          "full_content": {
+            "type": "string",
+            "title": "Full Content"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "key",
+          "medium",
+          "title",
+          "authors",
+          "narrators",
+          "files",
+          "identity",
+          "full_content"
+        ],
+        "title": "InspectedGroup"
+      },
+      "InspectionSnapshot": {
+        "properties": {
+          "schema_version": {
+            "type": "integer",
+            "title": "Schema Version"
+          },
+          "source_path": {
+            "type": "string",
+            "title": "Source Path"
+          },
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path"
+          },
+          "directory_identity": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Directory Identity"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/InspectedFile"
+            },
+            "type": "array",
+            "title": "Files"
+          },
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/InspectedGroup"
+            },
+            "type": "array",
+            "title": "Groups"
+          },
+          "publication_available": {
+            "type": "boolean",
+            "title": "Publication Available",
+            "default": false
+          },
+          "limits": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Limits"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "schema_version",
+          "source_path",
+          "relative_path",
+          "directory_identity",
+          "files",
+          "groups",
+          "revision"
+        ],
+        "title": "InspectionSnapshot"
+      },
+      "InspectionView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "source_key": {
+            "type": "string",
+            "title": "Source Key"
+          },
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "snapshot": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/InspectionSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "operation_id",
+          "source_key",
+          "relative_path",
+          "state",
+          "message"
+        ],
+        "title": "InspectionView"
       },
       "LibraryView": {
         "properties": {
@@ -3849,6 +4844,287 @@
         ],
         "title": "MetadataView"
       },
+      "NamingMetadata": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 600,
+            "title": "Title"
+          },
+          "authors": {
+            "items": {
+              "type": "string",
+              "maxLength": 600
+            },
+            "type": "array",
+            "maxItems": 30,
+            "title": "Authors"
+          },
+          "author_sort": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Author Sort"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subtitle"
+          },
+          "series": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Series"
+          },
+          "sequence": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sequence"
+          },
+          "original_year": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 9999.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Original Year"
+          },
+          "edition_year": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 9999.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Edition Year"
+          },
+          "recording_year": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 9999.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recording Year"
+          },
+          "edition": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Edition"
+          },
+          "publisher": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Publisher"
+          },
+          "narrators": {
+            "items": {
+              "type": "string",
+              "maxLength": 600
+            },
+            "type": "array",
+            "maxItems": 30,
+            "title": "Narrators"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "abridged": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Abridged"
+          },
+          "isbn": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Isbn"
+          },
+          "asin": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Asin"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "release_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Release Id"
+          },
+          "release_title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Release Title"
+          },
+          "source_posted_year": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 9999.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Posted Year"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "title": "NamingMetadata"
+      },
+      "NamingProfile": {
+        "properties": {
+          "layout": {
+            "type": "string",
+            "enum": [
+              "conventional",
+              "nested"
+            ],
+            "title": "Layout",
+            "default": "conventional"
+          },
+          "rename_files": {
+            "type": "boolean",
+            "title": "Rename Files",
+            "default": true
+          },
+          "audio_folder": {
+            "type": "string",
+            "title": "Audio Folder",
+            "default": "{author}/[{series}/][{sequence} - ][{recording_year} - ]{title}[ - {narrator}]"
+          },
+          "ebook_folder": {
+            "type": "string",
+            "title": "Ebook Folder",
+            "default": "{author}/[{series}/][{sequence} - ][{edition_year} - ]{title}[ - {edition}]"
+          },
+          "audio_filename": {
+            "type": "string",
+            "title": "Audio Filename",
+            "default": "[{disc}-][{track} - ]{title}"
+          },
+          "ebook_filename": {
+            "type": "string",
+            "title": "Ebook Filename",
+            "default": "{title}"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "NamingProfile"
+      },
       "OperationView": {
         "properties": {
           "id": {
@@ -3907,6 +5183,185 @@
           "work_ids"
         ],
         "title": "OrderInput"
+      },
+      "PlannedItem": {
+        "properties": {
+          "group_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Group Id"
+          },
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Version Id"
+          },
+          "medium": {
+            "type": "string",
+            "title": "Medium"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "held",
+              "skipped"
+            ],
+            "title": "State"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "folder": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Folder"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/FileMapping"
+            },
+            "type": "array",
+            "title": "Files"
+          },
+          "missing_metadata": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Missing Metadata"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "group_id",
+          "work_id",
+          "version_id",
+          "medium",
+          "title",
+          "state"
+        ],
+        "title": "PlannedItem"
+      },
+      "PlannedSourceFile": {
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "title": "Path"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "media",
+              "supplement"
+            ],
+            "title": "Role",
+            "default": "media"
+          },
+          "complete": {
+            "type": "boolean",
+            "title": "Complete",
+            "default": true
+          },
+          "track": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 999999.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Track"
+          },
+          "disc": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 999.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Disc"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "title": "PlannedSourceFile"
+      },
+      "PreviewInput": {
+        "properties": {
+          "profile": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/NamingProfile"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "groups": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ImportGroup"
+                },
+                "type": "array",
+                "maxItems": 100,
+                "minItems": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Groups"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "PreviewInput"
       },
       "PreviewView": {
         "properties": {
@@ -4237,6 +5692,25 @@
         ],
         "title": "RevisionInput"
       },
+      "SaveSettings": {
+        "properties": {
+          "profile": {
+            "$ref": "#/components/schemas/NamingProfile"
+          },
+          "expected_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Expected Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "profile",
+          "expected_revision"
+        ],
+        "title": "SaveSettings"
+      },
       "SearchPage": {
         "properties": {
           "provider": {
@@ -4321,6 +5795,37 @@
           "name"
         ],
         "title": "SeriesData"
+      },
+      "SettingsView": {
+        "properties": {
+          "profile": {
+            "$ref": "#/components/schemas/NamingProfile"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          },
+          "tokens": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Tokens"
+          },
+          "publication_available": {
+            "type": "boolean",
+            "title": "Publication Available",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "profile",
+          "revision",
+          "tokens"
+        ],
+        "title": "SettingsView"
       },
       "SetupView": {
         "properties": {

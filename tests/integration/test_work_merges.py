@@ -269,6 +269,8 @@ async def test_merge_history_blocks_unsafe_schema_downgrade(client, admin, datab
 
     a, b = await book(client, "A"), await book(client, "B")
     await merge(client, a, b)
+    async with database() as db:
+        current_revision = await db.scalar(text("SELECT version_num FROM alembic_version"))
     await get_engine().dispose()
     try:
         refused = await migrate("downgrade", "0006_acquisition")
@@ -278,8 +280,7 @@ async def test_merge_history_blocks_unsafe_schema_downgrade(client, admin, datab
         )
         async with database() as db:
             assert (
-                await db.scalar(text("SELECT version_num FROM alembic_version"))
-                == "0007_work_merges"
+                await db.scalar(text("SELECT version_num FROM alembic_version")) == current_revision
             )
     finally:
         restored = await migrate("upgrade", "head")

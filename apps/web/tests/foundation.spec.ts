@@ -375,6 +375,107 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   ).toBeVisible();
   await page.goto(mainBookUrl);
   await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.getByRole("link", { name: "Organization", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "File organization", exact: true }),
+  ).toBeVisible();
+  const examples = page.getByRole("region", { name: "Naming examples" });
+  await expect(examples).toContainText(
+    "5 planned item folders · 0 need attention",
+  );
+  await expect(examples).toContainText("2024 - The First Harbor - Casey Reed");
+  await page.getByText("Customize naming", { exact: true }).click();
+  await page
+    .getByLabel("Ebook folder", { exact: true })
+    .fill("{author}/{title}[ - {edition_year}]");
+  await expect(examples).toContainText(
+    "Library: ebooks/Alex Morgan/The First Harbor - 2017/The First Harbor.epub",
+  );
+  const namingSaved = page.waitForResponse(
+    (response) =>
+      response.url().endsWith("/organization/settings") &&
+      response.request().method() === "PUT",
+  );
+  await page.getByRole("button", { name: "Save naming settings" }).click();
+  expect((await namingSaved).status()).toBe(200);
+  await page.reload();
+  await page.getByText("Customize naming", { exact: true }).click();
+  await expect(page.getByLabel("Ebook folder", { exact: true })).toHaveValue(
+    "{author}/{title}[ - {edition_year}]",
+  );
+  await page.screenshot({
+    path: testInfo.outputPath("organization-desktop.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("organization-mobile.png"),
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "Reset naming defaults" }).click();
+  const namingReset = page.waitForResponse(
+    (response) =>
+      response.url().endsWith("/organization/settings") &&
+      response.request().method() === "PUT",
+  );
+  await page.getByRole("button", { name: "Save naming settings" }).click();
+  expect((await namingReset).status()).toBe(200);
+  await page.getByRole("link", { name: "Inspect completed downloads" }).click();
+  await page.getByLabel("Download folder", { exact: true }).fill("completed");
+  await page
+    .getByLabel(
+      "The download has finished and its files are no longer changing",
+    )
+    .check();
+  await page
+    .getByRole("button", { name: "Inspect files", exact: true })
+    .click();
+  const inspected = page.getByRole("region", { name: "Inspected download" });
+  await expect(inspected).toContainText(
+    "1 files inspected · 1 proposed book groups",
+  );
+  await inspected
+    .getByLabel("Find catalog book")
+    .fill("My protected catalog title");
+  await inspected.getByRole("button", { name: "Find matching book" }).click();
+  await inspected
+    .getByRole("combobox", { name: "Catalog book", exact: true })
+    .selectOption({ label: "My protected catalog title · Catalog Author" });
+  await expect(
+    inspected
+      .getByRole("combobox", { name: "Catalog version", exact: true })
+      .locator("option"),
+  ).not.toHaveCount(1);
+  await inspected
+    .getByRole("combobox", { name: "Catalog version", exact: true })
+    .selectOption({ index: 1 });
+  await inspected
+    .getByLabel(
+      "These files contain the complete book, not a sample or companion document",
+    )
+    .check();
+  await inspected.getByRole("button", { name: "Save import plan" }).click();
+  const savedPlan = page.getByRole("article", { name: "Saved import plan" });
+  await expect(savedPlan).toContainText(
+    "1 planned item folders · 0 need attention",
+  );
+  await page.reload();
+  await expect(savedPlan).toContainText("book.epub → ebooks/");
+  await page.screenshot({
+    path: testInfo.outputPath("inspection-mobile.png"),
+    fullPage: true,
+  });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.getByRole("link", { name: "Accounts", exact: true }).click();
   await page.getByLabel("Name", { exact: true }).fill("Guest reader");
   await page.getByLabel("Username", { exact: true }).fill("guest");

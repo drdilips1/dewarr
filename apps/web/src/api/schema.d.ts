@@ -796,6 +796,144 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organization/settings": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Settings */
+    get: operations["settings_api_organization_settings_get"];
+    /** Save Settings */
+    put: operations["save_settings_api_organization_settings_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organization/defaults": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Defaults */
+    get: operations["defaults_api_organization_defaults_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organization/preview": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Preview */
+    post: operations["preview_api_organization_preview_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organization/download-roots": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Download Roots */
+    get: operations["download_roots_api_organization_download_roots_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organization/inspections": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Inspections */
+    get: operations["inspections_api_organization_inspections_get"];
+    put?: never;
+    /** Create Inspection */
+    post: operations["create_inspection_api_organization_inspections_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organization/inspections/{inspection_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Inspection */
+    get: operations["inspection_api_organization_inspections__inspection_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organization/inspections/{inspection_id}/plans": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Freeze Plan */
+    post: operations["freeze_plan_api_organization_inspections__inspection_id__plans_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organization/plans/{plan_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Frozen Plan */
+    get: operations["frozen_plan_api_organization_plans__plan_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1118,15 +1256,264 @@ export interface components {
        */
       work_id: string;
     };
+    /** FileMapping */
+    FileMapping: {
+      /** Source */
+      source: string;
+      /** Destination */
+      destination: string;
+      /** Role */
+      role: string;
+    };
+    /** FreezeInput */
+    FreezeInput: {
+      /** Inspection Revision */
+      inspection_revision: string;
+      /** Profile Revision */
+      profile_revision: string;
+      /** Selections */
+      selections: components["schemas"]["GroupSelection"][];
+    };
+    /** FrozenDocument */
+    FrozenDocument: {
+      /** Schema Version */
+      schema_version: number;
+      /** Inspection Revision */
+      inspection_revision: string;
+      profile: components["schemas"]["NamingProfile"];
+      plan: components["schemas"]["ImportPlan"];
+      /** Groups */
+      groups: components["schemas"]["ImportGroup"][];
+      /** Source */
+      source: {
+        [key: string]: unknown;
+      };
+      /** Files */
+      files: components["schemas"]["InspectedFile"][];
+      /** Unselected Groups */
+      unselected_groups: string[];
+      /** Publication Available */
+      publication_available: boolean;
+      /** Pending Checks */
+      pending_checks: string[];
+    };
+    /** FrozenPlanView */
+    FrozenPlanView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Inspection Id
+       * Format: uuid
+       */
+      inspection_id: string;
+      /** Revision */
+      revision: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      document: components["schemas"]["FrozenDocument"];
+    };
     /** GrantInput */
     GrantInput: {
       /** User Ids */
       user_ids: string[];
     };
+    /** GroupSelection */
+    GroupSelection: {
+      /** Group Key */
+      group_key: string;
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /**
+       * Version Id
+       * Format: uuid
+       */
+      version_id: string;
+      /** Full Content */
+      full_content: boolean;
+    };
     /** HTTPValidationError */
     HTTPValidationError: {
       /** Detail */
       detail?: components["schemas"]["ValidationError"][];
+    };
+    /** ImportGroup */
+    ImportGroup: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /**
+       * Version Id
+       * Format: uuid
+       */
+      version_id: string;
+      /**
+       * Medium
+       * @enum {string}
+       */
+      medium: "ebook" | "audio";
+      metadata: components["schemas"]["NamingMetadata"];
+      /** Files */
+      files: components["schemas"]["PlannedSourceFile"][];
+      /**
+       * Decision
+       * @default import
+       * @enum {string}
+       */
+      decision: "import" | "skip-owned" | "needs-review";
+      /**
+       * Full Content
+       * @default true
+       */
+      full_content: boolean;
+      /** Reason */
+      reason?: string | null;
+    };
+    /** ImportPlan */
+    ImportPlan: {
+      /** Items */
+      items: components["schemas"]["PlannedItem"][];
+      /** Expected Items */
+      expected_items: number;
+      /** Held Items */
+      held_items: number;
+      /** Skipped Items */
+      skipped_items: number;
+      /**
+       * Publication Available
+       * @default false
+       */
+      publication_available: boolean;
+      /** Profile Revision */
+      profile_revision: string;
+    };
+    /** InspectInput */
+    InspectInput: {
+      /** Source Key */
+      source_key: string;
+      /** Relative Path */
+      relative_path: string;
+      /**
+       * Completed Download
+       * @constant
+       */
+      completed_download: true;
+    };
+    /** InspectedFile */
+    InspectedFile: {
+      /** Path */
+      path: string;
+      /** Extension */
+      extension: string;
+      /** State */
+      state: string;
+      /** Medium */
+      medium: string | null;
+      /** Identity */
+      identity: {
+        [key: string]: number;
+      };
+      /** Sha256 */
+      sha256: string;
+      /** Reason */
+      reason?: string | null;
+      /** Technical */
+      technical?: {
+        [key: string]: unknown;
+      } | null;
+      /** Metadata */
+      metadata?: {
+        [key: string]: unknown;
+      } | null;
+    };
+    /** InspectedGroup */
+    InspectedGroup: {
+      /** Key */
+      key: string;
+      /** Medium */
+      medium: string;
+      /** Title */
+      title: string | null;
+      /** Authors */
+      authors: string[];
+      /** Narrators */
+      narrators: string[];
+      /** Files */
+      files: components["schemas"]["PlannedSourceFile"][];
+      /** Identity */
+      identity: string;
+      /** Full Content */
+      full_content: string;
+    };
+    /** InspectionSnapshot */
+    InspectionSnapshot: {
+      /** Schema Version */
+      schema_version: number;
+      /** Source Path */
+      source_path: string;
+      /** Relative Path */
+      relative_path: string;
+      /** Directory Identity */
+      directory_identity: {
+        [key: string]: number;
+      };
+      /** Files */
+      files: components["schemas"]["InspectedFile"][];
+      /** Groups */
+      groups: components["schemas"]["InspectedGroup"][];
+      /**
+       * Publication Available
+       * @default false
+       */
+      publication_available: boolean;
+      /** Limits */
+      limits?: {
+        [key: string]: number;
+      };
+      /** Revision */
+      revision: string;
+    };
+    /** InspectionView */
+    InspectionView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /**
+       * Operation Id
+       * Format: uuid
+       */
+      operation_id: string;
+      /** Source Key */
+      source_key: string;
+      /** Relative Path */
+      relative_path: string;
+      /** State */
+      state: string;
+      /** Message */
+      message: string;
+      snapshot?: components["schemas"]["InspectionSnapshot"] | null;
     };
     /** LibraryView */
     LibraryView: {
@@ -1337,6 +1724,83 @@ export interface components {
        */
       enrichment_retryable: boolean;
     };
+    /** NamingMetadata */
+    NamingMetadata: {
+      /** Title */
+      title: string;
+      /** Authors */
+      authors?: string[];
+      /** Author Sort */
+      author_sort?: string | null;
+      /** Subtitle */
+      subtitle?: string | null;
+      /** Series */
+      series?: string | null;
+      /** Sequence */
+      sequence?: string | null;
+      /** Original Year */
+      original_year?: number | null;
+      /** Edition Year */
+      edition_year?: number | null;
+      /** Recording Year */
+      recording_year?: number | null;
+      /** Edition */
+      edition?: string | null;
+      /** Publisher */
+      publisher?: string | null;
+      /** Narrators */
+      narrators?: string[];
+      /** Language */
+      language?: string | null;
+      /** Abridged */
+      abridged?: boolean | null;
+      /** Isbn */
+      isbn?: string | null;
+      /** Asin */
+      asin?: string | null;
+      /** Source */
+      source?: string | null;
+      /** Release Id */
+      release_id?: string | null;
+      /** Release Title */
+      release_title?: string | null;
+      /** Source Posted Year */
+      source_posted_year?: number | null;
+    };
+    /** NamingProfile */
+    NamingProfile: {
+      /**
+       * Layout
+       * @default conventional
+       * @enum {string}
+       */
+      layout: "conventional" | "nested";
+      /**
+       * Rename Files
+       * @default true
+       */
+      rename_files: boolean;
+      /**
+       * Audio Folder
+       * @default {author}/[{series}/][{sequence} - ][{recording_year} - ]{title}[ - {narrator}]
+       */
+      audio_folder: string;
+      /**
+       * Ebook Folder
+       * @default {author}/[{series}/][{sequence} - ][{edition_year} - ]{title}[ - {edition}]
+       */
+      ebook_folder: string;
+      /**
+       * Audio Filename
+       * @default [{disc}-][{track} - ]{title}
+       */
+      audio_filename: string;
+      /**
+       * Ebook Filename
+       * @default {title}
+       */
+      ebook_filename: string;
+    };
     /** OperationView */
     OperationView: {
       /**
@@ -1365,6 +1829,69 @@ export interface components {
     OrderInput: {
       /** Work Ids */
       work_ids: string[];
+    };
+    /** PlannedItem */
+    PlannedItem: {
+      /**
+       * Group Id
+       * Format: uuid
+       */
+      group_id: string;
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /**
+       * Version Id
+       * Format: uuid
+       */
+      version_id: string;
+      /** Medium */
+      medium: string;
+      /** Title */
+      title: string;
+      /**
+       * State
+       * @enum {string}
+       */
+      state: "ready" | "held" | "skipped";
+      /** Reason */
+      reason?: string | null;
+      /** Folder */
+      folder?: string | null;
+      /** Files */
+      files?: components["schemas"]["FileMapping"][];
+      /** Missing Metadata */
+      missing_metadata?: string[];
+      /** Warnings */
+      warnings?: string[];
+    };
+    /** PlannedSourceFile */
+    PlannedSourceFile: {
+      /** Path */
+      path: string;
+      /**
+       * Role
+       * @default media
+       * @enum {string}
+       */
+      role: "media" | "supplement";
+      /**
+       * Complete
+       * @default true
+       */
+      complete: boolean;
+      /** Track */
+      track?: number | null;
+      /** Disc */
+      disc?: number | null;
+    };
+    /** PreviewInput */
+    PreviewInput: {
+      profile?: components["schemas"]["NamingProfile"] | null;
+      /** Groups */
+      groups?: components["schemas"]["ImportGroup"][] | null;
     };
     /** PreviewView */
     PreviewView: {
@@ -1480,6 +2007,12 @@ export interface components {
       /** Expected Revision */
       expected_revision: string;
     };
+    /** SaveSettings */
+    SaveSettings: {
+      profile: components["schemas"]["NamingProfile"];
+      /** Expected Revision */
+      expected_revision: string;
+    };
     /** SearchPage */
     SearchPage: {
       /**
@@ -1514,6 +2047,21 @@ export interface components {
        * @default false
        */
       compilation: boolean;
+    };
+    /** SettingsView */
+    SettingsView: {
+      profile: components["schemas"]["NamingProfile"];
+      /** Revision */
+      revision: string;
+      /** Tokens */
+      tokens: {
+        [key: string]: string;
+      };
+      /**
+       * Publication Available
+       * @default false
+       */
+      publication_available: boolean;
     };
     /** SetupView */
     SetupView: {
@@ -3397,6 +3945,295 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["RequestView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  settings_api_organization_settings_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SettingsView"];
+        };
+      };
+    };
+  };
+  save_settings_api_organization_settings_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SaveSettings"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SettingsView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  defaults_api_organization_defaults_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["NamingProfile"];
+        };
+      };
+    };
+  };
+  preview_api_organization_preview_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PreviewInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ImportPlan"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  download_roots_api_organization_download_roots_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": string[];
+        };
+      };
+    };
+  };
+  inspections_api_organization_inspections_get: {
+    parameters: {
+      query?: {
+        offset?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["InspectionView"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_inspection_api_organization_inspections_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["InspectInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["InspectionView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  inspection_api_organization_inspections__inspection_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        inspection_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["InspectionView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  freeze_plan_api_organization_inspections__inspection_id__plans_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        inspection_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["FreezeInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FrozenPlanView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  frozen_plan_api_organization_plans__plan_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        plan_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FrozenPlanView"];
         };
       };
       /** @description Validation Error */

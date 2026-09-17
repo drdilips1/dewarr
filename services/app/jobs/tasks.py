@@ -11,6 +11,13 @@ from app.jobs.queue import tasks
 from app.jobs.retry import CatalogRetryStrategy
 
 
+@tasks.task(name="organization.inspect", queue="inspection", retry=3)
+async def inspect_completed_download(operation_id: str) -> None:
+    from app.importing.workflow import run_inspection
+
+    await run_inspection(UUID(operation_id))
+
+
 @tasks.task(name="system.probe", queue="system", retry=3)
 async def system_probe(operation_id: str) -> None:
     async with session_factory()() as db, db.begin():

@@ -1,0 +1,358 @@
+"""Inspect bytes and propose file groups; catalog identity remains a separate decision."""
+
+import json
+import math
+import os
+import re
+import selectors
+import struct
+import subprocess
+import time
+import zipfile
+from pathlib import Path, PurePosixPath
+from urllib.parse import unquote, urlsplit
+
+from defusedxml import ElementTree
+from pydantic import Field
+
+from app.importing.filesystem import (
+    InspectionError,
+    beneath,
+    digest,
+    directory,
+    enumerate_files,
+    identity,
+    relative_parts,
+)
+from app.importing.naming import PlannedSourceFile, StrictModel, fingerprint
+
+
+class InspectedFile(StrictModel):
+    path: str
+    extension: str
+    state: str
+    medium: str | None
+    identity: dict[str, int]
+    sha256: str
+    reason: str | None = None
+    technical: dict | None = None
+    metadata: dict | None = None
+
+
+class InspectedGroup(StrictModel):
+    key: str
+    medium: str
+    title: str | None
+    authors: list[str]
+    narrators: list[str]
+    files: list[PlannedSourceFile]
+    identity: str
+    full_content: str
+
+
+class InspectionSnapshot(StrictModel):
+    schema_version: int
+    source_path: str
+    relative_path: str
+    directory_identity: dict[str, int]
+    files: list[InspectedFile]
+    groups: list[InspectedGroup]
+    publication_available: bool = False
+    limits: dict[str, int] = Field(default_factory=dict)
+    revision: str
+
+
+DEMUXERS = {
+    "m4b": "mov",
+    "m4a": "mov",
+    "mp3": "mp3",
+    "flac": "flac",
+    "ogg": "ogg",
+    "opus": "ogg",
+    "aac": "aac",
+    "wav": "wav",
+    "wma": "asf",
+}
+ARCHIVES = {"zip", "rar", "7z", "tar", "gz"}
+DISC = re.compile(r"^(?:cd|disc|disk)\s*(\d+)$", re.I)
+TAG_NAMES = (
+    "title,album,artist,album_artist,composer,narrator,track,disc,date,year,"
+    "language,isbn,asin,series,series-part"
+)
+
+
+def probe_audio(fd, extension, deadline, executable="ffprobe"):
+    # Inherited descriptor pins the opened source; never pass a source-supplied URL.
+    input_path = f"/proc/self/fd/{fd}" if Path("/proc/self/fd").exists() else f"/dev/fd/{fd}"
+    command = [
+        executable,
+        "-v",
+        "error",
+        "-max_alloc",
+        "67108864",
+        "-protocol_whitelist",
+        "file",
+        "-f",
+        DEMUXERS[extension],
+        "-probesize",
+        "8388608",
+        "-analyzeduration",
+        "10000000",
+    ]
+    if DEMUXERS[extension] == "mov":
+        command += ["-enable_drefs", "0", "-use_absolute_path", "0"]
+    command += [
+        "-show_entries",
+        f"format=duration,format_name:format_tags={TAG_NAMES}:"
+        f"stream=codec_name,codec_type,duration:stream_tags={TAG_NAMES}",
+        "-of",
+        "json",
+        input_path,
+    ]
+    expires = min(deadline, time.monotonic() + 20)
+    output = bytearray()
+    with subprocess.Popen(
+        command,
+        stdin=subprocess.DEVNULL,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        pass_fds=(fd,),
+    ) as process:
+        try:
+            with selectors.DefaultSelector() as selector:
+                selector.register(process.stdout, selectors.EVENT_READ)
+                while True:
+                    remaining = expires - time.monotonic()
+                    if remaining <= 0 or not selector.select(remaining):
+                        raise InspectionError("Audio metadata probe timed out")
+                    block = os.read(process.stdout.fileno(), 65536)
+                    if not block:
+                        break
+                    output.extend(block)
+                    if len(output) > 1024 * 1024:
+                        raise InspectionError("Audio metadata exceeds the supported size")
+            code = process.wait(timeout=max(0.01, expires - time.monotonic()))
+            if code:
+                raise InspectionError("File is not readable as its declared audio format")
+        finally:
+            if process.poll() is None:
+                process.kill()
+                process.wait()
+    data = json.loads(output)
+    streams = [stream for stream in data.get("streams", []) if stream.get("codec_type") == "audio"]
+    if len(streams) != 1 or not streams[0].get("codec_name"):
+        raise InspectionError("Expected one identifiable audio stream")
+    duration = float(data.get("format", {}).get("duration") or streams[0].get("duration") or 0)
+    if not math.isfinite(duration) or duration <= 0:
+        raise InspectionError("Audio duration could not be established")
+    tags = {
+        key.lower(): str(value)[:600]
+        for source in (streams[0], data.get("format", {}))
+        for key, value in source.get("tags", {}).items()
+    }
+    return {"codec": streams[0]["codec_name"], "duration": duration, "tags": tags}
+
+
+def inspect_epub(fd):
+    # Bound central-directory allocation before ZipFile parses attacker-controlled entries.
+    size = os.fstat(fd).st_size
+    tail = os.pread(fd, min(size, 65557), max(0, size - 65557))
+    end = tail.rfind(b"PK\x05\x06")
+    if end < 0 or len(tail) - end < 22:
+        raise InspectionError("EPUB has no complete ZIP directory")
+    _, disk, start_disk, count, total, directory_size, _, comment = struct.unpack(
+        "<4s4H2LH", tail[end : end + 22]
+    )
+    if (
+        disk
+        or start_disk
+        or count != total
+        or total > 10000
+        or directory_size > 8 * 1024 * 1024
+        or end + 22 + comment != len(tail)
+    ):
+        raise InspectionError("EPUB directory exceeds supported limits or uses multipart ZIP")
+    with os.fdopen(os.dup(fd), "rb") as source, zipfile.ZipFile(source) as archive:
+        entries = archive.infolist()
+        names = {entry.filename for entry in entries}
+        if len(names) != len(entries):
+            raise InspectionError("EPUB contains conflicting duplicate entries")
+        if "META-INF/encryption.xml" in names:
+            raise InspectionError("EPUB declares encrypted resources; review is required")
+
+        def read(name):
+            relative_parts(name)
+            info = archive.getinfo(name)
+            if info.flag_bits & 1 or info.file_size > 1024 * 1024:
+                raise InspectionError("EPUB metadata is encrypted or exceeds supported limits")
+            return archive.read(info)
+
+        if read("mimetype").strip() != b"application/epub+zip":
+            raise InspectionError("File does not declare an EPUB container")
+        container = ElementTree.fromstring(read("META-INF/container.xml"))
+        rootfiles = container.findall(".//{*}rootfile")
+        if len(rootfiles) != 1:
+            raise InspectionError("EPUB needs one unambiguous package document")
+        package_path = rootfiles[0].attrib["full-path"]
+        package = ElementTree.fromstring(read(package_path))
+        metadata = package.find("{*}metadata")
+        manifest = package.find("{*}manifest")
+        spine = package.find("{*}spine")
+        if metadata is None or manifest is None or spine is None or len(spine) == 0:
+            raise InspectionError("EPUB has no readable metadata and book spine")
+        items = {item.attrib.get("id"): item for item in manifest}
+        for ref in spine:
+            item = items.get(ref.attrib.get("idref"))
+            if item is None:
+                raise InspectionError("EPUB spine references missing content")
+            href = urlsplit(item.attrib.get("href", ""))
+            if href.scheme or href.netloc:
+                raise InspectionError("EPUB spine references external content")
+            relative = unquote(href.path)
+            relative_parts(relative)
+            path = str(PurePosixPath(package_path).parent / relative)
+            if path not in names or archive.getinfo(path).file_size == 0:
+                raise InspectionError("EPUB spine content is missing or empty")
+            if archive.getinfo(path).flag_bits & 1:
+                raise InspectionError("EPUB spine content is encrypted")
+
+        def values(name):
+            return [
+                node.text.strip()[:600]
+                for node in metadata.findall(f"{{*}}{name}")
+                if node.text and node.text.strip()
+            ][:30]
+
+        return {
+            "title": next(iter(values("title")), None),
+            "authors": values("creator"),
+            "languages": values("language"),
+            "identifiers": values("identifier"),
+            "spine_entries": len(spine),
+        }
+
+
+def inspect_file(fd, path, deadline):
+    extension = PurePosixPath(path).suffix.lower().lstrip(".")
+    result = {"path": path, "extension": extension, "state": "held", "medium": None}
+    try:
+        if extension in DEMUXERS:
+            result.update(medium="audio", technical=probe_audio(fd, extension, deadline))
+        elif extension == "epub":
+            result.update(medium="ebook", metadata=inspect_epub(fd))
+        else:
+            result["reason"] = (
+                "Archive extraction is not enabled"
+                if extension in ARCHIVES
+                else "No supported content inspector for this file; review as media or extra"
+            )
+            return result
+        result["state"] = "inspected"
+    except FileNotFoundError:
+        result["reason"] = "Audio inspection requires ffprobe on the worker"
+    except (
+        ValueError,
+        KeyError,
+        zipfile.BadZipFile,
+        RuntimeError,
+        subprocess.TimeoutExpired,
+        ElementTree.ParseError,
+    ) as error:
+        result["reason"] = (
+            str(error) if isinstance(error, InspectionError) else "Invalid media metadata"
+        )
+    return result
+
+
+def number(value, maximum):
+    match = re.fullmatch(r"\s*(\d+)(?:/\d+)?\s*", str(value or ""))
+    if match and 0 < int(match[1]) <= maximum:
+        return int(match[1])
+    return None
+
+
+def suggest_groups(files):
+    groups = {}
+    for file in files:
+        if file["state"] != "inspected":
+            continue
+        path = PurePosixPath(file["path"])
+        if file["medium"] == "ebook":
+            key = ("ebook", str(path))
+            metadata = file["metadata"]
+            title, authors = metadata["title"], metadata["authors"]
+            narrator, disc, track = None, None, None
+        else:
+            tags = file["technical"]["tags"]
+            folder = path.parent
+            disc_match = DISC.fullmatch(folder.name)
+            if disc_match:
+                folder = folder.parent
+            # Album/narrator evidence separates differently tagged books in a flat pack.
+            # Conflicting directories are never collapsed solely on a title match.
+            title = tags.get("album")
+            narrator = tags.get("narrator") or tags.get("composer")
+            authors = [tags.get("album_artist") or tags.get("artist")]
+            authors = [author for author in authors if author]
+            key = ("audio", str(folder), title, narrator, tuple(authors), file["extension"])
+            disc = number(tags.get("disc"), 999)
+            folder_disc = int(disc_match[1]) if disc_match else None
+            if folder_disc and disc and folder_disc != disc:
+                file["state"], file["reason"] = "held", "Disc folder conflicts with embedded tags"
+                continue
+            disc = disc or folder_disc
+            track = number(tags.get("track"), 999999)
+        stable_key = fingerprint(key)
+        group = groups.setdefault(
+            stable_key,
+            {
+                "key": stable_key,
+                "medium": file["medium"],
+                "title": title,
+                "authors": authors,
+                "narrators": [narrator] if narrator else [],
+                "files": [],
+                "identity": "unresolved",
+                "full_content": "unverified",
+            },
+        )
+        group["files"].append({"path": str(path), "disc": disc, "track": track})
+    return list(groups.values())
+
+
+def inspect_download(root: Path, relative: str, *, max_bytes=200 * 1024**3, timeout=300):
+    deadline = time.monotonic() + timeout
+    with directory(root) as mount, beneath(mount, relative, folder=True) as folder:
+        root_identity = identity(os.fstat(folder))
+        listing = enumerate_files(folder)
+        if sum(info["size"] for _, info in listing) > max_bytes:
+            raise InspectionError("Download exceeds the supported inspection byte budget")
+        files = []
+        for path, expected in listing:
+            with beneath(folder, path) as fd:
+                if identity(os.fstat(fd)) != expected:
+                    raise InspectionError("Source changed since directory enumeration")
+                sha256 = digest(fd, deadline)
+                inspected = inspect_file(fd, path, deadline)
+                if identity(os.fstat(fd)) != expected:
+                    raise InspectionError("Source changed while being inspected")
+                files.append({**inspected, "identity": expected, "sha256": sha256})
+        if enumerate_files(folder) != listing:
+            raise InspectionError(
+                "Download changed during inspection; inspect it again when stable"
+            )
+        # Reopen from the configured root to detect a renamed/replaced directory.
+        with beneath(mount, relative, folder=True) as current:
+            if identity(os.fstat(current)) != root_identity:
+                raise InspectionError("Download directory changed during inspection")
+        snapshot = {
+            "schema_version": 1,
+            "source_path": str(root),
+            "relative_path": relative,
+            "directory_identity": root_identity,
+            "files": files,
+            "groups": suggest_groups(files),
+            "publication_available": False,
+            "limits": {"max_bytes": max_bytes, "timeout_seconds": timeout},
+        }
+        return {**snapshot, "revision": fingerprint(snapshot)}

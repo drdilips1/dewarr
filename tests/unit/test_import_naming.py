@@ -1,0 +1,193 @@
+from uuid import UUID
+
+import pytest
+from pydantic import ValidationError
+
+from app.importing.examples import naming_examples
+from app.importing.naming import (
+    ImportGroup,
+    NamingMetadata,
+    NamingProfile,
+    PlannedSourceFile,
+    component,
+    plan_import,
+)
+
+
+def group(number=1, medium="ebook", **metadata):
+    return ImportGroup(
+        id=UUID(int=number),
+        work_id=UUID(int=number),
+        version_id=UUID(int=100 + number),
+        medium=medium,
+        metadata=NamingMetadata(title="Harbor", authors=["Writer"], **metadata),
+        files=[
+            PlannedSourceFile(
+                path=f"book{number}.epub" if medium == "ebook" else f"book{number}.m4b"
+            )
+        ],
+    )
+
+
+def test_examples_produce_separate_items_for_media_recordings_and_series_children():
+    plan = plan_import(naming_examples(), NamingProfile())
+    assert plan.expected_items == 5 and plan.held_items == 0
+    assert not plan.publication_available
+    paths = [file.destination for item in plan.items for file in item.files]
+    assert (
+        "ebooks/Alex Morgan/Harbor Trilogy/01 - 2017 - The First Harbor - First edition/"
+        "The First Harbor.epub" in paths
+    )
+    assert (
+        "audiobooks/Alex Morgan/Harbor Trilogy/01 - 2024 - The First Harbor - Casey Reed/"
+        "The First Harbor.m4b" in paths
+    )
+    assert paths[-3].endswith("/001 - Beyond the Harbor.mp3")
+    assert paths[-2].endswith("/002 - Beyond the Harbor.mp3")
+    assert paths[-1] == "ebooks/Alex Morgan/A Standalone Story/A Standalone Story.epub"
+    assert "edition_year" in plan.items[-1].missing_metadata
+
+
+@pytest.mark.parametrize(
+    "template",
+    [
+        "../{title}",
+        "/{title}",
+        "{title}/..",
+        "{title.__class__}",
+        "{unknown}",
+        "{title}[missing]",
+        "{title}[[{series}]]",
+        "{title}\x00",
+        "{title}/{track}",
+    ],
+)
+def test_unsafe_or_unsupported_templates_are_rejected(template):
+    with pytest.raises(ValidationError):
+        NamingProfile(ebook_folder=template)
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "/outside/book.epub",
+        "../book.epub",
+        "books/../book.epub",
+        "a\\book.epub",
+        "a//book.epub",
+        "book\x00.epub",
+    ],
+)
+def test_source_paths_remain_confined_and_relative(path):
+    with pytest.raises(ValidationError):
+        PlannedSourceFile(path=path)
+
+
+def test_missing_years_do_not_borrow_tracker_posting_year_and_decimal_sequence_is_preserved():
+    item = plan_import(
+        [group(sequence="1.5", series="Series", source_posted_year=2025)], NamingProfile()
+    ).items[0]
+    assert item.folder == "ebooks/Writer/Series/01.5 - Harbor"
+    assert "2025" not in item.folder
+
+
+def test_sanitization_unicode_device_names_and_long_components_are_stable():
+    assert component("CON.txt") == "_CON.txt"
+    assert component("A/B: C?") == "A B C"
+    assert component("Cafe\u0301") == "Café"
+    name = component("海" * 200)
+    assert len(name.encode()) <= 180 and name == component("海" * 200)
+    assert component("海" * 199 + "岸") != name
+
+
+def test_distinct_versions_with_same_label_get_stable_collision_suffix():
+    first, second = group(1), group(2)
+    a = plan_import([first, second], NamingProfile())
+    b = plan_import([second, first], NamingProfile())
+    assert a == b and a.expected_items == 2
+    assert a.items[0].folder != a.items[1].folder
+    assert second.version_id.hex in a.items[1].folder
+
+
+def test_ambiguous_children_do_not_block_valid_pack_siblings():
+    first, second = group(1), group(2, medium="audio")
+    second.files = [PlannedSourceFile(path="book2/1.mp3"), PlannedSourceFile(path="book2/2.mp3")]
+    plan = plan_import([first, second], NamingProfile())
+    assert plan.expected_items == 1 and plan.held_items == 1
+    assert plan.items[1].files == [] and "track" in plan.items[1].reason
+
+
+def test_multiple_discs_keep_order_and_custom_names_cannot_discard_track_order():
+    item = group(medium="audio")
+    item.files = [
+        PlannedSourceFile(path="CD2/track.mp3", disc=2, track=1),
+        PlannedSourceFile(path="CD1/track.mp3", disc=1, track=1),
+    ]
+    plan = plan_import([item], NamingProfile())
+    assert [file.destination.split("/")[-1] for file in plan.items[0].files] == [
+        "01-001 - Harbor.mp3",
+        "02-001 - Harbor.mp3",
+    ]
+    held = plan_import([item], NamingProfile(audio_filename="{title}")).items[0]
+    assert held.state == "held" and "playback order" in held.reason
+
+
+def test_duplicate_representations_and_shared_source_files_are_held():
+    first, second = group(1), group(2)
+    second.version_id = first.version_id
+    assert plan_import([first, second], NamingProfile()).held_items == 2
+    second.version_id = UUID(int=1000)
+    second.files = first.files
+    assert plan_import([first, second], NamingProfile()).held_items == 2
+
+
+def test_companion_only_incomplete_and_wrong_medium_are_not_valid_items():
+    for files in (
+        [PlannedSourceFile(path="Companion.pdf", role="supplement")],
+        [PlannedSourceFile(path="Book.epub", complete=False)],
+        [PlannedSourceFile(path="Audio.mp3")],
+    ):
+        item = group()
+        item.files = files
+        assert plan_import([item], NamingProfile()).items[0].state == "held"
+
+
+def test_same_edition_formats_keep_extensions_and_primary_warning():
+    item = group()
+    item.files = [PlannedSourceFile(path="Book.epub"), PlannedSourceFile(path="Book.pdf")]
+    planned = plan_import([item], NamingProfile()).items[0]
+    assert planned.state == "ready" and len(planned.files) == 2
+    assert [file.destination.split(".")[-1] for file in planned.files] == ["epub", "pdf"]
+    assert "primary" in planned.warnings[0]
+
+
+def test_nested_layout_is_explicitly_uncertified_and_owned_children_skip():
+    first, second = group(1, sequence="1", series="Series"), group(2)
+    second.decision = "skip-owned"
+    plan = plan_import([first, second], NamingProfile(layout="nested"))
+    assert plan.expected_items == 1 and plan.skipped_items == 1
+    assert plan.items[0].folder == "ebooks/Writer/Series/01 - Harbor/01 - Harbor"
+    assert "certification" in plan.items[0].warnings[0]
+    assert not plan.publication_available
+
+
+def test_item_ancestor_collision_holds_both_before_scanner_can_merge_them():
+    first, second = group(1), group(2, series="Harbor")
+    second.metadata.title = "Book two"
+    plan = plan_import([first, second], NamingProfile())
+    assert plan.held_items == 2
+    assert all(not item.files and "contain another book" in item.reason for item in plan.items)
+
+
+def test_keep_original_names_and_format_tokens_do_not_convert_media():
+    item = group(medium="audio")
+    item.files = [PlannedSourceFile(path="Download/Actual.MP3")]
+    plan = plan_import([item], NamingProfile(rename_files=False)).items[0]
+    assert plan.files[0].destination.endswith("/Actual.mp3")
+    plan = plan_import(
+        [item],
+        NamingProfile(
+            audio_folder="{author}/{title} - {formats}", audio_filename="{title} - {format}"
+        ),
+    ).items[0]
+    assert plan.files[0].destination.endswith("/Harbor - MP3/Harbor - MP3.mp3")

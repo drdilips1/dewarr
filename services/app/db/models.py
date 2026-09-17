@@ -364,3 +364,32 @@ class AcquisitionTarget(Identity, Base):
         ForeignKey("acquisition_reservations.id"), index=True
     )
     satisfied_asset_id: Mapped[UUID | None] = mapped_column(ForeignKey("library_assets.id"))
+
+
+class OrganizationSettings(Base):
+    __tablename__ = "organization_settings"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    profile: Mapped[dict[str, Any]] = mapped_column(JSONB)
+
+
+class DownloadInspection(Identity, Base):
+    __tablename__ = "download_inspections"
+    __table_args__ = (CheckConstraint("state IN ('queued', 'running', 'ready', 'failed')"),)
+    owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
+    operation_id: Mapped[UUID] = mapped_column(ForeignKey("operations.id"), unique=True)
+    source_key: Mapped[str] = mapped_column(String(60))
+    source_path: Mapped[str] = mapped_column(Text)
+    relative_path: Mapped[str] = mapped_column(String(1024))
+    state: Mapped[str] = mapped_column(String(20), default="queued")
+    message: Mapped[str] = mapped_column(String(300), default="Waiting to inspect completed files")
+    run_token: Mapped[UUID | None] = mapped_column()
+    snapshot: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
+
+
+class FrozenImportPlan(Identity, Base):
+    __tablename__ = "frozen_import_plans"
+    __table_args__ = (UniqueConstraint("inspection_id", "revision"),)
+    inspection_id: Mapped[UUID] = mapped_column(ForeignKey("download_inspections.id"), index=True)
+    owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
+    revision: Mapped[str] = mapped_column(String(64))
+    document: Mapped[dict[str, Any]] = mapped_column(JSONB)

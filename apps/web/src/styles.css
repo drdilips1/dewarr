@@ -1002,3 +1002,11 @@ img.detail-cover {
   height: auto;
   align-self: start;
 }
+
+.import-path {
+  display: grid;
+  gap: 6px;
+  margin: 16px 0;
+  overflow-wrap: anywhere;
+  font-size: 0.9rem;
+}

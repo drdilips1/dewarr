@@ -1,8 +1,11 @@
 """Run a disposable browser-test API and worker; never use an ordinary database."""
 
+import json
 import os
 import signal
 import subprocess
+import sys
+import tempfile
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -12,6 +15,12 @@ from cryptography.fernet import Fernet
 from app.db.models import Base
 
 root = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(root))
+from tests.media_fixtures import epub  # noqa: E402
+
+media_fixture = tempfile.TemporaryDirectory(prefix="book-search-browser-media-")
+media_root = Path(media_fixture.name).resolve()
+epub(media_root / "completed/book.epub", title="The Catalog Journey", author="Catalog Author")
 os.chdir(root)
 url = os.environ.get(
     "BOOK_E2E_DATABASE_URL",
@@ -29,6 +38,7 @@ os.environ.update(
         "BOOK_COOKIE_SECURE": "false",
         "BOOK_HARDCOVER_URL": "http://127.0.0.1:13379/catalog",
         "BOOK_OPENLIBRARY_URL": "http://127.0.0.1:13379/openlibrary",
+        "BOOK_IMPORT_SOURCES": json.dumps({"synthetic": str(media_root)}),
     }
 )
 subprocess.run(["uv", "run", "alembic", "upgrade", "head"], check=True)
@@ -86,3 +96,4 @@ try:
     processes[-1].wait()
 finally:
     shutdown()
+    media_fixture.cleanup()

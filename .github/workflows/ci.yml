@@ -26,6 +26,7 @@ jobs:
         with:
           version: "0.11.32"
       - run: uv sync --frozen
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - run: uv run ruff check services tests scripts
       - run: uv run ruff format --check services tests scripts
       - run: uv run pytest -q --junitxml=test-results/backend.xml

@@ -30,6 +30,8 @@ const Connections = lazy(() => import("./pages/Connections"));
 const MyLibrary = lazy(() => import("./pages/MyLibrary"));
 const Accounts = lazy(() => import("./pages/Accounts"));
 const ProviderSearch = lazy(() => import("./pages/ProviderSearch"));
+const Organization = lazy(() => import("./pages/Organization"));
+const ImportReview = lazy(() => import("./pages/ImportReview"));
 const MetadataSettings = lazy(() => import("./pages/MetadataSettings"));
 
 export default function App() {
@@ -275,6 +277,12 @@ function Shell({ auth }: { auth: Auth }) {
               Connections
             </NavLink>
           )}
+          {auth.user.role === "admin" && (
+            <NavLink to="/organization">
+              <Settings size={19} />
+              Organization
+            </NavLink>
+          )}
           <NavLink to="/lists">
             <List size={19} />
             Lists
@@ -349,6 +357,26 @@ function Shell({ auth }: { auth: Auth }) {
                 path="/metadata"
                 element={
                   <MetadataSettings admin={auth.user.role === "admin"} />
+                }
+              />
+              <Route
+                path="/organization/inspections"
+                element={
+                  auth.user.role === "admin" ? (
+                    <ImportReview />
+                  ) : (
+                    <Navigate to="/" replace />
+                  )
+                }
+              />
+              <Route
+                path="/organization"
+                element={
+                  auth.user.role === "admin" ? (
+                    <Organization />
+                  ) : (
+                    <Navigate to="/" replace />
+                  )
                 }
               />
               <Route

@@ -24,6 +24,19 @@ class Settings(BaseSettings):
     db_pool_size: int = 5
     hardcover_url: str = "https://api.hardcover.app"
     openlibrary_url: str = "https://openlibrary.org"
+    import_sources: dict[str, Path] = {}
+
+    @field_validator("import_sources")
+    @classmethod
+    def validate_import_sources(cls, sources):
+        import re
+
+        for key, path in sources.items():
+            if not re.fullmatch(r"[a-z0-9_-]{1,60}", key):
+                raise ValueError("Download root keys use lowercase letters, numbers, - and _")
+            if not path.is_absolute() or str(path) == "/" or ".." in path.parts:
+                raise ValueError("Download roots must be absolute directories below /")
+        return sources
 
     @field_validator("public_url")
     @classmethod
