@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Work } from "../api/client";
 import type { components } from "../api/schema";
@@ -6,6 +6,8 @@ import { api, result } from "../api/client";
 import { Loading, Notice } from "../components";
 import ProviderSearch, { providerName } from "./ProviderSearch";
 import { fieldLabel } from "./MetadataSettings";
+import IdentityHistory, { useRefreshIdentity } from "./IdentityHistory";
+import VersionReviews from "./VersionReview";
 
 type Edit = components["schemas"]["EditValues"];
 type Field =
@@ -27,6 +29,10 @@ export default function BookMetadata({
   const [offset, setOffset] = useState(0);
   const [matching, setMatching] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [unmatching, setUnmatching] = useState<
+    components["schemas"]["SourceView"] | null
+  >(null);
+  const refreshIdentity = useRefreshIdentity();
   const metadata = useQuery({
     queryKey: ["work-metadata", work.id, offset],
     queryFn: async () =>
@@ -35,11 +41,37 @@ export default function BookMetadata({
           params: { path: { work_id: work.id }, query: { offset, limit: 20 } },
         }),
       ),
+    refetchInterval: (query) =>
+      ["queued", "running", "retrying"].includes(
+        query.state.data?.enrichment?.status || "",
+      )
+        ? 3000
+        : false,
+  });
+  const enrichmentId = metadata.data?.enrichment?.id;
+  const enrichmentStatus = metadata.data?.enrichment?.status;
+  useEffect(() => {
+    if (enrichmentStatus === "completed") {
+      client.invalidateQueries({ queryKey: ["work", work.id] });
+      client.invalidateQueries({ queryKey: ["works"] });
+    }
+  }, [client, work.id, enrichmentId, enrichmentStatus]);
+  const enrich = useMutation({
+    mutationFn: async () =>
+      result(
+        await api.POST("/api/metadata/works/{work_id}/enrichment", {
+          params: { path: { work_id: work.id } },
+        }),
+      ),
+    onSuccess: () =>
+      client.invalidateQueries({ queryKey: ["work-metadata", work.id] }),
   });
   const updated = () => {
     client.invalidateQueries({ queryKey: ["work", work.id] });
     client.invalidateQueries({ queryKey: ["work-metadata", work.id] });
     client.invalidateQueries({ queryKey: ["works"] });
+    client.invalidateQueries({ queryKey: ["version-reviews", work.id] });
+    client.invalidateQueries({ queryKey: ["identity-history"] });
   };
   const refresh = useMutation({
     mutationFn: async (source: {
@@ -80,6 +112,22 @@ export default function BookMetadata({
       ),
     onSuccess: updated,
   });
+  const unmatch = useMutation({
+    mutationFn: async () => {
+      if (!unmatching?.revision)
+        throw new Error("Refresh the book before correcting its source.");
+      return result(
+        await api.POST("/api/identity/sources/{source_id}/unmatch", {
+          params: { path: { source_id: unmatching.id } },
+          body: { expected_revision: unmatching.revision },
+        }),
+      );
+    },
+    onSuccess: async () => {
+      setUnmatching(null);
+      await refreshIdentity();
+    },
+  });
   return (
     <section className="library-access">
       <div className="section-heading">
@@ -91,8 +139,41 @@ export default function BookMetadata({
         )}
       </div>
       <Notice
-        error={metadata.error || refresh.error || edit.error || more.error}
+        error={
+          metadata.error ||
+          refresh.error ||
+          edit.error ||
+          more.error ||
+          unmatch.error ||
+          enrich.error
+        }
       />
+      {admin && <VersionReviews workId={work.id} />}
+      {unmatching && (
+        <section className="panel editor" aria-label="Remove catalog source">
+          <h3>
+            Stop using {providerName(unmatching.provider)} for this match?
+          </h3>
+          <p>{unmatching.title}</p>
+          <p className="muted">
+            This source will stop supplying metadata and catalog-only editions.
+            Your book's label, protected edits and library copies remain.
+            Correction history can undo this decision.
+          </p>
+          <div className="button-row">
+            <button
+              type="button"
+              disabled={unmatch.isPending}
+              onClick={() => unmatch.mutate()}
+            >
+              Remove catalog match
+            </button>
+            <button type="button" onClick={() => setUnmatching(null)}>
+              Cancel removal
+            </button>
+          </div>
+        </section>
+      )}
       {matching && (
         <div className="panel">
           <ProviderSearch
@@ -108,6 +189,26 @@ export default function BookMetadata({
       {metadata.isPending && <Loading />}
       {metadata.data && (
         <>
+          {metadata.data.enrichment && (
+            <div
+              className="source-attribution"
+              aria-label="Automatic metadata lookup"
+            >
+              <span>
+                <strong>Automatic metadata</strong>
+                <small>{metadata.data.enrichment.message}</small>
+              </span>
+              {admin && metadata.data.enrichment_retryable && (
+                <button
+                  type="button"
+                  disabled={enrich.isPending}
+                  onClick={() => enrich.mutate()}
+                >
+                  Check missing details again
+                </button>
+              )}
+            </div>
+          )}
           {metadata.data.versions.length === 0 && (
             <p className="muted">
               No catalog editions have been linked yet. Library copies appear
@@ -207,6 +308,17 @@ export default function BookMetadata({
                     : `Load more ${providerName(source.provider)} editions`}
                 </button>
               )}
+              {admin && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    unmatch.reset();
+                    setUnmatching(source);
+                  }}
+                >
+                  Unmatch {providerName(source.provider)}
+                </button>
+              )}
             </div>
           ))}
           <details className="panel provenance">
@@ -225,9 +337,11 @@ export default function BookMetadata({
                   <span>
                     <strong>{fieldLabel(field)}</strong>
                     <small>
-                      {value.provider === "manual"
-                        ? "Your edit"
-                        : providerName(value.provider || "")}
+                      {value.provider === "unmatched"
+                        ? "Unmatched source"
+                        : value.provider === "manual"
+                          ? "Your edit"
+                          : providerName(value.provider || "")}
                       {value.locked ? " · Protected" : ""}
                     </small>
                     <small>{value.reason}</small>
@@ -292,6 +406,7 @@ export default function BookMetadata({
               </>
             )}
           </details>
+          {admin && <IdentityHistory workId={work.id} />}
         </>
       )}
     </section>

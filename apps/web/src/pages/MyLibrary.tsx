@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Empty, Loading, Notice } from "../components";
+import IdentityHistory from "./IdentityHistory";
 
 type Asset = components["schemas"]["AssetView"];
 export default function MyLibrary({ admin }: { admin: boolean }) {
@@ -213,7 +214,7 @@ function MatchForm({ asset, close }: { asset: Asset; close: () => void }) {
       result(
         await api.POST("/api/library/assets/{asset_id}/match", {
           params: { path: { asset_id: asset.id } },
-          body: { work_id: id },
+          body: { work_id: id, expected_revision: asset.match_revision },
         }),
       ),
     onSuccess: async () => {
@@ -235,6 +236,12 @@ function MatchForm({ asset, close }: { asset: Asset; close: () => void }) {
         also accepts the current edition or recording details.
       </p>
       <Notice error={works.error || match.error} />
+      {asset.work_ids.length > 1 && (
+        <p className="notice">
+          This replaces all current book associations for this library item. The
+          correction history can restore them.
+        </p>
+      )}
       <label>
         Search catalog
         <input
@@ -275,6 +282,7 @@ function MatchForm({ asset, close }: { asset: Asset; close: () => void }) {
           Cancel
         </button>
       </div>
+      <IdentityHistory entityId={asset.id} onChanged={close} />
     </form>
   );
 }

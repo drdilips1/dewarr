@@ -5,7 +5,6 @@ from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 from sqlalchemy import delete, func, select
 
-from app.adapters.audiobookshelf import ABSItem
 from app.api.dependencies import Admin, CurrentUser, Database
 from app.db.models import (
     AssetContains,
@@ -16,9 +15,8 @@ from app.db.models import (
     LibraryGrant,
     ProviderObject,
     User,
-    Work,
 )
-from app.domain.identity import resolve_abs_version
+from app.domain.corrections import asset_state, correct_asset, revision
 from app.domain.visibility import visible_library
 
 router = APIRouter(prefix="/library", tags=["library"])
@@ -52,6 +50,7 @@ class AssetView(BaseModel):
     formats: list[str]
     last_seen_at: datetime | None
     open_url: str
+    match_revision: str | None = None
 
 
 class AssetPage(BaseModel):
@@ -63,6 +62,7 @@ class AssetPage(BaseModel):
 
 class MatchInput(BaseModel):
     work_id: UUID | None
+    expected_revision: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
 
 
 @router.get("/libraries", response_model=list[LibraryView])
@@ -168,13 +168,36 @@ async def assets(
     ).all()
     coverage = (
         await db.execute(
-            select(AssetContains.asset_id, AssetContains.work_id).where(
+            select(AssetContains.asset_id, AssetContains.work_id, AssetContains.verified).where(
                 AssetContains.asset_id.in_([row[0].id for row in rows]),
             )
         )
     ).all()
+    links = (
+        (
+            await db.scalars(
+                select(ProviderObject).where(
+                    ProviderObject.provider.in_([f"abs:{row[2].id}" for row in rows]),
+                    ProviderObject.external_id.in_([row[0].external_id for row in rows]),
+                )
+            )
+        ).all()
+        if user.role == "admin"
+        else []
+    )
+    by_key = {(link.provider, link.kind, link.external_id): link for link in links}
     views = []
     for asset, library, connection in rows:
+        link = by_key.get((f"abs:{connection.id}", f"item:{asset.medium}", asset.external_id))
+        match_revision = (
+            revision(
+                await asset_state(
+                    db, asset, link, coverage=[row for row in coverage if row.asset_id == asset.id]
+                )
+            )
+            if link
+            else None
+        )
         views.append(
             AssetView(
                 id=asset.id,
@@ -185,7 +208,8 @@ async def assets(
                 state=asset.state,
                 full_content=asset.full_content,
                 match_status=asset.match_status,
-                work_ids=[work for identifier, work in coverage if identifier == asset.id],
+                work_ids=[row.work_id for row in coverage if row.asset_id == asset.id],
+                match_revision=match_revision,
                 version_id=asset.version_id,
                 narrators=asset.metadata_snapshot.get("narrators", [])
                 if asset.medium == "audio"
@@ -202,56 +226,5 @@ async def assets(
 
 @router.post("/assets/{asset_id}/match", status_code=204)
 async def match_asset(asset_id: UUID, body: MatchInput, admin: Admin, db: Database):
-    integration_id = await db.scalar(
-        select(Library.integration_id).join(LibraryAsset).where(LibraryAsset.id == asset_id)
-    )
-    if integration_id:
-        # Match correction and snapshot publication use the same lock order.
-        await db.get(Integration, integration_id, with_for_update=True)
-    asset = await db.get(LibraryAsset, asset_id, with_for_update=True)
-    if not asset:
-        raise HTTPException(404, "Library item not found")
-    library = await db.get(Library, asset.library_id)
-    link = await db.scalar(
-        select(ProviderObject)
-        .where(
-            ProviderObject.provider == f"abs:{library.integration_id}",
-            ProviderObject.kind == f"item:{asset.medium}",
-            ProviderObject.external_id == asset.external_id,
-        )
-        .with_for_update()
-    )
-    if not link:
-        raise HTTPException(409, "Sync this library before correcting its match")
-    previous = {
-        "work_id": str(link.work_id) if link.work_id else None,
-        "version_id": str(asset.version_id) if asset.version_id else None,
-    }
-    work = await db.get(Work, body.work_id) if body.work_id else None
-    if body.work_id and (not work or work.redirect_to):
-        raise HTTPException(404, "Book not found or merged; select its current record")
-    await db.execute(delete(AssetContains).where(AssetContains.asset_id == asset.id))
-    item = ABSItem.model_validate(asset.metadata_snapshot)
-    link.work_id, link.version_id, link.manual_lock = body.work_id, None, True
-    if work:
-        version = await resolve_abs_version(db, work, item, asset.medium, link)
-        asset.version_id, asset.match_status = version.id, "manual"
-        asset.full_content = getattr(item, f"full_{asset.medium}")
-        db.add(AssetContains(asset_id=asset.id, work_id=work.id, verified=True))
-        link.match_status = "manual"
-    else:
-        asset.version_id, asset.full_content, asset.match_status = None, False, "needs-review"
-        link.match_status = "unmatched"
-    link.snapshot = item.model_dump(mode="json")
-    db.add(
-        AuditEvent(
-            actor_id=admin.id,
-            action="library.match.corrected",
-            entity_id=asset.id,
-            detail={
-                "before": previous,
-                "after": {"work_id": str(body.work_id) if body.work_id else None},
-            },
-        )
-    )
+    await correct_asset(db, admin.id, asset_id, body.work_id, body.expected_revision)
     await db.commit()

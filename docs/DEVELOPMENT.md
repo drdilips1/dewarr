@@ -77,7 +77,7 @@ Base image digests are pinned and were resolved from the Docker Hub registry. Lo
 - Preserve PostgreSQL application/queue state and `.local/secrets/app_key` together. Without the key, encrypted provider credentials cannot be recovered from a database backup.
 - Schema migrations are explicit (`alembic upgrade head`), not performed implicitly by every API process. The frozen queue SQL is versioned independently of future Procrastinate upgrades.
 - `BOOK_RECOVERY_MODE=true` blocks diagnostic dispatch and worker startup. Full external-state restore reconciliation is still pending S09; this flag alone does not certify restore safety.
-- The current stalled-job recovery only retries the idempotent diagnostic task. Every future side-effecting workflow must supply reconciliation before joining recovery.
+- Stalled-job recovery includes diagnostics, fenced ABS inventory and fenced secondary metadata enrichment. Every future downloader/import workflow must supply reconciliation before joining recovery.
 - No current feature downloads, renames, hardlinks, deletes or edits media files. Catalog entries never imply ownership.
 
 Keep local database/log/test artifacts out of commits. Use the application health endpoints for readiness and the Activity screen's background-worker check for a durable queue round trip.

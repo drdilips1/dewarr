@@ -104,6 +104,25 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await page.getByRole("link", { name: "Catalog", exact: true }).click();
   const owned = page.getByRole("link", { name: /The Synthetic Archive/ });
   await expect(owned).toContainText("In library");
+  await page.getByRole("link", { name: "My Library", exact: true }).click();
+  await page.getByRole("button", { name: "Correct match" }).first().click();
+  await page.getByText("Match correction history", { exact: true }).click();
+  await page
+    .getByRole("button", { name: "Undo correction", exact: true })
+    .click();
+  await page.getByRole("link", { name: "Catalog", exact: true }).click();
+  await expect(
+    page.getByRole("link", { name: /The Synthetic Archive/ }),
+  ).not.toContainText("In library");
+  await page.getByRole("link", { name: "My Library", exact: true }).click();
+  await page.getByRole("button", { name: "Correct match" }).first().click();
+  await page
+    .getByLabel("Search catalog", { exact: true })
+    .fill("The Synthetic Archive");
+  await page
+    .getByRole("combobox", { name: "Book", exact: true })
+    .selectOption({ label: "The Synthetic Archive — Example Author" });
+  await page.getByRole("button", { name: "Confirm match" }).click();
   await page.getByRole("link", { name: "Metadata", exact: true }).click();
   await page.getByLabel("Hardcover API token").fill("browser-hardcover-token");
   await page.getByRole("button", { name: "Save catalog connection" }).click();
@@ -127,6 +146,13 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     page.getByRole("heading", { name: "The Catalog Journey", level: 1 }),
   ).toBeVisible();
   await expect(page.getByText("Narrated by Sample Narrator")).toBeVisible();
+  await expect(page.getByLabel("Automatic metadata lookup")).toContainText(
+    "Missing metadata checked against Open Library",
+    { timeout: 15_000 },
+  );
+  await expect(
+    page.getByRole("button", { name: "Refresh Open Library", exact: true }),
+  ).toBeVisible();
   await expect(
     page.getByText("Not confirmed in library", { exact: true }),
   ).toBeVisible();
@@ -134,6 +160,12 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     .getByText("Metadata sources and protected edits", { exact: true })
     .click();
   await page.getByRole("button", { name: "Edit book details" }).click();
+  await expect(
+    page.getByLabel("Publication year", { exact: true }),
+  ).toHaveValue("2020");
+  await expect(page.getByLabel("Book description")).toHaveValue(
+    "A synthetic book for catalog and metadata verification.",
+  );
   await page
     .getByLabel("Book title", { exact: true })
     .fill("My protected catalog title");
@@ -165,6 +197,63 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   ).toBe(true);
   await page.screenshot({
     path: testInfo.outputPath("catalog-metadata-mobile.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.request.post("http://127.0.0.1:13379/fixture/catalog/narrator", {
+    data: { narrator: "Changed Narrator" },
+  });
+  await page
+    .getByRole("button", { name: "Refresh Hardcover", exact: true })
+    .click();
+  const review = page.getByRole("region", { name: "Changed edition review" });
+  await expect(review).toContainText("Changed Narrator");
+  await page.screenshot({
+    path: testInfo.outputPath("edition-review-desktop.png"),
+    fullPage: true,
+  });
+  await review.getByRole("button", { name: "Keep current version" }).click();
+  await expect(review).toHaveCount(0);
+  await page.getByText("Match correction history", { exact: true }).click();
+  await page
+    .getByRole("button", { name: "Undo correction", exact: true })
+    .click();
+  await expect(review).toBeVisible();
+  await review
+    .getByRole("button", { name: "Accept as separate version" })
+    .click();
+  await expect(
+    page.getByText("Narrated by Changed Narrator", { exact: true }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Unmatch Hardcover", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Remove catalog match", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Refresh Hardcover", exact: true }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("heading", { name: "My protected catalog title", level: 1 }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Undo correction", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Refresh Hardcover", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Narrated by Changed Narrator", { exact: true }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("correction-history-mobile.png"),
     fullPage: true,
   });
   await page.setViewportSize({ width: 1440, height: 1000 });

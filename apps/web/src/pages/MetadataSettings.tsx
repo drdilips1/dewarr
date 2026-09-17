@@ -213,6 +213,23 @@ function PreferenceForm({ value }: { value: Preferences }) {
       <details>
         <summary>Advanced provider preferences</summary>
         <label>
+          <input
+            type="checkbox"
+            checked={settings.automatic_enrichment ?? true}
+            onChange={(event) =>
+              setSettings({
+                ...settings,
+                automatic_enrichment: event.target.checked,
+              })
+            }
+          />
+          Fill missing Hardcover details from Open Library automatically
+          <small>
+            Checks a matching book in the background. Ambiguous matches stay
+            available for review; protected edits are preserved.
+          </small>
+        </label>
+        <label>
           Cover provider
           <select
             value={settings.covers}
@@ -254,6 +271,7 @@ function PreferenceForm({ value }: { value: Preferences }) {
           onClick={() =>
             setSettings({
               ...settings,
+              automatic_enrichment: true,
               covers: "automatic",
               field_providers: {},
             })

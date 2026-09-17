@@ -16,6 +16,7 @@ FIELDS = ("title", "authors", "description", "publication_year", "language", "co
 
 class MetadataPreferences(BaseModel):
     primary: Provider = "hardcover"
+    automatic_enrichment: bool = True
     language: str = Field(default="en", min_length=2, max_length=20)
     covers: Literal["automatic", "hardcover", "openlibrary"] = "automatic"
     field_providers: dict[str, Provider] = Field(default_factory=dict)
@@ -74,10 +75,19 @@ async def resolve_fields(db, work, settings):
                 "observed_at": selected.fetched_at.isoformat(),
             }
     work.metadata_fields = {**work.metadata_fields, "fields": fields}
-    work.match_key = work_key(work.title, work.authors)
+    uncertain = any(
+        fields.get(name, {}).get("provider") == "unmatched" for name in ("title", "authors")
+    )
+    work.metadata_fields = {**work.metadata_fields, "identity_rejected": uncertain}
+    work.match_key = None if uncertain else work_key(work.title, work.authors)
 
 
 async def attach_source(db, work, book, *, explicit=False):
+    work = await db.get(Work, work.id, with_for_update=True, populate_existing=True)
+    if work.redirect_to:
+        raise HTTPException(
+            409, "This book was merged during lookup. Retry with its current record."
+        )
     link = await db.scalar(
         select(WorkMetadataSource).where(
             WorkMetadataSource.work_id == work.id,
@@ -85,7 +95,12 @@ async def attach_source(db, work, book, *, explicit=False):
             WorkMetadataSource.external_id == book.external_id,
         )
     )
-    if link and not (explicit or link.manual_match):
+    if link and not link.accepted and not explicit:
+        raise HTTPException(
+            409,
+            "This catalog source was explicitly unmatched. Confirm a new match to use it again.",
+        )
+    if link and not explicit:
         old = BookData.model_validate(link.snapshot)
         if work_key(old.title, old.authors) != work_key(book.title, book.authors) or (
             book.canonical_id and book.canonical_id != book.external_id
@@ -137,6 +152,17 @@ async def attach_source(db, work, book, *, explicit=False):
         )
         snapshot = edition.model_dump(mode="json")
         if version_link:
+            if version_link.metadata_source_id and version_link.metadata_source_id != link.id:
+                previous_source = await db.get(WorkMetadataSource, version_link.metadata_source_id)
+                if not explicit or (previous_source and previous_source.accepted):
+                    raise HTTPException(
+                        409,
+                        "An edition identifier conflicts with another catalog source. "
+                        "Review those matches first.",
+                    )
+            version_link.metadata_source_id = link.id
+            if version_link.manual_lock:
+                continue
             identity_fields = (
                 "medium",
                 "title",
@@ -151,9 +177,11 @@ async def attach_source(db, work, book, *, explicit=False):
             ):
                 # Existing assets keep their identity; review contradictory version changes.
                 version_link.match_status = "needs-review"
+                version_link.pending_snapshot = snapshot
             else:
                 version_link.snapshot = snapshot
                 version_link.match_status = "matched"
+                version_link.pending_snapshot = None
             continue
         version = Version(
             work_id=work.id,
@@ -176,6 +204,7 @@ async def attach_source(db, work, book, *, explicit=False):
                 version_id=version.id,
                 snapshot=snapshot,
                 match_status="matched",
+                metadata_source_id=link.id,
             )
         )
 
@@ -183,6 +212,17 @@ async def attach_source(db, work, book, *, explicit=False):
 async def import_book(db, user, book):
     await transaction_lock(db, "catalog:" + book.provider + ":" + book.external_id)
     await transaction_lock(db, "identity:" + normalized(book.title))
+    rejected = await db.scalar(
+        select(WorkMetadataSource.id)
+        .join(Work)
+        .where(
+            WorkMetadataSource.provider == book.provider,
+            WorkMetadataSource.external_id == book.external_id,
+            WorkMetadataSource.accepted.is_(False),
+            visible_work(user),
+        )
+        .limit(1)
+    )
     linked = (
         await db.scalars(
             select(Work)
@@ -204,6 +244,12 @@ async def import_book(db, user, book):
         # Adding an already catalogued title is idempotent, not an implicit refresh.
         return linked[0]
     else:
+        if rejected:
+            raise HTTPException(
+                409,
+                "This catalog record was previously unmatched. "
+                "Confirm its intended book before adding it again.",
+            )
         key = work_key(book.title, book.authors)
         matches = (
             (
@@ -228,6 +274,12 @@ async def import_book(db, user, book):
         if not matches:
             db.add(work)
             await db.flush()
+        else:
+            work = await db.get(Work, work.id, with_for_update=True, populate_existing=True)
+            if work.redirect_to:
+                raise HTTPException(
+                    409, "This book was merged during lookup. Retry the catalog import."
+                )
     # Matching private inventory never promotes its metadata to a public catalog record.
-    await attach_source(db, work, book, explicit=False if linked or same_work(work, book) else True)
+    await attach_source(db, work, book, explicit=not matches)
     return work

@@ -6,6 +6,7 @@ from pathlib import Path
 from fastapi import FastAPI, Header, HTTPException, Request
 
 app = FastAPI()
+catalog_state = {"narrator": "Sample Narrator"}
 item = json.loads(
     (Path(__file__).resolve().parents[1] / "tests/fixtures/audiobookshelf-item.json").read_text()
 )
@@ -44,7 +45,6 @@ async def catalog(request: Request, authorization: str = Header(default="")):
                     {
                         "id": 42,
                         "title": "The Catalog Journey",
-                        "release_year": 2020,
                         "description": "A synthetic book for catalog and metadata verification.",
                         "cached_contributors": [{"author": {"name": "Catalog Author"}}],
                         "book_series": [
@@ -76,7 +76,10 @@ async def catalog(request: Request, authorization: str = Header(default="")):
                         "reading_format": {"format": "Audio"},
                         "language": {"code2": "en"},
                         "cached_contributors": [
-                            {"contribution": "Narrator", "author": {"name": "Sample Narrator"}}
+                            {
+                                "contribution": "Narrator",
+                                "author": {"name": catalog_state["narrator"]},
+                            }
                         ],
                     },
                 ]
@@ -104,3 +107,38 @@ async def catalog(request: Request, authorization: str = Header(default="")):
             }
         }
     raise HTTPException(400)
+
+
+@app.post("/fixture/catalog/narrator")
+async def set_fixture_narrator(request: Request):
+    body = await request.json()
+    catalog_state["narrator"] = body["narrator"]
+    return {"status": "updated"}
+
+
+@app.get("/openlibrary/{path:path}")
+async def secondary_catalog(path: str):
+    if path == "search.json":
+        return {
+            "numFound": 1,
+            "docs": [
+                {
+                    "key": "/works/OL1W",
+                    "title": "The Catalog Journey",
+                    "author_name": ["Catalog Author"],
+                }
+            ],
+        }
+    if path == "works/OL1W.json":
+        return {
+            "key": "/works/OL1W",
+            "title": "The Catalog Journey",
+            "authors": [{"author": {"key": "/authors/OL1A"}}],
+            "first_publish_date": "2020",
+            "description": "Secondary fixture description",
+        }
+    if path == "authors/OL1A.json":
+        return {"name": "Catalog Author"}
+    if path == "works/OL1W/editions.json":
+        return {"entries": []}
+    raise HTTPException(404)

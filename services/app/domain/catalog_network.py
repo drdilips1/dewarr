@@ -114,6 +114,8 @@ class CatalogGateway:
                 if error.kind == FailureKind.RATE_LIMIT:
                     delay = max(delay, 60)
                 await self.cooldown(delay)
+                if delay:
+                    error.retry_after = max(error.retry_after or 0, math.ceil(delay))
                 raise
             await self.cooldown(retry_delay(self.http.response_headers, datetime.now(UTC)))
         except AdapterError as error:

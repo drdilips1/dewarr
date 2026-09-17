@@ -8,6 +8,7 @@ from app.config import get_settings
 from app.db.models import AuditEvent, Integration, Operation, User
 from app.db.session import session_factory
 from app.jobs.queue import tasks
+from app.jobs.retry import CatalogRetryStrategy
 
 
 @tasks.task(name="system.probe", queue="system", retry=3)
@@ -34,6 +35,15 @@ async def library_sync(operation_id: str) -> None:
     from app.domain.inventory import synchronize
 
     await synchronize(UUID(operation_id))
+
+
+@tasks.task(
+    name="metadata.enrich", queue="metadata", retry=CatalogRetryStrategy(max_attempts=5, wait=60)
+)
+async def enrich_metadata(operation_id: str) -> None:
+    from app.domain.catalog_enrichment import enrich
+
+    await enrich(UUID(operation_id))
 
 
 @tasks.periodic(cron="*/5 * * * *")

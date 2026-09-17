@@ -160,7 +160,7 @@ export default function BookDetail({
       </div>
       <BookMetadata work={work} admin={admin} />
       <h2 className="library-access">Your library copies</h2>
-      <LibraryAssets workId={id} />
+      <LibraryAssets workId={id} admin={admin} />
     </>
   );
 }

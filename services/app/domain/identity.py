@@ -41,6 +41,7 @@ async def resolve_abs_work(db: AsyncSession, item: ABSItem, link: ProviderObject
             await db.scalars(
                 select(Work).where(
                     Work.redirect_to.is_(None),
+                    Work.metadata_fields["identity_rejected"].astext.is_distinct_from("true"),
                     or_(Work.match_key == key, func.lower(Work.title) == item.title.lower()),
                 )
             )

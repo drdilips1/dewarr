@@ -12,6 +12,7 @@ from app.adapters.catalog_types import BookData, Provider, SearchPage, SeriesDat
 from app.adapters.contracts import AdapterError, FailureKind
 from app.api.catalog import WorkInput, WorkView, work_view
 from app.api.dependencies import Admin, CurrentUser, Database, Member
+from app.api.operations import OperationView
 from app.db.models import (
     AssetContains,
     AuditEvent,
@@ -20,6 +21,7 @@ from app.db.models import (
     Library,
     LibraryAsset,
     MetadataSettings,
+    Operation,
     ProviderObject,
     User,
     Version,
@@ -27,6 +29,7 @@ from app.db.models import (
     WorkMetadataSource,
 )
 from app.domain.availability import availability_for
+from app.domain.catalog_enrichment import TERMINAL, effective_status, proposal, schedule_enrichment
 from app.domain.catalog_metadata import (
     FIELDS,
     MetadataPreferences,
@@ -36,6 +39,7 @@ from app.domain.catalog_metadata import (
     resolve_fields,
 )
 from app.domain.catalog_network import CatalogGateway
+from app.domain.corrections import revision, source_state
 from app.domain.operations import transaction_lock
 from app.domain.visibility import visible_library, visible_work
 from app.security import decrypt_secrets, encrypt_secrets
@@ -248,6 +252,7 @@ async def add_catalog_book(provider: Provider, external_id: str, user: Member, d
         raise adapter_http_error(error) from error
     user = await current_actor(db, user_id, edit=True)
     work = await import_book(db, user, book)
+    await schedule_enrichment(db, user, work)
     db.add(AuditEvent(actor_id=user_id, action="metadata.book.imported", entity_id=work.id))
     await db.flush()
     availability = (await availability_for(db, user, [work.id]))[work.id]
@@ -266,6 +271,8 @@ async def accessible_work(db, user, work_id, *, lock=False):
 
 
 class SourceView(BaseModel):
+    id: UUID
+    revision: str | None = None
     provider: Provider
     external_id: str
     title: str
@@ -295,6 +302,8 @@ class MetadataView(BaseModel):
     offset: int
     limit: int
     cover_choices: list[str]
+    enrichment: OperationView | None = None
+    enrichment_retryable: bool = False
 
 
 @router.get("/works/{work_id}", response_model=MetadataView)
@@ -318,6 +327,8 @@ async def work_metadata(
         book = BookData.model_validate(source.snapshot)
         source_views.append(
             SourceView(
+                id=source.id,
+                revision=revision(source_state(work, source)) if user.role == "admin" else None,
                 provider=book.provider,
                 external_id=book.external_id,
                 title=book.title,
@@ -330,10 +341,13 @@ async def work_metadata(
         covers.extend([book.cover_url, *(edition.cover_url for edition in book.editions)])
     # Public catalog editions are visible; an inventory-only version requires a library grant.
     catalog_version = exists(
-        select(ProviderObject.id).where(
+        select(ProviderObject.id)
+        .join(WorkMetadataSource, ProviderObject.metadata_source_id == WorkMetadataSource.id)
+        .where(
             ProviderObject.work_id == work_id,
             ProviderObject.version_id == Version.id,
             ProviderObject.kind == "edition",
+            WorkMetadataSource.accepted.is_(True),
             ProviderObject.provider.in_([f"hardcover:{work_id}", f"openlibrary:{work_id}"]),
         )
     )
@@ -358,8 +372,7 @@ async def work_metadata(
         )
     )
     conditions = [Version.work_id == work_id]
-    if user.role != "admin":
-        conditions.append(or_(catalog_version, exists(accessible_asset)))
+    conditions.append(or_(catalog_version, exists(accessible_asset)))
     needs_review = exists(
         select(ProviderObject.id).where(
             ProviderObject.version_id == Version.id, ProviderObject.match_status == "needs-review"
@@ -377,7 +390,35 @@ async def work_metadata(
         )
     ).all()
     total = await db.scalar(select(func.count()).select_from(Version).where(*conditions))
+    enrichment = await db.scalar(
+        select(Operation)
+        .where(
+            Operation.kind == "metadata.enrich",
+            Operation.payload["work_id"].astext == str(work_id),
+            Operation.owner_id == user.id,
+        )
+        .order_by(Operation.created_at.desc(), Operation.id)
+        .limit(1)
+    )
+    enrichment_view = OperationView.model_validate(enrichment) if enrichment else None
+    if enrichment:
+        status = await effective_status(db, enrichment)
+        enrichment_view = OperationView.model_validate(enrichment)
+        if status != enrichment.status:
+            enrichment_view = enrichment_view.model_copy(
+                update={
+                    "status": status,
+                    "message": "The metadata worker ended before completion; retry the lookup",
+                }
+            )
     return MetadataView(
+        enrichment=enrichment_view,
+        enrichment_retryable=bool(
+            user.role == "admin"
+            and enrichment
+            and enrichment_view.status in TERMINAL
+            and await proposal(db, work, await preferences(db))
+        ),
         fields=work.metadata_fields.get("fields", {}),
         sources=source_views,
         versions=[
@@ -407,6 +448,16 @@ class MatchInput(BaseModel):
     confirm_match: bool = False
 
 
+@router.post("/works/{work_id}/enrichment", response_model=OperationView, status_code=202)
+async def retry_enrichment(work_id: UUID, user: Admin, db: Database):
+    work = await accessible_work(db, user, work_id, lock=True)
+    operation = await schedule_enrichment(db, user, work, retry=True)
+    if not operation:
+        raise HTTPException(409, "No automatic secondary lookup is needed or enabled for this book")
+    await db.commit()
+    return operation
+
+
 @router.post("/works/{work_id}/source", response_model=WorkView)
 async def match_source(work_id: UUID, body: MatchInput, user: Admin, db: Database):
     user_id = user.id
@@ -417,6 +468,7 @@ async def match_source(work_id: UUID, body: MatchInput, user: Admin, db: Databas
                 WorkMetadataSource.work_id == work_id,
                 WorkMetadataSource.provider == body.provider,
                 WorkMetadataSource.external_id == body.external_id,
+                WorkMetadataSource.accepted.is_(True),
             )
         )
         if not linked:
@@ -436,6 +488,7 @@ async def match_source(work_id: UUID, body: MatchInput, user: Admin, db: Databas
     user = await current_actor(db, user_id, admin=True)
     work = await accessible_work(db, user, work_id, lock=True)
     await attach_source(db, work, book, explicit=body.confirm_match)
+    await schedule_enrichment(db, user, work)
     db.add(
         AuditEvent(
             actor_id=user_id,

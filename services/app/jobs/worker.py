@@ -14,7 +14,12 @@ async def recover_stalled_jobs() -> None:
         # Each side-effecting workflow must supply its own reconciliation path.
         # These jobs are idempotent diagnostics or fenced, read-only inventory workflows.
         try:
-            for task_name in ("system.probe", "library.sync", "library.schedule"):
+            for task_name in (
+                "system.probe",
+                "library.sync",
+                "library.schedule",
+                "metadata.enrich",
+            ):
                 stalled = await queue.job_manager.get_stalled_jobs(
                     task_name=task_name,
                     seconds_since_heartbeat=60,

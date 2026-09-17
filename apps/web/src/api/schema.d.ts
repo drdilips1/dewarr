@@ -557,6 +557,23 @@ export interface paths {
     patch: operations["edit_metadata_api_metadata_works__work_id__patch"];
     trace?: never;
   };
+  "/api/metadata/works/{work_id}/enrichment": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Retry Enrichment */
+    post: operations["retry_enrichment_api_metadata_works__work_id__enrichment_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/metadata/works/{work_id}/source": {
     parameters: {
       query?: never;
@@ -585,6 +602,91 @@ export interface paths {
     put?: never;
     /** Load Editions */
     post: operations["load_editions_api_metadata_works__work_id__source_editions_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/identity/changes": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Changes */
+    get: operations["changes_api_identity_changes_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/identity/changes/{change_id}/undo": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Undo */
+    post: operations["undo_api_identity_changes__change_id__undo_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/identity/sources/{source_id}/unmatch": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Unmatch */
+    post: operations["unmatch_api_identity_sources__source_id__unmatch_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/identity/works/{work_id}/version-reviews": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Version Reviews */
+    get: operations["version_reviews_api_identity_works__work_id__version_reviews_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/identity/versions/{link_id}/review": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Resolve Version */
+    post: operations["resolve_version_api_identity_versions__link_id__review_post"];
     delete?: never;
     options?: never;
     head?: never;
@@ -687,6 +789,8 @@ export interface components {
       last_seen_at: string | null;
       /** Open Url */
       open_url: string;
+      /** Match Revision */
+      match_revision?: string | null;
     };
     /** AuthView */
     AuthView: {
@@ -778,6 +882,47 @@ export interface components {
       bootstrap_token: string;
       /** Display Name */
       display_name: string;
+    };
+    /** ChangePage */
+    ChangePage: {
+      /** Items */
+      items: components["schemas"]["ChangeView"][];
+      /** Total */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+    };
+    /** ChangeView */
+    ChangeView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Kind */
+      kind: string;
+      /**
+       * Entity Id
+       * Format: uuid
+       */
+      entity_id: string;
+      /** Work Id */
+      work_id: string | null;
+      /** Summary */
+      summary: string;
+      /** Actor Name */
+      actor_name: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /** Undone At */
+      undone_at: string | null;
+      /** Can Undo */
+      can_undo: boolean;
     };
     /** ConnectionView */
     ConnectionView: {
@@ -989,6 +1134,11 @@ export interface components {
        */
       primary: "hardcover" | "openlibrary";
       /**
+       * Automatic Enrichment
+       * @default true
+       */
+      automatic_enrichment: boolean;
+      /**
        * Language
        * @default en
        */
@@ -1022,6 +1172,12 @@ export interface components {
       limit: number;
       /** Cover Choices */
       cover_choices: string[];
+      enrichment?: components["schemas"]["OperationView"] | null;
+      /**
+       * Enrichment Retryable
+       * @default false
+       */
+      enrichment_retryable: boolean;
     };
     /** OperationView */
     OperationView: {
@@ -1051,6 +1207,21 @@ export interface components {
     OrderInput: {
       /** Work Ids */
       work_ids: string[];
+    };
+    /** ReviewInput */
+    ReviewInput: {
+      /** Expected Revision */
+      expected_revision: string;
+      /**
+       * Decision
+       * @enum {string}
+       */
+      decision: "keep" | "separate";
+    };
+    /** RevisionInput */
+    RevisionInput: {
+      /** Expected Revision */
+      expected_revision: string;
     };
     /** SearchPage */
     SearchPage: {
@@ -1094,6 +1265,13 @@ export interface components {
     };
     /** SourceView */
     SourceView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Revision */
+      revision?: string | null;
       /**
        * Provider
        * @enum {string}
@@ -1155,6 +1333,42 @@ export interface components {
       input?: unknown;
       /** Context */
       ctx?: Record<string, never>;
+    };
+    /** VersionReview */
+    VersionReview: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Provider */
+      provider: string;
+      /** External Id */
+      external_id: string;
+      /**
+       * Current Version Id
+       * Format: uuid
+       */
+      current_version_id: string;
+      /** Current Title */
+      current_title: string | null;
+      /** Current Medium */
+      current_medium: string;
+      /** Current Narrators */
+      current_narrators: string[];
+      /** Current Language */
+      current_language: string | null;
+      /** Current Publication Year */
+      current_publication_year: number | null;
+      /** Current Identifiers */
+      current_identifiers: {
+        [key: string]: unknown;
+      };
+      /** Current Abridged */
+      current_abridged: boolean | null;
+      proposed: components["schemas"]["EditionData"];
+      /** Revision */
+      revision: string;
     };
     /** VersionView */
     VersionView: {
@@ -1233,6 +1447,8 @@ export interface components {
     app__api__library__MatchInput: {
       /** Work Id */
       work_id: string | null;
+      /** Expected Revision */
+      expected_revision?: string | null;
     };
     /** MatchInput */
     app__api__metadata__MatchInput: {
@@ -2434,6 +2650,37 @@ export interface operations {
       };
     };
   };
+  retry_enrichment_api_metadata_works__work_id__enrichment_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        work_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OperationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   match_source_api_metadata_works__work_id__source_post: {
     parameters: {
       query?: never;
@@ -2492,6 +2739,166 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["WorkView"];
         };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  changes_api_identity_changes_get: {
+    parameters: {
+      query?: {
+        entity_id?: string | null;
+        work_id?: string | null;
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ChangePage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  undo_api_identity_changes__change_id__undo_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        change_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  unmatch_api_identity_sources__source_id__unmatch_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        source_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RevisionInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  version_reviews_api_identity_works__work_id__version_reviews_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        work_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["VersionReview"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  resolve_version_api_identity_versions__link_id__review_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        link_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReviewInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
       /** @description Validation Error */
       422: {

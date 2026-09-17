@@ -1669,6 +1669,49 @@
         }
       }
     },
+    "/api/metadata/works/{work_id}/enrichment": {
+      "post": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Retry Enrichment",
+        "operationId": "retry_enrichment_api_metadata_works__work_id__enrichment_post",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/metadata/works/{work_id}/source": {
       "post": {
         "tags": [
@@ -1761,6 +1804,271 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/identity/changes": {
+      "get": {
+        "tags": [
+          "identity"
+        ],
+        "summary": "Changes",
+        "operationId": "changes_api_identity_changes_get",
+        "parameters": [
+          {
+            "name": "entity_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Entity Id"
+            }
+          },
+          {
+            "name": "work_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Work Id"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangePage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/identity/changes/{change_id}/undo": {
+      "post": {
+        "tags": [
+          "identity"
+        ],
+        "summary": "Undo",
+        "operationId": "undo_api_identity_changes__change_id__undo_post",
+        "parameters": [
+          {
+            "name": "change_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Change Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/identity/sources/{source_id}/unmatch": {
+      "post": {
+        "tags": [
+          "identity"
+        ],
+        "summary": "Unmatch",
+        "operationId": "unmatch_api_identity_sources__source_id__unmatch_post",
+        "parameters": [
+          {
+            "name": "source_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Source Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevisionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/identity/works/{work_id}/version-reviews": {
+      "get": {
+        "tags": [
+          "identity"
+        ],
+        "summary": "Version Reviews",
+        "operationId": "version_reviews_api_identity_works__work_id__version_reviews_get",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VersionReview"
+                  },
+                  "title": "Response Version Reviews Api Identity Works  Work Id  Version Reviews Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/identity/versions/{link_id}/review": {
+      "post": {
+        "tags": [
+          "identity"
+        ],
+        "summary": "Resolve Version",
+        "operationId": "resolve_version_api_identity_versions__link_id__review_post",
+        "parameters": [
+          {
+            "name": "link_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Link Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
           },
           "422": {
             "description": "Validation Error",
@@ -2026,6 +2334,17 @@
           "open_url": {
             "type": "string",
             "title": "Open Url"
+          },
+          "match_revision": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Match Revision"
           }
         },
         "type": "object",
@@ -2279,6 +2598,109 @@
           "display_name"
         ],
         "title": "BootstrapInput"
+      },
+      "ChangePage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ChangeView"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "offset",
+          "limit"
+        ],
+        "title": "ChangePage"
+      },
+      "ChangeView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "entity_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Entity Id"
+          },
+          "work_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Work Id"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "actor_name": {
+            "type": "string",
+            "title": "Actor Name"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "undone_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Undone At"
+          },
+          "can_undo": {
+            "type": "boolean",
+            "title": "Can Undo"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "entity_id",
+          "work_id",
+          "summary",
+          "actor_name",
+          "created_at",
+          "undone_at",
+          "can_undo"
+        ],
+        "title": "ChangeView"
       },
       "ConnectionView": {
         "properties": {
@@ -2880,6 +3302,11 @@
             "title": "Primary",
             "default": "hardcover"
           },
+          "automatic_enrichment": {
+            "type": "boolean",
+            "title": "Automatic Enrichment",
+            "default": true
+          },
           "language": {
             "type": "string",
             "maxLength": 20,
@@ -2951,6 +3378,21 @@
             },
             "type": "array",
             "title": "Cover Choices"
+          },
+          "enrichment": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OperationView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "enrichment_retryable": {
+            "type": "boolean",
+            "title": "Enrichment Retryable",
+            "default": false
           }
         },
         "type": "object",
@@ -3023,6 +3465,43 @@
           "work_ids"
         ],
         "title": "OrderInput"
+      },
+      "ReviewInput": {
+        "properties": {
+          "expected_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Expected Revision"
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "keep",
+              "separate"
+            ],
+            "title": "Decision"
+          }
+        },
+        "type": "object",
+        "required": [
+          "expected_revision",
+          "decision"
+        ],
+        "title": "ReviewInput"
+      },
+      "RevisionInput": {
+        "properties": {
+          "expected_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Expected Revision"
+          }
+        },
+        "type": "object",
+        "required": [
+          "expected_revision"
+        ],
+        "title": "RevisionInput"
       },
       "SearchPage": {
         "properties": {
@@ -3124,6 +3603,22 @@
       },
       "SourceView": {
         "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "revision": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Revision"
+          },
           "provider": {
             "type": "string",
             "enum": [
@@ -3170,6 +3665,7 @@
         },
         "type": "object",
         "required": [
+          "id",
           "provider",
           "external_id",
           "title",
@@ -3292,6 +3788,112 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "VersionReview": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "provider": {
+            "type": "string",
+            "title": "Provider"
+          },
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          },
+          "current_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Current Version Id"
+          },
+          "current_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Title"
+          },
+          "current_medium": {
+            "type": "string",
+            "title": "Current Medium"
+          },
+          "current_narrators": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Current Narrators"
+          },
+          "current_language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Language"
+          },
+          "current_publication_year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Publication Year"
+          },
+          "current_identifiers": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Current Identifiers"
+          },
+          "current_abridged": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Abridged"
+          },
+          "proposed": {
+            "$ref": "#/components/schemas/EditionData"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "provider",
+          "external_id",
+          "current_version_id",
+          "current_title",
+          "current_medium",
+          "current_narrators",
+          "current_language",
+          "current_publication_year",
+          "current_identifiers",
+          "current_abridged",
+          "proposed",
+          "revision"
+        ],
+        "title": "VersionReview"
       },
       "VersionView": {
         "properties": {
@@ -3560,6 +4162,18 @@
               }
             ],
             "title": "Work Id"
+          },
+          "expected_revision": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Revision"
           }
         },
         "type": "object",

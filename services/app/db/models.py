@@ -3,6 +3,7 @@ from typing import Any
 from uuid import UUID, uuid4
 
 from sqlalchemy import (
+    BigInteger,
     Boolean,
     CheckConstraint,
     DateTime,
@@ -13,6 +14,9 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
     func,
+)
+from sqlalchemy import (
+    Identity as SQLIdentity,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
@@ -100,6 +104,10 @@ class ProviderObject(Identity, Base):
     snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
     match_status: Mapped[str] = mapped_column(String(30), default="unresolved")
     manual_lock: Mapped[bool] = mapped_column(Boolean, default=False)
+    metadata_source_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("work_metadata_sources.id"), index=True
+    )
+    pending_snapshot: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
 
 
 class Integration(Identity, Base):
@@ -209,6 +217,23 @@ class AuditEvent(Identity, Base):
     action: Mapped[str] = mapped_column(String(80))
     entity_id: Mapped[UUID | None] = mapped_column(index=True)
     detail: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+
+
+class IdentityChange(Identity, Base):
+    __tablename__ = "identity_changes"
+    __table_args__ = (
+        CheckConstraint("kind IN ('asset_match', 'source_detach', 'version_review')"),
+    )
+    sequence: Mapped[int] = mapped_column(BigInteger, SQLIdentity(), unique=True)
+    kind: Mapped[str] = mapped_column(String(40))
+    entity_id: Mapped[UUID] = mapped_column(index=True)
+    work_id: Mapped[UUID | None] = mapped_column(ForeignKey("works.id"), index=True)
+    actor_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
+    before: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    after: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    summary: Mapped[str] = mapped_column(String(500))
+    undone_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    undone_by: Mapped[UUID | None] = mapped_column(ForeignKey("users.id"))
 
 
 class InventoryRun(Identity, Base):

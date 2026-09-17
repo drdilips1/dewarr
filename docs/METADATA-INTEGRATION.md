@@ -18,6 +18,18 @@ Automatic field resolution chooses accepted source values using the configured p
 
 Provider references are scoped to the app work. Automatic attachment requires title/author agreement or an existing accepted provider association. Contradictory provider work identity or a provider merge is held for review. Explicit matching requires a preview and confirmation. A private inventory work is never made public merely because metadata was attached. Public catalog versions are visible with their work; inventory-only versions and ownership require library access.
 
+Administrators can remove a catalog match and review changed recording/edition evidence through reversible corrections. See [Identity corrections](IDENTITY-CORRECTIONS.md) for the journal, stale-state checks and immutable asset-version behavior.
+
+## Automatic secondary enrichment
+
+With Hardcover as the selected primary, importing or refreshing a book schedules a durable Open Library lookup when description, original publication year or cover is missing and not protected. The default is enabled; Advanced provider preferences can disable it. Catalog addition returns without waiting for the secondary network lookup. Existing explicitly matched secondary sources already participate in resolution and do not trigger another automatic search.
+
+The lookup uses one bounded title/author search page, requires a unique normalized title-and-author match, then independently validates the selected detail response. Incomplete search pages, ambiguous candidates, changed identity or conflicting known work languages require review. It does not infer recording identity from Open Library, search every edition, or automatically fill work language from an arbitrary edition. The validated secondary source then supplies missing fields through the existing provenance/lock resolver; valid primary values remain preferred unless the administrator explicitly configured a field override.
+
+Jobs are enqueued in the catalog transaction. Repeated imports coalesce by owner and input fingerprint. Each execution claims a run token, releases the database transaction for network I/O, then rechecks current user authority, source identity, work identity and provider preferences before committing. Newer executions fence older responses. A rejected secondary source suppresses automatic reattachment. Changed settings or permissions cancel the pending application of results; protected field edits remain protected.
+
+Transient failures use bounded queue retries and respect provider cooldown delays. Parser failures clear affected cache entries. Stale fallback responses remain useful for browsing but cannot establish a new automatic source association. Terminal or orphaned queue work exposes an explicit retry when the book still qualifies; a queued/live job is reused. Status is visible to the initiating user in book metadata and Activity without exposing another account's operation. This workflow performs public metadata reads and app-catalog writes only.
+
 ## Cache, budgets and recovery
 
 PostgreSQL stores request caches and provider budgets. Hardcover cache keys include account/generation; public Open Library requests can share public cache entries. The rate-budget key is derived from the credential using the installation key, so two users supplying the same token share its request budget without exposing the token.
@@ -30,17 +42,19 @@ No API database transaction is held over network I/O. Each lookup has a 60-secon
 
 Search books supports provider selection, paginated results, focused preview and catalog add. Book details show catalog editions/recordings alongside the existing separately permissioned library copies. Metadata provenance, protected edits and cover choices use a collapsed advanced section. Metadata settings provide the private account connection and administrator defaults. Edition language preference orders matching language codes first; it does not rewrite or translate languages.
 
-The 47-test backend suite includes metadata parsing, errors, caching/cooldown, encryption/account isolation, repeated/concurrent imports, protected edits, changed-version review, pagination, private inventory-version visibility and credential-generation fencing. The expanded Playwright journey exercises a synthetic Hardcover HTTP server, actual API/PostgreSQL, catalog search/import, editions and protected refresh, as well as earlier ABS/worker/list flows. Desktop/mobile screenshots were inspected. These fixtures do not certify live Hardcover or ABS scanner behavior.
+The backend suite includes metadata parsing, errors, caching/cooldown, encryption/account isolation, repeated/concurrent imports, protected edits, changed-version review, pagination, private inventory-version visibility and credential-generation fencing. Secondary-enrichment tests also exercise a real queue worker, transaction rollback, ambiguous/incomplete responses, concurrent claim fencing, in-flight authority changes, rejected-source suppression, retry exhaustion, orphan recovery and provider-directed retry scheduling. Current totals are in [Implementation status](IMPLEMENTATION-STATUS.md).
+
+The expanded Playwright journey exercises synthetic Hardcover/Open Library HTTP servers, actual API/PostgreSQL/worker, automatic gap filling, primary-value preservation, editions, protected refresh and correction undo, alongside earlier ABS/list flows. Desktop/mobile screenshots were inspected. These fixtures do not certify live Hardcover or ABS scanner behavior.
 
 A read-only live Open Library check returned 20 search results for Frankenstein/Mary Shelley, resolved the returned work and author, and loaded 50 editions with a continuation marker. This verifies that specific search/detail path, not all Open Library formats or records.
 
-Migration 0004 adds accounts, settings, cache/budget and metadata-source records and permits print/unknown catalog versions. Four migrations pass upgrade/downgrade-to-base/upgrade and drift checking on an empty isolated database. Downgrade refuses to discard print/unknown version semantics; restore a pre-upgrade backup for incompatible data.
+Migration 0004 adds accounts, settings, cache/budget and metadata-source records and permits print/unknown catalog versions. Migration 0005 adds reversible corrections and explicit edition-source associations. Empty-schema migration round trips and drift checking pass; populated downgrade guards preserve semantics/history. Restore a pre-upgrade backup for incompatible data.
 
 ## Remaining stage work
 
 - Live Hardcover token/scope/query verification and broader provider fixtures, including catalog aliases and merges.
-- Automatically targeted secondary enrichment; currently resolution combines sources already explicitly matched. Search fallback is implemented separately.
-- Cross-provider edition equivalence, reversible link/merge/unmatch and review resolution. Contradictions are currently held, not automatically repaired.
+- Cross-provider edition equivalence and canonical work merge/split. Source unmatch and changed-edition review are implemented, but original source attachment and complete identity reconciliation still need reversible handling.
+- Broader secondary lookup strategies where justified by identity evidence. The current automatic path deliberately covers targeted Hardcover → Open Library work-field gaps; it does not promise complete recording enrichment or translate metadata languages.
 - Series navigation and richer identifier-based local search; current work detail shows provider series membership.
 - More complete cover browsing across large edition sets and provider data-age propagation across multi-request snapshots.
 - Complete local list management and later discovery/community lists, external subscriptions and acquisition automation.
