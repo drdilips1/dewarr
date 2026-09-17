@@ -17,6 +17,7 @@ from app.domain.corrections import (
     undo_change,
     version_state,
 )
+from app.domain.work_graph import family_ids
 
 router = APIRouter(prefix="/identity", tags=["identity"])
 
@@ -55,10 +56,12 @@ async def changes(
     if entity_id:
         conditions.append(IdentityChange.entity_id == entity_id)
     if work_id:
+        scope = (await db.scalars(family_ids(work_id))).all()
         conditions.append(
             or_(
-                IdentityChange.work_id == work_id,
-                IdentityChange.before["work_id"].astext == str(work_id),
+                IdentityChange.work_id.in_(scope),
+                IdentityChange.before["work_id"].astext.in_([str(identity) for identity in scope]),
+                IdentityChange.entity_id.in_(scope),
             )
         )
     rows = (
@@ -148,7 +151,7 @@ async def version_reviews(work_id: UUID, admin: Admin, db: Database):
             .join(Version, ProviderObject.version_id == Version.id)
             .join(WorkMetadataSource, ProviderObject.metadata_source_id == WorkMetadataSource.id)
             .where(
-                ProviderObject.work_id == work_id,
+                ProviderObject.work_id.in_(family_ids(work_id)),
                 WorkMetadataSource.accepted.is_(True),
                 ProviderObject.kind == "edition",
                 ProviderObject.match_status == "needs-review",
@@ -185,4 +188,37 @@ class ReviewInput(RevisionInput):
 @router.post("/versions/{link_id}/review", status_code=204)
 async def resolve_version(link_id: UUID, body: ReviewInput, admin: Admin, db: Database):
     await review_version(db, admin.id, link_id, body.decision, body.expected_revision)
+    await db.commit()
+
+
+class MergeInput(BaseModel):
+    source_id: UUID
+    target_id: UUID
+
+
+class MergeCommand(MergeInput):
+    expected_revision: str = Field(pattern=r"^[a-f0-9]{64}$")
+
+
+class MergePreview(MergeInput):
+    source_title: str
+    target_title: str
+    source_authors: list[str]
+    target_authors: list[str]
+    counts: dict[str, int]
+    revision: str
+
+
+@router.post("/works/merge/preview", response_model=MergePreview)
+async def merge_preview(body: MergeInput, admin: Admin, db: Database):
+    from app.domain.work_merges import preview_merge
+
+    return await preview_merge(db, body.source_id, body.target_id, admin.id)
+
+
+@router.post("/works/merge", status_code=204)
+async def merge(body: MergeCommand, admin: Admin, db: Database):
+    from app.domain.work_merges import merge_works
+
+    await merge_works(db, admin.id, body.source_id, body.target_id, body.expected_revision)
     await db.commit()

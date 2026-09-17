@@ -8,7 +8,8 @@ from app.api.dependencies import CurrentUser, Database, Member
 from app.db.models import AuditEvent, Work
 from app.domain.availability import Availability, availability_for
 from app.domain.identity import work_key
-from app.domain.visibility import visible_work
+from app.domain.visibility import visible_origin_work, visible_work
+from app.domain.work_graph import canonical_map, canonical_work
 
 router = APIRouter(prefix="/catalog", tags=["catalog"])
 
@@ -81,7 +82,20 @@ async def works(
         pattern = (
             "%" + q.strip().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
         )
-        conditions.append(or_(Work.title.ilike(pattern), cast(Work.authors, Text).ilike(pattern)))
+        mapping = canonical_map()
+        from sqlalchemy.orm import aliased
+
+        origin = aliased(Work)
+        conditions.append(
+            Work.id.in_(
+                select(mapping.c.work_id)
+                .join(origin, origin.id == mapping.c.origin_id)
+                .where(
+                    or_(origin.title.ilike(pattern), cast(origin.authors, Text).ilike(pattern)),
+                    visible_origin_work(user, origin),
+                )
+            )
+        )
     rows = (
         await db.scalars(
             select(Work)
@@ -125,7 +139,8 @@ async def add_work(body: WorkInput, user: Member, db: Database):
 
 @router.get("/works/{work_id}", response_model=WorkView)
 async def work_detail(work_id: UUID, user: CurrentUser, db: Database):
-    work = await db.scalar(select(Work).where(Work.id == work_id, visible_work(user)))
+    canonical = await canonical_work(db, work_id)
+    work = await db.scalar(select(Work).where(Work.id == canonical.id, visible_work(user)))
     if not work:
         raise HTTPException(404, "Book not found")
     availability = await availability_for(db, user, [work.id])

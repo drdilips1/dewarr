@@ -41,7 +41,8 @@ from app.domain.catalog_metadata import (
 from app.domain.catalog_network import CatalogGateway
 from app.domain.corrections import revision, source_state
 from app.domain.operations import transaction_lock
-from app.domain.visibility import visible_library, visible_work
+from app.domain.visibility import visible_library, visible_origin_work, visible_work
+from app.domain.work_graph import canonical_work, family_ids
 from app.security import decrypt_secrets, encrypt_secrets
 
 router = APIRouter(prefix="/metadata", tags=["metadata"])
@@ -261,7 +262,10 @@ async def add_catalog_book(provider: Provider, external_id: str, user: Member, d
 
 
 async def accessible_work(db, user, work_id, *, lock=False):
-    query = select(Work).where(Work.id == work_id, visible_work(user), Work.redirect_to.is_(None))
+    canonical = await canonical_work(db, work_id)
+    query = select(Work).where(
+        Work.id == canonical.id, visible_work(user), Work.redirect_to.is_(None)
+    )
     if lock:
         query = query.with_for_update()
     work = await db.scalar(query)
@@ -315,10 +319,16 @@ async def work_metadata(
     limit: int = Query(default=40, ge=1, le=100),
 ):
     work = await accessible_work(db, user, work_id)
+    work_id = work.id
     sources = (
         await db.scalars(
             select(WorkMetadataSource)
-            .where(WorkMetadataSource.work_id == work_id, WorkMetadataSource.accepted.is_(True))
+            .join(Work, WorkMetadataSource.work_id == Work.id)
+            .where(
+                visible_origin_work(user),
+                WorkMetadataSource.work_id.in_(family_ids(work_id)),
+                WorkMetadataSource.accepted.is_(True),
+            )
             .order_by(WorkMetadataSource.provider, WorkMetadataSource.external_id)
         )
     ).all()
@@ -343,12 +353,14 @@ async def work_metadata(
     catalog_version = exists(
         select(ProviderObject.id)
         .join(WorkMetadataSource, ProviderObject.metadata_source_id == WorkMetadataSource.id)
+        .join(Work, Work.id == WorkMetadataSource.work_id)
         .where(
-            ProviderObject.work_id == work_id,
+            visible_origin_work(user),
+            ProviderObject.work_id.in_(family_ids(work_id)),
             ProviderObject.version_id == Version.id,
             ProviderObject.kind == "edition",
             WorkMetadataSource.accepted.is_(True),
-            ProviderObject.provider.in_([f"hardcover:{work_id}", f"openlibrary:{work_id}"]),
+            WorkMetadataSource.provider.in_(["hardcover", "openlibrary"]),
         )
     )
     accessible_asset = (
@@ -358,7 +370,7 @@ async def work_metadata(
         .join(AssetContains)
         .where(
             LibraryAsset.version_id == Version.id,
-            AssetContains.work_id == work_id,
+            AssetContains.work_id.in_(family_ids(work_id)),
             Library.accessible.is_(True),
             Integration.enabled.is_(True),
             visible_library(user),
@@ -371,7 +383,7 @@ async def work_metadata(
             LibraryAsset.state.in_(["present", "stale"]),
         )
     )
-    conditions = [Version.work_id == work_id]
+    conditions = [Version.work_id.in_(family_ids(work_id))]
     conditions.append(or_(catalog_version, exists(accessible_asset)))
     needs_review = exists(
         select(ProviderObject.id).where(
@@ -465,7 +477,7 @@ async def match_source(work_id: UUID, body: MatchInput, user: Admin, db: Databas
     if not body.confirm_match:
         linked = await db.scalar(
             select(WorkMetadataSource.id).where(
-                WorkMetadataSource.work_id == work_id,
+                WorkMetadataSource.work_id.in_(family_ids(work_id)),
                 WorkMetadataSource.provider == body.provider,
                 WorkMetadataSource.external_id == body.external_id,
                 WorkMetadataSource.accepted.is_(True),
@@ -507,7 +519,7 @@ async def load_editions(work_id: UUID, body: MatchInput, user: Admin, db: Databa
     await accessible_work(db, user, work_id)
     source = await db.scalar(
         select(WorkMetadataSource).where(
-            WorkMetadataSource.work_id == work_id,
+            WorkMetadataSource.work_id.in_(family_ids(work_id)),
             WorkMetadataSource.provider == body.provider,
             WorkMetadataSource.external_id == body.external_id,
             WorkMetadataSource.accepted.is_(True),

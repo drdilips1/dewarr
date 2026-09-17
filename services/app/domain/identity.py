@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.audiobookshelf import ABSItem
 from app.db.models import ProviderObject, Version, Work
+from app.domain.work_graph import canonical_work
 
 
 def normalized(value: str) -> str:
@@ -40,7 +41,6 @@ async def resolve_abs_work(db: AsyncSession, item: ABSItem, link: ProviderObject
         (
             await db.scalars(
                 select(Work).where(
-                    Work.redirect_to.is_(None),
                     Work.metadata_fields["identity_rejected"].astext.is_distinct_from("true"),
                     or_(Work.match_key == key, func.lower(Work.title) == item.title.lower()),
                 )
@@ -59,6 +59,11 @@ async def resolve_abs_work(db: AsyncSession, item: ABSItem, link: ProviderObject
             or normalized(candidate.language) == normalized(item.language)
         )
     ]
+    by_root = {}
+    for candidate in candidates:
+        root = await canonical_work(db, candidate.id)
+        by_root.setdefault(root.id, candidate)
+    candidates = list(by_root.values())
     if len(candidates) > 1:
         link.match_status = "needs-review"
         return None

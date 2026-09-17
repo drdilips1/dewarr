@@ -58,6 +58,9 @@ class RateLimit(Base):
 
 class Work(Identity, Base):
     __tablename__ = "works"
+    __table_args__ = (
+        CheckConstraint("redirect_to IS NULL OR redirect_to != id", name="work_redirect_not_self"),
+    )
     title: Mapped[str] = mapped_column(String(600), index=True)
     authors: Mapped[list[str]] = mapped_column(JSONB, default=list)
     description: Mapped[str | None] = mapped_column(Text)
@@ -65,7 +68,7 @@ class Work(Identity, Base):
     cover_url: Mapped[str | None] = mapped_column(Text)
     publication_year: Mapped[int | None] = mapped_column(Integer)
     provisional: Mapped[bool] = mapped_column(Boolean, default=True)
-    redirect_to: Mapped[UUID | None] = mapped_column(ForeignKey("works.id"))
+    redirect_to: Mapped[UUID | None] = mapped_column(ForeignKey("works.id"), index=True)
     metadata_fields: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
     catalog_public: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
     match_key: Mapped[str | None] = mapped_column(String(64), index=True)
@@ -222,7 +225,10 @@ class AuditEvent(Identity, Base):
 class IdentityChange(Identity, Base):
     __tablename__ = "identity_changes"
     __table_args__ = (
-        CheckConstraint("kind IN ('asset_match', 'source_detach', 'version_review')"),
+        CheckConstraint(
+            "kind IN ('asset_match', 'source_detach', 'version_review', 'work_merge')",
+            name="identity_changes_kind_check",
+        ),
     )
     sequence: Mapped[int] = mapped_column(BigInteger, SQLIdentity(), unique=True)
     kind: Mapped[str] = mapped_column(String(40))

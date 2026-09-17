@@ -485,6 +485,8 @@ async def test_acquisition_migration_refuses_to_discard_saved_requests(
     from tests.integration.test_correction_migration import migrate
 
     saved = await request(client, body(catalog, "audio"))
+    async with database() as db:
+        current_revision = await db.scalar(text("SELECT version_num FROM alembic_version"))
     await get_engine().dispose()
     try:
         refused = await migrate("downgrade", "0005_corrections")
@@ -493,8 +495,7 @@ async def test_acquisition_migration_refuses_to_discard_saved_requests(
         async with database() as db:
             assert await db.get(AcquisitionIntent, UUID(saved["request"]["id"])) is not None
             assert (
-                await db.scalar(text("SELECT version_num FROM alembic_version"))
-                == "0006_acquisition"
+                await db.scalar(text("SELECT version_num FROM alembic_version")) == current_revision
             )
     finally:
         restored = await migrate("upgrade", "head")

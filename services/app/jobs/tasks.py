@@ -52,7 +52,7 @@ async def evaluate_acquisition(operation_id: str) -> None:
         raise RuntimeError("Request evaluation is paused for recovery")
     from app.db.models import AcquisitionIntent
     from app.domain.acquisition import evaluate
-    from app.domain.operations import transaction_lock
+    from app.domain.work_graph import acquisition_lock
 
     async with session_factory()() as db, db.begin():
         operation = await db.get(Operation, UUID(operation_id))
@@ -63,7 +63,7 @@ async def evaluate_acquisition(operation_id: str) -> None:
         ):
             return
         intent = await db.get(AcquisitionIntent, UUID(operation.payload["intent_id"]))
-        await transaction_lock(db, "acquisition:" + str(intent.work_id))
+        await acquisition_lock(db, intent.work_id)
         await db.refresh(operation, with_for_update=True)
         if operation.status == "completed":
             return

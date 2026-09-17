@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ArrowLeft, BookOpen, Check, Headphones } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import { LibraryAssets } from "./MyLibrary";
 import { Loading, Notice } from "../components";
 import BookMetadata from "./BookMetadata";
+import WorkMerge from "./WorkMerge";
 import Wanted, { type WantedVersion } from "./Wanted";
 
 export default function BookDetail({
@@ -60,6 +61,7 @@ function BookDetailContent({
   if (book.isPending) return <Loading />;
   if (!book.data) return <Notice error={book.error} />;
   const work = book.data;
+  if (work.id !== id) return <Navigate to={`/books/${work.id}`} replace />;
   return (
     <>
       <Link to="/" className="back-link">
@@ -187,6 +189,7 @@ function BookDetailContent({
         admin={admin}
         onWantVersion={canEdit ? setWantedVersion : undefined}
       />
+      {admin && <WorkMerge work={work} />}
       <h2 className="library-access">Your library copies</h2>
       <LibraryAssets workId={id} admin={admin} />
     </>

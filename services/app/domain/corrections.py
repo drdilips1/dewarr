@@ -24,6 +24,7 @@ from app.db.models import (
 )
 from app.domain.catalog_metadata import FIELDS, preferences, resolve_fields
 from app.domain.identity import resolve_abs_version, version_changed
+from app.domain.work_graph import canonical_work, family_ids
 
 
 def revision(value):
@@ -207,7 +208,8 @@ async def source_target(db, source_id, *, lock=False):
     )
     if not work_id:
         raise HTTPException(404, "Catalog source not found")
-    work = await db.get(Work, work_id, with_for_update=lock, populate_existing=True)
+    canonical = await canonical_work(db, work_id)
+    work = await db.get(Work, canonical.id, with_for_update=lock, populate_existing=True)
     source = await db.get(WorkMetadataSource, source_id, populate_existing=True)
     if not work or work.redirect_to:
         raise HTTPException(409, "This book identity changed; open its current record")
@@ -260,7 +262,10 @@ async def detach_source(db, actor_id, source_id, expected_revision):
     work.provisional = not bool(
         await db.scalar(
             select(WorkMetadataSource.id)
-            .where(WorkMetadataSource.work_id == work.id, WorkMetadataSource.accepted.is_(True))
+            .where(
+                WorkMetadataSource.work_id.in_(family_ids(work.id)),
+                WorkMetadataSource.accepted.is_(True),
+            )
             .limit(1)
         )
     )
@@ -280,7 +285,8 @@ async def version_target(db, link_id, *, lock=False):
     work_id = await db.scalar(select(ProviderObject.work_id).where(ProviderObject.id == link_id))
     if not work_id:
         raise HTTPException(404, "Catalog version mapping not found")
-    work = await db.get(Work, work_id, with_for_update=lock, populate_existing=True)
+    canonical = await canonical_work(db, work_id)
+    work = await db.get(Work, canonical.id, with_for_update=lock, populate_existing=True)
     link = await db.get(ProviderObject, link_id, populate_existing=True)
     if not work or work.redirect_to or link.kind != "edition" or not link.metadata_source_id:
         raise HTTPException(409, "This version mapping needs a current catalog source")
@@ -309,7 +315,7 @@ async def review_version(db, actor_id, link_id, decision, expected_revision):
     proposed = EditionData.model_validate(link.pending_snapshot)
     if decision == "separate":
         version = Version(
-            work_id=work.id,
+            work_id=link.work_id,
             medium=proposed.medium,
             title=proposed.title,
             language=proposed.language,
@@ -344,6 +350,10 @@ async def review_version(db, actor_id, link_id, decision, expected_revision):
 
 
 async def change_state(db, change, *, lock=False):
+    if change.kind == "work_merge":
+        from app.domain.work_merges import merge_change_state
+
+        return await merge_change_state(db, change, lock=lock)
     if change.kind == "asset_match":
         asset, link = await asset_target(db, change.entity_id, lock=lock)
         return await asset_state(db, asset, link), (asset, link)
@@ -378,7 +388,11 @@ async def undo_change(db, actor_id, change_id):
             "or undo the latest correction first.",
         )
     before = change.before
-    if change.kind == "asset_match":
+    if change.kind == "work_merge":
+        from app.domain.work_merges import restore_merge
+
+        await restore_merge(db, change)
+    elif change.kind == "asset_match":
         asset, link = targets
         restored_work = (
             await db.get(Work, uuid_or_none(before["work_id"])) if before["work_id"] else None

@@ -53,7 +53,7 @@ Migration 0004 adds accounts, settings, cache/budget and metadata-source records
 ## Remaining stage work
 
 - Live Hardcover token/scope/query verification and broader provider fixtures, including catalog aliases and merges.
-- Cross-provider edition equivalence and canonical work merge/split. Source unmatch and changed-edition review are implemented, but original source attachment and complete identity reconciliation still need reversible handling.
+- Cross-provider edition equivalence and selective work splitting. Canonical grouping/undo, source unmatch and changed-edition review are implemented, but original source attachment and complete identity reconciliation still need reversible handling. Grouped provider sources retain their original work namespace so refreshing an inherited source preserves edition IDs.
 - Broader secondary lookup strategies where justified by identity evidence. The current automatic path deliberately covers targeted Hardcover → Open Library work-field gaps; it does not promise complete recording enrichment or translate metadata languages.
 - Series navigation and richer identifier-based local search; current work detail shows provider series membership.
 - More complete cover browsing across large edition sets and provider data-age propagation across multi-request snapshots.

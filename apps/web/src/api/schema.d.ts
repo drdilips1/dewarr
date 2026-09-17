@@ -693,6 +693,40 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/identity/works/merge/preview": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Merge Preview */
+    post: operations["merge_preview_api_identity_works_merge_preview_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/identity/works/merge": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Merge */
+    post: operations["merge_api_identity_works_merge_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/requests/preview": {
     parameters: {
       query?: never;
@@ -1180,6 +1214,61 @@ export interface components {
       count: number;
       /** Editable */
       editable: boolean;
+    };
+    /** MergeCommand */
+    MergeCommand: {
+      /**
+       * Source Id
+       * Format: uuid
+       */
+      source_id: string;
+      /**
+       * Target Id
+       * Format: uuid
+       */
+      target_id: string;
+      /** Expected Revision */
+      expected_revision: string;
+    };
+    /** MergeInput */
+    MergeInput: {
+      /**
+       * Source Id
+       * Format: uuid
+       */
+      source_id: string;
+      /**
+       * Target Id
+       * Format: uuid
+       */
+      target_id: string;
+    };
+    /** MergePreview */
+    MergePreview: {
+      /**
+       * Source Id
+       * Format: uuid
+       */
+      source_id: string;
+      /**
+       * Target Id
+       * Format: uuid
+       */
+      target_id: string;
+      /** Source Title */
+      source_title: string;
+      /** Target Title */
+      target_title: string;
+      /** Source Authors */
+      source_authors: string[];
+      /** Target Authors */
+      target_authors: string[];
+      /** Counts */
+      counts: {
+        [key: string]: number;
+      };
+      /** Revision */
+      revision: string;
     };
     /** MetadataEdit */
     MetadataEdit: {
@@ -3072,6 +3161,70 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["ReviewInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  merge_preview_api_identity_works_merge_preview_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MergeInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MergePreview"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  merge_api_identity_works_merge_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MergeCommand"];
       };
     };
     responses: {

@@ -10,6 +10,7 @@ from app.db.models import BookList, ListEntry, Work
 from app.domain.acquisition import withdraw_list_reasons
 from app.domain.availability import availability_for
 from app.domain.visibility import visible_work
+from app.domain.work_graph import canonical_map, canonical_work, family_ids, graph_lock
 
 router = APIRouter(prefix="/lists", tags=["lists"])
 
@@ -65,15 +66,17 @@ async def visible_list(list_id: UUID, user: CurrentUser, db: Database, *, edit=F
 
 @router.get("", response_model=list[ListView])
 async def list_all(user: CurrentUser, db: Database):
+    mapping = canonical_map()
     rows = (
         await db.execute(
             select(
                 BookList,
-                func.count(ListEntry.id).filter(
-                    ListEntry.work_id.in_(select(Work.id).where(visible_work(user)))
+                func.count(func.distinct(mapping.c.work_id)).filter(
+                    mapping.c.work_id.in_(select(Work.id).where(visible_work(user)))
                 ),
             )
             .outerjoin(ListEntry, ListEntry.list_id == BookList.id)
+            .outerjoin(mapping, mapping.c.origin_id == ListEntry.work_id)
             .where(or_(BookList.owner_id == user.id, BookList.shared.is_(True)))
             .group_by(BookList.id)
             .order_by(BookList.created_at.desc())
@@ -94,12 +97,15 @@ async def create_list(body: ListInput, user: Member, db: Database):
 @router.get("/{list_id}", response_model=ListDetail)
 async def detail(list_id: UUID, user: CurrentUser, db: Database):
     item = await visible_list(list_id, user, db)
+    mapping = canonical_map()
     works = (
         await db.scalars(
             select(Work)
-            .join(ListEntry, ListEntry.work_id == Work.id)
+            .join(mapping, mapping.c.work_id == Work.id)
+            .join(ListEntry, ListEntry.work_id == mapping.c.origin_id)
             .where(ListEntry.list_id == list_id, visible_work(user))
-            .order_by(ListEntry.position, ListEntry.id)
+            .group_by(Work.id)
+            .order_by(func.min(ListEntry.position), Work.id)
             .limit(10000)
         )
     ).all()
@@ -115,12 +121,14 @@ async def edit_list(list_id: UUID, body: ListInput, user: Member, db: Database):
     item = await visible_list(list_id, user, db, edit=True)
     for key, value in body.model_dump().items():
         setattr(item, key, value)
+    mapping = canonical_map()
     count = await db.scalar(
-        select(func.count())
+        select(func.count(func.distinct(mapping.c.work_id)))
         .select_from(ListEntry)
+        .join(mapping, mapping.c.origin_id == ListEntry.work_id)
         .where(
             ListEntry.list_id == list_id,
-            ListEntry.work_id.in_(select(Work.id).where(visible_work(user))),
+            mapping.c.work_id.in_(select(Work.id).where(visible_work(user))),
         )
     )
     await db.commit()
@@ -139,26 +147,31 @@ async def remove_list(list_id: UUID, user: Member, db: Database):
 @router.post("/{list_id}/entries", status_code=204)
 async def add_entry(list_id: UUID, body: EntryInput, user: Member, db: Database):
     await visible_list(list_id, user, db, edit=True)
-    if not await db.scalar(select(Work.id).where(Work.id == body.work_id, visible_work(user))):
+    await graph_lock(db)
+    work = await canonical_work(db, body.work_id)
+    if not await db.scalar(select(Work.id).where(Work.id == work.id, visible_work(user))):
         raise HTTPException(404, "Book not found")
     if not await db.scalar(
         select(ListEntry.id).where(
             ListEntry.list_id == list_id,
-            ListEntry.work_id == body.work_id,
+            ListEntry.work_id.in_(family_ids(work.id)),
         )
     ):
         position = await db.scalar(
             select(func.max(ListEntry.position)).where(ListEntry.list_id == list_id)
         )
-        db.add(ListEntry(list_id=list_id, work_id=body.work_id, position=(position or 0) + 1))
+        db.add(ListEntry(list_id=list_id, work_id=work.id, position=(position or 0) + 1))
     await db.commit()
 
 
 @router.delete("/{list_id}/entries/{work_id}", status_code=204)
 async def remove_entry(list_id: UUID, work_id: UUID, user: Member, db: Database):
     await visible_list(list_id, user, db, edit=True)
+    await graph_lock(db)
     await db.execute(
-        delete(ListEntry).where(ListEntry.list_id == list_id, ListEntry.work_id == work_id)
+        delete(ListEntry).where(
+            ListEntry.list_id == list_id, ListEntry.work_id.in_(family_ids(work_id))
+        )
     )
     await withdraw_list_reasons(db, user, list_id, work_id)
     await db.commit()
@@ -167,12 +180,21 @@ async def remove_entry(list_id: UUID, work_id: UUID, user: Member, db: Database)
 @router.put("/{list_id}/order", status_code=204)
 async def reorder(list_id: UUID, body: OrderInput, user: Member, db: Database):
     await visible_list(list_id, user, db, edit=True)
+    await graph_lock(db)
     entries = (await db.scalars(select(ListEntry).where(ListEntry.list_id == list_id))).all()
+    mapping = canonical_map()
+    roots = dict(
+        (
+            await db.execute(
+                select(mapping).where(mapping.c.origin_id.in_([e.work_id for e in entries]))
+            )
+        ).all()
+    )
     if len(set(body.work_ids)) != len(body.work_ids) or set(body.work_ids) != {
-        e.work_id for e in entries
+        roots[e.work_id] for e in entries
     }:
         raise HTTPException(422, "Include every book in this list exactly once")
     positions = {work_id: index for index, work_id in enumerate(body.work_ids)}
     for entry in entries:
-        entry.position = positions[entry.work_id]
+        entry.position = positions[roots[entry.work_id]]
     await db.commit()

@@ -18,6 +18,7 @@ Updated September 17, 2026. Objective remains **implement the full PRD end to en
 - Reversible administrator asset matches, source unmatch and changed-edition keep/separate review, with journaled history, optimistic revisions, concurrent undo and immutable library-version bindings.
 - Automatic targeted Open Library enrichment for missing Hardcover work fields, with atomic job creation, protected/primary-value preservation, run-token fencing, permission/identity rechecks, provider-directed retry delays, orphaned-job recovery and book-detail status.
 - Wanted media requests with normalized ebook/audio/both/either requirements, exact recording/edition constraints, independent manual/local-list reasons, compatible destination reservations, cancellation and periodic inventory/permission reconciliation. Book-page preview and persisted request history explicitly distinguish saving wanted media from downloading it.
+- Reversible canonical book grouping with merge preview, inherited source/version views, canonical search/list/availability projections, original binding preservation and atomic planned-request reconciliation. Private origin metadata/grants remain scoped; existing URLs resolve to the selected main record.
 - Docker/Compose scaffold, CI checks, isolated native database/browser harness, notices/reuse ledger and developer guide.
 
 ## Stage coverage
@@ -25,8 +26,8 @@ Updated September 17, 2026. Objective remains **implement the full PRD end to en
 | Stage | Status | Remaining gate work |
 |---|---|---|
 | S00 | In progress | Run container/PG18 certification; complete full adapter contracts and media/provider fixtures; operator backup scaffold; execute CI |
-| S01 | In progress | Intents/reasons/planned reservations and request reconciliation implemented; frozen dispatch/outbox, complete version compatibility, canonical work merge/split and original source-attachment undo, complete grants/account management and recovery workflows remain |
-| S02 | Metadata/catalog path implemented and fixture verified; remaining stage work | Live Hardcover certification; cross-provider version reconciliation and canonical work merge/split; series pages, richer identifier search and complete list UI |
+| S01 | In progress | Intents/reasons/planned reservations and request reconciliation implemented; frozen dispatch/outbox, complete version compatibility, selective work splitting and original source-attachment undo, complete grants/account management and recovery workflows remain |
+| S02 | Metadata/catalog path implemented and fixture verified; remaining stage work | Live Hardcover certification; cross-provider version reconciliation and selective work splitting; series pages, richer identifier search and complete list UI |
 | S03 | Inventory path implemented and fixture verified | Actual ABS 2.36.1 certification; change-event adapter; broader identifier/file-based move resolution; explicit repair/ignore/replacement intents |
 | S04–S09 | Pending | Importer, native sources, qBittorrent, aggregation/ranking, external lists/automation, discovery/write-back, complete hardening and release |
 | S10 | Pending | All six expansion work packages remain in scope and unimplemented |
@@ -39,10 +40,10 @@ Environment: macOS arm64, Python 3.13.14, local PostgreSQL 16.14, Procrastinate 
 
 | Evidence | Scope |
 |---|---|
-| 97 backend tests passing | Prior foundation/ABS/metadata/correction cases plus 24 acquisition cases: concurrent commands, atomic enqueue/redelivery, media and exact-recording satisfaction, list reason cancellation/deletion, compatible reservation sharing/relaxation, private grants, periodic repair beyond one page, revoked authority, recovery mode and populated migration guard |
-| Migration upgrade → downgrade to base → upgrade and Alembic drift check passing on isolated test database | Current six migrations and queue namespace; correction backfill and populated correction/acquisition-history downgrade guards tested; not an upgrade from a released production application |
+| 109 backend tests passing | Prior foundation/ABS/metadata/correction and 24 acquisition cases plus 12 canonical-group cases: aggregate projections, undo, alias URLs, source namespace/edition preservation, private grants and curation counts, chained/opposite merges, concurrent requests and worker redelivery, list cancellation, standalone coverage and post-merge request provenance |
+| Migration upgrade → downgrade to base → upgrade and Alembic drift check passing on isolated test database | Current seven migrations and queue namespace; correction backfill and populated correction/acquisition/merge-history downgrade guards tested; not an upgrade from a released production application |
 | Frontend TypeScript and production build passing | Current implemented routes and generated API types |
-| Browser journey passing | Setup/list/ABS/grant/member/metadata/correction flows plus both-media wanted preview, save/reload/cancel and exact-recording selection/save; desktop/mobile screenshots and no horizontal overflow; 1 expanded Playwright journey passed |
+| Browser journey passing | Setup/list/ABS/grant/member/metadata/correction flows plus both-media wanted preview, save/reload/cancel and exact-recording selection/save; canonical merge preview/focus, merge, old-URL redirect and undo; desktop/mobile screenshots and no horizontal overflow; 1 expanded Playwright journey passed |
 | Read-only live Open Library lookup passing | Search for Frankenstein/Mary Shelley, resolve the returned work/authors and load 50 editions with truthful continuation; no broader provider/format certification implied |
 | Wheel build and frozen migration inclusion | Current Python packaging |
 | Registry-resolved image digests | Image identities exist; does not prove image build or Compose runtime |
@@ -52,7 +53,7 @@ Backend evidence is saved locally at `.local/evidence/backend.xml`; browser scre
 ## Acceptance mapping: partial evidence only
 
 - AT-01: bootstrap/roles/origin subset; integrations and filesystem setup pending.
-- AT-02: reversible asset matching/unmatching, source unmatch, changed-version review and stale/concurrent undo verified; canonical work merge/split and complete cross-provider reconciliation remain pending.
+- AT-02: reversible asset matching/unmatching, source unmatch, changed-version review and stale/concurrent undo verified; canonical grouping/undo and historical binding preservation now verified; selective splitting and complete cross-provider version equivalence remain pending.
 - AT-03: metadata provenance, manual locks/clear/unlock, fresh refresh, changed-narrator keep/separate review and targeted secondary enrichment verified through fixtures and the browser; full cross-provider and initial sidecar/ABS-edit preservation remains pending.
 - AT-04/AT-05: local/provider catalog search, book page/editions and basic private/shared lists; source-native books, series navigation and discovery/sharing completion remain pending.
 - AT-06/AT-07: synthetic HTTP inventory, private grants, media classification, partial-sync freshness, conservative missing confirmation and cross-library moves tested. Actual ABS version/scanner and broader move/replacement scenarios remain pending.
@@ -67,7 +68,7 @@ All other scenarios remain not run. None of the full AT scenarios is claimed com
 
 Complete S01 identity and external-side-effect contracts, the remaining S02 metadata/series/list behavior, and S03 event/correction/live-compatibility gates. See [Acquisition foundation](ACQUISITION-FOUNDATION.md), [Metadata integration](METADATA-INTEGRATION.md) and [Identity corrections](IDENTITY-CORRECTIONS.md) for implemented contracts and remaining limitations. Actual ABS certification remains required before claiming live support. Then implement S04 import certification before the S05 MAM/qBittorrent vertical slice. Keep S07 list automation gated on those results.
 
-Known gaps to address as those modules land: complete list pagination instead of current bounded result windows; list rename/delete UI and bulk actions; canonical work merge/split and cross-provider version identity corrections; integration secrets/key rotation; role/grant administration and revocation; source selection and frozen dispatch state transitions; explicit external-state backup/restore.
+Known gaps to address as those modules land: complete list pagination instead of current bounded result windows; list rename/delete UI and bulk actions; selective work splitting and cross-provider version identity corrections; integration secrets/key rotation; role/grant administration and revocation; source selection and frozen dispatch state transitions; explicit external-state backup/restore.
 
 ## Inventory checkpoint limitations
 

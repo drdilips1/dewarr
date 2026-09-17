@@ -15,7 +15,7 @@ from app.domain.acquisition import (
     submit,
     validate_request,
 )
-from app.domain.operations import transaction_lock
+from app.domain.work_graph import acquisition_lock, canonical_work, family_ids
 
 router = APIRouter(prefix="/requests", tags=["requests"])
 
@@ -122,7 +122,7 @@ async def view(db, user, intent):
         ]
     return RequestView(
         id=intent.id,
-        work_id=intent.work_id,
+        work_id=(await canonical_work(db, intent.work_id)).id,
         specification=spec,
         description="; ".join(
             descriptions
@@ -192,7 +192,7 @@ async def all_requests(
 ):
     where = [AcquisitionIntent.owner_id == user.id]
     if work_id:
-        where.append(AcquisitionIntent.work_id == work_id)
+        where.append(AcquisitionIntent.work_id.in_(family_ids(work_id)))
     intents = (
         await db.scalars(
             select(AcquisitionIntent)
@@ -219,7 +219,7 @@ async def request_detail(intent_id: UUID, user: CurrentUser, db: Database):
 @router.delete("/{intent_id}/reasons/{reason_id}", response_model=RequestView)
 async def cancel_reason(intent_id: UUID, reason_id: UUID, user: Member, db: Database):
     intent = await owned_intent(db, user, intent_id)
-    await transaction_lock(db, "acquisition:" + str(intent.work_id))
+    await acquisition_lock(db, intent.work_id)
     reason = await db.scalar(
         select(AcquisitionReason)
         .where(

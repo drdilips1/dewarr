@@ -39,6 +39,8 @@ Compatible broad and exact requests can share a planned reservation. Its require
 
 Shared destination reservations do not share request API access. Users receive only their own intents, list labels and reasons. Only granted libraries can satisfy their requests. Reservation identifiers, other users' reasons and private holdings are not included in response payloads.
 
+Canonical work grouping uses a shared graph lock followed by the canonical work lock for reservation mutations. Grouping/undo takes the exclusive graph lock and rebuilds affected planned reservations. Historical intents retain origin IDs; new intents bind to the chosen canonical record, so undo preserves their meaning. Fulfillment checks include accessible assets across the canonical group. See [Identity corrections](IDENTITY-CORRECTIONS.md).
+
 Before S05 dispatch, extend reservations with a frozen selection/attempt lifecycle. A reservation that already caused a client mutation must never be tightened or relaxed as though it were still merely planned. The current two-state `planned`/`released` model deliberately has no downloader semantics.
 
 ## API and UI

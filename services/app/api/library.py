@@ -18,6 +18,7 @@ from app.db.models import (
 )
 from app.domain.corrections import asset_state, correct_asset, revision
 from app.domain.visibility import visible_library
+from app.domain.work_graph import canonical_map, family_ids
 
 router = APIRouter(prefix="/library", tags=["library"])
 
@@ -147,7 +148,7 @@ async def assets(
     if work_id:
         conditions.append(
             LibraryAsset.id.in_(
-                select(AssetContains.asset_id).where(AssetContains.work_id == work_id)
+                select(AssetContains.asset_id).where(AssetContains.work_id.in_(family_ids(work_id)))
             )
         )
     if library_id:
@@ -173,6 +174,14 @@ async def assets(
             )
         )
     ).all()
+    mapping = canonical_map()
+    roots = dict(
+        (
+            await db.execute(
+                select(mapping).where(mapping.c.origin_id.in_([row.work_id for row in coverage]))
+            )
+        ).all()
+    )
     links = (
         (
             await db.scalars(
@@ -208,7 +217,11 @@ async def assets(
                 state=asset.state,
                 full_content=asset.full_content,
                 match_status=asset.match_status,
-                work_ids=[row.work_id for row in coverage if row.asset_id == asset.id],
+                work_ids=list(
+                    dict.fromkeys(
+                        roots[row.work_id] for row in coverage if row.asset_id == asset.id
+                    )
+                ),
                 match_revision=match_revision,
                 version_id=asset.version_id,
                 narrators=asset.metadata_snapshot.get("narrators", [])

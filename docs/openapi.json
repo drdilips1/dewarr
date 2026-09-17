@@ -2083,6 +2083,81 @@
         }
       }
     },
+    "/api/identity/works/merge/preview": {
+      "post": {
+        "tags": [
+          "identity"
+        ],
+        "summary": "Merge Preview",
+        "operationId": "merge_preview_api_identity_works_merge_preview_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MergeInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MergePreview"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/identity/works/merge": {
+      "post": {
+        "tags": [
+          "identity"
+        ],
+        "summary": "Merge",
+        "operationId": "merge_api_identity_works_merge_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MergeCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/requests/preview": {
       "post": {
         "tags": [
@@ -3527,6 +3602,111 @@
           "editable"
         ],
         "title": "ListView"
+      },
+      "MergeCommand": {
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Source Id"
+          },
+          "target_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Target Id"
+          },
+          "expected_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Expected Revision"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source_id",
+          "target_id",
+          "expected_revision"
+        ],
+        "title": "MergeCommand"
+      },
+      "MergeInput": {
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Source Id"
+          },
+          "target_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Target Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source_id",
+          "target_id"
+        ],
+        "title": "MergeInput"
+      },
+      "MergePreview": {
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Source Id"
+          },
+          "target_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Target Id"
+          },
+          "source_title": {
+            "type": "string",
+            "title": "Source Title"
+          },
+          "target_title": {
+            "type": "string",
+            "title": "Target Title"
+          },
+          "source_authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Source Authors"
+          },
+          "target_authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Target Authors"
+          },
+          "counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Counts"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source_id",
+          "target_id",
+          "source_title",
+          "target_title",
+          "source_authors",
+          "target_authors",
+          "counts",
+          "revision"
+        ],
+        "title": "MergePreview"
       },
       "MetadataEdit": {
         "properties": {

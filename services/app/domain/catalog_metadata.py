@@ -9,7 +9,8 @@ from app.adapters.catalog_types import BookData, Provider
 from app.db.models import MetadataSettings, ProviderObject, Version, Work, WorkMetadataSource
 from app.domain.identity import normalized, work_key
 from app.domain.operations import transaction_lock
-from app.domain.visibility import visible_work
+from app.domain.visibility import visible_origin_work, visible_work
+from app.domain.work_graph import canonical_work, family_ids
 
 FIELDS = ("title", "authors", "description", "publication_year", "language", "cover_url")
 
@@ -43,7 +44,12 @@ async def resolve_fields(db, work, settings):
     sources = (
         await db.scalars(
             select(WorkMetadataSource)
-            .where(WorkMetadataSource.work_id == work.id, WorkMetadataSource.accepted.is_(True))
+            .join(Work, Work.id == WorkMetadataSource.work_id)
+            .where(
+                WorkMetadataSource.work_id.in_(family_ids(work.id)),
+                WorkMetadataSource.accepted.is_(True),
+                Work.catalog_public.is_(True) if work.catalog_public else True,
+            )
             .order_by(WorkMetadataSource.fetched_at.desc(), WorkMetadataSource.id)
         )
     ).all()
@@ -90,7 +96,7 @@ async def attach_source(db, work, book, *, explicit=False):
         )
     link = await db.scalar(
         select(WorkMetadataSource).where(
-            WorkMetadataSource.work_id == work.id,
+            WorkMetadataSource.work_id.in_(family_ids(work.id)),
             WorkMetadataSource.provider == book.provider,
             WorkMetadataSource.external_id == book.external_id,
         )
@@ -142,7 +148,7 @@ async def attach_source(db, work, book, *, explicit=False):
     work.provisional = False
     for edition in book.editions:
         # Per-work namespace prevents attaching a private library version to an unrelated catalog.
-        namespace = f"{book.provider}:{work.id}"
+        namespace = f"{book.provider}:{link.work_id}"
         version_link = await db.scalar(
             select(ProviderObject).where(
                 ProviderObject.provider == namespace,
@@ -184,7 +190,7 @@ async def attach_source(db, work, book, *, explicit=False):
                 version_link.pending_snapshot = None
             continue
         version = Version(
-            work_id=work.id,
+            work_id=link.work_id,
             medium=edition.medium,
             title=edition.title,
             language=edition.language,
@@ -200,7 +206,7 @@ async def attach_source(db, work, book, *, explicit=False):
                 provider=namespace,
                 kind="edition",
                 external_id=edition.external_id,
-                work_id=work.id,
+                work_id=link.work_id,
                 version_id=version.id,
                 snapshot=snapshot,
                 match_status="matched",
@@ -219,7 +225,7 @@ async def import_book(db, user, book):
             WorkMetadataSource.provider == book.provider,
             WorkMetadataSource.external_id == book.external_id,
             WorkMetadataSource.accepted.is_(False),
-            visible_work(user),
+            visible_origin_work(user),
         )
         .limit(1)
     )
@@ -231,11 +237,13 @@ async def import_book(db, user, book):
                 WorkMetadataSource.provider == book.provider,
                 WorkMetadataSource.external_id == book.external_id,
                 WorkMetadataSource.accepted.is_(True),
-                visible_work(user),
-                Work.redirect_to.is_(None),
+                visible_origin_work(user),
             )
         )
     ).all()
+    linked = list(
+        {work.id: work for work in [await canonical_work(db, row.id) for row in linked]}.values()
+    )
     if len(linked) > 1:
         raise HTTPException(
             409, "Multiple catalog records need reconciliation. Open the intended book to match it."

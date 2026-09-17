@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.models import AssetContains, Integration, Library, LibraryAsset, LibraryGrant, User
+from app.domain.work_graph import canonical_map
 
 
 class Availability(BaseModel):
@@ -22,13 +23,20 @@ async def availability_for(
     result = {work_id: Availability() for work_id in work_ids}
     if not work_ids:
         return result
+    mapping = canonical_map()
+    roots = dict((await db.execute(select(mapping).where(mapping.c.origin_id.in_(work_ids)))).all())
+    by_root = {}
+    for origin, root in roots.items():
+        by_root.setdefault(root, []).append(origin)
     query = (
-        select(AssetContains.work_id, LibraryAsset.medium, LibraryAsset.state)
+        select(mapping.c.work_id, LibraryAsset.medium, LibraryAsset.state)
+        .select_from(AssetContains)
+        .join(mapping, mapping.c.origin_id == AssetContains.work_id)
         .join(LibraryAsset, AssetContains.asset_id == LibraryAsset.id)
         .join(Library, LibraryAsset.library_id == Library.id)
         .join(Integration, Library.integration_id == Integration.id)
         .where(
-            AssetContains.work_id.in_(work_ids),
+            mapping.c.work_id.in_(by_root),
             AssetContains.verified.is_(True),
             LibraryAsset.full_content.is_(True),
             LibraryAsset.state.in_(["present", "stale"]),
@@ -41,9 +49,10 @@ async def availability_for(
             LibraryGrant.user_id == user.id
         )
     for work_id, medium, state in (await db.execute(query)).all():
-        availability = result[work_id]
-        availability.owned = True
-        availability.ebook |= medium == "ebook"
-        availability.audio |= medium == "audio"
-        availability.stale |= state == "stale"
+        for origin in by_root[work_id]:
+            availability = result[origin]
+            availability.owned = True
+            availability.ebook |= medium == "ebook"
+            availability.audio |= medium == "audio"
+            availability.stale |= state == "stale"
     return result

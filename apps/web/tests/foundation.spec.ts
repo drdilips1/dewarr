@@ -312,6 +312,69 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     fullPage: true,
   });
   await page.setViewportSize({ width: 1440, height: 1000 });
+  const mainBookUrl = page.url();
+  await page.getByRole("link", { name: "Catalog", exact: true }).click();
+  await page.getByRole("button", { name: "Add a title" }).click();
+  await page
+    .getByLabel("Title", { exact: true })
+    .fill("My duplicate catalog entry");
+  await page.getByLabel("Author", { exact: true }).fill("Catalog Author");
+  await page.getByRole("button", { name: "Save title" }).click();
+  await page.getByRole("link", { name: /My duplicate catalog entry/ }).click();
+  await expect(
+    page.getByRole("heading", { name: "My duplicate catalog entry", level: 1 }),
+  ).toBeVisible();
+  const duplicateBookUrl = page.url();
+  await page
+    .getByRole("button", { name: "Merge duplicate book", exact: true })
+    .click();
+  await page
+    .getByLabel("Find the book to keep")
+    .fill("My protected catalog title");
+  await page.getByRole("button", { name: "Find duplicate" }).click();
+  await page
+    .getByRole("button", {
+      name: "Keep My protected catalog title · Catalog Author",
+      exact: true,
+    })
+    .click();
+  const mergePreview = page.getByRole("region", { name: "Merge preview" });
+  await expect(mergePreview).toBeFocused();
+  await expect(mergePreview).toContainText("Recordings stay distinct");
+  await page.screenshot({
+    path: testInfo.outputPath("merge-preview-desktop.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("merge-preview-mobile.png"),
+    fullPage: true,
+  });
+  await page.getByLabel("These records describe the same book").check();
+  await page.getByRole("button", { name: "Merge into selected book" }).click();
+  await expect(page).toHaveURL(mainBookUrl);
+  await page.goto(duplicateBookUrl);
+  await expect(page).toHaveURL(mainBookUrl);
+  await page.getByText("Match correction history", { exact: true }).click();
+  const merged = page.locator("article").filter({
+    hasText:
+      "Merged My duplicate catalog entry into My protected catalog title",
+  });
+  await merged
+    .getByRole("button", { name: "Undo correction", exact: true })
+    .click();
+  await expect(merged).toContainText("Undone");
+  await page.goto(duplicateBookUrl);
+  await expect(
+    page.getByRole("heading", { name: "My duplicate catalog entry", level: 1 }),
+  ).toBeVisible();
+  await page.goto(mainBookUrl);
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.getByRole("link", { name: "Accounts", exact: true }).click();
   await page.getByLabel("Name", { exact: true }).fill("Guest reader");
   await page.getByLabel("Username", { exact: true }).fill("guest");

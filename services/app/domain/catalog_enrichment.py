@@ -16,6 +16,7 @@ from app.domain.catalog_network import CatalogGateway
 from app.domain.corrections import revision
 from app.domain.identity import normalized, work_key
 from app.domain.visibility import visible_work
+from app.domain.work_graph import family_ids
 from app.jobs.queue import enqueue
 from app.jobs.retry import CatalogRetry
 
@@ -55,7 +56,9 @@ async def proposal(db, work, settings):
     ):
         return None
     sources = (
-        await db.scalars(select(WorkMetadataSource).where(WorkMetadataSource.work_id == work.id))
+        await db.scalars(
+            select(WorkMetadataSource).where(WorkMetadataSource.work_id.in_(family_ids(work.id)))
+        )
     ).all()
     # A rejected secondary match is a durable decision, not a prompt to try another alias.
     if any(source.provider == "openlibrary" for source in sources):

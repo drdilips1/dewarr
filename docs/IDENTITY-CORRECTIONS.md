@@ -1,6 +1,6 @@
 # Identity correction checkpoint
 
-September 17, 2026. Implements reversible asset matches, catalog-source removal and changed-edition review. Canonical work merge/split and cross-provider edition reconciliation remain required work.
+September 17, 2026. Implements reversible asset matches, catalog-source removal, changed-edition review and canonical work grouping/undo. Selective splitting of an originally conflated record and cross-provider edition equivalence remain required work.
 
 ## User behavior
 
@@ -28,4 +28,22 @@ Downgrade refuses to discard an existing correction journal. Restore a pre-upgra
 
 The integration corpus covers match/unmatch/undo, changed evidence, stale requests, concurrent undo, private history access, protected fields, source removal, changed-recording keep/separate/undo and an actual PostgreSQL lock-wait race. The browser journey exercises these controls at desktop and mobile sizes.
 
-This does not complete FR-06 or AT-02. Work merge/split, reversible original source attachment, equivalence of pre-existing cross-provider versions, and future acquisition/job rebinding need their own implementation and evidence.
+This does not complete FR-06 or AT-02. Selective splitting, reversible original source attachment, equivalence of pre-existing cross-provider versions, and future dispatched-download/import identity handling still need their own implementation and evidence.
+
+## Canonical book grouping and undo
+
+An administrator opens **Merge duplicate book**, chooses the main record, reviews the affected versions/copies and their own list memberships/requests, and confirms that both records describe the same book. The chosen main record keeps its metadata. Existing book URLs resolve to it. A stale preview or an attempt to merge a record into its own group returns a conflict. When a public and private record are combined, the public catalog record must be the main record; private source metadata is not silently promoted into its fields.
+
+`Work.redirect_to` defines an acyclic canonical relationship. Origin records are retained: versions, provider namespaces, source attachments, library item/file IDs, asset coverage, list entries and historical request IDs are not rewritten or deleted. Canonical projections aggregate those bindings for catalog search, availability, versions, list display and requests. Two origin assertions about one canonical work count as one work when evaluating standalone/omnibus coverage. Different recordings remain distinct; grouping works does not establish version equivalence.
+
+List display and counts collapse duplicate canonical memberships. Removing a displayed membership removes its origin memberships and withdraws only the corresponding list reasons. New local list entries and new requests bind to the selected canonical record. Historical equivalent intents can remain separate, sharing compatible planned reservations; this preserves their original meanings during undo.
+
+Private library grants continue to filter ownership and assets. Metadata sources and catalog versions retain origin-level visibility checks. A public main record does not expose a private origin's sources or recordings to an ungranted user. A shared private canonical book can be discovered through an accessible origin, while its library-copy details remain individually scoped.
+
+Merge and undo serialize under an exclusive graph advisory lock. Request/reservation mutations take the matching shared graph lock before the canonical work lock. List mutations retain list-row-first ordering; the merge never acquires a list row or edits its membership history. It rebuilds the affected **planned** reservations atomically, rechecking each owner's grants and requested version. This is not a contract for already dispatched transfers: S05 must extend the lifecycle before those can exist.
+
+Undo restores the recorded canonical relationships and recomputes fulfillment, preserving later metadata and additions at their origin. Dependent later merges must be undone first. The journal records group topology rather than copying every related row, so routine inventory updates do not invalidate undo. A request created for the main record after the merge remains with that record after undo; a refreshed provider edition retains its provider-origin binding.
+
+Migration `0007_work_merges` adds the journal kind, redirect index and self-redirect constraint. Downgrade refuses existing merge history or redirects because the older application cannot interpret their inventory/request semantics. Tests cover merge/undo, chained and concurrent opposite merges, concurrent request/worker execution, private grants, inherited source refresh, list cancellation, exact recordings, canonical omnibus counting and post-merge request provenance. The browser verifies preview/focus, merge, old-URL navigation, undo and mobile layout.
+
+Future modules must resolve canonical identity for comparisons and fulfillment while retaining origin IDs for provenance. Direct equality of two stored `work_id` values is not proof that they describe different books. Full reference-dataset performance and real ABS integration remain separate gates.

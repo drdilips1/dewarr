@@ -16,6 +16,7 @@ export function useRefreshIdentity() {
         "version-reviews",
         "lists",
         "list",
+        "merge-preview",
         "requests",
         "request-preview",
       ].map((key) => cache.invalidateQueries({ queryKey: [key] })),

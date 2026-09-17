@@ -32,7 +32,8 @@ from app.db.models import (
 )
 from app.domain.corrections import revision
 from app.domain.operations import transaction_lock
-from app.domain.visibility import visible_library, visible_work
+from app.domain.visibility import visible_library, visible_origin_work, visible_work
+from app.domain.work_graph import acquisition_lock, canonical_map, canonical_work, family_ids
 from app.jobs.queue import enqueue
 
 Medium = Literal["ebook", "audio"]
@@ -141,9 +142,10 @@ def intersect_rules(left, right):
 
 
 async def validate_request(db, user, work_id, spec, reason=None):
+    canonical = await canonical_work(db, work_id)
     work = await db.scalar(
         select(Work).where(
-            Work.id == work_id,
+            Work.id == canonical.id,
             Work.redirect_to.is_(None),
             visible_work(user),
         )
@@ -171,7 +173,9 @@ async def validate_request(db, user, work_id, spec, reason=None):
         catalog = await db.scalar(
             select(ProviderObject.id)
             .join(WorkMetadataSource)
+            .join(Work, Work.id == WorkMetadataSource.work_id)
             .where(
+                visible_origin_work(user),
                 ProviderObject.version_id == version_id,
                 WorkMetadataSource.accepted.is_(True),
             )
@@ -191,7 +195,7 @@ async def validate_request(db, user, work_id, spec, reason=None):
         )
         if (
             not version
-            or version.work_id != work_id
+            or (await canonical_work(db, version.work_id)).id != work.id
             or version.medium != medium
             or not (catalog or asset)
         ):
@@ -220,7 +224,7 @@ async def validate_request(db, user, work_id, spec, reason=None):
             .where(
                 BookList.id == reason.list_id,
                 BookList.owner_id == user.id,
-                ListEntry.work_id == work_id,
+                ListEntry.work_id.in_(family_ids(work_id)),
             )
         )
         if not owned:
@@ -229,9 +233,11 @@ async def validate_request(db, user, work_id, spec, reason=None):
 
 
 async def inventory_candidates(db, user, work_id):
+    mapping = canonical_map()
     coverage = (
-        select(func.count())
+        select(func.count(func.distinct(mapping.c.work_id)))
         .select_from(AssetContains)
+        .join(mapping, mapping.c.origin_id == AssetContains.work_id)
         .where(AssetContains.asset_id == LibraryAsset.id)
         .correlate(LibraryAsset)
         .scalar_subquery()
@@ -244,7 +250,7 @@ async def inventory_candidates(db, user, work_id):
             .join(Integration)
             .join(AssetContains)
             .where(
-                AssetContains.work_id == work_id,
+                AssetContains.work_id.in_(family_ids(work_id)),
                 AssetContains.verified.is_(True),
                 LibraryAsset.full_content.is_(True),
                 Library.accessible.is_(True),
@@ -333,7 +339,7 @@ async def release_unused(db, work_id):
     reservations = (
         await db.scalars(
             select(AcquisitionReservation).where(
-                AcquisitionReservation.work_id == work_id,
+                AcquisitionReservation.work_id.in_(family_ids(work_id)),
                 AcquisitionReservation.state == "planned",
             )
         )
@@ -373,7 +379,7 @@ async def reserve(db, user, intent, spec, slot):
             await db.scalars(
                 select(AcquisitionReservation)
                 .where(
-                    AcquisitionReservation.work_id == intent.work_id,
+                    AcquisitionReservation.work_id.in_(family_ids(intent.work_id)),
                     AcquisitionReservation.scope == scope,
                     AcquisitionReservation.state == "planned",
                 )
@@ -404,7 +410,7 @@ async def reserve(db, user, intent, spec, slot):
     medium = spec.media(slot)[0]
     destination = getattr(spec, medium + "_library_id")
     reservation = AcquisitionReservation(
-        work_id=intent.work_id,
+        work_id=(await canonical_work(db, intent.work_id)).id,
         destination_id=destination,
         scope=str(destination) if destination else "unconfigured:" + str(user.id),
         requirements=spec.rule(medium),
@@ -432,7 +438,7 @@ async def evaluate(db, user, intent):
             .where(
                 BookList.id == reason.list_id,
                 BookList.owner_id == intent.owner_id,
-                ListEntry.work_id == intent.work_id,
+                ListEntry.work_id.in_(family_ids(intent.work_id)),
             )
         ):
             reason.active = False
@@ -508,18 +514,22 @@ async def submit(db, user, work_id, spec, reason, key):
             .with_for_update()
         ):
             raise HTTPException(404, "List not found")
-    await transaction_lock(db, "acquisition:" + str(work_id))
+    canonical = await acquisition_lock(db, work_id)
+    work_id = canonical.id
     await db.refresh(user)
     if not user.active or user.role == "viewer":
         raise HTTPException(403, "Your account no longer has permission to create requests")
     await validate_request(db, user, work_id, spec, reason)
     fingerprint = revision(spec.model_dump(mode="json"))
     intent = await db.scalar(
-        select(AcquisitionIntent).where(
+        select(AcquisitionIntent)
+        .where(
             AcquisitionIntent.owner_id == user.id,
             AcquisitionIntent.work_id == work_id,
             AcquisitionIntent.fingerprint == fingerprint,
         )
+        .order_by(AcquisitionIntent.created_at, AcquisitionIntent.id)
+        .limit(1)
     )
     if not intent:
         intent = AcquisitionIntent(
@@ -569,7 +579,7 @@ async def withdraw_list_reasons(db, user, list_id, work_id=None):
         AcquisitionIntent.owner_id == user.id,
     ]
     if work_id:
-        conditions.append(AcquisitionIntent.work_id == work_id)
+        conditions.append(AcquisitionIntent.work_id.in_(family_ids(work_id)))
     intents = (
         (
             await db.scalars(
@@ -583,7 +593,7 @@ async def withdraw_list_reasons(db, user, list_id, work_id=None):
         .all()
     )
     for intent in intents:
-        await transaction_lock(db, "acquisition:" + str(intent.work_id))
+        await acquisition_lock(db, intent.work_id)
         reasons = (
             await db.scalars(
                 select(AcquisitionReason).where(
@@ -637,7 +647,7 @@ async def reconcile_requests():
                 intent = await db.get(AcquisitionIntent, intent_id)
                 if intent is None:
                     continue
-                await transaction_lock(db, "acquisition:" + str(intent.work_id))
+                await acquisition_lock(db, intent.work_id)
                 await db.refresh(intent)
                 user = await db.get(User, intent.owner_id)
                 await evaluate(db, user, intent)
