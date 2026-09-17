@@ -480,7 +480,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await expect(
     page.getByRole("region", { name: "Destination ebooks" }),
   ).toContainText(
-    "Filesystem and ABS folder mapping verified; publication workflow is still required",
+    "Filesystem and ABS folder mapping verified; ready for a reviewed import plan",
   );
   await page.screenshot({
     path: testInfo.outputPath("destinations-mobile.png"),
@@ -493,6 +493,22 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   ).toBe(true);
   await page.goBack();
   await expect(savedPlan).toContainText("book.epub → ebooks/");
+  await page
+    .getByRole("button", { name: "Import resolved books", exact: true })
+    .click();
+  const importResult = page
+    .getByRole("region", { name: "Import result" })
+    .first();
+  await expect(importResult).toContainText("Waiting for Audiobookshelf");
+  await page.request.post("http://127.0.0.1:13379/fixture/scan");
+  await importResult
+    .getByRole("button", { name: "Retry library detection" })
+    .click();
+  await expect(importResult).toContainText("Available in Audiobookshelf");
+  await page.reload();
+  await expect(
+    page.getByRole("region", { name: "Import result" }).first(),
+  ).toContainText("Available in Audiobookshelf");
   await page.screenshot({
     path: testInfo.outputPath("inspection-mobile.png"),
     fullPage: true,
@@ -555,7 +571,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await page.getByRole("link", { name: "My Library", exact: true }).click();
   await expect(
     page.getByRole("link", { name: "Open in Audiobookshelf" }),
-  ).toHaveCount(2);
+  ).toHaveCount(3);
   await expect(
     page.getByRole("link", { name: "Connections", exact: true }),
   ).toHaveCount(0);

@@ -3,6 +3,7 @@
 import json
 
 import httpx
+from defusedxml.ElementTree import parse
 
 from app.adapters.audiobookshelf import Audiobookshelf
 
@@ -66,3 +67,81 @@ class ImportBackendFixture:
 
     def client(self, url="http://fixture", token="private-import-token"):
         return Audiobookshelf(url, token, transport=httpx.MockTransport(self.handle))
+
+
+class ScanningBackend(ImportBackendFixture):
+    def __init__(self, root):
+        super().__init__(root)
+        self.items = {}
+        self.detect = True
+        self.scan_count = 0
+
+    def scan(self):
+        self.scan_count += 1
+        if not self.detect:
+            return
+        dc = "{http://purl.org/dc/elements/1.1/}"
+        for index, opf in enumerate(sorted(self.root.rglob("metadata.opf"))):
+            xml = parse(opf)
+            folder = opf.parent
+            relative = folder.relative_to(self.root)
+            files = [
+                {
+                    "ino": str(path.stat().st_ino),
+                    "metadata": {
+                        "path": f"{self.backend_path}/{relative}/{path.name}",
+                        "ext": path.suffix,
+                        "size": path.stat().st_size,
+                    },
+                }
+                for path in sorted(folder.iterdir())
+                if path.is_file()
+            ]
+            media = {
+                "metadata": {
+                    "title": xml.find(f".//{dc}title").text,
+                    "authors": [{"name": node.text} for node in xml.findall(f".//{dc}creator")],
+                    "narrators": [],
+                    "language": xml.findtext(f".//{dc}language"),
+                    "publishedYear": xml.findtext(f".//{dc}date"),
+                },
+                "audioFiles": [],
+            }
+            media["ebookFile"] = next(
+                {**file, "ebookFormat": "epub"}
+                for file in files
+                if file["metadata"]["ext"] == ".epub"
+            )
+            item_id = f"import-{index}"
+            self.items[item_id] = {
+                "id": item_id,
+                "libraryId": self.library_id,
+                "path": f"{self.backend_path}/{relative}",
+                "mediaType": "book",
+                "media": media,
+                "libraryFiles": files,
+            }
+
+    async def handle(self, request):
+        import json
+
+        path = request.url.path
+        if path == f"/api/libraries/{self.library_id}/scan":
+            self.scan()
+            return httpx.Response(200)
+        if path == f"/api/libraries/{self.library_id}/items":
+            return httpx.Response(
+                200, json={"total": len(self.items), "results": [{"id": key} for key in self.items]}
+            )
+        if path == "/api/items/batch/get":
+            return httpx.Response(
+                200,
+                json={
+                    "libraryItems": [
+                        self.items[key] for key in json.loads(request.content)["libraryItemIds"]
+                    ]
+                },
+            )
+        if path.startswith("/api/items/"):
+            return httpx.Response(200, json=self.items[path.split("/")[-1]])
+        return await super().handle(request)

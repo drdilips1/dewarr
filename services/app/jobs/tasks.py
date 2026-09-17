@@ -11,6 +11,53 @@ from app.jobs.queue import tasks
 from app.jobs.retry import CatalogRetryStrategy
 
 
+@tasks.task(
+    name="organization.publish", queue="imports", retry=RetryStrategy(max_attempts=4, wait=30)
+)
+async def publish_book(operation_id: str) -> None:
+    from app.importing.execution import execute
+
+    await execute(UUID(operation_id))
+
+
+@tasks.periodic(cron="* * * * *")
+@tasks.task(name="organization.confirm", queue="imports", retry=3)
+async def schedule_import_confirmation(timestamp: int) -> None:
+    from sqlalchemy import text
+
+    from app.db.models import ImportEntry
+    from app.jobs.queue import enqueue
+
+    if get_settings().recovery_mode:
+        return
+    async with session_factory()() as db, db.begin():
+        entries = (
+            await db.scalars(
+                select(ImportEntry)
+                .where(
+                    ImportEntry.state == "awaiting-library",
+                    ImportEntry.next_check_at <= datetime.now(UTC),
+                )
+                .order_by(ImportEntry.id)
+                .limit(20)
+                .with_for_update(skip_locked=True)
+            )
+        ).all()
+        for entry in entries:
+            operation = await db.get(Operation, entry.operation_id)
+            status = await db.scalar(
+                text("SELECT status::text FROM book_queue.procrastinate_jobs WHERE id=:id"),
+                {"id": operation.job_id},
+            )
+            if status in {"todo", "doing"}:
+                continue
+            operation.status = "queued"
+            operation.job_id = await enqueue(
+                db, "organization.publish", operation_id=str(operation.id)
+            )
+            entry.next_check_at = datetime.now(UTC) + timedelta(minutes=1)
+
+
 @tasks.task(name="organization.probe", queue="inspection", retry=3)
 async def check_destination(operation_id: str) -> None:
     from app.importing.destinations import probe_route

@@ -2,7 +2,7 @@
 
 September 17, 2026. Implemented S04 foundation; the importer stage is not complete.
 
-The administrator can edit naming presets, inspect a completed download directory, map proposed file groups to existing catalog versions, save an immutable review plan, and configure/test a destination. No endpoint publishes media into the library. Destination tests create and remove their own temporary hardlinks, a small copy sentinel and empty folders. An inspected file, saved plan or successful filesystem check never establishes library ownership.
+The administrator can edit naming presets, inspect a completed download directory, map proposed file groups to existing catalog versions, save an immutable review plan, configure/test a destination, and import the resolved books. Each item is independently published and confirmed through ABS. An inspected file, saved plan, completed publication or successful scan request never establishes library ownership by itself.
 
 ## Naming
 
@@ -10,7 +10,7 @@ The administrator can edit naming presets, inspect a completed download director
 
 The DSL accepts named `{tokens}` and nonnested `[optional segments]`. An optional segment disappears if any of its tokens is missing. Arbitrary expressions, traversal, absolute paths, control characters and file-specific folder tokens are rejected. Work publication, edition, recording and tracker-posting years are distinct. Extensions reflect the source, never an implied conversion. Unicode normalization, byte limits, reserved names, deterministic collisions and conflicting item ancestry are handled by the planner. Custom multi-disc/track naming must retain verified ordering tokens.
 
-The [ABS structure contract](https://audiobookshelf.org/docs/documentation/libraries/book-library/directory-structure/) determines actual book/item boundaries. A displayed path and expected count are predictions, not scanner evidence. Narrator/series export and metadata precedence require the still-pending sidecar and backend-certification work.
+The [ABS structure contract](https://audiobookshelf.org/docs/documentation/libraries/book-library/directory-structure/) determines actual book/item boundaries. A displayed path and expected count are predictions, not scanner evidence. Initial OPF export and eight native scanner cases cover the supported narrator/series fields; the complete compatibility matrix remains pending.
 
 ## Configure read-only inspection
 
@@ -48,7 +48,7 @@ Open **Organization → Configure library destinations**. Bind each configured r
 
 From a saved import plan choose **Check destination**, save the binding and run **Test destination route**. A durable worker operation checks the selected source hash, creates a temporary hardlink, writes/re-reads a copy sentinel, tests atomic no-replace directory publication and collision refusal, and reports available space. It removes only temporary objects it actually created. The filesystem portion is not a full-file copy test or an import reservation. The backend portion separately checks folder mapping, settings and detection capabilities. Hardlink failure never silently chooses copying. Source/staging/library overlap is rejected using configured paths; bind-mount aliases and roots not declared to the app still require the backend mapping gate.
 
-Settings are revision protected. Jobs fence obsolete worker attempts and recheck account, library, connection and route configuration before accepting results. Changing roots, source mappings or bindings invalidates previous probe evidence. A successful check keeps `publication_available=false` until the complete import workflow exists.
+Settings are revision protected. Jobs fence obsolete worker attempts and recheck account, library, connection and route configuration before accepting results. Changing roots, source mappings or bindings invalidates previous probe evidence. A successful current route check enables reviewed conventional-layout imports; the worker refreshes backend checks before publication.
 
 The backend check reads ABS version and library settings, requires the exact selected library-folder root, checks that ebooks are permitted, and verifies that OPF runs after folder/audio tags in metadata precedence. It requires either scan capability or an enabled watcher. The currently certified baseline is ABS 2.36.1; other versions remain usable for inventory but do not pass this import check yet. The app does not change ABS settings.
 
@@ -58,7 +58,7 @@ Library settings are re-read before accepting the result. Credential generation,
 
 ## Initial metadata export
 
-New frozen plans use document schema 2 and record deterministic per-group `metadata.opf` contents under `initial_sidecars`. The content participates in the immutable plan revision. Older schema-1 plans remain readable; they do not gain invented export data and must be freshly planned before future publication.
+New frozen plans use document schema 2 and record deterministic per-group `metadata.opf` contents under `initial_sidecars`, plus selected catalog-version fingerprints. Both participate in the immutable plan revision. Older plans remain readable; a plan missing either export or version evidence must be freshly planned before publication.
 
 The exporter writes clean title/subtitle, credited authors, audio narrators, language, the relevant edition/recording year, publisher, description, genres, supported identifiers and selected filing-series sequence when resolved. It escapes XML, preserves Unicode, rejects invalid XML characters and validates ISBN checksums. Original-work and tracker-posting dates do not substitute for a missing version year. Ebook exports do not invent narrator metadata. Uncertified fields such as abridgment, edition labels and app IDs remain in app metadata rather than pretending to be supported ABS OPF fields or identifiers.
 
@@ -90,22 +90,40 @@ Grouping uses directory boundaries and observed album/author/narrator/format evi
 | `GET /api/organization/destinations` | Bindings and current probe evidence |
 | `PUT /api/organization/destinations/{root_key}` | Save library/path/media/method binding with expected revision |
 | `POST /api/organization/destinations/{id}/probe` | Queue a real worker filesystem check using an owned frozen plan and idempotency key |
+| `POST /api/organization/plans/{id}/imports` | Reserve resolved versions and atomically enqueue per-book publication; requires a command key and current plan/destination revisions |
+| `GET /api/organization/plans/{id}/imports` | Latest 25 owner-scoped runs and per-child states |
+| `GET /api/organization/imports/{id}` | Owner-scoped publication and backend-confirmation state |
+| `POST /api/organization/imports/{id}/entries/{entry_id}/retry` | Retry a held reserved import or pending detection without duplicating an active queue job |
 
 Administrator access is enforced server-side. Each inspection belongs to its initiating administrator. Queue enqueue and inspection creation share one PostgreSQL transaction. Worker attempts use generation tokens; a superseded attempt cannot commit over the newer one. Check actor/root configuration before and after filesystem work. Stalled read-only jobs are eligible for existing worker recovery. Deterministic file failures expose an actionable state; a new inspection command retries after repair.
 
-Frozen plans retain source identity/hash evidence, original version/work bindings, selected groups, unselected-group keys, the naming profile, resolved relative destinations and pending publication checks. Concurrent equivalent saves share one plan record. Changing settings cannot mutate a saved plan. Existing-media satisfaction, final roots, link/copy capability, source revalidation, active permissions and ABS boundaries must be checked before any future publisher consumes a plan. The API has no publish command. Plan revisions do not yet implement selective edit/replanning of already published entries.
+Frozen plans retain source identity/hash evidence, original version/work bindings, selected groups, unselected-group keys, the naming profile, resolved relative destinations and pending publication checks. Concurrent equivalent saves share one plan record. Changing settings cannot mutate a saved plan. Publication freezes its route and checks existing-media satisfaction, source evidence, active permissions and ABS boundaries. Plan revisions do not yet implement selective edit/replanning of already published entries.
 
 Migrations 0008 and 0009 add organization settings, download inspections and frozen plans. Populated settings/history guard against lossy downgrade; restore a pre-upgrade backup for such rollback. A new installation can round-trip the empty schema.
 
 Migration 0010 adds destination bindings and fenced probe state, with the same populated-state downgrade guard.
 
+Migration 0011 adds durable runs, per-child publication state and reservations. Populated import history prevents destructive downgrade. Preserve database state and the private filesystem journal together; complete restore reconciliation remains S09 work.
+
+## Reviewed publication and availability
+
+After saving a conventional-layout plan, select a verified destination for each medium and choose **Import resolved books**. The UI chooses a destination automatically only when exactly one verified binding matches the medium. Unresolved or unverified children remain held; other children proceed independently. Full ownership of this exact version in the selected ABS library skips publication. Another reserved import for the version in that library holds the new entry, including when different destination bindings point to the same library. Reservations and queue jobs commit atomically; command replay returns the same run.
+
+The state flow is `queued → publishing → awaiting-library → confirmed`, with independent `held` and `skipped` outcomes. A per-entry attempt token fences stale workers. Bulk file work happens outside database transactions; a short final guard locks the current actor, connection, library, route, version and entry around no-replace publication and receipt persistence. Revoked access, changed identity or a changed route blocks that write. A receipt can recover the publication after a crash before the database acknowledgement.
+
+Once published, detection retries verify the selected library bytes without republishing or requiring the source download to remain present. The worker requests a scan when permitted; otherwise it waits for the enabled watcher. Confirmation requires the exact ABS item folder, exact media paths and sizes, full-medium classification, compatible exported metadata and a direct item re-read. Only then does it bind the observed asset to the selected version and update availability. A conflicting manual library match is held for review.
+
+Pending detection is checked every minute while workers are running. After 30 minutes without confirmation it becomes actionable attention. Retry does not duplicate a live queue job or replace media. An explicit retry can accept a rotated credential generation for the same frozen server/library/paths; changed bindings still require resolution. Unrelated destination content is never overwritten or adopted by its filename. A failed route does not silently switch from hardlink to copy.
+
+Current limits: reservations stay attached to held/published entries; cancellation, explicit reservation release, replacement, and selective replanning are not yet exposed. Confirmation currently scans the library inventory per entry; batched/coalesced lookup remains future work. Equivalent libraries registered through different integration records and filesystem aliases require broader reconciliation. Existing user library content is not reorganized. Source downloads, external lists and automatic acquisition are not connected to this manual workflow yet.
+
 ## Filesystem publisher primitive
 
-`app.importing.publication.publish_item` implements and tests complete-item staging, source identity/hash revalidation, hardlink or explicit copy, independently generated sidecar files, journaled interruptions and atomic no-replace publication. It is not exposed by the API or a publication worker. Its tests and certification harness operate only on synthetic media.
+`app.importing.publication.publish_item` implements complete-item staging, source identity/hash revalidation, hardlink or explicit copy, independently generated sidecar files, journaled interruptions and atomic no-replace publication. The reviewed API/worker workflow now uses it. Tests and native certification operate only on generated synthetic media; no user's library files were used as fixtures.
 
 All receipts, locks and partial staging stay outside scanned roots. Existing destination folders are never adopted by filename alone or overwritten. Recovery recognizes a published item through recorded directory identity and an exact file/hash manifest, including when the seeded download has subsequently gone away. Staged copy recovery removes only the recorded partial inode; unknown files and unconfirmed staging directories remain untouched for review. A missing or changed published item is held instead of silently recreated. Source media bytes, names, modes and timestamps are not rewritten; hardlink creation necessarily changes link counts and inode change time.
 
-The implementation uses Linux [renameat2 with RENAME_NOREPLACE](https://man7.org/linux/man-pages/man2/rename.2.html) and Darwin [renameatx_np with RENAME_EXCL](https://github.com/apple-oss-distributions/xnu/blob/main/bsd/sys/stdio.h). Only Darwin has been executed locally. Ordinary overwrite-capable rename is not a fallback. Kernel I/O interruption, Linux/container behavior, bind aliases, full recovery/cleanup for orphaned probe/staging objects, cross-process database reservations, per-child ownership checks, generated covers, broader export/identity mapping and ABS reconciliation remain gate work.
+The implementation uses Linux [renameat2 with RENAME_NOREPLACE](https://man7.org/linux/man-pages/man2/rename.2.html) and Darwin [renameatx_np with RENAME_EXCL](https://github.com/apple-oss-distributions/xnu/blob/main/bsd/sys/stdio.h). Only Darwin has been executed locally. Ordinary overwrite-capable rename is not a fallback. Kernel I/O interruption, Linux/container behavior, bind aliases, full orphan cleanup/restore recovery, generated covers and broader export/identity mapping remain gate work.
 
 ## Verification and remaining gate
 
@@ -113,6 +131,8 @@ The current corpus exercises naming, actual generated EPUB/MP3/M4B inspection, s
 
 The publisher adds 25 tests for hardlink/copy integrity, interrupted/replayed publication, concurrent workers, collisions, stale sources and symlink escapes. Ten destination integration tests cover actual probes, concurrent commands, stale configuration, obsolete workers, access and downgrade guards. The browser additionally saves a destination and verifies its actual route on a mobile viewport.
 
-The [native ABS certification](ABS-NATIVE-CERTIFICATION.md) passed eight pinned-server scanner cases through the actual publisher and inventory adapter. The production initial OPF exporter now participates in these checks. Generated covers, watcher behavior and integrated import confirmation remain unverified; nested layout is still preview-only.
+Fourteen integrated publication tests cover command/reservation races, shared-library bindings, per-child partial success, exact-version satisfaction, mismatched backend metadata/files, final permission/identity fencing, post-rename crash recovery, periodic confirmation, credential retry and downgrade protection. The browser submits a reviewed import, observes waiting state, confirms fixture detection and retains availability after reload.
 
-Next: publication database state/reservations, generation/permission/recovery fencing at external writes, generated covers, actual ABS item confirmation in the app, fuller grouping/format coverage and existing-owned child reconciliation. These remain required before enabling the MAM/qBittorrent acquisition path. No S04 acceptance gate is claimed complete.
+The [native ABS certification](ABS-NATIVE-CERTIFICATION.md) passed eight pinned-server scanner cases through the publisher and inventory adapter, plus a real ebook application workflow through the import API and durable worker. Initial OPF export participates in these checks. Actual watcher behavior, the audio application workflow and broader compatibility remain unverified; nested layout is still preview-only.
+
+Next: generated covers, fuller grouping/format/omnibus coverage, cancellation/replanning and the complete recovery/compatibility matrix. These remain required before enabling the MAM/qBittorrent acquisition path. No S04 acceptance gate is claimed complete.

@@ -1,17 +1,23 @@
 """Synthetic ABS HTTP endpoint for browser tests; never a compatibility certificate."""
 
 import json
+import sys
 from pathlib import Path
 
 from fastapi import FastAPI, Header, HTTPException, Request
 
 from app.config import get_settings
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from tests.abs_import_fixture import ScanningBackend  # noqa: E402
+
 app = FastAPI()
 catalog_state = {"narrator": "Sample Narrator"}
 item = json.loads(
     (Path(__file__).resolve().parents[1] / "tests/fixtures/audiobookshelf-item.json").read_text()
 )
+scanner = ScanningBackend(get_settings().import_destinations["ebooks"])
+scanner.backend_path, scanner.library_id = "/fixture/books", "library-one"
 
 
 @app.api_route("/abs/{path:path}", methods=["GET", "POST"])
@@ -55,12 +61,30 @@ async def endpoint(path: str, request: Request, authorization: str = Header(defa
             "exists": (get_settings().import_destinations["ebooks"] / body["directory"]).is_dir()
         }
     if path == "api/libraries/library-one/items":
-        return {"results": [{"id": item["id"], "updatedAt": 1}], "total": 1}
+        return {
+            "results": [
+                {"id": row["id"], "updatedAt": 1} for row in [item, *scanner.items.values()]
+            ],
+            "total": 1 + len(scanner.items),
+        }
     if path == "api/items/batch/get":
-        return {"libraryItems": [item]}
+        body = await request.json()
+        records = {item["id"]: item, **scanner.items}
+        return {"libraryItems": [records[key] for key in body["libraryItemIds"]]}
     if path == f"api/items/{item['id']}":
         return item
+    if path == "api/libraries/library-one/scan":
+        scanner.scan()
+        return {}
+    if path.startswith("api/items/") and path.split("/")[-1] in scanner.items:
+        return scanner.items[path.split("/")[-1]]
     raise HTTPException(404)
+
+
+@app.post("/fixture/scan")
+async def fixture_watch():
+    scanner.scan()
+    return {"items": len(scanner.items)}
 
 
 @app.post("/catalog/v1/graphql")

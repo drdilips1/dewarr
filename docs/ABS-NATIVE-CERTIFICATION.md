@@ -1,6 +1,6 @@
 # Native Audiobookshelf certification evidence
 
-September 17, 2026. A bounded compatibility check against a real disposable ABS server, not a full S03/S04 certification or application import workflow.
+September 17, 2026. Bounded compatibility checks against a real disposable ABS server, including one ebook application import workflow. This is not full S03/S04 certification.
 
 ## Reproduce
 
@@ -13,6 +13,15 @@ uv run python scripts/certify_abs.py --node /opt/homebrew/opt/node@24/bin/node
 ```
 
 Use the installed ABS-compatible Node executable on other hosts. The clone command is for an absent checkout; do not rerun it over an existing directory.
+
+To additionally exercise the application API, database reservations, durable worker and final availability, create a dedicated disposable database whose name ends `_abs_test` and pass it explicitly:
+
+```sh
+createdb -h 127.0.0.1 -p 55438 -U book book_search_abs_test
+uv run python scripts/certify_abs.py --node /opt/homebrew/opt/node@24/bin/node --workflow-database postgresql+psycopg://book@127.0.0.1:55438/book_search_abs_test
+```
+
+The application fixture migrates and clears that database, then truncates its fixture application/queue tables on completion. Never use a database containing wanted data. It generates temporary application credentials and connects only to the harness's disposable ABS process. These credentials are not retained in the evidence report.
 
 Tested: ABS 2.36.1, commit `4b67c170ce46fd6ba770dc55c189ca13fef89b02`, macOS arm64, Node 24, Python 3.13.14 and ffmpeg/ffprobe 8.1.2. The upstream server failed to start under this host's Node 26.7 because its `buffer-equal-constant-time` dependency expects `SlowBuffer`. No upstream dependency patch or audit fix was applied. Optional SQLite Unicode extension was not loaded. This does not certify the production Docker image, other runtimes or all ABS API behavior.
 
@@ -35,7 +44,9 @@ The default ABS metadata precedence applies the generated OPF after folder and a
 
 ## Explicit boundaries
 
-The script disables the watcher and triggers manual scans. The actual backend path-existence endpoint passes an absent → visible → absent empty-folder challenge, verifying the worker/ABS root mapping. Library media settings and OPF precedence are read through the real API. Watcher-driven imports, generated covers, DB publication reservations/permissions and the app's final import-confirmation workflow remain pending. So do broader format, companion/omnibus, wider international metadata, disc-order, deletion/move, user-progress, permission and crash/scanner matrices. The two-track case verifies membership, not the complete playback-order matrix.
+The additional application test passes bootstrap → ABS connection/inventory → EPUB inspection → frozen plan → destination probe → import API/worker → real ABS scan/confirmation. It verifies exact-version ownership, source byte/inode preservation and a second request skipping the owned version. Its catalog version is seeded deliberately; it does not certify an external metadata provider or acquisition source.
+
+The script disables the watcher and triggers manual scans. The actual backend path-existence endpoint passes an absent → visible → absent empty-folder challenge, verifying the worker/ABS root mapping. Library media settings and OPF precedence are read through the real API. Watcher-driven imports, generated covers, the complete audio application workflow, broader formats, companion/omnibus, wider international metadata, disc-order, deletion/move, user-progress, permission and crash/scanner matrices remain pending. The two-track case verifies membership, not the complete playback-order matrix. Concurrent reservation and permission-race cases use the separate HTTP fixture integration tests.
 
 Nested layouts remain preview-only in the app. No complete stage or acceptance gate is marked passed from these eight checks. Logs and sanitized JSON evidence are saved in ignored `.local/evidence/abs-native.*`; server credentials and fixture databases are not retained in the JSON report.
 

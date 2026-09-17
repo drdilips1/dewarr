@@ -14,6 +14,7 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
     func,
+    text,
 )
 from sqlalchemy import (
     Identity as SQLIdentity,
@@ -410,3 +411,46 @@ class ImportDestination(Identity, Base):
     probe: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
     probe_operation_id: Mapped[UUID | None] = mapped_column(ForeignKey("operations.id"))
     probe_token: Mapped[UUID | None] = mapped_column()
+
+
+class ImportRun(Identity, Base):
+    __tablename__ = "import_runs"
+    __table_args__ = (UniqueConstraint("owner_id", "command_key"),)
+    owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
+    plan_id: Mapped[UUID] = mapped_column(ForeignKey("frozen_import_plans.id"))
+    command_key: Mapped[str] = mapped_column(String(200))
+    request: Mapped[dict[str, Any]] = mapped_column(JSONB)
+
+
+class ImportEntry(Identity, Base):
+    __tablename__ = "import_entries"
+    __table_args__ = (
+        UniqueConstraint("run_id", "group_id"),
+        CheckConstraint(
+            "state IN ('queued', 'publishing', 'awaiting-library', 'confirmed', 'held', 'skipped')"
+        ),
+        Index(
+            "uq_import_reserved_version",
+            "destination_id",
+            "version_id",
+            unique=True,
+            postgresql_where=text("reserved"),
+        ),
+    )
+    run_id: Mapped[UUID] = mapped_column(ForeignKey("import_runs.id"), index=True)
+    group_id: Mapped[UUID] = mapped_column()
+    version_id: Mapped[UUID] = mapped_column(ForeignKey("versions.id"))
+    destination_id: Mapped[UUID | None] = mapped_column(ForeignKey("import_destinations.id"))
+    operation_id: Mapped[UUID | None] = mapped_column(ForeignKey("operations.id"), unique=True)
+    state: Mapped[str] = mapped_column(String(30), default="queued")
+    message: Mapped[str] = mapped_column(String(500))
+    reserved: Mapped[bool] = mapped_column(Boolean, default=False)
+    specification: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
+    configuration: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
+    expected_metadata: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
+    receipt: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
+    run_token: Mapped[UUID | None] = mapped_column()
+    published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    confirmed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    asset_id: Mapped[UUID | None] = mapped_column(ForeignKey("library_assets.id"))
+    next_check_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), index=True)

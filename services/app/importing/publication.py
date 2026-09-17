@@ -13,7 +13,7 @@ import stat
 import sys
 import time
 from collections.abc import Callable
-from contextlib import ExitStack, contextmanager
+from contextlib import ExitStack, contextmanager, nullcontext
 from pathlib import Path, PurePosixPath
 from typing import Literal
 from uuid import UUID, uuid4
@@ -383,7 +383,11 @@ def stage_files(staging, stage, source, receipt_name, receipt, spec, deadline, c
 
 
 def publish_item(
-    spec: PublicationSpec, *, checkpoint: Callable[[str], None] = lambda _: None, timeout=600
+    spec: PublicationSpec,
+    *,
+    checkpoint: Callable[[str], None] = lambda _: None,
+    timeout=600,
+    publication_guard: Callable = nullcontext,
 ):
     deadline = time.monotonic() + timeout
     spec_hash = fingerprint(spec.model_dump(mode="json"))
@@ -456,40 +460,41 @@ def publish_item(
                     with destination_parent(destination, spec.folder) as (parent, leaf):
                         if conflicting_name(parent, leaf) is not None:
                             raise PublicationError("Destination name is already occupied")
-                        # Recheck current permissions/lease immediately before rename.
-                        checkpoint("before-publish")
-                        with directory(spec.destination_root) as current:
-                            if not same_object(current, receipt["destination_identity"]):
-                                raise PublicationError(
-                                    "Destination mount changed before publication"
+                        with publication_guard():
+                            # Recheck current permissions/lease immediately before rename.
+                            checkpoint("before-publish")
+                            with directory(spec.destination_root) as current:
+                                if not same_object(current, receipt["destination_identity"]):
+                                    raise PublicationError(
+                                        "Destination mount changed before publication"
+                                    )
+                            relative_parent = str(PurePosixPath(spec.folder).parent)
+                            with ExitStack() as recheck:
+                                current_parent = (
+                                    recheck.enter_context(
+                                        beneath(destination, relative_parent, folder=True)
+                                    )
+                                    if relative_parent != "."
+                                    else destination
                                 )
-                        relative_parent = str(PurePosixPath(spec.folder).parent)
-                        with ExitStack() as recheck:
-                            current_parent = (
-                                recheck.enter_context(
-                                    beneath(destination, relative_parent, folder=True)
+                                if object_id(current_parent) != object_id(parent):
+                                    raise PublicationError(
+                                        "Destination parent moved before publication"
+                                    )
+                                current_stage = recheck.enter_context(
+                                    beneath(staging, receipt["stage_name"], folder=True)
                                 )
-                                if relative_parent != "."
-                                else destination
-                            )
-                            if object_id(current_parent) != object_id(parent):
-                                raise PublicationError(
-                                    "Destination parent moved before publication"
-                                )
-                            current_stage = recheck.enter_context(
-                                beneath(staging, receipt["stage_name"], folder=True)
-                            )
-                            if not same_object(current_stage, receipt["stage_identity"]):
-                                raise PublicationError(
-                                    "Staged directory changed before publication"
-                                )
-                        no_replace(staging, receipt["stage_name"], parent, leaf)
-                        sync_directory(parent)
-                        sync_directory(staging)
-                        checkpoint("published-before-receipt")
-                        receipt["state"] = "published"
-                        write_receipt(staging, receipt_name, receipt)
-                        return receipt
+                                if not same_object(current_stage, receipt["stage_identity"]):
+                                    raise PublicationError(
+                                        "Staged directory changed before publication"
+                                    )
+                            no_replace(staging, receipt["stage_name"], parent, leaf)
+                            sync_directory(parent)
+                            sync_directory(staging)
+                            checkpoint("published-before-receipt")
+                            receipt["state"] = "published"
+                            write_receipt(staging, receipt_name, receipt)
+                            return receipt
 
 
 def probe_destination(

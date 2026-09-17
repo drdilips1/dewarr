@@ -4,6 +4,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
+import ImportExecution from "../components/ImportExecution";
 
 type Group = components["schemas"]["InspectedGroup"];
 type Selection = components["schemas"]["GroupSelection"];
@@ -87,8 +88,9 @@ export default function ImportReview() {
         </div>
       </div>
       <p className="notice">
-        Inspection reads source files. Publishing to a library is not available
-        yet; a saved plan does not mark a book as owned.
+        Inspection reads source files. Review the plan and choose a verified
+        destination before importing. A saved plan does not mark a book as
+        owned.
       </p>
       <form
         className="panel editor"
@@ -334,6 +336,7 @@ function Review({ inspection }: { inspection: Inspection }) {
               ))}
             </div>
           ))}
+          <ImportExecution plan={frozen.data} />
         </article>
       )}
     </section>

@@ -23,6 +23,8 @@ async def recover_stalled_jobs() -> None:
                 "acquisition.reconcile",
                 "organization.inspect",
                 "organization.probe",
+                "organization.publish",
+                "organization.confirm",
             ):
                 stalled = await queue.job_manager.get_stalled_jobs(
                     task_name=task_name,

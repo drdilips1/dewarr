@@ -108,7 +108,8 @@ function Editor({
       </div>
       <p className="notice">
         Naming previews and completed-file inspection are available. Library
-        destination checks are available; file publication is still being built.
+        destination checks and per-book importing are available for verified
+        destinations.
       </p>
       <p>
         <Link to="/organization/inspections">Inspect completed downloads</Link>

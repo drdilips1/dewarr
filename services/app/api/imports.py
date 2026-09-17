@@ -33,6 +33,7 @@ from app.importing.naming import (
     fingerprint,
     plan_import,
 )
+from app.importing.versioning import version_revision
 from app.importing.workflow import source_matches
 from app.jobs.queue import enqueue
 
@@ -87,6 +88,7 @@ class FrozenDocument(StrictModel):
     publication_available: bool
     pending_checks: list[str]
     initial_sidecars: dict[str, dict[str, str]] = Field(default_factory=dict)
+    version_revisions: dict[str, str] = Field(default_factory=dict)
 
 
 class FrozenPlanView(BaseModel):
@@ -218,7 +220,7 @@ async def freeze_plan(inspection_id: UUID, body: FreezeInput, admin: Admin, db: 
         raise HTTPException(422, "Choose each inspected group once")
     observed = {group["key"]: group for group in row.snapshot["groups"]}
     files = {file["path"]: file for file in row.snapshot["files"]}
-    groups, sidecars = [], {}
+    groups, sidecars, versions = [], {}, {}
     await graph_lock(db)
     for selection in body.selections:
         group = observed.get(selection.group_key)
@@ -275,6 +277,7 @@ async def freeze_plan(inspection_id: UUID, body: FreezeInput, admin: Admin, db: 
             )
         )
         try:
+            versions[str(version.id)] = version_revision(version)
             sidecars[str(groups[-1].id)] = initial_sidecars(
                 ExportMetadata(
                     medium=version.medium,
@@ -292,6 +295,7 @@ async def freeze_plan(inspection_id: UUID, body: FreezeInput, admin: Admin, db: 
     document = {
         "schema_version": 2,
         "initial_sidecars": sidecars,
+        "version_revisions": versions,
         "inspection_revision": row.snapshot["revision"],
         "profile": profile.model_dump(),
         "plan": plan.model_dump(mode="json"),

@@ -75,6 +75,12 @@ async def view(db, row):
         revision=revision,
         configured=bool(configuration["root_path"] and configuration["staging_path"]),
         probe=probe,
+        publication_available=bool(
+            probe
+            and probe.get("status") == "verified"
+            and probe.get("backend", {}).get("root_mapping")
+            and row.enabled
+        ),
     )
 
 

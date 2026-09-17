@@ -934,6 +934,58 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organization/plans/{plan_id}/imports": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Plan Imports */
+    get: operations["plan_imports_api_organization_plans__plan_id__imports_get"];
+    put?: never;
+    /** Start Import */
+    post: operations["start_import_api_organization_plans__plan_id__imports_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organization/imports/{run_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Import Run */
+    get: operations["import_run_api_organization_imports__run_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organization/imports/{run_id}/entries/{entry_id}/retry": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Retry Entry */
+    post: operations["retry_entry_api_organization_imports__run_id__entries__entry_id__retry_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organization/destination-roots": {
     parameters: {
       query?: never;
@@ -1270,6 +1322,16 @@ export interface components {
       /** Password */
       password: string;
     };
+    /** DestinationChoice */
+    DestinationChoice: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Revision */
+      revision: string;
+    };
     /** DestinationInput */
     DestinationInput: {
       /**
@@ -1388,6 +1450,43 @@ export interface components {
        */
       work_id: string;
     };
+    /** EntryView */
+    EntryView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Group Id
+       * Format: uuid
+       */
+      group_id: string;
+      /**
+       * Version Id
+       * Format: uuid
+       */
+      version_id: string;
+      /** Destination Id */
+      destination_id: string | null;
+      /** Operation Id */
+      operation_id: string | null;
+      /** State */
+      state: string;
+      /** Message */
+      message: string;
+      /** Published At */
+      published_at: string | null;
+      /** Confirmed At */
+      confirmed_at: string | null;
+      /** Asset Id */
+      asset_id: string | null;
+      /**
+       * Can Retry
+       * @default false
+       */
+      can_retry: boolean;
+    };
     /** FileMapping */
     FileMapping: {
       /** Source */
@@ -1433,6 +1532,10 @@ export interface components {
         [key: string]: {
           [key: string]: string;
         };
+      };
+      /** Version Revisions */
+      version_revisions?: {
+        [key: string]: string;
       };
     };
     /** FrozenPlanView */
@@ -1521,6 +1624,15 @@ export interface components {
       full_content: boolean;
       /** Reason */
       reason?: string | null;
+    };
+    /** ImportInput */
+    ImportInput: {
+      /** Plan Revision */
+      plan_revision: string;
+      /** Destinations */
+      destinations: {
+        [key: string]: components["schemas"]["DestinationChoice"];
+      };
     };
     /** ImportPlan */
     ImportPlan: {
@@ -2154,6 +2266,26 @@ export interface components {
     RevisionInput: {
       /** Expected Revision */
       expected_revision: string;
+    };
+    /** RunView */
+    RunView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Plan Id
+       * Format: uuid
+       */
+      plan_id: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /** Entries */
+      entries: components["schemas"]["EntryView"][];
     };
     /** SaveSettings */
     SaveSettings: {
@@ -4382,6 +4514,137 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["FrozenPlanView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  plan_imports_api_organization_plans__plan_id__imports_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        plan_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RunView"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  start_import_api_organization_plans__plan_id__imports_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        plan_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ImportInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RunView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  import_run_api_organization_imports__run_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        run_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RunView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  retry_entry_api_organization_imports__run_id__entries__entry_id__retry_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        run_id: string;
+        entry_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RunView"];
         };
       };
       /** @description Validation Error */

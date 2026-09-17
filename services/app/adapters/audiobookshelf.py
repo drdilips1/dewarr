@@ -44,6 +44,9 @@ class ABSItem(BaseModel):
     invalid: bool = False
     full_audio: bool = False
     full_ebook: bool = False
+    path: str | None = None
+    library_files: list[ABSFile] = Field(default_factory=list)
+    series: list[dict] = Field(default_factory=list)
 
 
 class ABSImportConfiguration(BaseModel):
@@ -128,6 +131,9 @@ def parse_item(value: dict) -> ABSItem:
         return ABSItem(
             id=external_id(value["id"]),
             library_id=external_id(value["libraryId"]),
+            path=value.get("path"),
+            library_files=[file_evidence(file) for file in files],
+            series=metadata.get("series") or [],
             old_id=external_id(value["oldLibraryItemId"])
             if value.get("oldLibraryItemId")
             else None,

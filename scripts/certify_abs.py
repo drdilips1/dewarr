@@ -18,9 +18,11 @@ import sys
 import tempfile
 import time
 from pathlib import Path
+from urllib.parse import urlsplit
 from uuid import uuid4
 
 import httpx
+from cryptography.fernet import Fernet
 
 from app.adapters.audiobookshelf import Audiobookshelf
 from app.importing.backend import verify_backend
@@ -96,7 +98,7 @@ def publish_fixture(root, name, folder, *, title="First Harbor", narrator=None, 
     return {"folder": folder, "title": title, "narrator": narrator, "tracks": tracks}
 
 
-async def exercise(base, root, process):
+async def exercise(base, root, process, workflow=False):
     async with httpx.AsyncClient(base_url=base, trust_env=False, timeout=30) as client:
         deadline = time.monotonic() + 45
         while True:
@@ -217,9 +219,15 @@ async def exercise(base, root, process):
             second_page, second_total = await adapter.page(library_id, 0)
             assert second_total == total
             assert {row["id"] for row in page} == {row["id"] for row in second_page}
+            workflow_report = None
+            if workflow:
+                from certify_import_workflow import certify_workflow
+
+                workflow_report = await certify_workflow(base, token, root, client)
             return {
                 "server_version": status["serverVersion"],
                 "cases": report,
+                "application_workflow": workflow_report,
                 "backend_checks": {
                     "root_mapping": backend_report["root_mapping"],
                     "scan_capable": backend_report["scan_capable"],
@@ -231,8 +239,25 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", type=Path, default=ROOT / ".local/reference/audiobookshelf")
     parser.add_argument("--node", default="node", help="ABS-compatible Node executable")
+    parser.add_argument(
+        "--workflow-database", help="Optional disposable PostgreSQL URL ending _abs_test"
+    )
     parser.add_argument("--evidence", type=Path, default=ROOT / ".local/evidence/abs-native.json")
     args = parser.parse_args()
+    if args.workflow_database:
+        if not urlsplit(args.workflow_database).path.endswith("_abs_test"):
+            raise SystemExit("Workflow certification requires a disposable _abs_test database")
+        os.environ.update(
+            {
+                "BOOK_ENV_FILE": "",
+                "BOOK_DATABASE_URL": args.workflow_database,
+                "BOOK_SECRET_KEY": Fernet.generate_key().decode(),
+                "BOOK_BOOTSTRAP_TOKEN": secrets.token_urlsafe(24),
+                "BOOK_PUBLIC_URL": "http://native-fixture",
+                "BOOK_COOKIE_SECURE": "false",
+            }
+        )
+        subprocess.run(["uv", "run", "alembic", "upgrade", "head"], cwd=ROOT, check=True)
     source = args.source.resolve(strict=True)
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=source, text=True).strip()
     if commit != ABS_COMMIT:
@@ -271,7 +296,12 @@ def main():
             )
             try:
                 report = asyncio.run(
-                    exercise(f"http://127.0.0.1:{port}/certification/", root, process)
+                    exercise(
+                        f"http://127.0.0.1:{port}/certification/",
+                        root,
+                        process,
+                        bool(args.workflow_database),
+                    )
                 )
             finally:
                 process.terminate()
@@ -284,8 +314,10 @@ def main():
             source_commit=commit,
             node=subprocess.check_output([args.node, "--version"], text=True).strip(),
             platform=platform.platform(),
-            boundaries="Native server/API/manual scanner and publisher primitives only",
-            exclusions=["watcher", "Docker", "import workflow"],
+            boundaries="Native server/API/manual scanner and selected application workflow"
+            if args.workflow_database
+            else "Native server/API/manual scanner and publisher primitives only",
+            exclusions=["watcher", "Docker", "complete compatibility matrix"],
         )
         args.evidence.write_text(json.dumps(report, indent=2) + "\n")
         print(f"ABS {report['server_version']}: {len(report['cases'])} cases passed")

@@ -37,8 +37,9 @@ export default function Destinations() {
         </div>
       </div>
       <p className="notice">
-        Filesystem and Audiobookshelf folder checks are available. Publishing
-        from the app remains disabled until the import workflow is complete.
+        Verify the filesystem route and Audiobookshelf folder mapping before
+        importing a saved plan. Each book is confirmed in Audiobookshelf after
+        publication.
       </p>
       {!query.data.roots.length && (
         <p className="notice">

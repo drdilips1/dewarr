@@ -155,7 +155,7 @@ async def probe_route(operation_id: UUID, *, client_factory=None):
                 )
 
         message = (
-            "Filesystem and ABS folder mapping verified; publication workflow is still required"
+            "Filesystem and ABS folder mapping verified; ready for a reviewed import plan"
             if ok
             else ("Hardlink route unavailable; correct the mounts or explicitly choose copy mode")
         )
