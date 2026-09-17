@@ -1,0 +1,24 @@
+# Book discovery app — planning workspace
+
+A self-hosted ebook/audiobook discovery, curation and acquisition application above Audiobookshelf, with native MAM/AudiobookBay, optional Prowlarr, direct qBittorrent, and Hardcover/Goodreads list automation.
+
+**Status:** implementation is in progress. The initial API/UI, accounts, local catalog/lists and transactional worker foundation are implemented; source integrations, downloading, importing and automation remain pending. See [Implementation Status](docs/IMPLEMENTATION-STATUS.md) for precise coverage and evidence, and [Development Guide](docs/DEVELOPMENT.md) to run the current build. The full PRD remains the goal.
+
+## Development handoff
+
+1. [Product Requirements](PRD.md): purpose, scope, user journeys, UX, 36 v1 functional requirements, six post-v1 requirements and 12 nonfunctional requirements.
+2. [End-to-End Development Plan](IMPLEMENTATION-PLAN.md): S00–S10 stages, work packages, dependencies, engineering boundaries, ownership and exit gates.
+3. [Acceptance Plan](ACCEPTANCE-PLAN.md): requirement coverage, scenario matrix, fixtures, crash recovery, compatibility and release evidence.
+4. [Implementation Decisions](IMPLEMENTATION-DECISIONS.md): researched technical choices D01–D13 and primary-source evidence.
+5. [Product Architecture](PRODUCT-ARCHITECTURE.md): system overview, integration responsibilities and code-reuse direction.
+
+The PRD controls product behavior; the implementation decisions control the researched technical baseline; the development plan controls sequencing; the acceptance plan controls verification. User instructions take precedence over all documents. Update dependent documents together when a decision changes.
+
+## Supporting research
+
+- [Metadata and collections](research/metadata-and-collections.md)
+- [Audiobookshelf import layouts](research/audiobookshelf-import-layout.md)
+- [Initial discovery research](research/book-discovery-architecture.md) — historical; its earlier acquisition-manager recommendation is superseded.
+- [Source snapshot](research/source-snapshot.json)
+
+Start implementation at S00. The first full manual acquisition milestone is S05, list-driven automation is S07, and production v1 requires S09. S10 capabilities are separate later releases.

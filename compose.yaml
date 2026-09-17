@@ -1,0 +1,75 @@
+name: book-search
+
+x-application: &application
+  build: .
+  image: book-search:local
+  env_file: .env
+  user: "${BOOK_UID:-1000}:${BOOK_GID:-1000}"
+  secrets:
+    - app_key
+    - bootstrap_token
+  read_only: true
+  tmpfs:
+    - /tmp
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+
+services:
+  postgres:
+    image: postgres:18.3-bookworm@sha256:80630f83606d8db77d30b3851b16a9f78be2d0d4dda6f7b82a1fdca5ebe3acba
+    environment:
+      POSTGRES_USER: book
+      POSTGRES_DB: book
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    volumes:
+      - postgres:/var/lib/postgresql
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U book -d book"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  migrate:
+    <<: *application
+    command: [alembic, upgrade, head]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api:
+    <<: *application
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health/ready', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  worker:
+    <<: *application
+    command: [python, -m, app.jobs.worker]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+volumes:
+  postgres:
+
+secrets:
+  app_key:
+    file: .local/secrets/app_key
+  bootstrap_token:
+    file: .local/secrets/bootstrap_token
+  postgres_password:
+    file: .local/secrets/postgres_password

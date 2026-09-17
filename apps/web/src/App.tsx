@@ -1,0 +1,343 @@
+import { lazy, Suspense, useEffect, useState } from "react";
+import type { FormEvent } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  Activity,
+  BookOpen,
+  Library,
+  List,
+  LogOut,
+  Search,
+  Users,
+} from "lucide-react";
+import {
+  Navigate,
+  NavLink,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
+import { api, ApiError, result, setCsrf } from "./api/client";
+import type { Auth } from "./api/client";
+import { Loading, Notice } from "./components";
+
+const Catalog = lazy(() => import("./pages/Catalog"));
+const BookDetail = lazy(() => import("./pages/BookDetail"));
+const Lists = lazy(() => import("./pages/Lists"));
+const ActivityPage = lazy(() => import("./pages/Activity"));
+const Accounts = lazy(() => import("./pages/Accounts"));
+
+export default function App() {
+  const client = useQueryClient();
+  useEffect(() => {
+    const expire = () => {
+      setCsrf("");
+      // A new document discards private query caches and outstanding requests.
+      window.location.replace("/");
+    };
+    window.addEventListener("book:session-expired", expire);
+    return () => window.removeEventListener("book:session-expired", expire);
+  }, [client]);
+  const session = useQuery({
+    queryKey: ["session"],
+    queryFn: async () => {
+      const response = await api.GET("/api/auth/me");
+      if (response.response.status === 401) return null;
+      const auth = result(response);
+      setCsrf(auth.csrf_token);
+      return auth;
+    },
+  });
+  if (session.isPending) return <Loading />;
+  if (session.isError)
+    return (
+      <main className="auth-page">
+        <div className="panel">
+          <h1>Unable to connect</h1>
+          <Notice error={session.error} />
+          <button onClick={() => session.refetch()}>Try again</button>
+        </div>
+      </main>
+    );
+  if (!session.data)
+    return (
+      <SignIn
+        onSuccess={(auth) => {
+          setCsrf(auth.csrf_token);
+          client.setQueryData(["session"], auth);
+        }}
+      />
+    );
+  return <Shell auth={session.data} />;
+}
+
+function SignIn({ onSuccess }: { onSuccess: (auth: Auth) => void }) {
+  const setup = useQuery({
+    queryKey: ["setup"],
+    queryFn: async () => result(await api.GET("/api/auth/setup")),
+  });
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [token, setToken] = useState("");
+  const mutation = useMutation({
+    mutationFn: async () => {
+      if (setup.data?.needs_setup)
+        return result(
+          await api.POST("/api/auth/bootstrap", {
+            body: {
+              username,
+              password,
+              display_name: displayName,
+              bootstrap_token: token,
+            },
+          }),
+        );
+      return result(
+        await api.POST("/api/auth/login", { body: { username, password } }),
+      );
+    },
+    onSuccess,
+    onError: (error) => {
+      if (error instanceof ApiError && error.status === 409) setup.refetch();
+    },
+  });
+  if (setup.isPending) return <Loading />;
+  return (
+    <main className="auth-page">
+      <div className="auth-intro">
+        <div className="brand">
+          <BookOpen size={30} />
+          <span>Book Search</span>
+        </div>
+        <h1>
+          Your next chapter
+          <br />
+          starts here.
+        </h1>
+        <p>
+          A home for your reading lists.
+          <br />A clear view of the books you own.
+        </p>
+        <div className="spines" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+          <i />
+          <i />
+        </div>
+      </div>
+      <form
+        className="panel auth-form"
+        onSubmit={(event) => {
+          event.preventDefault();
+          mutation.mutate();
+        }}
+      >
+        <p className="eyebrow">YOUR PERSONAL BOOKSHELF</p>
+        <h2>
+          {setup.data?.needs_setup ? "Set up your library" : "Welcome back"}
+        </h2>
+        <p className="muted">
+          {setup.data?.needs_setup
+            ? "Create the administrator account for this installation."
+            : "Sign in to browse your catalog and lists."}
+        </p>
+        <Notice error={setup.error || mutation.error} />
+        {setup.data?.needs_setup ? (
+          <label>
+            Your name
+            <input
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              autoComplete="name"
+              required
+              maxLength={120}
+            />
+          </label>
+        ) : null}
+        <label>
+          Username
+          <input
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            autoComplete="username"
+            required
+            minLength={3}
+            maxLength={100}
+            pattern="[A-Za-z0-9_.@\-]+"
+          />
+        </label>
+        <label>
+          Password
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete={
+              setup.data?.needs_setup ? "new-password" : "current-password"
+            }
+            required
+            minLength={12}
+            maxLength={256}
+          />
+        </label>
+        {setup.data?.needs_setup ? (
+          <label>
+            Setup token
+            <input
+              type="password"
+              value={token}
+              onChange={(e) => setToken(e.target.value)}
+              required
+              minLength={16}
+            />
+            <small>
+              Use the setup token created when this instance was installed.
+            </small>
+          </label>
+        ) : null}
+        <button
+          className="primary"
+          disabled={mutation.isPending || setup.isError}
+        >
+          {mutation.isPending
+            ? "Connecting…"
+            : setup.data?.needs_setup
+              ? "Create administrator"
+              : "Sign in"}
+        </button>
+      </form>
+    </main>
+  );
+}
+
+function Shell({ auth }: { auth: Auth }) {
+  const client = useQueryClient();
+  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+  const logout = useMutation({
+    mutationFn: async () => result(await api.POST("/api/auth/logout")),
+    onSuccess: () => {
+      setCsrf("");
+      client.clear();
+      window.location.assign("/");
+    },
+  });
+  function searchSubmit(event: FormEvent) {
+    event.preventDefault();
+    navigate("/?q=" + encodeURIComponent(search));
+  }
+  return (
+    <div className="app-shell">
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
+      <aside className="sidebar">
+        <NavLink to="/" className="brand">
+          <BookOpen size={27} />
+          <span>Book Search</span>
+        </NavLink>
+        <button
+          className="icon-button mobile-signout"
+          aria-label="Sign out"
+          onClick={() => logout.mutate()}
+          disabled={logout.isPending}
+        >
+          <LogOut size={18} />
+        </button>
+        <p className="nav-caption">YOUR COLLECTION</p>
+        <nav aria-label="Main navigation">
+          <NavLink to="/" end>
+            <Library size={19} />
+            Catalog
+          </NavLink>
+          <NavLink to="/lists">
+            <List size={19} />
+            Lists
+          </NavLink>
+          <NavLink to="/activity">
+            <Activity size={19} />
+            Activity
+          </NavLink>
+          {auth.user.role === "admin" ? (
+            <NavLink to="/accounts">
+              <Users size={19} />
+              Accounts
+            </NavLink>
+          ) : null}
+        </nav>
+        <div className="sidebar-bottom">
+          <div className="avatar">
+            {auth.user.display_name.slice(0, 1).toUpperCase()}
+          </div>
+          <div>
+            <strong>{auth.user.display_name}</strong>
+            <small>{auth.user.role}</small>
+          </div>
+          <button
+            className="icon-button"
+            aria-label="Sign out"
+            onClick={() => logout.mutate()}
+            disabled={logout.isPending}
+          >
+            <LogOut size={18} />
+          </button>
+        </div>
+      </aside>
+      <div className="workspace">
+        <header className="topbar">
+          <form className="search" onSubmit={searchSubmit}>
+            <Search size={18} aria-hidden="true" />
+            <input
+              aria-label="Search your catalog"
+              placeholder="Search books or authors"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <button type="submit">Search</button>
+          </form>
+          <span className="quiet-label">Your reading, organized.</span>
+        </header>
+        <main id="main" className="main-content">
+          <Notice error={logout.error} />
+          <Suspense fallback={<Loading />}>
+            <Routes>
+              <Route
+                path="/"
+                element={<Catalog canEdit={auth.user.role !== "viewer"} />}
+              />
+              <Route
+                path="/books/:id"
+                element={<BookDetail canEdit={auth.user.role !== "viewer"} />}
+              />
+              <Route
+                path="/lists"
+                element={<Lists canEdit={auth.user.role !== "viewer"} />}
+              />
+              <Route
+                path="/lists/:id"
+                element={<Lists canEdit={auth.user.role !== "viewer"} />}
+              />
+              <Route
+                path="/activity"
+                element={<ActivityPage admin={auth.user.role === "admin"} />}
+              />
+              <Route
+                path="/accounts"
+                element={
+                  auth.user.role === "admin" ? (
+                    <Accounts />
+                  ) : (
+                    <Navigate to="/" replace />
+                  )
+                }
+              />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Suspense>
+        </main>
+      </div>
+    </div>
+  );
+}

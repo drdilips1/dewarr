@@ -1,0 +1,125 @@
+# Acceptance, compatibility and release verification
+
+Planning baseline v1.0 · September 17, 2026.
+
+**Status: acceptance definitions; implementation evidence is tracked in [Implementation Status](docs/IMPLEMENTATION-STATUS.md).** Some foundation subsets have now been tested; no full scenario is yet certified complete. This document maps [PRD requirements](PRD.md) to the gates in [Development Plan](IMPLEMENTATION-PLAN.md). Research/source inspection is evidence for a design choice, not a passing runtime test.
+
+## 1. Evidence format and test environments
+
+Record each execution with scenario ID, application revision/image digest, dependency/service versions, fixture revision, environment/filesystem, timestamp, result and evidence location. Record skipped cases and the missing dependency explicitly. Live-provider credentials absent from CI do not mean a connector passed its live contract.
+
+Use four environments:
+
+1. Unit/contract: synthetic or sanitized records, no real accounts, deterministic clocks and bounded parser fixtures.
+2. Integration: actual PostgreSQL and disposable ABS/qBittorrent services; generated/public-domain media; isolated mounted directories.
+3. Browser: test users with different grants, seeded catalog/list/activity states and actual API integration.
+4. Connector certification: authorized test account and actual configured route; read-only checks where possible and controlled acquisition of authorized test content where needed. Never run a production-library migration as a test.
+
+Initial certification targets come from the researched decisions: ABS 2.36.1, qBittorrent 5.2.3, PostgreSQL 18.x and Procrastinate 3.9.0. Pin exact artifacts at scaffold time and record any baseline changes. These are targets, not verified claims or an instruction to upgrade the user's installed services.
+
+## 2. Acceptance matrix
+
+All AT-01–AT-30 are v1 release scenarios. Individual stage gates may exercise a subset first, with the full scenario completed by S09. AT-31–AT-35 apply only to their post-v1 feature releases.
+
+| ID | Requirements | Scenarios and required result | Gate |
+|---|---|---|---|
+| AT-01 | FR-01, FR-02, FR-03, FR-04 | Clean install, bootstrap race, restart, account roles, invalid integrations and path access. One bootstrap admin; reusable bootstrap closes; unauthorized API calls fail; nondestructive diagnostics distinguish auth/route/capability/path problems. | S00–S05 |
+| AT-02 | FR-05, FR-06 | Duplicate provider IDs, reused ISBN, translated edition, narrator variation, title collision, provider merge, manual unmatch and mistaken-merge repair. Stable internal identity; contradictory records held; asset/job history survives correction. | S01–S03 |
+| AT-03 | FR-07, FR-08 | Provider disagreement/outage, missing fields, manual field/cover locks and later refresh. Automatic defaults work; provenance remains; unknowns stay unknown; protected app/ABS values are preserved. | S02–S04 |
+| AT-04 | FR-09, FR-10 | Search by title/author/series/identifier, direct-source provisional work, multiple releases of one recording, ebook-only ownership and ABS deep link. One coherent work page with truthful version/release boundaries. | S02–S06 |
+| AT-05 | FR-11, FR-12 | Create/order/bulk-edit local lists, follow supported public list, grant/revoke sharing, provider outage and recommendation labels. Only authorized content visible; attributed shelves and local fallback remain useful. | S02, S08 |
+| AT-06 | FR-13, FR-14 | Full/paginated/event ABS sync, failed page, reconnect, removed grant, ebook-only/audio-only/both, companion PDF and partial audio. Completeness tracked; overall check requires a full confirmed medium; no false removal or hidden-library disclosure. | S03 |
+| AT-07 | FR-15 | Missing mount, transient ABS failure, external move/deletion, changed backend item ID and explicit ignore/replace. Reconcile before confirmed missing; suppressions persist; no automatic replacement; unaffected medium stays owned. | S03, S09 |
+| AT-08 | FR-16, NFR-10 | Rich MAM details, mam_id rotation, concurrent workers, required proxy failure, auth expiry, parser failure, empty results and rate limits. Safe serialized credential updates; no direct-route fallback; no error disguised as no results. | S05 |
+| AT-09 | FR-17 | ABB search/detail fixture variants, supported host changes, missing file lists, invalid magnets and markup break. Typed errors, bounded parsing/fetching, no fabricated coverage and unaffected other-source results. | S06 |
+| AT-10 | FR-18 | Prowlarr multiple indexers/categories, native MAM overlap, torrent/Usenet results and origin-specific credentials. Preserve origin, suppress duplicate querying, expose unsupported protocol without a working-looking download action. | S06 |
+| AT-11 | FR-19 | Partial/slow/failed sources, duplicate release references, unknown seeds/narrator, differing raw titles. Incremental useful results; raw detail retained; catalog versions not inflated by releases. | S06 |
+| AT-12 | FR-20, FR-21 | Wrong language, blocked format, exact/unknown narrator, EPUB preference, M4B/MP3 preference, conflicting source/seeder preference, either/both and owned-media requests. Eligibility first; deterministic explanation; correct missing targets; manual sorting never rewrites stored profile. | S05–S06 |
+| AT-13 | FR-22, FR-23 | Concurrent requests/lists, repeated idempotency key, compatible/incompatible version constraints, qBit add timeout, preexisting unrelated torrent and shared cancellation. One authorized compatible transfer; uncertain add reconciled; unrelated jobs remain untouched; cancellation of one reason does not cancel others. | S01, S05, S07 |
+| AT-14 | FR-24, FR-25 | Just-book/prefer-pack/complete-series, aliases, main/related/unreleased works, partial/wrong pack claims, mixed-media packs and already-owned children. Explicit expansion; actual per-child coverage; independent completion/recovery; no duplicate import. | S04, S06 |
+| AT-15 | FR-26 | Indivisible omnibus with verified/unknown contents, shared asset availability and deletion. One actual asset can satisfy verified works; no fictional split files; losing that asset updates all affected coverage. | S04, S06 |
+| AT-16 | FR-27 | Missing author/series/year, decimal/non-numeric order, Unicode, reserved characters, long paths, duplicate names, different narrators, changed templates and same-edition ebook formats. Stable valid preview and collision handling; no implicit existing-file moves. | S04 |
+| AT-17 | FR-28, NFR-01 | Same-filesystem hardlink, incompatible mounts, explicit copy fallback, disk-full, destination collision, symlinks/path traversal and interrupted publication. Confined no-replace import; verified source integrity; unrelated files untouched; no destructive fallback. | S04 |
+| AT-18 | FR-29 | Initial generated sidecars/covers, existing absMetadata/OPF conflict, refreshed catalog, protected ABS edits and post-import template change. Correct initial metadata; later refresh changes app data only; no source inode/tag writes. | S04 |
+| AT-19 | FR-30 | Conventional/nested version layouts, multiple narrators, multi-file recordings, ebook formats, scan-capable/inventory-only credentials and delayed/failed scan. Correct ABS item count/identity/files; watcher mode works; only observed items become available. | S04–S05 |
+| AT-20 | FR-31 | Hardcover pagination, private/public authorized lists, quota/auth failure, interrupted snapshot, repeated pages and provider membership updates. Per-account boundaries; committed complete observations; no lost entries or invented removals. | S07 |
+| AT-21 | FR-32 | Goodreads RSS repeated/truncated/empty/304 responses, changed feed entry IDs, malformed XML, CSV duplicates and encoding. Safe parsing and identity dedupe; RSS omission never removes membership; CSV preview explains snapshot behavior. | S07 |
+| AT-22 | FR-33 | Browse/manual/auto, future-only baseline failure, backlog preview, overlapping lists, media both/either, exclusions, pause/resume and removing a request reason. No work before valid authorization/baseline; bounded resumable backfill; repeated sync has no duplicate side effect. | S07 |
+| AT-23 | FR-34 | Hardcover write-back disabled/enabled, unsupported mutation, success response lost, remote conflict, echoed membership, account revoked and read-status fields. Reconcile intended list state; no blind duplicate write; no download-to-read mutation; no Goodreads write-back. | S08 |
+| AT-24 | FR-35, NFR-08 | Search rejection, auth failure, uncertain dispatch, partial pack, held match, scan delay and retry. Correlated redacted history; visible policy/reason; correct next action resumes only necessary stage. | S01–S09 |
+| AT-25 | FR-36, NFR-11 | Upgrade backup, restored keys/manifests, running external download, partially published import and deleted media after backup. Restore dispatch-paused; reconcile before resume; no historical replay; measured app-state RPO/RTO meets reference targets. | S09 |
+| AT-26 | NFR-03, NFR-04, NFR-10 | Reference dataset/load, slow upstreams, large list backfill, large pack, repeated failures and worker concurrency. Meet PRD latency/capacity targets, bound queues/memory/connections, honor budgets and show partial results. | S09 |
+| AT-27 | NFR-05, FR-02 | Cross-account object IDs, list/library grants, shared-transfer privacy, CSRF/session misuse, secret exports, provider redirects to local services, malicious metadata/feed/path inputs. Authorization enforced; secrets redacted; untrusted routing/files confined; intended admin local-service configuration supported. | S01, S03, S08–S09 |
+| AT-28 | NFR-07 | Keyboard-only onboarding/search/request/list/repair, focus restoration, labels/errors, screen-reader status, contrast and zoom/mobile. Core flows meet WCAG 2.2 AA target with documented automated and manual evidence. | S02 onward; S09 release |
+| AT-29 | NFR-06, NFR-09, NFR-12 | Fresh Compose install, supported version matrix, migration from prior release fixture, missing optional provider, image/non-root permissions, license notices and generated API drift. Reproducible deployment; truthful capability limits; degraded browse; documented upgrade/recovery. | S00 onward; S09 release |
+| AT-30 | NFR-01, NFR-02, FR-22, FR-23, FR-28 | Kill/restart at every side-effect boundary in section 4. State converges without duplicate dispatch, source mutation, destination overwrite or premature ownership. | S01, S04–S07, S09 |
+| AT-31 | FR-37, FR-38 | Optional upgrade/reorganization with failure before/after publication, old-copy retention, seeding, collision and ABS progress mapping. Preserve existing availability until replacement confirmed; resumable previewed changes; block unknown progress-preservation cases. | S10 |
+| AT-32 | FR-39 | Additional backend inventory, permissions, capabilities, media/version grouping, item moves and availability. Pass independent adapter/compatibility contract; no assumed ABS behavior. | S10 |
+| AT-33 | FR-40 | Additional recommendation/provider identity, attribution, opt-ins and usefulness evaluation. No private-data leakage or false edition merge; document benefit and fallback. | S10 |
+| AT-34 | FR-41 | Actual additional client's submit ambiguity, monitoring, completion, files, cleanup and restart. Same durable acquisition/import guarantees with client-specific evidence. | S10 |
+| AT-35 | FR-42 | OIDC linking, issuer/subject collision, revoked access, grant enforcement and admin recovery. No account takeover or lost list ownership; recovery remains possible. | S10 |
+
+## 3. Required fixture corpus
+
+Build fixture directories during S00; filenames below describe cases rather than existing artifacts.
+
+| Corpus | Minimum representative cases |
+|---|---|
+| Catalog | Same title/different authors; translations; reused/missing identifier; abbreviated author; pen name; multiple narrators; abridged/unabridged; revised ebook; provider duplicate/merge; ambiguous series order |
+| Audio | Single M4B; ordered multi-MP3 book; nested CD folders; two narrator versions; missing/contradictory tags; incomplete tracks; companion PDF; same recording in two encodings |
+| Ebook | EPUB; PDF full book versus companion; EPUB+AZW3 of same edition; distinct revised editions; missing title/author; Unicode/long names |
+| Collections | Clean book-per-folder series; flat filenames; mixed ebook/audio; missing advertised child; unrelated extras; partially owned pack; mislabeled child; inseparable omnibus; ambiguous grouping |
+| Filesystem | Same filesystem; incompatible mounts; writable/unwritable roots; collision with unrelated file; symlink escape; directory replacement race; full disk; worker restart mid-copy/publish |
+| Lists | Complete paginated list; interrupted page; duplicate membership; RSS window truncation; existing-entry edit; empty/304/error feed; CSV import; future-only baseline; multi-user overlapping lists |
+| Services | ABS scan permission denied/event gap; qBit response lost/torrent already exists; MAM rotated session/login page; ABB parser drift; Prowlarr unsupported protocol; Hardcover quota/permission error |
+
+Assertions should inspect database state and external files/items, not only UI messages. Source hashes, destination file identities, manifest entries, qBittorrent associations and ABS item boundaries provide the integrity evidence. Generated test media must contain enough real structure for the scanner/inspector to classify it; zero-byte filename placeholders are insufficient for media compatibility tests.
+
+## 4. Crash and ambiguous-outcome matrix
+
+| Interruption point | Required recovery |
+|---|---|
+| Domain transaction before commit | No committed intent/job side effect |
+| Domain commit before worker execution | Durable job remains executable; no lost acquisition |
+| Worker redelivery/concurrent reservation | Compatible targets attach to one active fulfillment path |
+| qBit add submitted, response absent | Mark dispatch-uncertain; lookup and reconcile before resubmitting |
+| qBit completion before status persisted | Discover existing associated torrent/files; continue inspection |
+| Manifest planned before staging | Resume that versioned plan; do not silently use changed templates |
+| Partial hardlink/copy staging | Reconcile owned staging entries; retry safely; original files unchanged |
+| Publication succeeds before DB acknowledgment | Recognize owned published destination from journal/evidence; do not overwrite or duplicate |
+| Some pack children published, another fails | Preserve successful children; retry/hold only incomplete entries |
+| ABS scan requested, response lost | Observe inventory or retry safe scan under policy; never redownload |
+| ABS confirmation before availability commit | Reconcile backend binding and commit availability once |
+| List observation persisted around dispatch | Reasons/intents remain idempotent; no repeated backlog |
+| Hardcover mutation succeeds, response lost | Reconcile remote desired state before repeating operation |
+| Database restored behind external state | Start dispatch-paused, reconcile downloads/files/backend, then resume deliberately |
+
+A no-replace publication test must exercise competing publishers and preexisting unrelated destinations. A pass based only on checking `exists()` before writing is insufficient because it does not protect against races. Verify the selected filesystem primitive's actual behavior.
+
+## 5. Compatibility certification template
+
+Publish a matrix for each release with these fields:
+
+| Dimension | Evidence required |
+|---|---|
+| Backend/client | Exact version/image, auth mode, required permissions, tested operations and limitations |
+| ABS media/layout | Conventional/nested; audiobook/ebook; multiple recordings; multi-file audio; omnibus; resulting item boundaries |
+| Metadata | Folder/tag/sidecar precedence, imported fields, manual-edit preservation and refresh behavior |
+| Filesystem | Host/filesystem/mount arrangement, UID/GID, hardlink test, publication primitive, copy support |
+| Source | Adapter revision, sanitized fixture revision, live connection check date, supported fields/transport/route |
+| List provider | Read/write capabilities, tested pagination/observation semantics, scope and quota behavior |
+
+Default to disabled or explicitly unverified for untested optional capabilities. Display degraded mode when a previously healthy integration changes behavior. Never generalize one Linux filesystem result to all network or container mounts.
+
+## 6. Release gates and evidence package
+
+Gate severity:
+
+- **P0:** source data corruption, unrelated overwrite, credential/private-data exposure, broken authorization or unrecoverable persisted state. Blocks all affected releases immediately.
+- **P1:** unintended duplicate acquisition, false ownership, mandatory workflow failure, wrong-book automatic acquisition, unbounded automation or failed recovery. Blocks v1; an alpha may only exclude the affected feature explicitly when doing so remains safe.
+- **P2:** degraded optional behavior with a truthful documented workaround; prioritize by user impact.
+- **P3:** cosmetic polish without functional/accessibility impact.
+
+Release package: requirement coverage report; AT results with revisions; parser/live-connector distinction; compatibility matrix; crash/concurrency evidence; before/after source-integrity checks; backup/restore timings; performance percentiles; accessibility review; security/reuse review; screenshots of principal states; known limitations and operator guide.
+
+All FR-01–FR-36 and NFR-01–NFR-12 must map to passing evidence before v1. AT-31–AT-35 are not v1 blockers because their features are explicitly post-v1. When a scenario fails, record its actual effect and owner; do not convert “not run” into “passed with limitations.”

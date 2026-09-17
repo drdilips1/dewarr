@@ -1,0 +1,6 @@
+# Preserve upstream notices and SQL verbatim, including their whitespace.
+docs/notices/* -whitespace
+services/app/db/migrations/queue-3.9.0.sql -whitespace
+apps/web/src/api/schema.d.ts linguist-generated=true
+docs/openapi.json linguist-generated=true
+docs/frontend-dependencies.json linguist-generated=true

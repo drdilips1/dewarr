@@ -1,0 +1,83 @@
+# Development and operation of the current build
+
+This is an early development build. The full [PRD](../PRD.md) remains the target; [Implementation Status](IMPLEMENTATION-STATUS.md) records actual coverage. Do not connect production acquisition automation until the relevant import and recovery gates pass.
+
+## Native development
+
+Requires Python 3.13, uv, Node 24+ and PostgreSQL. The current workspace uses a dedicated PostgreSQL 16.14 cluster on loopback port 55438; PostgreSQL 18 container certification is pending.
+
+```sh
+uv sync --frozen
+npm --prefix apps/web ci
+```
+
+For a new local installation with PostgreSQL binaries available:
+
+```sh
+mkdir -p .local
+initdb -D .local/postgres -U book -A trust --no-locale -E UTF8
+pg_ctl -D .local/postgres -l .local/postgres.log -o '-h 127.0.0.1 -p 55438 -k /tmp' start
+createdb -h 127.0.0.1 -p 55438 -U book book_search_dev
+createdb -h 127.0.0.1 -p 55438 -U book book_search_test
+createdb -h 127.0.0.1 -p 55438 -U book book_search_browser_test
+uv run python scripts/init_env.py --mode native
+uv run alembic upgrade head
+npm --prefix apps/web run build
+```
+
+The trust-authenticated database is a loopback-only development fixture, not a production deployment pattern. Do not rerun initialization over an existing cluster. `init_env.py` refuses to replace an existing `.env`. It writes secrets with restrictive permissions and never prints them.
+
+Run the API/static UI and worker in separate terminals:
+
+```sh
+uv run uvicorn app.main:app --host 127.0.0.1 --port 8000
+uv run python -m app.jobs.worker
+```
+
+Open `http://localhost:8000`. Initial setup requires the token in `.local/secrets/bootstrap_token`; choose your own administrator username and password. No default account is installed. The development database and real installation secrets are distinct from disposable tests.
+
+For Vite hot reload, run `npm --prefix apps/web run dev` and change `BOOK_PUBLIC_URL` to the exact browser origin, normally `http://localhost:5173`, before restarting the API. Its `/api` proxy targets port 8000. Production serves static assets and API from one origin.
+
+## Checks
+
+```sh
+uv run ruff check services tests scripts
+uv run ruff format --check services tests scripts
+BOOK_TEST_DATABASE_URL=postgresql+psycopg://book@127.0.0.1:55438/book_search_test uv run pytest -q
+uv run alembic check
+uv run python scripts/export_openapi.py
+npm --prefix apps/web run generate:api
+npm --prefix apps/web run format:check
+npm --prefix apps/web run build
+npm --prefix apps/web exec playwright install chromium
+npm --prefix apps/web run test:e2e
+```
+
+Backend tests require a database name ending `_test`; browser tests require `_browser_test`. They truncate those disposable databases. With no `BOOK_TEST_DATABASE_URL`, integration tests skip explicitly, so a unit-only run is not integration evidence. Browser tests launch their own API and worker, use generated encryption keys and a fixture-only bootstrap token, and stop those processes afterward. Override `BOOK_E2E_DATABASE_URL` when needed.
+
+The browser journey covers bootstrap, a synthetic catalog title, a private list, real worker execution, reload persistence and mobile layout/sign-out. Test data is deliberately identified as synthetic. Screenshots are saved under `apps/web/test-results/`.
+
+## Container deployment scaffold
+
+On a fresh installation with Docker/Compose:
+
+```sh
+uv run python scripts/init_env.py --mode compose
+docker compose up --build -d
+```
+
+The initializer sets UID/GID to the invoking user so mounted secret files remain readable by the application account. The image itself defaults to UID/GID 1000. Do not generate native `.env` then assume its localhost database URL works inside Compose; create the appropriate configuration for the deployment environment deliberately.
+
+Compose runs PostgreSQL, a one-shot migration process, API and worker. The API is bound to loopback by default. Configure the reverse proxy and exact `BOOK_PUBLIC_URL` for remote access; enable `BOOK_COOKIE_SECURE=true` under HTTPS. Forwarded headers are not trusted by default. No Docker socket or media directory is mounted into the API. Media mounts will be configured when the importer is implemented.
+
+Base image digests are pinned and were resolved from the Docker Hub registry. Local container build/run has not been verified because Docker is unavailable on this host. CI includes an image-build job; an unexecuted workflow is not passing evidence.
+
+## State and recovery boundaries
+
+- Preserve PostgreSQL application/queue state and `.local/secrets/app_key` together. Without the key, encrypted provider credentials cannot be recovered from a database backup.
+- Schema migrations are explicit (`alembic upgrade head`), not performed implicitly by every API process. The frozen queue SQL is versioned independently of future Procrastinate upgrades.
+- `BOOK_RECOVERY_MODE=true` blocks diagnostic dispatch and worker startup. Full external-state restore reconciliation is still pending S09; this flag alone does not certify restore safety.
+- The current stalled-job recovery only retries the idempotent diagnostic task. Every future side-effecting workflow must supply reconciliation before joining recovery.
+- No current feature downloads, renames, hardlinks, deletes or edits media files. Catalog entries never imply ownership.
+
+Keep local database/log/test artifacts out of commits. Use the application health endpoints for readiness and the Activity screen's background-worker check for a durable queue round trip.

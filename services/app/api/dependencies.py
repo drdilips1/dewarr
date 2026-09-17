@@ -1,0 +1,63 @@
+import hmac
+from datetime import UTC, datetime
+from typing import Annotated
+
+from fastapi import Depends, HTTPException, Request
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.config import get_settings
+from app.db.models import LoginSession, User
+from app.db.session import database
+from app.security import csrf_token, token_hash
+
+Database = Annotated[AsyncSession, Depends(database)]
+COOKIE = "book_session"
+
+
+def require_origin(request: Request) -> None:
+    if request.headers.get("origin") != get_settings().public_url:
+        raise HTTPException(403, "The request origin is not allowed")
+
+
+async def current_user(request: Request, db: Database) -> User:
+    raw = request.cookies.get(COOKIE)
+    if not raw:
+        raise HTTPException(401, "Sign in to continue")
+    user = await db.scalar(
+        select(User)
+        .join(LoginSession, User.id == LoginSession.user_id)
+        .where(
+            LoginSession.token_hash == token_hash(raw),
+            LoginSession.expires_at > datetime.now(UTC),
+            User.active.is_(True),
+        )
+    )
+    if not user:
+        raise HTTPException(401, "Your session has expired. Sign in again")
+    if request.method not in {"GET", "HEAD", "OPTIONS"}:
+        require_origin(request)
+        if not hmac.compare_digest(request.headers.get("x-csrf-token", ""), csrf_token(raw)):
+            raise HTTPException(403, "Refresh this page before trying again")
+    return user
+
+
+CurrentUser = Annotated[User, Depends(current_user)]
+
+
+def require_admin(user: CurrentUser) -> User:
+    if user.role != "admin":
+        raise HTTPException(403, "Administrator access is required")
+    return user
+
+
+Admin = Annotated[User, Depends(require_admin)]
+
+
+def require_member(user: CurrentUser) -> User:
+    if user.role == "viewer":
+        raise HTTPException(403, "This account has read-only access")
+    return user
+
+
+Member = Annotated[User, Depends(require_member)]
