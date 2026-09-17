@@ -1,6 +1,6 @@
 # Product and development handoff
 
-September 17, 2026 · Planning guide, not a claim of implemented functionality.
+September 17, 2026 · v1.2 planning guide, not a claim of implemented functionality.
 
 Build a self-hosted book discovery, curation and acquisition app above Audiobookshelf. The experience should feel familiar to a Seerr user: browse attractive shelves, open one book page, see what is already owned, inspect available versions and sources, and request missing media. The app also owns organizing its newly downloaded files so that Audiobookshelf can serve them correctly.
 
@@ -113,3 +113,5 @@ Code existence, fixture success, live compatibility and stage acceptance are sep
 For the existing workspace, use the verified [status](docs/IMPLEMENTATION-STATUS.md) instead of rebuilding the scaffold. Close the remaining S01 contracts, finish S02 metadata/catalog and S03 inventory compatibility, then implement S04 import certification. Keep unverified integration work distinct from tested checkpoints. Source acquisition, importing and external-list automation must not be described as shipped before their evidence exists.
 
 At each stage start, split its packages into reviewable tickets with an owner, affected FR/AT IDs, input/output contract, success/failure fixtures and demo. Estimate after inspecting the existing implementation and measuring throughput; revise estimates for provider and filesystem uncertainty. At stage end, attach the revision and actual results, update coverage, and resolve blockers before enabling the dependent capability.
+
+Use the [end-to-end product walkthrough](PRD.md#15-end-to-end-product-acceptance-walkthrough) as the common trilogy/list/pack fixture throughout development. The [stage evidence scopes](ACCEPTANCE-PLAN.md#7-stage-evidence-scopes) separate early subsets from full release acceptance, so catalog work is not blocked by a downloader that belongs to a later stage. Production v1 still requires the complete integrated evidence.

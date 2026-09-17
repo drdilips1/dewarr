@@ -1,6 +1,6 @@
 # Product requirements: book discovery and acquisition
 
-Version 1.1 planning baseline · September 17, 2026 · Working product name: Book discovery app.
+Version 1.2 planning baseline · September 17, 2026 · Working product name: Book discovery app.
 
 Status: ready for staged development. No application code or production deployment is implied by this document. User requirements from the conversation take precedence. This PRD defines product behavior; [Implementation Decisions](IMPLEMENTATION-DECISIONS.md) defines the researched engineering baseline; [Development Plan](IMPLEMENTATION-PLAN.md) defines delivery; [Acceptance Plan](ACCEPTANCE-PLAN.md) defines verification. Earlier research remains rationale, not an alternative product direction.
 
@@ -348,3 +348,34 @@ Usability acceptance uses task walkthroughs with defaults: connect ABS; find an 
 | P1 | Recovery | No implicit upgrade/deletion replacement; restore dispatch-paused | Production release |
 
 These are selected defaults, not questions the user must answer before development. Actual server versions, account capabilities, proxy behavior and filesystem support are setup/certification gates. A failing gate restricts the affected capability while preserving useful browsing and inventory. Brand/name, exact artwork and additional providers can be settled later without changing the core contracts.
+
+## 15. End-to-end product acceptance walkthrough
+
+This walkthrough is a shared development fixture and release demonstration, not an additional feature or a claim of implemented behavior. All titles and media used for it are synthetic. It exercises journeys A–F together; the acceptance plan still covers their independent failure cases.
+
+**Starting state.** The Harbor Trilogy has three published main-series works. The household has a complete ebook of book one and a complete audiobook of book two, performed by Jordan Lee. Neither medium of book three is available. A second recording of book two, performed by Casey Reed, exists in catalog metadata. Two source releases of Jordan's recording remain two download choices, not two catalog recordings. The connected ABS inventory and app grants confirm these holdings.
+
+| Step | User experience | Required persisted outcome |
+|---|---|---|
+| 1. Browse the series | Books one and two show In library with their respective media indicators; book three shows missing | Three works, distinct confirmed versions/assets; provider and source references retain separate identities |
+| 2. Follow a Hardcover list | Preview the current members; choose Automatic, Both, Prefer series packs, and future additions only | A successful baseline, subscription policy revision and no historical acquisition |
+| 3. Add book three externally | The next successful sync shows a new member and wanted ebook/audio targets | One membership reason; repeat observations and overlapping lists reuse compatible intents |
+| 4. Search its sources | MAM detail is preserved alongside ABB/Prowlarr results; the UI explains eligible formats, coverage and the selected source | Frozen selection evidence; wrong-language or incompatible-recording results are excluded before seed counts are considered |
+| 5. Choose a qualifying audio series pack and ebook | The pack preview identifies additional books, total transfer size and the already-owned audio child | One associated transfer per selected release, reservations for authorized targets, explicit additional coverage; no hidden request to upgrade book two |
+| 6. Inspect the completed pack | Confident book groups progress independently; an ambiguous child displays Resolve match | Per-child manifests from actual files. Import book one's additional audio and book three's audio; skip book two's satisfied audio. Preserve the complete seeded pack |
+| 7. Publish the library items | Previewed names match final destinations; Activity shows Awaiting library until ABS sees them | Separate version leaves, unchanged source hashes, journaled hardlinks and independent sidecars; no availability based solely on torrent completion |
+| 8. Confirm and repeat sync | Book three shows In library with ebook and audio; book one also gains audio | Accessible ABS confirmation satisfies targets. Repeated list sync, page refresh and worker restart create no extra transfers/imports |
+| 9. Request the alternate narrator | Book two remains owned; an explicit Casey Reed request creates a separate recording acquisition | Exact-version intent and destination; Jordan Lee's recording and playback state remain intact |
+| 10. Repair an interruption | Restart after a published child but before its database acknowledgement; retry only the incomplete work | Reconcile the manifest and existing destination; never overwrite an unrelated item or redownload the pack |
+
+The ebook request for book three is independent of the audio pack: a pack that contains only audio cannot satisfy Both by implication. Additional pack children do not become requirements to fetch their other medium. An uncertain pack child is never counted as available until its mapping and backend presence are confirmed.
+
+Run the equivalent list-observation scenario with Goodreads RSS. A new observed entry may trigger the same acquisition engine; an entry disappearing from the feed does not remove a request reason or a library asset. Hardcover write-back, when enabled and supported, changes only the selected list membership and never sets reading status.
+
+## 16. Delivery handoff
+
+The implementation plan contains 61 work packages across S00–S10, with entry dependencies, responsible roles, deliverables, demonstrations and exit evidence. S05 delivers the first manual acquisition alpha, S07 the list-automation beta, S08 the full discovery/curation experience, and S09 production v1. S10 contains separately scoped extensions.
+
+Use [stage evidence scopes](ACCEPTANCE-PLAN.md#7-stage-evidence-scopes) to avoid requiring later functionality at an earlier gate. Partial evidence stays partial until the complete scenario runs. The walkthrough above becomes executable fixtures incrementally, then a complete release rehearsal in S09.
+
+The visual implementation should preserve the familiarity of Seerr's navigation, cover shelves, book-detail hierarchy and request dialogs. Component reuse is optional where adapting its framework dependencies would cost more than implementing the same presentation against this app's contracts. The success criterion is the requested familiar experience, not a percentage of reused Seerr code.

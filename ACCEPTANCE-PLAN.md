@@ -123,3 +123,23 @@ Gate severity:
 Release package: requirement coverage report; AT results with revisions; parser/live-connector distinction; compatibility matrix; crash/concurrency evidence; before/after source-integrity checks; backup/restore timings; performance percentiles; accessibility review; security/reuse review; screenshots of principal states; known limitations and operator guide.
 
 All FR-01–FR-36 and NFR-01–NFR-12 must map to passing evidence before v1. AT-31–AT-35 are not v1 blockers because their features are explicitly post-v1. When a scenario fails, record its actual effect and owner; do not convert “not run” into “passed with limitations.”
+
+## 7. Stage evidence scopes
+
+An AT scenario is a release-level collection of assertions. Early stages prove their assigned subset; they cannot claim the whole scenario passed or require a later integration merely to close an earlier package. Record the specific assertion/fixture alongside the AT ID. The S09 gate runs the complete v1 scenarios across the integrated application.
+
+| Gate | Evidence required at this stage | Evidence deliberately completed later |
+|---|---|---|
+| S00 | Clean install/scaffold, schema lifecycle, generated contracts and reproducible fixture harness | Real integration behavior, production deployment certification |
+| S01 | Roles, durable identity/corrections, atomic enqueue, target reservations and redelivery using domain fixtures | Actual downloader side effects, provider conflicts involving live adapters, file publication |
+| S02 | Catalog identity/metadata, protected edits, local list CRUD and catalog search/detail; AT-02–AT-05 applicable subsets | ABS preservation/ownership in S03–S04; source-native provisional discovery in S05; aggregation in S06; discovery/sharing in S08 |
+| S03 | Complete/partial inventory, grants, media ownership, move/missing detection, relink/ignore and replacement-intent creation | Execution of replacement acquisition in S05; full restore/recovery rehearsal in S09 |
+| S04 | AT-14 import subset and AT-15–AT-19 using completed-file fixtures and actual supported ABS; publication crash points | Live qBittorrent lifecycle in S05; source-ranked pack selection in S06 |
+| S05 | MAM/proxy/session, qBittorrent and the complete manual request-to-library flow; actual submission-uncertainty recovery | Other sources/ranking in S06; external-list triggers in S07 |
+| S06 | Multi-source aggregation, eligibility/ranking, series policy, actual-versus-claimed coverage and partial pack fulfillment | Scheduled external-list observations in S07; curation surfaces in S08 |
+| S07 | Inbound lists, baselines/backfill, overlapping reasons, pause/resume/exclusions and list-to-library automation | Optional outbound list writes and shared/community curation in S08 |
+| S08 | Discovery, complete local list sharing, supported write-back, core-flow usability/accessibility | Final cross-version, performance, restore and packaging certification in S09 |
+| S09 | Full AT-01–AT-30 and all v1 FR/NFR evidence, including earlier-stage regressions | Only explicitly post-v1 FR-37–FR-42/AT-31–AT-35 |
+| S10 | The complete relevant expansion scenario plus v1 regression for affected modules | Other independently scoped expansion releases |
+
+The [integrated PRD walkthrough](PRD.md#15-end-to-end-product-acceptance-walkthrough) provides one shared demonstration across stages. It supplements the negative-case matrix; a successful happy path does not waive a failed duplicate, privacy, source-integrity or recovery assertion.

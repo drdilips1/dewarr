@@ -1,6 +1,6 @@
 # End-to-end development plan
 
-Planning baseline v1.1 · September 17, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
+Planning baseline v1.2 · September 17, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
 
 This plan implements [the PRD](PRD.md) using [the researched decisions](IMPLEMENTATION-DECISIONS.md). [Acceptance Plan](ACCEPTANCE-PLAN.md) specifies the evidence required at each gate. A stage is complete only when its exit gate passes; this document does not report completed engineering or tested compatibility.
 
@@ -114,6 +114,8 @@ Paginate potentially large collections. Use typed errors with safe user messages
 
 Ticket IDs below are stable planning references. Each ticket should acquire a concrete owner and implementation estimate when its stage starts. Responsibility names describe roles, not a staffing requirement; one developer can own several roles.
 
+Acceptance scenarios often span several stages. The [stage evidence scopes](ACCEPTANCE-PLAN.md#7-stage-evidence-scopes) define which assertions apply at each gate. Referencing an AT ID at an early gate never makes its later-source, list or recovery assertions prerequisites for that earlier stage; those remain explicitly pending until their delivery stage and the S09 full regression.
+
 ### S00 — Repository, contracts and scaffold
 
 **Entry:** PRD and implementation decisions accepted as the working baseline. **Responsible:** technical lead/platform, with frontend and backend input. **Requirements:** FR-01, FR-36 foundations; NFR-09, NFR-12.
@@ -154,13 +156,13 @@ Ticket IDs below are stable planning references. Each ticket should acquire a co
 |---|---|
 | S02-01 | Hardcover catalog adapter and independent provider contract; Open Library for targeted conservative work/ebook fallback, caching, budgets and version/series normalization. Explicitly document which fields each adapter supplies; do not treat Open Library as a complete recording catalog or bulk-harvest it. |
 | S02-02 | Metadata resolver with Automatic defaults, provenance, protected edits, cover selection and advanced group/field preferences. Keep contradictory editions separate. |
-| S02-03 | Adapt Seerr navigation, cover cards, shelves, detail layout, dialogs and settings visuals. Remove film/TV service bindings and vocabulary; implement responsive keyboard-accessible states. |
+| S02-03 | Implement Seerr-style navigation, cover cards, shelves, detail layout, dialogs and settings visuals against book-native contracts. Adapt eligible presentation components where useful; avoid carrying framework/server dependencies solely to reuse markup. Record copied components and notices. Implement responsive keyboard-accessible states. |
 | S02-04 | Local/catalog search, work/edition/recording/series views, provisional works and correction flow. Add paginated endpoints and local search indexes. |
 | S02-05 | Local list CRUD, ordering and bulk selection; own/private access; placeholder ownership fields use explicit unknown state until inventory exists. |
 
 **Demo:** find a book, inspect its editions/recordings and provenance, protect a title edit and add it to a local list without advanced setup.
 
-**Exit:** AT-02–AT-04 and AT-05 local-list subset pass. Provider outage leaves cached catalog usable. No catalog edition is created merely because two tracker releases exist. Initial accessibility checks cover navigation, search and book detail.
+**Exit:** AT-02 catalog identity/correction subset, AT-03 app metadata subset, AT-04 catalog search/detail subset and AT-05 local-list subset pass. Backend/file preservation and source-native results remain assigned to S03–S06. Provider outage leaves cached catalog usable. No catalog edition is created merely because two tracker releases exist. Initial accessibility checks cover navigation, search and book detail.
 
 ### S03 — Audiobookshelf inventory and reconciliation
 
@@ -176,7 +178,7 @@ Ticket IDs below are stable planning references. Each ticket should acquire a co
 
 **Demo:** an ebook alone checks the work as owned; an audio request is still missing. Losing an ABS page does not erase the library. Two narrators show two available recordings.
 
-**Exit:** AT-06, AT-07, AT-27 library-scope subset pass. Inventory-only credentials work. No scan-start or download status is used as proof of ownership.
+**Exit:** AT-06 inventory assertions, AT-07 missing/move detection and non-destructive repair subset, and AT-27 library-scope subset pass. Explicit replacement execution integrates in S05 and complete recovery in S09. Inventory-only credentials work. No scan-start or download status is used as proof of ownership.
 
 ### S04 — Safe importing, naming and collection manifests
 
@@ -424,3 +426,20 @@ Estimate remaining work after the first measured stage using observed completed 
 | Production v1 | Install, upgrade, restore behind external state, repair failed import, pass mapped release criteria | S09; zero open P0/P1 release blockers |
 
 The requested product is complete for v1 only at the final row. S10 is a visible continuation roadmap with independent requirements and evidence; it must not absorb unfinished FR-01–FR-36 work.
+
+## 9. Integrated development rehearsal
+
+Use the [PRD walkthrough](PRD.md#15-end-to-end-product-acceptance-walkthrough) as one continuous example across the backlog. Maintain a single synthetic identity graph and media corpus so that each module consumes the same works, recordings and collection evidence.
+
+| Stage | Increment of the rehearsal |
+|---|---|
+| S01–S02 | Create the trilogy, provider references, two recordings and local list; prove stable IDs and reversible corrections |
+| S03 | Observe ebook-only/audio-only ownership and granted-library visibility |
+| S04 | Import a synthetic completed pack into an isolated ABS instance; certify paths, item boundaries and restart behavior |
+| S05 | Replace the completed-download fixture with the native MAM/qBittorrent lifecycle; retain identical importer assertions |
+| S06 | Add independent sources, source failure, duplicate release origins and explained pack selection |
+| S07 | Trigger acquisition through Hardcover and Goodreads observations using the same intent/dispatch/import path |
+| S08 | Finish discovery, community-list entry, sharing and supported optional write-back around that journey |
+| S09 | Execute from clean install and restored app state; attach full compatibility and release evidence |
+
+Preserve a fixture-only run in CI and a separately recorded run against the supported external service versions. A parser fixture cannot certify live account authentication; a live search cannot certify a filesystem import. No evaluation or replacement of the user's existing stack is a prerequisite for planning or building these fixtures.
