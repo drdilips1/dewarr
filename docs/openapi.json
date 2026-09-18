@@ -2806,6 +2806,100 @@
         }
       }
     },
+    "/api/organization/inspections/{inspection_id}/grouping": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Get Grouping",
+        "operationId": "get_grouping_api_organization_inspections__inspection_id__grouping_get",
+        "parameters": [
+          {
+            "name": "inspection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Inspection Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupingView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Save Grouping",
+        "operationId": "save_grouping_api_organization_inspections__inspection_id__grouping_put",
+        "parameters": [
+          {
+            "name": "inspection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Inspection Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupingInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupingView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/organization/plans/{plan_id}/imports": {
       "post": {
         "tags": [
@@ -4384,6 +4478,29 @@
         ],
         "title": "EntryView"
       },
+      "ExcludedFile": {
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "title": "Path"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Reason"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path",
+          "reason"
+        ],
+        "title": "ExcludedFile"
+      },
       "FileMapping": {
         "properties": {
           "source": {
@@ -4420,6 +4537,18 @@
             "pattern": "^[a-f0-9]{64}$",
             "title": "Profile Revision"
           },
+          "grouping_revision": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grouping Revision"
+          },
           "selections": {
             "items": {
               "$ref": "#/components/schemas/GroupSelection"
@@ -4448,6 +4577,27 @@
           "inspection_revision": {
             "type": "string",
             "title": "Inspection Revision"
+          },
+          "grouping_revision": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grouping Revision"
+          },
+          "excluded_files": {
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Excluded Files"
           },
           "profile": {
             "$ref": "#/components/schemas/NamingProfile"
@@ -4610,6 +4760,100 @@
           "full_content"
         ],
         "title": "GroupSelection"
+      },
+      "GroupingContent": {
+        "properties": {
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/InspectedGroup"
+            },
+            "type": "array",
+            "title": "Groups"
+          },
+          "excluded": {
+            "items": {
+              "$ref": "#/components/schemas/ExcludedFile"
+            },
+            "type": "array",
+            "title": "Excluded"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "groups",
+          "excluded"
+        ],
+        "title": "GroupingContent"
+      },
+      "GroupingInput": {
+        "properties": {
+          "inspection_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Inspection Revision"
+          },
+          "expected_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Expected Revision"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "replace",
+              "reset"
+            ],
+            "title": "Action",
+            "default": "replace"
+          },
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewedGroup"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Groups"
+          },
+          "excluded": {
+            "items": {
+              "$ref": "#/components/schemas/ExcludedFile"
+            },
+            "type": "array",
+            "maxItems": 10000,
+            "title": "Excluded"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "inspection_revision",
+          "expected_revision"
+        ],
+        "title": "GroupingInput"
+      },
+      "GroupingView": {
+        "properties": {
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          },
+          "position": {
+            "type": "integer",
+            "title": "Position"
+          },
+          "content": {
+            "$ref": "#/components/schemas/GroupingContent"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "revision",
+          "position",
+          "content"
+        ],
+        "title": "GroupingView"
       },
       "HTTPValidationError": {
         "properties": {
@@ -6373,6 +6617,67 @@
           "decision"
         ],
         "title": "ReviewInput"
+      },
+      "ReviewedFile": {
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "title": "Path"
+          },
+          "disc": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 999.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Disc"
+          },
+          "track": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 999999.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Track"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "title": "ReviewedFile"
+      },
+      "ReviewedGroup": {
+        "properties": {
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewedFile"
+            },
+            "type": "array",
+            "maxItems": 5000,
+            "minItems": 1,
+            "title": "Files"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "files"
+        ],
+        "title": "ReviewedGroup"
       },
       "RevisionInput": {
         "properties": {

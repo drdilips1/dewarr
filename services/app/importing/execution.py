@@ -175,6 +175,17 @@ def matches(entry, item):
         raise PublicationError("ABS item boundaries or media files differ from the frozen import")
     if normalized(item.title) != normalized(metadata["title"]):
         raise PublicationError("ABS title differs from the exported title")
+    if expected_order := metadata.get("audio_order"):
+        indices = [file.playback_index for file in item.audio]
+        if (
+            any(index is None for index in indices)
+            or len(set(indices)) != len(indices)
+            or [file.path for file in sorted(item.audio, key=lambda file: file.playback_index)]
+            != expected_order
+        ):
+            raise PublicationError(
+                "ABS playback order differs from the reviewed disc and track order"
+            )
     for key in ("authors", "narrators"):
         expected = metadata[key] if key == "authors" or metadata["medium"] == "audio" else []
         if expected and sorted(map(normalized, expected)) != sorted(

@@ -1,6 +1,6 @@
 # Native Audiobookshelf certification evidence
 
-September 17, 2026. Bounded compatibility checks against a real disposable ABS server, including one ebook application import workflow. This is not full S03/S04 certification.
+September 17, 2026. Bounded compatibility checks against a real disposable ABS server, including ebook and merged two-track audiobook application import workflows. This is not full S03/S04 certification.
 
 ## Reproduce
 
@@ -44,9 +44,9 @@ The default ABS metadata precedence applies the generated OPF after folder and a
 
 ## Explicit boundaries
 
-The additional application test passes bootstrap → ABS connection/inventory → EPUB inspection → frozen plan → destination probe → import API/worker → real ABS scan/confirmation. It verifies exact-version ownership, source byte/inode preservation and a second request skipping the owned version. Its catalog version is seeded deliberately; it does not certify an external metadata provider or acquisition source.
+The additional application tests pass bootstrap → ABS connection/inventory → file inspection → frozen plan → destination probe → import API/worker → real ABS scan/confirmation for both an EPUB and an audiobook. The audiobook starts as two source-folder groups, is merged through the grouping API, and confirms one item with the reviewed two-track playback order. Both cases verify exact-version ownership, source byte/inode preservation and a second request skipping the owned version. Catalog versions are seeded deliberately; this does not certify an external metadata provider or acquisition source.
 
-The script disables the watcher and triggers manual scans. The actual backend path-existence endpoint passes an absent → visible → absent empty-folder challenge, verifying the worker/ABS root mapping. Library media settings and OPF precedence are read through the real API. Watcher-driven imports, generated covers, the complete audio application workflow, broader formats, companion/omnibus, wider international metadata, disc-order, deletion/move, user-progress, permission and crash/scanner matrices remain pending. The two-track case verifies membership, not the complete playback-order matrix. Concurrent reservation and permission-race cases use the separate HTTP fixture integration tests.
+The script disables the watcher and triggers manual scans. The actual backend path-existence endpoint passes an absent → visible → absent empty-folder challenge, verifying the worker/ABS root mapping. Library media settings and OPF precedence are read through the real API. Watcher-driven imports, generated covers, broader formats, companion/omnibus, wider international metadata, full disc-order, deletion/move, user-progress, permission and crash/scanner matrices remain pending. The audio application case establishes one two-track ordering scenario, not the complete matrix. Concurrent reservation and permission-race cases use the separate HTTP fixture integration tests.
 
 Nested layouts remain preview-only in the app. No complete stage or acceptance gate is marked passed from these eight checks. Logs and sanitized JSON evidence are saved in ignored `.local/evidence/abs-native.*`; server credentials and fixture databases are not retained in the JSON report.
 

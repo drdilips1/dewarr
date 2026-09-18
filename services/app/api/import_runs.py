@@ -13,6 +13,7 @@ from app.api.imports import assert_admin
 from app.config import get_settings
 from app.db.models import (
     AuditEvent,
+    DownloadInspection,
     FrozenImportPlan,
     ImportDestination,
     ImportEntry,
@@ -22,6 +23,7 @@ from app.db.models import (
 )
 from app.domain.operations import transaction_lock
 from app.importing.destinations import destination_configuration
+from app.importing.grouping import current_grouping
 from app.importing.naming import StrictModel
 from app.importing.ownership import already_owned
 from app.importing.publication import PublicationSpec, PublishFile
@@ -119,7 +121,12 @@ async def start_import(
     )
     if not plan:
         raise HTTPException(404, "Import plan not found")
+    await transaction_lock(db, f"inspection-plan:{plan.inspection_id}")
+    inspection = await db.get(DownloadInspection, plan.inspection_id)
+    grouping_revision, _ = await current_grouping(db, inspection)
     document = plan.document
+    if (document.get("grouping_revision") or document["inspection_revision"]) != grouping_revision:
+        raise HTTPException(409, "File groups changed after this plan; save a new reviewed plan")
     if plan.revision != body.plan_revision:
         raise HTTPException(409, "Review the current frozen import plan")
     if document["profile"]["layout"] != "conventional":
@@ -226,6 +233,20 @@ async def start_import(
             "medium": item["medium"],
             "version_revision": version_revision(version),
         }
+        if item["medium"] == "audio" and len(specification.files) > 1:
+            names = {file.source: file.name for file in specification.files}
+            entry.expected_metadata["audio_order"] = [
+                str(
+                    PurePosixPath(configuration["backend_path"])
+                    / specification.folder
+                    / names[file["path"]]
+                )
+                for file in sorted(
+                    group["files"],
+                    key=lambda file: (file.get("disc") or 1, file.get("track") or 1, file["path"]),
+                )
+                if file.get("role", "media") == "media"
+            ]
         entry.state, entry.message, entry.reserved = "queued", "Waiting to publish this book", True
         operation = Operation(
             owner_id=admin.id,

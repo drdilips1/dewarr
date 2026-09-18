@@ -436,9 +436,45 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     .getByRole("button", { name: "Inspect files", exact: true })
     .click();
   const inspected = page.getByRole("region", { name: "Inspected download" });
-  await expect(inspected).toContainText(
-    "1 files inspected · 1 proposed book groups",
-  );
+  await expect(inspected).toContainText("1 files inspected · 1 book groups");
+  await inspected
+    .getByRole("button", { name: "Review file groups", exact: true })
+    .click();
+  const groupEditor = page.getByRole("region", {
+    name: "Edit file groups",
+    exact: true,
+  });
+  await groupEditor
+    .getByRole("combobox", { name: "Book group for book.epub", exact: true })
+    .selectOption("");
+  await groupEditor
+    .getByLabel("Exclusion reason for book.epub")
+    .fill("Not part of this reading list");
+  await page.screenshot({
+    path: testInfo.outputPath("grouping-mobile.png"),
+    fullPage: true,
+  });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await groupEditor
+    .getByRole("button", { name: "Save file groups", exact: true })
+    .click();
+  await expect(inspected).toContainText("1 files inspected · 0 book groups");
+  await page.reload();
+  await expect(inspected).toContainText("1 files excluded from this plan");
+  await inspected
+    .getByRole("button", { name: "Review file groups", exact: true })
+    .click();
+  await expect(
+    groupEditor.getByLabel("Exclusion reason for book.epub"),
+  ).toHaveValue("Not part of this reading list");
+  await groupEditor
+    .getByRole("button", { name: "Restore proposed groups", exact: true })
+    .click();
+  await expect(inspected).toContainText("1 files inspected · 1 book groups");
   await inspected
     .getByLabel("Find catalog book")
     .fill("My protected catalog title");

@@ -387,6 +387,16 @@ class DownloadInspection(Identity, Base):
     snapshot: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
 
 
+class InspectionGrouping(Identity, Base):
+    __tablename__ = "inspection_groupings"
+    __table_args__ = (UniqueConstraint("inspection_id", "position"),)
+    inspection_id: Mapped[UUID] = mapped_column(ForeignKey("download_inspections.id"), index=True)
+    position: Mapped[int] = mapped_column(Integer)
+    revision: Mapped[str] = mapped_column(String(64))
+    previous_revision: Mapped[str] = mapped_column(String(64))
+    content: Mapped[dict[str, Any]] = mapped_column(JSONB)
+
+
 class FrozenImportPlan(Identity, Base):
     __tablename__ = "frozen_import_plans"
     __table_args__ = (UniqueConstraint("inspection_id", "revision"),)

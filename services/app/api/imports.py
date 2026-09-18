@@ -21,6 +21,7 @@ from app.db.models import (
 from app.domain.operations import transaction_lock
 from app.domain.work_graph import canonical_work, graph_lock
 from app.importing.filesystem import relative_parts
+from app.importing.grouping import current_grouping
 from app.importing.inspection import InspectedFile, InspectionSnapshot
 from app.importing.metadata import ExportMetadata, initial_sidecars
 from app.importing.naming import (
@@ -73,12 +74,15 @@ class GroupSelection(StrictModel):
 class FreezeInput(StrictModel):
     inspection_revision: str = Field(pattern=r"^[a-f0-9]{64}$")
     profile_revision: str = Field(pattern=r"^[a-f0-9]{64}$")
+    grouping_revision: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
     selections: list[GroupSelection] = Field(min_length=1, max_length=100)
 
 
 class FrozenDocument(StrictModel):
     schema_version: int
     inspection_revision: str
+    grouping_revision: str | None = None
+    excluded_files: list[dict[str, str]] = Field(default_factory=list)
     profile: NamingProfile
     plan: ImportPlan
     groups: list[ImportGroup]
@@ -218,7 +222,12 @@ async def freeze_plan(inspection_id: UUID, body: FreezeInput, admin: Admin, db: 
         raise HTTPException(409, "Naming settings changed; preview the current profile")
     if len({selection.group_key for selection in body.selections}) != len(body.selections):
         raise HTTPException(422, "Choose each inspected group once")
-    observed = {group["key"]: group for group in row.snapshot["groups"]}
+    grouping_revision, grouping = await current_grouping(db, row)
+    if (body.grouping_revision or row.snapshot["revision"]) != grouping_revision:
+        raise HTTPException(
+            409, "File groups changed; review their current membership before planning"
+        )
+    observed = {group.key: group.model_dump() for group in grouping.groups}
     files = {file["path"]: file for file in row.snapshot["files"]}
     groups, sidecars, versions = [], {}, {}
     await graph_lock(db)
@@ -297,6 +306,8 @@ async def freeze_plan(inspection_id: UUID, body: FreezeInput, admin: Admin, db: 
         "initial_sidecars": sidecars,
         "version_revisions": versions,
         "inspection_revision": row.snapshot["revision"],
+        "grouping_revision": grouping_revision,
+        "excluded_files": [file.model_dump() for file in grouping.excluded],
         "profile": profile.model_dump(),
         "plan": plan.model_dump(mode="json"),
         "groups": [group.model_dump(mode="json") for group in groups],

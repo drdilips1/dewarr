@@ -72,7 +72,17 @@ The worker opens each directory component relative to an already-open descriptor
 - EPUB: bounded ZIP directory and metadata reads, defused XML parsing, container/package/spine validation and existing nonempty spine entries. Read title, authors, language and identifier assertions. EPUB stays intact; no extraction occurs. This is structural inspection, not full chapter decoding or proof that the book is complete.
 - Other ebook formats, extras and generic archives remain held for review because their byte-level inspectors are not yet implemented. Invalid supported files are held independently so other inspectable groups remain usable. A compromised or changing directory invalidates the entire snapshot instead of committing a partial tree.
 
-Grouping uses directory boundaries and observed album/author/narrator/format evidence. Disc directories are folded into their parent recording; contradictory disc evidence is held. Flat ebooks remain separate groups. Filename-only track inference, grouping corrections, automatic provider-identifier matching, collection/omnibus verification, companion classification and broader formats remain S04 work. All proposed groups begin with unresolved identity and unverified full contents.
+Grouping uses directory boundaries and observed album/author/narrator/format evidence. Disc directories are folded into their parent recording; contradictory disc evidence is held. Flat ebooks remain separate groups. Filename-only track inference, automatic provider-identifier matching, verified omnibus coverage, companion classification and broader formats remain S04 work. All proposed groups begin with unresolved identity and unverified full contents.
+
+## Correct collection groups
+
+Choose **Review file groups** on a completed inspection. Assign files to an existing group to join them, choose **New group** to separate files, or exclude a file with a reason. Review disc/track numbers for multi-file audio. Every inspected file must be assigned once or explicitly excluded; source bytes and the original inspection are never changed. Unsupported or failed files cannot be promoted into valid media by this editor. Ebook and audio remain separate, alternate audio encodings cannot be combined, and each currently supported EPUB stays intact in its own group. A single omnibus is not split into invented standalone books.
+
+Saving creates an immutable grouping revision, clears the current catalog selections and asks the user to map the resulting groups. Common embedded metadata supplies suggestions only; identity and completeness remain unverified until reviewed. An excluded file remains in the seeded download. **Restore proposed groups** saves a new revision of the original proposals, preserving previous review history. Optimistic revision checks reject stale competing edits; replaying the same saved change returns its existing revision.
+
+Frozen plans include the reviewed grouping revision and exclusions. A later grouping correction leaves the old plan readable but prevents starting a new import from it. Creating import reservations and saving group changes share a transaction lock; an inspection with reserved or published children cannot be regrouped through this editor. Selective replanning/cancellation of those children remains separate unfinished work.
+
+New multi-file audio imports also freeze the expected playback sequence. Confirmation compares that sequence with ABS's explicit audio-file indices, not the order of an API array. Missing, duplicate or differing indices hold confirmation. ABS can prefer embedded tags over filename numbers; the app does not rewrite seeded tags to force an order. A real two-track merged-group workflow passes the pinned-server check, but the full disc/track and manual-order repair matrix remains pending.
 
 ## Persistence and API
 
@@ -84,6 +94,7 @@ Grouping uses directory boundaries and observed album/author/narrator/format evi
 | `POST /api/organization/inspections` | Queue durable inspection; requires idempotency key, configured source and completed-download assertion |
 | `GET /api/organization/inspections` | Owner-scoped history, 25 summaries per page without loading file snapshots |
 | `GET /api/organization/inspections/{id}` | Owner-scoped result, file evidence and proposed groups |
+| `GET/PUT /api/organization/inspections/{id}/grouping` | Read/save reviewed membership, ordering and exclusions, or restore proposals with expected revision |
 | `POST /api/organization/inspections/{id}/plans` | Validate selected catalog versions and profile/inspection revisions; save immutable plan |
 | `GET /api/organization/plans/{id}` | Reload the recorded plan independently of later settings changes |
 | `GET /api/organization/destination-roots` | Configured destination keys |
@@ -104,6 +115,8 @@ Migrations 0008 and 0009 add organization settings, download inspections and fro
 Migration 0010 adds destination bindings and fenced probe state, with the same populated-state downgrade guard.
 
 Migration 0011 adds durable runs, per-child publication state and reservations. Populated import history prevents destructive downgrade. Preserve database state and the private filesystem journal together; complete restore reconciliation remains S09 work.
+
+Migration 0012 adds immutable file-group review history. Its populated-state guard prevents lossy rollback. The latest grouping is separate from the original inspection snapshot and from every frozen plan.
 
 ## Reviewed publication and availability
 
@@ -133,6 +146,8 @@ The publisher adds 25 tests for hardlink/copy integrity, interrupted/replayed pu
 
 Fourteen integrated publication tests cover command/reservation races, shared-library bindings, per-child partial success, exact-version satisfaction, mismatched backend metadata/files, final permission/identity fencing, post-rename crash recovery, periodic confirmation, credential retry and downgrade protection. The browser submits a reviewed import, observes waiting state, confirms fixture detection and retains availability after reload.
 
-The [native ABS certification](ABS-NATIVE-CERTIFICATION.md) passed eight pinned-server scanner cases through the publisher and inventory adapter, plus a real ebook application workflow through the import API and durable worker. Initial OPF export participates in these checks. Actual watcher behavior, the audio application workflow and broader compatibility remain unverified; nested layout is still preview-only.
+Twelve grouping integration cases cover merge/split/reset, immutable source evidence, stale/concurrent reviews, invalid file assignments, frozen-plan invalidation, active-import protection, owner isolation and downgrade protection. Four additional cases reject reversed, missing or duplicate playback indices while accepting explicit correct indices independent of API array order. The browser persists exclusions, restores proposals, maps the restored group and completes its import.
+
+The [native ABS certification](ABS-NATIVE-CERTIFICATION.md) passed eight pinned-server scanner cases through the publisher and inventory adapter, plus real ebook and merged two-track audio application workflows through the import API and durable worker. The audio case confirms playback order. Initial OPF export participates in these checks. Actual watcher behavior and broader compatibility remain unverified; nested layout is still preview-only.
 
 Next: generated covers, fuller grouping/format/omnibus coverage, cancellation/replanning and the complete recovery/compatibility matrix. These remain required before enabling the MAM/qBittorrent acquisition path. No S04 acceptance gate is claimed complete.

@@ -934,6 +934,24 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organization/inspections/{inspection_id}/grouping": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Grouping */
+    get: operations["get_grouping_api_organization_inspections__inspection_id__grouping_get"];
+    /** Save Grouping */
+    put: operations["save_grouping_api_organization_inspections__inspection_id__grouping_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organization/plans/{plan_id}/imports": {
     parameters: {
       query?: never;
@@ -1487,6 +1505,13 @@ export interface components {
        */
       can_retry: boolean;
     };
+    /** ExcludedFile */
+    ExcludedFile: {
+      /** Path */
+      path: string;
+      /** Reason */
+      reason: string;
+    };
     /** FileMapping */
     FileMapping: {
       /** Source */
@@ -1502,6 +1527,8 @@ export interface components {
       inspection_revision: string;
       /** Profile Revision */
       profile_revision: string;
+      /** Grouping Revision */
+      grouping_revision?: string | null;
       /** Selections */
       selections: components["schemas"]["GroupSelection"][];
     };
@@ -1511,6 +1538,12 @@ export interface components {
       schema_version: number;
       /** Inspection Revision */
       inspection_revision: string;
+      /** Grouping Revision */
+      grouping_revision?: string | null;
+      /** Excluded Files */
+      excluded_files?: {
+        [key: string]: string;
+      }[];
       profile: components["schemas"]["NamingProfile"];
       plan: components["schemas"]["ImportPlan"];
       /** Groups */
@@ -1580,6 +1613,38 @@ export interface components {
       version_id: string;
       /** Full Content */
       full_content: boolean;
+    };
+    /** GroupingContent */
+    GroupingContent: {
+      /** Groups */
+      groups: components["schemas"]["InspectedGroup"][];
+      /** Excluded */
+      excluded: components["schemas"]["ExcludedFile"][];
+    };
+    /** GroupingInput */
+    GroupingInput: {
+      /** Inspection Revision */
+      inspection_revision: string;
+      /** Expected Revision */
+      expected_revision: string;
+      /**
+       * Action
+       * @default replace
+       * @enum {string}
+       */
+      action: "replace" | "reset";
+      /** Groups */
+      groups?: components["schemas"]["ReviewedGroup"][];
+      /** Excluded */
+      excluded?: components["schemas"]["ExcludedFile"][];
+    };
+    /** GroupingView */
+    GroupingView: {
+      /** Revision */
+      revision: string;
+      /** Position */
+      position: number;
+      content: components["schemas"]["GroupingContent"];
     };
     /** HTTPValidationError */
     HTTPValidationError: {
@@ -2261,6 +2326,20 @@ export interface components {
        * @enum {string}
        */
       decision: "keep" | "separate";
+    };
+    /** ReviewedFile */
+    ReviewedFile: {
+      /** Path */
+      path: string;
+      /** Disc */
+      disc?: number | null;
+      /** Track */
+      track?: number | null;
+    };
+    /** ReviewedGroup */
+    ReviewedGroup: {
+      /** Files */
+      files: components["schemas"]["ReviewedFile"][];
     };
     /** RevisionInput */
     RevisionInput: {
@@ -4514,6 +4593,72 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["FrozenPlanView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_grouping_api_organization_inspections__inspection_id__grouping_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        inspection_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GroupingView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  save_grouping_api_organization_inspections__inspection_id__grouping_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        inspection_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["GroupingInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GroupingView"];
         };
       };
       /** @description Validation Error */

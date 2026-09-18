@@ -12,15 +12,15 @@ from app.db.session import get_engine, session_factory
 from app.importing.execution import execute
 from app.jobs.queue import get_queue
 from app.main import create_app
-from tests.media_fixtures import epub
+from tests.media_fixtures import audio, epub
 
 
-async def certify_workflow(base, token, root, backend_client):
-    target = root / "workflow-library"
+async def certify_workflow(base, token, root, backend_client, medium="ebook"):
+    target = root / f"workflow-library-{medium}"
     target.mkdir()
     settings = get_settings()
     settings.import_sources = {"native": root / "downloads"}
-    settings.import_destinations = {"ebooks": target}
+    settings.import_destinations = {medium: target}
     settings.import_staging_root = root / "staging"
     if not settings.database_url.get_secret_value().endswith("_abs_test"):
         raise RuntimeError("Native workflow requires a dedicated _abs_test database")
@@ -35,7 +35,7 @@ async def certify_workflow(base, token, root, backend_client):
     response = await backend_client.post(
         "api/libraries",
         json={
-            "name": "Workflow certification",
+            "name": f"Workflow certification {medium}",
             "mediaType": "book",
             "folders": [{"fullPath": str(target)}],
             "settings": {"disableWatcher": True, "audiobooksOnly": False},
@@ -43,7 +43,15 @@ async def certify_workflow(base, token, root, backend_client):
     )
     response.raise_for_status()
     external_library = response.json()["id"]
-    epub(root / "downloads/workflow/book.epub", title="Workflow Harbor", author="Fixture Author")
+    title = "Workflow Harbor" if medium == "ebook" else "Workflow Audio Harbor"
+    source = root / "downloads" / f"workflow-{medium}"
+    if medium == "ebook":
+        epub(source / "book.epub", title=title, author="Fixture Author")
+    else:
+        # Separate folders deliberately require a reviewed merge before import.
+        audio(source / "part-a/01.mp3", title=title, author="Fixture Author", track=1)
+        audio(source / "part-b/02.mp3", title=title, author="Fixture Author", track=2)
+    source_bytes = {path: path.read_bytes() for path in source.rglob("*") if path.is_file()}
     queue = get_queue()
     try:
         async with (
@@ -91,17 +99,23 @@ async def certify_workflow(base, token, root, backend_client):
             )
             await drain()
             libraries = await request("GET", "/api/library/libraries")
-            library = next(row for row in libraries if row["name"] == "Workflow certification")
+            library = next(
+                row for row in libraries if row["name"] == f"Workflow certification {medium}"
+            )
             assert library["accessible"]
             work = await request(
                 "POST",
                 "/api/catalog/works",
                 201,
-                json={"title": "Workflow Harbor", "authors": ["Fixture Author"], "language": "en"},
+                json={"title": title, "authors": ["Fixture Author"], "language": "en"},
             )
             async with session_factory()() as db, db.begin():
                 version = Version(
-                    work_id=UUID(work["id"]), medium="ebook", language="en", publication_year=2024
+                    work_id=UUID(work["id"]),
+                    medium=medium,
+                    language="en",
+                    publication_year=2024,
+                    narrators=["Jordan Lee"] if medium == "audio" else [],
                 )
                 db.add(version)
                 await db.flush()
@@ -113,12 +127,36 @@ async def certify_workflow(base, token, root, backend_client):
                 headers={"Idempotency-Key": "native-inspection"},
                 json={
                     "source_key": "native",
-                    "relative_path": "workflow",
+                    "relative_path": source.name,
                     "completed_download": True,
                 },
             )
             await drain()
             inspection = await request("GET", f"/api/organization/inspections/{inspection['id']}")
+            grouping = await request(
+                "GET", f"/api/organization/inspections/{inspection['id']}/grouping"
+            )
+            if medium == "audio":
+                assert len(grouping["content"]["groups"]) == 2
+                grouping = await request(
+                    "PUT",
+                    f"/api/organization/inspections/{inspection['id']}/grouping",
+                    json={
+                        "inspection_revision": inspection["snapshot"]["revision"],
+                        "expected_revision": grouping["revision"],
+                        "groups": [
+                            {
+                                "files": [
+                                    {key: file.get(key) for key in ("path", "disc", "track")}
+                                    for group in grouping["content"]["groups"]
+                                    for file in group["files"]
+                                ]
+                            }
+                        ],
+                        "excluded": [],
+                    },
+                )
+                assert len(grouping["content"]["groups"]) == 1
             naming = await request("GET", "/api/organization/settings")
             plan = await request(
                 "POST",
@@ -127,9 +165,10 @@ async def certify_workflow(base, token, root, backend_client):
                 json={
                     "inspection_revision": inspection["snapshot"]["revision"],
                     "profile_revision": naming["revision"],
+                    "grouping_revision": grouping["revision"],
                     "selections": [
                         {
-                            "group_key": inspection["snapshot"]["groups"][0]["key"],
+                            "group_key": grouping["content"]["groups"][0]["key"],
                             "work_id": work["id"],
                             "version_id": version_id,
                             "full_content": True,
@@ -139,8 +178,8 @@ async def certify_workflow(base, token, root, backend_client):
             )
             destination = await request(
                 "PUT",
-                "/api/organization/destinations/ebooks",
-                json={"library_id": library["id"], "medium": "ebook", "backend_path": str(target)},
+                f"/api/organization/destinations/{medium}",
+                json={"library_id": library["id"], "medium": medium, "backend_path": str(target)},
             )
             await request(
                 "POST",
@@ -155,7 +194,7 @@ async def certify_workflow(base, token, root, backend_client):
             body = {
                 "plan_revision": plan["revision"],
                 "destinations": {
-                    "ebook": {"id": destination["id"], "revision": destination["revision"]}
+                    medium: {"id": destination["id"], "revision": destination["revision"]}
                 },
             }
             run = await request(
@@ -176,12 +215,18 @@ async def certify_workflow(base, token, root, backend_client):
                 await execute(UUID(entry["operation_id"]))
             assert entry["state"] == "confirmed", entry
             owned = await request("GET", f"/api/catalog/works/{work['id']}")
-            assert owned["availability"]["owned"] and owned["availability"]["ebook"]
-            assert not owned["availability"]["audio"]
-            source = root / "downloads/workflow/book.epub"
-            published = list(target.rglob("*.epub"))
-            assert len(published) == 1 and published[0].stat().st_ino == source.stat().st_ino
-            assert published[0].read_bytes() == source.read_bytes()
+            assert owned["availability"]["owned"] and owned["availability"][medium]
+            assert not owned["availability"]["audio" if medium == "ebook" else "ebook"]
+            published = list(target.rglob("*.epub" if medium == "ebook" else "*.mp3"))
+            assert len(published) == len(source_bytes)
+            for original, content in source_bytes.items():
+                matches = [
+                    path for path in published if path.stat().st_ino == original.stat().st_ino
+                ]
+                assert (
+                    len(matches) == 1
+                    and matches[0].read_bytes() == original.read_bytes() == content
+                )
             second = await request(
                 "POST",
                 f"/api/organization/plans/{plan['id']}/imports",
@@ -195,7 +240,9 @@ async def certify_workflow(base, token, root, backend_client):
                 "owned": True,
                 "source_preserved": True,
                 "duplicate_skipped": True,
-                "medium": "ebook",
+                "medium": medium,
+                "reviewed_group_merge": medium == "audio",
+                "playback_order_confirmed": medium == "audio",
                 "catalog_version_seeded": True,
                 "server_library_id": external_library,
             }

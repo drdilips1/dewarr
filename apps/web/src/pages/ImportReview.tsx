@@ -5,6 +5,7 @@ import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
 import ImportExecution from "../components/ImportExecution";
+import GroupingEditor from "../components/GroupingEditor";
 
 type Group = components["schemas"]["InspectedGroup"];
 type Selection = components["schemas"]["GroupSelection"];
@@ -193,11 +194,27 @@ export default function ImportReview() {
 }
 
 function Review({ inspection }: { inspection: Inspection }) {
+  const cache = useQueryClient();
   const [params, setParams] = useSearchParams();
   const [selections, setSelections] = useState<Record<string, Selection>>({});
   const [groupOffset, setGroupOffset] = useState(0);
   const [fileLimit, setFileLimit] = useState(100);
+  const [editingGroups, setEditingGroups] = useState(false);
   const snapshot = inspection.snapshot;
+  const grouping = useQuery({
+    queryKey: ["inspection-grouping", inspection.id],
+    enabled: !!snapshot && inspection.state === "ready",
+    queryFn: async () =>
+      result(
+        await api.GET(
+          "/api/organization/inspections/{inspection_id}/grouping",
+          {
+            params: { path: { inspection_id: inspection.id } },
+          },
+        ),
+      ),
+  });
+  const groups = grouping.data?.content.groups || [];
   const planId = params.get("plan");
   const settings = useQuery({
     queryKey: ["naming-review-settings"],
@@ -221,6 +238,7 @@ function Review({ inspection }: { inspection: Inspection }) {
           body: {
             inspection_revision: snapshot!.revision,
             profile_revision: settings.data!.revision,
+            grouping_revision: grouping.data!.revision,
             selections: Object.values(selections),
           },
         }),
@@ -235,26 +253,61 @@ function Review({ inspection }: { inspection: Inspection }) {
       {snapshot && (
         <>
           <p className="muted">
-            {snapshot.files.length} files inspected · {snapshot.groups.length}{" "}
-            proposed book groups. Embedded metadata is evidence; choose a
-            catalog version to confirm each mapping.
+            {snapshot.files.length} files inspected · {groups.length} book
+            groups. Embedded metadata is evidence; choose a catalog version to
+            confirm each mapping.
           </p>
-          {snapshot.groups.slice(groupOffset, groupOffset + 10).map((group) => (
-            <GroupMatch
-              key={group.key}
-              group={group}
-              selection={selections[group.key]}
+          <Notice error={grouping.error} />
+          {grouping.isPending && <Loading />}
+          {grouping.data && !editingGroups && (
+            <button
               disabled={save.isPending}
-              onChange={(selection) =>
-                setSelections((current) => {
-                  const next = { ...current };
-                  if (selection) next[group.key] = selection;
-                  else delete next[group.key];
-                  return next;
-                })
-              }
+              onClick={() => setEditingGroups(true)}
+            >
+              Review file groups
+            </button>
+          )}
+          {editingGroups && grouping.data && (
+            <GroupingEditor
+              key={grouping.data.revision}
+              inspection={inspection}
+              grouping={grouping.data}
+              onCancel={() => setEditingGroups(false)}
+              onSave={(value) => {
+                cache.setQueryData(
+                  ["inspection-grouping", inspection.id],
+                  value,
+                );
+                setSelections({});
+                setGroupOffset(0);
+                setEditingGroups(false);
+                setParams({ inspection: inspection.id });
+              }}
             />
-          ))}
+          )}
+          {grouping.data?.content.excluded.length ? (
+            <p className="muted">
+              {grouping.data.content.excluded.length} files excluded from this
+              plan. Review file groups to see why.
+            </p>
+          ) : null}
+          {!editingGroups &&
+            groups.slice(groupOffset, groupOffset + 10).map((group) => (
+              <GroupMatch
+                key={`${grouping.data?.revision}:${group.key}`}
+                group={group}
+                selection={selections[group.key]}
+                disabled={save.isPending}
+                onChange={(selection) =>
+                  setSelections((current) => {
+                    const next = { ...current };
+                    if (selection) next[group.key] = selection;
+                    else delete next[group.key];
+                    return next;
+                  })
+                }
+              />
+            ))}
           <div className="actions">
             <button
               disabled={groupOffset === 0}
@@ -263,7 +316,7 @@ function Review({ inspection }: { inspection: Inspection }) {
               Previous groups
             </button>
             <button
-              disabled={groupOffset + 10 >= snapshot.groups.length}
+              disabled={groupOffset + 10 >= groups.length}
               onClick={() => setGroupOffset((value) => value + 10)}
             >
               More groups
@@ -295,6 +348,8 @@ function Review({ inspection }: { inspection: Inspection }) {
             disabled={
               save.isPending ||
               !settings.data ||
+              !grouping.data ||
+              editingGroups ||
               !Object.keys(selections).length
             }
             onClick={() => save.mutate()}
@@ -302,8 +357,14 @@ function Review({ inspection }: { inspection: Inspection }) {
             {save.isPending ? "Saving…" : "Save import plan"}
           </button>
           {save.isError && (
-            <button onClick={() => settings.refetch()}>
-              Refresh naming settings
+            <button
+              onClick={() => {
+                settings.refetch();
+                grouping.refetch();
+                setSelections({});
+              }}
+            >
+              Refresh review settings
             </button>
           )}
         </>

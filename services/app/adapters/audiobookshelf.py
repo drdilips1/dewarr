@@ -24,6 +24,7 @@ class ABSFile(BaseModel):
     format: str
     inode: str | None = None
     modified: float | None = None
+    playback_index: int | None = Field(default=None, ge=1)
 
 
 class ABSItem(BaseModel):
@@ -91,6 +92,9 @@ def parse_item(value: dict) -> ABSItem:
                 format=(file.get("ebookFormat") or source.get("ext", "")).lstrip(".").lower(),
                 inode=str(file["ino"]) if file.get("ino") is not None else None,
                 modified=source.get("mtimeMs"),
+                playback_index=file.get("index")
+                if isinstance(file.get("index"), int) and file["index"] > 0
+                else None,
             )
 
         all_audio = media.get("audioFiles", [])
