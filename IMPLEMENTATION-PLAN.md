@@ -1,6 +1,6 @@
 # End-to-end development plan
 
-Planning baseline v1.7 · September 18, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
+Planning baseline v1.8 · September 18, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
 
 This plan implements [the PRD](PRD.md) using [the researched decisions](IMPLEMENTATION-DECISIONS.md). [Acceptance Plan](ACCEPTANCE-PLAN.md) specifies the evidence required at each gate. A stage is complete only when its exit gate passes; this document does not report completed engineering or tested compatibility.
 
@@ -580,7 +580,7 @@ Forecast dates after estimating the split tickets and observing delivery through
 - All stages have dependencies, responsible roles, deliverables and release gates; all packages are available in the backlog export.
 - Existing implementation status is distinct from planned scope and release acceptance.
 
-The next development action is to review and close the earliest incomplete dependency for batches A/B using the current implementation, then proceed through the manual acquisition slice. Do not restart the project scaffold or enable list-driven downloading merely because its settings screen exists.
+For a fresh implementation, close the dependencies in batches A/B before the manual acquisition slice. For this existing workspace, section 15 and the release delivery contract in section 16 control the next work: review current evidence and preserve completed components. A settings screen alone never establishes readiness for automatic acquisition.
 
 ## 13. Next development slices from the current checkpoint
 
@@ -687,3 +687,53 @@ For each unit attach: parent package IDs; FR/AT assertions; preconditions; typed
 - Decision references: provider APIs/capabilities, identity, naming/ABS boundaries, hardlinks, source routing, durability and reuse licensing remain in Implementation Decisions and supporting research.
 
 No calendar commitment is implied. At each stage start, assign named owners and estimate remaining implementation, verification, integration access and contingency separately; reforecast at manual alpha and automation beta. A complete planning package makes development reviewable; it does not certify the application as complete.
+
+
+## 16. Release delivery contract
+
+This is the final development handoff for planning baseline v1.8. Sections 1–3 define the dependency graph and work packages; section 15 identifies the existing implementation starting point. Earlier checkpoint sequences are historical guidance. The PRD remains authoritative for behavior, and implementation status remains authoritative for verified progress.
+
+### Milestones and acceptance ownership
+
+| Milestone | Required stage scope | Review demonstration | Release decision owner |
+|---|---|---|---|
+| M0 · Engineering foundation | S00–S01 | Reproducible stack, private accounts, stable identities, transactional jobs and interrupted-operation recovery | Technical owner with platform/security review |
+| M1 · Catalog and connected library | S02–S03 | J-01 plus local-curation portion of J-02; correct work/version grouping, protected metadata and grant-scoped ownership | Product/frontend owner with catalog/inventory owner |
+| M2 · Manual acquisition alpha | S04–S05 and their foundation dependencies | J-03 using native MAM; real-file grouping/naming, source-preserving hardlinks, downloader ambiguity recovery and ABS confirmation | Acquisition/import owner with integration reviewer |
+| M3 · Multi-source acquisition | S06 | Full J-03 and J-06 across required source adapters, explainable ranking and partially owned series packs | Source/domain owner with importer reviewer |
+| M4 · Automated-list beta | S07 and required S06 behavior | J-04, J-05 and J-07 through actual list observations and the shared downloader/importer; zero routine per-title approval | Lists/domain owner with end-to-end reviewer |
+| M5 · Complete discovery beta | S08 and remaining catalog UX | Full J-02; attributed shelves, series navigation, related titles, community/local list curation and supported optional write-back | Product/frontend owner with accessibility/privacy review |
+| M6 · Production v1 | S09 and all v1 requirements | J-01–J-08 on the supported deployment; complete AT-01–AT-30 evidence | Technical/release owner with product acceptance |
+| M7 · Separate extensions | Individual S10 packages | Each additional backend/client, upgrade, reorganization, recommendation or SSO journey | Relevant feature owner and release owner |
+
+Owner labels describe responsibilities, not assumed staffing. One developer may fill several roles. Assign actual names when tickets enter development. Milestones have evidence dependencies; they are not equal-sized sprints. Interface work can proceed against stable contracts while dependent integration work continues, but release acceptance waits for the full required path.
+
+### Next increment in this workspace
+
+The workspace contains both verified earlier components and in-progress list-policy changes. The next increment is **qualify the bounded single-book list-to-library path**, within S07-04–S07-06 and their S01/S05/S06 dependencies. Its presence in the working tree is not passing evidence and does not close S07.
+
+1. Review existing request constraints, policy activation, scheduler, permission checks and UI against FR-20–FR-23 and FR-31–FR-33. Reuse the shared acquisition/import services.
+2. Close policy inheritance for manual and automatic actions; make future-only, explicit backfill, pause and catch-up semantics consistent in API and UI.
+3. Demonstrate both ebook and audiobook additions from external lists through actual files to backend confirmation. Cover Both/Either policies, already-owned skips and delayed scans independently.
+4. Verify overlapping lists, independent withdrawal, stale activation, profile/grant changes, retry budgets and interrupted submission/import. Preserve durable request reasons and original transfer identity.
+5. Record migration, affected regression and browser evidence; update implementation status only for what passed. Keep native ABB, complete pack/recording handling and live/deployment certification visible as separate remaining gates.
+
+After that bounded increment, finish missing S06 source/series/recording coverage, full S07 policy and connector qualification, S08 discovery, then S09 release readiness. Close earlier-stage gaps whenever they block these outcomes. Do not rewrite working foundation modules merely to follow stage numbering, and do not defer mandatory v1 functionality into S10.
+
+### Ticket readiness and completion
+
+A ready ticket identifies its parent package, user outcome, FR/NFR and AT assertions, dependency contracts, owned modules, schema/API/UI changes, failure behavior, capability prerequisites and verification scope. Estimate implementation, qualification and external-access waits separately. Put unresolved provider behavior into a bounded investigation ticket with a concrete contract or fallback as its output.
+
+A completed ticket includes a reviewable change, required migration and operational notes, observed success and relevant failure evidence, a UI demonstration where applicable, and an honest statement of remaining limits. Only the relevant milestone review can accept a stage. Implementation, fixture verification, actual-service compatibility and release acceptance are four different facts.
+
+### Integration evidence to refresh before certification
+
+The supplied project pages and official API entry points were revisited during this planning refresh. They support adapter boundaries and reuse investigation; they do not certify current credentials, scanner behavior or the application's implementation.
+
+- [Seerr](https://github.com/seerr-team/seerr), [MouseSearch](https://github.com/sevenlayercookie/MouseSearch), [Shelfmark](https://github.com/calibrain/shelfmark) and [BookOrbit](https://github.com/bookorbit/bookorbit): select reusable files against a pinned revision and the reuse ledger. Verify notices for each copied component/dependency; visual similarity alone is not a reuse plan.
+- [Hardcover API guide](https://docs.hardcover.app/api/getting-started/): supports the server-side GraphQL integration. The retrieved guide is dated July 2025; do not treat its token lifetime, quotas or historical restrictions as newly verified September 2026 behavior. Verify actual supported account capabilities and schema during connector qualification; keep authentication details inside the adapter.
+- [Audiobookshelf API](https://api.audiobookshelf.org/) and [repository](https://github.com/advplyr/audiobookshelf): qualify inventory, scan permissions and actual item boundaries together. The existence of an endpoint does not prove a folder layout produces the intended items.
+- [qBittorrent Web API](https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-(qBittorrent-5.0)): pin the supported server/API combinations and prove association/reconciliation after ambiguous submission.
+- The Goodreads API entry point redirected to the homepage in this research pass. This supplies no evidence of a usable new public API. Keep the planned RSS/CSV inbound contract; validate supported feed behavior without promising write-back.
+
+No API account or external application installation is required to approve this plan. Actual-service access becomes an explicit qualification dependency when the corresponding connector is implemented and certified.

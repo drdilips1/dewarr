@@ -1,6 +1,6 @@
 # Product requirements: book discovery and acquisition
 
-Version 1.7 planning baseline · September 18, 2026 · Working product name: Book discovery app.
+Version 1.8 planning baseline · September 18, 2026 · Working product name: Book discovery app.
 
 Status: product specification for staged development; implementation is in progress and recorded separately. User requirements from the conversation take precedence. This PRD defines product behavior; [Implementation Decisions](IMPLEMENTATION-DECISIONS.md) defines the researched engineering baseline; [Development Plan](IMPLEMENTATION-PLAN.md) defines delivery; [Acceptance Plan](ACCEPTANCE-PLAN.md) defines verification. Earlier research remains rationale, not an alternative product direction.
 
@@ -9,6 +9,8 @@ Read sections 1–6 for the product and UX, section 7 for tracked requirements, 
 The [requirement traceability export](REQUIREMENTS-TRACEABILITY.csv) maps every functional and nonfunctional requirement to its acceptance scenarios. Section 19 sets initial finite automation defaults; these are product decisions to implement and qualify, not claims about the current runtime.
 
 For a compact development handoff, see the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md).
+
+The [launch journey checklist](#20-launch-journey-checklist) makes the combined product behavior reviewable. It adds no scope beyond the existing requirements. Use the implementation plan's [release delivery contract](IMPLEMENTATION-PLAN.md#16-release-delivery-contract) to sequence and accept development.
 
 ## 1. Product purpose
 
@@ -510,3 +512,22 @@ Activation shows: included lists, desired media, eligible current entries, alrea
 Pausing list acquisition keeps membership sync running and stops new dispatch from that reason. Already-submitted transfers retain their lifecycle and other lists' reasons; pausing is not qBittorrent cancellation. Pause membership synchronization is a separate control. Resume previews accumulated additions and does not reinterpret them as newly authorized historical backfill.
 
 A title gets the green In library state only from confirmed accessible inventory. Prepared, downloading, imported-awaiting-ABS and owned are separate states. A successful list refresh or candidate preparation does not satisfy the end-to-end automation requirement.
+
+## 20. Launch journey checklist
+
+Use these journeys in product reviews, implementation tickets and release demonstrations. They combine existing requirements rather than introduce another feature backlog. A successful screen is insufficient: the persisted request, actual files and connected inventory must agree where applicable.
+
+| Journey | User experience | Required result | Acceptance |
+|---|---|---|---|
+| J-01 · Connect and recognize | Connect ABS and open a known book with an ebook and two different narrations | One work card; green overall ownership; separate media and recording availability; Open in ABS targets the selected actual item | AT-01–AT-04, AT-06 |
+| J-02 · Discover and curate | Search a catalog, inspect related books and add selected titles to a local list | Clean catalog pages remain independent of download availability; recommendations disclose their source or signal; private lists stay private | AT-03–AT-05, AT-27–AT-28 |
+| J-03 · Compare and acquire | Open Sources, compare MAM/ABB/Prowlarr and request an ebook or audiobook | Preserve raw release detail; identify the chosen catalog version; apply eligibility before format/source/seed preferences; reach confirmed ABS availability | AT-08–AT-13, AT-17–AT-19 |
+| J-04 · Follow without surprises | Follow a populated Hardcover list or Goodreads feed and activate future additions | Existing members remain browseable without an accidental backlog; a later qualifying member completes acquisition with no per-title approval; repeated observations create no duplicate transfer | AT-20–AT-22, AT-30 |
+| J-05 · Own one, request both | Add an ebook-owned work to a list whose policy requests Both | Keep the green work check and ebook indicator; request only the missing audiobook; retain existing assets and independent request reasons | AT-06, AT-12–AT-13, AT-22 |
+| J-06 · Acquire a collection | Request a missing series book with Prefer series packs, with another series book already owned | Apply expansion/size limits; inspect each actual child; import qualifying missing books into distinct version leaves; hold ambiguous children; do not duplicate owned items | AT-14–AT-19, AT-26 |
+| J-07 · Change and recover | Pause a list, add books upstream, resume, change a profile or interrupt a worker | Preview catch-up; keep other lists' reasons; preserve frozen submitted choices; resume the required stage without redownloading or modifying seeded bytes | AT-12–AT-13, AT-22, AT-24, AT-30 |
+| J-08 · Install and restore | Install the release, acquire a book, back up and restore while an external transfer exists | Start with dispatch paused after restore; reconcile external work and published files; preserve identities, secrets and policies; resume without replaying historical acquisitions | AT-25, AT-27–AT-30 |
+
+The common fixture contains a trilogy, one already-owned ebook, two narrations of one work, an incomplete/ambiguous pack child, two overlapping lists and an independent manual request. Reuse it across stages so that list automation exercises the same identity, selection and import behavior already demonstrated manually.
+
+For each journey, review the default path first, then its advanced option and failure state. Normal operation should require no numeric scoring weights, per-field metadata configuration or filesystem template syntax. Expert customization must show the inherited setting, its effect and how to reset it. Reviews must distinguish a complete medium from a companion document, a catalog version from a tracker release, and confirmed availability from download progress.

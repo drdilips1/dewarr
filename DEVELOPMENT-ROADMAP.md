@@ -1,10 +1,12 @@
 # Product and development handoff
 
-September 18, 2026 · v1.7 planning guide, not a claim of implemented functionality.
+September 18, 2026 · v1.8 planning guide, not a claim of implemented functionality.
 
 Build a self-hosted book discovery, curation and acquisition app above Audiobookshelf. The experience should feel familiar to a Seerr user: browse attractive shelves, open one book page, see what is already owned, inspect available versions and sources, and request missing media. The app also owns organizing its newly downloaded files so that Audiobookshelf can serve them correctly.
 
 This guide is the short entry point. The complete specification is in [PRD](PRD.md), the engineering backlog in [Implementation Plan](IMPLEMENTATION-PLAN.md), researched choices in [Implementation Decisions](IMPLEMENTATION-DECISIONS.md), and verification in [Acceptance Plan](ACCEPTANCE-PLAN.md). [Implementation Status](docs/IMPLEMENTATION-STATUS.md) records what has actually been built and tested.
+
+For milestone acceptance and the next bounded development increment, use the [release delivery contract](IMPLEMENTATION-PLAN.md#16-release-delivery-contract). The [eight launch journeys](PRD.md#20-launch-journey-checklist) connect the product experience to existing acceptance scenarios.
 
 For issue-tracker import, use the [61-package backlog export](DEVELOPMENT-BACKLOG.csv). The plan's [execution batches](IMPLEMENTATION-PLAN.md#12-development-backlog-and-execution-batches) sequence the remaining development from the existing code through manual alpha, automation beta, production v1 and separate extensions.
 

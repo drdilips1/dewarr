@@ -1,6 +1,6 @@
 # Acceptance, compatibility and release verification
 
-Planning baseline v1.7 · September 18, 2026.
+Planning baseline v1.8 · September 18, 2026.
 
 **Status: acceptance definitions; implementation evidence is tracked in [Implementation Status](docs/IMPLEMENTATION-STATUS.md).** Some foundation subsets have now been tested; no full scenario is yet certified complete. This document maps [PRD requirements](PRD.md) to the gates in [Development Plan](IMPLEMENTATION-PLAN.md). Research/source inspection is evidence for a design choice, not a passing runtime test.
 
@@ -212,3 +212,12 @@ Apply these assertions to AT-12–AT-14, AT-20–AT-22, AT-26 and AT-30 under th
 - A stale activation preview, changed profile, revoked grant or newly owned title is re-evaluated before dispatch. The recorded explanation matches the effective rules and actual selected candidate.
 
 Qualification records the tested values from PRD section 19. Changing a default updates product documentation and its boundary fixtures; limits may be tuned with evidence without inventing a new feature or silently broadening an active list's authority.
+
+
+## 13. Product journey review
+
+The PRD's [J-01–J-08 launch journeys](PRD.md#20-launch-journey-checklist) group existing AT assertions into product demonstrations. They add no new scenario IDs and do not replace the detailed failure matrix. The implementation plan's [M0–M7 release contract](IMPLEMENTATION-PLAN.md#16-release-delivery-contract) assigns those demonstrations to milestones.
+
+Record the journey, tested revision, prerequisite configuration, user-visible result, durable/external evidence and remaining unsupported combinations. For the automation journeys, count routine approval steps and actual transfer submissions; inspect final files and ABS inventory. Repeat with overlapping lists, a worker restart and a delayed scan. For J-06, include an ambiguous child and a separately owned child, and verify their independent outcomes. For J-08, reconcile an external transfer that is ahead of the restored database before resuming dispatch.
+
+Document-only planning updates require requirement/backlog cross-reference and link checks. They do not constitute a new application test run or alter previous implementation evidence. New functionality and changed defaults require their relevant implementation checks before acceptance.
