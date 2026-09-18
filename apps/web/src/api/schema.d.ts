@@ -2749,6 +2749,13 @@ export interface components {
        */
       publication_available: boolean;
     };
+    /** DownloadConstraints */
+    DownloadConstraints: {
+      /** Blocked Formats */
+      blocked_formats?: string[];
+      /** Maximum Bytes */
+      maximum_bytes?: number | null;
+    };
     /** DownloadMapping */
     DownloadMapping: {
       /** Download Root */
@@ -4550,6 +4557,8 @@ export interface components {
        * @default false
        */
       standalone: boolean;
+      download_constraints?:
+        components["schemas"]["DownloadConstraints"] | null;
     };
     /** RequestView */
     RequestView: {

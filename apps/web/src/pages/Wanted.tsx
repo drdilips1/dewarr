@@ -4,6 +4,7 @@ import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
 import { Link } from "react-router-dom";
+import DownloadConstraints from "./DownloadConstraints";
 
 type Spec = components["schemas"]["RequestSpec"];
 export type WantedVersion = components["schemas"]["VersionView"];
@@ -241,6 +242,9 @@ export default function Wanted({
           {requests.data.items.map((intent) => (
             <article className="panel editor" key={intent.id}>
               <p className="muted">{intent.description}</p>
+              <DownloadConstraints
+                value={intent.specification.download_constraints}
+              />
               {intent.targets.map((target) => (
                 <p key={target.slot}>
                   <strong>

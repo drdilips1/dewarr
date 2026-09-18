@@ -45,6 +45,7 @@ from app.domain.release_profiles import (
     profile_snapshot,
     ranking_key,
 )
+from app.domain.request_constraints import constrained_preferences
 from app.domain.source_artifacts import persist_artifact
 from app.domain.source_network import source_call
 from app.domain.visibility import visible_origin_work
@@ -207,7 +208,9 @@ async def begin(db, user, body, key):
             "work": deepcopy(search.payload["work"]),
             "profile": profile.model_dump(mode="json"),
             "requirements": rule,
-            "maximum_bytes": limit_bytes(profile.preferences, rule["medium"]),
+            "maximum_bytes": limit_bytes(
+                constrained_preferences(profile.preferences, rule), rule["medium"]
+            ),
             "inspected": [],
             "verified": {},
             "decisions": [],

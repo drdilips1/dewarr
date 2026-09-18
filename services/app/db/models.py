@@ -429,7 +429,14 @@ class WorkMetadataSource(Identity, Base):
 
 class AcquisitionIntent(Identity, Base):
     __tablename__ = "acquisition_intents"
-    __table_args__ = (UniqueConstraint("owner_id", "work_id", "fingerprint"),)
+    __table_args__ = (
+        UniqueConstraint("owner_id", "work_id", "fingerprint"),
+        CheckConstraint(
+            "NOT (specification ? 'download_constraints') OR "
+            "jsonb_typeof(specification -> 'download_constraints') = 'object'",
+            name="ck_request_download_constraints",
+        ),
+    )
     owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
     work_id: Mapped[UUID] = mapped_column(ForeignKey("works.id"), index=True)
     fingerprint: Mapped[str] = mapped_column(String(64))

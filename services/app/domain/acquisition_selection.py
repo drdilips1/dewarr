@@ -35,6 +35,7 @@ from app.domain.acquisition import (
 from app.domain.downloaders import SETTINGS_LOCK, connection_or_404, mapped_path
 from app.domain.operations import transaction_lock
 from app.domain.release_profiles import enforce_profile, profile_snapshot
+from app.domain.request_constraints import constrained_preferences
 from app.domain.source_artifacts import artifact_bytes, member
 from app.domain.work_graph import acquisition_lock, canonical_work
 from app.importing.destinations import destination_configuration
@@ -189,7 +190,6 @@ async def prepare(db, user, body, key, *, automatic_evidence=None):
                 )
             }
         )
-    enforce_profile(release, descriptor, profile)
     spec = RequestSpec.model_validate(intent.specification)
     if (
         body.slot == "either"
@@ -203,6 +203,10 @@ async def prepare(db, user, body, key, *, automatic_evidence=None):
         await db.flush()
         await release_unused(db, intent.work_id)
     rule = reservation.requirements
+    profile = profile.model_copy(
+        update={"preferences": constrained_preferences(profile.preferences, rule)}
+    )
+    enforce_profile(release, descriptor, profile)
     version = await db.get(Version, UUID(rule["version_id"])) if rule["version_id"] else None
     release_compatible(release, rule, version)
     await transaction_lock(db, SETTINGS_LOCK)

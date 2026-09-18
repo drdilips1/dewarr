@@ -672,6 +672,8 @@ The current C checkpoint supplies endpoint slots, rolling automatic-transfer acc
 
 ### Reviewable development units
 
+The first prerequisite for D is durable request-level acquisition restrictions under S01-04, S06-03–S06-04 and S07-04. Persist each reason's effective hard limits separately from ranking preferences; prove compatible-reservation intersection, independent withdrawal, immutable selected releases and final file validation. Then implement policy activation/preview, membership-to-request scheduling, and the full list-to-library journey as successive units. This ordering prevents a later list from silently relaxing another list's blocked formats or transfer-size cap. Accept this prerequisite only with its migration, API and regression evidence recorded; it does not itself activate a list policy.
+
 Each change should close one observable path across domain, API, worker and UI where applicable. Example for B: select a wanted audiobook, fetch sources, prepare the best eligible candidate, reload its persisted explanation, invalidate its source configuration and show a safe repair action. Include only the migration and tests needed for that unit; do not turn the 61 planning packages into 61 oversized pull requests.
 
 For each unit attach: parent package IDs; FR/AT assertions; preconditions; typed input/output; durable transitions; idempotency and cancellation rules; a browser demonstration; relevant failure/restart evidence; migration/rollback effect; and any capability restriction. Update current status after verification. Never treat a prepared selection as a completed automatic acquisition.

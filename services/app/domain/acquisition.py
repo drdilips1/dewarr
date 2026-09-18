@@ -33,6 +33,7 @@ from app.db.models import (
 )
 from app.domain.corrections import revision
 from app.domain.operations import transaction_lock
+from app.domain.request_constraints import DownloadConstraints, combine, formats_possible
 from app.domain.visibility import visible_library, visible_origin_work, visible_work
 from app.domain.work_graph import acquisition_lock, canonical_map, canonical_work, family_ids
 from app.jobs.queue import enqueue
@@ -78,6 +79,14 @@ class RequestSpec(BaseModel):
     audio_library_id: UUID | None = None
     abridged: bool | None = None
     standalone: bool = False
+    download_constraints: DownloadConstraints | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
+
+    @field_validator("download_constraints")
+    @classmethod
+    def meaningful_constraints(cls, value):
+        return value if value and value.active else None
 
     @field_validator("language")
     @classmethod
@@ -86,6 +95,13 @@ class RequestSpec(BaseModel):
 
     @model_validator(mode="after")
     def applicable_constraints(self):
+        if self.download_constraints:
+            media = [self.mode] if self.mode in {"ebook", "audio"} else ["ebook", "audio"]
+            if any(
+                not formats_possible(self.download_constraints.model_dump(), medium)
+                for medium in media
+            ):
+                raise ValueError("Allow at least one format for each requested medium")
         if self.mode == "either" and not self.preferred_medium:
             raise ValueError("Choose which medium to search first when neither is available")
         if self.mode != "either" and self.preferred_medium:
@@ -113,6 +129,11 @@ class RequestSpec(BaseModel):
             "version_id": str(getattr(self, medium + "_version_id") or "") or None,
             "abridged": self.abridged if medium == "audio" else None,
             "standalone": self.standalone,
+            **(
+                {"download_constraints": self.download_constraints.model_dump()}
+                if self.download_constraints
+                else {}
+            ),
         }
 
 
@@ -139,7 +160,49 @@ def intersect_rules(left, right):
     else:
         return None
     result["standalone"] = left["standalone"] or right["standalone"]
+    constraints = combine(left.get("download_constraints"), right.get("download_constraints"))
+    if constraints:
+        if not formats_possible(constraints, left["medium"]):
+            return None
+        result["download_constraints"] = constraints
     return result
+
+
+async def compatible_reservation(db, candidate, rule):
+    """Known frozen files can satisfy a stricter limit without rewriting an old decision."""
+    compatible = intersect_rules(candidate.requirements, rule)
+    if not compatible:
+        return None
+    if candidate.state == "planned" or compatible == candidate.requirements:
+        return compatible
+    if {k: v for k, v in compatible.items() if k != "download_constraints"} != {
+        k: v for k, v in candidate.requirements.items() if k != "download_constraints"
+    }:
+        return None
+    selection = await db.scalar(
+        select(AcquisitionSelection).where(
+            AcquisitionSelection.reservation_id == candidate.id,
+            AcquisitionSelection.state.in_(["prepared", "committed"]),
+        )
+    )
+    if not selection:
+        return None
+    from app.adapters.mam import MAMRelease
+    from app.adapters.prowlarr import ProwlarrRelease
+    from app.adapters.torrent_descriptor import TorrentDescriptor
+    from app.domain.release_profiles import ProfileSnapshot, ReleasePreferences, enforce_profile
+    from app.domain.request_constraints import constrained_preferences
+
+    release = selection.frozen["release"]
+    try:
+        enforce_profile(
+            (MAMRelease if release["source"] == "mam" else ProwlarrRelease).model_validate(release),
+            TorrentDescriptor.model_validate(selection.frozen["descriptor"]),
+            ProfileSnapshot(preferences=constrained_preferences(ReleasePreferences(), compatible)),
+        )
+    except HTTPException:
+        return None
+    return compatible
 
 
 async def validate_request(db, user, work_id, spec, reason=None):
@@ -409,13 +472,11 @@ async def reserve(db, user, intent, spec, slot, *, only_medium=None):
                 )
             ).all()
             for candidate in candidates:
-                compatible = intersect_rules(candidate.requirements, rule)
+                compatible = await compatible_reservation(db, candidate, rule)
                 if not compatible:
                     continue
                 if candidate.state in {"selected", "committed"}:
-                    if compatible == candidate.requirements:
-                        return candidate
-                    continue
+                    return candidate
                 if compatible["version_id"]:
                     version = await db.get(Version, UUID(compatible["version_id"]))
                     if (

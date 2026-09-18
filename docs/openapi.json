@@ -8338,6 +8338,34 @@
         ],
         "title": "DestinationView"
       },
+      "DownloadConstraints": {
+        "properties": {
+          "blocked_formats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Blocked Formats"
+          },
+          "maximum_bytes": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 9007199254740991.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maximum Bytes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "DownloadConstraints"
+      },
       "DownloadMapping": {
         "properties": {
           "download_root": {
@@ -13144,6 +13172,16 @@
             "type": "boolean",
             "title": "Standalone",
             "default": false
+          },
+          "download_constraints": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DownloadConstraints"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,

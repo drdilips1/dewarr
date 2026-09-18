@@ -2134,12 +2134,29 @@ test("approved automatic selection queues one download and preserves its receipt
     name: "Wanted media",
     exact: true,
   });
-  await wanted
-    .getByRole("combobox", { name: "Media to request", exact: true })
-    .selectOption("ebook");
-  await wanted
-    .getByRole("button", { name: "Save to wanted", exact: true })
-    .click();
+  // Seed request restrictions through the real API; list policy controls are a later slice.
+  const session = await (await page.request.get("/api/auth/me")).json();
+  const workId = new URL(page.url()).pathname.split("/").at(-1);
+  const constrained = await page.request.post("/api/requests", {
+    headers: {
+      Origin: "http://127.0.0.1:8001",
+      "X-CSRF-Token": session.csrf_token,
+      "Idempotency-Key": "browser-constrained-automatic-request",
+    },
+    data: {
+      work_id: workId,
+      specification: {
+        mode: "ebook",
+        download_constraints: {
+          blocked_formats: ["pdf"],
+          maximum_bytes: 32 * 1024 ** 2,
+        },
+      },
+    },
+  });
+  expect(constrained.status()).toBe(202);
+  await page.reload();
+  await expect(wanted).toContainText("exclude PDF · up to 32 MiB per transfer");
   await wanted
     .getByRole("link", { name: "Choose a source release", exact: true })
     .click();
@@ -2154,6 +2171,7 @@ test("approved automatic selection queues one download and preserves its receipt
   await expect(
     page.getByRole("status").filter({ hasText: "Search finished" }),
   ).toBeVisible({ timeout: 20_000 });
+  await expect(selection).toContainText("Maximum transfer size: 32 MiB");
   await expect(automatic).toBeEnabled();
   await automatic.click();
   await expect(selection.getByRole("status")).toContainText(
@@ -2174,6 +2192,9 @@ test("approved automatic selection queues one download and preserves its receipt
     }),
   ).toBeVisible();
   await expect(automatic).toBeDisabled();
+  await expect(selection).toContainText(
+    "Transfer limit for this selection: 32 MiB",
+  );
   await page.setViewportSize({ width: 390, height: 844 });
   expect(
     await page.evaluate(

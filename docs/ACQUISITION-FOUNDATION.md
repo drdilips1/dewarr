@@ -41,7 +41,19 @@ Shared destination reservations do not share request API access. Users receive o
 
 Canonical work grouping uses a shared graph lock followed by the canonical work lock for reservation mutations. Grouping/undo takes the exclusive graph lock and rebuilds affected planned reservations. Historical intents retain origin IDs; new intents bind to the chosen canonical record, so undo preserves their meaning. Fulfillment checks include accessible assets across the canonical group. See [Identity corrections](IDENTITY-CORRECTIONS.md).
 
-Reviewed selection now adds a `selected` state and immutable requirements/route handoff. Broader compatible targets may share it; stricter targets cannot tighten it. Before S05 dispatch, add the attempt lifecycle and a distinct external-side-effect boundary. A reservation that already caused a client mutation must never use preparation cancellation or planned-rule recomputation.
+Reviewed selection adds a `selected` state and immutable requirements/route handoff. Broader compatible targets may share it. A target with stricter download restrictions can share an inspected release only when its frozen manifest proves those restrictions; it cannot rewrite the selection. The attempt ledger supplies the distinct external-side-effect boundary. A reservation that already caused a client mutation must never use preparation cancellation or planned-rule recomputation.
+
+## Request download restrictions
+
+`RequestSpec.download_constraints` optionally stores `blocked_formats` and `maximum_bytes`. Empty restrictions are normalized away so existing request fingerprints and idempotency receipts remain compatible. Format names are normalized and the size ceiling uses whole-torrent bytes, including padding and extras. Restrictions that leave no possible primary format for a requested medium are rejected.
+
+Each intent retains its own restrictions. Compatible planned reservations combine blocked formats and take the lowest size ceiling; withdrawing a reason recomputes the remaining unselected requirements. Incompatible format sets require separate reservations. Manual selection and automatic eligibility both enforce the shared restrictions. The selected profile carries them into actual-file validation, so a later profile change or request withdrawal cannot relax the frozen import decision.
+
+These are acquisition restrictions, not ownership criteria or soft ranking preferences. An existing complete accessible ebook still satisfies an ebook request even when its format is excluded from future downloads. This avoids silently turning a preference change into a replacement request. Source order, format preference order and seed ranking remain in the release profile.
+
+The API accepts restrictions for individual requests and reviewed list batches. Wanted history, saved list previews and automatic-selection receipts display them. Standing list policies will snapshot the selected profile's hard limits into these fields; policy activation and scheduled acquisition remain unfinished. This checkpoint does not add a second profile editor to the request form.
+
+Migration `0029_request_constraints` adds the persisted JSON contract. Legacy requests survive upgrade and replay. Downgrade is refused after new restriction-bearing intent, reservation or selection records exist; restore the pre-upgrade backup instead of discarding their meaning.
 
 ## API and UI
 
@@ -51,7 +63,7 @@ Reviewed selection now adds a `selected` state and immutable requirements/route 
 - `GET /api/requests/{id}`: owner-scoped current projection.
 - `DELETE /api/requests/{id}/reasons/{reason_id}`: withdraw one reason and recompute fulfillment.
 
-Book detail provides Wanted media, explicit ebook/audio/both/either selection, inventory preview, saved-request history and reason cancellation. Edition/recording cards can populate an exact-version request. Either asks which medium to prefer when both are missing; either existing full medium still satisfies it. The UI explicitly states that automatic downloading is not available yet.
+Book detail provides Wanted media, explicit ebook/audio/both/either selection, inventory preview, saved-request history and reason cancellation. Edition/recording cards can populate an exact-version request. Either asks which medium to prefer when both are missing; either existing full medium still satisfies it. Saving a wanted request does not download it. The Sources panel provides the separate [automatic selection and download](AUTOMATIC-SELECTION.md) action for qualified routes.
 
 ## Verification and remaining work
 

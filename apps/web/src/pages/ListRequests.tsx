@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
+import DownloadConstraints from "./DownloadConstraints";
 
 type Spec = components["schemas"]["RequestSpec"];
 type Work = components["schemas"]["WorkView"];
@@ -393,6 +394,9 @@ export default function ListRequests({
           {value.specification.language && (
             <p>Required language: {value.specification.language}</p>
           )}
+          <DownloadConstraints
+            value={value.specification.download_constraints}
+          />
           {value.records.map((record) => (
             <article key={record.work_id} className="source-attribution">
               <div>

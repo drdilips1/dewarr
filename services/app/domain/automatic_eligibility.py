@@ -5,6 +5,7 @@ from pathlib import PurePosixPath
 
 from app.domain.acquisition import language_accepts
 from app.domain.release_profiles import assess_release, normalized
+from app.domain.request_constraints import constrained_preferences
 from app.importing.match_evidence import isbn_forms
 
 EBOOKS = {"epub", "pdf", "cbz"}
@@ -24,6 +25,7 @@ def limit_bytes(preferences, medium):
 def eligibility(
     release, work, rule, preferences, *, version=None, descriptor=None, unattended=False
 ):
+    preferences = constrained_preferences(preferences, rule)
     assessment = assess_release(release, work, preferences, rule["medium"])
     reasons = list(assessment.blocked)
     if assessment.identity != "corroborated":

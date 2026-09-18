@@ -299,6 +299,8 @@ Resolve ordinary preferences from the most specific explicitly set value: reques
 
 Show the effective settings and their origin in the request preview. Conflicting requirements from different lists remain separate reasons/targets unless one fulfillment can satisfy both. One list's profile must never silently replace another list's exact narrator or format requirement. If both can use the same transfer, retain both policy snapshots and explanations.
 
+Distinguish acquisition restrictions from ownership and ranking. Blocked formats and maximum transfer size constrain a new acquisition; they do not remove the green check from a complete book already confirmed in an accessible library. Format ordering, source preference and seed preference rank eligible releases. Before selection, compatible requests sharing a reservation use the union of blocked formats and the lowest maximum transfer size; incompatible version requirements or no common eligible format keep requests separate. After selection, a new reason may share the frozen release only when its inspected evidence satisfies that reason's restrictions. Removing a reason recomputes unselected requirements but never rewrites an already submitted transfer or its historical policy.
+
 | Change point | Required behavior |
 |---|---|
 | Before request submission | Preview resolves current defaults; submitting a stale preview revalidates it |

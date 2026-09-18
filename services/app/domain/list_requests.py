@@ -25,7 +25,7 @@ from app.domain.acquisition import (
     RequestReason,
     RequestSpec,
     assess,
-    intersect_rules,
+    compatible_reservation,
     submit,
     validate_request,
 )
@@ -279,14 +279,16 @@ async def status_records(db, user, operation):
         targets = []
         for outcome in outcomes:
             value = {k: outcome[k] for k in ("slot", "state", "message")}
-            compatible = any(
-                candidate.scope
-                == str(getattr(spec, medium + "_library_id") or "unconfigured:" + str(user.id))
-                and intersect_rules(candidate.requirements, spec.rule(medium))
-                == candidate.requirements
-                for candidate in pending
-                for medium in spec.media(outcome["slot"])
-            )
+            compatible = False
+            for candidate in pending:
+                for medium in spec.media(outcome["slot"]):
+                    scope = str(
+                        getattr(spec, medium + "_library_id") or "unconfigured:" + str(user.id)
+                    )
+                    if candidate.scope == scope and await compatible_reservation(
+                        db, candidate, spec.rule(medium)
+                    ):
+                        compatible = True
             if value["state"] == "wanted" and compatible:
                 value.update(
                     state="pending",

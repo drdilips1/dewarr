@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import DownloadConstraints, { transferSize } from "./DownloadConstraints";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
@@ -144,6 +145,8 @@ export default function AutomaticSelection({
   const defaultLimit = medium === "ebook" ? 1024 ** 3 : 10 * 1024 ** 3;
   const limit = Math.min(
     search.profile.preferences.maximum_bytes ?? defaultLimit,
+    request.data?.specification.download_constraints?.maximum_bytes ??
+      defaultLimit,
     defaultLimit,
   );
   const unavailable =
@@ -175,12 +178,13 @@ export default function AutomaticSelection({
         need review.
       </p>
       <p className="muted">
-        Maximum transfer size:{" "}
-        {(limit / 1024 ** 3).toLocaleString(undefined, {
-          maximumFractionDigits: 2,
-        })}{" "}
-        GiB. Preparing a release does not start a download.
+        Maximum transfer size: {transferSize(limit)}. Shared requests may impose
+        stricter limits, which are checked before selection. Preparing a release
+        does not start a download.
       </p>
+      <DownloadConstraints
+        value={request.data?.specification.download_constraints}
+      />
       <Notice
         error={
           request.error ||
@@ -260,6 +264,10 @@ export default function AutomaticSelection({
           <p>
             {receipt.data.inspections} of {receipt.data.maximum_inspections}{" "}
             candidates inspected · {receipt.data.status}
+          </p>
+          <p className="muted">
+            Transfer limit for this selection:{" "}
+            {transferSize(receipt.data.maximum_bytes)}
           </p>
           {active && (
             <button disabled={cancel.isPending} onClick={() => cancel.mutate()}>

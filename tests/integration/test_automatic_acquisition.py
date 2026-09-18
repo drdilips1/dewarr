@@ -13,6 +13,7 @@ from app.adapters.mam import MAMArtifact, MAMRelease, ReleasePage
 from app.adapters.torrent_descriptor import inspect_torrent
 from app.config import get_settings
 from app.db.models import (
+    AcquisitionSelection,
     DownloadAttempt,
     DownloadCapacity,
     DownloadFulfillment,
@@ -41,8 +42,17 @@ pytestmark = pytest.mark.integration
 
 @pytest.mark.parametrize("medium", ["ebook", "audio"])
 @pytest.mark.parametrize("delayed_backend", [False, True])
+@pytest.mark.parametrize("request_limits", [False, True])
 async def test_search_to_automatic_download_and_confirmed_member_library(
-    client, admin, database, ready_route, review_account, monkeypatch, medium, delayed_backend
+    client,
+    admin,
+    database,
+    ready_route,
+    review_account,
+    monkeypatch,
+    medium,
+    delayed_backend,
+    request_limits,
 ):
     route = ready_route
     work_id = route["plan"]["document"]["groups"][0]["work_id"]
@@ -144,7 +154,22 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     qbit.complete = True
     monkeypatch.setattr(downloads, "QbitClient", lambda *args: qbit)
     wanted = await request(
-        client, body({"work": work_id}, medium, **{medium + "_library_id": route["library_id"]})
+        client,
+        body(
+            {"work": work_id},
+            medium,
+            **{medium + "_library_id": route["library_id"]},
+            **(
+                {
+                    "download_constraints": {
+                        "maximum_bytes": descriptor.torrent_bytes,
+                        "blocked_formats": ["pdf" if medium == "ebook" else "flac"],
+                    }
+                }
+                if request_limits
+                else {}
+            ),
+        ),
     )
     search = await client.post(
         f"/api/catalog/works/{work_id}/source-searches",
@@ -176,6 +201,11 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     ).json()
     assert result["status"] == "completed" and result["download_id"], result
     async with database() as db:
+        selection = await db.get(AcquisitionSelection, UUID(result["selection_id"]))
+        if request_limits:
+            preferences = selection.frozen["profile"]["preferences"]
+            assert preferences["maximum_bytes"] == descriptor.torrent_bytes
+            assert preferences["blocked_formats"] == ["pdf" if medium == "ebook" else "flac"]
         entries = list(await db.scalars(select(ImportEntry)))
         assert len(entries) == 1
         entry = entries[0]
