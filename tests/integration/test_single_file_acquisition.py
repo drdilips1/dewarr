@@ -11,7 +11,7 @@ from uuid import UUID, uuid4
 
 import libtorrent as lt
 import pytest
-from sqlalchemy import delete, select
+from sqlalchemy import delete, func, select
 
 from app.adapters.mam import release
 from app.adapters.torrent_descriptor import inspect_torrent
@@ -20,8 +20,10 @@ from app.db.models import (
     AcquisitionReason,
     AcquisitionReservation,
     AcquisitionSelection,
+    AuditEvent,
     AutomaticImport,
     AutomaticImportPolicy,
+    CatalogAccount,
     DownloadAttempt,
     DownloadFulfillment,
     DownloadIdentityClaim,
@@ -30,15 +32,20 @@ from app.db.models import (
     ImportRun,
     Integration,
     LibraryGrant,
+    MetadataSettings,
+    Operation,
+    ProviderObject,
     SourceArtifact,
     SourceConnection,
     User,
     Version,
+    WorkMetadataSource,
 )
 from app.domain import download_attempts as downloads
-from app.importing import automatic, execution
+from app.importing import automatic, catalog_resolution, execution
 from app.jobs.queue import get_queue
 from app.security import encrypt_secrets
+from tests.catalog_resolution_fixture import resolution_provider  # noqa: F401
 from tests.integration.test_acquisition import body, request
 from tests.integration.test_acquisition_selections import prepare
 from tests.integration.test_download_attempts import Client
@@ -70,6 +77,13 @@ pytestmark = pytest.mark.integration
         "reviewer",
         "automatic",
         "automatic-audio",
+        "automatic-provider",
+        "automatic-provider-audio",
+        "automatic-provider-revoked",
+        "automatic-provider-rotation",
+        "automatic-provider-conflict",
+        "automatic-provider-retry",
+        "automatic-provider-settings",
         "automatic-unmatched",
         "automatic-manifest",
         "automatic-disable",
@@ -78,17 +92,41 @@ pytestmark = pytest.mark.integration
     ],
 )
 async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
-    client, admin, database, ready_route, monkeypatch, save_relative, handoff, review_account
+    client,
+    admin,
+    database,
+    ready_route,
+    monkeypatch,
+    save_relative,
+    handoff,
+    review_account,
+    resolution_provider,
 ):
     route = ready_route
     automatic_mode = isinstance(handoff, str) and handoff.startswith("automatic")
     old = route["plan"]["document"]["groups"][0]
-    medium = "audio" if handoff == "automatic-audio" else "ebook"
+    provider_mode = isinstance(handoff, str) and handoff.startswith("automatic-provider")
+    success = {
+        "automatic",
+        "automatic-audio",
+        "automatic-provider",
+        "automatic-provider-audio",
+        "automatic-provider-retry",
+    }
+    medium = "audio" if handoff in {"automatic-audio", "automatic-provider-audio"} else "ebook"
     name = "selected.mp3" if medium == "audio" else "selected.epub"
     source = route["source"] / save_relative / name
     if medium == "audio":
         audio(source, tags={"isbn": "9781234567897", "language": "en"})
-        await prepare_audio_route(client, database, route, old["work_id"], source)
+        seeded = await prepare_audio_route(client, database, route, old["work_id"], source)
+        if provider_mode:
+            async with database() as db, db.begin():
+                await db.execute(
+                    delete(ProviderObject).where(ProviderObject.id == seeded["provider"])
+                )
+                await db.execute(
+                    delete(WorkMetadataSource).where(WorkMetadataSource.id == seeded["source"])
+                )
     else:
         epub(
             source,
@@ -182,7 +220,7 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
     assert selected_response.status_code == 201, selected_response.text
     owner_client = client
     if automatic_mode:
-        if medium == "ebook":
+        if medium == "ebook" and not provider_mode:
             await edition(database, work_id=UUID(old["work_id"]))
         if handoff == "automatic-ambiguous":
             await edition(database, work_id=UUID(old["work_id"]))
@@ -195,6 +233,33 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
             },
         )
         assert response.status_code == 200 and response.json()["ready"], response.text
+    if provider_mode:
+        resolution_provider["medium"] = medium
+        if handoff == "automatic-provider-conflict":
+            resolution_provider["fault"] = "ambiguous"
+        if handoff == "automatic-provider-retry":
+            resolution_provider["fault"] = "quota"
+        async with database() as db, db.begin():
+            db.add(
+                CatalogAccount(
+                    user_id=UUID(admin["id"]),
+                    encrypted_token=encrypt_secrets({"token": "requester-catalog-token"}),
+                    generation=1,
+                )
+            )
+
+        async def change_during_lookup():
+            async with database() as db, db.begin():
+                if handoff == "automatic-provider-revoked":
+                    await db.execute(
+                        delete(LibraryGrant).where(LibraryGrant.user_id == UUID(admin["id"]))
+                    )
+                elif handoff == "automatic-provider-rotation":
+                    (await db.get(CatalogAccount, UUID(admin["id"]))).generation += 1
+                elif handoff == "automatic-provider-settings":
+                    db.add(MetadataSettings(id=1, preferences={"automatic_edition_lookup": False}))
+
+        resolution_provider["hook"] = change_during_lookup
     if handoff:
         async with database() as db, db.begin():
             (await db.get(User, UUID(admin["id"]))).role = "member"
@@ -227,7 +292,19 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
 
         monkeypatch.setattr(execution, "publish_item", publish)
     await get_queue().run_worker_async(wait=False, concurrency=1)
-    if automatic_mode and handoff not in {"automatic", "automatic-audio"}:
+    if handoff == "automatic-provider-retry":
+        async with database() as db, db.begin():
+            auto = await db.scalar(select(AutomaticImport))
+            resolved = await db.get(Operation, UUID(auto.evidence["catalog_resolution"]))
+            assert resolved.status == "retrying" and resolved.payload["attempts"] == 1
+            assert not await db.scalar(select(ImportRun.id))
+            old_job = (await db.get(Operation, auto.operation_id)).job_id
+            await automatic.recover(db, auto.id)
+            assert (await db.get(Operation, auto.operation_id)).job_id == old_job
+        resolution_provider["fault"] = None
+        await asyncio.gather(*(catalog_resolution.resolve(resolved.id) for _ in range(2)))
+        await get_queue().run_worker_async(wait=False, concurrency=1)
+    if automatic_mode and handoff not in success:
         async with database() as db:
             auto = await db.scalar(select(AutomaticImport))
             if handoff == "automatic-disable":
@@ -239,7 +316,7 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
             assert not await db.scalar(select(DownloadFulfillment.id))
         assert qbit.calls.count("submit") == 1 and not list(route["target"].rglob("*.epub"))
         return
-    if handoff in {"automatic", "automatic-audio"}:
+    if handoff in success:
         async with database() as db:
             auto = await db.scalar(select(AutomaticImport))
             assert auto.state == "importing", auto.message
@@ -252,6 +329,26 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
             fulfilled = await db.scalar(select(DownloadFulfillment))
             assert fulfilled and fulfilled.import_entry_id == entries[0].id
             assert (await db.scalar(select(DownloadIdentityClaim))).active
+            if provider_mode:
+                resolved = await db.get(Operation, UUID(auto.evidence["catalog_resolution"]))
+                assert resolved.status == "completed" and resolved.owner_id == UUID(admin["id"])
+                assert await db.scalar(
+                    select(WorkMetadataSource.id).where(
+                        WorkMetadataSource.work_id == UUID(old["work_id"])
+                    )
+                )
+                assert all(
+                    auth == ("Bearer requester-catalog-token" if path == "/v1/graphql" else None)
+                    for path, auth in resolution_provider["calls"]
+                )
+                assert (
+                    await db.scalar(
+                        select(func.count())
+                        .select_from(AuditEvent)
+                        .where(AuditEvent.action == "metadata.import.resolved")
+                    )
+                    == 1
+                )
         assert qbit.calls.count("submit") == 1
         output = list(route["target"].rglob("*.mp3" if medium == "audio" else "*.epub"))
         assert len(output) == 1 and output[0].stat().st_ino == source.stat().st_ino
@@ -446,3 +543,4 @@ async def prepare_audio_route(client, database, route, work_id, source):
     await get_queue().run_worker_async(wait=False, concurrency=1)
     route["destination"] = (await client.get("/api/organization/destinations")).json()[0]
     assert route["destination"]["publication_available"]
+    return catalog

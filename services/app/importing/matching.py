@@ -3,7 +3,7 @@
 from typing import Literal
 from uuid import UUID
 
-from sqlalchemy import exists, func, or_, select
+from sqlalchemy import exists, false, func, or_, select
 
 from app.db.models import (
     Integration,
@@ -27,7 +27,7 @@ from app.importing.match_evidence import (
 from app.importing.naming import StrictModel, fingerprint
 from app.importing.versioning import version_revision
 
-MATCHER_VERSION = 1
+MATCHER_VERSION = 2
 MAX_CANDIDATES = 50
 
 
@@ -199,6 +199,10 @@ async def match_group(db, snapshot, grouping_revision, group):
                 )
         elif scheme == "asin":
             conditions.append(func.upper(Version.identifiers["asin"].astext) == value)
+    # Put every exact identifier candidate before title-only suggestions. A
+    # display limit must not hide an edition or manufacture uniqueness.
+    identifier_condition = or_(*conditions) if conditions else false()
+    identifier_order = [identifier_condition.desc().nulls_last()] if conditions else []
     if facts.titles:
         conditions.extend(
             [func.lower(Work.title).in_(facts.titles), func.lower(Version.title).in_(facts.titles)]
@@ -212,14 +216,14 @@ async def match_group(db, snapshot, grouping_revision, group):
     rows = (
         (
             await db.execute(
-                select(Version, Work, needs_review)
+                select(Version, Work, needs_review, identifier_condition)
                 .join(Work)
                 .where(
                     Version.medium == group.medium,
                     usable_version(),
                     or_(*conditions),
                 )
-                .order_by(Version.id)
+                .order_by(*identifier_order, Version.id)
                 .limit(MAX_CANDIDATES + 1)
                 .execution_options(populate_existing=True)
             )
@@ -228,7 +232,7 @@ async def match_group(db, snapshot, grouping_revision, group):
         else []
     )
     candidates = []
-    for version, origin, review in rows[:MAX_CANDIDATES]:
+    for version, origin, review, _ in rows[:MAX_CANDIDATES]:
         work = await canonical_work(db, origin.id)
         candidates.append(candidate_evidence(facts, version, origin, work, review))
     candidates.sort(
@@ -240,7 +244,7 @@ async def match_group(db, snapshot, grouping_revision, group):
         if len(identified) == 1
         and not identified[0].conflicts
         and not facts.issues
-        and len(rows) <= MAX_CANDIDATES
+        and not (len(rows) > MAX_CANDIDATES and rows[MAX_CANDIDATES][3])
         else None
     )
     status = "matched" if chosen else "review" if candidates or facts.issues else "unmatched"

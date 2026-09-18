@@ -274,7 +274,11 @@ async def test_pagination_and_candidate_limits_are_explicit(client, admin, datab
             )
     page = await matches(client, inspected)
     match = page["items"][0]
-    assert match["truncated"] and match["status"] == "review" and len(match["candidates"]) == 50
+    assert match["truncated"] and match["status"] == "matched" and len(match["candidates"]) == 50
+    assert match["selected_version_id"] == str(selected["version"])
+    # A second identifier match must remain ambiguous even among many title-only editions.
+    await edition(database, work_id=selected["work"])
+    assert (await matches(client, inspected))["items"][0]["status"] == "review"
     empty = await matches(client, inspected, offset=1)
     assert empty["total"] == 1 and empty["items"] == []
 

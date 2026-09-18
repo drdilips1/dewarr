@@ -107,6 +107,17 @@ async def enrich_metadata(operation_id: str) -> None:
     await enrich(UUID(operation_id))
 
 
+@tasks.task(
+    name="metadata.resolve-import",
+    queue="metadata",
+    retry=CatalogRetryStrategy(max_attempts=5, wait=60),
+)
+async def resolve_import_metadata(operation_id: str) -> None:
+    from app.importing.catalog_resolution import resolve
+
+    await resolve(UUID(operation_id))
+
+
 @tasks.task(name="acquisition.evaluate", queue="acquisition", retry=3)
 async def evaluate_acquisition(operation_id: str) -> None:
     if get_settings().recovery_mode:

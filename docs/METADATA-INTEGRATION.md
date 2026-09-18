@@ -32,6 +32,8 @@ Transient failures use bounded queue retries and respect provider cooldown delay
 
 ## Cache, budgets and recovery
 
+Approved automatic imports can also perform a separate [edition-resolution lookup](IMPORT-CATALOG-RESOLUTION.md) when an inspected book has valid embedded identifiers but no matching local edition. This uses the original requester's catalog connection, complete bounded edition pages and the existing file matcher. Its advanced preference is independent of secondary work-field enrichment; both default on. New catalog metadata still establishes neither file completeness nor ownership.
+
 PostgreSQL stores request caches and provider budgets. Hardcover cache keys include account/generation; public Open Library requests can share public cache entries. The rate-budget key is derived from the credential using the installation key, so two users supplying the same token share its request budget without exposing the token.
 
 Requests are spaced at least 1.1 seconds per budget. Retry-After, exhausted RateLimit buckets and legacy reset headers extend cooldown. Search cache TTL is five minutes; detail TTL is one hour. Transient outages can serve data fetched within seven days with a stale warning. Authentication/permission errors do not use stale success. Explicit refresh refuses stale fallback rather than reporting it as refreshed. Parser failures invalidate the operation's cached responses.

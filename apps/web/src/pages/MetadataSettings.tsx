@@ -230,6 +230,23 @@ function PreferenceForm({ value }: { value: Preferences }) {
           </small>
         </label>
         <label>
+          <input
+            type="checkbox"
+            checked={settings.automatic_edition_lookup ?? true}
+            onChange={(event) =>
+              setSettings({
+                ...settings,
+                automatic_edition_lookup: event.target.checked,
+              })
+            }
+          />
+          Look up missing editions before automatic import
+          <small>
+            Uses the requesting reader's connected catalog and compatible public
+            sources. Uncertain editions stay for review.
+          </small>
+        </label>
+        <label>
           Cover provider
           <select
             value={settings.covers}
@@ -272,6 +289,7 @@ function PreferenceForm({ value }: { value: Preferences }) {
             setSettings({
               ...settings,
               automatic_enrichment: true,
+              automatic_edition_lookup: true,
               covers: "automatic",
               field_providers: {},
             })

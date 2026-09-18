@@ -2866,7 +2866,7 @@ export interface components {
       limit: number;
       /**
        * Matcher Version
-       * @default 1
+       * @default 2
        */
       matcher_version: number;
     };
@@ -2951,6 +2951,11 @@ export interface components {
        * @default true
        */
       automatic_enrichment: boolean;
+      /**
+       * Automatic Edition Lookup
+       * @default true
+       */
+      automatic_edition_lookup: boolean;
       /**
        * Language
        * @default en

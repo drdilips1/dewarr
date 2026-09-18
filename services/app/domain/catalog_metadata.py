@@ -18,6 +18,7 @@ FIELDS = ("title", "authors", "description", "publication_year", "language", "co
 class MetadataPreferences(BaseModel):
     primary: Provider = "hardcover"
     automatic_enrichment: bool = True
+    automatic_edition_lookup: bool = True
     language: str = Field(default="en", min_length=2, max_length=20)
     covers: Literal["automatic", "hardcover", "openlibrary"] = "automatic"
     field_providers: dict[str, Provider] = Field(default_factory=dict)

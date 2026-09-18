@@ -132,6 +132,28 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await expect(page.getByRole("status")).toHaveText(
     "Hardcover catalog access verified.",
   );
+  await page
+    .getByText("Advanced provider preferences", { exact: true })
+    .click();
+  const editionLookup = page.getByRole("checkbox", {
+    name: /Look up missing editions before automatic import/,
+  });
+  await expect(editionLookup).toBeChecked();
+  await editionLookup.uncheck();
+  await page.getByRole("button", { name: "Save metadata defaults" }).click();
+  await expect(
+    page.getByText("Metadata defaults saved.", { exact: true }),
+  ).toBeVisible();
+  await page.reload();
+  await page
+    .getByText("Advanced provider preferences", { exact: true })
+    .click();
+  await expect(editionLookup).not.toBeChecked();
+  await editionLookup.check();
+  await page.getByRole("button", { name: "Save metadata defaults" }).click();
+  await expect(
+    page.getByText("Metadata defaults saved.", { exact: true }),
+  ).toBeVisible();
   await page.getByRole("link", { name: "Search books", exact: true }).click();
   await page
     .getByLabel("Title, author or identifier")

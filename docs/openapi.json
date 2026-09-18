@@ -8440,7 +8440,7 @@
           "matcher_version": {
             "type": "integer",
             "title": "Matcher Version",
-            "default": 1
+            "default": 2
           }
         },
         "additionalProperties": false,
@@ -8599,6 +8599,11 @@
           "automatic_enrichment": {
             "type": "boolean",
             "title": "Automatic Enrichment",
+            "default": true
+          },
+          "automatic_edition_lookup": {
+            "type": "boolean",
+            "title": "Automatic Edition Lookup",
             "default": true
           },
           "language": {

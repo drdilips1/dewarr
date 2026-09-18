@@ -108,7 +108,8 @@ export default function Activity({
                                 ? "Download import review"
                                 : item.kind === "acquisition.select"
                                   ? "Release selection"
-                                  : item.kind === "metadata.enrich"
+                                  : item.kind === "metadata.enrich" ||
+                                      item.kind === "metadata.resolve-import"
                                     ? "Automatic metadata lookup"
                                     : item.kind}
                 </h2>

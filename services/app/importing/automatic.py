@@ -122,6 +122,10 @@ async def recover(db, identifier):
     row = await db.get(AutomaticImport, identifier, populate_existing=True)
     if not row or row.state not in {"queued", "inspecting"}:
         return
+    from app.importing.catalog_resolution import pending
+
+    if await pending(db, row):
+        return
     operation = await db.get(Operation, row.operation_id, populate_existing=True)
 
     async def status(job_id):
@@ -222,10 +226,12 @@ async def plan_ready(db, row, selection, inspection, approver, destination, curr
         raise HTTPException(409, "This collection exceeds the automatic review limit")
     work = await canonical_work(db, UUID(selection.frozen["origin_work_id"]))
     files = {file["path"]: file for file in inspection.snapshot["files"]}
-    choices, held = [], []
+    choices, held, unresolved = [], [], []
     for group in grouping.groups:
         match = await match_group(db, inspection.snapshot, grouping_revision, group)
         reason = content_reason(group, files, selection.frozen["release"])
+        if not reason:
+            unresolved.append(match)
         candidate = next(
             (item for item in match.candidates if item.version_id == match.selected_version_id),
             None,
@@ -253,7 +259,13 @@ async def plan_ready(db, row, selection, inspection, approver, destination, curr
                 match_revision=match.revision,
             )
         )
+    if not choices:
+        from app.importing.catalog_resolution import schedule
+
+        if await schedule(db, row, unresolved):
+            return
     row.evidence = {
+        **row.evidence,
         "schema_version": 1,
         "completeness_basis": "complete-transfer-and-supported-container",
         "held_groups": held,
