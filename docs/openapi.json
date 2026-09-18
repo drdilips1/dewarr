@@ -7645,7 +7645,7 @@
             "title": "Work Ids"
           },
           "specification": {
-            "$ref": "#/components/schemas/RequestSpec"
+            "$ref": "#/components/schemas/RequestOptions"
           },
           "release_preferences": {
             "anyOf": [
@@ -10922,7 +10922,7 @@
             "default": "browse"
           },
           "specification": {
-            "$ref": "#/components/schemas/RequestSpec"
+            "$ref": "#/components/schemas/RequestOptions"
           },
           "profile_id": {
             "anyOf": [
@@ -12933,6 +12933,26 @@
           "specification": {
             "$ref": "#/components/schemas/RequestSpec"
           },
+          "scope_options": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RequestOptions"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "preference_overrides": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PreferenceOverrides"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "profile": {
             "$ref": "#/components/schemas/ProfileSnapshot"
           },
@@ -13117,6 +13137,83 @@
       },
       "PreferenceOverrides": {
         "properties": {
+          "desired_media": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "ebook",
+                  "audio",
+                  "both",
+                  "either"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Desired Media"
+          },
+          "preferred_medium": {
+            "type": "string",
+            "enum": [
+              "ebook",
+              "audio"
+            ],
+            "title": "Preferred Medium"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20,
+                "pattern": "^[a-zA-Z]{2,3}([-_][a-zA-Z0-9]{2,8})*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "abridged": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Abridged"
+          },
+          "standalone": {
+            "type": "boolean",
+            "title": "Standalone"
+          },
+          "ebook_library_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ebook Library Id"
+          },
+          "audio_library_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Library Id"
+          },
           "ebook_formats": {
             "items": {
               "type": "string"
@@ -13220,6 +13317,9 @@
       },
       "PreviewView": {
         "properties": {
+          "specification": {
+            "$ref": "#/components/schemas/RequestSpec"
+          },
           "targets": {
             "items": {
               "$ref": "#/components/schemas/TargetView"
@@ -13245,6 +13345,7 @@
         },
         "type": "object",
         "required": [
+          "specification",
           "targets"
         ],
         "title": "PreviewView"
@@ -13372,6 +13473,13 @@
                 "type": "null"
               }
             ]
+          },
+          "scope_origins": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Scope Origins"
           }
         },
         "type": "object",
@@ -14066,6 +14174,85 @@
       },
       "ReleasePreferences": {
         "properties": {
+          "desired_media": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "ebook",
+                  "audio",
+                  "both",
+                  "either"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Desired Media"
+          },
+          "preferred_medium": {
+            "type": "string",
+            "enum": [
+              "ebook",
+              "audio"
+            ],
+            "title": "Preferred Medium",
+            "default": "audio"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20,
+                "pattern": "^[a-zA-Z]{2,3}([-_][a-zA-Z0-9]{2,8})*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "abridged": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Abridged"
+          },
+          "standalone": {
+            "type": "boolean",
+            "title": "Standalone",
+            "default": false
+          },
+          "ebook_library_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ebook Library Id"
+          },
+          "audio_library_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Library Id"
+          },
           "ebook_formats": {
             "items": {
               "type": "string"
@@ -14254,7 +14441,7 @@
             "title": "Work Id"
           },
           "specification": {
-            "$ref": "#/components/schemas/RequestSpec"
+            "$ref": "#/components/schemas/RequestOptions"
           },
           "reason": {
             "$ref": "#/components/schemas/RequestReason"
@@ -14289,6 +14476,132 @@
           "specification"
         ],
         "title": "RequestInput"
+      },
+      "RequestOptions": {
+        "properties": {
+          "mode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "ebook",
+                  "audio",
+                  "both",
+                  "either"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mode"
+          },
+          "preferred_medium": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "ebook",
+                  "audio"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preferred Medium"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20,
+                "pattern": "^[a-zA-Z]{2,3}([-_][a-zA-Z0-9]{2,8})*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "ebook_version_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ebook Version Id"
+          },
+          "audio_version_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Version Id"
+          },
+          "ebook_library_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ebook Library Id"
+          },
+          "audio_library_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Library Id"
+          },
+          "abridged": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Abridged"
+          },
+          "standalone": {
+            "type": "boolean",
+            "title": "Standalone"
+          },
+          "download_constraints": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DownloadConstraints"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "RequestOptions",
+        "description": "Sparse editable choices, validated as a strict RequestSpec after inheritance."
       },
       "RequestPage": {
         "properties": {

@@ -79,6 +79,7 @@ export default function RequestPreferences({
       </label>
       {preferences && (
         <PreferenceFields
+          includeMedia={false}
           overrides={value.overrides || {}}
           inherited={preferences}
           origins={origins}

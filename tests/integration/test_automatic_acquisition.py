@@ -157,8 +157,17 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     monkeypatch.setattr(downloads, "QbitClient", lambda *args: qbit)
     policy = None
     if via_list:
+        from tests.integration.test_acquisition_defaults import save as save_defaults
         from tests.integration.test_list_policies import tick
 
+        await save_defaults(
+            client,
+            {
+                "desired_media": medium,
+                "language": "en",
+                medium + "_library_id": route["library_id"],
+            },
+        )
         shelf = (await client.post("/api/lists", json={"name": "List-to-library fixture"})).json()[
             "id"
         ]
@@ -168,7 +177,6 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             json={
                 "mode": "automatic",
                 "specification": {
-                    "mode": medium,
                     "download_constraints": {
                         "maximum_bytes": descriptor.torrent_bytes,
                         "blocked_formats": ["pdf" if medium == "ebook" else "flac"],
@@ -285,6 +293,10 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     book = (await client.get(f"/api/catalog/works/{work_id}")).json()
     assert book["availability"]["owned"] and book["availability"][medium]
     if via_list:
+        assert policy["configuration"]["specification"]["mode"] == medium
+        assert policy["configuration"]["specification"]["language"] == "en"
+        assert policy["configuration"]["profile"]["scope_origins"]["mode"] == "Personal default"
+        assert policy["configuration"]["profile"]["scope_origins"]["language"] == "Personal default"
         assert (await client.post(activation_url)).json()["id"] == policy["id"]
         await tick(database, policy, force_books=True)
     else:

@@ -1,3 +1,4 @@
+import { EffectiveScope } from "./ScopeFields";
 import RequestPreferences, { type Choice } from "./RequestPreferences";
 import { EffectivePreferences } from "./PreferenceFields";
 import { useEffect, useRef, useState } from "react";
@@ -8,7 +9,7 @@ import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
 import DownloadConstraints from "./DownloadConstraints";
 
-type Spec = components["schemas"]["RequestSpec"];
+type Spec = components["schemas"]["RequestOptions"];
 type Work = components["schemas"]["WorkView"];
 const states: Record<string, string> = {
   satisfied: "Available",
@@ -77,13 +78,9 @@ function ListRequestEditor({
   const path = { list_id: listId };
   const [id, setId] = useState<string | null>(null);
   const [selected, setSelected] = useState<string[]>([]);
-  const [spec, setSpec] = useState<Spec>(
-    defaults ?? {
-      mode: "either",
-      preferred_medium: "audio",
-      standalone: false,
-    },
-  );
+  const [spec, setSpec] = useState<Spec>({
+    download_constraints: defaults?.download_constraints,
+  });
   const [preferences, setPreferences] = useState<Choice>({});
   const [filter, setFilter] = useState("");
   const [page, setPage] = useState(0);
@@ -306,13 +303,13 @@ function ListRequestEditor({
             <label>
               Media to request
               <select
-                value={spec.mode}
+                value={spec.mode || ""}
                 onChange={(event) => {
                   const mode = event.target.value as Spec["mode"];
                   setSpec({
                     ...spec,
-                    mode,
-                    preferred_medium: mode === "either" ? "audio" : null,
+                    mode: mode || undefined,
+                    preferred_medium: mode === "either" ? "audio" : undefined,
                     ...(mode === "ebook"
                       ? { audio_library_id: null, abridged: null }
                       : {}),
@@ -321,6 +318,7 @@ function ListRequestEditor({
                   changed();
                 }}
               >
+                <option value="">Use list or profile media</option>
                 <option value="either">Either ebook or audiobook</option>
                 <option value="both">Both ebook and audiobook</option>
                 <option value="ebook">Ebook</option>
@@ -345,80 +343,6 @@ function ListRequestEditor({
                 </select>
               </label>
             )}
-            <details>
-              <summary>Language and destinations</summary>
-              <label>
-                Required language (optional)
-                <input
-                  value={spec.language || ""}
-                  maxLength={20}
-                  placeholder="e.g. en"
-                  pattern="[a-zA-Z]{2,3}([-_][a-zA-Z0-9]{2,8})*"
-                  onChange={(event) => {
-                    setSpec({ ...spec, language: event.target.value || null });
-                    changed();
-                  }}
-                />
-              </label>
-              {(["ebook", "audio"] as const)
-                .filter(
-                  (m) =>
-                    spec.mode === m ||
-                    spec.mode === "both" ||
-                    spec.mode === "either",
-                )
-                .map((m) => (
-                  <label key={m}>
-                    {media[m]} destination
-                    <select
-                      value={spec[`${m}_library_id`] || ""}
-                      onChange={(event) => {
-                        setSpec({
-                          ...spec,
-                          [`${m}_library_id`]: event.target.value || null,
-                        });
-                        changed();
-                      }}
-                    >
-                      <option value="">Choose during release selection</option>
-                      {libraries.data
-                        ?.filter((l) => l.accessible)
-                        .map((l) => (
-                          <option key={l.id} value={l.id}>
-                            {l.name}
-                          </option>
-                        ))}
-                    </select>
-                  </label>
-                ))}
-              <label className="checkbox">
-                <input
-                  type="checkbox"
-                  checked={spec.standalone || false}
-                  onChange={(event) => {
-                    setSpec({ ...spec, standalone: event.target.checked });
-                    changed();
-                  }}
-                />
-                Require standalone copies
-              </label>
-              {spec.mode !== "ebook" && (
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    checked={spec.abridged === false}
-                    onChange={(event) => {
-                      setSpec({
-                        ...spec,
-                        abridged: event.target.checked ? false : null,
-                      });
-                      changed();
-                    }}
-                  />
-                  Require unabridged audiobooks
-                </label>
-              )}
-            </details>
             <RequestPreferences
               value={preferences}
               inherited={profile}
@@ -444,6 +368,10 @@ function ListRequestEditor({
             {value.records.length === 1 ? "book" : "books"}
           </h3>
           <p role="status">{value.message}</p>
+          <EffectiveScope
+            specification={value.specification}
+            origins={value.release_policy?.scope_origins}
+          />
           <p className="muted">
             Current media targets:{" "}
             {Object.entries(value.counts)

@@ -1,7 +1,8 @@
+import ScopeFields from "./ScopeFields";
 import type { components } from "../api/schema";
 type Preferences = components["schemas"]["ReleasePreferences"];
 export type Overrides = components["schemas"]["PreferenceOverrides"];
-export const preferenceLabels: Record<keyof Preferences, string> = {
+export const preferenceLabels: Partial<Record<keyof Preferences, string>> = {
   criteria: "Ranking priorities",
   source_order: "Source preference",
   ebook_formats: "Ebook format preference",
@@ -85,11 +86,13 @@ export default function PreferenceFields({
   inherited,
   origins,
   onChange,
+  includeMedia = true,
 }: {
   overrides: Overrides;
   inherited: Preferences;
   origins: Record<string, string>;
   onChange: (value: Overrides) => void;
+  includeMedia?: boolean;
 }) {
   const effective = { ...inherited, ...overrides };
   const origin = (key: keyof Preferences) => (
@@ -116,7 +119,7 @@ export default function PreferenceFields({
   ) => (
     <div>
       <Order
-        label={preferenceLabels[key]}
+        label={preferenceLabels[key]!}
         values={effective[key] || []}
         onChange={(values) => onChange({ ...overrides, [key]: values })}
       />
@@ -128,6 +131,13 @@ export default function PreferenceFields({
       <p className="muted">
         Change only what matters to you. Other values follow their defaults.
       </p>
+      <ScopeFields
+        overrides={overrides}
+        inherited={inherited}
+        origins={origins}
+        onChange={onChange}
+        includeMedia={includeMedia}
+      />
       {order("criteria")}
       {order("source_order")}
       <details>

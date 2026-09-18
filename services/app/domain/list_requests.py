@@ -22,6 +22,7 @@ from app.db.models import (
 )
 from app.db.session import session_factory
 from app.domain.acquisition import (
+    RequestOptions,
     RequestReason,
     RequestSpec,
     assess,
@@ -31,6 +32,7 @@ from app.domain.acquisition import (
 )
 from app.domain.operations import transaction_lock
 from app.domain.request_preferences import PreferenceChoice, resolve
+from app.domain.request_scope import same_command
 from app.domain.visibility import visible_work
 from app.domain.work_graph import acquisition_lock, canonical_map, graph_lock
 from app.jobs.queue import enqueue
@@ -42,7 +44,7 @@ MAX_BOOKS = 100
 class BatchInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
     work_ids: list[UUID] = Field(min_length=1, max_length=MAX_BOOKS)
-    specification: RequestSpec
+    specification: RequestOptions
     release_preferences: PreferenceChoice | None = None
 
     @model_validator(mode="after")
@@ -112,6 +114,7 @@ async def preview(db, user, list_id, body, key):
         "list_id": str(list_id),
         "work_ids": sorted(map(str, body.work_ids)),
         "specification": body.specification.model_dump(mode="json"),
+        "scope_inheritance": 1,
     }
     if body.release_preferences is not None:
         command["release_preferences"] = body.release_preferences.model_dump(
@@ -121,7 +124,7 @@ async def preview(db, user, list_id, body, key):
         select(Operation).where(Operation.owner_id == user.id, Operation.idempotency_key == key)
     )
     if existing:
-        if existing.kind != KIND or existing.payload["command"] != command:
+        if existing.kind != KIND or not same_command(existing.payload["command"], command):
             raise HTTPException(409, "This preview key was already used for different options")
         return existing
     specification, profile = await resolve(
@@ -189,7 +192,7 @@ async def validate_plan(db, user, operation):
     )
     if [identity(w) for w in works] != operation.payload["records"]:
         raise HTTPException(409, "Book identity changed since preview; create a new preview")
-    spec = RequestSpec.model_validate(command["specification"])
+    spec = RequestOptions.model_validate(command["specification"])
     if operation.payload.get("release_policy"):
         spec, _ = await resolve(
             db,

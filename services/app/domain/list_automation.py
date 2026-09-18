@@ -52,15 +52,20 @@ def proof(policy, book):
 def configuration_input(config):
     return list_policies.ListPolicyInput(
         mode=config["mode"],
-        specification={
-            **config["specification"],
-            "download_constraints": config.get("request_constraints"),
-        },
+        specification=config.get(
+            "scope_options",
+            {
+                **config["specification"],
+                "download_constraints": config.get("request_constraints"),
+            },
+        ),
         profile_id=config["profile"]["id"],
         profile_generation=config["profile"]["generation"],
         profile_effective_revision=config["profile"].get("base_effective_revision")
         or config["profile"].get("effective_revision"),
-        preference_overrides=config["profile"].get("list_overrides") or {},
+        preference_overrides=config.get(
+            "preference_overrides", config["profile"].get("list_overrides") or {}
+        ),
         downloader_id=config["downloader_id"],
         downloader_generation=config["downloader_generation"],
         routes=config["routes"],

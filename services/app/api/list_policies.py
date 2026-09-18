@@ -9,9 +9,9 @@ from app.api.dependencies import Database, Member
 from app.api.requests import TargetView
 from app.domain import list_monitoring
 from app.domain import list_policies as policies
-from app.domain.acquisition import RequestSpec
+from app.domain.acquisition import RequestOptions, RequestSpec
 from app.domain.list_requests import owner_context
-from app.domain.release_profiles import ProfileSnapshot
+from app.domain.release_profiles import PreferenceOverrides, ProfileSnapshot
 from app.domain.request_constraints import DownloadConstraints
 
 router = APIRouter(prefix="/lists/{list_id}/acquisition", tags=["list-policies"])
@@ -20,6 +20,8 @@ router = APIRouter(prefix="/lists/{list_id}/acquisition", tags=["list-policies"]
 class PolicyConfiguration(BaseModel):
     mode: str
     specification: RequestSpec
+    scope_options: RequestOptions | None = None
+    preference_overrides: PreferenceOverrides | None = None
     profile: ProfileSnapshot
     downloader_id: UUID | None
     downloader_generation: int | None

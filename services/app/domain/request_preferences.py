@@ -7,6 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from sqlalchemy import select
 
 from app.db.models import AcquisitionIntent, BookList, ListAcquisitionPolicy, Operation
+from app.domain import request_scope
 from app.domain.release_profiles import (
     PreferenceOverrides,
     ProfileSnapshot,
@@ -62,10 +63,16 @@ async def resolve(db, user, specification, reason, choice=None, *, frozen=None, 
         profile = overlay_profile(
             base,
             list_overrides=inherited.list_overrides if inherited else None,
-            request_overrides=choice.overrides,
+            request_overrides={
+                **choice.overrides.model_dump(mode="json"),
+                **request_scope.overrides(specification),
+            },
         )
     if expected is not None and profile.effective_revision != expected:
         raise HTTPException(409, "Request preferences changed; preview this request again")
+    if frozen is None:
+        specification, origins = request_scope.specification(specification, profile)
+        profile = profile.model_copy(update={"scope_origins": origins})
     values = specification.model_dump(mode="json")
     values["download_constraints"] = combine(
         values.get("download_constraints"),
@@ -83,12 +90,18 @@ async def resolve(db, user, specification, reason, choice=None, *, frozen=None, 
 def policy_identity(profile):
     # Preserve legacy built-in request deduplication, while separate non-equivalent
     # policies retain their own intents/reasons and may share eligible reservations.
-    if profile.id is None and profile.preferences == ReleasePreferences():
+    values = profile.preferences.model_dump(
+        exclude=set(request_scope.SCOPE_FIELDS.values()), mode="json"
+    )
+    defaults = ReleasePreferences().model_dump(
+        exclude=set(request_scope.SCOPE_FIELDS.values()), mode="json"
+    )
+    if profile.id is None and values == defaults:
         return None
     return {
         "profile_id": str(profile.id) if profile.id else None,
         "generation": profile.generation,
-        "preferences": profile.preferences.model_dump(),
+        "preferences": values,
     }
 
 
@@ -122,10 +135,13 @@ async def for_intent(db, user, intent, body):
     )
     if getattr(body, "preference_overrides", None):
         overrides.update(body.preference_overrides.model_dump())
-    return overlay_profile(
+    profile = overlay_profile(
         base,
         list_overrides=inherited.list_overrides if inherited else None,
         request_overrides=overrides,
+    )
+    return profile.model_copy(
+        update={"scope_origins": inherited.scope_origins if inherited else {}}
     )
 
 

@@ -1,3 +1,4 @@
+import { EffectiveScope } from "./ScopeFields";
 import PreferenceFields, {
   EffectivePreferences,
   type Overrides,
@@ -153,14 +154,38 @@ function PolicyEditor({
     (policy?.configuration.mode as Input["mode"]) || "browse",
   );
   const [medium, setMedium] = useState<Input["specification"]["mode"]>(
-    policy?.configuration.specification.mode || "either",
+    policy?.configuration.scope_options?.mode ||
+      policy?.configuration.preference_overrides?.desired_media ||
+      (policy?.configuration.scope_options == null
+        ? policy?.configuration.specification.mode
+        : undefined) ||
+      null,
   );
   const [preferred, setPreferred] = useState<"ebook" | "audio">(
     policy?.configuration.specification.preferred_medium || "audio",
   );
-  const [overrides, setOverrides] = useState<Overrides>(
-    policy?.configuration.profile.list_overrides || {},
-  );
+  const [overrides, setOverrides] = useState<Overrides>(() => {
+    const values = {
+      ...(policy?.configuration.preference_overrides ??
+        policy?.configuration.profile.list_overrides ??
+        {}),
+      ...Object.fromEntries(
+        Object.entries(policy?.configuration.scope_options || {}).filter(
+          ([key]) =>
+            [
+              "language",
+              "abridged",
+              "standalone",
+              "ebook_library_id",
+              "audio_library_id",
+            ].includes(key),
+        ),
+      ),
+    };
+    delete values.desired_media;
+    delete values.preferred_medium;
+    return values;
+  });
   const [profileId, setProfileId] = useState(
     policy?.configuration.profile.id || "",
   );
@@ -195,10 +220,15 @@ function PolicyEditor({
   const downloader =
     downloaders.find((d) => d.id === downloaderId) ||
     (downloaders.length === 1 ? downloaders[0] : undefined);
+  const profile = profiles.data?.find((p) => (p.id || "") === profileId);
+  const effectiveMedium =
+    medium || overrides.desired_media || profile?.preferences.desired_media;
   const media =
-    medium === "both" || medium === "either"
+    effectiveMedium === "both" || effectiveMedium === "either"
       ? (["ebook", "audio"] as const)
-      : [medium];
+      : effectiveMedium
+        ? [effectiveMedium]
+        : [];
   const available = (m: string) =>
     options.data?.destinations.filter(
       (d) =>
@@ -210,17 +240,12 @@ function PolicyEditor({
   const destination = (m: string) =>
     available(m).find((d) => d.id === destinations[m]) ||
     (available(m).length === 1 ? available(m)[0] : undefined);
-  const profile = profiles.data?.find((p) => (p.id || "") === profileId);
   const specification: Input["specification"] = {
-    ...policy?.configuration.specification,
-    mode: medium,
-    preferred_medium: medium === "either" ? preferred : null,
-    standalone: policy?.configuration.specification.standalone || false,
-    ebook_library_id: null,
-    audio_library_id: null,
-    // The chosen profile supplies these restrictions; do not carry an old profile's limits into an edit.
+    mode: medium || undefined,
+    ...(medium === "either" ? { preferred_medium: preferred } : {}),
     download_constraints: policy?.configuration.request_constraints || null,
   };
+  if (medium !== "either") delete specification.preferred_medium;
   const input: Input = {
     mode,
     specification,
@@ -332,12 +357,13 @@ function PolicyEditor({
             <label>
               Desired media
               <select
-                value={medium}
+                value={medium || ""}
                 onChange={(e) => {
-                  setMedium(e.target.value as typeof medium);
+                  setMedium((e.target.value || null) as typeof medium);
                   changed();
                 }}
               >
+                <option value="">Use profile or personal default</option>
                 <option value="ebook">Ebook</option>
                 <option value="audio">Audiobook</option>
                 <option value="both">Both</option>
@@ -382,6 +408,7 @@ function PolicyEditor({
               <details>
                 <summary>List download overrides</summary>
                 <PreferenceFields
+                  includeMedia={false}
                   overrides={overrides}
                   inherited={profile.preferences}
                   origins={profile.origins || {}}
@@ -502,6 +529,10 @@ function PolicyEditor({
       ) : receipt.data ? (
         <div aria-label="List activation preview">
           <h3>Review {receipt.data.configuration.mode} mode</h3>
+          <EffectiveScope
+            specification={receipt.data.configuration.specification}
+            origins={receipt.data.configuration.profile.scope_origins}
+          />
           <EffectivePreferences
             preferences={receipt.data.configuration.profile.preferences}
             origins={receipt.data.configuration.profile.origins || {}}

@@ -66,7 +66,7 @@ async def view(db, user, scope, row):
             {
                 "generation": row.generation if row else 0,
                 "overrides": overrides,
-                "effective": effective.model_dump(),
+                "effective": effective.model_dump(mode="json"),
                 "origins": origins,
             }
         ),
@@ -90,7 +90,7 @@ async def save(scope: Scope, body: SaveDefaults, user: Member, db: Database):
             key=key, owner_id=user.id if scope == "personal" else None, generation=0
         )
         db.add(row)
-    row.preferences = body.overrides.model_dump()
+    row.preferences = body.overrides.model_dump(mode="json")
     row.generation += 1
     db.add(
         AuditEvent(

@@ -8,7 +8,14 @@ from typing import Literal
 from uuid import UUID
 
 from fastapi import HTTPException
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    field_validator,
+    model_serializer,
+    model_validator,
+)
 from sqlalchemy import func, select
 
 from app.config import get_settings
@@ -34,29 +41,12 @@ from app.db.models import (
 from app.domain.corrections import revision
 from app.domain.operations import transaction_lock
 from app.domain.request_constraints import DownloadConstraints, combine, formats_possible
+from app.domain.request_scope import language, same_command, sparse_schema
 from app.domain.visibility import visible_library, visible_origin_work, visible_work
 from app.domain.work_graph import acquisition_lock, canonical_map, canonical_work, family_ids
 from app.jobs.queue import enqueue
 
 Medium = Literal["ebook", "audio"]
-
-
-def language(value):
-    if not value:
-        return None
-    parts = value.casefold().replace("_", "-").split("-")
-    parts[0] = {
-        "eng": "en",
-        "fra": "fr",
-        "fre": "fr",
-        "deu": "de",
-        "ger": "de",
-        "spa": "es",
-        "ita": "it",
-        "por": "pt",
-        "jpn": "ja",
-    }.get(parts[0], parts[0])
-    return "-".join(parts)
 
 
 def language_accepts(required, observed):
@@ -135,6 +125,21 @@ class RequestSpec(BaseModel):
                 else {}
             ),
         }
+
+
+class RequestOptions(RequestSpec):
+    """Sparse editable choices, validated as a strict RequestSpec after inheritance."""
+
+    model_config = ConfigDict(extra="forbid", json_schema_extra=sparse_schema)
+    mode: Literal["ebook", "audio", "both", "either"] | None = None
+
+    @model_validator(mode="after")
+    def applicable_constraints(self):
+        return self
+
+    @model_serializer(mode="wrap")
+    def sparse(self, handler):
+        return {key: value for key, value in handler(self).items() if key in self.model_fields_set}
 
 
 class RequestReason(BaseModel):
@@ -600,6 +605,7 @@ async def submit(
         "work_id": str(work_id),
         "specification": spec.model_dump(mode="json"),
         "reason": reason.model_dump(mode="json"),
+        **({"scope_inheritance": 1} if isinstance(spec, RequestOptions) else {}),
     }
     if preference_choice is not None:
         payload["release_preferences"] = preference_choice.model_dump(
@@ -619,7 +625,9 @@ async def submit(
         select(Operation).where(Operation.owner_id == user.id, Operation.idempotency_key == key)
     )
     if existing:
-        if existing.kind != "acquisition.evaluate" or existing.payload.get("command") != payload:
+        if existing.kind != "acquisition.evaluate" or not same_command(
+            existing.payload.get("command"), payload
+        ):
             raise HTTPException(409, "This operation key was already used for another command")
         return await db.get(AcquisitionIntent, UUID(existing.payload["intent_id"])), existing
     if reason.list_id:
@@ -639,7 +647,6 @@ async def submit(
     await db.refresh(user)
     if not user.active or user.role == "viewer":
         raise HTTPException(403, "Your account no longer has permission to create requests")
-    await validate_request(db, user, work_id, spec, reason)
     from app.domain.request_preferences import policy_identity, resolve
 
     spec, profile = await resolve(
@@ -651,6 +658,7 @@ async def submit(
         frozen=frozen_preferences,
         expected=expected_preference_revision,
     )
+    await validate_request(db, user, work_id, spec, reason)
     policy_key = policy_identity(profile)
     fingerprint = revision(
         {**spec.model_dump(mode="json"), **({"release_policy": policy_key} if policy_key else {})}

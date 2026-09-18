@@ -47,6 +47,7 @@ from app.domain.release_profiles import (
     same_profile,
 )
 from app.domain.request_constraints import constrained_preferences
+from app.domain.request_scope import SCOPE_FIELDS
 from app.domain.source_artifacts import persist_artifact
 from app.domain.source_network import source_call
 from app.domain.visibility import visible_origin_work
@@ -117,16 +118,30 @@ async def context(db, user_id, body):
         raise HTTPException(409, "Wait for the source search to finish")
     if datetime.fromisoformat(search.payload["expires_at"]) <= datetime.now(UTC):
         raise HTTPException(409, "Source results expired; refresh the source search")
+    # General book searches can serve strict scope targets; candidate/selection
+    # checks still enforce their language, recording and library requirements.
+    # Custom release ranking/limits require the request-bound search snapshot.
     bound_request = search.payload.get("command", {}).get("request_id")
     if (
         intent.release_policy
-        and any(intent.release_policy.get(key) for key in ("list_overrides", "request_overrides"))
+        and any(
+            set(intent.release_policy.get(key) or {}) - set(SCOPE_FIELDS.values())
+            for key in ("list_overrides", "request_overrides")
+        )
         and bound_request != str(intent.id)
     ):
         raise HTTPException(409, "Refresh sources for this request’s preferences")
     if bound_request and bound_request != str(intent.id):
         raise HTTPException(409, "Source search belongs to a different request")
     profile = ProfileSnapshot.model_validate(search.payload["profile"])
+    if not bound_request and intent.release_policy and intent.release_policy.get("id"):
+        requested = ProfileSnapshot.model_validate(intent.release_policy)
+        scope_fields = set(SCOPE_FIELDS.values())
+        if (requested.id, requested.generation) != (profile.id, profile.generation) or (
+            requested.preferences.model_dump(exclude=scope_fields)
+            != profile.preferences.model_dump(exclude=scope_fields)
+        ):
+            raise HTTPException(409, "Refresh sources for this request’s preferences")
     current = await refresh_profile(db, user_id, profile)
     if not same_profile(current, profile):
         raise HTTPException(409, "Download preferences changed; refresh the source search")

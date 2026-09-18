@@ -16,6 +16,7 @@ from app.db.models import (
     Version,
 )
 from app.domain.acquisition import (
+    RequestOptions,
     RequestReason,
     RequestSpec,
     assess,
@@ -33,7 +34,7 @@ router = APIRouter(prefix="/requests", tags=["requests"])
 class RequestInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
     work_id: UUID
-    specification: RequestSpec
+    specification: RequestOptions
     reason: RequestReason = Field(default_factory=RequestReason)
     release_preferences: PreferenceChoice | None = None
     expected_preference_revision: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
@@ -67,6 +68,7 @@ class RequestView(BaseModel):
 
 
 class PreviewView(BaseModel):
+    specification: RequestSpec
     targets: list[TargetView]
     download_available: bool = False
     release_policy: ProfileSnapshot | None = None
@@ -197,6 +199,7 @@ async def preview(body: RequestInput, user: CurrentUser, db: Database):
     )
     await validate_request(db, user, body.work_id, specification, body.reason)
     return PreviewView(
+        specification=specification,
         release_policy=profile,
         targets=[
             TargetView(**item)

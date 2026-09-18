@@ -11,6 +11,7 @@ from sqlalchemy import and_, literal, select
 from sqlalchemy.orm import aliased
 
 from app.db.models import AcquisitionDefaults, AcquisitionProfile
+from app.domain.request_scope import ScopePreferences
 from app.importing.naming import fingerprint
 
 FORMATS = {
@@ -30,7 +31,7 @@ FORMATS = {
 }
 
 
-class ReleasePreferences(BaseModel):
+class ReleasePreferences(ScopePreferences):
     model_config = ConfigDict(extra="forbid")
     ebook_formats: list[str] = Field(
         default=["epub", "pdf", "azw3", "mobi", "azw", "cbz", "cbr"], min_length=1, max_length=20
@@ -103,13 +104,14 @@ class ProfileSnapshot(BaseModel):
     base_effective_revision: str | None = None
     list_overrides: PreferenceOverrides | None = None
     request_overrides: PreferenceOverrides | None = None
+    scope_origins: dict[str, str] = Field(default_factory=dict)
 
 
 def resolve_preferences(layers):
-    values = ReleasePreferences().model_dump()
+    values = ReleasePreferences().model_dump(mode="json")
     origins = dict.fromkeys(values, "Built-in default")
     for label, overrides in layers:
-        sparse = PreferenceOverrides.model_validate(overrides).model_dump()
+        sparse = PreferenceOverrides.model_validate(overrides).model_dump(mode="json")
         values.update(sparse)
         origins.update(dict.fromkeys(sparse, label))
     return ReleasePreferences.model_validate(values), origins
@@ -182,7 +184,7 @@ async def profile_snapshot(db, user_id, identifier=None, generation=None, expect
         {
             "id": str(identifier) if identifier else None,
             "generation": row.generation if row.id else 0,
-            "preferences": preferences.model_dump(),
+            "preferences": preferences.model_dump(mode="json"),
             "origins": origins,
         }
     )
@@ -201,14 +203,14 @@ async def profile_snapshot(db, user_id, identifier=None, generation=None, expect
 
 
 def overlay_profile(profile, *, list_overrides=None, request_overrides=None):
-    values = profile.preferences.model_dump()
+    values = profile.preferences.model_dump(mode="json")
     origins = dict(profile.origins)
     for label, overrides in [
         ("List override", list_overrides),
         ("Request override", request_overrides),
     ]:
         if overrides is not None:
-            sparse = PreferenceOverrides.model_validate(overrides).model_dump()
+            sparse = PreferenceOverrides.model_validate(overrides).model_dump(mode="json")
             values.update(sparse)
             origins.update(dict.fromkeys(sparse, label))
     return profile.model_copy(

@@ -1244,6 +1244,138 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   expect(errors).toEqual([]);
 });
 
+test("request scope inherits defaults, supports explicit clearing and remains frozen", async ({
+  page,
+}, testInfo) => {
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Sign out", exact: true }),
+  ).toBeVisible();
+  const session = await (await page.request.get("/api/auth/me")).json();
+  const headers = {
+    Origin: "http://127.0.0.1:8001",
+    "X-CSRF-Token": session.csrf_token,
+  };
+  const created = await page.request.post("/api/catalog/works", {
+    headers,
+    data: { title: "Scope inheritance journey", authors: ["Fixture Author"] },
+  });
+  expect(created.status()).toBe(201);
+  const work = await created.json();
+  await page.goto("/download-preferences");
+  const settings = page.getByRole("region", {
+    name: "Download defaults",
+    exact: true,
+  });
+  await settings
+    .getByText("Media, language and library defaults", { exact: true })
+    .click();
+  await settings
+    .getByRole("combobox", { name: "Default requested media", exact: true })
+    .selectOption("both");
+  await settings
+    .getByRole("textbox", { name: "Required language", exact: true })
+    .fill("en");
+  await settings
+    .getByRole("combobox", { name: "Audiobook abridgment", exact: true })
+    .selectOption("false");
+  await settings
+    .getByRole("button", { name: "Save download defaults", exact: true })
+    .click();
+  await expect(settings.getByRole("status")).toContainText(
+    "Download defaults saved",
+  );
+  await page.goto(`/books/${work.id}`);
+  const wanted = page.getByRole("region", {
+    name: "Wanted media",
+    exact: true,
+  });
+  await expect(
+    wanted.getByRole("combobox", { name: "Media to request", exact: true }),
+  ).toHaveValue("");
+  const scope = wanted.locator("details").filter({
+    has: page.locator("summary", { hasText: /^Effective request scope$/ }),
+  });
+  await scope.locator("summary").click();
+  await expect(scope).toContainText("Both");
+  await expect(scope).toContainText("Personal default");
+  await expect(scope).toContainText("Unabridged");
+  await wanted
+    .getByText("Download preferences for this request", { exact: true })
+    .click();
+  await wanted
+    .getByText("Media, language and library defaults", { exact: true })
+    .click();
+  await wanted
+    .getByRole("textbox", { name: "Required language", exact: true })
+    .fill("");
+  await expect(scope).toContainText("Any language");
+  await expect(scope).toContainText("Request override");
+  await wanted
+    .getByRole("button", {
+      name: "Use inherited Required language",
+      exact: true,
+    })
+    .click();
+  await expect(scope).toContainText("Personal default");
+  await wanted
+    .getByRole("button", { name: "Save to wanted", exact: true })
+    .click();
+  await expect
+    .poll(
+      async () =>
+        (
+          await (
+            await page.request.get(`/api/requests?work_id=${work.id}`)
+          ).json()
+        ).total,
+    )
+    .toBe(1);
+  const saved = (
+    await (await page.request.get(`/api/requests?work_id=${work.id}`)).json()
+  ).items[0];
+  expect(saved.specification.mode).toBe("both");
+  expect(saved.specification.language).toBe("en");
+  expect(saved.specification.abridged).toBe(false);
+  await page.reload();
+  await expect(wanted).toContainText("Language: en");
+  await wanted
+    .locator("article")
+    .first()
+    .getByText("Effective request scope", { exact: true })
+    .click();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("request-scope-mobile.png"),
+    fullPage: true,
+  });
+  await page.goto("/download-preferences");
+  await settings
+    .getByRole("button", { name: "Use inherited defaults", exact: true })
+    .click();
+  await settings
+    .getByRole("button", { name: "Save download defaults", exact: true })
+    .click();
+  await expect(settings.getByRole("status")).toContainText(
+    "Download defaults saved",
+  );
+  const retained = await (
+    await page.request.get(`/api/requests/${saved.id}`)
+  ).json();
+  expect(retained.specification).toEqual(saved.specification);
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+});
+
 test("list and request preferences survive previews, saving and source reload", async ({
   page,
 }, testInfo) => {
@@ -1326,7 +1458,7 @@ test("list and request preferences survive previews, saving and source reload", 
     .click();
   await expect(
     batch.getByRole("combobox", { name: "Media to request", exact: true }),
-  ).toHaveValue("ebook");
+  ).toHaveValue("");
   await batch
     .getByText("Download preferences for this request", { exact: true })
     .click();
@@ -2495,7 +2627,7 @@ test("list policy activates future additions and acquires a synced title without
     page
       .getByRole("region", { name: "List wanted media", exact: true })
       .getByLabel("Media to request"),
-  ).toHaveValue("ebook");
+  ).toHaveValue("");
   await page
     .getByRole("button", { name: "Close list requests", exact: true })
     .click();

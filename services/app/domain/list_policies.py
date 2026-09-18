@@ -23,7 +23,8 @@ from app.db.models import (
     User,
     Work,
 )
-from app.domain.acquisition import RequestSpec, assess, evaluate, validate_request
+from app.domain import request_scope
+from app.domain.acquisition import RequestOptions, RequestSpec, assess, evaluate, validate_request
 from app.domain.acquisition_selection import verified_probe
 from app.domain.automatic_dispatch import approve_route
 from app.domain.downloaders import connection_or_404, mapped_path
@@ -47,7 +48,7 @@ class PolicyRoute(BaseModel):
 class ListPolicyInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
     mode: Literal["browse", "manual", "automatic"] = "browse"
-    specification: RequestSpec
+    specification: RequestOptions
     profile_id: UUID | None = None
     profile_generation: int | None = Field(default=None, ge=0)
     profile_effective_revision: str | None = Field(
@@ -128,7 +129,23 @@ async def configuration(db, user, list_id, body):
     profile = await profile_snapshot(
         db, user.id, body.profile_id, body.profile_generation, body.profile_effective_revision
     )
-    profile = overlay_profile(profile, list_overrides=body.preference_overrides)
+    profile = overlay_profile(
+        profile,
+        list_overrides={
+            **body.preference_overrides.model_dump(mode="json"),
+            **request_scope.overrides(spec),
+        },
+    )
+    browse_inventory = body.mode == "browse" and profile.preferences.desired_media is None
+    options = (
+        RequestOptions.model_validate({**spec.model_dump(mode="json"), "mode": "either"})
+        if browse_inventory
+        else spec
+    )
+    spec, origins = request_scope.specification(options, profile)
+    if browse_inventory:
+        origins["mode"] = "Browse inventory"
+    profile = profile.model_copy(update={"scope_origins": origins})
     constraints = combine(
         spec.download_constraints.model_dump() if spec.download_constraints else None,
         profile.preferences.model_dump(include={"blocked_formats", "maximum_bytes"}),
@@ -169,9 +186,12 @@ async def configuration(db, user, list_id, body):
             if expected_library and expected_library != destination.library_id:
                 raise HTTPException(422, "Destination conflicts with the requested library")
             values[medium + "_library_id"] = str(destination.library_id)
+            profile.scope_origins[medium + "_library_id"] = "List import route"
             approvals[medium] = approval
     return {
         "mode": body.mode,
+        "scope_options": body.specification.model_dump(mode="json"),
+        "preference_overrides": body.preference_overrides.model_dump(mode="json"),
         "request_constraints": spec.download_constraints.model_dump()
         if spec.download_constraints
         else None,

@@ -1,3 +1,4 @@
+import { EffectiveScope } from "./ScopeFields";
 import RequestPreferences, { type Choice } from "./RequestPreferences";
 import { EffectivePreferences } from "./PreferenceFields";
 import { useEffect, useRef, useState } from "react";
@@ -8,7 +9,7 @@ import { Notice } from "../components";
 import { Link } from "react-router-dom";
 import DownloadConstraints from "./DownloadConstraints";
 
-type Spec = components["schemas"]["RequestSpec"];
+type Spec = components["schemas"]["RequestOptions"];
 export type WantedVersion = components["schemas"]["VersionView"];
 const label = (slot: string) =>
   slot === "audio" ? "Audiobook" : slot === "ebook" ? "Ebook" : "Either medium";
@@ -39,24 +40,29 @@ export default function Wanted({
   );
   const [preferred, setPreferred] = useState<"ebook" | "audio">("ebook");
   const [preferences, setPreferences] = useState<Choice>({});
-  const [language, setLanguage] = useState("");
-  const [standalone, setStandalone] = useState(false);
   const [offset, setOffset] = useState(0);
   const key = useRef(crypto.randomUUID());
   useEffect(() => {
     if (version) heading.current?.focus();
   }, [version]);
   const specification: Spec = {
-    mode: mode || "ebook",
-    preferred_medium: mode === "either" ? preferred : null,
-    language: language || null,
-    standalone,
+    ...(mode ? { mode } : {}),
+    ...(mode === "either" ? { preferred_medium: preferred } : {}),
     ...(version?.medium === "audio" ? { audio_version_id: version.id } : {}),
     ...(version?.medium === "ebook" ? { ebook_version_id: version.id } : {}),
   };
-  const valid =
-    !!mode &&
-    (!language || /^[a-zA-Z]{2,3}([-_][a-zA-Z0-9]{2,8})*$/.test(language));
+  const profiles = useQuery({
+    queryKey: ["release-profiles"],
+    queryFn: async () => result(await api.GET("/api/acquisition/profiles")),
+  });
+  const selectedProfile = profiles.data?.find(
+    (p) => (p.id || "") === (preferences.profile_id || ""),
+  );
+  const valid = !!(
+    mode ||
+    preferences.overrides?.desired_media ||
+    selectedProfile?.preferences.desired_media
+  );
   const preview = useQuery({
     queryKey: ["request-preview", workId, specification, preferences],
     queryFn: async () =>
@@ -152,13 +158,13 @@ export default function Wanted({
         <label>
           Media to request
           <select
-            value={mode}
+            value={mode || ""}
             onChange={(event) => {
               changed();
               setMode(event.target.value as Spec["mode"]);
             }}
           >
-            <option value="">Choose media</option>
+            <option value="">Use profile or personal default</option>
             <option value="ebook">Ebook</option>
             <option value="audio">Audiobook</option>
             <option value="both">Both</option>
@@ -185,36 +191,6 @@ export default function Wanted({
           </small>
         </label>
       )}
-      <details>
-        <summary>Request preferences</summary>
-        <label>
-          Required language code
-          <input
-            value={language}
-            placeholder="Any language"
-            maxLength={20}
-            onChange={(event) => {
-              changed();
-              setLanguage(event.target.value);
-            }}
-          />
-          <small>
-            For example, en for English. An unknown language will not satisfy a
-            required language.
-          </small>
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={standalone}
-            onChange={(event) => {
-              changed();
-              setStandalone(event.target.checked);
-            }}
-          />
-          Require a standalone copy rather than an omnibus
-        </label>
-      </details>
       <RequestPreferences
         value={preferences}
         onChange={(value) => {
@@ -230,6 +206,10 @@ export default function Wanted({
       )}
       {valid && preview.data && (
         <div aria-label="Request preview">
+          <EffectiveScope
+            specification={preview.data.specification}
+            origins={preview.data.release_policy?.scope_origins}
+          />
           {preview.data.release_policy && (
             <EffectivePreferences
               preferences={preview.data.release_policy.preferences}
@@ -268,6 +248,10 @@ export default function Wanted({
           {requests.data.items.map((intent) => (
             <article className="panel editor" key={intent.id}>
               <p className="muted">{intent.description}</p>
+              <EffectiveScope
+                specification={intent.specification}
+                origins={intent.release_policy?.scope_origins}
+              />
               {intent.release_policy && (
                 <EffectivePreferences
                   preferences={intent.release_policy.preferences}

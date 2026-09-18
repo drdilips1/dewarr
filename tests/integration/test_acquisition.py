@@ -411,7 +411,12 @@ async def test_current_inventory_releases_a_reservation_on_worker_recheck(
 
 
 async def test_request_constraints_and_reason_validation(client, admin, catalog):
-    invalid = await client.post("/api/requests/preview", json=body(catalog, "either"))
+    inherited = await client.post("/api/requests/preview", json=body(catalog, "either"))
+    assert inherited.status_code == 200
+    assert inherited.json()["specification"]["preferred_medium"] == "audio"
+    invalid = await client.post(
+        "/api/requests/preview", json=body(catalog, "either", preferred_medium=None)
+    )
     assert invalid.status_code == 422
     invalid = await client.post(
         "/api/requests/preview",

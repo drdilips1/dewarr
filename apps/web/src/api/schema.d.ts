@@ -2427,7 +2427,7 @@ export interface components {
     BatchInput: {
       /** Work Ids */
       work_ids: string[];
-      specification: components["schemas"]["RequestSpec"];
+      specification: components["schemas"]["RequestOptions"];
       release_preferences?: components["schemas"]["PreferenceChoice"] | null;
     };
     /** BatchPage */
@@ -3662,7 +3662,7 @@ export interface components {
        * @enum {string}
        */
       mode: "browse" | "manual" | "automatic";
-      specification: components["schemas"]["RequestSpec"];
+      specification: components["schemas"]["RequestOptions"];
       /** Profile Id */
       profile_id?: string | null;
       /** Profile Generation */
@@ -4400,6 +4400,9 @@ export interface components {
       /** Mode */
       mode: string;
       specification: components["schemas"]["RequestSpec"];
+      scope_options?: components["schemas"]["RequestOptions"] | null;
+      preference_overrides?:
+        components["schemas"]["PreferenceOverrides"] | null;
       profile: components["schemas"]["ProfileSnapshot"];
       /** Downloader Id */
       downloader_id: string | null;
@@ -4458,6 +4461,23 @@ export interface components {
      * @description Omitted fields inherit; explicit empty block lists and null limits override.
      */
     PreferenceOverrides: {
+      /** Desired Media */
+      desired_media?: ("ebook" | "audio" | "both" | "either") | null;
+      /**
+       * Preferred Medium
+       * @enum {string}
+       */
+      preferred_medium?: "ebook" | "audio";
+      /** Language */
+      language?: string | null;
+      /** Abridged */
+      abridged?: boolean | null;
+      /** Standalone */
+      standalone?: boolean;
+      /** Ebook Library Id */
+      ebook_library_id?: string | null;
+      /** Audio Library Id */
+      audio_library_id?: string | null;
       /** Ebook Formats */
       ebook_formats?: string[];
       /** Audio Formats */
@@ -4479,6 +4499,7 @@ export interface components {
     };
     /** PreviewView */
     PreviewView: {
+      specification: components["schemas"]["RequestSpec"];
       /** Targets */
       targets: components["schemas"]["TargetView"][];
       /**
@@ -4535,6 +4556,10 @@ export interface components {
       base_effective_revision?: string | null;
       list_overrides?: components["schemas"]["PreferenceOverrides"] | null;
       request_overrides?: components["schemas"]["PreferenceOverrides"] | null;
+      /** Scope Origins */
+      scope_origins?: {
+        [key: string]: string;
+      };
     };
     /** ProwlarrConnectionInput */
     ProwlarrConnectionInput: {
@@ -4790,6 +4815,27 @@ export interface components {
     };
     /** ReleasePreferences */
     ReleasePreferences: {
+      /** Desired Media */
+      desired_media?: ("ebook" | "audio" | "both" | "either") | null;
+      /**
+       * Preferred Medium
+       * @default audio
+       * @enum {string}
+       */
+      preferred_medium: "ebook" | "audio";
+      /** Language */
+      language?: string | null;
+      /** Abridged */
+      abridged?: boolean | null;
+      /**
+       * Standalone
+       * @default false
+       */
+      standalone: boolean;
+      /** Ebook Library Id */
+      ebook_library_id?: string | null;
+      /** Audio Library Id */
+      audio_library_id?: string | null;
       /**
        * Ebook Formats
        * @default [
@@ -4877,11 +4923,37 @@ export interface components {
        * Format: uuid
        */
       work_id: string;
-      specification: components["schemas"]["RequestSpec"];
+      specification: components["schemas"]["RequestOptions"];
       reason?: components["schemas"]["RequestReason"];
       release_preferences?: components["schemas"]["PreferenceChoice"] | null;
       /** Expected Preference Revision */
       expected_preference_revision?: string | null;
+    };
+    /**
+     * RequestOptions
+     * @description Sparse editable choices, validated as a strict RequestSpec after inheritance.
+     */
+    RequestOptions: {
+      /** Mode */
+      mode?: ("ebook" | "audio" | "both" | "either") | null;
+      /** Preferred Medium */
+      preferred_medium?: ("ebook" | "audio") | null;
+      /** Language */
+      language?: string | null;
+      /** Ebook Version Id */
+      ebook_version_id?: string | null;
+      /** Audio Version Id */
+      audio_version_id?: string | null;
+      /** Ebook Library Id */
+      ebook_library_id?: string | null;
+      /** Audio Library Id */
+      audio_library_id?: string | null;
+      /** Abridged */
+      abridged?: boolean | null;
+      /** Standalone */
+      standalone?: boolean;
+      download_constraints?:
+        components["schemas"]["DownloadConstraints"] | null;
     };
     /** RequestPage */
     RequestPage: {
