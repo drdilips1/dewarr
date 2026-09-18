@@ -21,6 +21,7 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
   const [downloaderId, setDownloaderId] = useState("");
   const [destinationId, setDestinationId] = useState("");
   const [confirmed, setConfirmed] = useState(false);
+  const [group, setGroup] = useState<Array<{ id: string; title: string }>>([]);
   const key = useRef(crypto.randomUUID());
   const downloadKeys = useRef(new Map<string, string>());
   const options = useQuery({
@@ -94,6 +95,9 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
     (!choice && params.get("work")
       ? choices.find((item) => item.intent.work_id === params.get("work"))
       : undefined);
+  const useSearchContext = params.get("request")
+    ? params.get("request") === selected?.intent.id
+    : !params.get("work") || params.get("work") === selected?.intent.work_id;
   const downloaders =
     options.data?.downloaders.filter((item) => item.ready) || [];
   const downloader =
@@ -136,20 +140,26 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
             intent_id: selected!.intent.id,
             slot: selected!.target.slot as "audio" | "ebook" | "either",
             artifact_id: artifact.id,
-            search_id: params.get("search") || undefined,
+            search_id: useSearchContext
+              ? params.get("search") || undefined
+              : undefined,
             downloader_id: downloader!.id,
             downloader_generation: downloader!.generation,
             destination_id: destination!.id,
             destination_revision: destination!.revision,
             confirmed_work_id: selected!.intent.work_id,
-            profile_id: params.get("profile") || undefined,
-            profile_effective_revision:
-              params.get("profile_effective_revision") ||
-              selectedProfile?.effective_revision ||
-              undefined,
-            profile_generation: params.get("profile_generation")
-              ? Number(params.get("profile_generation"))
-              : undefined,
+            ...(useSearchContext
+              ? {
+                  profile_id: params.get("profile") || undefined,
+                  profile_effective_revision:
+                    params.get("profile_effective_revision") ||
+                    selectedProfile?.effective_revision ||
+                    undefined,
+                  profile_generation: params.get("profile_generation")
+                    ? Number(params.get("profile_generation"))
+                    : undefined,
+                }
+              : {}),
           },
         }),
       ),
@@ -169,19 +179,27 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
     onSuccess: refresh,
   });
   const startDownload = useMutation({
-    mutationFn: async (id: string) => {
-      if (!downloadKeys.current.has(id))
-        downloadKeys.current.set(id, crypto.randomUUID());
+    mutationFn: async (ids: string[]) => {
+      const sorted = [...ids].sort();
+      const command = sorted.join(":");
+      if (!downloadKeys.current.has(command))
+        downloadKeys.current.set(command, crypto.randomUUID());
       return result(
         await api.POST("/api/acquisition/downloads", {
           params: {
-            header: { "idempotency-key": downloadKeys.current.get(id)! },
+            header: { "idempotency-key": downloadKeys.current.get(command)! },
           },
-          body: { selection_id: id },
+          body: {
+            selection_id: sorted[0],
+            additional_selection_ids: sorted.slice(1),
+          },
         }),
       );
     },
-    onSuccess: refresh,
+    onSuccess: async () => {
+      setGroup([]);
+      await refresh();
+    },
   });
   const changed = () => {
     setConfirmed(false);
@@ -194,7 +212,7 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
       aria-label="Release selection"
     >
       <h2>Select for a book request</h2>
-      {selectedProfile && (
+      {selectedProfile && useSearchContext && (
         <EffectivePreferences
           preferences={selectedProfile.preferences}
           origins={selectedProfile.origins || {}}
@@ -202,8 +220,10 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
       )}
       <p>
         Download profile:{" "}
-        {selectedProfile?.name ||
-          (params.get("profile") ? "Saved profile unavailable" : "Balanced")}
+        {!useSearchContext
+          ? "Selected request’s saved preferences"
+          : selectedProfile?.name ||
+            (params.get("profile") ? "Saved profile unavailable" : "Balanced")}
       </p>
       <p className="muted">
         Choose the book this release contains and its library destination. The
@@ -342,8 +362,60 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
       {!!history.data?.items.length && (
         <>
           <h3>Saved selections</h3>
+          <p className="muted">
+            For a collection, save a selection for each wanted book, then select
+            those books below to download them together. They must use the same
+            downloader and library route. File inspection confirms each book
+            separately.
+          </p>
+          {group.length > 0 && (
+            <section className="panel" aria-label="Shared download scope">
+              <h4>{group.length} selected books · one transfer</h4>
+              <ul>
+                {group.map((item) => (
+                  <li key={item.id}>{item.title}</li>
+                ))}
+              </ul>
+              <button
+                className="primary"
+                disabled={group.length < 2 || startDownload.isPending}
+                onClick={() =>
+                  startDownload.mutate(group.map((item) => item.id))
+                }
+              >
+                Download selected books together
+              </button>
+              <button
+                disabled={startDownload.isPending}
+                onClick={() => setGroup([])}
+              >
+                Clear selection
+              </button>
+            </section>
+          )}
           {history.data.items.map((item) => (
             <article key={item.id} className="source-attribution">
+              {item.dispatch_available && (
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={group.some((entry) => entry.id === item.id)}
+                    disabled={startDownload.isPending || cancel.isPending}
+                    onChange={(event) => {
+                      const checked = event.target.checked;
+                      setGroup((current) =>
+                        checked
+                          ? [
+                              ...current,
+                              { id: item.id, title: item.work_title },
+                            ]
+                          : current.filter((entry) => entry.id !== item.id),
+                      );
+                    }}
+                  />
+                  Include {item.work_title} in shared download
+                </label>
+              )}
               <span>
                 <strong>{item.work_title}</strong>
                 <small>{item.message}</small>
@@ -358,7 +430,7 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
                 <button
                   className="primary"
                   disabled={startDownload.isPending}
-                  onClick={() => startDownload.mutate(item.id)}
+                  onClick={() => startDownload.mutate([item.id])}
                 >
                   {startDownload.isPending
                     ? "Queuing download…"
@@ -371,7 +443,12 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
               {item.state === "prepared" && (
                 <button
                   disabled={cancel.isPending}
-                  onClick={() => cancel.mutate(item.id)}
+                  onClick={() => {
+                    setGroup((current) =>
+                      current.filter((entry) => entry.id !== item.id),
+                    );
+                    cancel.mutate(item.id);
+                  }}
                 >
                   Cancel selection
                 </button>

@@ -6,6 +6,8 @@ The reviewed selection now has a persisted qBittorrent acquisition lifecycle, ow
 
 `POST /api/acquisition/downloads` takes a selection ID and an idempotency key. Within one PostgreSQL transaction it rechecks the requesting account, active reasons, current library inventory, destination grants, frozen source/client/version/mount settings, artifact integrity and the verified import route. It creates a `DownloadAttempt`, operation receipt, full torrent identity claims and the durable worker job. Repeated commands return the original attempt, including cancelled history; different payloads cannot reuse a key.
 
+[Reviewed shared downloads](SHARED-DOWNLOADS.md) add optional `additional_selection_ids` for up to 100 compatible selections from one requester. Each selection has explicit membership in the same physical attempt; dispatch, cancellation, repair lookup and fulfillment retain the individual book requirements. Membership is frozen before dispatch.
+
 The selection and reservation enter `committed`. Their requirements remain frozen. Compatible requests may share that reservation; a stricter request cannot change an acquisition already underway. Full v1/v2 claims are unique per normalized downloader URL, including two connection records with the same URL. Different DNS aliases for one physical downloader are not automatically recognized as the same endpoint. Conflicting claims disclose no other owner's request, artifact or holdings.
 
 The worker performs read-only preflight and checks both known hashes and the unique attempt tag. A pre-existing torrent is not adopted or retagged. Immediately before add, it rechecks authorization and settings and commits the sticky `external_may_exist` marker. No run whose marker is set can call add again. An absent transfer or a lost acknowledgement causes observation/reconciliation, not resubmission.
@@ -38,7 +40,7 @@ The observed non-padding file paths and sizes must exactly match the saved nativ
 
 On administrator-owned completion, the worker atomically queues the existing read-only inspection under the frozen worker root and exact torrent directory or single-file path. Activity links to its review. Actual file identity, book/version assignment and safe publication still use the existing import workflow. Members receive an explicit administrator-review state; their filesystem permissions are not elevated. Neither completion nor inspection establishes ownership.
 
-[Single-file inspection and publication](SINGLE-FILE-IMPORTS.md) now support both direct-root and nested save mappings without enumerating neighboring downloads. There is no automatic content matching/import, shared-pack reuse across different works, automatic ranking or list automation yet. Existing source endpoint policy and full live client/filesystem compatibility still require certification before normal activation.
+[Single-file inspection and publication](SINGLE-FILE-IMPORTS.md) support both direct-root and nested save mappings without enumerating neighboring downloads. Approved automatic imports, bounded single-book list automation and reviewed shared-pack transfers now have separate implementation checkpoints. Automatic pack coverage selection, later/cross-owner shared reuse and full live client/filesystem compatibility remain pending; see [implementation status](IMPLEMENTATION-STATUS.md).
 
 ## Evidence
 

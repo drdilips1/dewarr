@@ -610,6 +610,16 @@ class DownloadAttempt(Identity, Base):
     inspection_id: Mapped[UUID | None] = mapped_column(ForeignKey("download_inspections.id"))
 
 
+class DownloadMembership(Base):
+    """Immutable selections served by a physical transfer, including its representative."""
+
+    __tablename__ = "download_memberships"
+    selection_id: Mapped[UUID] = mapped_column(
+        ForeignKey("acquisition_selections.id"), primary_key=True
+    )
+    attempt_id: Mapped[UUID] = mapped_column(ForeignKey("download_attempts.id"), index=True)
+
+
 class CapacitySettings(Base):
     __tablename__ = "capacity_settings"
     __table_args__ = (CheckConstraint("id = 1"),)

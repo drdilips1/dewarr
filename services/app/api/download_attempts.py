@@ -16,9 +16,11 @@ from app.db.models import (
     DownloadAttempt,
     DownloadFulfillment,
     DownloadInspection,
+    DownloadMembership,
     ImportEntry,
 )
 from app.domain import download_attempts as downloads
+from app.domain import download_memberships
 from app.domain import download_repairs as repairs
 from app.domain.acquisition import RequestSpec, assess
 from app.domain.acquisition_selection import configuration_current
@@ -29,12 +31,24 @@ router = APIRouter(prefix="/acquisition/downloads", tags=["downloads"])
 class StartInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
     selection_id: UUID
+    additional_selection_ids: list[UUID] = Field(default_factory=list, max_length=99)
 
 
 class FulfillmentView(BaseModel):
     confirmed_at: datetime
     basis: str
     available_now: bool
+
+
+class DownloadMemberView(BaseModel):
+    selection_id: UUID
+    intent_id: UUID
+    work_title: str
+    medium: str
+    state: str
+    target_state: str
+    message: str
+    fulfillment: FulfillmentView | None
 
 
 class RepairInput(BaseModel):
@@ -74,6 +88,7 @@ class AttemptView(BaseModel):
     fulfillment: FulfillmentView | None
     repair: RepairView | None
     can_repair: bool
+    members: list[DownloadMemberView]
 
 
 class AttemptPage(BaseModel):
@@ -112,26 +127,26 @@ async def view(db, user, row, selection):
         committed=True,
         configuration=await repairs.accepted_configuration(db, selection),
     )
-    fulfillment = await db.scalar(
-        select(DownloadFulfillment).where(
-            DownloadFulfillment.attempt_id == row.id,
-            DownloadFulfillment.target_id == selection.target_id,
+    members = []
+    for item in await download_memberships.for_attempt(db, row.id):
+        if item.owner_id != user.id:
+            continue
+        target = await db.get(AcquisitionTarget, item.target_id)
+        members.append(
+            DownloadMemberView(
+                selection_id=item.id,
+                intent_id=item.intent_id,
+                work_title=item.frozen["work_title"],
+                medium=item.frozen["requirements"]["medium"],
+                state=item.state,
+                target_state=target.state,
+                message=target.message,
+                fulfillment=await fulfillment_view(db, user, row, item),
+            )
         )
+    confirmed = next(
+        (item.fulfillment for item in members if item.selection_id == selection.id), None
     )
-    confirmed = None
-    if fulfillment:
-        intent = await db.get(AcquisitionIntent, selection.intent_id)
-        target = await db.get(AcquisitionTarget, selection.target_id)
-        outcomes = await assess(
-            db, user, intent.work_id, RequestSpec.model_validate(intent.specification)
-        )
-        confirmed = FulfillmentView(
-            confirmed_at=fulfillment.created_at,
-            basis=fulfillment.evidence["basis"],
-            available_now=any(
-                item["slot"] == target.slot and item["state"] == "satisfied" for item in outcomes
-            ),
-        )
     return AttemptView(
         id=row.id,
         created_at=row.created_at,
@@ -154,7 +169,32 @@ async def view(db, user, row, selection):
         fulfillment=confirmed,
         repair=RepairView.model_validate(repair) if repair else None,
         can_repair=needs_review,
+        members=members,
     )
+
+
+async def fulfillment_view(db, user, row, selection):
+    fulfillment = await db.scalar(
+        select(DownloadFulfillment).where(
+            DownloadFulfillment.attempt_id == row.id,
+            DownloadFulfillment.target_id == selection.target_id,
+        )
+    )
+    confirmed = None
+    if fulfillment:
+        intent = await db.get(AcquisitionIntent, selection.intent_id)
+        target = await db.get(AcquisitionTarget, selection.target_id)
+        outcomes = await assess(
+            db, user, intent.work_id, RequestSpec.model_validate(intent.specification)
+        )
+        confirmed = FulfillmentView(
+            confirmed_at=fulfillment.created_at,
+            basis=fulfillment.evidence["basis"],
+            available_now=any(
+                item["slot"] == target.slot and item["state"] == "satisfied" for item in outcomes
+            ),
+        )
+    return confirmed
 
 
 @router.post("", response_model=AttemptView, status_code=202)
@@ -165,7 +205,13 @@ async def start(
     idempotency_key: str = Header(min_length=8, max_length=200),
 ):
     try:
-        row = await downloads.start(db, user, body.selection_id, idempotency_key)
+        row = await downloads.start(
+            db,
+            user,
+            body.selection_id,
+            idempotency_key,
+            additional_selection_ids=body.additional_selection_ids,
+        )
     except AdapterError as error:
         raise adapter_http_error(error) from error
     result = await view(db, user, row, await db.get(AcquisitionSelection, row.selection_id))
@@ -183,7 +229,13 @@ async def listing(
 ):
     where = [DownloadAttempt.owner_id == user.id]
     if selection_id:
-        where.append(DownloadAttempt.selection_id == selection_id)
+        where.append(
+            DownloadAttempt.id.in_(
+                select(DownloadMembership.attempt_id).where(
+                    DownloadMembership.selection_id == selection_id
+                )
+            )
+        )
     rows = await db.scalars(
         select(DownloadAttempt)
         .where(*where)

@@ -2437,6 +2437,8 @@ export interface components {
       repair: components["schemas"]["RepairView"] | null;
       /** Can Repair */
       can_repair: boolean;
+      /** Members */
+      members: components["schemas"]["DownloadMemberView"][];
     };
     /** AuthView */
     AuthView: {
@@ -3088,6 +3090,30 @@ export interface components {
       download_root: string;
       /** Source Key */
       source_key: string;
+    };
+    /** DownloadMemberView */
+    DownloadMemberView: {
+      /**
+       * Selection Id
+       * Format: uuid
+       */
+      selection_id: string;
+      /**
+       * Intent Id
+       * Format: uuid
+       */
+      intent_id: string;
+      /** Work Title */
+      work_title: string;
+      /** Medium */
+      medium: string;
+      /** State */
+      state: string;
+      /** Target State */
+      target_state: string;
+      /** Message */
+      message: string;
+      fulfillment: components["schemas"]["FulfillmentView"] | null;
     };
     /** DownloaderChoice */
     DownloaderChoice: {
@@ -5792,6 +5818,8 @@ export interface components {
        * Format: uuid
        */
       selection_id: string;
+      /** Additional Selection Ids */
+      additional_selection_ids?: string[];
     };
     /** SubmittedView */
     SubmittedView: {

@@ -8,6 +8,8 @@ The [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md) provides a concise
 
 For the existing workspace, use its [remaining development batches](DEVELOPMENT-ROADMAP.md#9-remaining-development-batches-from-the-current-checkpoint) alongside section 16. These batches map outstanding work to the stable packages below; they do not add scope or supersede stage acceptance gates.
 
+The [stage closure plan](#17-stage-closure-and-implementation-packets) turns the current `3e6fc70` checkpoint into an execution order, including the first shared-pack implementation packets. Use it with the complete S00–S10 backlog; it does not replace the PRD or mark partially implemented stages complete.
+
 ## 1. Delivery strategy
 
 Deliver a working vertical slice early, then expand source coverage and automation. Build durable domain state, identity and inventory before dispatch; certify importing before connecting automatic acquisition. Hardening, accessibility, authorization and migration testing start with their first affected feature rather than waiting for the final stage.
@@ -712,7 +714,7 @@ Owner labels describe responsibilities, not assumed staffing. One developer may 
 
 ### Next increment in this workspace
 
-The v1.9 planning review began at committed revision `0c947b3`. The subsequent series catalog/curation increment now has bounded implementation evidence in [Series catalog](docs/SERIES-CATALOG.md) and [Implementation Status](docs/IMPLEMENTATION-STATUS.md). It does not complete pack acquisition or certify live Hardcover service behavior.
+The current planning checkpoint is committed revision `3e6fc70`, following the earlier review at `0c947b3`. Series catalog/curation, reviewed finite series requests and catalog-derived source queries now have bounded evidence in [Implementation Status](docs/IMPLEMENTATION-STATUS.md). The recorded checkpoint has 1,233 passing backend tests and two focused browser journeys; this is existing evidence, not a new verification run or full browser/stage certification. It does not complete pack acquisition or certify live Hardcover service behavior.
 
 The bounded single-book list-to-library path, membership re-addition/merge lifecycle and release-profile defaults have implementation evidence in [Implementation Status](docs/IMPLEMENTATION-STATUS.md). Those subsets do not close S06/S07. Continue **complete policy inheritance and acquisition scope**, within S06-04 and S07-04–S07-06, using the existing shared resolver and acquisition/import services.
 
@@ -762,3 +764,66 @@ The supplied project pages and official API entry points were revisited during t
 - The Goodreads API entry point redirected to the homepage in this research pass. This supplies no evidence of a usable new public API. Keep the planned RSS/CSV inbound contract; validate supported feed behavior without promising write-back.
 
 No API account or external application installation is required to approve this plan. Actual-service access becomes an explicit qualification dependency when the corresponding connector is implemented and certified.
+
+## 17. Stage closure and implementation packets
+
+This is the execution plan from revision `3e6fc70`, not a greenfield rebuild. Keep all 61 parent work packages and their FR/NFR/AT mappings. The packets below decompose existing work, and must not be counted as additional completed requirements. Consult current implementation evidence again when a packet starts.
+
+### Remaining work across the entire lifecycle
+
+| Stage | What development must still close | Evidence needed to accept the stage |
+|---|---|---|
+| S00 | Supported container/database runtime, complete adapter fixtures, CI execution and operator scaffold | Clean supported deployment, reproducible contracts/build and recorded CI results; local native startup alone is insufficient |
+| S01 | Shared-transfer ownership, remaining identity correction/version compatibility, account/grant administration and external-state recovery | Concurrency, permission changes, correction and restart preserve identity, request reasons and authorized side effects |
+| S02 | Complete identifier/version reconciliation, catalog/list UX and actual provider qualification | One work page distinguishes editions, recordings and releases; protected metadata survives refresh and corrected matches |
+| S03 | ABS event handling with polling repair, broader move detection, missing/ignore/replace workflow and compatibility | Interrupted inventory never erases holdings; actual accessible items establish medium/version availability |
+| S04 | Complete collection/omnibus coverage, supported format/layout matrix, file-alias reconciliation and recovery | Per-child imports survive interruption; source hashes/paths remain unchanged; expected ABS boundaries are observed |
+| S05 | Actual MAM/qBittorrent qualification, identifier-poor resolution, shared-transfer reuse and connection/path repair | The complete manual MAM-to-ABS journey passes, including lost submission response and requester/route changes |
+| S06 | Native ABB, full release equivalence, inherited series scope/routes, compatible pack selection and version coverage | All required sources contribute independent results; a partially owned pack is selected, imported and explained correctly |
+| S07 | Full policy revisions, large-list/identity correction, overlapping reasons and live connector qualification | Hardcover and Goodreads additions use the same acquisition engine; repeated observations, outages and restarts do not duplicate work |
+| S08 | Discovery shelves, explained related titles, community browsing/following, complete sharing/write-back and usability | Bookstore-style browse → curate → request works with attribution, privacy, keyboard access and useful provider-outage states |
+| S09 | Supported deployment/upgrade/restore, performance, security, accessibility and release documentation | Every v1 requirement has mapped evidence; all eight launch journeys and mandatory failure cases pass on the declared runtime |
+| S10 | All six extension packages | Separate accepted releases for upgrades, reorganization, other backends, recommendations, download clients and SSO |
+
+Passing one row's unit tests is not stage acceptance. Each gate includes the relevant API, browser, filesystem and actual-service evidence in the acceptance plan. S10 remains planned scope; its separate releases cannot absorb unfinished v1 requirements.
+
+### Immediate workstream: one transfer, independently fulfilled books
+
+The highest-priority missing series dependency is the relationship between a physical transfer and the book requests it serves. A result discovered through a series alias is only a candidate. It does not prove coverage or authorize importing the whole series.
+
+These packets belong to S06-05d/e and the existing S01/S04/S05 packages. Each is a reviewable change with its own migration/API/UI work where applicable. Their combined result, followed by the automation packets, is the deliverable; a manually grouped transfer alone does not close series automation.
+
+| Packet | Build and module responsibility | Required proof before the next dependent packet |
+|---|---|---|
+| PACK-01 · Transfer membership | Domain/DB: model one physical attempt with multiple explicit selection memberships. Preserve each request, media/version requirements, reason, owner and immutable selection evidence. Backfill existing attempts as single-member transfers. Define transport identity separately from fulfillment. | Existing attempts retain behavior/history after migration. One selection cannot join competing attempts. Multiple target reservations still consume one physical download slot and one transfer-size budget. |
+| PACK-02 · Atomic reviewed selection | Acquisition/API: accept a finite reviewed group whose artifact identity, downloader endpoint, save path and import route are compatible. Lock canonical targets in deterministic order; recheck inventory, constraints and authority before reserving and dispatching once. First implementation may limit reviewed grouping to one owner; later compatible automatic reuse remains required. | Repeated command, simultaneous overlapping groups, stale preview and incompatible narrator/route cases create no duplicate side effect. Hash equality alone never attaches an unrelated torrent. |
+| PACK-03 · Lifecycle and authority | Worker/domain: use shared membership for reconciliation, capacity, repair, retry and cancellation. Distinguish removing one request reason from cancelling the physical transfer. Recheck the surviving authorized demand at the dispatch boundary. | Removing or satisfying the representative request does not strand other wanted children. Lost add response reconciles before retry. Removing one reason cannot cancel another owner's/request's work or disclose its details. |
+| PACK-04 · Per-child import | Importer: match actual inspected groups to authorized targets and versions; build independent manifest entries under the common route. Skip satisfied children, hold uncertain ones and retain the seeded pack. Unrequested content is not implicitly approved for import. | A three-book pack has one skipped child, one confirmed child and one held child. Correcting/retrying the held child does not repeat publication or download. Required narrator/language/version is checked for each child. |
+| PACK-05 · Fulfillment and shared assets | Inventory/domain: confirm each child's expected backend item/files before retiring its reservation. Keep the physical attempt identity for reconciliation. Model verified omnibus containment without inventing separate files. | An omitted advertised book stays wanted. One completed audiobook cannot satisfy an ebook target. Loss of an omnibus updates all verified contained works without altering unrelated availability. |
+| PACK-06 · User-visible closure | Frontend/API: show one transfer with child status and per-book requirements, coverage evidence, match corrections and clearly scoped cancel/retry actions. Retain overall In library alongside missing-medium progress. | Browser journey follows a partially owned trilogy through reviewed acquisition, restart, correction and ABS confirmation. A member sees only authorized child details. |
+
+Before implementing PACK-01, write the schema/locking decision against the existing `AcquisitionSelection`, `DownloadAttempt`, reservations and fulfillment tables. An association is the recommended shape; retaining a representative selection for transport compatibility must not leave authority, import matching or fulfillment dependent only on that representative. Review every attempt lookup and join across dispatch, repair, list automation, importing and Activity.
+
+Existing submitted attempts are immutable history. Migration must not infer additional members from filenames or tracker descriptions. Once multi-member state exists, a downgrade must either preserve it or fail with an actionable supported-restore path; silently discarding child associations is unacceptable.
+
+### Next workstreams and dependencies
+
+| Order | Existing packages | Implementation outcome | Exit demonstration |
+|---|---|---|---|
+| 1. Complete acquisition policy | S06-04–S06-05, S07-04 | Shared resolver for Just book / Prefer packs / Complete series, bounded target expansion, ordered coverage/format/source/seeder preferences, inherited approved routes and reviewed changes to unsatisfied requests | The same effective policy appears in request preview, source search, ranking, selection and import. Changing a list policy cannot rewrite a dispatched selection. |
+| 2. Automatic pack selection and reuse | S06-03–S06-05, S07-05 | Use PACK-01–06 for eligible automatic groups and later compatible pending requests. Preserve independent list reasons and restrictions; reserve before dispatch and replan genuinely uncovered targets after inspection | Two overlapping lists converge on one compatible pack; incompatible recordings remain separate; an already-owned list entry does not silently trigger whole-series completion. |
+| 3. Required source coverage | S06-01–S06-03, S05 qualification | Native ABB including magnet resolution, origin-aware Prowlarr/native equivalence and actual MAM/qBittorrent qualification. Missing torrent metadata must resolve through the real client before coverage/import planning | One slow/broken source leaves useful results. Unknown file contents do not acquire invented coverage. Native and Prowlarr routes preserve their separate credentials and provenance. |
+| 4. Full external-list qualification | S07-01–S07-06 | Complete snapshots, identity correction, finite backlog/catch-up, policy edits, budgets and recovery through shared selection/import | New Hardcover and Goodreads entries reach ABS without routine approval; existing holdings, repeated pages, omitted RSS entries, overlapping lists and interruption behave as specified. |
+| 5. Discovery and curation | S08-01–S08-05, remaining S02 | Attributed shelves, related-title explanations, community list discovery, local sharing and supported opt-in Hardcover list write-back; finish simple/default and advanced UX | A user browses, follows, curates and requests without configuring metadata weights. Outages retain useful local views and write-back never changes reading status. |
+| 6. Production closure | S09-01–S09-06 and remaining earlier gates | Complete compatibility matrix, supported images, migration/restore, security/accessibility review, measured performance and operator documentation | Fresh install → all launch journeys → upgrade → restore with a running torrent and partially published pack, without duplicate transfer or source mutation. |
+| 7. Extension releases | S10-01–S10-06 | Plan each additional backend/client, upgrade/reorganization, recommendation or SSO feature against the stable contracts | Each ships only with its mapped acceptance scenario and recovery evidence. |
+
+Native ABB and provider qualification can proceed independently once the adapter contracts are stable. Discovery UI can proceed against recorded catalog fixtures. Neither changes the release dependency: automatic acquisition needs verified selection/import behavior, and production needs all mandatory stages accepted.
+
+### Development cadence and scope of completion
+
+For each packet: inspect existing code/evidence → record the input/output and migration contracts → implement the smallest complete user behavior → verify success plus relevant failure boundaries → review UI where affected → update implementation evidence and remaining gates. Run focused tests during development and the affected regression suite at the integrated checkpoint. Do not repeat unrelated suites without a change or unresolved risk that justifies them.
+
+Track five distinct values per ticket: planned, implemented, fixture verified, actual-service qualified and milestone accepted. Store revision, test commands/results, supported environment, reviewer and remaining limitations with the evidence. A large test count cannot stand in for an untested integration or omitted user journey.
+
+Estimate each ready packet separately for implementation, verification, actual-service access and contingency. Publish dates only after measuring throughput and access dependencies; keep the fixed release criteria even if forecasts change. PACK-01 and the reviewed same-owner portions of PACK-02–06 now have an implementation checkpoint in [Shared downloads](docs/SHARED-DOWNLOADS.md). Full packet/stage acceptance still needs automatic compatible pack selection/reuse, broader version/omnibus coverage and actual-service evidence. Continue the inherited policy/coverage workstreams using these shared services; do not recreate the transfer ledger. No further product-preference decision is required to proceed.

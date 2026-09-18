@@ -417,6 +417,8 @@ The [portable development backlog](DEVELOPMENT-BACKLOG.csv) exports those packag
 
 Use [stage evidence scopes](ACCEPTANCE-PLAN.md#7-stage-evidence-scopes) to avoid requiring later functionality at an earlier gate. Partial evidence stays partial until the complete scenario runs. The walkthrough above becomes executable fixtures incrementally, then a complete release rehearsal in S09.
 
+The [current stage closure plan](IMPLEMENTATION-PLAN.md#17-stage-closure-and-implementation-packets) decomposes the remaining implementation from the existing checkpoint. Its shared-pack packets are engineering subdivisions of existing requirements, not a reduction to a manual-only product. Completion still requires automatic source selection, independent child fulfillment, external-list automation, discovery and production qualification.
+
 The visual implementation should preserve the familiarity of Seerr's navigation, cover shelves, book-detail hierarchy and request dialogs. Component reuse is optional where adapting its framework dependencies would cost more than implementing the same presentation against this app's contracts. The success criterion is the requested familiar experience, not a percentage of reused Seerr code.
 
 Product completion is evaluated at three distinct boundaries:

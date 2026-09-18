@@ -74,6 +74,7 @@ class ScanningBackend(ImportBackendFixture):
     def __init__(self, root):
         super().__init__(root)
         self.items = {}
+        self.item_ids = {}
         self.detect = True
         self.scan_count = 0
 
@@ -83,7 +84,7 @@ class ScanningBackend(ImportBackendFixture):
             return
         dc = "{http://purl.org/dc/elements/1.1/}"
         role = "{http://www.idpf.org/2007/opf}role"
-        for index, opf in enumerate(sorted(self.root.rglob("metadata.opf"))):
+        for opf in sorted(self.root.rglob("metadata.opf")):
             xml = parse(opf)
             folder = opf.parent
             relative = folder.relative_to(self.root)
@@ -148,7 +149,9 @@ class ScanningBackend(ImportBackendFixture):
                         "index": int(probe.get("tags", {}).get("track", "1").split("/")[0]),
                     }
                 )
-            item_id = f"import-{index}"
+            # Adding an earlier-sorting book must not reassign an existing item's
+            # identity. Multi-child imports can publish in either order.
+            item_id = self.item_ids.setdefault(str(relative), f"import-{len(self.item_ids)}")
             self.items[item_id] = {
                 "id": item_id,
                 "libraryId": self.library_id,

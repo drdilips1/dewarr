@@ -10,6 +10,8 @@ For an associated attempt, a `DownloadFulfillment` records the target, qualifyin
 
 The original selected target can be reconciled even when an older implementation already cleared its reservation binding. Unknown historical membership of other detached requests is not reconstructed from title similarity or presumed compatibility.
 
+[Reviewed shared downloads](SHARED-DOWNLOADS.md) now associate multiple selections with one attempt. Satisfaction and reservation retirement are evaluated separately for each member; the original representative is not the sole fulfillment source. Activity exposes each owned member's current media requirement and confirmation, while the transfer keeps one identity and capacity record.
+
 ## Closing a reservation
 
 A reservation closes only when the download is complete, the original selected target has fulfillment evidence and remains satisfied, and other targets have detached after their own evaluation. The selection becomes `fulfilled` and the fulfillment reservation becomes `released`. A single audit event records that transition.
@@ -32,4 +34,4 @@ Migration `0019_fulfillment` adds the ledger and fulfilled selection state. It d
 
 Integration tests cover concurrent closure, shared generic/exact targets, existing-asset provenance, wrong medium/narrator, stale or incomplete assets, inaccessible libraries, disabled accounts, retained uncertain claims, legacy detached targets, dispatch-disabled recheck/cooldown, merge preservation and guarded downgrade. The two single-file acquisition-to-library tests now verify the actual import-entry link, reservation retirement and retained torrent claims through worker execution.
 
-[Reviewed connection repair](DOWNLOAD-REPAIRS.md) now handles updated credential generations on the same route. Remaining work includes changed-endpoint/path reconciliation, member-to-administrator import handoff, reuse of verified pack files across different work requests, full per-child acquisition projections and live MAM/qBittorrent certification. If the original requester withdraws or loses access before satisfaction, the attempt stays committed for explicit resolution; another request's success is not misreported as that user's fulfillment. These limitations remain in the S05/S06 recovery and sharing gates.
+[Reviewed connection repair](DOWNLOAD-REPAIRS.md) handles updated credential generations on the same route, and [administrator handoff](DOWNLOAD-REVIEWS.md) retains requester authority through import. Remaining work includes changed-endpoint/path reconciliation, later/cross-owner reuse of verified pack files, automatic pack coverage selection, omnibus coverage and live MAM/qBittorrent certification. A withdrawn request is not credited with another request's success; surviving shared members continue independently. Outstanding external work retains its ledger for explicit resolution. These limitations remain in the S05/S06 recovery and sharing gates.

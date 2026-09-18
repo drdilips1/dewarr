@@ -26,7 +26,7 @@ from app.db.models import (
     Operation,
     User,
 )
-from app.domain import narrators
+from app.domain import download_memberships, narrators
 from app.domain.acquisition import RequestSpec, evaluate, language_accepts, validate_request
 from app.domain.downloaders import mapped_path
 from app.domain.operations import transaction_lock
@@ -110,6 +110,76 @@ async def requester_authority(db, selection, *, lock=False):
     raise HTTPException(409, "The request was withdrawn; review its acquisition before importing")
 
 
+async def requesting_selection(db, attempt, representative):
+    members = await download_memberships.for_attempt(db, attempt.id)
+    if len(members) <= 1:
+        return representative
+    for item in members:
+        target = await db.get(AcquisitionTarget, item.target_id, populate_existing=True)
+        if item.state != "committed" or target.state != "wanted":
+            continue
+        try:
+            await requester_authority(db, item)
+        except HTTPException:
+            continue
+        return item
+    raise HTTPException(409, "No authorized book in this transfer currently needs import")
+
+
+def validate_version(rule, version, inspection, group):
+    if version.medium != rule["medium"] or not language_accepts(rule["language"], version.language):
+        raise HTTPException(422, "This version does not satisfy the requested medium or language")
+    if rule["abridged"] is not None and version.abridged != rule["abridged"]:
+        raise HTTPException(422, "This recording does not satisfy the abridgment requirement")
+    if rule["version_id"] and str(version.id) != rule["version_id"]:
+        raise HTTPException(422, "Select the requested edition or recording for this book")
+    required = rule.get("required_narrators", [])
+    if not narrators.accepts(required, version.narrators):
+        raise HTTPException(422, "This recording does not confirm every required narrator")
+    if required and group is not None:
+        from app.importing.match_evidence import group_evidence
+
+        facts = group_evidence(inspection.snapshot, group)
+        if not facts.narrators or any(
+            not narrators.accepts(required, names) for names in facts.narrators
+        ):
+            raise HTTPException(422, "Inspected audio does not confirm every required narrator")
+
+
+async def validate_shared_inspection(db, attempt, members, *, destination_id, version, group, lock):
+    inspection = await db.get(DownloadInspection, attempt.inspection_id)
+    for item in members:
+        if inspection.snapshot and item.frozen.get("profile"):
+            enforce_inspected_profile(
+                inspection.snapshot["files"], ProfileSnapshot.model_validate(item.frozen["profile"])
+            )
+    handoff = await for_inspection(db, inspection.id)
+    if handoff:
+        reviewer = await db.get(User, handoff.reviewer_id, populate_existing=True)
+        if not handoff.active or not reviewer or not reviewer.active or reviewer.role != "admin":
+            raise HTTPException(409, "The assigned administrator no longer has import access")
+    candidates = members
+    if version:
+        work_id = (await canonical_work(db, version.work_id)).id
+        candidates = [
+            item
+            for item in members
+            if (await canonical_work(db, UUID(item.frozen["origin_work_id"]))).id == work_id
+        ]
+    last_error = HTTPException(422, "This book is outside the reviewed transfer scope")
+    for item in candidates:
+        try:
+            _, _, destination = await requester_authority(db, item, lock=lock)
+            if destination_id and destination.id != destination_id:
+                raise HTTPException(422, "Use the destination selected for this acquisition")
+            if version:
+                validate_version(item.frozen["requirements"], version, inspection, group)
+            return
+        except HTTPException as error:
+            last_error = error
+    raise last_error
+
+
 async def lock_principals(db, inspection_id):
     """Acquire both users before the publisher acquires backend/library rows."""
     handoff = await for_inspection(db, inspection_id)
@@ -132,6 +202,18 @@ async def validate_inspection(
         select(DownloadAttempt).where(DownloadAttempt.inspection_id == inspection_id)
     )
     if attempt:
+        members = await download_memberships.for_attempt(db, attempt.id)
+        if len(members) > 1:
+            await validate_shared_inspection(
+                db,
+                attempt,
+                members,
+                destination_id=destination_id,
+                version=version,
+                group=group,
+                lock=lock,
+            )
+            return
         selection = await db.get(AcquisitionSelection, attempt.selection_id)
         if version and not narrators.accepts(
             selection.frozen["requirements"].get("required_narrators", []), version.narrators
@@ -200,7 +282,8 @@ async def queue_view(db, admin, attempt, selection):
     )
     message, allowed = "Ready for administrator inspection", True
     try:
-        await requester_authority(db, selection)
+        active = await requesting_selection(db, attempt, selection)
+        await requester_authority(db, active)
     except HTTPException:
         message, allowed = "Requester access or active request needs attention", False
     if handoff:
@@ -260,7 +343,10 @@ async def claim(db, admin, identifier, revision, key):
         # Match planning/starting imports: inspection lock precedes domain locks.
         await transaction_lock(db, f"inspection-plan:{previous.inspection_id}")
     attempt, selection = await locked(db, identifier)
-    if not attempt or attempt.state != "complete" or selection.state != "committed":
+    if not attempt or attempt.state != "complete":
+        raise HTTPException(404, "Completed acquisition awaiting review not found")
+    selection = await requesting_selection(db, attempt, selection)
+    if selection.state != "committed":
         raise HTTPException(404, "Completed acquisition awaiting review not found")
     handoff = await assignment(db, attempt.id)
     if attempt.inspection_id:

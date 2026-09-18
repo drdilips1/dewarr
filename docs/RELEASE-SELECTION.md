@@ -4,6 +4,8 @@ A wanted request can now be connected to a saved MAM torrent manifest and a veri
 
 This is a preparation record. It neither submits a torrent nor establishes that a tracker posting really contains the requested book or exact version. The entire artifact is selected, including collection files. Actual child coverage, standalone status, abridgment and edition/recording identity still require file inspection and review. Only ABS-confirmed complete assets establish ownership.
 
+For a collection, save separate selections for its wanted books, then use [reviewed shared downloads](SHARED-DOWNLOADS.md) to submit compatible selections as one physical transfer. Each must belong to the requester and use the same artifact, medium and verified route. Choosing a different request from a request-bound source page uses that request's saved preferences, without carrying over the first book's search policy.
+
 ## Frozen handoff
 
 `AcquisitionSelection` stores the actor, initiating request/target, shared reservation, source artifact, downloader and destination. Its immutable document includes:
@@ -16,7 +18,7 @@ This is a preparation record. It neither submits a torrent nor establishes that 
 
 Preparation rechecks active request reasons, current inventory, actor authority, artifact ownership/integrity, source generation, downloader diagnostics/path mappings, library grants and the actual destination probe contract. A required library cannot be replaced with a different destination. The probe must cover the downloader's worker source root, no-replace publication, selected hardlink/copy mode and ABS root mapping. No credentials or absolute filesystem paths are returned in the selection/options responses.
 
-Known medium/language/narrator conflicts are rejected. Unknown or incomplete content claims are not converted into verified coverage. Basic format profiles and automatic eligibility/ranking are still pending. A saved selection is not proof that an automatic acquisition is eligible.
+Known medium/language/narrator conflicts are rejected. Unknown or incomplete content claims are not converted into verified coverage. [Download preferences](DOWNLOAD-PREFERENCES.md) and bounded [automatic selection](AUTOMATIC-SELECTION.md) have separate implementation checkpoints; complete series coverage ranking remains pending. A saved selection alone is not proof that an automatic acquisition is eligible.
 
 ## Reservation behavior
 
@@ -24,12 +26,12 @@ Known medium/language/narrator conflicts are rejected. Unknown or incomplete con
 |---|---|
 | `planned` | Compatible wanted requirements may be combined and recomputed |
 | `selected` | Requirements are frozen by a prepared selection; compatible broader requests may join without changing them |
-| `committed` | A durable download attempt owns the frozen reservation; reconciliation cannot release it |
+| `committed` | A durable download attempt owns the frozen reservation until completed transfer and confirmed fulfillment permit retirement |
 | `released` | No active planned use remains |
 
 Committed reservations, then selected reservations, are considered before planned reservations across either-medium alternatives. A stricter or incompatible later request receives a separate planned reservation; it cannot modify a prepared choice. A deliberate manual choice can use the other medium for an Either request. Reconciliation preserves that selected medium.
 
-A selection has states `prepared`, `committed` and `cancelled`. Preparation cancellation applies only before commitment. Cancelling it returns still-needed requirements to planning. If the initiating target becomes satisfied, loses authority or loses its last active reason, reconciliation cancels preparation. Remaining compatible requests retain their own reasons and are replanned. Canonical merge/undo cancels affected preparation before rebuilding reservations; historical documents remain unchanged.
+A selection has states `prepared`, `committed`, `fulfilled` and `cancelled`. Preparation cancellation applies only before commitment. Cancelling it returns still-needed requirements to planning. If the initiating target becomes satisfied, loses authority or loses its last active reason, reconciliation cancels preparation. Remaining compatible requests retain their own reasons and are replanned. Canonical merge/undo cancels affected preparation before rebuilding reservations; historical documents remain unchanged.
 
 These cancellation rules are safe because preparation performs no external mutation. **They must not be reused for a submitted or uncertain download.** The [download-attempt ledger](DOWNLOAD-ATTEMPTS.md) now supplies a distinct irreversible boundary, attempt identity, leases and observation-based recovery. Neither a cancelled selection nor a released planned reservation authorizes deleting a torrent or media.
 
@@ -55,4 +57,4 @@ Request views include their book title and, only for the selection owner, a link
 
 Twenty-one API/database cases cover concurrent/replayed commands, receipt binding, cancellation, no downloader jobs, fixed requirements, broader/stricter sharing, Either-medium selection, inventory satisfaction, actor/library/artifact ownership, settings and recording changes, canonical merging, pagination and downgrade protection. The browser journey follows a new ebook request through MAM detail, native artifact inspection, a previously verified library route, saved selection, reload and cancellation. Source/downloader responses are synthetic; the existing import journey performs the filesystem and synthetic ABS route probe.
 
-The opt-in [download lifecycle](DOWNLOAD-ATTEMPTS.md) consumes this selection with persisted dispatch and recovery. Cross-work pack sharing, format profiles, live certification and the complete transfer-to-library gate remain required for S05/S06. List automation must use this acquisition workflow rather than bypassing preparation or import verification.
+The opt-in [download lifecycle](DOWNLOAD-ATTEMPTS.md) consumes this selection with persisted dispatch and recovery. Reviewed same-owner pack grouping now uses that same path. Automatic pack scope/coverage, later compatible sharing, live certification and the complete transfer-to-library gate remain required for S05/S06. List automation uses this acquisition workflow rather than bypassing preparation or import verification.

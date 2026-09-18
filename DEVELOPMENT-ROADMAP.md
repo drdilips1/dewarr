@@ -10,6 +10,8 @@ The planning package contains **42 functional requirements, 12 nonfunctional req
 
 Read this guide first, then the PRD's [detailed behavior contracts](PRD.md#13-detailed-behavior-contracts). Developers use the implementation plan's [stage packages](IMPLEMENTATION-PLAN.md#3-stage-work-packages-and-gates) and [release delivery contract](IMPLEMENTATION-PLAN.md#16-release-delivery-contract). The current code is partially implemented; an existing screen or passing subset does not establish completion of a stage.
 
+The [current stage closure plan](IMPLEMENTATION-PLAN.md#17-stage-closure-and-implementation-packets) starts at revision `3e6fc70`. It lists remaining work for every stage, six concrete shared-pack implementation packets, the subsequent automation/discovery/release workstreams and their evidence gates. [Reviewed shared downloads](docs/SHARED-DOWNLOADS.md) now implement the transfer-membership foundation and bounded reviewed dispatch/import portions. Automatic coverage selection and full series policies remain next; the complete requested product remains the full stage plan.
+
 ## 1. Product boundary
 
 | Concern | Owner |
@@ -168,7 +170,7 @@ After that increment, follow the existing package dependencies through complete 
 
 ## 9. Remaining development batches from the current checkpoint
 
-This sequence makes the existing stage backlog actionable; it adds no packages and does not mark any stage complete. The planning review began at code revision `0c947b3`; subsequent series catalog/curation evidence is recorded in implementation status. Recheck the status document and worktree before scheduling because subsequent implementation may close individual assertions.
+This sequence makes the existing stage backlog actionable; it adds no packages and does not mark any stage complete. The current reviewed checkpoint is `3e6fc70`, including bounded series catalog, reviewed requests and source-query evidence. Recheck the status document and worktree before scheduling because subsequent implementation may close individual assertions.
 
 Batch 1 now has bounded narrator inheritance, source/import, ownership, ranking and browser evidence. Its wider recording-equivalence and live-service gates are not implied by those results; see the narrator checkpoint in implementation status. Continue with the earliest unmet dependencies in batches 2–7.
 

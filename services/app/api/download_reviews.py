@@ -7,7 +7,7 @@ from sqlalchemy import and_, exists, func, or_, select
 from app.adapters.contracts import AdapterError
 from app.api.dependencies import Admin, Database
 from app.api.metadata import adapter_http_error
-from app.db.models import AcquisitionSelection, DownloadAttempt, DownloadHandoff
+from app.db.models import AcquisitionSelection, DownloadAttempt, DownloadHandoff, DownloadMembership
 from app.domain import download_reviews as reviews
 
 router = APIRouter(prefix="/acquisition/reviews", tags=["downloads"])
@@ -47,9 +47,17 @@ async def listing(
     active = exists().where(
         DownloadHandoff.attempt_id == DownloadAttempt.id, DownloadHandoff.active.is_(True)
     )
-    pending = and_(
-        DownloadAttempt.inspection_id.is_(None), AcquisitionSelection.state == "committed"
+    member_pending = (
+        select(DownloadMembership.selection_id)
+        .join(AcquisitionSelection, AcquisitionSelection.id == DownloadMembership.selection_id)
+        .where(
+            DownloadMembership.attempt_id == DownloadAttempt.id,
+            AcquisitionSelection.state == "committed",
+        )
+        .correlate(DownloadAttempt)
+        .exists()
     )
+    pending = and_(DownloadAttempt.inspection_id.is_(None), member_pending)
     query = (
         select(DownloadAttempt, AcquisitionSelection)
         .join(AcquisitionSelection)

@@ -202,6 +202,7 @@ async def test_error_and_rate_limit_preserve_baseline_and_share_cooldown(
     await sync(client, database, shelf)
     first = (await client.get(f"/api/lists/{shelf}/subscription")).json()["baseline_at"]
     feeds.error = AdapterError(FailureKind.RATE_LIMIT, "Source cooldown", retry_after=7200)
+    failed_sync_started_at = datetime.now(UTC)
     failed_operation = await sync(client, database, shelf, "rate-limited-key")
     calls = len(feeds.calls)
     # A redelivered terminal job cannot bypass the persisted observation backoff.
@@ -209,7 +210,10 @@ async def test_error_and_rate_limit_preserve_baseline_and_share_cooldown(
     assert len(feeds.calls) == calls
     row = (await client.get(f"/api/lists/{shelf}/subscription")).json()
     assert row["state"] == "failed" and row["baseline_at"] == first
-    assert datetime.fromisoformat(row["next_sync_at"]) > datetime.now(UTC) + timedelta(hours=2)
+    next_sync_at = datetime.fromisoformat(row["next_sync_at"])
+    # The cooldown starts during sync; stable jitter can legitimately be zero.
+    assert failed_sync_started_at + timedelta(hours=2) <= next_sync_at
+    assert next_sync_at <= datetime.now(UTC) + timedelta(hours=2, seconds=180)
     assert (await client.get(f"/api/lists/{shelf}")).json()["count"] == 1
     async with database() as db:
         assert (await db.get(RateLimit, "goodreads:rss")).resets_at > datetime.now(UTC) + timedelta(

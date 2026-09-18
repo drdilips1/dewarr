@@ -9,7 +9,7 @@ from sqlalchemy import select
 from app.config import get_settings
 from app.db.models import (
     AuditEvent,
-    DownloadAttempt,
+    DownloadMembership,
     DownloadRepair,
     ImportDestination,
     Integration,
@@ -39,8 +39,8 @@ async def latest(db, attempt_id, state=None):
 async def accepted_configuration(db, selection):
     record = await db.scalar(
         select(DownloadRepair)
-        .join(DownloadAttempt)
-        .where(DownloadAttempt.selection_id == selection.id, DownloadRepair.state == "applied")
+        .join(DownloadMembership, DownloadMembership.attempt_id == DownloadRepair.attempt_id)
+        .where(DownloadMembership.selection_id == selection.id, DownloadRepair.state == "applied")
         .order_by(DownloadRepair.applied_at.desc(), DownloadRepair.id)
         .limit(1)
     )

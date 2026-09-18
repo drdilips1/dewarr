@@ -20,7 +20,11 @@ export default function Downloads({ canManage }: { canManage: boolean }) {
       query.state.data?.items.some(
         (item) =>
           item.state !== "cancelled" &&
-          (item.state !== "complete" || !item.fulfillment),
+          (item.state !== "complete" ||
+            item.members.some(
+              (member) =>
+                !member.fulfillment && member.target_state === "wanted",
+            )),
       )
         ? 3000
         : false,
@@ -58,11 +62,30 @@ export default function Downloads({ canManage }: { canManage: boolean }) {
       {downloads.data?.items.map((item) => (
         <article className="activity-row" key={item.id}>
           <div className="grow">
-            <h3>{item.work_title}</h3>
+            <h3>
+              {item.members.length > 1
+                ? `${item.members.length} books · shared download`
+                : item.work_title}
+            </h3>
             <p>{item.release_title}</p>
             <p>{item.message}</p>
             {item.repair && <p>{item.repair.message}</p>}
-            {item.fulfillment && (
+            {item.members.length > 1 && (
+              <ul aria-label="Books in this download">
+                {item.members.map((member) => (
+                  <li key={member.selection_id}>
+                    <strong>{member.work_title}</strong> ·{" "}
+                    {member.medium === "audio" ? "Audiobook" : "Ebook"}
+                    <p>
+                      {member.fulfillment?.available_now
+                        ? "Confirmed in your library"
+                        : member.message}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {item.members.length === 1 && item.fulfillment && (
               <p>
                 {item.fulfillment.available_now
                   ? item.fulfillment.basis === "imported"
@@ -82,7 +105,9 @@ export default function Downloads({ canManage }: { canManage: boolean }) {
                   disabled={action.isPending}
                   onClick={() => action.mutate({ id: item.id, cancel: true })}
                 >
-                  Cancel before submission
+                  {item.members.length > 1
+                    ? "Cancel entire transfer before submission"
+                    : "Cancel before submission"}
                 </button>
               )}
               {canManage && item.can_recheck && (
@@ -106,7 +131,8 @@ export default function Downloads({ canManage }: { canManage: boolean }) {
             {item.can_repair && <DownloadRepair attemptId={item.id} />}
           </div>
           <span className="status">
-            {item.state === "complete" && item.fulfillment?.available_now
+            {item.state === "complete" &&
+            item.members.every((member) => member.fulfillment?.available_now)
               ? "Available"
               : item.state === "complete"
                 ? "Downloaded"

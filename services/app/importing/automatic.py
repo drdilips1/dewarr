@@ -1,6 +1,7 @@
 """Durable opt-in continuation through the shared reviewed importer."""
 
 import re
+from collections import Counter
 from pathlib import PurePosixPath
 from uuid import UUID
 
@@ -20,7 +21,8 @@ from app.db.models import (
     Version,
 )
 from app.db.session import session_factory
-from app.domain import download_reviews
+from app.domain import download_memberships, download_reviews
+from app.domain.acquisition import RequestSpec, assess
 from app.domain.operations import transaction_lock
 from app.domain.work_graph import canonical_work
 from app.importing.destination_view import view as destination_view
@@ -233,9 +235,25 @@ async def plan_ready(db, row, selection, inspection, approver, destination, curr
     grouping_revision, grouping = await current_grouping(db, inspection)
     if len(grouping.groups) > 100:
         raise HTTPException(409, "This collection exceeds the automatic review limit")
-    work = await canonical_work(db, UUID(selection.frozen["origin_work_id"]))
+    members = await download_memberships.for_attempt(db, row.attempt_id)
+    works, wanted = set(), {}
+    for item in members:
+        work_id = (await canonical_work(db, UUID(item.frozen["origin_work_id"]))).id
+        works.add(work_id)
+        try:
+            owner, intent, _ = await download_reviews.requester_authority(db, item)
+        except HTTPException:
+            continue
+        outcomes = await assess(
+            db, owner, intent.work_id, RequestSpec.model_validate(intent.specification)
+        )
+        if any(
+            outcome["slot"] == item.frozen["slot"] and outcome["state"] == "wanted"
+            for outcome in outcomes
+        ):
+            wanted.setdefault(work_id, []).append(item)
     files = {file["path"]: file for file in inspection.snapshot["files"]}
-    choices, held, unresolved = [], [], []
+    choices, held, unresolved, skipped = [], [], [], []
     for group in grouping.groups:
         match = await match_group(db, inspection.snapshot, grouping_revision, group)
         reason = content_reason(group, files, selection.frozen["release"])
@@ -247,14 +265,34 @@ async def plan_ready(db, row, selection, inspection, approver, destination, curr
         )
         if match.status != "matched" or not candidate:
             reason = match.message
-        elif candidate.work_id != work.id:
+        elif candidate.work_id not in works:
             reason = "Additional collection titles need an authorized acquisition scope"
+        elif candidate.work_id not in wanted:
+            skipped.append(
+                {
+                    "group_key": group.key,
+                    "reason": "No authorized missing target remains for this book",
+                }
+            )
+            continue
         else:
             try:
+                version = await db.get(Version, candidate.version_id)
+                last_error = None
+                for member in wanted[candidate.work_id]:
+                    try:
+                        download_reviews.validate_version(
+                            member.frozen["requirements"], version, inspection, group
+                        )
+                        break
+                    except HTTPException as error:
+                        last_error = error
+                else:
+                    raise last_error
                 await download_reviews.validate_inspection(
                     db,
                     inspection.id,
-                    version=await db.get(Version, candidate.version_id),
+                    version=version,
                     group=group,
                 )
             except HTTPException as error:
@@ -271,7 +309,19 @@ async def plan_ready(db, row, selection, inspection, approver, destination, curr
                 match_revision=match.revision,
             )
         )
-    if not choices:
+    counts = Counter(item.work_id for item in choices)
+    ambiguous = {work_id for work_id, count in counts.items() if count > 1}
+    held.extend(
+        {
+            "group_key": item.group_key,
+            "reason": "Several file groups could satisfy this book; "
+            "review their versions and grouping",
+        }
+        for item in choices
+        if item.work_id in ambiguous
+    )
+    choices = [item for item in choices if item.work_id not in ambiguous]
+    if not choices and len(members) == 1 and not ambiguous:
         from app.importing.catalog_resolution import schedule
 
         if await schedule(db, row, unresolved):
@@ -281,14 +331,9 @@ async def plan_ready(db, row, selection, inspection, approver, destination, curr
         "schema_version": 1,
         "completeness_basis": "complete-transfer-and-supported-container",
         "held_groups": held,
+        "skipped_groups": skipped,
         "excluded_files": [item.model_dump() for item in grouping.excluded],
     }
-    if len(choices) > 1:
-        row.state, row.message = (
-            "held",
-            "Several file groups could satisfy this book; review their versions and grouping",
-        )
-        return
     if not choices:
         row.state, row.message = (
             "held",
@@ -337,7 +382,9 @@ async def run(identifier):
             async with db.begin_nested():
                 policy, approver, destination, current = await check_policy(db, row)
                 attempt = await db.get(DownloadAttempt, row.attempt_id)
-                selection = await db.get(AcquisitionSelection, attempt.selection_id)
+                selection = await download_reviews.requesting_selection(
+                    db, attempt, await db.get(AcquisitionSelection, attempt.selection_id)
+                )
                 await download_reviews.requester_authority(db, selection)
                 if selection.frozen["mapping"]["source_key"] != policy.configuration["source_key"]:
                     raise HTTPException(

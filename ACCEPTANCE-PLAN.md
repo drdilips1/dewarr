@@ -232,3 +232,21 @@ These assertions refine AT-02, AT-04–AT-06 and AT-14–AT-15, with automated f
 - Adding selected books to a list is authorized, idempotent and reports partial failures. The UI identifies when the chosen list already has automatic acquisition enabled. Read-only catalog refresh never submits downloads.
 - Complete series records a finite target set and its catalog/policy revision. An unknown publication date or ambiguous main membership does not become eligible by guesswork. Provider refresh, a new sequel and a popularity change cannot expand an accepted request; explicit future monitoring uses standing policy.
 - A partly owned pack keeps separate claimed and verified coverage. One verified child may finish while another is held. Retries preserve successful publication, seeding paths and surviving request reasons. An inseparable omnibus remains one asset; losing it updates all verified containment relationships.
+
+### Shared-pack execution assertions
+
+These refine the existing AT-13–AT-15, AT-19, AT-22, AT-27 and AT-30 scenarios for the [PACK-01–06 implementation packets](IMPLEMENTATION-PLAN.md#immediate-workstream-one-transfer-independently-fulfilled-books). They add no scenario IDs and do not substitute for actual-service qualification.
+
+| Boundary | Required case and outcome |
+|---|---|
+| Migration | Existing attempts become single-member transfers with unchanged receipts/history. Multi-member data cannot be silently discarded on downgrade. |
+| Reservation | Two simultaneous overlapping pack requests produce one compatible physical transfer, with independent authorized target memberships. Different routes or incompatible exact recordings are not silently combined. |
+| Idempotency | A repeated command with the same accepted membership returns the same operation. Reusing its key with changed membership fails rather than expanding a prior authorization. |
+| Capacity | One physical transfer consumes one downloader slot and its actual byte budget, even if it serves several requests; per-child publication reserves only its actual required destination resources. |
+| Representative independence | Satisfying/removing the request first attached to the transfer does not strand the remaining requests. Transport configuration remains stable and surviving authority is revalidated before dispatch. |
+| Shared cancellation | Removing one list/manual reason leaves other reasons intact. Cancelling an entire unsent transfer is explicit and reconciles all its child reservations. A possibly submitted attempt cannot be replayed as a new transfer. |
+| Child eligibility | Each actual group must meet its own work, medium, language, narrator/version and current import authority. Strong metadata for one child cannot authorize an ambiguous sibling. |
+| Partial completion | In a three-book pack, skip an owned qualifying child, confirm one missing child and hold one ambiguous child. Correcting and retrying the held child preserves the prior publication and seeded pack. |
+| Unverified coverage | An advertised but absent child remains wanted. A series name alone never proves membership. An indivisible omnibus grants only verified containment, with one physical-asset relationship. |
+| Privacy | Shared transfer views expose only granted request/library details. Cross-owner reuse does not reveal another user's private lists, source credentials or inaccessible holdings. |
+| Full automation | Repeat the trilogy case through two external-list reasons and the automatic selector, interrupt dispatch/import, then reconcile delayed ABS inventory. No routine per-title approval, duplicate transfer or premature owned badge occurs for supported unambiguous inputs. |

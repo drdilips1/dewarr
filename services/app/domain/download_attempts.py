@@ -21,6 +21,7 @@ from app.db.models import (
     DownloadCapacity,
     DownloadIdentityClaim,
     DownloadInspection,
+    DownloadMembership,
     DownloadRepair,
     ImportDestination,
     Integration,
@@ -29,14 +30,13 @@ from app.db.models import (
     User,
 )
 from app.db.session import session_factory
-from app.domain import automatic_dispatch, capacity
+from app.domain import automatic_dispatch, capacity, download_memberships
 from app.domain.acquisition import RequestSpec, evaluate, validate_request
 from app.domain.acquisition_selection import configuration_current, owned_selection
 from app.domain.downloaders import SETTINGS_LOCK
 from app.domain.operations import transaction_lock
 from app.domain.release_profiles import DEFAULTS_LOCK
 from app.domain.source_artifacts import artifact_bytes, member
-from app.domain.work_graph import acquisition_lock
 from app.importing.naming import fingerprint
 from app.jobs.queue import enqueue
 from app.security import decrypt_secrets
@@ -79,13 +79,7 @@ async def locked(db, identifier):
     if not attempt:
         return None, None
     selection = await db.get(AcquisitionSelection, attempt.selection_id)
-    await automatic_dispatch.lock_principals(
-        db,
-        selection.owner_id,
-        automatic_dispatch.consent(selection),
-        (selection.frozen.get("automatic_selection") or {}).get("list_authority"),
-    )
-    await acquisition_lock(db, UUID(selection.frozen["origin_work_id"]))
+    await download_memberships.lock(db, await download_memberships.for_attempt(db, attempt.id))
     await db.refresh(attempt, with_for_update=True)
     await db.refresh(selection)
     return attempt, selection
@@ -98,7 +92,7 @@ async def owned_attempt(db, user, identifier):
     return row
 
 
-async def authority(db, selection, *, wanted, configuration=None, dispatch_consent=True):
+async def selection_authority(db, selection, *, wanted, configuration=None, dispatch_consent=True):
     """Recheck current grants and frozen configuration at the side-effect boundary."""
     if get_settings().recovery_mode:
         raise HTTPException(409, "Downloads are paused for recovery")
@@ -149,7 +143,49 @@ async def authority(db, selection, *, wanted, configuration=None, dispatch_conse
     return await db.get(Integration, selection.downloader_id), content
 
 
-async def start(db, user, selection_id, key, *, automatic=False):
+async def authority(db, selection, *, wanted, configuration=None, dispatch_consent=True):
+    attempt = await download_memberships.attempt_for(db, selection.id)
+    members = await download_memberships.for_attempt(db, attempt.id) if attempt else [selection]
+    if len(members) == 1 or not wanted:
+        return await selection_authority(
+            db,
+            selection,
+            wanted=wanted,
+            configuration=configuration,
+            dispatch_consent=dispatch_consent,
+        )
+    active = await wanted_members(db, members)
+    if not active:
+        raise HTTPException(409, "None of the selected book targets is still wanted")
+    result = None
+    for item in active:
+        result = await selection_authority(
+            db,
+            item,
+            wanted=True,
+            configuration=configuration,
+            dispatch_consent=dispatch_consent,
+        )
+    return result
+
+
+async def wanted_members(db, members):
+    active = []
+    for item in members:
+        user = await db.get(User, item.owner_id)
+        await evaluate(db, user, await db.get(AcquisitionIntent, item.intent_id))
+        await db.flush()
+        target = await db.get(AcquisitionTarget, item.target_id, populate_existing=True)
+        if target.state == "wanted" and target.reservation_id == item.reservation_id:
+            active.append(item)
+    return active
+
+
+async def start(db, user, selection_id, key, *, automatic=False, additional_selection_ids=()):
+    additional = sorted(set(additional_selection_ids))
+    if len(additional) > 99 or selection_id in additional:
+        raise HTTPException(422, "Choose up to 100 distinct selections for one transfer")
+    additional_keys = [str(identifier) for identifier in additional]
     await transaction_lock(db, f"operation:{user.id}:{key}")
     await member(db, user.id)
     receipt = await db.scalar(
@@ -163,23 +199,28 @@ async def start(db, user, selection_id, key, *, automatic=False):
             receipt.kind != "acquisition.download"
             or receipt.payload.get("selection_id") != str(selection_id)
             or receipt.payload.get("automatic", False) != automatic
+            or receipt.payload.get("additional_selection_ids", []) != additional_keys
         ):
             raise HTTPException(409, "This command key was already used for another operation")
         return await owned_attempt(db, user, UUID(receipt.payload["attempt_id"]))
     if not get_settings().download_dispatch_enabled:
         raise HTTPException(409, "Download dispatch is not enabled for this installation")
     selection = await owned_selection(db, user, selection_id)
-    await automatic_dispatch.lock_principals(
-        db,
-        user.id,
-        automatic_dispatch.consent(selection),
-        (selection.frozen.get("automatic_selection") or {}).get("list_authority"),
-    )
-    await acquisition_lock(db, UUID(selection.frozen["origin_work_id"]))
-    await db.refresh(selection)
-    existing = await db.scalar(
-        select(DownloadAttempt).where(DownloadAttempt.selection_id == selection.id)
-    )
+    members = [selection] + [
+        await owned_selection(db, user, identifier) for identifier in additional
+    ]
+    if additional:
+        if automatic:
+            raise HTTPException(
+                422, "Reviewed grouping cannot replace automatic selection authorization"
+            )
+        download_memberships.require_compatible(members)
+    await download_memberships.lock(db, members)
+    existing = await download_memberships.attempt_for(db, selection.id)
+    if existing and additional:
+        saved = {item.id for item in await download_memberships.for_attempt(db, existing.id)}
+        if saved != {item.id for item in members}:
+            raise HTTPException(409, "This transfer already has a different frozen book scope")
     if existing:
         # Every accepted command key gets its own durable receipt, including aliases.
         db.add(
@@ -193,13 +234,18 @@ async def start(db, user, selection_id, key, *, automatic=False):
                     "selection_id": str(selection.id),
                     "attempt_id": str(existing.id),
                     "automatic": automatic,
+                    **({"additional_selection_ids": additional_keys} if additional else {}),
                 },
             )
         )
         return existing
-    if selection.state != "prepared":
-        raise HTTPException(409, "Select a current source release before downloading")
-    downloader, _ = await authority(db, selection, wanted=True)
+    for item in members:
+        if item.state != "prepared" or await download_memberships.attempt_for(db, item.id):
+            raise HTTPException(
+                409, "Select current uncommitted releases before grouping a download"
+            )
+        await selection_authority(db, item, wanted=True)
+    downloader = await db.get(Integration, selection.downloader_id)
     endpoint_key = fingerprint({"url": downloader.base_url.rstrip("/")})
     identities = hashes(selection)
     if not identities:
@@ -230,6 +276,7 @@ async def start(db, user, selection_id, key, *, automatic=False):
             "selection_id": str(selection.id),
             "attempt_id": str(attempt_id),
             "automatic": automatic,
+            **({"additional_selection_ids": additional_keys} if additional else {}),
         },
     )
     db.add(operation)
@@ -244,6 +291,9 @@ async def start(db, user, selection_id, key, *, automatic=False):
     )
     db.add(attempt)
     await db.flush()
+    db.add_all(
+        [DownloadMembership(attempt_id=attempt.id, selection_id=item.id) for item in members]
+    )
     db.add(DownloadCapacity(attempt_id=attempt.id, automatic=automatic))
     db.add_all(
         [
@@ -253,9 +303,10 @@ async def start(db, user, selection_id, key, *, automatic=False):
             for digest in sorted(identities)
         ]
     )
-    reservation = await db.get(AcquisitionReservation, selection.reservation_id)
-    reservation.state, selection.state = "committed", "committed"
-    selection.message = "Download queued; follow its progress in Activity"
+    for item in members:
+        reservation = await db.get(AcquisitionReservation, item.reservation_id)
+        reservation.state, item.state = "committed", "committed"
+        item.message = "Download queued; follow its progress in Activity"
     operation.job_id = await enqueue(db, "acquisition.download", attempt_id=str(attempt.id))
     db.add(AuditEvent(actor_id=user.id, action="acquisition.download.queued", entity_id=attempt.id))
     return attempt
@@ -289,9 +340,11 @@ async def cancel(db, user, identifier):
             409, "Submission may have reached the downloader; reconcile it instead of cancelling"
         )
     await record(db, attempt, "cancelled", "Cancelled before submission; no torrent was removed")
-    selection.state, selection.message = "cancelled", attempt.message
-    reservation = await db.get(AcquisitionReservation, selection.reservation_id)
-    reservation.state = "planned"
+    members = await download_memberships.for_attempt(db, attempt.id)
+    for item in members:
+        item.state, item.message = "cancelled", attempt.message
+        reservation = await db.get(AcquisitionReservation, item.reservation_id)
+        reservation.state = "planned"
     await db.execute(
         update(DownloadIdentityClaim)
         .where(
@@ -299,8 +352,9 @@ async def cancel(db, user, identifier):
         )
         .values(active=False)
     )
-    intent = await db.get(AcquisitionIntent, selection.intent_id)
-    await evaluate(db, user, intent)
+    for item in members:
+        intent = await db.get(AcquisitionIntent, item.intent_id)
+        await evaluate(db, user, intent)
     db.add(
         AuditEvent(actor_id=user.id, action="acquisition.download.cancelled", entity_id=attempt.id)
     )
@@ -327,7 +381,8 @@ async def recheck(db, user, identifier):
     if attempt.state == "complete":
         from app.domain.download_fulfillment import reconcile_work
 
-        await reconcile_work(db, UUID(selection.frozen["origin_work_id"]))
+        for item in await download_memberships.for_attempt(db, attempt.id):
+            await reconcile_work(db, UUID(item.frozen["origin_work_id"]))
         attempt.next_check_at = now + timedelta(seconds=60)
         return attempt
     from sqlalchemy import text
@@ -385,19 +440,18 @@ async def finish_observation(db, attempt, selection, state):
         "complete",
         "Download complete; file inspection and library confirmation are still required",
     )
-    await enqueue(db, "acquisition.fulfillment", work_id=selection.frozen["origin_work_id"])
+    members = await download_memberships.for_attempt(db, attempt.id)
+    for item in members:
+        await enqueue(db, "acquisition.fulfillment", work_id=item.frozen["origin_work_id"])
     user = await db.get(User, attempt.owner_id)
-    intent = await db.get(AcquisitionIntent, selection.intent_id)
-    await evaluate(db, user, intent)
-    target = await db.get(AcquisitionTarget, selection.target_id)
-    if target.state != "wanted":
-        attempt.message = (
-            "Download complete; the request is already satisfied by library inventory"
-            if target.state == "satisfied"
-            else "Download complete; review the request before importing its files"
-        )
+    active = await wanted_members(db, members)
+    if not active:
+        attempt.message = "Download complete; no selected book currently needs import"
         (await db.get(Operation, attempt.operation_id)).message = attempt.message
         return False
+    # The transport representative remains immutable; continuation may be needed
+    # only for a different member after the first book became available.
+    selection = active[0]
     from app.importing.automatic import schedule
 
     if await schedule(db, attempt, selection):

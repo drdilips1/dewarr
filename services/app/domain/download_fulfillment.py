@@ -11,6 +11,7 @@ from app.db.models import (
     AuditEvent,
     DownloadAttempt,
     DownloadFulfillment,
+    DownloadMembership,
     FrozenImportPlan,
     ImportEntry,
     ImportRun,
@@ -32,7 +33,8 @@ async def record_satisfaction(db, intent, target, previous_reservation_id):
     pairs = (
         await db.execute(
             select(DownloadAttempt, AcquisitionSelection)
-            .join(AcquisitionSelection, DownloadAttempt.selection_id == AcquisitionSelection.id)
+            .join(DownloadMembership, DownloadMembership.attempt_id == DownloadAttempt.id)
+            .join(AcquisitionSelection, AcquisitionSelection.id == DownloadMembership.selection_id)
             .where(
                 AcquisitionSelection.state == "committed",
                 DownloadAttempt.external_may_exist.is_(True),
@@ -94,8 +96,12 @@ async def retire_satisfied(db, work_id):
     pairs = (
         await db.execute(
             select(AcquisitionSelection, DownloadAttempt)
-            .join(DownloadAttempt, DownloadAttempt.selection_id == AcquisitionSelection.id)
-            .join(AcquisitionReservation)
+            .join(DownloadMembership, DownloadMembership.selection_id == AcquisitionSelection.id)
+            .join(DownloadAttempt, DownloadAttempt.id == DownloadMembership.attempt_id)
+            .join(
+                AcquisitionReservation,
+                AcquisitionReservation.id == AcquisitionSelection.reservation_id,
+            )
             .where(
                 AcquisitionReservation.work_id.in_(family_ids(work_id)),
                 AcquisitionReservation.state == "committed",

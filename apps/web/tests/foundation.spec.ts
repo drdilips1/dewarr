@@ -1073,11 +1073,76 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await selectionForm
     .getByRole("button", { name: "Save release selection", exact: true })
     .click();
+  const sharedArtifactUrl = page.url();
+  await page.getByRole("link", { name: "Catalog", exact: true }).click();
+  await page.getByRole("button", { name: "Add a title" }).click();
+  await page
+    .getByLabel("Title", { exact: true })
+    .fill("Shared Harbor Companion");
+  await page.getByLabel("Author", { exact: true }).fill("Example Author");
+  await page.getByRole("button", { name: "Save title" }).click();
+  await page.getByRole("link", { name: /^Shared Harbor Companion/ }).click();
+  const companionWanted = page.getByRole("region", {
+    name: "Wanted media",
+    exact: true,
+  });
+  await companionWanted
+    .getByRole("combobox", { name: "Media to request", exact: true })
+    .selectOption("ebook");
+  await companionWanted
+    .getByRole("button", { name: "Save to wanted", exact: true })
+    .click();
+  await expect(
+    companionWanted.getByRole("link", {
+      name: "Choose a source release",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page.goto(sharedArtifactUrl);
+  const companionOption = selectionForm
+    .getByRole("combobox", { name: "Wanted book", exact: true })
+    .locator("option")
+    .filter({ hasText: "Shared Harbor Companion" });
+  await expect(companionOption).toHaveCount(1);
   await selectionForm
-    .getByRole("button", { name: "Start download", exact: true })
+    .getByRole("combobox", { name: "Wanted book", exact: true })
+    .selectOption((await companionOption.getAttribute("value")) as string);
+  await expect(selectionForm).toContainText(
+    "Selected request’s saved preferences",
+  );
+  await selectionForm
+    .getByRole("checkbox", {
+      name: "I checked the release details and it contains Shared Harbor Companion.",
+      exact: true,
+    })
+    .check();
+  await selectionForm
+    .getByRole("button", { name: "Save release selection", exact: true })
+    .click();
+  await selectionForm
+    .getByRole("checkbox", {
+      name: "Include The Next Harbor in shared download",
+      exact: true,
+    })
+    .check();
+  await selectionForm
+    .getByRole("checkbox", {
+      name: "Include Shared Harbor Companion in shared download",
+      exact: true,
+    })
+    .check();
+  await expect(
+    selectionForm.getByRole("region", { name: "Shared download scope" }),
+  ).toContainText("2 selected books · one transfer");
+  await selectionForm
+    .getByRole("button", {
+      name: "Download selected books together",
+      exact: true,
+    })
     .click();
   await selectionForm
     .getByRole("link", { name: "View download", exact: true })
+    .first()
     .click();
   const downloadActivity = page.getByRole("region", {
     name: "Downloads",
@@ -1087,6 +1152,14 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     "Transfer associated; waiting for complete files",
   );
   await expect(downloadActivity).toContainText("25% downloaded");
+  await expect(
+    downloadActivity.getByRole("heading", {
+      name: "2 books · shared download",
+    }),
+  ).toBeVisible();
+  await expect(
+    downloadActivity.getByRole("list", { name: "Books in this download" }),
+  ).toContainText("Shared Harbor Companion");
   await expect(
     downloadActivity.getByRole("button", { name: "Cancel before submission" }),
   ).toHaveCount(0);

@@ -6,6 +6,8 @@ A self-hosted ebook/audiobook discovery, curation and acquisition application ab
 
 ## Development handoff
 
+Latest shared-pack checkpoint: [Reviewed shared downloads](docs/SHARED-DOWNLOADS.md) add explicit selections for several books on one physical transfer, atomic grouping, per-book Activity/fulfillment and independent import of qualified children. Owned children are skipped and ambiguous children can be reviewed beside successful siblings. Automatic pack coverage selection, inherited series policies, later/cross-owner reuse and omnibus fulfillment remain pending.
+
 Latest preference checkpoint: [Download preferences](docs/DOWNLOAD-PREFERENCES.md) resolve request overrides over list overrides, sparse saved profiles, personal and installation defaults. Previews, saved requests, manual list batches and automatic acquisition retain effective values and origins. Request-bound source searches preserve the same policy through polling and selection; independent restrictions still apply to shared transfers. Full media/language/narrator/series/destination inheritance and policy edits for unsatisfied requests remain pending.
 
 Latest list checkpoint: [Goodreads shelf subscriptions](docs/GOODREADS-SUBSCRIPTIONS.md) bring RSS additions into private local lists through scheduled workers, retain omitted books, remember exclusions and reuse corroborated catalog identities with existing library availability. [Reviewed CSV snapshots](docs/CSV-LIST-IMPORT.md) now add column mapping, shelf/subset selection, private identity dedupe and durable import receipts. [Hardcover subscriptions](docs/HARDCOVER-LISTS.md) now add account-backed list selection, fresh two-pass membership verification, source-only removals and persistent exclusions. [Reviewed list requests](docs/LIST-REQUESTS.md) now preview selected media, reuse compatible wanted requests and retain independent list reasons with durable receipts. [List acquisition policies](docs/LIST-POLICIES.md) now add versioned future-only activation, explicit backlog/catch-up selection, inherited manual media/limits, scheduled searches and automatic dispatch through approved routes. Full series/recording and live-list qualification remain pending.
@@ -37,6 +39,8 @@ Series checkpoint: [Series catalog and curation](docs/SERIES-CATALOG.md) adds du
 Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md) for the product boundary, end-to-end journey, P0/P1 decisions, stage summary and release milestones.
 
 The [release delivery contract](IMPLEMENTATION-PLAN.md#16-release-delivery-contract) defines milestone owners, demonstrations and the next bounded increment. The PRD includes [eight launch journeys](PRD.md#20-launch-journey-checklist) spanning connected inventory, discovery, acquisition, lists, packs and restore.
+
+The [stage closure plan](IMPLEMENTATION-PLAN.md#17-stage-closure-and-implementation-packets) provides the current end-to-end execution handoff: remaining S00–S10 gates, shared-pack implementation packets, automation and discovery dependencies, and production acceptance. It is a plan, not a claim that those features have shipped.
 
 The roadmap's [requirements-to-delivery checklist](DEVELOPMENT-ROADMAP.md#7-your-requirements-mapped-to-delivery) maps the requested user experience to PRD requirements, development stages and acceptance scenarios.
 

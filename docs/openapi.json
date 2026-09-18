@@ -7806,6 +7806,13 @@
           "can_repair": {
             "type": "boolean",
             "title": "Can Repair"
+          },
+          "members": {
+            "items": {
+              "$ref": "#/components/schemas/DownloadMemberView"
+            },
+            "type": "array",
+            "title": "Members"
           }
         },
         "type": "object",
@@ -7825,7 +7832,8 @@
           "inspection_id",
           "fulfillment",
           "repair",
-          "can_repair"
+          "can_repair",
+          "members"
         ],
         "title": "AttemptView"
       },
@@ -9516,6 +9524,62 @@
           "source_key"
         ],
         "title": "DownloadMapping"
+      },
+      "DownloadMemberView": {
+        "properties": {
+          "selection_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Selection Id"
+          },
+          "intent_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Intent Id"
+          },
+          "work_title": {
+            "type": "string",
+            "title": "Work Title"
+          },
+          "medium": {
+            "type": "string",
+            "title": "Medium"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "target_state": {
+            "type": "string",
+            "title": "Target State"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "fulfillment": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FulfillmentView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "selection_id",
+          "intent_id",
+          "work_title",
+          "medium",
+          "state",
+          "target_state",
+          "message",
+          "fulfillment"
+        ],
+        "title": "DownloadMemberView"
       },
       "DownloaderChoice": {
         "properties": {
@@ -16889,6 +16953,15 @@
             "type": "string",
             "format": "uuid",
             "title": "Selection Id"
+          },
+          "additional_selection_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 99,
+            "title": "Additional Selection Ids"
           }
         },
         "additionalProperties": false,

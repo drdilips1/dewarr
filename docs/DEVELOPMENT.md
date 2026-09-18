@@ -2,7 +2,7 @@
 
 This is an early development build. The full [PRD](../PRD.md) remains the target; [Implementation Status](IMPLEMENTATION-STATUS.md) records actual coverage. Do not connect production acquisition automation until the relevant import and recovery gates pass.
 
-Current request contract: back up the database and apply migrations through `0035_source_queries` before restarting API and worker together. [Request restrictions](ACQUISITION-FOUNDATION.md#request-download-restrictions) preserve independent format and whole-transfer size limits across shared acquisitions. Populated new restrictions block lossy downgrade. Default dispatch remains disabled; this migration does not activate list automation.
+Current request contract: back up the database and apply migrations through `0036_download_memberships` before restarting API and worker together. [Request restrictions](ACQUISITION-FOUNDATION.md#request-download-restrictions) preserve independent format and whole-transfer size limits across shared acquisitions. Populated new restrictions block lossy downgrade. Default dispatch remains disabled; this migration does not activate list automation.
 
 ## Native development
 
@@ -150,3 +150,5 @@ List policies and manual request forms expose sparse release overrides. Request-
 [Reviewed series requests](SERIES-REQUESTS.md) add the `series.requests` task and independent series reasons. Apply `0034_series_requests` before restarting API and worker together. Populated series history requires backup-based rollback. Saving a series request creates ordinary wanted requests; it does not dispatch a pack or expand future membership.
 
 [Series source search](SERIES-SOURCE-SEARCH.md) requires `0035_source_queries`. API and worker must be restarted together after backing up and migrating. Existing searches retain their original query plans; new searches can include bounded known series names under the inherited search preference. Automatic pack selection is not enabled by this change.
+
+[Reviewed shared downloads](SHARED-DOWNLOADS.md) require `0036_download_memberships`. Stop the old API/worker before migration, back up, upgrade and restart both together. Existing attempts receive one membership; new reviewed batches can serve multiple selections through one transfer. Populated multi-member history prevents destructive downgrade. New automatic series selection and later/cross-owner reuse remain pending; dispatch stays disabled by default.

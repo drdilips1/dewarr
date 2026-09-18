@@ -13,7 +13,6 @@ from app.db.models import (
     AcquisitionReservation,
     AcquisitionSelection,
     AcquisitionTarget,
-    DownloadAttempt,
     ListAcquisitionBook,
     ListAcquisitionPolicy,
     Operation,
@@ -161,9 +160,9 @@ async def advance_target(db, user, policy, book, target, progress, now):
             )
         )
         if selected:
-            attempt = await db.scalar(
-                select(DownloadAttempt).where(DownloadAttempt.selection_id == selected.id)
-            )
+            from app.domain.download_memberships import attempt_for
+
+            attempt = await attempt_for(db, selected.id)
             if (
                 attempt
                 and attempt.state == "held"
