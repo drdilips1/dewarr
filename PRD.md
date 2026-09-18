@@ -1,8 +1,8 @@
 # Product requirements: book discovery and acquisition
 
-Version 1.3 planning baseline · September 17, 2026 · Working product name: Book discovery app.
+Version 1.4 planning baseline · September 17, 2026 · Working product name: Book discovery app.
 
-Status: ready for staged development. No application code or production deployment is implied by this document. User requirements from the conversation take precedence. This PRD defines product behavior; [Implementation Decisions](IMPLEMENTATION-DECISIONS.md) defines the researched engineering baseline; [Development Plan](IMPLEMENTATION-PLAN.md) defines delivery; [Acceptance Plan](ACCEPTANCE-PLAN.md) defines verification. Earlier research remains rationale, not an alternative product direction.
+Status: product specification for staged development; implementation is in progress and recorded separately. User requirements from the conversation take precedence. This PRD defines product behavior; [Implementation Decisions](IMPLEMENTATION-DECISIONS.md) defines the researched engineering baseline; [Development Plan](IMPLEMENTATION-PLAN.md) defines delivery; [Acceptance Plan](ACCEPTANCE-PLAN.md) defines verification. Earlier research remains rationale, not an alternative product direction.
 
 Read sections 1–6 for the product and UX, section 7 for tracked requirements, and sections 13–14 for precise behavior and release decisions. Implementation evidence is recorded separately in [Implementation Status](docs/IMPLEMENTATION-STATUS.md); planned functionality must not be presented as shipped.
 
@@ -400,3 +400,13 @@ The implementation plan contains 61 work packages across S00–S10, with entry d
 Use [stage evidence scopes](ACCEPTANCE-PLAN.md#7-stage-evidence-scopes) to avoid requiring later functionality at an earlier gate. Partial evidence stays partial until the complete scenario runs. The walkthrough above becomes executable fixtures incrementally, then a complete release rehearsal in S09.
 
 The visual implementation should preserve the familiarity of Seerr's navigation, cover shelves, book-detail hierarchy and request dialogs. Component reuse is optional where adapting its framework dependencies would cost more than implementing the same presentation against this app's contracts. The success criterion is the requested familiar experience, not a percentage of reused Seerr code.
+
+Product completion is evaluated at three distinct boundaries:
+
+| Boundary | User-visible result | What completion does not imply |
+|---|---|---|
+| Manual acquisition alpha, S05 | Find a book through native MAM, acquire the selected medium, organize it and receive ABS-confirmed availability | Multi-source selection, external-list automation or production readiness |
+| Full requested v1, S09 | Browse and curate; aggregate supported sources; follow external lists; automatically acquire missing requested media; handle collections and versions; recover and operate the installation reliably | Every possible metadata provider, backend, file format or future expansion |
+| Extended roadmap, S10 | Independently qualified additional backends, recommendation providers, clients, upgrades, reorganization and SSO | Permission to move unfinished v1 behavior into a later release |
+
+The [release-blocker policy](IMPLEMENTATION-PLAN.md#11-release-blockers-and-stage-review) defines how P0/P1 findings affect these boundaries. Defaults and architecture are sufficiently decided to proceed; integration capability checks and implementation evidence remain required. Actual compatibility restrictions must be visible in setup and the release notes, rather than appearing only in developer documentation.

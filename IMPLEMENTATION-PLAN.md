@@ -1,6 +1,6 @@
 # End-to-end development plan
 
-Planning baseline v1.3 · September 17, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
+Planning baseline v1.4 · September 17, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
 
 This plan implements [the PRD](PRD.md) using [the researched decisions](IMPLEMENTATION-DECISIONS.md). [Acceptance Plan](ACCEPTANCE-PLAN.md) specifies the evidence required at each gate. A stage is complete only when its exit gate passes; this document does not report completed engineering or tested compatibility.
 
@@ -55,7 +55,7 @@ flowchart LR
 - Workers: Procrastinate, initially the researched 3.9.0 baseline, with atomic enqueue and explicit stalled-job recovery.
 - Distribution: Docker Compose with API/static UI, worker and PostgreSQL. No Redis requirement. External services stay separately administered.
 
-Proposed paths below are development targets, not files already created:
+The structure below defines module responsibilities. Several paths already exist; consult the implementation status for actual coverage rather than inferring completion from a directory:
 
 ```text
 apps/web/                     UI routes, components, generated API client
@@ -496,3 +496,51 @@ Completion evidence: <revision, commands/results, demo and remaining limits>
 ```
 
 Assign estimates after this split. Separate implementation effort from provider access or compatibility waits, and revise forecasts after each accepted stage. The critical path is identity/inventory → certified import → manual acquisition → aggregated selection → list automation → release qualification. Discovery presentation can advance against the agreed contracts while those integrations are built; its final acceptance still requires working data and user flows.
+
+## 11. Release blockers and stage review
+
+Priority describes the consequence of a defect, not the order in which every feature must be coded. Planned functionality is tracked as remaining scope; it becomes a release blocker when its milestone requires it. Do not label every incomplete future ticket as an incident.
+
+| Severity | Definition for this product | Examples | Required response |
+|---|---|---|---|
+| P0 | Integrity, authorization or uncontrolled external-action failure | Changes seeded bytes; overwrites unrelated media; leaks another user's tokens/private library; repeatedly dispatches downloads after restart | Stop the affected action, preserve evidence and existing data, repair and run the relevant regression before reactivation |
+| P1 | A required milestone journey is unavailable or materially incorrect | Wrong edition/narrator acquired; false ownership; duplicates across lists; series children merged incorrectly; restore cannot reconcile; required connector unusable | Block that milestone; repair and prove the complete failing path, including its recovery behavior |
+| P2 | A bounded defect with a clear workaround that preserves product invariants | Secondary visual polish, optional sorting inconvenience, nonessential diagnostics detail | Record owner, workaround and target release; cannot be used to relabel a P0/P1 problem |
+
+Provider outages are operational states when handled correctly. An outage becomes an application defect if it causes false absence, unsafe fallback, duplicate work or lost requests. Unsupported account capabilities are restrictions only when the product already permits that restriction and explains it; unavailable credentials cannot count as passed connector certification.
+
+### First required proof by risk
+
+| Proof | Earliest blocking gate | Required evidence |
+|---|---|---|
+| Stable work/version identities and reversible correction | S01–S03 | Same title/different author, alternate narrator, provider duplicate and mistaken-match repair without lost holdings/history |
+| Correct overall ownership and missing-medium requirements | S03; integrated S05 | Ebook-only ownership plus an unsatisfied audio request; exact recording stays distinct; private holdings remain scoped |
+| Source-preserving collection publication | S04 | Per-child manifests, real link/copy behavior, actual ABS item boundaries, collision and crash recovery |
+| One compatible transfer despite uncertain submission | S05 | Concurrent requests and response-lost add; reconciliation before another submission; unrelated torrents unchanged |
+| Correct selection across independent sources | S06 | Eligibility before seed/format ranking; unknown fields remain unknown; source failure isolated; verified pack scope |
+| Safe repeated external-list observations | S07 | Baseline/backfill, overlapping lists, pause/resume, exclusions and RSS truncation; no duplicate acquisition |
+| Bookstore browsing without configuration overload | S08 | Task-based onboarding, discovery, list following and requests using shipped defaults; optional customization remains discoverable |
+| Recoverable supported installation | S09 | Shipped-image startup, upgrade/backup/restore, external-state reconciliation, permissions and compatibility matrix |
+
+### Stage review record
+
+Maintain one review per stage in the implementation evidence. Use the following fields rather than a percentage-complete estimate:
+
+```text
+Stage and candidate revision:
+Required FR/NFR and AT assertions:
+Implemented packages and remaining scope:
+Fixture evidence:
+Actual service/filesystem evidence:
+Browser demonstration and accessibility evidence:
+Open P0/P1 findings:
+Supported versions and explicit capability restrictions:
+Migration/backup/recovery impact:
+Decision: incomplete | accepted for the stated milestone
+Capabilities enabled by this decision:
+Next dependent packages:
+```
+
+An accepted review is specific to its tested revision and capabilities. Changes to identity, source selection, dispatch, publication or inventory confirmation require rerunning the affected contracts before release. Presentation-only changes use appropriate UI checks; they do not require repeating unrelated provider certification. Product direction changes update the PRD and dependent acceptance criteria before they silently alter implementation behavior.
+
+The planning deliverable is complete when requirements, defaults, dependencies and evidence obligations are reviewable. The application is complete only when its applicable stage gates pass. These are separate outcomes.

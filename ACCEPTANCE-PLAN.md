@@ -1,6 +1,6 @@
 # Acceptance, compatibility and release verification
 
-Planning baseline v1.3 · September 17, 2026.
+Planning baseline v1.4 · September 17, 2026.
 
 **Status: acceptance definitions; implementation evidence is tracked in [Implementation Status](docs/IMPLEMENTATION-STATUS.md).** Some foundation subsets have now been tested; no full scenario is yet certified complete. This document maps [PRD requirements](PRD.md) to the gates in [Development Plan](IMPLEMENTATION-PLAN.md). Research/source inspection is evidence for a design choice, not a passing runtime test.
 
@@ -158,3 +158,9 @@ These refine existing scenarios, without introducing additional release stages o
 | AT-30 | A naming change during an interrupted import does not change frozen destinations; permission revocation before publication pauses it despite a valid historical plan | S04 publication subset; S09 full regression |
 
 Preserve the distinction between proposed behavior and implementation evidence when evaluating these assertions. A saved profile and a successful sample preview cannot close the importer stage.
+
+## 9. Stage review and defect severity
+
+Apply the [release-blocker policy and stage review record](IMPLEMENTATION-PLAN.md#11-release-blockers-and-stage-review) when evaluating these scenarios. Every failure records the affected requirement, actual result, severity, reproduction evidence and owner. Mark missing credentials or unavailable test infrastructure as not run; do not convert them into passing evidence.
+
+Acceptance requires both the positive journey and its relevant failure assertions. For example, a successful list download does not close AT-22 if a truncated feed launches the backlog, and a correct folder tree does not close AT-19 if ABS combines different recordings into one item. A release restriction must be explicitly allowed by the PRD and enforced in the application; documenting a broken mandatory journey is not acceptance.
