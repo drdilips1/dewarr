@@ -34,8 +34,9 @@ from app.domain.acquisition import (
 )
 from app.domain.downloaders import SETTINGS_LOCK, connection_or_404, mapped_path
 from app.domain.operations import transaction_lock
-from app.domain.release_profiles import enforce_profile, profile_snapshot
+from app.domain.release_profiles import enforce_profile
 from app.domain.request_constraints import constrained_preferences
+from app.domain.request_preferences import for_selection
 from app.domain.source_artifacts import artifact_bytes, member
 from app.domain.work_graph import acquisition_lock, canonical_work
 from app.importing.destinations import destination_configuration
@@ -52,6 +53,7 @@ class SelectionInput(BaseModel):
     destination_id: UUID
     destination_revision: str = Field(pattern=r"^[0-9a-f]{64}$")
     confirmed_work_id: UUID
+    search_id: UUID | None = Field(default=None, exclude_if=lambda value: value is None)
     profile_id: UUID | None = None
     profile_generation: int | None = Field(default=None, ge=0)
     profile_effective_revision: str | None = Field(
@@ -181,9 +183,7 @@ async def prepare(db, user, body, key, *, automatic_evidence=None):
     release = (MAMRelease if artifact.source_key == "mam" else ProwlarrRelease).model_validate(
         artifact.release_snapshot
     )
-    profile = await profile_snapshot(
-        db, user.id, body.profile_id, body.profile_generation, body.profile_effective_revision
-    )
+    profile = await for_selection(db, user, intent, body)
     if automatic_evidence:
         maximum = automatic_evidence["maximum_bytes"]
         profile = profile.model_copy(

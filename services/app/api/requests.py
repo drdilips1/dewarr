@@ -23,6 +23,8 @@ from app.domain.acquisition import (
     submit,
     validate_request,
 )
+from app.domain.release_profiles import ProfileSnapshot
+from app.domain.request_preferences import PreferenceChoice, resolve
 from app.domain.work_graph import acquisition_lock, canonical_work, family_ids
 
 router = APIRouter(prefix="/requests", tags=["requests"])
@@ -33,6 +35,8 @@ class RequestInput(BaseModel):
     work_id: UUID
     specification: RequestSpec
     reason: RequestReason = Field(default_factory=RequestReason)
+    release_preferences: PreferenceChoice | None = None
+    expected_preference_revision: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
 
 
 class TargetView(BaseModel):
@@ -48,6 +52,7 @@ class ReasonView(BaseModel):
     kind: str
     active: bool
     list_id: UUID | None
+    release_policy: ProfileSnapshot | None = None
 
 
 class RequestView(BaseModel):
@@ -58,11 +63,13 @@ class RequestView(BaseModel):
     targets: list[TargetView]
     reasons: list[ReasonView]
     description: str
+    release_policy: ProfileSnapshot | None = None
 
 
 class PreviewView(BaseModel):
     targets: list[TargetView]
     download_available: bool = False
+    release_policy: ProfileSnapshot | None = None
 
 
 class SubmittedView(BaseModel):
@@ -156,6 +163,7 @@ async def view(db, user, intent):
         work_id=(await canonical_work(db, intent.work_id)).id,
         work_title=work_title,
         specification=spec,
+        release_policy=intent.release_policy,
         description="; ".join(
             descriptions
             + (["Language: " + spec.language] if spec.language else [])
@@ -169,6 +177,7 @@ async def view(db, user, intent):
                 kind=reason.kind,
                 active=reason.active,
                 list_id=reason.list_id,
+                release_policy=reason.release_policy,
                 label="Your request"
                 if reason.kind == "manual"
                 else (
@@ -183,17 +192,21 @@ async def view(db, user, intent):
 
 @router.post("/preview", response_model=PreviewView)
 async def preview(body: RequestInput, user: CurrentUser, db: Database):
-    await validate_request(db, user, body.work_id, body.specification, body.reason)
+    specification, profile = await resolve(
+        db, user, body.specification, body.reason, body.release_preferences
+    )
+    await validate_request(db, user, body.work_id, specification, body.reason)
     return PreviewView(
+        release_policy=profile,
         targets=[
             TargetView(**item)
             for item in await assess(
                 db,
                 user,
                 body.work_id,
-                body.specification,
+                specification,
             )
-        ]
+        ],
     )
 
 
@@ -205,7 +218,14 @@ async def create(
     idempotency_key: str = Header(min_length=8, max_length=200),
 ):
     intent, operation = await submit(
-        db, user, body.work_id, body.specification, body.reason, idempotency_key
+        db,
+        user,
+        body.work_id,
+        body.specification,
+        body.reason,
+        idempotency_key,
+        preference_choice=body.release_preferences,
+        expected_preference_revision=body.expected_preference_revision,
     )
     response = SubmittedView(
         request=await view(db, user, intent), operation=OperationView.model_validate(operation)

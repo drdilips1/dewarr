@@ -1,3 +1,7 @@
+import PreferenceFields, {
+  EffectivePreferences,
+  type Overrides,
+} from "./PreferenceFields";
 import { useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -154,6 +158,9 @@ function PolicyEditor({
   const [preferred, setPreferred] = useState<"ebook" | "audio">(
     policy?.configuration.specification.preferred_medium || "audio",
   );
+  const [overrides, setOverrides] = useState<Overrides>(
+    policy?.configuration.profile.list_overrides || {},
+  );
   const [profileId, setProfileId] = useState(
     policy?.configuration.profile.id || "",
   );
@@ -220,6 +227,7 @@ function PolicyEditor({
     profile_id: profile?.id || null,
     profile_generation: profile?.generation || 0,
     profile_effective_revision: profile?.effective_revision,
+    preference_overrides: overrides,
     expected_revision: policy?.revision || 0,
     include_work_ids: mode === "automatic" ? selected : [],
     downloader_id: mode === "automatic" ? downloader?.id : null,
@@ -370,6 +378,20 @@ function PolicyEditor({
                   ))}
               </select>
             </label>
+            {profile && (
+              <details>
+                <summary>List download overrides</summary>
+                <PreferenceFields
+                  overrides={overrides}
+                  inherited={profile.preferences}
+                  origins={profile.origins || {}}
+                  onChange={(value) => {
+                    changed();
+                    setOverrides(value);
+                  }}
+                />
+              </details>
+            )}
             {mode === "automatic" && (
               <>
                 <label>
@@ -480,6 +502,10 @@ function PolicyEditor({
       ) : receipt.data ? (
         <div aria-label="List activation preview">
           <h3>Review {receipt.data.configuration.mode} mode</h3>
+          <EffectivePreferences
+            preferences={receipt.data.configuration.profile.preferences}
+            origins={receipt.data.configuration.profile.origins || {}}
+          />
           <p>
             {receipt.data.total} current books · {receipt.data.selected}{" "}
             selected for acquisition.

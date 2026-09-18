@@ -174,6 +174,7 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
                         "blocked_formats": ["pdf" if medium == "ebook" else "flac"],
                     },
                 },
+                "preference_overrides": {"criteria": ["seeders", "format", "source"]},
                 "downloader_id": downloader_id,
                 "downloader_generation": 1,
                 "routes": {

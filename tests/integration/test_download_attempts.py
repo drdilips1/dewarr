@@ -472,11 +472,12 @@ async def test_downloader_change_after_submission_holds_identity_and_does_not_fo
 
 
 async def test_dispatch_history_refuses_lossy_downgrade(client, database, selected):
-    from tests.integration.test_correction_migration import migrate
+    from tests.integration.test_correction_migration import legacy_request_policy_fixture, migrate
 
     await start(client, selected)
     async with database() as db:
         before = await db.scalar(text("SELECT version_num FROM alembic_version"))
+    await legacy_request_policy_fixture(database)
     result = await migrate("downgrade", "0017_selections")
     assert result.returncode != 0
     assert "Capacity history requires" in result.stderr

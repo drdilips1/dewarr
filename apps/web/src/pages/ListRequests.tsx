@@ -1,3 +1,5 @@
+import RequestPreferences, { type Choice } from "./RequestPreferences";
+import { EffectivePreferences } from "./PreferenceFields";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -46,7 +48,16 @@ export default function ListRequests({
       key={`${listId}:${policy.data?.revision || 0}`}
       listId={listId}
       works={works}
-      defaults={policy.data?.configuration.specification}
+      defaults={
+        policy.data
+          ? {
+              ...policy.data.configuration.specification,
+              download_constraints:
+                policy.data.configuration.request_constraints,
+            }
+          : undefined
+      }
+      profile={policy.data?.configuration.profile}
     />
   );
 }
@@ -55,10 +66,12 @@ function ListRequestEditor({
   listId,
   works,
   defaults,
+  profile,
 }: {
   listId: string;
   works: Work[];
   defaults?: Spec;
+  profile?: components["schemas"]["ProfileSnapshot"];
 }) {
   const client = useQueryClient();
   const path = { list_id: listId };
@@ -71,6 +84,7 @@ function ListRequestEditor({
       standalone: false,
     },
   );
+  const [preferences, setPreferences] = useState<Choice>({});
   const [filter, setFilter] = useState("");
   const [page, setPage] = useState(0);
   const [historyOffset, setHistoryOffset] = useState(0);
@@ -134,7 +148,11 @@ function ListRequestEditor({
       result(
         await api.POST("/api/lists/{list_id}/requests/preview", {
           params: { path, header: { "idempotency-key": key.current } },
-          body: { work_ids: selected, specification: spec },
+          body: {
+            work_ids: selected,
+            specification: spec,
+            release_preferences: preferences,
+          },
         }),
       ),
     onSuccess: (data) => {
@@ -401,6 +419,14 @@ function ListRequestEditor({
                 </label>
               )}
             </details>
+            <RequestPreferences
+              value={preferences}
+              inherited={profile}
+              onChange={(value) => {
+                setPreferences(value);
+                key.current = crypto.randomUUID();
+              }}
+            />
             <button
               className="primary"
               disabled={!selected.length || preview.isPending}
@@ -429,6 +455,12 @@ function ListRequestEditor({
               .join(" · ")}
             . Inventory is checked again when saving.
           </p>
+          {value.release_policy && (
+            <EffectivePreferences
+              preferences={value.release_policy.preferences}
+              origins={value.release_policy.origins || {}}
+            />
+          )}
           {value.specification.language && (
             <p>Required language: {value.specification.language}</p>
           )}

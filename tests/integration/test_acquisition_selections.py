@@ -31,7 +31,7 @@ from app.importing.destinations import destination_configuration
 from app.importing.naming import fingerprint
 from app.security import encrypt_secrets, hash_password
 from tests.integration.test_acquisition import body, catalog, request  # noqa: F401
-from tests.integration.test_correction_migration import migrate
+from tests.integration.test_correction_migration import legacy_request_policy_fixture, migrate
 from tests.mam_fixture import release_row
 from tests.torrent_fixture import torrent_bytes
 
@@ -390,12 +390,14 @@ async def test_canonical_merge_invalidates_prepared_source_selection(
 
 async def test_selection_history_prevents_lossy_downgrade(client, admin, database, selection_route):
     selected = (await prepare(client, selection_route)).json()
+    await legacy_request_policy_fixture(database)
     result = await migrate("downgrade", "0016_artifacts")
     assert result.returncode and "Acquisition selection history" in result.stderr
     await client.delete("/api/acquisition/selections/" + selected["id"])
     async with database() as db, db.begin():
         await db.delete(await db.get(AcquisitionSelection, UUID(selected["id"])))
     try:
+        await legacy_request_policy_fixture(database)
         result = await migrate("downgrade", "0016_artifacts")
         assert result.returncode == 0, result.stderr
     finally:

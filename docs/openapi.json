@@ -5817,6 +5817,23 @@
               "format": "uuid",
               "title": "Work Id"
             }
+          },
+          {
+            "name": "request_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Request Id"
+            }
           }
         ],
         "responses": {
@@ -7629,6 +7646,16 @@
           },
           "specification": {
             "$ref": "#/components/schemas/RequestSpec"
+          },
+          "release_preferences": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PreferenceChoice"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -7777,6 +7804,16 @@
           "message": {
             "type": "string",
             "title": "Message"
+          },
+          "release_policy": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProfileSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "specification": {
             "$ref": "#/components/schemas/RequestSpec"
@@ -7991,6 +8028,18 @@
             "type": "string",
             "format": "uuid",
             "title": "Work Id"
+          },
+          "request_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Id"
           },
           "query": {
             "type": "string",
@@ -10911,6 +10960,9 @@
             ],
             "title": "Profile Effective Revision"
           },
+          "preference_overrides": {
+            "$ref": "#/components/schemas/PreferenceOverrides"
+          },
           "downloader_id": {
             "anyOf": [
               {
@@ -13017,6 +13069,52 @@
         ],
         "title": "PolicyView"
       },
+      "PreferenceChoice": {
+        "properties": {
+          "profile_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile Id"
+          },
+          "profile_generation": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile Generation"
+          },
+          "profile_effective_revision": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile Effective Revision"
+          },
+          "overrides": {
+            "$ref": "#/components/schemas/PreferenceOverrides"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "PreferenceChoice"
+      },
       "PreferenceOverrides": {
         "properties": {
           "ebook_formats": {
@@ -13133,6 +13231,16 @@
             "type": "boolean",
             "title": "Download Available",
             "default": false
+          },
+          "release_policy": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProfileSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -13233,6 +13341,37 @@
               }
             ],
             "title": "Effective Revision"
+          },
+          "base_effective_revision": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Effective Revision"
+          },
+          "list_overrides": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PreferenceOverrides"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "request_overrides": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PreferenceOverrides"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -13792,6 +13931,16 @@
               }
             ],
             "title": "List Id"
+          },
+          "release_policy": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProfileSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -14109,6 +14258,28 @@
           },
           "reason": {
             "$ref": "#/components/schemas/RequestReason"
+          },
+          "release_preferences": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PreferenceChoice"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "expected_preference_revision": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Preference Revision"
           }
         },
         "additionalProperties": false,
@@ -14327,6 +14498,16 @@
           "description": {
             "type": "string",
             "title": "Description"
+          },
+          "release_policy": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProfileSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -14680,6 +14861,21 @@
             ],
             "title": "Profile Effective Revision"
           },
+          "request_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Id"
+          },
+          "preference_overrides": {
+            "$ref": "#/components/schemas/PreferenceOverrides"
+          },
           "offset": {
             "type": "integer",
             "maximum": 10000.0,
@@ -14837,6 +15033,18 @@
             "type": "string",
             "format": "uuid",
             "title": "Confirmed Work Id"
+          },
+          "search_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Search Id"
           },
           "profile_id": {
             "anyOf": [

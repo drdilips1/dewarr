@@ -21,7 +21,7 @@ from app.importing import automatic
 from app.jobs.tasks import schedule_downloads
 from tests.integration.test_acquisition import catalog  # noqa: F401
 from tests.integration.test_acquisition_selections import selection_route  # noqa: F401
-from tests.integration.test_correction_migration import migrate
+from tests.integration.test_correction_migration import legacy_request_policy_fixture, migrate
 from tests.integration.test_download_attempts import downloader, selected, start  # noqa: F401
 
 pytestmark = pytest.mark.integration
@@ -181,6 +181,7 @@ async def test_periodic_recovery_repairs_lost_continuation_without_duplicate_job
 async def test_automatic_history_cannot_be_discarded_by_downgrade(database, automatic_job):
     async with database() as db:
         before = await db.scalar(text("SELECT version_num FROM alembic_version"))
+    await legacy_request_policy_fixture(database)
     result = await migrate("downgrade", "0021_handoffs")
     assert result.returncode != 0 and "Capacity history requires" in result.stderr
     async with database() as db:

@@ -29,7 +29,7 @@ from app.domain.automatic_dispatch import approve_route
 from app.domain.downloaders import connection_or_404, mapped_path
 from app.domain.list_requests import owner_context, pending_targets
 from app.domain.operations import transaction_lock
-from app.domain.release_profiles import profile_snapshot
+from app.domain.release_profiles import PreferenceOverrides, overlay_profile, profile_snapshot
 from app.domain.request_constraints import combine
 from app.domain.visibility import visible_work
 from app.domain.work_graph import acquisition_lock, canonical_map, family_ids, graph_lock
@@ -53,6 +53,7 @@ class ListPolicyInput(BaseModel):
     profile_effective_revision: str | None = Field(
         default=None, pattern=r"^[a-f0-9]{64}$", exclude_if=lambda value: value is None
     )
+    preference_overrides: PreferenceOverrides = Field(default_factory=PreferenceOverrides)
     downloader_id: UUID | None = None
     downloader_generation: int | None = Field(default=None, ge=1)
     routes: dict[Literal["ebook", "audio"], PolicyRoute] = Field(default_factory=dict)
@@ -127,6 +128,7 @@ async def configuration(db, user, list_id, body):
     profile = await profile_snapshot(
         db, user.id, body.profile_id, body.profile_generation, body.profile_effective_revision
     )
+    profile = overlay_profile(profile, list_overrides=body.preference_overrides)
     constraints = combine(
         spec.download_constraints.model_dump() if spec.download_constraints else None,
         profile.preferences.model_dump(include={"blocked_formats", "maximum_bytes"}),

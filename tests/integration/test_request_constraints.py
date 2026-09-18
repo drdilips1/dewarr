@@ -163,13 +163,15 @@ async def test_legacy_requests_replay_across_migration_and_new_constraints_block
     client, database, catalog
 ):
     from app.db.session import get_engine
-    from tests.integration.test_correction_migration import migrate
+    from tests.integration.test_correction_migration import legacy_request_policy_fixture, migrate
 
     payload = body(catalog, "audio")
     legacy = await request(client, payload, "legacy-constraints-replay")
     assert "download_constraints" not in legacy["request"]["specification"]
     await get_engine().dispose()
     try:
+        await legacy_request_policy_fixture(database)
+        legacy = await request(client, payload, "legacy-constraints-replay")
         prior = await migrate("downgrade", "0028_capacity")
         assert prior.returncode == 0, prior.stderr
         upgraded = await migrate("upgrade", "head")
@@ -180,6 +182,7 @@ async def test_legacy_requests_replay_across_migration_and_new_constraints_block
         await get_engine().dispose()
         async with database() as db:
             current_revision = await db.scalar(text("SELECT version_num FROM alembic_version"))
+        await legacy_request_policy_fixture(database)
         rejected = await migrate("downgrade", "0028_capacity")
         assert rejected.returncode != 0 and "pre-upgrade backup" in rejected.stderr
         async with database() as db:

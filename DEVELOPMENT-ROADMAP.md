@@ -6,13 +6,9 @@ Build a self-hosted book discovery, curation and acquisition app above Audiobook
 
 This guide is the short entry point. The complete specification is in [PRD](PRD.md), the engineering backlog in [Implementation Plan](IMPLEMENTATION-PLAN.md), researched choices in [Implementation Decisions](IMPLEMENTATION-DECISIONS.md), and verification in [Acceptance Plan](ACCEPTANCE-PLAN.md). [Implementation Status](docs/IMPLEMENTATION-STATUS.md) records what has actually been built and tested.
 
-For milestone acceptance and the next bounded development increment, use the [release delivery contract](IMPLEMENTATION-PLAN.md#16-release-delivery-contract). The [eight launch journeys](PRD.md#20-launch-journey-checklist) connect the product experience to existing acceptance scenarios.
+The planning package contains **42 functional requirements, 12 nonfunctional requirements, 61 development work packages and 35 acceptance scenarios**. The core product ships through S09; S10 contains separately scoped extensions. Use the [backlog CSV](DEVELOPMENT-BACKLOG.csv) for issue import and [requirements traceability](REQUIREMENTS-TRACEABILITY.csv) to connect each requirement to its acceptance evidence.
 
-For issue-tracker import, use the [61-package backlog export](DEVELOPMENT-BACKLOG.csv). The plan's [execution batches](IMPLEMENTATION-PLAN.md#12-development-backlog-and-execution-batches) sequence the remaining development from the existing code through manual alpha, automation beta, production v1 and separate extensions.
-
-For the current implementation, start with the [refreshed delivery order](IMPLEMENTATION-PLAN.md#15-refreshed-implementation-starting-point-and-delivery-order). Existing fulfillment, review, inbound lists, manual request batches, bounded automatic selection, explicit authorized dispatch and shared capacity accounting have partial evidence. Bounded list policy activation and scheduled source searches now use that shared handoff; continue with full identity/inheritance, source/pack coverage and certification before accepting automated-list beta. The earlier eight slices retain dependency rationale, not a fresh instruction to rebuild completed components.
-
-The v1.6 baseline defines [unattended operation and exception review](PRD.md#18-unattended-operation-and-exception-review): a clean, authorized list acquisition reaches ABS without per-title approvals; ambiguous children receive scoped review. The [execution sequence](IMPLEMENTATION-PLAN.md#14-executing-the-complete-automation-path) assigns this work to existing packages, and the [acceptance assertions](ACCEPTANCE-PLAN.md#11-unattended-acquisition-and-review-assertions) prove authority, restart recovery and the actual list-to-library result.
+Read this guide first, then the PRD's [detailed behavior contracts](PRD.md#13-detailed-behavior-contracts). Developers use the implementation plan's [stage packages](IMPLEMENTATION-PLAN.md#3-stage-work-packages-and-gates) and [release delivery contract](IMPLEMENTATION-PLAN.md#16-release-delivery-contract). The current code is partially implemented; an existing screen or passing subset does not establish completion of a stage.
 
 ## 1. Product boundary
 
@@ -118,17 +114,13 @@ The plan defines **42 functional requirements**: 36 for v1 and six later capabil
 
 Code existence, fixture success, live compatibility and stage acceptance are separate statuses. Missing service credentials or container/runtime certification must remain visible as unverified gates. No P0/P1 integrity, privacy, wrong-book acquisition, false-ownership or mandatory-workflow failure is acceptable for production v1.
 
-For the existing workspace, use verified [status](docs/IMPLEMENTATION-STATUS.md) and the refreshed delivery order. Retain the working foundation, metadata, inventory, importer, acquisition and list-observation modules. Bounded single-book list-to-library orchestration now has separate implementation evidence. Membership re-addition and canonical merge/undo now have focused lifecycle coverage. Release preferences now resolve sparse profiles over personal and installation defaults; broader request/list and media/language inheritance remains unfinished. Native ABB, full series/identity-correction and inheritance coverage, and complete deployment/live-service qualification remain open. Bounded single-book automatic preparation now has separate implementation evidence; it does not accept the full S06 or S07 stage.
+For this workspace, first compare the current revision and uncommitted work with [verified implementation status](docs/IMPLEMENTATION-STATUS.md). Reuse completed modules and finish the outstanding assertions. The next bounded development area is complete request/list preference inheritance and acquisition scope, as specified in the [current implementation handoff](IMPLEMENTATION-PLAN.md#next-increment-in-this-workspace). Native ABB, full series and version handling, discovery and production qualification remain part of the full delivery plan.
 
-At each stage start, split its packages into reviewable tickets with an owner, affected FR/AT IDs, input/output contract, success/failure fixtures and demo. Estimate after inspecting the existing implementation and measuring throughput; revise estimates for provider and filesystem uncertainty. At stage end, attach the revision and actual results, update coverage, and resolve blockers before enabling the dependent capability.
+At each stage start, split its packages into reviewable tickets with an owner, affected FR/AT IDs, input/output contract, success/failure fixtures and demo. Estimate remaining implementation, verification, integration access and contingency separately after inspecting the code and measuring throughput. At stage end, attach the revision and actual results, update coverage, and resolve blockers before enabling the dependent capability. Calendar estimates are forecasts; acceptance gates remain mandatory.
 
-The [capability activation and readiness matrix](IMPLEMENTATION-PLAN.md#10-capability-activation-and-integration-readiness) specifies when each user-facing workflow can be enabled, its installation prerequisites and its useful fallback. It also assigns unresolved integration questions to work packages and provides a ticket template for the development handoff.
+Use the [capability readiness matrix](IMPLEMENTATION-PLAN.md#10-capability-activation-and-integration-readiness) to decide which workflows an installation can enable. Apply the [P0/P1 release-blocker policy](IMPLEMENTATION-PLAN.md#11-release-blockers-and-stage-review) when reviewing defects. Missing compatibility evidence is recorded explicitly, not counted as a passed test.
 
-Use the [end-to-end product walkthrough](PRD.md#15-end-to-end-product-acceptance-walkthrough) as the common trilogy/list/pack fixture throughout development. The [stage evidence scopes](ACCEPTANCE-PLAN.md#7-stage-evidence-scopes) separate early subsets from full release acceptance, so catalog work is not blocked by a downloader that belongs to a later stage. Production v1 still requires the complete integrated evidence.
-
-The v1.3 handoff also fixes [settings precedence and in-flight changes](PRD.md#effective-settings-and-changes-during-acquisition-fr-20fr-23-fr-27-fr-33): show effective values, retain each request reason's constraints, freeze submitted choices and import manifests, and recheck current permissions before side effects. Sample naming previews are usable before filesystem setup; only inspected, validated plans can qualify for publication. Unsupported archives stay reviewable without being mistaken for supported book containers or directly hardlinkable media.
-
-The v1.4 handoff adds an explicit [P0/P1 release-blocker policy and stage review record](IMPLEMENTATION-PLAN.md#11-release-blockers-and-stage-review). It distinguishes remaining planned scope, unavailable integration evidence and actual product defects. Use it to decide which capabilities can be enabled at each milestone; it does not turn partial implementation into completed stages.
+Use the [common trilogy/list/pack walkthrough](PRD.md#15-end-to-end-product-acceptance-walkthrough) throughout development. Early stages prove their [scoped assertions](ACCEPTANCE-PLAN.md#7-stage-evidence-scopes); production v1 proves the complete integrated journey. In particular, a supported automatic-list acquisition must reach confirmed ABS availability without routine per-title approval, while an ambiguous pack child alone enters review.
 
 ## 7. Your requirements mapped to delivery
 
@@ -155,5 +147,21 @@ This table is the product review checklist. Requirement and acceptance IDs refer
 
 The core requested product is delivered through S09. Additional backends such as BookOrbit, more advanced recommendations, other download clients and deliberate existing-library reorganization are explicit S10 expansions. Basic related-title recommendations, useful customization and organization of new downloads are already v1 requirements; they must not be deferred under those expansion headings.
 
+## 8. Development execution contract
 
-The v1.7 handoff adds [finite automation defaults](PRD.md#19-initial-automation-defaults-and-activation-contract), a [54-requirement traceability export](REQUIREMENTS-TRACEABILITY.csv), and a current development starting point. Size, concurrency, retry, backlog and storage limits are recommended implementation defaults to qualify, not asserted runtime behavior.
+The implementation owner selects the earliest unmet dependency from S00–S09 and closes one observable user journey at a time. Frontend layouts and adapter fixtures can progress against agreed contracts, but a release waits for its actual integration evidence. S10 work is estimated and accepted separately.
+
+Every development ticket records:
+
+1. **Scope:** parent stage/package, FR IDs, user outcome and explicit exclusions.
+2. **Contract:** API/schema changes, authority, durable state transitions and compatibility assumptions.
+3. **Failure handling:** idempotency, retries, cancellation, stale settings and recovery after an external side effect.
+4. **Delivery:** backend, worker, UI and migration changes needed for the complete outcome.
+5. **Proof:** applicable AT assertions, default/advanced/error-state demo and recorded revision/environment.
+6. **Operations:** rollout or capability gate, backup/migration implications, repair path and documentation.
+
+Use one acquisition pipeline for manual requests and list automation. Resolve settings field by field in this order: request override → list override → selected profile → personal defaults → installation defaults → built-in defaults. Independently enforce administrator restrictions and each surviving request reason's hard constraints. Show effective values and their origins, preserve an explicit clear separately from an omitted field, and freeze submitted choices and import manifests.
+
+The next policy increment is accepted only when manual requests, list previews, source search, selection and automatic dispatch agree on the effective settings; overlapping requests share only compatible work; stale previews are rejected; and changes cannot rewrite an existing transfer's requirements. Broader media, language, narrator, series and destination scope must be tracked explicitly rather than inferred from completion of format-ranking controls.
+
+After that increment, follow the existing package dependencies through complete source/pack handling, list-automation qualification, discovery/curation and production operations. A release candidate must demonstrate fresh install, the eight launch journeys, worker interruption, an upstream outage and restore with an external transfer already running. The release record names supported service/filesystem combinations and any intentionally disabled optional capabilities.

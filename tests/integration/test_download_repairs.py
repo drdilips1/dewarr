@@ -264,12 +264,13 @@ async def test_repair_permission_idempotency_and_recovery_boundaries(
 
 
 async def test_repair_history_refuses_lossy_rollback(client, database, selected, submitted):
-    from tests.integration.test_correction_migration import migrate
+    from tests.integration.test_correction_migration import legacy_request_policy_fixture, migrate
 
     await change(database, selected)
     await repair(client, submitted, await preview(client, submitted))
     async with database() as db:
         before = await db.scalar(text("SELECT version_num FROM alembic_version"))
+    await legacy_request_policy_fixture(database)
     result = await migrate("downgrade", "0019_fulfillment")
     assert result.returncode != 0 and "Capacity history requires" in result.stderr
     async with database() as db:

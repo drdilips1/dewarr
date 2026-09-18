@@ -1,3 +1,5 @@
+import RequestPreferences, { type Choice } from "./RequestPreferences";
+import { EffectivePreferences } from "./PreferenceFields";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, result } from "../api/client";
@@ -36,6 +38,7 @@ export default function Wanted({
       : "",
   );
   const [preferred, setPreferred] = useState<"ebook" | "audio">("ebook");
+  const [preferences, setPreferences] = useState<Choice>({});
   const [language, setLanguage] = useState("");
   const [standalone, setStandalone] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -55,11 +58,15 @@ export default function Wanted({
     !!mode &&
     (!language || /^[a-zA-Z]{2,3}([-_][a-zA-Z0-9]{2,8})*$/.test(language));
   const preview = useQuery({
-    queryKey: ["request-preview", workId, specification],
+    queryKey: ["request-preview", workId, specification, preferences],
     queryFn: async () =>
       result(
         await api.POST("/api/requests/preview", {
-          body: { work_id: workId, specification },
+          body: {
+            work_id: workId,
+            specification,
+            release_preferences: preferences,
+          },
         }),
       ),
     enabled: valid,
@@ -84,7 +91,13 @@ export default function Wanted({
     mutationFn: async () =>
       result(
         await api.POST("/api/requests", {
-          body: { work_id: workId, specification },
+          body: {
+            work_id: workId,
+            specification,
+            release_preferences: preferences,
+            expected_preference_revision:
+              preview.data?.release_policy?.effective_revision,
+          },
           params: { header: { "idempotency-key": key.current } },
         }),
       ),
@@ -202,6 +215,13 @@ export default function Wanted({
           Require a standalone copy rather than an omnibus
         </label>
       </details>
+      <RequestPreferences
+        value={preferences}
+        onChange={(value) => {
+          changed();
+          setPreferences(value);
+        }}
+      />
       <Notice
         error={preview.error || save.error || requests.error || cancel.error}
       />
@@ -210,6 +230,12 @@ export default function Wanted({
       )}
       {valid && preview.data && (
         <div aria-label="Request preview">
+          {preview.data.release_policy && (
+            <EffectivePreferences
+              preferences={preview.data.release_policy.preferences}
+              origins={preview.data.release_policy.origins || {}}
+            />
+          )}
           {preview.data.targets.map((target) => (
             <p key={target.slot}>
               <strong>
@@ -242,6 +268,12 @@ export default function Wanted({
           {requests.data.items.map((intent) => (
             <article className="panel editor" key={intent.id}>
               <p className="muted">{intent.description}</p>
+              {intent.release_policy && (
+                <EffectivePreferences
+                  preferences={intent.release_policy.preferences}
+                  origins={intent.release_policy.origins || {}}
+                />
+              )}
               <DownloadConstraints
                 value={intent.specification.download_constraints}
               />

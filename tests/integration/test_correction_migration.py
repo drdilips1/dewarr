@@ -15,6 +15,18 @@ from app.db.session import get_engine
 pytestmark = pytest.mark.integration
 
 
+async def legacy_request_policy_fixture(database):
+    """Model pre-0032 rows so older migration guards remain independently tested.
+
+    Current request creation records policy history that correctly blocks rollback
+    before older guards run. Only disposable historical migration fixtures clear it;
+    the populated 0032 guard has its own integration test.
+    """
+    async with database() as db, db.begin():
+        await db.execute(text("UPDATE acquisition_intents SET release_policy = NULL"))
+        await db.execute(text("UPDATE acquisition_reasons SET release_policy = NULL"))
+
+
 async def migrate(*args):
     return await asyncio.to_thread(
         subprocess.run, ["uv", "run", "alembic", *args], capture_output=True, text=True

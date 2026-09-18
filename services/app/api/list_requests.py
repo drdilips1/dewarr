@@ -11,6 +11,7 @@ from app.db.models import Operation
 from app.domain import list_requests
 from app.domain.acquisition import RequestSpec
 from app.domain.list_requests import BatchInput
+from app.domain.release_profiles import ProfileSnapshot
 
 router = APIRouter(prefix="/lists/{list_id}/requests", tags=["list-requests"])
 
@@ -31,6 +32,7 @@ class BatchView(BaseModel):
     id: UUID
     status: str
     message: str
+    release_policy: ProfileSnapshot | None = None
     specification: RequestSpec
     expires_at: datetime
     records: list[BatchRecord]
@@ -68,7 +70,9 @@ async def view(db, user, operation):
         id=operation.id,
         status=operation.status,
         message=operation.message,
-        specification=operation.payload["command"]["specification"],
+        specification=operation.payload.get("effective_specification")
+        or operation.payload["command"]["specification"],
+        release_policy=operation.payload.get("release_policy"),
         expires_at=operation.payload["expires_at"],
         records=records,
         counts=counts,

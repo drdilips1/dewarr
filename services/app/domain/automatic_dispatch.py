@@ -16,7 +16,7 @@ from app.db.models import (
     User,
 )
 from app.domain.book_sources import identity
-from app.domain.release_profiles import ProfileSnapshot, profile_snapshot, same_profile
+from app.domain.release_profiles import ProfileSnapshot, refresh_profile, same_profile
 from app.domain.visibility import visible_library
 from app.domain.work_graph import canonical_work
 from app.importing.settings import current_profile
@@ -115,7 +115,7 @@ async def require_selection(db, selection):
         lock=True,
     )
     profile = ProfileSnapshot.model_validate(operation.payload["profile"])
-    current = await profile_snapshot(db, selection.owner_id, profile.id, profile.generation)
+    current = await refresh_profile(db, selection.owner_id, profile)
     if not same_profile(current, profile):
         raise HTTPException(409, "Automatic acquisition preferences changed; review this request")
     work = await canonical_work(db, UUID(selection.frozen["origin_work_id"]))

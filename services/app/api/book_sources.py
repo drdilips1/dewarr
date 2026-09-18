@@ -13,7 +13,7 @@ from app.api.dependencies import CurrentUser, Database, Member
 from app.api.metadata import adapter_http_error
 from app.api.prowlarr import resolve as resolve_prowlarr
 from app.api.source_artifacts import SourceArtifactView, artifact_view
-from app.db.models import Operation, SourceConnection, SourceResult
+from app.db.models import AcquisitionIntent, Operation, SourceConnection, SourceResult
 from app.domain.book_sources import SearchInput, accessible_work, checked, refresh_status, start
 from app.domain.operations import transaction_lock
 from app.domain.release_profiles import (
@@ -22,6 +22,8 @@ from app.domain.release_profiles import (
     assess_release,
     ranking_key,
 )
+from app.domain.request_constraints import constrained_preferences
+from app.domain.request_preferences import owned_request
 from app.domain.source_artifacts import resolve_mam
 
 router = APIRouter(tags=["book-sources"])
@@ -48,6 +50,7 @@ class RankedReleaseView(BaseModel):
 class BookSearchView(BaseModel):
     id: UUID
     work_id: UUID
+    request_id: UUID | None = None
     query: str
     medium: str
     offset: int
@@ -83,6 +86,13 @@ async def view(db, user, operation_id):
                     worker.pop("token", None)
     refresh_status(operation, payload)
     profile = ProfileSnapshot.model_validate(payload["profile"])
+    preferences = profile.preferences
+    request_id = payload.get("command", {}).get("request_id")
+    if request_id:
+        intent = await db.get(AcquisitionIntent, UUID(request_id))
+        if not intent or intent.owner_id != user.id:
+            raise HTTPException(404, "Request not found")
+        preferences = constrained_preferences(preferences, intent.specification)
     connections = {s.key: s for s in await db.scalars(select(SourceConnection))}
     rows = list(
         await db.scalars(
@@ -101,9 +111,7 @@ async def view(db, user, operation_id):
             RankedReleaseView(
                 id=row.id,
                 release=release,
-                assessment=assess_release(
-                    release, payload["work"], profile.preferences, payload["medium"]
-                ),
+                assessment=assess_release(release, payload["work"], preferences, payload["medium"]),
                 expires_at=row.expires_at,
                 current_connection=bool(
                     not changed
@@ -114,10 +122,11 @@ async def view(db, user, operation_id):
                 ),
             )
         )
-    ranked.sort(key=lambda item: ranking_key(item.release, item.assessment, profile.preferences))
+    ranked.sort(key=lambda item: ranking_key(item.release, item.assessment, preferences))
     response = BookSearchView(
         id=operation.id,
         work_id=payload["work"]["id"],
+        request_id=payload.get("command", {}).get("request_id"),
         query=payload["query"],
         medium=payload["medium"],
         offset=payload["offset"],
@@ -149,14 +158,19 @@ async def begin(
 
 
 @router.get("/catalog/works/{work_id}/source-searches/latest", response_model=BookSearchView | None)
-async def latest(work_id: UUID, user: CurrentUser, db: Database):
+async def latest(work_id: UUID, user: CurrentUser, db: Database, request_id: UUID | None = None):
     work = await accessible_work(db, user, work_id)
+    filters = []
+    if request_id:
+        await owned_request(db, user, request_id, work.id)
+        filters.append(Operation.payload["command"]["request_id"].astext == str(request_id))
     operation = await db.scalar(
         select(Operation)
         .where(
             Operation.owner_id == user.id,
             Operation.kind == "sources.search",
             Operation.payload["work"]["id"].astext == str(work.id),
+            *filters,
         )
         .order_by(Operation.created_at.desc(), Operation.id)
         .limit(1)

@@ -207,7 +207,11 @@ function BookDetailContent({
       </nav>
       {showSources ? (
         <Suspense fallback={<Loading />}>
-          <BookSources work={work} canAcquire={canEdit} />
+          <BookSources
+            key={`${work.id}:${params.get("request") || ""}`}
+            work={work}
+            canAcquire={canEdit}
+          />
         </Suspense>
       ) : (
         <>

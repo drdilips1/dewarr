@@ -31,7 +31,7 @@ from app.main import create_app
 from app.security import hash_password
 from tests.integration.test_acquisition import catalog  # noqa: F401
 from tests.integration.test_acquisition_selections import selection_route  # noqa: F401
-from tests.integration.test_correction_migration import migrate
+from tests.integration.test_correction_migration import legacy_request_policy_fixture, migrate
 from tests.integration.test_download_attempts import downloader, selected, start  # noqa: F401
 
 pytestmark = pytest.mark.integration
@@ -327,6 +327,7 @@ async def test_populated_review_history_blocks_lossy_downgrade(database, reviewe
     assert (await claim(review, await proposal(review))).status_code == 202
     async with database() as db:
         before = await db.scalar(text("SELECT version_num FROM alembic_version"))
+    await legacy_request_policy_fixture(database)
     result = await migrate("downgrade", "0020_repairs")
     assert result.returncode != 0 and "Capacity history requires" in result.stderr
     async with database() as db:

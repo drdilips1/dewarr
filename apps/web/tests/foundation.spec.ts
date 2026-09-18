@@ -1,4 +1,13 @@
 import { expect, test } from "@playwright/test";
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+
+test.beforeEach(() => {
+  execFileSync("uv", ["run", "python", "scripts/e2e_auth_budget.py"], {
+    cwd: fileURLToPath(new URL("../../../", import.meta.url)),
+    stdio: "pipe",
+  });
+});
 
 test("setup, catalog, private list and durable worker are usable together", async ({
   page,
@@ -1233,6 +1242,167 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     ),
   ).toBe(true);
   expect(errors).toEqual([]);
+});
+
+test("list and request preferences survive previews, saving and source reload", async ({
+  page,
+}, testInfo) => {
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Sign out", exact: true }),
+  ).toBeVisible();
+  const session = await (await page.request.get("/api/auth/me")).json();
+  const headers = {
+    Origin: "http://127.0.0.1:8001",
+    "X-CSRF-Token": session.csrf_token,
+  };
+  const created = await page.request.post("/api/catalog/works", {
+    headers,
+    data: { title: "Preference journey", authors: ["Fixture Author"] },
+  });
+  expect(created.status()).toBe(201);
+  const work = await created.json();
+  const list = await page.request.post("/api/lists", {
+    headers,
+    data: { name: "Preference shelf" },
+  });
+  expect(list.status()).toBe(201);
+  const listId = (await list.json()).id;
+  expect(
+    (
+      await page.request.post(`/api/lists/${listId}/entries`, {
+        headers,
+        data: { work_id: work.id },
+      })
+    ).status(),
+  ).toBe(204);
+  await page.goto(`/lists/${listId}`);
+  await page
+    .getByRole("button", { name: "Acquisition policy", exact: true })
+    .click();
+  const policy = page.getByRole("region", {
+    name: "List acquisition policy",
+    exact: true,
+  });
+  await policy.getByLabel("Acquisition mode").selectOption("manual");
+  await policy.getByLabel("Desired media").selectOption("ebook");
+  await policy.getByText("List download overrides", { exact: true }).click();
+  await policy
+    .getByRole("button", {
+      name: "Move seeders up in Ranking priorities",
+      exact: true,
+    })
+    .click();
+  await policy
+    .getByText("Formats and transfer limits", { exact: true })
+    .click();
+  await policy
+    .getByRole("button", {
+      name: "Move pdf up in Ebook format preference",
+      exact: true,
+    })
+    .click();
+  await policy
+    .getByRole("button", { name: "Preview list policy", exact: true })
+    .click();
+  await policy
+    .getByRole("button", { name: "Save list mode", exact: true })
+    .click();
+  await expect(policy.getByRole("status")).toContainText("Manual");
+  await page
+    .getByRole("button", { name: "Request books", exact: true })
+    .click();
+  const batch = page.getByRole("region", {
+    name: "List wanted media",
+    exact: true,
+  });
+  await batch
+    .getByRole("button", { name: "Select this page", exact: true })
+    .click();
+  await expect(
+    batch.getByRole("combobox", { name: "Media to request", exact: true }),
+  ).toHaveValue("ebook");
+  await batch
+    .getByText("Download preferences for this request", { exact: true })
+    .click();
+  await batch.getByText("Formats and transfer limits", { exact: true }).click();
+  const formats = batch.getByRole("group", {
+    name: "Ebook format preference",
+    exact: true,
+  });
+  await expect(formats.getByRole("listitem").first()).toContainText("pdf");
+  await batch
+    .getByRole("combobox", { name: "Request download profile", exact: true })
+    .selectOption("");
+  await expect(formats.getByRole("listitem").first()).toContainText("pdf");
+  await expect(
+    batch.getByText("Inherited · List override").first(),
+  ).toBeVisible();
+  await batch
+    .getByRole("button", {
+      name: "Move epub up in Ebook format preference",
+      exact: true,
+    })
+    .click();
+  await batch
+    .getByRole("button", { name: "Preview wanted media", exact: true })
+    .click();
+  await batch
+    .getByText("Effective download preferences", { exact: true })
+    .click();
+  await expect(batch).toContainText("Request override");
+  await expect(batch).toContainText("List override");
+  await batch
+    .getByRole("button", { name: "Save wanted media", exact: true })
+    .click();
+  await expect(batch.getByRole("status")).toContainText(
+    "Saved wanted media for 1 book",
+    { timeout: 20_000 },
+  );
+  const requests = await (
+    await page.request.get(`/api/requests?work_id=${work.id}`)
+  ).json();
+  const wanted = requests.items[0];
+  expect(wanted.release_policy.preferences.ebook_formats[0]).toBe("epub");
+  expect(wanted.release_policy.origins.ebook_formats).toBe("Request override");
+  expect(wanted.release_policy.origins.criteria).toBe("List override");
+  await page.goto(`/books/${work.id}`);
+  await page
+    .getByRole("region", { name: "Wanted media", exact: true })
+    .getByRole("link", { name: "Choose a source release", exact: true })
+    .click();
+  const url = `/api/catalog/works/${work.id}/source-searches/latest?request_id=${wanted.id}`;
+  await expect
+    .poll(async () => {
+      const value = await (await page.request.get(url)).json();
+      return value?.request_id;
+    })
+    .toBe(wanted.id);
+  const search = await (await page.request.get(url)).json();
+  expect(search.profile).toEqual(wanted.release_policy);
+  await page.reload();
+  await expect(
+    page.getByRole("region", { name: "Book download sources", exact: true }),
+  ).toBeVisible();
+  const reloaded = await (await page.request.get(url)).json();
+  expect(reloaded.id).toBe(search.id);
+  expect(reloaded.profile).toEqual(search.profile);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("request-preferences-mobile.png"),
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });
 
 test("administrator review queue retries a command and shows its assigned inspection", async ({

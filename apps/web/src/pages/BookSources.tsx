@@ -26,7 +26,18 @@ export default function BookSources({
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const initial = useRef(false);
   const key = useRef(crypto.randomUUID());
-  const queryKey = ["book-sources", work.id];
+  const requestId = params.get("request");
+  const queryKey = ["book-sources", work.id, requestId];
+  const request = useQuery({
+    queryKey: ["source-request", requestId],
+    enabled: !!requestId,
+    queryFn: async () =>
+      result(
+        await api.GET("/api/requests/{intent_id}", {
+          params: { path: { intent_id: requestId! } },
+        }),
+      ),
+  });
   const profiles = useQuery({
     queryKey: ["release-profiles"],
     queryFn: async () => result(await api.GET("/api/acquisition/profiles")),
@@ -36,7 +47,10 @@ export default function BookSources({
     queryFn: async () =>
       result(
         await api.GET("/api/catalog/works/{work_id}/source-searches/latest", {
-          params: { path: { work_id: work.id } },
+          params: {
+            path: { work_id: work.id },
+            query: { request_id: requestId || undefined },
+          },
         }),
       ),
     refetchInterval: (query) =>
@@ -46,7 +60,12 @@ export default function BookSources({
   });
   const chosen =
     profiles.data?.find(
-      (p) => (p.id || "") === (selectedId ?? search.data?.profile.id ?? ""),
+      (p) =>
+        (p.id || "") ===
+        (selectedId ??
+          (request.data?.release_policy
+            ? request.data.release_policy.id || ""
+            : (search.data?.profile.id ?? ""))),
     ) || profiles.data?.[0];
   const begin = useMutation({
     mutationFn: async (offset: number) =>
@@ -58,6 +77,7 @@ export default function BookSources({
           },
           body: {
             q,
+            request_id: requestId,
             medium,
             offset,
             profile_id: chosen?.id,
@@ -72,21 +92,35 @@ export default function BookSources({
     },
   });
   useEffect(() => {
-    if (search.isSuccess && search.data && !initial.current) {
+    if (
+      search.isSuccess &&
+      search.data &&
+      (!requestId || search.data.request_id === requestId) &&
+      !initial.current
+    ) {
       initial.current = true;
       setQ(search.data.query);
       setMedium(search.data.medium);
     }
     if (
       search.isSuccess &&
-      search.data === null &&
+      (search.data === null ||
+        (!!requestId && search.data?.request_id !== requestId)) &&
+      (!requestId || request.isSuccess) &&
       profiles.isSuccess &&
       !initial.current
     ) {
       initial.current = true;
       begin.mutate(0);
     }
-  }, [search.isSuccess, search.data, profiles.isSuccess, begin]);
+  }, [
+    search.isSuccess,
+    search.data,
+    profiles.isSuccess,
+    requestId,
+    request.isSuccess,
+    begin,
+  ]);
   const inspect = useMutation({
     mutationFn: async (id: string) =>
       result(
@@ -96,7 +130,10 @@ export default function BookSources({
         ),
       ),
     onSuccess: (artifact) => {
-      const context = new URLSearchParams({ work: work.id });
+      const context = new URLSearchParams({
+        work: work.id,
+        search: search.data!.id,
+      });
       if (search.data?.profile.id) {
         context.set("profile", search.data.profile.id);
         context.set(
@@ -107,7 +144,8 @@ export default function BookSources({
       if (search.data?.profile.effective_revision)
         context.set(
           "profile_effective_revision",
-          search.data.profile.effective_revision,
+          search.data.profile.base_effective_revision ||
+            search.data.profile.effective_revision,
         );
       for (const field of ["request", "slot"])
         if (params.get(field)) context.set(field, params.get(field)!);
@@ -118,7 +156,8 @@ export default function BookSources({
     begin.isPending ||
     inspect.isPending ||
     (search.data && search.data.status !== "completed");
-  const data = search.data;
+  const data =
+    !requestId || search.data?.request_id === requestId ? search.data : null;
   return (
     <section aria-label="Book download sources">
       <h2>Download sources</h2>
@@ -135,7 +174,13 @@ export default function BookSources({
         </Link>
       </div>
       <Notice
-        error={search.error || profiles.error || begin.error || inspect.error}
+        error={
+          search.error ||
+          profiles.error ||
+          request.error ||
+          begin.error ||
+          inspect.error
+        }
       />
       <form
         className="panel editor"
@@ -180,7 +225,12 @@ export default function BookSources({
         </label>
         <button
           className="primary"
-          disabled={!!busy || !profiles.data || !q.trim()}
+          disabled={
+            !!busy ||
+            !profiles.data ||
+            (!!requestId && !request.isSuccess) ||
+            !q.trim()
+          }
         >
           Refresh source results
         </button>

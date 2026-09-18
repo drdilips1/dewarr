@@ -136,6 +136,7 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
             intent_id: selected!.intent.id,
             slot: selected!.target.slot as "audio" | "ebook" | "either",
             artifact_id: artifact.id,
+            search_id: params.get("search") || undefined,
             downloader_id: downloader!.id,
             downloader_generation: downloader!.generation,
             destination_id: destination!.id,

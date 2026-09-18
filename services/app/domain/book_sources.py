@@ -16,7 +16,8 @@ from app.db.models import Operation, SourceConnection, SourceResult, User, Work
 from app.db.session import session_factory
 from app.domain.operations import transaction_lock
 from app.domain.prowlarr_network import prowlarr_call
-from app.domain.release_profiles import profile_snapshot
+from app.domain.release_profiles import PreferenceOverrides
+from app.domain.request_preferences import for_intent, owned_request
 from app.domain.source_network import source_call
 from app.domain.visibility import visible_work
 from app.domain.work_graph import canonical_work
@@ -34,6 +35,10 @@ class SearchInput(BaseModel):
     profile_generation: int | None = Field(default=None, ge=0)
     profile_effective_revision: str | None = Field(
         default=None, pattern=r"^[a-f0-9]{64}$", exclude_if=lambda value: value is None
+    )
+    request_id: UUID | None = Field(default=None, exclude_if=lambda value: value is None)
+    preference_overrides: PreferenceOverrides = Field(
+        default_factory=PreferenceOverrides, exclude_if=lambda value: not value.model_fields_set
     )
     offset: int = Field(default=0, ge=0, le=10000)
 
@@ -63,9 +68,8 @@ async def start(db, user, work_id, body, key):
         if existing.kind != "sources.search" or existing.payload.get("command") != command:
             raise HTTPException(409, "This search command was already used for different options")
         return existing
-    profile = await profile_snapshot(
-        db, user.id, body.profile_id, body.profile_generation, body.profile_effective_revision
-    )
+    intent = await owned_request(db, user, body.request_id, work.id) if body.request_id else None
+    profile = await for_intent(db, user, intent, body)
     query = (body.q if body.q is not None else work.title[:300]).strip()
     if not query:
         raise HTTPException(422, "Enter a source-search query")

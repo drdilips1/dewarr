@@ -710,9 +710,9 @@ Owner labels describe responsibilities, not assumed staffing. One developer may 
 
 ### Next increment in this workspace
 
-The bounded single-book list-to-library path, membership re-addition/merge lifecycle and release-profile defaults now have implementation evidence in [Implementation Status](docs/IMPLEMENTATION-STATUS.md). Those subsets do not close S06/S07. Continue **complete policy inheritance and acquisition scope**, within S06-04 and S07-04–S07-06, using the existing shared resolver and acquisition/import services.
+The bounded single-book list-to-library path, membership re-addition/merge lifecycle and release-profile defaults have implementation evidence in [Implementation Status](docs/IMPLEMENTATION-STATUS.md). Those subsets do not close S06/S07. Continue **complete policy inheritance and acquisition scope**, within S06-04 and S07-04–S07-06, using the existing shared resolver and acquisition/import services.
 
-1. Extend field-level precedence through request overrides and list overrides, retaining selected-profile, personal and installation defaults. Cover ordinary ranking preferences as well as language, desired media, recording/abridgment, series scope and eligible destinations; administrator restrictions remain independent.
+1. Complete field-level precedence for language, desired media, recording/abridgment, series scope and eligible destinations, retaining independent administrator restrictions. Request/list overrides for the six release-preference fields now have a durable resolver and snapshots; qualify those changes against current evidence, then extend the same explicit inheritance model to the remaining scope fields.
 2. Show effective values and origins before manual and automatic actions. Preserve omitted versus explicit values; reject stale previews and avoid silently changing unrelated fields when one preference is edited.
 3. Reuse list future-only/backfill/catch-up semantics and shared request reasons. Verify overlapping lists and incompatible version requirements, with no second transfer when current frozen evidence can satisfy both requests.
 4. Keep submitted transfers/import manifests immutable. Preview changes to unsatisfied requests, invalidate obsolete selections before dispatch and retain original policy evidence for existing transfers.

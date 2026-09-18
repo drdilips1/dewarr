@@ -100,6 +100,9 @@ class ProfileSnapshot(BaseModel):
     overrides: PreferenceOverrides = Field(default_factory=PreferenceOverrides)
     origins: dict[str, str] = Field(default_factory=dict)
     effective_revision: str | None = None
+    base_effective_revision: str | None = None
+    list_overrides: PreferenceOverrides | None = None
+    request_overrides: PreferenceOverrides | None = None
 
 
 def resolve_preferences(layers):
@@ -170,6 +173,49 @@ async def profile_snapshot(db, user_id, identifier=None, generation=None, expect
         overrides=PreferenceOverrides.model_validate(row.preferences if row else {}),
         origins=origins,
         effective_revision=revision,
+        base_effective_revision=revision,
+    )
+
+
+def overlay_profile(profile, *, list_overrides=None, request_overrides=None):
+    values = profile.preferences.model_dump()
+    origins = dict(profile.origins)
+    for label, overrides in [
+        ("List override", list_overrides),
+        ("Request override", request_overrides),
+    ]:
+        if overrides is not None:
+            sparse = PreferenceOverrides.model_validate(overrides).model_dump()
+            values.update(sparse)
+            origins.update(dict.fromkeys(sparse, label))
+    return profile.model_copy(
+        update={
+            "preferences": ReleasePreferences.model_validate(values),
+            "origins": origins,
+            "list_overrides": PreferenceOverrides.model_validate(list_overrides)
+            if list_overrides
+            else None,
+            "request_overrides": PreferenceOverrides.model_validate(request_overrides)
+            if request_overrides
+            else None,
+            "base_effective_revision": profile.base_effective_revision
+            or profile.effective_revision,
+            "effective_revision": fingerprint(
+                {
+                    "id": str(profile.id) if profile.id else None,
+                    "generation": profile.generation,
+                    "preferences": values,
+                    "origins": origins,
+                }
+            ),
+        }
+    )
+
+
+async def refresh_profile(db, user_id, snapshot):
+    base = await profile_snapshot(db, user_id, snapshot.id, snapshot.generation)
+    return overlay_profile(
+        base, list_overrides=snapshot.list_overrides, request_overrides=snapshot.request_overrides
     )
 
 

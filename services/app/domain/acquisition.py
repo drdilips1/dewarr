@@ -581,7 +581,19 @@ async def evaluate(db, user, intent):
     await retire_satisfied(db, intent.work_id)
 
 
-async def submit(db, user, work_id, spec, reason, key, *, policy_reference=None):
+async def submit(
+    db,
+    user,
+    work_id,
+    spec,
+    reason,
+    key,
+    *,
+    policy_reference=None,
+    preference_choice=None,
+    frozen_preferences=None,
+    expected_preference_revision=None,
+):
     if get_settings().recovery_mode:
         raise HTTPException(409, "Request evaluation is paused for recovery")
     payload = {
@@ -589,6 +601,12 @@ async def submit(db, user, work_id, spec, reason, key, *, policy_reference=None)
         "specification": spec.model_dump(mode="json"),
         "reason": reason.model_dump(mode="json"),
     }
+    if preference_choice is not None:
+        payload["release_preferences"] = preference_choice.model_dump(
+            mode="json", exclude_unset=True
+        )
+    if expected_preference_revision is not None:
+        payload["expected_preference_revision"] = expected_preference_revision
     if policy_reference is not None:
         if not reason.list_id:
             raise ValueError("Policy requests require a list")
@@ -622,7 +640,21 @@ async def submit(db, user, work_id, spec, reason, key, *, policy_reference=None)
     if not user.active or user.role == "viewer":
         raise HTTPException(403, "Your account no longer has permission to create requests")
     await validate_request(db, user, work_id, spec, reason)
-    fingerprint = revision(spec.model_dump(mode="json"))
+    from app.domain.request_preferences import policy_identity, resolve
+
+    spec, profile = await resolve(
+        db,
+        user,
+        spec,
+        reason,
+        preference_choice,
+        frozen=frozen_preferences,
+        expected=expected_preference_revision,
+    )
+    policy_key = policy_identity(profile)
+    fingerprint = revision(
+        {**spec.model_dump(mode="json"), **({"release_policy": policy_key} if policy_key else {})}
+    )
     intent = await db.scalar(
         select(AcquisitionIntent)
         .where(
@@ -639,6 +671,7 @@ async def submit(db, user, work_id, spec, reason, key, *, policy_reference=None)
             work_id=work_id,
             fingerprint=fingerprint,
             specification=spec.model_dump(mode="json"),
+            release_policy=profile.model_dump(mode="json"),
         )
         db.add(intent)
         await db.flush()
@@ -657,6 +690,7 @@ async def submit(db, user, work_id, spec, reason, key, *, policy_reference=None)
         )
         db.add(record)
     record.active = True
+    record.release_policy = profile.model_dump(mode="json")
     await db.flush()
     await evaluate(db, user, intent)
     operation = Operation(

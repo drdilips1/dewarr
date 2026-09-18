@@ -58,7 +58,9 @@ def configuration_input(config):
         },
         profile_id=config["profile"]["id"],
         profile_generation=config["profile"]["generation"],
-        profile_effective_revision=config["profile"].get("effective_revision"),
+        profile_effective_revision=config["profile"].get("base_effective_revision")
+        or config["profile"].get("effective_revision"),
+        preference_overrides=config["profile"].get("list_overrides") or {},
         downloader_id=config["downloader_id"],
         downloader_generation=config["downloader_generation"],
         routes=config["routes"],
@@ -279,9 +281,11 @@ async def advance_target(db, user, policy, book, target, progress, now):
         book.work_id,
         book_sources.SearchInput(
             medium=medium,
+            request_id=book.intent_id,
             profile_id=config["profile"]["id"],
             profile_generation=config["profile"]["generation"],
-            profile_effective_revision=config["profile"].get("effective_revision"),
+            profile_effective_revision=config["profile"].get("base_effective_revision")
+            or config["profile"].get("effective_revision"),
         ),
         f"list-search:{cycle}:{progress['round']}",
     )
@@ -302,6 +306,7 @@ async def advance_book(db, user, policy, book, now):
             RequestReason(list_id=policy.list_id),
             f"list-request:{book.id}:{policy.generation}:{book.progress.get('activation', 1)}",
             policy_reference=list_policies.reason_reference(policy),
+            frozen_preferences=policy.configuration["profile"],
         )
         book.intent_id = intent.id
         await db.flush()

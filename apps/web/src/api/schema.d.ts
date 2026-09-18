@@ -2428,6 +2428,7 @@ export interface components {
       /** Work Ids */
       work_ids: string[];
       specification: components["schemas"]["RequestSpec"];
+      release_preferences?: components["schemas"]["PreferenceChoice"] | null;
     };
     /** BatchPage */
     BatchPage: {
@@ -2497,6 +2498,7 @@ export interface components {
       status: string;
       /** Message */
       message: string;
+      release_policy?: components["schemas"]["ProfileSnapshot"] | null;
       specification: components["schemas"]["RequestSpec"];
       /**
        * Expires At
@@ -2575,6 +2577,8 @@ export interface components {
        * Format: uuid
        */
       work_id: string;
+      /** Request Id */
+      request_id?: string | null;
       /** Query */
       query: string;
       /** Medium */
@@ -3665,6 +3669,7 @@ export interface components {
       profile_generation?: number | null;
       /** Profile Effective Revision */
       profile_effective_revision?: string | null;
+      preference_overrides?: components["schemas"]["PreferenceOverrides"];
       /** Downloader Id */
       downloader_id?: string | null;
       /** Downloader Generation */
@@ -4438,6 +4443,16 @@ export interface components {
       /** Message */
       message: string;
     };
+    /** PreferenceChoice */
+    PreferenceChoice: {
+      /** Profile Id */
+      profile_id?: string | null;
+      /** Profile Generation */
+      profile_generation?: number | null;
+      /** Profile Effective Revision */
+      profile_effective_revision?: string | null;
+      overrides?: components["schemas"]["PreferenceOverrides"];
+    };
     /**
      * PreferenceOverrides
      * @description Omitted fields inherit; explicit empty block lists and null limits override.
@@ -4471,6 +4486,7 @@ export interface components {
        * @default false
        */
       download_available: boolean;
+      release_policy?: components["schemas"]["ProfileSnapshot"] | null;
     };
     /** ProbeInput */
     ProbeInput: {
@@ -4515,6 +4531,10 @@ export interface components {
       };
       /** Effective Revision */
       effective_revision?: string | null;
+      /** Base Effective Revision */
+      base_effective_revision?: string | null;
+      list_overrides?: components["schemas"]["PreferenceOverrides"] | null;
+      request_overrides?: components["schemas"]["PreferenceOverrides"] | null;
     };
     /** ProwlarrConnectionInput */
     ProwlarrConnectionInput: {
@@ -4727,6 +4747,7 @@ export interface components {
       active: boolean;
       /** List Id */
       list_id: string | null;
+      release_policy?: components["schemas"]["ProfileSnapshot"] | null;
     };
     /** ReleaseAssessment */
     ReleaseAssessment: {
@@ -4858,6 +4879,9 @@ export interface components {
       work_id: string;
       specification: components["schemas"]["RequestSpec"];
       reason?: components["schemas"]["RequestReason"];
+      release_preferences?: components["schemas"]["PreferenceChoice"] | null;
+      /** Expected Preference Revision */
+      expected_preference_revision?: string | null;
     };
     /** RequestPage */
     RequestPage: {
@@ -4925,6 +4949,7 @@ export interface components {
       reasons: components["schemas"]["ReasonView"][];
       /** Description */
       description: string;
+      release_policy?: components["schemas"]["ProfileSnapshot"] | null;
     };
     /** ReviewInput */
     ReviewInput: {
@@ -5049,6 +5074,9 @@ export interface components {
       profile_generation?: number | null;
       /** Profile Effective Revision */
       profile_effective_revision?: string | null;
+      /** Request Id */
+      request_id?: string | null;
+      preference_overrides?: components["schemas"]["PreferenceOverrides"];
       /**
        * Offset
        * @default 0
@@ -5135,6 +5163,8 @@ export interface components {
        * Format: uuid
        */
       confirmed_work_id: string;
+      /** Search Id */
+      search_id?: string | null;
       /** Profile Id */
       profile_id?: string | null;
       /** Profile Generation */
@@ -9459,7 +9489,9 @@ export interface operations {
   };
   latest_api_catalog_works__work_id__source_searches_latest_get: {
     parameters: {
-      query?: never;
+      query?: {
+        request_id?: string | null;
+      };
       header?: never;
       path: {
         work_id: string;

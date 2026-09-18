@@ -329,7 +329,7 @@ async def test_legacy_external_attempt_is_backfilled_and_blocks_new_storage_unti
     client, database, selected, selection_route
 ):
     from app.db.session import get_engine
-    from tests.integration.test_correction_migration import migrate
+    from tests.integration.test_correction_migration import legacy_request_policy_fixture, migrate
 
     first = UUID((await start(client, selected)).json()["id"])
     second_selection = await another_selection(client, database, selection_route)
@@ -341,6 +341,7 @@ async def test_legacy_external_attempt_is_backfilled_and_blocks_new_storage_unti
         await db.execute(delete(DownloadCapacity))
     await get_engine().dispose()
     try:
+        await legacy_request_policy_fixture(database)
         previous = await migrate("downgrade", "0027_hardcover_lists")
         assert previous.returncode == 0, previous.stderr
         upgraded = await migrate("upgrade", "head")
@@ -353,6 +354,7 @@ async def test_legacy_external_attempt_is_backfilled_and_blocks_new_storage_unti
         assert await admit(database, str(first)) == "reserved"
         assert await admit(database, second) == "reserved"
         await get_engine().dispose()
+        await legacy_request_policy_fixture(database)
         rejected = await migrate("downgrade", "0027_hardcover_lists")
         assert rejected.returncode != 0 and "Capacity history" in rejected.stderr
     finally:

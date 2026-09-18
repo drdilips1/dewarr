@@ -30,6 +30,7 @@ from app.domain.acquisition import (
     validate_request,
 )
 from app.domain.operations import transaction_lock
+from app.domain.request_preferences import PreferenceChoice, resolve
 from app.domain.visibility import visible_work
 from app.domain.work_graph import acquisition_lock, canonical_map, graph_lock
 from app.jobs.queue import enqueue
@@ -42,6 +43,7 @@ class BatchInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
     work_ids: list[UUID] = Field(min_length=1, max_length=MAX_BOOKS)
     specification: RequestSpec
+    release_preferences: PreferenceChoice | None = None
 
     @model_validator(mode="after")
     def book_specific_versions(self):
@@ -111,6 +113,10 @@ async def preview(db, user, list_id, body, key):
         "work_ids": sorted(map(str, body.work_ids)),
         "specification": body.specification.model_dump(mode="json"),
     }
+    if body.release_preferences is not None:
+        command["release_preferences"] = body.release_preferences.model_dump(
+            mode="json", exclude_unset=True
+        )
     existing = await db.scalar(
         select(Operation).where(Operation.owner_id == user.id, Operation.idempotency_key == key)
     )
@@ -118,13 +124,14 @@ async def preview(db, user, list_id, body, key):
         if existing.kind != KIND or existing.payload["command"] != command:
             raise HTTPException(409, "This preview key was already used for different options")
         return existing
+    specification, profile = await resolve(
+        db, user, body.specification, RequestReason(list_id=list_id), body.release_preferences
+    )
     await graph_lock(db)
     works = await selected_works(db, user, list_id, body.work_ids)
     records = []
     for work in works:
-        await validate_request(
-            db, user, work.id, body.specification, RequestReason(list_id=list_id)
-        )
+        await validate_request(db, user, work.id, specification, RequestReason(list_id=list_id))
         records.append(identity(work))
     # Only abandoned, unsubmitted previews expire; accepted receipts are durable.
     old = list(
@@ -148,6 +155,8 @@ async def preview(db, user, list_id, body, key):
         payload={
             "command": command,
             "records": records,
+            "effective_specification": specification.model_dump(mode="json"),
+            "release_policy": profile.model_dump(mode="json"),
             "expires_at": (datetime.now(UTC) + timedelta(hours=24)).isoformat(),
         },
     )
@@ -181,6 +190,17 @@ async def validate_plan(db, user, operation):
     if [identity(w) for w in works] != operation.payload["records"]:
         raise HTTPException(409, "Book identity changed since preview; create a new preview")
     spec = RequestSpec.model_validate(command["specification"])
+    if operation.payload.get("release_policy"):
+        spec, _ = await resolve(
+            db,
+            user,
+            spec,
+            RequestReason(list_id=UUID(command["list_id"])),
+            PreferenceChoice.model_validate(command["release_preferences"])
+            if command.get("release_preferences") is not None
+            else None,
+            expected=operation.payload["release_policy"]["effective_revision"],
+        )
     for work in works:
         await validate_request(
             db, user, work.id, spec, RequestReason(list_id=UUID(command["list_id"]))
@@ -261,7 +281,10 @@ async def pending_targets(db, user, work_id, spec, outcomes):
 async def status_records(db, user, operation):
     """Current, owner-visible projection, distinct from the immutable completion receipt."""
     records = []
-    spec = RequestSpec.model_validate(operation.payload["command"]["specification"])
+    spec = RequestSpec.model_validate(
+        operation.payload.get("effective_specification")
+        or operation.payload["command"]["specification"]
+    )
     for snapshot in operation.payload["records"]:
         work_id = UUID(snapshot["work_id"])
         work = await db.scalar(select(Work).where(Work.id == work_id, visible_work(user)))
@@ -345,6 +368,7 @@ async def run(operation_id):
                 spec,
                 RequestReason(list_id=UUID(command["list_id"])),
                 f"list-request:{operation.id}:{work.id}",
+                frozen_preferences=operation.payload.get("release_policy"),
             )
             receipts.append({"work_id": str(work.id), "request_id": str(intent.id)})
         operation.payload = {**operation.payload, "receipt": receipts}

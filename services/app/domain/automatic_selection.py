@@ -42,8 +42,8 @@ from app.domain.release_profiles import (
     ProfileSnapshot,
     assess_release,
     normalized,
-    profile_snapshot,
     ranking_key,
+    refresh_profile,
     same_profile,
 )
 from app.domain.request_constraints import constrained_preferences
@@ -117,8 +117,17 @@ async def context(db, user_id, body):
         raise HTTPException(409, "Wait for the source search to finish")
     if datetime.fromisoformat(search.payload["expires_at"]) <= datetime.now(UTC):
         raise HTTPException(409, "Source results expired; refresh the source search")
+    bound_request = search.payload.get("command", {}).get("request_id")
+    if (
+        intent.release_policy
+        and any(intent.release_policy.get(key) for key in ("list_overrides", "request_overrides"))
+        and bound_request != str(intent.id)
+    ):
+        raise HTTPException(409, "Refresh sources for this request’s preferences")
+    if bound_request and bound_request != str(intent.id):
+        raise HTTPException(409, "Source search belongs to a different request")
     profile = ProfileSnapshot.model_validate(search.payload["profile"])
-    current = await profile_snapshot(db, user_id, profile.id, profile.generation)
+    current = await refresh_profile(db, user_id, profile)
     if not same_profile(current, profile):
         raise HTTPException(409, "Download preferences changed; refresh the source search")
     # A matched source/provider identity is required; manually typed titles alone
@@ -624,6 +633,7 @@ async def run(identifier):
                     user,
                     SelectionInput(
                         intent_id=body.intent_id,
+                        search_id=body.search_id,
                         slot=body.slot,
                         artifact_id=artifact_id,
                         downloader_id=body.downloader_id,
@@ -633,7 +643,8 @@ async def run(identifier):
                         confirmed_work_id=work.id,
                         profile_id=profile.id,
                         profile_generation=profile.generation,
-                        profile_effective_revision=profile.effective_revision,
+                        profile_effective_revision=profile.base_effective_revision
+                        or profile.effective_revision,
                     ),
                     child_key,
                     automatic_evidence={

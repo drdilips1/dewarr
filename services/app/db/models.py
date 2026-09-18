@@ -484,6 +484,7 @@ class AcquisitionIntent(Identity, Base):
     work_id: Mapped[UUID] = mapped_column(ForeignKey("works.id"), index=True)
     fingerprint: Mapped[str] = mapped_column(String(64))
     specification: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    release_policy: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
 
 
 class AcquisitionReason(Identity, Base):
@@ -496,6 +497,7 @@ class AcquisitionReason(Identity, Base):
     kind: Mapped[str] = mapped_column(String(20))
     reference: Mapped[str] = mapped_column(String(200))
     active: Mapped[bool] = mapped_column(Boolean, default=True)
+    release_policy: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
     list_id: Mapped[UUID | None] = mapped_column(
         ForeignKey("book_lists.id", ondelete="SET NULL"), index=True
     )

@@ -1,6 +1,6 @@
 # Download defaults and profile inheritance
 
-Release preferences resolve per field: a saved profile's explicit values override personal defaults, which override installation defaults, which override the built-in Balanced values. Leaving a field unset inherits it. Editing one field in the UI records only that override; “Use inherited …” removes it again. Existing profiles with complete stored preferences remain explicit and keep their previous values.
+Release preferences resolve per field: request overrides → list overrides → selected profile → personal defaults → installation defaults → built-in Balanced values. Leaving a field unset inherits it. Editing one field in the UI records only that override; “Use inherited …” removes it again. Existing profiles with complete stored preferences remain explicit and keep their previous values.
 
 This applies to ebook/audio format order, source order, ranking criteria, blocked formats and maximum transfer bytes. Empty format/source preference lists are invalid. An explicit empty blocked-format list clears an inherited preference; an explicit null maximum removes an inherited profile limit. These are ordinary preferences. Independent request restrictions, administrator-approved destinations, permissions and installation capacity limits remain enforced and cannot be relaxed here. Ownership is unchanged.
 
@@ -8,13 +8,23 @@ Open **Personal and installation download defaults** from a book's Sources prefe
 
 ## Acquisition behavior
 
-Source search, reviewed selection and list activation use the same resolver. Their snapshots include effective values, field origins and an effective revision. The browser sends that revision when starting search, selecting an inspected release or previewing a list policy; stale resolved preferences return a conflict instead of silently using new values. Replaying an already accepted idempotent search still returns its original receipt and frozen preferences.
+Request previews, saved requests, manual list batches, source search, reviewed selection and list activation use the same resolver. Their snapshots include effective values, field origins and an effective revision. The browser sends that revision when starting search, selecting an inspected release or previewing a list policy; stale resolved preferences return a conflict instead of silently using new values. Replaying an already accepted idempotent search still returns its original receipt and frozen preferences.
 
 Automatic selection and pre-dispatch authorization compare current effective preferences with the original snapshot. A changed effective policy holds an unsubmitted automatic acquisition. An existing external transfer keeps its original selection and is observed without a replacement download. A changed default used by a standing list requires another activation preview. Existing submitted acquisition/import decisions continue to retain their original snapshots.
 
 A fully explicit profile masks changes to lower-level defaults. Sparse profiles inherit changes only for fields they omit. Older receipts without field origins remain readable; matching compares their actual saved values and profile identity/generation rather than requiring newly added presentation fields.
 
-The current slice does **not** claim the entire FR-20 inheritance contract. Independent request restrictions and list media/routes already have their own policy behavior, but arbitrary request/list ranking overrides and inheritance of language, desired media, narrator, series scope and destination preferences remain unfinished. Those settings must join the same explicit precedence model before S06/S07 acceptance.
+The current slice does **not** claim the entire FR-20 inheritance contract. Independent request restrictions and list media/routes already have their own policy behavior, but inheritance of language, desired media, narrator, series scope and destination preferences remains unfinished. Previewing policy changes for already-unsatisfied requests also remains a separate follow-up. Those settings must join the same explicit precedence model before S06/S07 acceptance.
+
+## Request and list overrides
+
+A list policy has a collapsed **List download overrides** editor. A manual title request or list batch has **Download preferences for this request**, initially set to inherit. Both editors expose the same six release-preference fields, with reset-to-inherited actions. Request preview and saved receipts show effective values and their origins.
+
+Each new acquisition intent and reason keeps its accepted release-policy snapshot. Requests with different effective policies retain separate histories, while compatible targets can still share a transfer. Existing legacy requests remain readable without an invented historical snapshot. Changing defaults does not rewrite accepted history. New searches revalidate the selected base profile and retain the accepted list/request overrides; automatic selection checks current authority before dispatch.
+
+Source searches opened from a wanted request are bound to that request. Polling and reload retrieve that request's latest search, so another search for the same book cannot replace its policy. Selection retains the saved search policy and rejects a search bound to another request. Independent request size/format restrictions remain enforced during ranking and selection, even when an ordinary preference explicitly clears its own limit.
+
+Manual list previews freeze both effective preferences and the resulting request specification. Changing the list's effective preferences before submission requires a new preview. An accepted batch passes the same snapshot to each child request. Automatic lists pass their policy snapshot through the existing search, selection and download workflow.
 
 ## API and storage
 
@@ -24,10 +34,17 @@ The current slice does **not** claim the entire FR-20 inheritance contract. Inde
 | `PUT /api/acquisition/preferences/personal` | Replace own sparse overrides with expected revision |
 | `GET/PUT /api/acquisition/preferences/installation` | Same contract, administrator only |
 | `/api/acquisition/profiles` | Existing profile routes now persist sparse preferences and return their resolved snapshot |
+| `POST /api/requests/preview` and `/api/requests` | Optional `release_preferences` with selected profile and sparse `overrides`; submission accepts `expected_preference_revision` |
+| List policy preview | Optional sparse `preference_overrides` layer |
+| List request preview | Optional `release_preferences`; accepted batch retains the resolved snapshot |
+| Book source searches | Optional `request_id` binds search and latest-result lookup to a private request |
+| Release selection | Optional `search_id` preserves the saved search's effective policy |
 
 Replacing overrides with `{}` restores inheritance. Revision checks include the edited layer's generation and inherited effective values, so stale concurrent edits and an edit made before installation defaults changed are rejected. Profile/search/selection generation checks remain active. No API accepts a target user ID for personal settings.
 
 Migration `0031_acquisition_defaults` adds installation/personal override records. Existing complete profile JSON is not rewritten. Populated defaults block downgrade to avoid dropping preferences; recover from a pre-upgrade backup. Restart API and worker together after migration. No additional service or secret is needed. Older standing-list configurations may request reactivation when their stored snapshot lacks the new resolution evidence; this preserves their authority boundary instead of silently adopting changed defaults.
+
+Migration `0032_request_release_policy` adds nullable policy snapshots to intents and reasons. It does not backfill unknown historical choices. A populated snapshot blocks downgrade; use a pre-upgrade backup rather than discarding acquisition evidence.
 
 ## Evidence boundaries
 

@@ -238,7 +238,7 @@ async def test_recheck_repairs_detached_legacy_target_without_new_dispatch(
 async def test_fulfilled_history_survives_book_merge_and_refuses_lossy_downgrade(
     database, admin, catalog, selected, completed
 ):
-    from tests.integration.test_correction_migration import migrate
+    from tests.integration.test_correction_migration import legacy_request_policy_fixture, migrate
 
     await asset(database, catalog)
     await reconcile(database, catalog["work"])
@@ -255,6 +255,7 @@ async def test_fulfilled_history_survives_book_merge_and_refuses_lossy_downgrade
         assert all(row.active for row in await db.scalars(select(DownloadIdentityClaim)))
     async with database() as db:
         before = await db.scalar(text("SELECT version_num FROM alembic_version"))
+    await legacy_request_policy_fixture(database)
     result = await migrate("downgrade", "0018_attempts")
     assert result.returncode != 0 and "Capacity history requires" in result.stderr
     async with database() as db:

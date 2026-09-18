@@ -2,7 +2,7 @@
 
 This is an early development build. The full [PRD](../PRD.md) remains the target; [Implementation Status](IMPLEMENTATION-STATUS.md) records actual coverage. Do not connect production acquisition automation until the relevant import and recovery gates pass.
 
-Current request contract: back up the database and apply `0029_request_constraints` before restarting API and worker together. [Request restrictions](ACQUISITION-FOUNDATION.md#request-download-restrictions) preserve independent format and whole-transfer size limits across shared acquisitions. Populated new restrictions block lossy downgrade. Default dispatch remains disabled; this migration does not activate list automation.
+Current request contract: back up the database and apply migrations through `0032_request_release_policy` before restarting API and worker together. [Request restrictions](ACQUISITION-FOUNDATION.md#request-download-restrictions) preserve independent format and whole-transfer size limits across shared acquisitions. Populated new restrictions block lossy downgrade. Default dispatch remains disabled; this migration does not activate list automation.
 
 ## Native development
 
@@ -140,3 +140,9 @@ Membership re-addition and canonical merge/undo monitoring reuse `0030_list_poli
 ## Acquisition defaults
 
 Apply `0031_acquisition_defaults` after backing up, then restart API and worker together. It adds sparse personal and installation preferences without rewriting existing complete profiles. The Sources profile editor links to `/download-preferences`; members can edit personal defaults and administrators can also edit installation defaults. Stale effective revisions require a refreshed preview/search. Populated defaults block downgrade. See [Download preferences](DOWNLOAD-PREFERENCES.md) for the boundary between ordinary preferences, request restrictions and remaining inheritance work.
+
+## Request and list preference snapshots
+
+Migration `0032_request_release_policy` records effective release preferences on acquisition intents and individual reasons. Back up before upgrade and restart API and worker at the same revision. Existing requests retain null historical snapshots; no guessed backfill is performed. Once a snapshot is stored, downgrade is refused to prevent loss of acquisition evidence.
+
+List policies and manual request forms expose sparse release overrides. Request-bound source searches retain those layers through selection; polling is scoped to the request. See [Download preferences](DOWNLOAD-PREFERENCES.md) for precedence, stale-preview behavior and the remaining media/language/scope inheritance work. This migration does not enable dispatch or change existing files.
