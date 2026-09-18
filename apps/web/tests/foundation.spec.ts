@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("setup, catalog, private list and durable worker are usable together", async ({
   page,
 }, testInfo) => {
-  test.setTimeout(90_000);
+  test.setTimeout(120_000);
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
@@ -1081,6 +1081,49 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await expect(
     downloaderForm.getByLabel("qBittorrent password", { exact: true }),
   ).toHaveValue("");
+  await downloaderForm
+    .getByRole("button", { name: "Save downloader", exact: true })
+    .click();
+  await downloaderCard
+    .getByRole("button", { name: "Test saved connection", exact: true })
+    .click();
+  await expect(downloaderCard).toContainText("connected");
+  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  await downloadActivity
+    .getByRole("button", { name: "Review updated connections" })
+    .click();
+  const repairReview = downloadActivity.getByRole("region", {
+    name: "Review updated download connections",
+  });
+  await expect(repairReview).toContainText("updated qBittorrent connection");
+  await page.screenshot({
+    path: testInfo.outputPath("download-repair-desktop.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("download-repair-mobile.png"),
+    fullPage: true,
+  });
+  await repairReview
+    .getByRole("button", { name: "Confirm and check existing transfer" })
+    .click();
+  await expect(downloadActivity).toContainText(
+    "Updated connections verified against the existing transfer",
+  );
+  await expect(downloadActivity).toContainText("25% downloaded");
+  await page.reload();
+  await expect(downloadActivity).toContainText("no download was added");
+  await page.getByRole("link", { name: "Connections", exact: true }).click();
+  await page.getByRole("link", { name: "Downloaders", exact: true }).click();
+  await downloaderCard
+    .getByRole("button", { name: "Edit downloader", exact: true })
+    .click();
   await downloaderForm
     .getByLabel("Enable connection", { exact: true })
     .uncheck();

@@ -253,9 +253,9 @@ async def test_fulfilled_history_survives_book_merge_and_refuses_lossy_downgrade
     async with database() as db:
         assert await db.scalar(select(DownloadFulfillment.id))
         assert all(row.active for row in await db.scalars(select(DownloadIdentityClaim)))
+    async with database() as db:
+        before = await db.scalar(text("SELECT version_num FROM alembic_version"))
     result = await migrate("downgrade", "0018_attempts")
     assert result.returncode != 0 and "Fulfillment history requires" in result.stderr
     async with database() as db:
-        assert (
-            await db.scalar(text("SELECT version_num FROM alembic_version")) == "0019_fulfillment"
-        )
+        assert await db.scalar(text("SELECT version_num FROM alembic_version")) == before

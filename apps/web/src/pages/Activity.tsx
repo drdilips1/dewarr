@@ -98,11 +98,13 @@ export default function Activity({
                         ? "Wanted media check"
                         : item.kind === "acquisition.download"
                           ? "Book download"
-                          : item.kind === "acquisition.select"
-                            ? "Release selection"
-                            : item.kind === "metadata.enrich"
-                              ? "Automatic metadata lookup"
-                              : item.kind}
+                          : item.kind === "acquisition.repair"
+                            ? "Download connection repair"
+                            : item.kind === "acquisition.select"
+                              ? "Release selection"
+                              : item.kind === "metadata.enrich"
+                                ? "Automatic metadata lookup"
+                                : item.kind}
                 </h2>
                 <p>{item.message}</p>
               </div>

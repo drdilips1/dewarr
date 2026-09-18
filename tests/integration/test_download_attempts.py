@@ -475,13 +475,13 @@ async def test_dispatch_history_refuses_lossy_downgrade(client, database, select
     from tests.integration.test_correction_migration import migrate
 
     await start(client, selected)
+    async with database() as db:
+        before = await db.scalar(text("SELECT version_num FROM alembic_version"))
     result = await migrate("downgrade", "0017_selections")
     assert result.returncode != 0
     assert "Download attempt history requires" in result.stderr
     async with database() as db:
-        assert (
-            await db.scalar(text("SELECT version_num FROM alembic_version")) == "0019_fulfillment"
-        )
+        assert await db.scalar(text("SELECT version_num FROM alembic_version")) == before
 
 
 async def test_known_padding_is_not_mistaken_for_missing_payload(

@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import { Notice } from "../components";
+import DownloadRepair from "./DownloadRepair";
 
 export default function Downloads({ canManage }: { canManage: boolean }) {
   const [offset, setOffset] = useState(0);
@@ -60,6 +61,7 @@ export default function Downloads({ canManage }: { canManage: boolean }) {
             <h3>{item.work_title}</h3>
             <p>{item.release_title}</p>
             <p>{item.message}</p>
+            {item.repair && <p>{item.repair.message}</p>}
             {item.fulfillment && (
               <p>
                 {item.fulfillment.available_now
@@ -101,6 +103,7 @@ export default function Downloads({ canManage }: { canManage: boolean }) {
                 </Link>
               )}
             </div>
+            {item.can_repair && <DownloadRepair attemptId={item.id} />}
           </div>
           <span className="status">
             {item.state === "complete" && item.fulfillment?.available_now

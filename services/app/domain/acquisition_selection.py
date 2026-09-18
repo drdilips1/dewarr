@@ -307,13 +307,13 @@ async def cancel(db, user, selection):
     return selection
 
 
-async def configuration_current(db, selection, *, committed=False):
+async def configuration_current(db, selection, *, committed=False, configuration=None):
     if (
         selection.state not in ({"prepared", "committed"} if committed else {"prepared"})
         or get_settings().recovery_mode
     ):
         return False
-    frozen = selection.frozen
+    frozen = {**selection.frozen, **(configuration or {})}
     artifact = await db.get(SourceArtifact, selection.artifact_id)
     source = await db.get(SourceConnection, artifact.source_key)
     downloader = await db.get(Integration, selection.downloader_id)

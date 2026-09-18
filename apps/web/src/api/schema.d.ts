@@ -849,6 +849,40 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/acquisition/downloads/{attempt_id}/repair-preview": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Repair Preview */
+    get: operations["repair_preview_api_acquisition_downloads__attempt_id__repair_preview_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/acquisition/downloads/{attempt_id}/repairs": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Repair Download */
+    post: operations["repair_download_api_acquisition_downloads__attempt_id__repairs_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organization/settings": {
     parameters: {
       query?: never;
@@ -1535,6 +1569,9 @@ export interface components {
       /** Inspection Id */
       inspection_id: string | null;
       fulfillment: components["schemas"]["FulfillmentView"] | null;
+      repair: components["schemas"]["RepairView"] | null;
+      /** Can Repair */
+      can_repair: boolean;
     };
     /** AuthView */
     AuthView: {
@@ -3146,6 +3183,39 @@ export interface components {
       has_more: boolean;
       /** Warnings */
       warnings?: string[];
+    };
+    /** RepairInput */
+    RepairInput: {
+      /** Revision */
+      revision: string;
+    };
+    /** RepairPreview */
+    RepairPreview: {
+      /** Revision */
+      revision: string;
+      /** Changes */
+      changes: string[];
+    };
+    /** RepairView */
+    RepairView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** State */
+      state: string;
+      /** Message */
+      message: string;
+      /** Changes */
+      changes: string[];
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /** Applied At */
+      applied_at: string | null;
     };
     /** RequestInput */
     RequestInput: {
@@ -5560,6 +5630,74 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["AttemptView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  repair_preview_api_acquisition_downloads__attempt_id__repair_preview_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        attempt_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RepairPreview"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  repair_download_api_acquisition_downloads__attempt_id__repairs_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        attempt_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RepairInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RepairView"];
         };
       };
       /** @description Validation Error */

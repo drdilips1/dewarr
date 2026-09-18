@@ -2672,6 +2672,113 @@
         }
       }
     },
+    "/api/acquisition/downloads/{attempt_id}/repair-preview": {
+      "get": {
+        "tags": [
+          "downloads"
+        ],
+        "summary": "Repair Preview",
+        "operationId": "repair_preview_api_acquisition_downloads__attempt_id__repair_preview_get",
+        "parameters": [
+          {
+            "name": "attempt_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Attempt Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RepairPreview"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/acquisition/downloads/{attempt_id}/repairs": {
+      "post": {
+        "tags": [
+          "downloads"
+        ],
+        "summary": "Repair Download",
+        "operationId": "repair_download_api_acquisition_downloads__attempt_id__repairs_post",
+        "parameters": [
+          {
+            "name": "attempt_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Attempt Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RepairInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RepairView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/organization/settings": {
       "get": {
         "tags": [
@@ -4742,6 +4849,20 @@
                 "type": "null"
               }
             ]
+          },
+          "repair": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RepairView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "can_repair": {
+            "type": "boolean",
+            "title": "Can Repair"
           }
         },
         "type": "object",
@@ -4759,7 +4880,9 @@
           "can_cancel",
           "progress",
           "inspection_id",
-          "fulfillment"
+          "fulfillment",
+          "repair",
+          "can_repair"
         ],
         "title": "AttemptView"
       },
@@ -9060,6 +9183,93 @@
           "has_more"
         ],
         "title": "ReleasePage"
+      },
+      "RepairInput": {
+        "properties": {
+          "revision": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "revision"
+        ],
+        "title": "RepairInput"
+      },
+      "RepairPreview": {
+        "properties": {
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          },
+          "changes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Changes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "revision",
+          "changes"
+        ],
+        "title": "RepairPreview"
+      },
+      "RepairView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "changes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Changes"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "applied_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Applied At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "state",
+          "message",
+          "changes",
+          "created_at",
+          "applied_at"
+        ],
+        "title": "RepairView"
       },
       "RequestInput": {
         "properties": {

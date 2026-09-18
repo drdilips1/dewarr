@@ -451,6 +451,30 @@ class DownloadAttempt(Identity, Base):
     inspection_id: Mapped[UUID | None] = mapped_column(ForeignKey("download_inspections.id"))
 
 
+class DownloadRepair(Identity, Base):
+    __tablename__ = "download_repairs"
+    __table_args__ = (
+        UniqueConstraint("actor_id", "command_key"),
+        CheckConstraint("state IN ('pending', 'applied', 'held')"),
+        Index(
+            "uq_pending_download_repair",
+            "attempt_id",
+            unique=True,
+            postgresql_where=text("state = 'pending'"),
+        ),
+    )
+    attempt_id: Mapped[UUID] = mapped_column(ForeignKey("download_attempts.id"), index=True)
+    actor_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
+    operation_id: Mapped[UUID] = mapped_column(ForeignKey("operations.id"), unique=True)
+    command_key: Mapped[str] = mapped_column(String(200))
+    revision: Mapped[str] = mapped_column(String(64))
+    configuration: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    changes: Mapped[list[str]] = mapped_column(JSONB)
+    state: Mapped[str] = mapped_column(String(20), default="pending")
+    message: Mapped[str] = mapped_column(String(300))
+    applied_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
 class DownloadFulfillment(Identity, Base):
     """Historical satisfaction evidence; never a substitute for current inventory."""
 

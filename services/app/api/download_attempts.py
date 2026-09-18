@@ -2,11 +2,11 @@ from datetime import UTC, datetime
 from uuid import UUID
 
 from fastapi import APIRouter, Header, Query
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import func, select
 
 from app.adapters.contracts import AdapterError
-from app.api.dependencies import CurrentUser, Database, Member
+from app.api.dependencies import Admin, CurrentUser, Database, Member
 from app.api.metadata import adapter_http_error
 from app.db.models import (
     AcquisitionIntent,
@@ -16,7 +16,9 @@ from app.db.models import (
     DownloadFulfillment,
 )
 from app.domain import download_attempts as downloads
+from app.domain import download_repairs as repairs
 from app.domain.acquisition import RequestSpec, assess
+from app.domain.acquisition_selection import configuration_current
 
 router = APIRouter(prefix="/acquisition/downloads", tags=["downloads"])
 
@@ -30,6 +32,26 @@ class FulfillmentView(BaseModel):
     confirmed_at: datetime
     basis: str
     available_now: bool
+
+
+class RepairInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    revision: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+
+class RepairPreview(BaseModel):
+    revision: str
+    changes: list[str]
+
+
+class RepairView(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: UUID
+    state: str
+    message: str
+    changes: list[str]
+    created_at: datetime
+    applied_at: datetime | None
 
 
 class AttemptView(BaseModel):
@@ -47,6 +69,8 @@ class AttemptView(BaseModel):
     progress: float | None
     inspection_id: UUID | None
     fulfillment: FulfillmentView | None
+    repair: RepairView | None
+    can_repair: bool
 
 
 class AttemptPage(BaseModel):
@@ -57,6 +81,21 @@ class AttemptPage(BaseModel):
 
 
 async def view(db, user, row, selection):
+    repair = await repairs.latest(db, row.id)
+    repairing = bool(repair and repair.state == "pending")
+    repairable = (
+        user.role == "admin"
+        and row.external_may_exist
+        and not repairing
+        and row.state not in {"complete", "cancelled"}
+        and (not row.lease_until or row.lease_until <= datetime.now(UTC))
+    )
+    needs_review = repairable and not await configuration_current(
+        db,
+        selection,
+        committed=True,
+        configuration=await repairs.accepted_configuration(db, selection),
+    )
     fulfillment = await db.scalar(
         select(DownloadFulfillment).where(
             DownloadFulfillment.attempt_id == row.id,
@@ -89,11 +128,14 @@ async def view(db, user, row, selection):
         external_may_exist=row.external_may_exist,
         can_cancel=not row.external_may_exist and row.state != "cancelled",
         can_recheck=row.state != "cancelled"
+        and not repairing
         and (not row.lease_until or row.lease_until <= datetime.now(UTC))
         and (not row.next_check_at or row.next_check_at <= datetime.now(UTC)),
         progress=(row.observation or {}).get("progress"),
         inspection_id=row.inspection_id,
         fulfillment=confirmed,
+        repair=RepairView.model_validate(repair) if repair else None,
+        can_repair=needs_review,
     )
 
 
@@ -166,5 +208,27 @@ async def cancel(attempt_id: UUID, user: Member, db: Database):
 async def recheck(attempt_id: UUID, user: Member, db: Database):
     row = await downloads.recheck(db, user, attempt_id)
     result = await view(db, user, row, await db.get(AcquisitionSelection, row.selection_id))
+    await db.commit()
+    return result
+
+
+@router.get("/{attempt_id}/repair-preview", response_model=RepairPreview)
+async def repair_preview(attempt_id: UUID, user: Admin, db: Database):
+    return await repairs.preview(db, user, attempt_id)
+
+
+@router.post("/{attempt_id}/repairs", response_model=RepairView, status_code=202)
+async def repair_download(
+    attempt_id: UUID,
+    body: RepairInput,
+    user: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    try:
+        row = await repairs.start(db, user, attempt_id, body.revision, idempotency_key)
+    except AdapterError as error:
+        raise adapter_http_error(error) from error
+    result = RepairView.model_validate(row)
     await db.commit()
     return result

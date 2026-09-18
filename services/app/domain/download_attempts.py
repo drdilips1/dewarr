@@ -20,6 +20,7 @@ from app.db.models import (
     DownloadAttempt,
     DownloadIdentityClaim,
     DownloadInspection,
+    DownloadRepair,
     ImportDestination,
     Integration,
     Operation,
@@ -88,7 +89,7 @@ async def owned_attempt(db, user, identifier):
     return row
 
 
-async def authority(db, selection, *, wanted):
+async def authority(db, selection, *, wanted, configuration=None):
     """Recheck current grants and frozen configuration at the side-effect boundary."""
     if get_settings().recovery_mode:
         raise HTTPException(409, "Downloads are paused for recovery")
@@ -118,7 +119,11 @@ async def authority(db, selection, *, wanted):
             }
         ),
     )
-    if not await configuration_current(db, selection, committed=True):
+    if configuration is None:
+        from app.domain.download_repairs import accepted_configuration
+
+        configuration = await accepted_configuration(db, selection)
+    if not await configuration_current(db, selection, committed=True, configuration=configuration):
         raise HTTPException(409, "Saved acquisition settings changed; review the download route")
     artifact = await db.get(SourceArtifact, selection.artifact_id)
     content = artifact_bytes(artifact)
@@ -279,6 +284,10 @@ async def recheck(db, user, identifier):
         raise HTTPException(409, "Downloads are paused for recovery")
     if attempt.state == "cancelled":
         return attempt
+    from app.domain.download_repairs import latest
+
+    if await latest(db, attempt.id, "pending"):
+        raise HTTPException(409, "A reviewed connection repair is already pending")
     now = datetime.now(UTC)
     if (attempt.lease_until and attempt.lease_until > now) or (
         attempt.next_check_at and attempt.next_check_at > now
@@ -345,9 +354,21 @@ async def finish_observation(db, attempt, selection, state):
         "complete",
         "Download complete; file inspection and library confirmation are still required",
     )
+    await enqueue(db, "acquisition.fulfillment", work_id=selection.frozen["origin_work_id"])
+    user = await db.get(User, attempt.owner_id)
+    intent = await db.get(AcquisitionIntent, selection.intent_id)
+    await evaluate(db, user, intent)
+    target = await db.get(AcquisitionTarget, selection.target_id)
+    if target.state != "wanted":
+        attempt.message = (
+            "Download complete; the request is already satisfied by library inventory"
+            if target.state == "satisfied"
+            else "Download complete; review the request before importing its files"
+        )
+        (await db.get(Operation, attempt.operation_id)).message = attempt.message
+        return
     # Existing reviewed import UI is administrator-only. Do not silently elevate
     # a member's source-directory access or manufacture library availability.
-    user = await db.get(User, attempt.owner_id)
     if user.role != "admin":
         attempt.message = (
             "Download complete; administrator inspection is required before library import"
@@ -380,6 +401,9 @@ async def finish_observation(db, attempt, selection, state):
 async def run(identifier):
     """Persist the irreversible boundary before add; all subsequent runs only find."""
     token = uuid4()
+    from app.domain.download_repairs import finish as finish_repair
+    from app.domain.download_repairs import latest, require_repair_actor
+
     async with session_factory()() as db, db.begin():
         attempt, selection = await locked(db, identifier)
         if not attempt or attempt.state in TERMINAL:
@@ -387,14 +411,23 @@ async def run(identifier):
         now = datetime.now(UTC)
         if attempt.lease_until and attempt.lease_until > now:
             return
+        repair = await latest(db, attempt.id, "pending")
+        repair_id = repair.id if repair else None
         try:
+            if repair:
+                await require_repair_actor(db, repair)
             downloader, content = await authority(
-                db, selection, wanted=not attempt.external_may_exist
+                db,
+                selection,
+                wanted=not attempt.external_may_exist,
+                configuration=repair.configuration if repair else None,
             )
         except (HTTPException, AdapterError):
             await record(
                 db, attempt, "held", "Download access, request or saved settings need review"
             )
+            if repair:
+                await finish_repair(db, repair, "held", attempt.message)
             return
         if fingerprint({"url": downloader.base_url.rstrip("/")}) != attempt.endpoint_key:
             await record(
@@ -403,6 +436,8 @@ async def run(identifier):
                 "held",
                 "Downloader identity changed; existing transfer needs reconciliation",
             )
+            if repair:
+                await finish_repair(db, repair, "held", attempt.message)
             return
         credentials, endpoint = decrypt_secrets(downloader.encrypted_secrets), downloader.base_url
         already_submitted = attempt.external_may_exist
@@ -462,7 +497,23 @@ async def run(identifier):
                 attempt, current = await locked(db, identifier)
                 if attempt.run_token != token:
                     return
-                await authority(db, current, wanted=False)
+                repair = await db.get(DownloadRepair, repair_id) if repair_id else None
+                if repair:
+                    await require_repair_actor(db, repair)
+                await authority(
+                    db,
+                    current,
+                    wanted=False,
+                    configuration=repair.configuration if repair else None,
+                )
+                if repair and observed:
+                    await finish_repair(
+                        db,
+                        repair,
+                        "applied",
+                        "Updated connections verified against the existing transfer; "
+                        "no download was added",
+                    )
                 await finish_observation(db, attempt, current, observed)
                 db.add(
                     AuditEvent(
@@ -503,3 +554,7 @@ async def run(identifier):
                 message[:300],
                 poll=transient or unknown,
             )
+            if repair_id and not transient:
+                repair = await db.get(DownloadRepair, repair_id)
+                if repair and repair.state == "pending":
+                    await finish_repair(db, repair, "held", message[:300])
