@@ -342,3 +342,38 @@ async def secondary_catalog(path: str):
     if path == "works/OL1W/editions.json":
         return {"entries": []}
     raise HTTPException(404)
+
+
+@app.get("/prowlarr/{path:path}")
+async def prowlarr_fixture(path: str, request: Request):
+    from tests.prowlarr_fixture import indexer, release
+
+    if request.headers.get("x-api-key") != "browser-prowlarr-key":
+        raise HTTPException(401)
+    if path == "api/v1/system/status":
+        return {"version": "2.3.0-fixture"}
+    if path == "api/v1/indexer":
+        return [
+            indexer(),
+            indexer(id=8, name="Unavailable tracker"),
+            indexer(id=9, name="NZB books", protocol="usenet"),
+            indexer(id=10, name="MAM duplicate", definitionName="MyAnonamouse"),
+        ]
+    if path == "api/v1/search":
+        identifier = int(request.query_params["indexerIds"])
+        if identifier == 8:
+            raise HTTPException(503, "Synthetic source outage")
+        return [
+            release(
+                indexerId=identifier,
+                indexer="NZB books" if identifier == 9 else "Book tracker",
+                title="Prowlarr browser audiobook" if identifier == 7 else "Unsupported NZB book",
+                protocol="usenet" if identifier == 9 else "torrent",
+                downloadUrl=f"http://127.0.0.1:13379/prowlarr/{identifier}/download?apikey=browser-prowlarr-key&link=private_fixture&file=book",
+            )
+        ]
+    if path == "7/download":
+        if request.query_params.get("link") != "private_fixture":
+            raise HTTPException(404)
+        return Response(torrent_bytes(), media_type="application/x-bittorrent")
+    raise HTTPException(404)

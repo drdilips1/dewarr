@@ -25,10 +25,14 @@ export default function SourceArtifact() {
     <>
       <header className="page-heading">
         <div>
-          <p className="eyebrow">MAM RELEASE #{release.source_id}</p>
+          <p className="eyebrow">
+            {release.source === "mam" ? "MAM" : "PROWLARR"} RELEASE
+          </p>
           <h1>Torrent manifest</h1>
           <p>{release.title}</p>
-          <Link to={`/sources?q=${encodeURIComponent(release.title)}`}>
+          <Link
+            to={`/sources${release.source === "prowlarr" ? "/prowlarr" : ""}?q=${encodeURIComponent(release.title)}`}
+          >
             Return to source search
           </Link>
         </div>
@@ -36,8 +40,8 @@ export default function SourceArtifact() {
       <Notice error={artifact.error} />
       {!current_connection && (
         <p className="notice error">
-          The MAM connection changed. Inspect this release again before using it
-          for a download.
+          The source connection changed. Inspect this release again before using
+          it for a download.
         </p>
       )}
       <section className="panel" aria-label="Inspected torrent">

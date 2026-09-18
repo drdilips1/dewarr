@@ -82,7 +82,8 @@ async def proposal(db, user, attempt, selection):
         )
     if await latest(db, attempt.id, "pending"):
         raise HTTPException(409, "A reviewed connection repair is already pending")
-    await transaction_lock(db, "source:mam")
+    source_artifact = await db.get(SourceArtifact, selection.artifact_id)
+    await transaction_lock(db, f"source:{source_artifact.source_key}")
     await transaction_lock(db, SETTINGS_LOCK)
     downloader = await db.get(Integration, selection.downloader_id, populate_existing=True)
     artifact = await db.get(SourceArtifact, selection.artifact_id)
@@ -130,7 +131,7 @@ async def proposal(db, user, attempt, selection):
     previous = await accepted_configuration(db, selection) or frozen
     changes = []
     if previous["source_generation"] != desired["source_generation"]:
-        changes.append("Use the current MAM connection for this existing acquisition")
+        changes.append("Use the current source connection for this existing acquisition")
     if previous["downloader"] != desired["downloader"]:
         changes.append("Use the updated qBittorrent connection to observe the same transfer")
     if previous["destination"] != desired["destination"]:

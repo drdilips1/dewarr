@@ -8,6 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import select
 
 from app.adapters.mam import MAMRelease
+from app.adapters.prowlarr import ProwlarrRelease
 from app.adapters.torrent_descriptor import TorrentDescriptor
 from app.config import get_settings
 from app.db.models import (
@@ -156,10 +157,10 @@ async def prepare(db, user, body, key):
         raise HTTPException(409, "A compatible request already has a selected release")
     if reservation.state != "planned":
         raise HTTPException(409, "This request needs reconciliation before selection")
-    await transaction_lock(db, "source:mam")
     artifact = await db.get(SourceArtifact, body.artifact_id)
     if not artifact or artifact.owner_id != user.id:
         raise HTTPException(404, "Source artifact not found")
+    await transaction_lock(db, f"source:{artifact.source_key}")
     source = await db.get(SourceConnection, artifact.source_key, populate_existing=True)
     if not source or not source.enabled or source.generation != artifact.source_generation:
         raise HTTPException(409, "The source connection changed; inspect the release again")
@@ -167,7 +168,9 @@ async def prepare(db, user, body, key):
     artifact_bytes(artifact)
     if descriptor.artifact_sha256 != artifact.sha256:
         raise HTTPException(409, "The saved torrent descriptor needs inspection again")
-    release = MAMRelease.model_validate(artifact.release_snapshot)
+    release = (MAMRelease if artifact.source_key == "mam" else ProwlarrRelease).model_validate(
+        artifact.release_snapshot
+    )
     spec = RequestSpec.model_validate(intent.specification)
     if (
         body.slot == "either"

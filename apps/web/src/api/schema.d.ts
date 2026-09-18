@@ -1314,6 +1314,92 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/sources/prowlarr/connection": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Connection */
+    get: operations["connection_api_sources_prowlarr_connection_get"];
+    /** Save Connection */
+    put: operations["save_connection_api_sources_prowlarr_connection_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/sources/prowlarr/connection/test": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Test Connection */
+    post: operations["test_connection_api_sources_prowlarr_connection_test_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/sources/prowlarr/indexers": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Indexers */
+    get: operations["indexers_api_sources_prowlarr_indexers_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/sources/prowlarr/search": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Search */
+    post: operations["search_api_sources_prowlarr_search_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/sources/prowlarr/results/{result_id}/artifact": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Resolve */
+    post: operations["resolve_api_sources_prowlarr_results__result_id__artifact_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/downloaders": {
     parameters: {
       query?: never;
@@ -2670,9 +2756,8 @@ export interface components {
     /** MAMRelease */
     MAMRelease: {
       /**
-       * Source
-       * @default mam
-       * @constant
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
        */
       source: "mam";
       /** Source Id */
@@ -3231,6 +3316,182 @@ export interface components {
       /** Expected Revision */
       expected_revision: string;
     };
+    /** ProwlarrConnectionInput */
+    ProwlarrConnectionInput: {
+      /** Base Url */
+      base_url: string;
+      /** Api Key */
+      api_key?: string | null;
+      /**
+       * Enabled
+       * @default true
+       */
+      enabled: boolean;
+      /** Excluded Indexers */
+      excluded_indexers?: number[];
+      /**
+       * Expected Generation
+       * @default 0
+       */
+      expected_generation: number;
+    };
+    /** ProwlarrConnectionView */
+    ProwlarrConnectionView: {
+      /** Configured */
+      configured: boolean;
+      /** Base Url */
+      base_url: string;
+      /** Has Api Key */
+      has_api_key: boolean;
+      /** Enabled */
+      enabled: boolean;
+      /** Generation */
+      generation: number;
+      /** Excluded Indexers */
+      excluded_indexers: number[];
+      /** Status */
+      status: string;
+      /** Last Error */
+      last_error: string | null;
+      /** Last Success At */
+      last_success_at: string | null;
+    };
+    /** ProwlarrIndexer */
+    ProwlarrIndexer: {
+      /** Id */
+      id: number;
+      /** Name */
+      name: string;
+      /** Definition */
+      definition: string;
+      /**
+       * Protocol
+       * @enum {string}
+       */
+      protocol: "torrent" | "nzb" | "unknown";
+      /** Enabled */
+      enabled: boolean;
+      /** Supports Search */
+      supports_search: boolean;
+      /** Supports Pagination */
+      supports_pagination: boolean;
+      /** Categories */
+      categories: number[];
+      /** Native Mam */
+      native_mam: boolean;
+      /**
+       * Excluded
+       * @default false
+       */
+      excluded: boolean;
+    };
+    /** ProwlarrPage */
+    ProwlarrPage: {
+      /** Items */
+      items: components["schemas"]["ProwlarrResultView"][];
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+      /** May Have More */
+      may_have_more: boolean;
+      /** Warnings */
+      warnings: string[];
+    };
+    /** ProwlarrRelease */
+    ProwlarrRelease: {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      source: "prowlarr";
+      /** Source Id */
+      source_id: string;
+      /** Indexer Id */
+      indexer_id?: string | null;
+      /** Raw Title */
+      raw_title: string;
+      /** Medium */
+      medium?: ("ebook" | "audio") | null;
+      /** Authors */
+      authors?: string[];
+      /** Narrators */
+      narrators?: string[];
+      /** Language */
+      language?: string | null;
+      /** Formats */
+      formats?: string[];
+      /** Size Bytes */
+      size_bytes?: number | null;
+      /** Seeders */
+      seeders?: number | null;
+      /** Description */
+      description?: string | null;
+      /** Coverage */
+      coverage?: components["schemas"]["CoverageClaim"][];
+      /**
+       * Protocol
+       * @default unknown
+       * @enum {string}
+       */
+      protocol: "torrent" | "nzb" | "direct" | "unknown";
+      /** Details */
+      details?: {
+        [key: string]: unknown;
+      };
+      /** Title */
+      title: string;
+      /** Indexer Name */
+      indexer_name: string;
+      /** Categories */
+      categories: number[];
+      /**
+       * Observed At
+       * Format: date-time
+       */
+      observed_at: string;
+      /** Acquisition Supported */
+      acquisition_supported: boolean;
+      /** Limitation */
+      limitation?: string | null;
+    };
+    /** ProwlarrResultView */
+    ProwlarrResultView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Expires At
+       * Format: date-time
+       */
+      expires_at: string;
+      release: components["schemas"]["ProwlarrRelease"];
+    };
+    /** ProwlarrSearch */
+    ProwlarrSearch: {
+      /** Q */
+      q: string;
+      /** Indexer Id */
+      indexer_id: number;
+      /**
+       * Medium
+       * @default all
+       * @enum {string}
+       */
+      medium: "all" | "ebook" | "audio";
+      /**
+       * Offset
+       * @default 0
+       */
+      offset: number;
+      /**
+       * Limit
+       * @default 50
+       */
+      limit: number;
+    };
     /** ReasonView */
     ReasonView: {
       /** Label */
@@ -3653,7 +3914,10 @@ export interface components {
       /** Current Connection */
       current_connection: boolean;
       descriptor: components["schemas"]["TorrentDescriptor"];
-      release: components["schemas"]["MAMRelease"];
+      /** Release */
+      release:
+        | components["schemas"]["MAMRelease"]
+        | components["schemas"]["ProwlarrRelease"];
       /**
        * Dispatch Available
        * @default false
@@ -6754,6 +7018,163 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["MAMRelease"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  connection_api_sources_prowlarr_connection_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProwlarrConnectionView"];
+        };
+      };
+    };
+  };
+  save_connection_api_sources_prowlarr_connection_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ProwlarrConnectionInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProwlarrConnectionView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  test_connection_api_sources_prowlarr_connection_test_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProwlarrConnectionView"];
+        };
+      };
+    };
+  };
+  indexers_api_sources_prowlarr_indexers_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProwlarrIndexer"][];
+        };
+      };
+    };
+  };
+  search_api_sources_prowlarr_search_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ProwlarrSearch"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ProwlarrPage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  resolve_api_sources_prowlarr_results__result_id__artifact_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        result_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SourceArtifactView"];
         };
       };
       /** @description Validation Error */

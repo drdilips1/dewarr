@@ -58,6 +58,9 @@ export default function Sources({
         <div>
           <p className="eyebrow">DOWNLOAD SOURCES</p>
           <h1>Search MAM</h1>
+          <Link to={`/sources/prowlarr?${params.toString()}`}>
+            Search Prowlarr indexers
+          </Link>
           <p>
             Find source releases by title, author or series, then inspect the
             edition and recording details.

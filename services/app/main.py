@@ -29,6 +29,7 @@ from app.api import (
     metadata,
     operations,
     organization,
+    prowlarr,
     requests,
     source_artifacts,
     sources,
@@ -114,6 +115,7 @@ def create_app() -> FastAPI:
     app.include_router(destinations.router, prefix="/api")
     app.include_router(automatic_imports.router, prefix="/api")
     app.include_router(sources.router, prefix="/api")
+    app.include_router(prowlarr.router, prefix="/api")
     app.include_router(downloaders.router, prefix="/api")
     app.include_router(source_artifacts.router, prefix="/api")
     app.include_router(acquisition_selections.router, prefix="/api")

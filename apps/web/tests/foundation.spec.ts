@@ -1325,3 +1325,83 @@ test("administrator review queue retries a command and shows its assigned inspec
   await page.getByRole("link", { name: "Activity", exact: true }).click();
   await expect(review).toHaveCount(0);
 });
+
+test("Prowlarr sources retain successful results beside an outage and inspect through the shared manifest", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(60_000);
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Your catalog", exact: true }),
+  ).toBeVisible();
+  await page.goto("/sources/prowlarr");
+  await page
+    .getByText("Prowlarr connection · not-configured", { exact: true })
+    .click();
+  await page
+    .getByLabel("Server URL", { exact: true })
+    .fill("http://127.0.0.1:13379/prowlarr");
+  await page
+    .getByLabel("API key", { exact: true })
+    .fill("browser-prowlarr-key");
+  await page
+    .getByRole("button", { name: "Save connection", exact: true })
+    .click();
+  await expect(page.getByLabel("API key", { exact: true })).toHaveValue("");
+  await expect(page.getByLabel(/MAM duplicate/)).toBeDisabled();
+  await page
+    .getByLabel("Title, author or series", { exact: true })
+    .fill("Prowlarr browser");
+  await page
+    .getByRole("button", { name: "Search sources", exact: true })
+    .click();
+  const successful = page.getByRole("region", {
+    name: "Book tracker results",
+    exact: true,
+  });
+  await expect(
+    successful.getByRole("heading", { name: "Prowlarr browser audiobook" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Unavailable tracker results" }),
+  ).toContainText("Prowlarr could not complete this request");
+  await expect(
+    page
+      .getByRole("region", { name: "NZB books results" })
+      .getByRole("button", { name: "Inspect torrent" }),
+  ).toBeDisabled();
+  await expect(
+    page.getByRole("button", { name: "Search sources", exact: true }),
+  ).toBeEnabled();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("prowlarr-mobile.png"),
+    fullPage: true,
+  });
+  await successful.getByRole("button", { name: "Inspect torrent" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Torrent manifest", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("PROWLARR RELEASE", { exact: true }),
+  ).toBeVisible();
+  await page.reload();
+  await expect(
+    page.getByRole("heading", { name: "Torrent manifest", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Return to source search" }),
+  ).toHaveAttribute("href", /sources\/prowlarr/);
+  await expect(page.locator("body")).not.toContainText("private_fixture");
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+});

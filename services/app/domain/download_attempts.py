@@ -104,7 +104,8 @@ async def authority(db, selection, *, wanted, configuration=None):
         target = await db.get(AcquisitionTarget, selection.target_id, populate_existing=True)
         if target.state != "wanted" or target.reservation_id != selection.reservation_id:
             raise HTTPException(409, "The selected target is no longer wanted")
-    await transaction_lock(db, "source:mam")
+    source_artifact = await db.get(SourceArtifact, selection.artifact_id)
+    await transaction_lock(db, f"source:{source_artifact.source_key}")
     await transaction_lock(db, SETTINGS_LOCK)
     destination = await db.get(ImportDestination, selection.destination_id, with_for_update=True)
     spec = RequestSpec.model_validate(intent.specification)

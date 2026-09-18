@@ -25,22 +25,26 @@ async def resolve_mam(user_id, source_id):
     async with session_factory()() as db:
         await member(db, user_id)
     artifact, generation = await source_call(user_id, "resolve", source_id, with_generation=True)
+    return await persist_artifact(user_id, source_id, artifact, generation, "mam")
+
+
+async def persist_artifact(user_id, source_id, artifact, generation, source_key):
     descriptor = await inspect_torrent(artifact.content)
     digest = hashlib.sha256(artifact.content).hexdigest()
     if digest != descriptor.artifact_sha256:
         raise AdapterError(FailureKind.PARSER, "Torrent identity changed during inspection.")
     async with session_factory()() as db, db.begin():
-        await transaction_lock(db, "source:mam")
+        await transaction_lock(db, f"source:{source_key}")
         await member(db, user_id)
-        source = await db.get(SourceConnection, "mam")
+        source = await db.get(SourceConnection, source_key)
         if not source or not source.enabled or source.generation != generation:
             raise HTTPException(
-                409, "MAM settings changed while inspecting the torrent. Resolve it again."
+                409, "Source settings changed while inspecting the torrent. Resolve it again."
             )
         existing = await db.scalar(
             select(SourceArtifact).where(
                 SourceArtifact.owner_id == user_id,
-                SourceArtifact.source_key == "mam",
+                SourceArtifact.source_key == source_key,
                 SourceArtifact.source_id == source_id,
                 SourceArtifact.source_generation == generation,
                 SourceArtifact.sha256 == digest,
@@ -50,7 +54,7 @@ async def resolve_mam(user_id, source_id):
             return existing.id
         row = SourceArtifact(
             owner_id=user_id,
-            source_key="mam",
+            source_key=source_key,
             source_id=source_id,
             source_generation=generation,
             sha256=digest,
