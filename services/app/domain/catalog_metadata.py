@@ -6,7 +6,15 @@ from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import select
 
 from app.adapters.catalog_types import BookData, Provider
-from app.db.models import MetadataSettings, ProviderObject, Version, Work, WorkMetadataSource
+from app.db.models import (
+    ListCatalogBinding,
+    MetadataSettings,
+    ProviderObject,
+    User,
+    Version,
+    Work,
+    WorkMetadataSource,
+)
 from app.domain.identity import normalized, work_key
 from app.domain.operations import transaction_lock
 from app.domain.visibility import visible_origin_work, visible_work
@@ -217,6 +225,17 @@ async def attach_source(db, work, book, *, explicit=False):
 
 
 async def import_book(db, user, book):
+    # Take the actor fence before the shared list/catalog identity lock. Otherwise
+    # an audit FK can deadlock against a list worker holding the actor row.
+    user = await db.scalar(
+        select(User)
+        .where(User.id == user.id)
+        .with_for_update(key_share=True)
+        .execution_options(populate_existing=True)
+    )
+    if not user or not user.active or user.role == "viewer":
+        raise HTTPException(403, "Catalog editing is no longer permitted")
+    await transaction_lock(db, f"goodreads:catalog:{user.id}")
     await transaction_lock(db, "catalog:" + book.provider + ":" + book.external_id)
     await transaction_lock(db, "identity:" + normalized(book.title))
     rejected = await db.scalar(
@@ -271,6 +290,22 @@ async def import_book(db, user, book):
             if key
             else []
         )
+        binding = await db.scalar(
+            select(ListCatalogBinding).where(
+                ListCatalogBinding.owner_id == user.id,
+                ListCatalogBinding.identity_key == f"{book.provider}:{book.external_id}",
+            )
+        )
+        if binding:
+            bound = await canonical_work(db, binding.work_id)
+            if await db.scalar(select(Work.id).where(Work.id == bound.id, visible_work(user))):
+                if not same_work(bound, book):
+                    raise HTTPException(
+                        409,
+                        "The followed book differs from this catalog result; "
+                        "review its identity first",
+                    )
+                matches = [bound]
         if len(matches) > 1:
             raise HTTPException(
                 409, "Multiple books match. Choose the intended book from your catalog."

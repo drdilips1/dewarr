@@ -91,6 +91,16 @@ class Hardcover:
             raise parse_failure()
         return value["data"]
 
+    async def list_page(self, external_id, cursor=0):
+        from app.adapters.hardcover_lists import page
+
+        return await page(self.query, external_id, cursor)
+
+    async def list_choices(self, mode="owned", cursor=0):
+        from app.adapters.hardcover_lists import choices
+
+        return await choices(self.query, mode, cursor)
+
     async def test(self):
         # Catalog-only token does not require access to private profile fields.
         await self.search("Dune", 1)

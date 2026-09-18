@@ -231,12 +231,92 @@ async def fixture_watcher(request: Request):
     return backend_state
 
 
+hardcover_list_state = {"mode": "normal"}
+
+
+@app.post("/fixture/hardcover-list")
+async def hardcover_list_control(request: Request):
+    hardcover_list_state["mode"] = (await request.json())["mode"]
+    return hardcover_list_state
+
+
 @app.post("/catalog/v1/graphql")
 async def catalog(request: Request, authorization: str = Header(default="")):
     if authorization != "Bearer browser-hardcover-token":
         raise HTTPException(401)
     body = await request.json()
     query = body.get("query", "")
+    list_info = {
+        "id": 91,
+        "name": "Fixture Hardcover List",
+        "books_count": 2,
+        "updated_at": "2026-09-18T00:00:00+00:00",
+        "public": False,
+        "user_id": 7,
+    }
+    if "MyLists(" in query:
+        return {"data": {"me": [{"id": 7, "lists": [list_info]}]}}
+    if "FollowedLists(" in query:
+        return {"data": {"me": [{"id": 7, "followed_lists": [{"id": 1, "list": list_info}]}]}}
+    if "DiscoverLists(" in query:
+        return {"data": {"lists": [{**list_info, "public": True}]}}
+    if "ListMembershipPage(" in query:
+        members = [
+            {
+                "id": 1,
+                "book_id": 42,
+                "edition_id": None,
+                "position": 1,
+                "date_added": None,
+                "book": {
+                    "id": 42,
+                    "title": "The Catalog Journey",
+                    "cached_contributors": [{"author": {"name": "Catalog Author"}}],
+                },
+            },
+            {
+                "id": 2,
+                "book_id": 7001,
+                "edition_id": 8001,
+                "position": 2,
+                "date_added": None,
+                "book": {
+                    "id": 7001,
+                    "title": "Hardcover List Arrival",
+                    "cached_contributors": [{"author": {"name": "Catalog Author"}}],
+                },
+            },
+        ]
+        mode = hardcover_list_state["mode"]
+        if mode == "omission":
+            members = members[:1]
+        if mode == "addition":
+            members.append(
+                {
+                    "id": 3,
+                    "book_id": 7002,
+                    "edition_id": None,
+                    "position": 3,
+                    "date_added": None,
+                    "book": {
+                        "id": 7002,
+                        "title": "Hardcover Later Arrival",
+                        "cached_contributors": [{"author": {"name": "Catalog Author"}}],
+                    },
+                }
+            )
+        after = body["variables"]["after"]
+        return {
+            "data": {
+                "lists": [
+                    {
+                        **list_info,
+                        "books_count": len(members),
+                        "list_books": [row for row in members if row["id"] > after][:1],
+                    }
+                ]
+            }
+        }
     if "CatalogBook(" in query:
         return {
             "data": {

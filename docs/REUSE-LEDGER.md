@@ -32,3 +32,5 @@ The libtorrent wheel inspected on macOS arm64 does not include distribution lice
 This ledger records actual reuse, not permission to copy every file in a referenced repository. Package licenses, fonts/images and metadata-provider usage conditions remain separate reviews.
 
 - CSV snapshots: original parser/orchestration/UI using Python standard-library `csv`; synthetic Goodreads-shaped export fixtures and explicit mapping. No Goodreads/third-party app implementation or private exports bundled. Interface reference: https://docs.python.org/3.13/library/csv.html.
+
+Hardcover list integration also references the official list/user GraphQL schemas through independently written `services/app/adapters/hardcover_lists.py` operations and synthetic fixtures. No upstream application code or bundled schema was copied; see [Hardcover list subscriptions](HARDCOVER-LISTS.md) for exact references and live-certification limits.

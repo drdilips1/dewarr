@@ -45,7 +45,7 @@ def retry_delay(headers, now):
 class CatalogGateway:
     """Persisted HTTP cache and credential-wide budget; never hold a transaction over I/O."""
 
-    def __init__(self, provider, scope, token=None, *, force=False, transport=None):
+    def __init__(self, provider, scope, token=None, *, force=False, transport=None, cache=True):
         settings = get_settings()
         endpoint = settings.hardcover_url if provider == "hardcover" else settings.openlibrary_url
         self.http = JsonEndpoint(endpoint, token, transport=transport)
@@ -56,6 +56,7 @@ class CatalogGateway:
         self.budget_key = f"{provider}:{digest}"
         self.stale, self.warning, self.used_keys = False, None, []
         self.endpoint = endpoint
+        self.cache = cache
 
     async def __aenter__(self):
         await self.http.__aenter__()
@@ -100,7 +101,7 @@ class CatalogGateway:
         self.used_keys.append(key)
         now = datetime.now(UTC)
         async with session_factory()() as db:
-            cached = await db.get(ProviderCache, key)
+            cached = await db.get(ProviderCache, key) if self.cache else None
             cached_value = cached.value if cached else None
             cached_at = cached.fetched_at if cached else None
             if cached and cached.expires_at > now and not self.force:
@@ -134,6 +135,8 @@ class CatalogGateway:
                 self.warning = "Provider unavailable; showing previously cached catalog data."
                 return cached_value
             raise
+        if not self.cache:
+            return response
         data = response.get("data")
         search = data.get("search") if isinstance(data, dict) else None
         if (

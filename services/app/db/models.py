@@ -277,6 +277,9 @@ class ListCatalogBinding(Identity, Base):
 
 class ListSubscription(Identity, Base):
     __tablename__ = "list_subscriptions"
+    provider: Mapped[str] = mapped_column(
+        String(20), default="goodreads", server_default="goodreads"
+    )
     list_id: Mapped[UUID] = mapped_column(
         ForeignKey("book_lists.id", ondelete="CASCADE"), unique=True
     )
@@ -305,6 +308,7 @@ class ListObservation(Identity, Base):
     snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB)
     work_id: Mapped[UUID] = mapped_column(ForeignKey("works.id"), index=True)
     excluded: Mapped[bool] = mapped_column(Boolean, default=False)
+    present: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
     last_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 

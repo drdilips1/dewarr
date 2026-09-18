@@ -746,6 +746,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/metadata/hardcover-lists": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Hardcover Lists */
+    get: operations["hardcover_lists_api_metadata_hardcover_lists_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/identity/changes": {
     parameters: {
       query?: never;
@@ -2119,6 +2136,13 @@ export interface components {
       /** Can Undo */
       can_undo: boolean;
     };
+    /** ChoicePage */
+    ChoicePage: {
+      /** Items */
+      items: components["schemas"]["ListChoice"][];
+      /** Next Cursor */
+      next_cursor?: number | null;
+    };
     /** ClaimInput */
     ClaimInput: {
       /** Revision */
@@ -2974,6 +2998,19 @@ export interface components {
       /** Granted User Ids */
       granted_user_ids: string[];
     };
+    /** ListChoice */
+    ListChoice: {
+      /** External Id */
+      external_id: string;
+      /** Name */
+      name: string;
+      /** Count */
+      count: number;
+      /** Public */
+      public: boolean;
+      /** Owner Id */
+      owner_id: string;
+    };
     /** ListDetail */
     ListDetail: {
       /** Name */
@@ -3541,6 +3578,8 @@ export interface components {
       excluded: boolean;
       /** Identity Changed */
       identity_changed: boolean;
+      /** Present */
+      present: boolean;
       /**
        * First Seen At
        * Format: date-time
@@ -4531,6 +4570,10 @@ export interface components {
     };
     /** SubscriptionInput */
     SubscriptionInput: {
+      /** Provider */
+      provider?: ("goodreads" | "hardcover") | null;
+      /** Hardcover List Id */
+      hardcover_list_id?: number | null;
       /** Feed Url */
       feed_url?: string | null;
       /**
@@ -4551,6 +4594,15 @@ export interface components {
     };
     /** SubscriptionView */
     SubscriptionView: {
+      /**
+       * Provider
+       * @enum {string}
+       */
+      provider: "goodreads" | "hardcover";
+      /** Hardcover List Id */
+      hardcover_list_id?: number | null;
+      /** Present Count */
+      present_count: number;
       /**
        * Id
        * Format: uuid
@@ -6416,6 +6468,38 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["WorkView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  hardcover_lists_api_metadata_hardcover_lists_get: {
+    parameters: {
+      query?: {
+        mode?: "owned" | "followed" | "public";
+        cursor?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ChoicePage"];
         };
       };
       /** @description Validation Error */

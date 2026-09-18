@@ -37,6 +37,6 @@ Tests exercise synthetic RSS/HTTP, PostgreSQL/API state, actual durable worker e
 
 ## Remaining PRD work
 
-[CSV snapshot import and mapping](CSV-LIST-IMPORT.md) is now implemented separately. Hardcover list adapters, complete list pagination, acquisition policy inheritance, activation/backfill/catch-up previews, automatic list-to-download orchestration, richer identity reconciliation and write-back remain pending. The only currently supported subscription acquisition mode is Browse. A followed shelf creates no acquisition intent or download, even if download dispatch is enabled elsewhere. These are unfinished S07–S08 requirements, not removed scope.
+[CSV snapshot import and mapping](CSV-LIST-IMPORT.md) and [Hardcover inbound subscriptions](HARDCOVER-LISTS.md) are now implemented separately. Complete large-list support, acquisition policy inheritance, activation/backfill/catch-up previews, automatic list-to-download orchestration, richer identity reconciliation and write-back remain pending. The only currently supported subscription acquisition mode is Browse. A followed shelf creates no acquisition intent or download, even if download dispatch is enabled elsewhere. These are unfinished S07–S08 requirements, not removed scope.
 
 Goodreads' own [RSS announcement](https://www.goodreads.com/blog/show/20-more-rss-feeds) documents shelf-addition feeds. It is a historical source, not a current stability or completeness guarantee. This adapter uses original code and synthetic interface fixtures; no Goodreads implementation or reader reviews are bundled.

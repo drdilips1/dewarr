@@ -95,7 +95,7 @@ export default function Activity({
                   {item.kind === "lists.csv"
                     ? "CSV list import"
                     : item.kind === "lists.sync"
-                      ? "Goodreads shelf observation"
+                      ? "External list observation"
                       : item.kind === "sources.search"
                         ? "Book source search"
                         : item.kind === "system.probe"

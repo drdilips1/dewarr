@@ -12,6 +12,7 @@ export default function ListSubscription({ listId }: { listId: string }) {
   const cache = useQueryClient();
   const [expanded, setExpanded] = useState(false);
   const [offset, setOffset] = useState(0);
+  const [choice, setChoice] = useState<"goodreads" | "hardcover">("goodreads");
   const key = useRef(crypto.randomUUID());
   const path = { list_id: listId };
   const subscription = useQuery({
@@ -73,6 +74,11 @@ export default function ListSubscription({ listId }: { listId: string }) {
         await api.PUT("/api/lists/{list_id}/subscription", {
           params: { path },
           body: {
+            provider: String(fields.get("provider")) as
+              "goodreads" | "hardcover",
+            hardcover_list_id: fields.get("hardcover_id")
+              ? Number(fields.get("hardcover_id"))
+              : null,
             feed_url: String(fields.get("url") || "") || null,
             interval_minutes: Number(fields.get("interval")),
             enabled: fields.get("enabled") === "on",
@@ -101,14 +107,27 @@ export default function ListSubscription({ listId }: { listId: string }) {
     },
   });
   const data = subscription.data;
+  const provider = data?.provider || choice;
+  const hardcover = provider === "hardcover";
   const busy =
     sync.isPending || data?.state === "queued" || data?.state === "running";
   return (
-    <section className="panel editor" aria-label="Goodreads shelf subscription">
-      <h2>Follow a Goodreads shelf</h2>
+    <section
+      className="panel editor"
+      aria-label={
+        hardcover
+          ? "Hardcover list subscription"
+          : "Goodreads shelf subscription"
+      }
+    >
+      <h2>
+        {hardcover ? "Follow a Hardcover list" : "Follow a Goodreads shelf"}
+      </h2>
       <p>
-        Bring shelf additions into this list. Books missing from a later feed
-        stay here. Removing an imported book excludes it from future refreshes.
+        {hardcover
+          ? "Follow your own or an accessible community list. Verified removals affect source-only entries; books you added locally stay here."
+          : "Bring shelf additions into this list. Books missing from a later feed stay here."}{" "}
+        Removing an imported book excludes it from future refreshes.
       </p>
       <p className="muted">
         Browsing only: shelf observation does not start downloads or change
@@ -121,21 +140,26 @@ export default function ListSubscription({ listId }: { listId: string }) {
         <>
           <p role="status">{data.message}</p>
           <p>
-            {data.observed_count} observed · {data.excluded_count} excluded ·{" "}
-            {data.shelf}
+            {data.provider === "hardcover"
+              ? `${data.present_count} currently listed`
+              : `${data.observed_count} observed`}{" "}
+            · {data.excluded_count} excluded · {data.shelf}
           </p>
           <p className="muted">
             Last success:{" "}
             {data.last_success_at
               ? new Date(data.last_success_at).toLocaleString()
               : "Not yet observed"}
-            . RSS is a partial view of a shelf.
+            .{" "}
+            {hardcover
+              ? "Only a fully verified observation updates membership."
+              : "RSS is a partial view of a shelf."}
           </p>
           <button
             disabled={!!busy || !data.enabled}
             onClick={() => sync.mutate()}
           >
-            Refresh Goodreads shelf
+            {hardcover ? "Refresh Hardcover list" : "Refresh Goodreads shelf"}
           </button>
         </>
       )}
@@ -144,6 +168,8 @@ export default function ListSubscription({ listId }: { listId: string }) {
           key={data?.generation || "new"}
           data={data}
           pending={save.isPending}
+          provider={provider}
+          onProvider={setChoice}
           onSave={(form) => save.mutate(form)}
         />
       )}
@@ -192,10 +218,14 @@ export default function ListSubscription({ listId }: { listId: string }) {
 function SubscriptionSettings({
   data,
   pending,
+  provider,
+  onProvider,
   onSave,
 }: {
   data: Subscription | null | undefined;
   pending: boolean;
+  provider: "goodreads" | "hardcover";
+  onProvider: (provider: "goodreads" | "hardcover") => void;
   onSave: (form: HTMLFormElement) => void;
 }) {
   return (
@@ -209,20 +239,39 @@ function SubscriptionSettings({
         }}
       >
         <label>
-          Goodreads RSS URL
-          <input
-            name="url"
-            type="password"
-            autoComplete="off"
-            required={!data}
-            placeholder={
-              data
-                ? "Saved securely; leave blank to keep"
-                : "https://www.goodreads.com/review/list_rss/…"
+          List provider
+          <select
+            aria-label="List provider"
+            value={provider}
+            disabled={!!data}
+            onChange={(e) =>
+              onProvider(e.target.value as "goodreads" | "hardcover")
             }
-            maxLength={2000}
-          />
+          >
+            <option value="goodreads">Goodreads RSS</option>
+            <option value="hardcover">Hardcover</option>
+          </select>
+          <input type="hidden" name="provider" value={provider} />
         </label>
+        {provider === "hardcover" ? (
+          <HardcoverChoice data={data} />
+        ) : (
+          <label>
+            Goodreads RSS URL
+            <input
+              name="url"
+              type="password"
+              autoComplete="off"
+              required={!data}
+              placeholder={
+                data
+                  ? "Saved securely; leave blank to keep"
+                  : "https://www.goodreads.com/review/list_rss/…"
+              }
+              maxLength={2000}
+            />
+          </label>
+        )}
         <label>
           Check every (minutes)
           <input
@@ -244,7 +293,7 @@ function SubscriptionSettings({
         </label>
         <p className="muted">
           Pausing keeps this list and its exclusions. Start another local list
-          to follow a different Goodreads shelf.
+          to follow a different source list.
         </p>
         <button className="primary" disabled={pending}>
           {data ? "Save shelf settings" : "Follow shelf"}
@@ -302,6 +351,12 @@ function ObservedEntry({
       ) : (
         <p>The linked catalog book is no longer accessible.</p>
       )}
+      {!entry.present && (
+        <p className="muted">
+          No longer present in the verified source list. Any separately added
+          local entry is preserved.
+        </p>
+      )}
       {entry.identity_changed && (
         <p className="notice">
           The source identity changed. Review the linked catalog book; its
@@ -311,7 +366,7 @@ function ObservedEntry({
       <Notice error={match.error || update.error} />
       <div className="button-row">
         <button
-          disabled={update.isPending}
+          disabled={update.isPending || !entry.present}
           onClick={() => update.mutate({ excluded: !entry.excluded })}
         >
           {entry.excluded ? "Restore to this list" : "Exclude from this shelf"}
@@ -350,5 +405,110 @@ function ObservedEntry({
         </form>
       )}
     </article>
+  );
+}
+
+function HardcoverChoice({ data }: { data: Subscription | null | undefined }) {
+  const [mode, setMode] = useState<"owned" | "followed" | "public">("owned");
+  const [cursor, setCursor] = useState(0);
+  const [selected, setSelected] = useState(
+    String(data?.hardcover_list_id || ""),
+  );
+  const options = useQuery({
+    queryKey: ["hardcover-lists", mode, cursor],
+    enabled: !data,
+    queryFn: async () =>
+      result(
+        await api.GET("/api/metadata/hardcover-lists", {
+          params: { query: { mode, cursor } },
+        }),
+      ),
+  });
+  return (
+    <>
+      <p className="muted">
+        Uses your account in <Link to="/metadata">Metadata settings</Link>. Your
+        token needs access to lists and book metadata.
+      </p>
+      {!data ? (
+        <>
+          <label>
+            Browse Hardcover lists
+            <select
+              aria-label="Browse Hardcover lists"
+              value={mode}
+              onChange={(e) => {
+                setMode(e.target.value as typeof mode);
+                setCursor(0);
+              }}
+            >
+              <option value="owned">My lists</option>
+              <option value="followed">Lists I follow</option>
+              <option value="public">Public lists</option>
+            </select>
+          </label>
+          <Notice error={options.error} />
+          <label>
+            Choose a Hardcover list
+            <select
+              aria-label="Choose a Hardcover list"
+              value={
+                options.data?.items.some(
+                  (item) => item.external_id === selected,
+                )
+                  ? selected
+                  : ""
+              }
+              onChange={(e) => setSelected(e.target.value)}
+            >
+              <option value="">
+                {options.isFetching
+                  ? "Loading lists…"
+                  : "Choose a list or enter its ID below"}
+              </option>
+              {options.data?.items.map((item) => (
+                <option key={item.external_id} value={item.external_id}>
+                  {item.name} · {item.count} books ·{" "}
+                  {item.public ? "Public" : "Restricted"}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div className="button-row">
+            <button
+              type="button"
+              disabled={!cursor || options.isFetching}
+              onClick={() => setCursor(0)}
+            >
+              First list page
+            </button>
+            <button
+              type="button"
+              disabled={!options.data?.next_cursor || options.isFetching}
+              onClick={() => setCursor(options.data!.next_cursor!)}
+            >
+              More Hardcover lists
+            </button>
+          </div>
+        </>
+      ) : null}
+      <label>
+        Hardcover list ID
+        <input
+          name="hardcover_id"
+          type="number"
+          min={1}
+          max={2147483647}
+          required
+          value={selected}
+          readOnly={!!data}
+          onChange={(e) => setSelected(e.target.value)}
+        />
+      </label>
+      <p className="muted">
+        Local following does not follow or modify the list on Hardcover. No
+        library files are removed.
+      </p>
+    </>
   );
 }

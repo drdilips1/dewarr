@@ -1,4 +1,5 @@
 from datetime import UTC, datetime
+from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Header, HTTPException
@@ -8,7 +9,15 @@ from sqlalchemy import delete, func, select
 from app.adapters.goodreads import feed_identity, feed_url
 from app.api.dependencies import Database, Member
 from app.api.operations import OperationView
-from app.db.models import AuditEvent, ListEntry, ListObservation, ListSubscription, Operation, Work
+from app.db.models import (
+    AuditEvent,
+    CatalogAccount,
+    ListEntry,
+    ListObservation,
+    ListSubscription,
+    Operation,
+    Work,
+)
 from app.domain.acquisition import withdraw_list_reasons
 from app.domain.list_subscriptions import begin, ensure_membership, owned_list, repair_job
 from app.domain.visibility import visible_work
@@ -19,6 +28,8 @@ router = APIRouter(prefix="/lists/{list_id}/subscription", tags=["list-subscript
 
 
 class SubscriptionInput(BaseModel):
+    provider: Literal["goodreads", "hardcover"] | None = None
+    hardcover_list_id: int | None = Field(default=None, ge=1, le=2147483647, strict=True)
     feed_url: str | None = Field(default=None, max_length=2000)
     enabled: bool = True
     interval_minutes: int = Field(default=30, ge=30, le=1440)
@@ -31,6 +42,9 @@ class SubscriptionInput(BaseModel):
 
 
 class SubscriptionView(BaseModel):
+    provider: Literal["goodreads", "hardcover"]
+    hardcover_list_id: int | None = None
+    present_count: int
     id: UUID
     generation: int
     enabled: bool
@@ -57,6 +71,7 @@ class ObservationView(BaseModel):
     catalog_title: str | None
     excluded: bool
     identity_changed: bool
+    present: bool
     first_seen_at: datetime
     last_seen_at: datetime
 
@@ -87,14 +102,29 @@ async def view(db, row):
             )
         )
     ).one()
+    config = decrypt_secrets(row.encrypted_config)
+    count_present = await db.scalar(
+        select(func.count())
+        .select_from(ListObservation)
+        .where(ListObservation.subscription_id == row.id, ListObservation.present.is_(True))
+    )
     return SubscriptionView(
+        provider=row.provider,
+        feed_configured=row.provider == "goodreads",
+        hardcover_list_id=int(config["external_id"]) if row.provider == "hardcover" else None,
+        present_count=count_present or 0,
+        completeness=("verified-observation" if config.get("complete") else "not-observed")
+        if row.provider == "hardcover"
+        else "partial-feed",
         id=row.id,
         generation=row.generation,
         enabled=row.enabled,
         interval_minutes=row.interval_minutes,
         state=row.state,
         message=row.message,
-        shelf=feed_identity(decrypt_secrets(row.encrypted_config)["url"])[1],
+        shelf=(config.get("name") or f"Hardcover list {config['external_id']}")
+        if row.provider == "hardcover"
+        else feed_identity(config["url"])[1],
         last_success_at=row.last_success_at,
         baseline_at=row.baseline_at,
         next_sync_at=row.next_sync_at,
@@ -114,11 +144,29 @@ async def detail(list_id: UUID, user: Member, db: Database):
 @router.put("", response_model=SubscriptionView)
 async def configure(list_id: UUID, body: SubscriptionInput, user: Member, db: Database):
     row = await subscription(db, user, list_id)
+    provider = body.provider or (row.provider if row else "goodreads")
+    if row and provider != row.provider:
+        raise HTTPException(422, "Detach the current subscription before changing its provider")
+    if provider == "hardcover":
+        if body.feed_url:
+            raise HTTPException(422, "Hardcover lists use your connected account, not an RSS URL")
+        account = await db.get(CatalogAccount, user.id)
+        if (not account or not account.enabled) and (not row or body.enabled):
+            raise HTTPException(409, "Connect and enable your Hardcover account in Metadata first")
+    elif body.hardcover_list_id is not None:
+        raise HTTPException(422, "A Goodreads subscription cannot use a Hardcover list ID")
     if not row:
-        if body.expected_generation or not body.feed_url:
-            raise HTTPException(422, "Enter a feed URL and revision zero to follow a shelf")
+        if body.expected_generation or (
+            not body.feed_url if provider == "goodreads" else not body.hardcover_list_id
+        ):
+            raise HTTPException(422, "Choose a source list and revision zero to follow it")
+        config = (
+            {"url": body.feed_url}
+            if provider == "goodreads"
+            else {"external_id": str(body.hardcover_list_id)}
+        )
         row = ListSubscription(
-            list_id=list_id, encrypted_config=encrypt_secrets({"url": body.feed_url})
+            list_id=list_id, provider=provider, encrypted_config=encrypt_secrets(config)
         )
         db.add(row)
         await db.flush()
@@ -126,13 +174,20 @@ async def configure(list_id: UUID, body: SubscriptionInput, user: Member, db: Da
         if row.generation != body.expected_generation:
             raise HTTPException(409, "Shelf settings changed; reload before saving")
         config = decrypt_secrets(row.encrypted_config)
-        if body.feed_url and feed_identity(body.feed_url) != feed_identity(config["url"]):
+        if provider == "goodreads":
+            if body.feed_url and feed_identity(body.feed_url) != feed_identity(config["url"]):
+                raise HTTPException(
+                    422, "Follow a different shelf in a new list, or detach this subscription first"
+                )
+            if body.feed_url:
+                row.encrypted_config = encrypt_secrets({"url": body.feed_url})
+        elif (
+            body.hardcover_list_id is not None
+            and str(body.hardcover_list_id) != config["external_id"]
+        ):
             raise HTTPException(
-                422, "Follow a different shelf in a new list, or detach this subscription first"
+                422, "Follow a different Hardcover list separately, or detach first"
             )
-        if body.feed_url:
-            # Credentials/ordering can change, but cached validators do not cross a changed URL.
-            row.encrypted_config = encrypt_secrets({"url": body.feed_url})
         row.generation += 1
         if row.operation_id:
             operation = await db.get(Operation, row.operation_id)
@@ -220,6 +275,7 @@ async def observations(list_id: UUID, user: Member, db: Database, offset: int = 
                 catalog_title=work.title if allowed else None,
                 excluded=record.excluded,
                 identity_changed=record.snapshot.get("identity_changed", False),
+                present=record.present,
                 first_seen_at=record.created_at,
                 last_seen_at=record.last_seen_at,
             )
@@ -234,6 +290,7 @@ async def remove_unneeded(db, user, row, work_id):
             ListObservation.subscription_id == row.id,
             ListObservation.work_id.in_(family_ids(work_id)),
             ListObservation.excluded.is_(False),
+            ListObservation.present.is_(True),
         )
         .limit(1)
     )

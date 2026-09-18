@@ -10,6 +10,7 @@ from sqlalchemy import case, exists, func, or_, select
 from app.adapters.catalog_providers import Hardcover, OpenLibrary
 from app.adapters.catalog_types import BookData, Provider, SearchPage, SeriesData
 from app.adapters.contracts import AdapterError, FailureKind
+from app.adapters.hardcover_lists import ChoicePage
 from app.api.catalog import WorkInput, WorkView, work_view
 from app.api.dependencies import Admin, CurrentUser, Database, Member
 from app.api.operations import OperationView
@@ -105,7 +106,9 @@ async def provider_call(db, user_id, provider, operation, *args, force=False):
     scope = f"{user_id}:{generation}" if provider == "hardcover" else "public"
     await db.rollback()
     # No request transaction or connection is retained across provider I/O.
-    async with CatalogGateway(provider, scope, token, force=force) as gateway:
+    async with CatalogGateway(
+        provider, scope, token, force=force, cache=operation not in {"list_page", "list_choices"}
+    ) as gateway:
         adapter = (
             Hardcover(gateway.request) if provider == "hardcover" else OpenLibrary(gateway.request)
         )
@@ -629,3 +632,19 @@ async def edit_metadata(work_id: UUID, body: MetadataEdit, user: Admin, db: Data
     availability = (await availability_for(db, user, [work_id]))[work_id]
     await db.commit()
     return work_view(work, availability)
+
+
+@router.get("/hardcover-lists", response_model=ChoicePage)
+async def hardcover_lists(
+    user: Member,
+    db: Database,
+    mode: Literal["owned", "followed", "public"] = "owned",
+    cursor: int = Query(default=0, ge=0, le=2147483647),
+):
+    try:
+        value, _, _ = await provider_call(
+            db, user.id, "hardcover", "list_choices", mode, cursor, force=True
+        )
+        return value
+    except AdapterError as error:
+        raise adapter_http_error(error) from error

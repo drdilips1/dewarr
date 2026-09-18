@@ -1716,3 +1716,102 @@ test("CSV snapshots preview mapped columns, import selected shelves and retain r
   });
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });
+
+test("Hardcover lists verify pages before syncing and retain exclusions after source changes", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(180_000);
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.getByRole("link", { name: "Lists", exact: true }).click();
+  await page
+    .getByLabel("Create a private list")
+    .fill("Hardcover curated shelf");
+  await page.getByRole("button", { name: "Create list", exact: true }).click();
+  await page.getByRole("link", { name: /Hardcover curated shelf/ }).click();
+  await page
+    .getByRole("combobox", { name: "List provider", exact: true })
+    .selectOption("hardcover");
+  const panel = page.getByRole("region", {
+    name: "Hardcover list subscription",
+  });
+  await expect(
+    panel.getByRole("combobox", { name: "Choose a Hardcover list" }),
+  ).toContainText("Fixture Hardcover List");
+  await panel
+    .getByRole("combobox", { name: "Choose a Hardcover list" })
+    .selectOption("91");
+  await panel
+    .getByRole("button", { name: "Follow shelf", exact: true })
+    .click();
+  await expect(panel.getByRole("status")).toContainText(
+    "Hardcover list verified: 2 books",
+    { timeout: 40_000 },
+  );
+  await expect(
+    page.getByRole("link", { name: /Hardcover List Arrival/ }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", {
+      name: "Remove Hardcover List Arrival from list",
+      exact: true,
+    })
+    .click();
+  await expect(
+    page.getByRole("link", { name: /Hardcover List Arrival/ }),
+  ).toHaveCount(0);
+  await page.request.post("http://127.0.0.1:13379/fixture/hardcover-list", {
+    data: { mode: "omission" },
+  });
+  await panel
+    .getByRole("button", { name: "Refresh Hardcover list", exact: true })
+    .click();
+  await expect(panel.getByRole("status")).toContainText(
+    "Hardcover list verified: 1 books",
+    { timeout: 40_000 },
+  );
+  await page.request.post("http://127.0.0.1:13379/fixture/hardcover-list", {
+    data: { mode: "addition" },
+  });
+  await panel
+    .getByRole("button", { name: "Refresh Hardcover list", exact: true })
+    .click();
+  await expect(panel.getByRole("status")).toContainText(
+    "Hardcover list verified: 3 books",
+    { timeout: 40_000 },
+  );
+  await expect(
+    page.getByRole("link", { name: /Hardcover Later Arrival/ }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /Hardcover List Arrival/ }),
+  ).toHaveCount(0);
+  await panel.getByText("Shelf connection settings", { exact: true }).click();
+  await panel.getByLabel("Observe shelf additions").uncheck();
+  await panel
+    .getByRole("button", { name: "Save shelf settings", exact: true })
+    .click();
+  await expect(panel.getByRole("status")).toContainText("Observation paused");
+  await page.reload();
+  await expect(panel.getByRole("status")).toContainText("Observation paused");
+  await expect(page.locator("body")).not.toContainText(
+    "browser-hardcover-token",
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
+    )
+    .toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("hardcover-list-mobile.png"),
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+});

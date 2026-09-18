@@ -64,6 +64,7 @@ async def resolve(db, owner, record):
                 .join(BookList)
                 .where(
                     BookList.owner_id == owner.id,
+                    ListSubscription.provider == "goodreads",
                     ListObservation.external_id == record["external_id"],
                 )
             )

@@ -11,6 +11,7 @@ from app.adapters.goodreads import fetch_feed
 from app.config import get_settings
 from app.db.models import (
     BookList,
+    CatalogAccount,
     ListCatalogBinding,
     ListEntry,
     ListObservation,
@@ -25,7 +26,7 @@ from app.db.session import session_factory
 from app.domain.operations import transaction_lock
 from app.domain.release_profiles import normalized
 from app.domain.visibility import visible_origin_work, visible_work
-from app.domain.work_graph import canonical_work, family_ids, graph_lock
+from app.domain.work_graph import canonical_map, canonical_work, family_ids, graph_lock
 from app.importing.match_evidence import ISBN_KEYS, isbn_forms
 from app.jobs.queue import enqueue
 from app.jobs.retry import ShelfRetry
@@ -81,10 +82,17 @@ async def begin(db, user, list_id, key):
         return old
     row = await db.scalar(select(ListSubscription).where(ListSubscription.list_id == list_id))
     if not row or not row.enabled:
-        raise HTTPException(409, "Enable a Goodreads subscription before refreshing")
+        raise HTTPException(409, "Enable a list subscription before refreshing")
     await repair_job(db, row)
     if row.state in {"queued", "running"}:
         return await db.get(Operation, row.operation_id)
+    account_generation = None
+    if row.provider == "hardcover":
+        await transaction_lock(db, f"catalog-account:{user.id}")
+        account = await db.get(CatalogAccount, user.id, populate_existing=True)
+        if not account or not account.enabled:
+            raise HTTPException(409, "Connect and enable your Hardcover account in Metadata first")
+        account_generation = account.generation
     operation = Operation(
         owner_id=user.id,
         kind="lists.sync",
@@ -93,8 +101,10 @@ async def begin(db, user, list_id, key):
             "subscription_id": str(row.id),
             "list_id": str(list_id),
             "generation": row.generation,
+            "provider": row.provider,
+            "account_generation": account_generation,
         },
-        message="Waiting to observe Goodreads shelf additions",
+        message="Waiting to observe list membership",
     )
     db.add(operation)
     await db.flush()
@@ -110,17 +120,32 @@ async def context(db, operation_id):
     item = await db.scalar(
         select(BookList).where(BookList.id == UUID(operation.payload["list_id"])).with_for_update()
     )
+    await db.refresh(operation)
+    if operation.status in {"completed", "failed"}:
+        return None
     row = await db.get(
         ListSubscription, UUID(operation.payload["subscription_id"]), populate_existing=True
     )
+    account_valid = True
+    if row and row.provider == "hardcover":
+        await transaction_lock(db, f"catalog-account:{operation.owner_id}")
+        account = await db.get(CatalogAccount, operation.owner_id, populate_existing=True)
+        account_valid = bool(
+            account
+            and account.enabled
+            and account.generation == operation.payload.get("account_generation")
+        )
+    # Account saves take this advisory lock before their audit actor FK. Match
+    # that order rather than holding the actor row while waiting on the account.
     owner = await db.scalar(
         select(User)
         .where(User.id == operation.owner_id)
-        .with_for_update()
+        .with_for_update(key_share=True)
         .execution_options(populate_existing=True)
     )
     if (
-        not item
+        not account_valid
+        or not item
         or not row
         or not owner
         or not owner.active
@@ -187,7 +212,9 @@ async def catalog_match(db, owner, record, *, previous=True, create=True):
             .join(ListSubscription)
             .join(BookList)
             .where(
-                BookList.owner_id == owner.id, ListObservation.external_id == record["external_id"]
+                BookList.owner_id == owner.id,
+                ListSubscription.provider == "goodreads",
+                ListObservation.external_id == record["external_id"],
             )
             .order_by(ListObservation.created_at)
             .limit(1)
@@ -267,7 +294,7 @@ async def catalog_match(db, owner, record, *, previous=True, create=True):
 
 
 async def ensure_membership(db, row, observation):
-    if observation.excluded:
+    if observation.excluded or not observation.present:
         return
     exists = await db.scalar(
         select(ListEntry.id).where(
@@ -293,6 +320,16 @@ async def apply_records(db, row, owner, items):
     await graph_lock(db)
     await transaction_lock(db, f"goodreads:catalog:{owner.id}")
     now, added = datetime.now(UTC), 0
+    mapping = canonical_map()
+    entries = (
+        await db.execute(
+            select(mapping.c.work_id, ListEntry.position)
+            .join(ListEntry, ListEntry.work_id == mapping.c.origin_id)
+            .where(ListEntry.list_id == row.list_id)
+        )
+    ).all()
+    listed = {work_id for work_id, _ in entries}
+    position = max((p for _, p in entries), default=0)
     observed = {
         o.external_id: o
         for o in await db.scalars(
@@ -302,7 +339,12 @@ async def apply_records(db, row, owner, items):
     for record in items:
         observation = observed.get(record["external_id"])
         if not observation:
-            work = await catalog_match(db, owner, record)
+            if row.provider == "hardcover":
+                from app.domain.hardcover_subscriptions import catalog_match as hardcover_match
+
+                work = await hardcover_match(db, owner, record)
+            else:
+                work = await catalog_match(db, owner, record)
             observation = ListObservation(
                 subscription_id=row.id,
                 external_id=record["external_id"],
@@ -310,6 +352,7 @@ async def apply_records(db, row, owner, items):
                 snapshot=record,
                 last_seen_at=now,
                 excluded=False,
+                present=True,
             )
             db.add(observation)
             await db.flush()
@@ -324,11 +367,29 @@ async def apply_records(db, row, owner, items):
                 "identity_changed": bool(changed or previous.get("identity_changed")),
             }
             observation.last_seen_at = now
-        await ensure_membership(db, row, observation)
+            observation.present = True
+        if not observation.excluded and observation.present:
+            root = await canonical_work(db, observation.work_id)
+            if root.id not in listed:
+                position += 1
+                db.add(
+                    ListEntry(
+                        list_id=row.list_id, work_id=root.id, position=position, locally_added=False
+                    )
+                )
+                listed.add(root.id)
+                await db.flush()
     return added
 
 
 async def run(operation_id):
+    async with session_factory()() as db:
+        operation = await db.get(Operation, operation_id)
+        provider = operation.payload.get("provider") if operation else None
+    if provider == "hardcover":
+        from app.domain.hardcover_subscriptions import run as run_hardcover
+
+        return await run_hardcover(operation_id)
     if get_settings().recovery_mode:
         raise ShelfRetry(60)
     token = uuid4()
@@ -434,6 +495,20 @@ async def schedule():
             owner = await db.get(User, item.owner_id)
             if not row or not row.enabled or not owner.active or owner.role == "viewer":
                 continue
+            if row.provider == "hardcover":
+                account = await db.get(CatalogAccount, owner.id)
+                if not account or not account.enabled:
+                    row.state = "failed"
+                    row.message = (
+                        "Your Hardcover account is disabled; other lists continue normally"
+                    )
+                    row.run_token = None
+                    row.next_sync_at = next_due(row, datetime.now(UTC), failed=True)
+                    if row.operation_id:
+                        operation = await db.get(Operation, row.operation_id)
+                        if operation.status in {"queued", "running"}:
+                            operation.status, operation.message = "failed", row.message
+                    continue
             await repair_job(db, row)
             if row.next_sync_at <= datetime.now(UTC):
                 await begin(db, owner, list_id, f"shelf-schedule:{row.id}:{uuid4()}")

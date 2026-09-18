@@ -2391,6 +2391,66 @@
         }
       }
     },
+    "/api/metadata/hardcover-lists": {
+      "get": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Hardcover Lists",
+        "operationId": "hardcover_lists_api_metadata_hardcover_lists_get",
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "owned",
+                "followed",
+                "public"
+              ],
+              "type": "string",
+              "default": "owned",
+              "title": "Mode"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 2147483647,
+              "minimum": 0,
+              "default": 0,
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChoicePage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/identity/changes": {
       "get": {
         "tags": [
@@ -6603,6 +6663,33 @@
         ],
         "title": "ChangeView"
       },
+      "ChoicePage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ListChoice"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "title": "ChoicePage"
+      },
       "ClaimInput": {
         "properties": {
           "revision": {
@@ -8930,6 +9017,42 @@
         ],
         "title": "LibraryView"
       },
+      "ListChoice": {
+        "properties": {
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 600,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Count"
+          },
+          "public": {
+            "type": "boolean",
+            "title": "Public"
+          },
+          "owner_id": {
+            "type": "string",
+            "title": "Owner Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "external_id",
+          "name",
+          "count",
+          "public",
+          "owner_id"
+        ],
+        "title": "ListChoice"
+      },
       "ListDetail": {
         "properties": {
           "name": {
@@ -10494,6 +10617,10 @@
             "type": "boolean",
             "title": "Identity Changed"
           },
+          "present": {
+            "type": "boolean",
+            "title": "Present"
+          },
           "first_seen_at": {
             "type": "string",
             "format": "date-time",
@@ -10515,6 +10642,7 @@
           "catalog_title",
           "excluded",
           "identity_changed",
+          "present",
           "first_seen_at",
           "last_seen_at"
         ],
@@ -12972,6 +13100,34 @@
       },
       "SubscriptionInput": {
         "properties": {
+          "provider": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "goodreads",
+                  "hardcover"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider"
+          },
+          "hardcover_list_id": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 2147483647.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hardcover List Id"
+          },
           "feed_url": {
             "anyOf": [
               {
@@ -13008,6 +13164,29 @@
       },
       "SubscriptionView": {
         "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "goodreads",
+              "hardcover"
+            ],
+            "title": "Provider"
+          },
+          "hardcover_list_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hardcover List Id"
+          },
+          "present_count": {
+            "type": "integer",
+            "title": "Present Count"
+          },
           "id": {
             "type": "string",
             "format": "uuid",
@@ -13099,6 +13278,8 @@
         },
         "type": "object",
         "required": [
+          "provider",
+          "present_count",
           "id",
           "generation",
           "enabled",
