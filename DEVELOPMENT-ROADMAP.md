@@ -1,6 +1,6 @@
 # Product and development handoff
 
-September 18, 2026 · v1.8 planning guide, not a claim of implemented functionality.
+September 18, 2026 · v1.9 planning guide, not a claim of implemented functionality.
 
 Build a self-hosted book discovery, curation and acquisition app above Audiobookshelf. The experience should feel familiar to a Seerr user: browse attractive shelves, open one book page, see what is already owned, inspect available versions and sources, and request missing media. The app also owns organizing its newly downloaded files so that Audiobookshelf can serve them correctly.
 
@@ -168,7 +168,7 @@ After that increment, follow the existing package dependencies through complete 
 
 ## 9. Remaining development batches from the current checkpoint
 
-This sequence makes the existing stage backlog actionable; it adds no packages and does not mark any stage complete. The starting code revision is `067da81`. Recheck the status document before scheduling because subsequent implementation may close individual assertions.
+This sequence makes the existing stage backlog actionable; it adds no packages and does not mark any stage complete. The planning review began at code revision `0c947b3`; subsequent series catalog/curation evidence is recorded in implementation status. Recheck the status document and worktree before scheduling because subsequent implementation may close individual assertions.
 
 Batch 1 now has bounded narrator inheritance, source/import, ownership, ranking and browser evidence. Its wider recording-equivalence and live-service gates are not implied by those results; see the narrator checkpoint in implementation status. Continue with the earliest unmet dependencies in batches 2–7.
 
@@ -184,3 +184,5 @@ Batch 1 now has bounded narrator inheritance, source/import, ownership, ranking 
 | 8. Separate expansion releases | S10 | Additional backends/clients, richer recommendations, deliberate upgrades/reorganization and SSO | Each extension passes its own adapter, authorization and recovery contract |
 
 Batch 4's independent connector work can proceed once its contracts are stable; the automation beta still waits for all required source, series and import evidence. No launch estimate should be inferred from the number of batches. Estimate each remaining ticket after inspecting its code, fixtures and external-service access needs.
+
+Batch 2 is now decomposed into [six series implementation tasks](IMPLEMENTATION-PLAN.md#series-increment-reviewable-implementation-sequence): catalog observation, browsing/curation, target-set preview, shared pack selection, verified child fulfillment and list-to-library demonstration. Catalog observation and browsing/curation now have bounded implementation evidence. The immediate handoff is a reviewed finite target set before enabling pack automation; a browsable series is not proof of downloadable or imported coverage.

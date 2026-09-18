@@ -227,6 +227,40 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/catalog/series/hardcover/{external_id}/refresh": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Refresh */
+    post: operations["refresh_api_catalog_series_hardcover__external_id__refresh_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/catalog/series/hardcover/{external_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Detail */
+    get: operations["detail_api_catalog_series_hardcover__external_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/lists": {
     parameters: {
       query?: never;
@@ -5333,6 +5367,94 @@ export interface components {
        */
       compilation: boolean;
     };
+    /** SeriesEntryView */
+    SeriesEntryView: {
+      /**
+       * Membership Id
+       * Format: uuid
+       */
+      membership_id: string;
+      /** External Id */
+      external_id: string;
+      /** Position */
+      position: string | null;
+      /** Details */
+      details: string | null;
+      /** Compilation */
+      compilation: boolean;
+      /** Partial */
+      partial: boolean;
+      /** Merged Record */
+      merged_record: boolean;
+      /** Ambiguous Position */
+      ambiguous_position: boolean;
+      /** Release Date */
+      release_date: string | null;
+      /** Publication */
+      publication: string;
+      work: components["schemas"]["WorkView"];
+    };
+    /** SeriesView */
+    SeriesView: {
+      /** Id */
+      id?: string | null;
+      /**
+       * Provider
+       * @default hardcover
+       */
+      provider: string;
+      /** External Id */
+      external_id: string;
+      /** Name */
+      name: string;
+      /** Description */
+      description?: string | null;
+      /**
+       * Generation
+       * @default 0
+       */
+      generation: number;
+      /** Fetched At */
+      fetched_at?: string | null;
+      /** Status */
+      status: string;
+      /** Message */
+      message: string;
+      /**
+       * Items
+       * @default []
+       */
+      items: components["schemas"]["SeriesEntryView"][];
+      /**
+       * Total
+       * @default 0
+       */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+      /**
+       * Books
+       * @default 0
+       */
+      books: number;
+      /**
+       * Owned
+       * @default 0
+       */
+      owned: number;
+      /**
+       * Ebook
+       * @default 0
+       */
+      ebook: number;
+      /**
+       * Audio
+       * @default 0
+       */
+      audio: number;
+    };
     /** SettingsView */
     SettingsView: {
       profile: components["schemas"]["NamingProfile"];
@@ -6137,6 +6259,73 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["WorkView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  refresh_api_catalog_series_hardcover__external_id__refresh_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        external_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OperationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  detail_api_catalog_series_hardcover__external_id__get: {
+    parameters: {
+      query?: {
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        external_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SeriesView"];
         };
       };
       /** @description Validation Error */

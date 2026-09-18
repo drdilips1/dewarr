@@ -1,6 +1,6 @@
 # End-to-end development plan
 
-Planning baseline v1.8 · September 18, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
+Planning baseline v1.9 · September 18, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
 
 This plan implements [the PRD](PRD.md) using [the researched decisions](IMPLEMENTATION-DECISIONS.md). [Acceptance Plan](ACCEPTANCE-PLAN.md) specifies the evidence required at each gate. A stage is complete only when its exit gate passes; this document does not report completed engineering or tested compatibility.
 
@@ -226,7 +226,7 @@ Acceptance scenarios often span several stages. The [stage evidence scopes](ACCE
 | S06-02 | Prowlarr per-indexer capabilities/categories/search/resolution; origin attribution; native-MAM overlap suppression; unsupported transport handling. |
 | S06-03 | Incremental federated search, per-source budgets, normalized+raw fields, release equivalence and per-origin availability. Preserve distinct credentials/download routes even when results describe the same transfer. |
 | S06-04 | Complete profiles, inheritance and effective-policy explanations using the PRD precedence and in-flight change table. Default source/format preferences, minimum requirements, unknown-value handling and deterministic ranking; manual sorting separate from stored policy. Preserve each reason's constraints when sharing fulfillment. |
-| S06-05 | Just book / Prefer packs / Complete series selection, aliases, published/main-series set, verified coverage and bounded size/expansion controls. Replan uncovered wanted children after inspection without refetching satisfied children. |
+| S06-05 | Durable series catalog and curation; Just book / Prefer packs / Complete series selection, aliases, evidenced published/main-series set, verified coverage and bounded size/expansion controls. Preserve ambiguous membership, freeze accepted target sets and replan uncovered wanted children after inspection without refetching satisfied children. |
 | S06-06 | Source comparison, rejection explanations, edition/recording distinction, series coverage and omnibus UI with a truthful shared-asset link. |
 
 **Demo:** one book displays releases from independent sources, one failed adapter does not hide successful results, and an eligible series pack wins under the selected profile. Incorrect advertised coverage never gives false ownership.
@@ -693,7 +693,7 @@ No calendar commitment is implied. At each stage start, assign named owners and 
 
 ## 16. Release delivery contract
 
-This is the final development handoff for planning baseline v1.8. Sections 1–3 define the dependency graph and work packages; section 15 identifies the existing implementation starting point. Earlier checkpoint sequences are historical guidance. The PRD remains authoritative for behavior, and implementation status remains authoritative for verified progress.
+This is the current development handoff for planning baseline v1.9. Sections 1–3 define the dependency graph and work packages; section 15 identifies an earlier implementation starting point. Earlier checkpoint sequences are historical guidance. The PRD remains authoritative for behavior, and implementation status remains authoritative for verified progress.
 
 ### Milestones and acceptance ownership
 
@@ -712,6 +712,8 @@ Owner labels describe responsibilities, not assumed staffing. One developer may 
 
 ### Next increment in this workspace
 
+The v1.9 planning review began at committed revision `0c947b3`. The subsequent series catalog/curation increment now has bounded implementation evidence in [Series catalog](docs/SERIES-CATALOG.md) and [Implementation Status](docs/IMPLEMENTATION-STATUS.md). It does not complete pack acquisition or certify live Hardcover service behavior.
+
 The bounded single-book list-to-library path, membership re-addition/merge lifecycle and release-profile defaults have implementation evidence in [Implementation Status](docs/IMPLEMENTATION-STATUS.md). Those subsets do not close S06/S07. Continue **complete policy inheritance and acquisition scope**, within S06-04 and S07-04–S07-06, using the existing shared resolver and acquisition/import services.
 
 1. Complete field-level precedence for series scope and automatic destination routes, retaining independent administrator restrictions. Narrator preference and requirement now have bounded implementation evidence in [Request scope](docs/REQUEST-SCOPE.md): preferred names rank eligible audio, required names constrain satisfaction, and exact recording identity remains separate. Continue full series/recording behavior without treating that narrator increment as complete S06. The release-preference fields and supported request scope—desired media, first medium, language, abridgment, narrator requirements, standalone copies and required libraries—use the shared resolver, snapshots and UI. Library choices do not complete destination-route inheritance.
@@ -721,6 +723,27 @@ The bounded single-book list-to-library path, membership re-addition/merge lifec
 5. Demonstrate inherited policies through actual ebook/audio files to backend confirmation, including Both/Either, owned-media skips and delayed scans. Record affected regression, migration and browser evidence without claiming live-service or full-stage qualification from fixtures.
 
 After that bounded increment, finish missing S06 source/series/recording coverage, full S07 policy and connector qualification, S08 discovery, then S09 release readiness. Close earlier-stage gaps whenever they block these outcomes. Do not rewrite working foundation modules merely to follow stage numbering, and do not defer mandatory v1 functionality into S10.
+
+### Series increment: reviewable implementation sequence
+
+These are child tasks of S06-05 with existing S02/S03/S04/S06/S07 dependencies. They do not add top-level packages or replace the end-to-end stage gate. Their order deliberately separates catalog observation, user authorization, transfer selection and verified library coverage.
+
+| Child task | Implementation contract | Acceptance and handoff |
+|---|---|---|
+| S06-05a · Catalog observation | Provider-scoped series/member identities, account-scoped refresh operations, bounded pagination, generation/provenance and retained previous snapshots. Keep duplicate positions, merged records, compilations and partial books distinguishable. | AT-02/AT-04 subset: repeated/failed/changing pages, account rotation and restart never publish a partial replacement; no refresh creates an acquisition. Matching repeated pages is a consistency check, not a provider snapshot guarantee. |
+| S06-05b · Series browser and curation | Ordered members with uncertainty labels, overall/ebook/audio counts based on accessible canonical works, pagination and selected-book addition to an editable local list. | AT-04/AT-05/AT-06 subset: private inventory remains private; duplicate source members do not inflate counts; list-add errors preserve failed selections. Explain that the destination list's existing automation policy applies. |
+| S06-05c · Target-set preview | Shared scope resolver for Just book, Prefer packs and Complete series; dated main-series/publication evidence, explicit unresolved members, finite expansion and target-set revision. Separate current completion from future monitoring. | AT-12/AT-14 subset: same-name series and duplicate positions cannot silently substitute books; unknown membership requires selection/review; preview changes invalidate acceptance; refreshing the catalog cannot broaden existing authorization. |
+| S06-05d · Shared pack selection | Map each release's claimed/corroborated contents to eligible targets; compare coverage before ordered preferences; reserve compatible child targets and one transfer; retain each list/request reason. | AT-13/AT-14 subset: concurrent overlapping requests reuse compatible work, incompatible narrators remain separate, unknown/excessive payload is held, and loss of one reason does not cancel surviving reasons. |
+| S06-05e · Verified child fulfillment | Inspect actual media, persist per-book/version manifest entries, skip satisfied children, import verified missing children and reconcile each expected ABS item. An indivisible omnibus retains one physical asset with verified containment. | Full AT-14/AT-15 plus AT-17–AT-19 assertions: source bytes unchanged, ambiguous children held independently, omitted claimed children remain wanted and restarts do not repeat completed work. |
+| S06-05f · Automated series demonstration | Carry the same scope, profile, route, reasons and frozen evidence from an external-list observation through the existing acquisition pipeline. Surface policy, progress and repair actions. | AT-20–AT-22 and relevant AT-30: partially owned trilogy, two overlapping lists, repeated sync, worker interruption and delayed ABS scan converge without routine approval for supported unambiguous cases. |
+
+S06-05a/b now have bounded parser, database, API, browser and migration evidence recorded in implementation status. The next change is S06-05c: persist and preview a finite target set, including publication/main-membership uncertainty and stale-preview protection, using the existing request resolver and acquisition services. Live provider qualification remains outstanding. The series browser does not close S06-05c–f.
+
+### Release scheduling and scope control
+
+Plan by the M0–M6 demonstrations above. At each stage start, estimate the remaining child tasks after inspecting existing code: implementation effort, test/qualification effort, external-access dependencies and contingency are separate fields. Assign one accountable owner per ticket and one reviewer for its gate. Do not derive calendar dates from package counts or assume credentials, test services or filesystem compatibility are available.
+
+Within v1, preserve the complete requested experience: Seerr-style visuals; native MAM plus ABB/Prowlarr; metadata defaults and meaningful overrides; catalog editions/recordings; list-triggered acquisitions; collection-aware organization; ABS-confirmed ownership; discovery and related titles. Scope reductions require an explicit PRD change. Post-v1 adapters and advanced recommendations do not substitute for unfinished core behavior.
 
 ### Ticket readiness and completion
 

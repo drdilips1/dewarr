@@ -24,6 +24,7 @@ import { Loading, Notice } from "./components";
 
 const Catalog = lazy(() => import("./pages/Catalog"));
 const BookDetail = lazy(() => import("./pages/BookDetail"));
+const Series = lazy(() => import("./pages/Series"));
 const Lists = lazy(() => import("./pages/Lists"));
 const ActivityPage = lazy(() => import("./pages/Activity"));
 const Connections = lazy(() => import("./pages/Connections"));
@@ -372,6 +373,10 @@ function Shell({ auth }: { auth: Auth }) {
                 element={
                   <ProviderSearch canEdit={auth.user.role !== "viewer"} />
                 }
+              />
+              <Route
+                path="/series/hardcover/:externalId"
+                element={<Series canEdit={auth.user.role !== "viewer"} />}
               />
               <Route
                 path="/metadata"

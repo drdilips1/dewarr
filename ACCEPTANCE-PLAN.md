@@ -221,3 +221,14 @@ The PRD's [J-01–J-08 launch journeys](PRD.md#20-launch-journey-checklist) grou
 Record the journey, tested revision, prerequisite configuration, user-visible result, durable/external evidence and remaining unsupported combinations. For the automation journeys, count routine approval steps and actual transfer submissions; inspect final files and ABS inventory. Repeat with overlapping lists, a worker restart and a delayed scan. For J-06, include an ambiguous child and a separately owned child, and verify their independent outcomes. For J-08, reconcile an external transfer that is ahead of the restored database before resuming dispatch.
 
 Document-only planning updates require requirement/backlog cross-reference and link checks. They do not constitute a new application test run or alter previous implementation evidence. New functionality and changed defaults require their relevant implementation checks before acceptance.
+
+## 14. Series catalog and acquisition boundary
+
+These assertions refine AT-02, AT-04–AT-06 and AT-14–AT-15, with automated fulfillment still covered by AT-20–AT-22 and AT-30. They introduce no new scenario IDs. Apply them to the S06-05 child tasks in the implementation plan.
+
+- Two provider series with the same name remain separate. Repeated positions, decimal positions, unknown positions, compilations, partial books and merged records retain their source evidence. Popularity never silently decides acquisition identity or main-series membership.
+- An interrupted, changing or permission-limited series refresh preserves the previous usable snapshot and reports its freshness. A same-size membership replacement is not mistaken for an unchanged catalog merely because counts match. Account revocation or superseding refresh fences stale workers from publishing.
+- A series page counts distinct canonical works from accessible inventory; a compilation row does not count as another owned main-series work. An ebook-only work stays owned while an audio target remains wanted. Identity corrections update the projection without losing request history.
+- Adding selected books to a list is authorized, idempotent and reports partial failures. The UI identifies when the chosen list already has automatic acquisition enabled. Read-only catalog refresh never submits downloads.
+- Complete series records a finite target set and its catalog/policy revision. An unknown publication date or ambiguous main membership does not become eligible by guesswork. Provider refresh, a new sequel and a popularity change cannot expand an accepted request; explicit future monitoring uses standing policy.
+- A partly owned pack keeps separate claimed and verified coverage. One verified child may finish while another is held. Retries preserve successful publication, seeding paths and surviving request reasons. An inseparable omnibus remains one asset; losing it updates all verified containment relationships.

@@ -522,6 +522,124 @@
         }
       }
     },
+    "/api/catalog/series/hardcover/{external_id}/refresh": {
+      "post": {
+        "tags": [
+          "series"
+        ],
+        "summary": "Refresh",
+        "operationId": "refresh_api_catalog_series_hardcover__external_id__refresh_post",
+        "parameters": [
+          {
+            "name": "external_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "External Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/catalog/series/hardcover/{external_id}": {
+      "get": {
+        "tags": [
+          "series"
+        ],
+        "summary": "Detail",
+        "operationId": "detail_api_catalog_series_hardcover__external_id__get",
+        "parameters": [
+          {
+            "name": "external_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "External Id"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeriesView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/lists": {
       "get": {
         "tags": [
@@ -15633,6 +15751,206 @@
           "name"
         ],
         "title": "SeriesData"
+      },
+      "SeriesEntryView": {
+        "properties": {
+          "membership_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Membership Id"
+          },
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "details": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Details"
+          },
+          "compilation": {
+            "type": "boolean",
+            "title": "Compilation"
+          },
+          "partial": {
+            "type": "boolean",
+            "title": "Partial"
+          },
+          "merged_record": {
+            "type": "boolean",
+            "title": "Merged Record"
+          },
+          "ambiguous_position": {
+            "type": "boolean",
+            "title": "Ambiguous Position"
+          },
+          "release_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Release Date"
+          },
+          "publication": {
+            "type": "string",
+            "title": "Publication"
+          },
+          "work": {
+            "$ref": "#/components/schemas/WorkView"
+          }
+        },
+        "type": "object",
+        "required": [
+          "membership_id",
+          "external_id",
+          "position",
+          "details",
+          "compilation",
+          "partial",
+          "merged_record",
+          "ambiguous_position",
+          "release_date",
+          "publication",
+          "work"
+        ],
+        "title": "SeriesEntryView"
+      },
+      "SeriesView": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "provider": {
+            "type": "string",
+            "title": "Provider",
+            "default": "hardcover"
+          },
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "generation": {
+            "type": "integer",
+            "title": "Generation",
+            "default": 0
+          },
+          "fetched_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fetched At"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SeriesEntryView"
+            },
+            "type": "array",
+            "title": "Items",
+            "default": []
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total",
+            "default": 0
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "books": {
+            "type": "integer",
+            "title": "Books",
+            "default": 0
+          },
+          "owned": {
+            "type": "integer",
+            "title": "Owned",
+            "default": 0
+          },
+          "ebook": {
+            "type": "integer",
+            "title": "Ebook",
+            "default": 0
+          },
+          "audio": {
+            "type": "integer",
+            "title": "Audio",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "external_id",
+          "name",
+          "status",
+          "message",
+          "offset",
+          "limit"
+        ],
+        "title": "SeriesView"
       },
       "SettingsView": {
         "properties": {

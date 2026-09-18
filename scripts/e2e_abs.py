@@ -293,6 +293,42 @@ async def catalog(request: Request, authorization: str = Header(default="")):
         raise HTTPException(401)
     body = await request.json()
     query = body.get("query", "")
+    if "CatalogSeriesPage(" in query:
+        members = [
+            {
+                "id": key,
+                "position": key,
+                "details": str(key),
+                "compilation": key == 3,
+                "featured": True,
+                "book": {
+                    "id": book_id,
+                    "title": title,
+                    "cached_contributors": [{"author": {"name": "Catalog Author"}}],
+                    "is_partial_book": False,
+                    "release_date": "2020-01-01" if key != 4 else None,
+                },
+            }
+            for key, book_id, title in [
+                (1, 42, "The Catalog Journey"),
+                (2, 7001, "Hardcover List Arrival"),
+                (3, 7010, "Journey Collection"),
+                (4, 7011, "Journey Without Date"),
+            ]
+        ]
+        return {
+            "data": {
+                "series": [
+                    {
+                        "id": body["variables"]["id"],
+                        "name": "The Journey Series",
+                        "description": "A synthetic series for curation verification.",
+                        "book_series_aggregate": {"aggregate": {"count": len(members)}},
+                        "book_series": [m for m in members if m["id"] > body["variables"]["after"]],
+                    }
+                ]
+            }
+        }
     list_info = {
         "id": 91,
         "name": "Fixture Hardcover List",

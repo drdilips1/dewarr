@@ -1,6 +1,6 @@
 # Product requirements: book discovery and acquisition
 
-Version 1.8 planning baseline · September 18, 2026 · Working product name: Book discovery app.
+Version 1.9 planning baseline · September 18, 2026 · Working product name: Book discovery app.
 
 Status: product specification for staged development; implementation is in progress and recorded separately. User requirements from the conversation take precedence. This PRD defines product behavior; [Implementation Decisions](IMPLEMENTATION-DECISIONS.md) defines the researched engineering baseline; [Development Plan](IMPLEMENTATION-PLAN.md) defines delivery; [Acceptance Plan](ACCEPTANCE-PLAN.md) defines verification. Earlier research remains rationale, not an alternative product direction.
 
@@ -338,6 +338,12 @@ Unknown seeds display as unknown. Source-local popularity is never treated as a 
 | Complete series | Missing eligible published main-series works from a dated catalog snapshot | Each required work/media target satisfied; gaps remain visible |
 
 Future books, novellas, related series and author-wide collections are not silently included. A new release can be discovered later through explicit follow/list policy; selecting Complete series is not perpetual monitoring of everything an author publishes. Pack selection records additional included titles and expected total size. Unknown or excessive expansion is held for review under the effective limits. Runtime defaults for size/concurrency are validated during S06 and documented before enabling automation.
+
+The series catalog and the acquisition target set are separate. Retain provider-scoped series IDs, member IDs, original position/details, publication evidence and any partial-book, compilation or merge information. Two series with the same name remain separate until matched. Duplicate positions, decimal positions and unknown positions are valid observable states; neither popularity nor position alone proves that two entries are the same work or that an entry is a main-series book. A provider's featured-series flag must not be interpreted as main-book membership without an explicit documented contract.
+
+A series page may display uncertain members with an explanation. Complete series previews a dated, finite set of resolved eligible targets and separately identifies excluded or unresolved members. When main-series membership cannot be established, offer an explicit selection instead of silently guessing. Catalog refresh never expands an accepted request or dispatches a download. Following future additions requires a separate standing list/follow policy. Failed or changing paginated observations retain the last complete catalog and its visible freshness; they cannot remove request targets or owned assets.
+
+Series progress counts distinct canonical works against the accepted target set, with ebook and audiobook counts alongside overall ownership. A compilation entry does not inflate that denominator. A book available as an ebook stays checked even while the series request still wants its audiobook. Catalog membership is evidence about a series; it is not proof that a tracker pack contains those books.
 
 After a pack finishes, inspect the actual files. Each identifiable child has an independent import entry; already-satisfied children can be skipped while the complete original torrent remains available for seeding. A missing claimed child stays wanted. An indivisible omnibus becomes one asset with verified contained works, never fabricated standalone files.
 

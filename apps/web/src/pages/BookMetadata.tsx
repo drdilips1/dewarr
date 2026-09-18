@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Work } from "../api/client";
 import type { components } from "../api/schema";
@@ -297,7 +298,13 @@ export default function BookMetadata({
                 </small>
                 {source.series.map((series) => (
                   <small key={series.external_id}>
-                    {series.name}
+                    {source.provider === "hardcover" ? (
+                      <Link to={`/series/hardcover/${series.external_id}`}>
+                        {series.name}
+                      </Link>
+                    ) : (
+                      series.name
+                    )}
                     {series.position ? ` · Book ${series.position}` : ""}
                   </small>
                 ))}

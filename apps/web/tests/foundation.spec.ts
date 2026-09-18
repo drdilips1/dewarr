@@ -2984,3 +2984,87 @@ test("download defaults inherit per field and persist after reload", async ({
   );
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });
+
+test("series catalog preserves uncertainty and curates selected books", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(120_000);
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.getByRole("link", { name: /My protected catalog title/ }).click();
+  await page
+    .getByRole("link", { name: "The Journey Series", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Load series from Hardcover" })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "The Journey Series", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("status").filter({ hasText: "Verified 4 series entries" }),
+  ).toBeVisible({ timeout: 30_000 });
+  await expect(
+    page.getByText("Publication date unknown", { exact: false }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "3 · Journey Collection" }),
+  ).toBeVisible();
+  const curation = page.getByRole("region", { name: "Curate series" });
+  await curation
+    .getByLabel("Destination list")
+    .selectOption({ label: "Weekend reads" });
+  await expect(curation.getByRole("status")).toHaveText(
+    "This list has no active automatic acquisition policy.",
+  );
+  await curation
+    .getByRole("button", { name: "Select published books on this page" })
+    .click();
+  await expect(
+    page.getByLabel("Select My protected catalog title", { exact: true }),
+  ).toBeChecked();
+  await expect(
+    page.getByLabel("Select Hardcover List Arrival", { exact: true }),
+  ).toBeChecked();
+  await expect(
+    page.getByLabel("Select Journey Collection", { exact: true }),
+  ).not.toBeChecked();
+  await expect(
+    page.getByLabel("Select Journey Without Date", { exact: true }),
+  ).not.toBeChecked();
+  await curation
+    .getByRole("button", { name: "Add selected books to list (2)" })
+    .click();
+  await expect(
+    curation.getByText("Added 2 books to the list.", { exact: true }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("series-catalog-mobile.png"),
+    fullPage: true,
+  });
+  await page.getByRole("link", { name: "Lists", exact: true }).click();
+  await page.getByRole("link", { name: /Weekend reads/ }).click();
+  await expect(
+    page.getByRole("heading", {
+      name: "My protected catalog title",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Hardcover List Arrival", exact: true }),
+  ).toBeVisible();
+  expect(errors).toEqual([]);
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+});

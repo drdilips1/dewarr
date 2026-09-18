@@ -76,6 +76,31 @@ class Work(Identity, Base):
     match_key: Mapped[str | None] = mapped_column(String(64), index=True)
 
 
+class CatalogSeries(Identity, Base):
+    __tablename__ = "catalog_series"
+    __table_args__ = (UniqueConstraint("owner_id", "provider", "external_id"),)
+    owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
+    provider: Mapped[str] = mapped_column(String(40))
+    external_id: Mapped[str] = mapped_column(String(200))
+    name: Mapped[str] = mapped_column(String(600))
+    snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+    generation: Mapped[int] = mapped_column(Integer, default=0)
+    fetched_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    operation_id: Mapped[UUID | None] = mapped_column(ForeignKey("operations.id"))
+
+
+class SeriesMembership(Identity, Base):
+    __tablename__ = "series_memberships"
+    __table_args__ = (UniqueConstraint("series_id", "external_id"),)
+    series_id: Mapped[UUID] = mapped_column(
+        ForeignKey("catalog_series.id", ondelete="CASCADE"), index=True
+    )
+    external_id: Mapped[str] = mapped_column(String(200))
+    work_id: Mapped[UUID] = mapped_column(ForeignKey("works.id"), index=True)
+    snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    present: Mapped[bool] = mapped_column(Boolean, default=True)
+
+
 class Version(Identity, Base):
     __tablename__ = "versions"
     __table_args__ = (
