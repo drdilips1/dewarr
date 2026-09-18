@@ -4732,6 +4732,16 @@
               }
             ],
             "title": "Inspection Id"
+          },
+          "fulfillment": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FulfillmentView"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -4748,7 +4758,8 @@
           "can_recheck",
           "can_cancel",
           "progress",
-          "inspection_id"
+          "inspection_id",
+          "fulfillment"
         ],
         "title": "AttemptView"
       },
@@ -6385,6 +6396,30 @@
           "document"
         ],
         "title": "FrozenPlanView"
+      },
+      "FulfillmentView": {
+        "properties": {
+          "confirmed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Confirmed At"
+          },
+          "basis": {
+            "type": "string",
+            "title": "Basis"
+          },
+          "available_now": {
+            "type": "boolean",
+            "title": "Available Now"
+          }
+        },
+        "type": "object",
+        "required": [
+          "confirmed_at",
+          "basis",
+          "available_now"
+        ],
+        "title": "FulfillmentView"
       },
       "GrantInput": {
         "properties": {

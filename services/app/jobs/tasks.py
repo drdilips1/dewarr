@@ -184,6 +184,14 @@ async def download_attempt(attempt_id: str) -> None:
     await run(UUID(attempt_id))
 
 
+@tasks.task(name="acquisition.fulfillment", queue="acquisition", retry=3)
+async def reconcile_fulfillment(work_id: str) -> None:
+    from app.domain.download_fulfillment import reconcile_work
+
+    async with session_factory()() as db, db.begin():
+        await reconcile_work(db, UUID(work_id))
+
+
 @tasks.periodic(cron="* * * * *")
 @tasks.task(name="acquisition.downloads.schedule", queue="acquisition", retry=3)
 async def schedule_downloads(timestamp: int) -> None:

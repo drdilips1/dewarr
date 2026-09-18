@@ -438,7 +438,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     .getByRole("button", { name: "Inspect files", exact: true })
     .click();
   const inspected = page.getByRole("region", { name: "Inspected download" });
-  await expect(inspected).toContainText("1 files inspected · 1 book groups");
+  await expect(inspected).toContainText("1 file inspected · 1 book group");
   await inspected
     .getByRole("button", { name: "Review file groups", exact: true })
     .click();
@@ -464,7 +464,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await groupEditor
     .getByRole("button", { name: "Save file groups", exact: true })
     .click();
-  await expect(inspected).toContainText("1 files inspected · 0 book groups");
+  await expect(inspected).toContainText("1 file inspected · 0 book groups");
   await page.reload();
   await expect(inspected).toContainText("1 files excluded from this plan");
   await inspected
@@ -476,7 +476,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await groupEditor
     .getByRole("button", { name: "Restore proposed groups", exact: true })
     .click();
-  await expect(inspected).toContainText("1 files inspected · 1 book groups");
+  await expect(inspected).toContainText("1 file inspected · 1 book group");
   await inspected
     .getByLabel("Find catalog book")
     .fill("My protected catalog title");
@@ -702,7 +702,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await groupEditor
     .getByRole("button", { name: "Save file groups", exact: true })
     .click();
-  await expect(inspected).toContainText("2 files inspected · 1 book groups");
+  await expect(inspected).toContainText("2 files inspected · 1 book group");
   await expect(inspected).toContainText(
     "Reviewed as multiple formats of one complete edition",
   );
@@ -758,7 +758,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await groupEditor
     .getByRole("button", { name: "Save file groups", exact: true })
     .click();
-  await expect(inspected).toContainText("2 files inspected · 1 book groups");
+  await expect(inspected).toContainText("2 files inspected · 1 book group");
   await page.reload();
   await inspected
     .getByRole("button", { name: "Review file groups", exact: true })

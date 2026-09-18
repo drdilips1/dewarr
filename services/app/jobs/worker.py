@@ -23,6 +23,7 @@ async def recover_stalled_jobs() -> None:
                 "acquisition.download",
                 "acquisition.downloads.schedule",
                 "acquisition.reconcile",
+                "acquisition.fulfillment",
                 "organization.inspect",
                 "organization.probe",
                 "organization.publish",

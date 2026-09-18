@@ -479,7 +479,9 @@ async def test_dispatch_history_refuses_lossy_downgrade(client, database, select
     assert result.returncode != 0
     assert "Download attempt history requires" in result.stderr
     async with database() as db:
-        assert await db.scalar(text("SELECT version_num FROM alembic_version")) == "0018_attempts"
+        assert (
+            await db.scalar(text("SELECT version_num FROM alembic_version")) == "0019_fulfillment"
+        )
 
 
 async def test_known_padding_is_not_mistaken_for_missing_payload(

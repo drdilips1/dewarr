@@ -30,7 +30,7 @@ Owner-only GET/list, pre-submission cancellation, and cooldown-controlled rechec
 
 Changing saved credentials, source generation or import settings after submission holds the attempt and retains its claims. Rebinding an existing attempt to corrected settings is not implemented yet; do not edit database state or discard the history as a workaround. This repair workflow remains part of S05/S09.
 
-Book merge/undo is refused while a committed reservation is outstanding. This prevents a canonical identity correction from releasing a possibly active transfer. Safe post-import claim/reservation retirement and identity repair remain to be connected to the full acquisition workflow.
+Book merge/undo is refused while a committed reservation is outstanding. This prevents a canonical identity correction from releasing a possibly active transfer. [Fulfillment reconciliation](DOWNLOAD-FULFILLMENT.md) now closes completed, satisfied request reservations while preserving torrent identity claims. Historical fulfillment no longer permanently blocks book correction; uncertain transfers remain protected. Explicit identity repair and shared-file reuse remain pending.
 
 ## Completed-file handoff
 

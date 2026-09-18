@@ -13,7 +13,16 @@ from sqlalchemy import select
 from app.adapters.mam import release
 from app.adapters.torrent_descriptor import inspect_torrent
 from app.config import get_settings
-from app.db.models import DownloadAttempt, Integration, SourceArtifact, SourceConnection
+from app.db.models import (
+    AcquisitionReservation,
+    AcquisitionSelection,
+    DownloadAttempt,
+    DownloadFulfillment,
+    DownloadIdentityClaim,
+    Integration,
+    SourceArtifact,
+    SourceConnection,
+)
 from app.domain import download_attempts as downloads
 from app.jobs.queue import get_queue
 from app.security import encrypt_secrets
@@ -165,6 +174,17 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
     await get_queue().run_worker_async(wait=False, concurrency=1)
     imported = (await client.get(f"/api/organization/imports/{result.json()['id']}")).json()
     assert imported["entries"][0]["state"] == "confirmed", imported
+    async with database() as db:
+        fulfillment = await db.scalar(select(DownloadFulfillment))
+        assert fulfillment and fulfillment.import_entry_id == UUID(imported["entries"][0]["id"])
+        assert fulfillment.evidence["basis"] == "imported"
+        selection = await db.get(AcquisitionSelection, UUID(selected_response.json()["id"]))
+        assert selection.state == "fulfilled"
+        assert (await db.get(AcquisitionReservation, selection.reservation_id)).state == "released"
+        assert (await db.scalar(select(DownloadIdentityClaim))).active
+    activity = (await client.get(f"/api/acquisition/downloads/{attempt.id}")).json()
+    assert activity["fulfillment"]["basis"] == "imported"
+    assert activity["fulfillment"]["available_now"]
     output = list(route["target"].rglob("*.epub"))
     assert len(output) == 1 and output[0].stat().st_ino == source.stat().st_ino
     assert output[0].read_bytes() == source.read_bytes() == original

@@ -17,7 +17,9 @@ export default function Downloads({ canManage }: { canManage: boolean }) {
       ),
     refetchInterval: (query) =>
       query.state.data?.items.some(
-        (item) => !["complete", "cancelled"].includes(item.state),
+        (item) =>
+          item.state !== "cancelled" &&
+          (item.state !== "complete" || !item.fulfillment),
       )
         ? 3000
         : false,
@@ -48,8 +50,8 @@ export default function Downloads({ canManage }: { canManage: boolean }) {
     <section className="panel library-access" aria-label="Downloads">
       <h2>Downloads</h2>
       <p className="muted">
-        Completed downloads still need inspection and library confirmation
-        before they appear as available.
+        See download progress and whether the requested book is available in
+        your library.
       </p>
       <Notice error={downloads.error || action.error} />
       {downloads.data?.items.map((item) => (
@@ -58,6 +60,15 @@ export default function Downloads({ canManage }: { canManage: boolean }) {
             <h3>{item.work_title}</h3>
             <p>{item.release_title}</p>
             <p>{item.message}</p>
+            {item.fulfillment && (
+              <p>
+                {item.fulfillment.available_now
+                  ? item.fulfillment.basis === "imported"
+                    ? "Imported and confirmed in your library."
+                    : "Request satisfied by a book already available in your library."
+                  : "Previously fulfilled; current library availability needs attention."}
+              </p>
+            )}
             {item.progress !== null && item.progress !== undefined && (
               <p className="muted">
                 {Math.round(item.progress * 100)}% downloaded
@@ -77,7 +88,9 @@ export default function Downloads({ canManage }: { canManage: boolean }) {
                   disabled={action.isPending}
                   onClick={() => action.mutate({ id: item.id, cancel: false })}
                 >
-                  Check existing transfer
+                  {item.state === "complete"
+                    ? "Check library availability"
+                    : "Check existing transfer"}
                 </button>
               )}
               {item.inspection_id && (
@@ -89,7 +102,13 @@ export default function Downloads({ canManage }: { canManage: boolean }) {
               )}
             </div>
           </div>
-          <span className="status">{item.state}</span>
+          <span className="status">
+            {item.state === "complete" && item.fulfillment?.available_now
+              ? "Available"
+              : item.state === "complete"
+                ? "Downloaded"
+                : item.state}
+          </span>
         </article>
       ))}
       <div className="button-row">

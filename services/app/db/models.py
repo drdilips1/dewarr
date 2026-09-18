@@ -403,7 +403,7 @@ class AcquisitionSelection(Identity, Base):
     __tablename__ = "acquisition_selections"
     __table_args__ = (
         UniqueConstraint("owner_id", "command_key"),
-        CheckConstraint("state IN ('prepared', 'committed', 'cancelled')"),
+        CheckConstraint("state IN ('prepared', 'committed', 'fulfilled', 'cancelled')"),
         Index(
             "uq_acquisition_selected_reservation",
             "reservation_id",
@@ -449,6 +449,18 @@ class DownloadAttempt(Identity, Base):
     receipt: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
     observation: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
     inspection_id: Mapped[UUID | None] = mapped_column(ForeignKey("download_inspections.id"))
+
+
+class DownloadFulfillment(Identity, Base):
+    """Historical satisfaction evidence; never a substitute for current inventory."""
+
+    __tablename__ = "download_fulfillments"
+    __table_args__ = (UniqueConstraint("attempt_id", "target_id"),)
+    attempt_id: Mapped[UUID] = mapped_column(ForeignKey("download_attempts.id"), index=True)
+    target_id: Mapped[UUID] = mapped_column(ForeignKey("acquisition_targets.id"), index=True)
+    asset_id: Mapped[UUID] = mapped_column(ForeignKey("library_assets.id"))
+    import_entry_id: Mapped[UUID | None] = mapped_column(ForeignKey("import_entries.id"))
+    evidence: Mapped[dict[str, Any]] = mapped_column(JSONB)
 
 
 class DownloadIdentityClaim(Identity, Base):

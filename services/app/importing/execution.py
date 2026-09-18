@@ -484,6 +484,11 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                 )
                 stored_operation = await db.get(Operation, operation_id)
                 stored_operation.status, stored_operation.message = "completed", current.message
+                # Enqueue in this transaction; the reconciler acquires work locks
+                # afterward, never in reverse order under import publication locks.
+                from app.jobs.queue import enqueue
+
+                await enqueue(db, "acquisition.fulfillment", work_id=str(version.work_id))
                 db.add(
                     AuditEvent(
                         actor_id=operation.owner_id,

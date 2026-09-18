@@ -1534,6 +1534,7 @@ export interface components {
       progress: number | null;
       /** Inspection Id */
       inspection_id: string | null;
+      fulfillment: components["schemas"]["FulfillmentView"] | null;
     };
     /** AuthView */
     AuthView: {
@@ -2134,6 +2135,18 @@ export interface components {
        */
       created_at: string;
       document: components["schemas"]["FrozenDocument"];
+    };
+    /** FulfillmentView */
+    FulfillmentView: {
+      /**
+       * Confirmed At
+       * Format: date-time
+       */
+      confirmed_at: string;
+      /** Basis */
+      basis: string;
+      /** Available Now */
+      available_now: boolean;
     };
     /** GrantInput */
     GrantInput: {

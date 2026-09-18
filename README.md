@@ -8,6 +8,8 @@ A self-hosted ebook/audiobook discovery, curation and acquisition application ab
 
 Latest import checkpoint: [single-file imports](docs/SINGLE-FILE-IMPORTS.md) handle standalone downloads without scanning neighboring files, preserve existing directory receipts, and pass real ABS ebook/audio workflows. [Catalog matching](docs/IMPORT-MATCHING.md) resolves embedded edition identifiers against the local catalog, exposes conflicts for review and saves revalidated evidence without asserting file completeness or ownership.
 
+Latest lifecycle checkpoint: [download fulfillment](docs/DOWNLOAD-FULFILLMENT.md) links satisfied targets to confirmed assets and import entries, retires completed request reservations, retains transfer identity claims and shows current library availability separately from historical fulfillment. Credential repair and shared-pack reuse remain pending.
+
 Latest source checkpoint: [native MAM search](docs/MAM-INTEGRATION.md) adds rich release browsing, source details, encrypted session settings and required proxy routing. It is fixture verified; live account compatibility remains pending.
 
 Latest acquisition preparation: [saved torrent manifests](docs/SOURCE-ARTIFACTS.md) resolve MAM artifacts, validate native v1/v2/hybrid identity and safe file layouts, encrypt original bytes and provide owner-only manifest views. Inspecting a manifest does not start a download or establish ownership.

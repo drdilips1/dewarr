@@ -447,6 +447,8 @@ async def reserve(db, user, intent, spec, slot, *, only_medium=None):
 
 
 async def evaluate(db, user, intent):
+    from app.domain.download_fulfillment import record_satisfaction, retire_satisfied
+
     spec = RequestSpec.model_validate(intent.specification)
     reasons = (
         await db.scalars(
@@ -491,6 +493,7 @@ async def evaluate(db, user, intent):
         if not target:
             target = AcquisitionTarget(intent_id=intent.id, slot=slot)
             db.add(target)
+        previous_reservation_id = target.reservation_id
         target.reservation_id, target.satisfied_asset_id = None, None
         if not active or not allowed:
             target.state = "cancelled" if not active else "paused"
@@ -502,6 +505,7 @@ async def evaluate(db, user, intent):
         target.state, target.message = outcome["state"], outcome["message"]
         target.satisfied_asset_id = outcome["asset_id"]
         if target.state != "wanted":
+            await record_satisfaction(db, intent, target, previous_reservation_id)
             continue
         reservation = await reserve(db, user, intent, spec, slot)
         target.reservation_id = reservation.id
@@ -513,6 +517,7 @@ async def evaluate(db, user, intent):
             else "Saved to wanted; automatic downloading is not available yet"
         )
     await release_unused(db, intent.work_id)
+    await retire_satisfied(db, intent.work_id)
 
 
 async def submit(db, user, work_id, spec, reason, key):

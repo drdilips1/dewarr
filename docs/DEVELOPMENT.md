@@ -95,4 +95,6 @@ Organization settings provide a naming preview and saved defaults. The completed
 
 Migration `0018_attempts` adds the attempt/identity-claim ledger and committed reservation state. A populated ledger cannot be downgraded without losing external-side-effect history; rollback requires a pre-upgrade backup and recovery-mode reconciliation.
 
+Migration `0019_fulfillment` records confirmed request satisfaction and permits completed fulfillment reservations to retire while preserving torrent claims. Import confirmation enqueues a separate reconciler; periodic request evaluation repairs missed events. Completed Activity entries can check current library availability without new download dispatch. Populated fulfillment history also requires backup-based rollback. See [Download fulfillment](DOWNLOAD-FULFILLMENT.md) for evidence, privacy and remaining repair/sharing boundaries.
+
 Single-file download and import behavior, receipt compatibility and verification are described in [Single-file imports](SINGLE-FILE-IMPORTS.md). The native ABS workflow harness now includes standalone ebook and audio file selections.

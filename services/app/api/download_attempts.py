@@ -8,8 +8,15 @@ from sqlalchemy import func, select
 from app.adapters.contracts import AdapterError
 from app.api.dependencies import CurrentUser, Database, Member
 from app.api.metadata import adapter_http_error
-from app.db.models import AcquisitionSelection, DownloadAttempt
+from app.db.models import (
+    AcquisitionIntent,
+    AcquisitionSelection,
+    AcquisitionTarget,
+    DownloadAttempt,
+    DownloadFulfillment,
+)
 from app.domain import download_attempts as downloads
+from app.domain.acquisition import RequestSpec, assess
 
 router = APIRouter(prefix="/acquisition/downloads", tags=["downloads"])
 
@@ -17,6 +24,12 @@ router = APIRouter(prefix="/acquisition/downloads", tags=["downloads"])
 class StartInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
     selection_id: UUID
+
+
+class FulfillmentView(BaseModel):
+    confirmed_at: datetime
+    basis: str
+    available_now: bool
 
 
 class AttemptView(BaseModel):
@@ -33,6 +46,7 @@ class AttemptView(BaseModel):
     can_cancel: bool
     progress: float | None
     inspection_id: UUID | None
+    fulfillment: FulfillmentView | None
 
 
 class AttemptPage(BaseModel):
@@ -42,7 +56,27 @@ class AttemptPage(BaseModel):
     limit: int
 
 
-def view(row, selection):
+async def view(db, user, row, selection):
+    fulfillment = await db.scalar(
+        select(DownloadFulfillment).where(
+            DownloadFulfillment.attempt_id == row.id,
+            DownloadFulfillment.target_id == selection.target_id,
+        )
+    )
+    confirmed = None
+    if fulfillment:
+        intent = await db.get(AcquisitionIntent, selection.intent_id)
+        target = await db.get(AcquisitionTarget, selection.target_id)
+        outcomes = await assess(
+            db, user, intent.work_id, RequestSpec.model_validate(intent.specification)
+        )
+        confirmed = FulfillmentView(
+            confirmed_at=fulfillment.created_at,
+            basis=fulfillment.evidence["basis"],
+            available_now=any(
+                item["slot"] == target.slot and item["state"] == "satisfied" for item in outcomes
+            ),
+        )
     return AttemptView(
         id=row.id,
         created_at=row.created_at,
@@ -54,11 +88,12 @@ def view(row, selection):
         message=row.message,
         external_may_exist=row.external_may_exist,
         can_cancel=not row.external_may_exist and row.state != "cancelled",
-        can_recheck=row.state not in {"complete", "cancelled"}
+        can_recheck=row.state != "cancelled"
         and (not row.lease_until or row.lease_until <= datetime.now(UTC))
         and (not row.next_check_at or row.next_check_at <= datetime.now(UTC)),
         progress=(row.observation or {}).get("progress"),
         inspection_id=row.inspection_id,
+        fulfillment=confirmed,
     )
 
 
@@ -73,7 +108,7 @@ async def start(
         row = await downloads.start(db, user, body.selection_id, idempotency_key)
     except AdapterError as error:
         raise adapter_http_error(error) from error
-    result = view(row, await db.get(AcquisitionSelection, row.selection_id))
+    result = await view(db, user, row, await db.get(AcquisitionSelection, row.selection_id))
     await db.commit()
     return result
 
@@ -106,7 +141,7 @@ async def listing(
         )
     }
     return AttemptPage(
-        items=[view(row, selections[row.selection_id]) for row in rows],
+        items=[await view(db, user, row, selections[row.selection_id]) for row in rows],
         offset=offset,
         limit=limit,
         total=await db.scalar(select(func.count()).select_from(DownloadAttempt).where(*where)),
@@ -116,13 +151,13 @@ async def listing(
 @router.get("/{attempt_id}", response_model=AttemptView)
 async def detail(attempt_id: UUID, user: CurrentUser, db: Database):
     row = await downloads.owned_attempt(db, user, attempt_id)
-    return view(row, await db.get(AcquisitionSelection, row.selection_id))
+    return await view(db, user, row, await db.get(AcquisitionSelection, row.selection_id))
 
 
 @router.delete("/{attempt_id}", response_model=AttemptView)
 async def cancel(attempt_id: UUID, user: Member, db: Database):
     row = await downloads.cancel(db, user, attempt_id)
-    result = view(row, await db.get(AcquisitionSelection, row.selection_id))
+    result = await view(db, user, row, await db.get(AcquisitionSelection, row.selection_id))
     await db.commit()
     return result
 
@@ -130,6 +165,6 @@ async def cancel(attempt_id: UUID, user: Member, db: Database):
 @router.post("/{attempt_id}/recheck", response_model=AttemptView, status_code=202)
 async def recheck(attempt_id: UUID, user: Member, db: Database):
     row = await downloads.recheck(db, user, attempt_id)
-    result = view(row, await db.get(AcquisitionSelection, row.selection_id))
+    result = await view(db, user, row, await db.get(AcquisitionSelection, row.selection_id))
     await db.commit()
     return result

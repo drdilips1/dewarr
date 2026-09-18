@@ -188,7 +188,7 @@ async def start(db, user, selection_id, key):
         .limit(1)
     ):
         raise HTTPException(
-            409, "This transfer already has a pending acquisition; resolve it in Activity"
+            409, "This transfer is already recorded; its existing files need reconciliation"
         )
     attempt_id, operation_id = uuid4(), uuid4()
     operation = Operation(
@@ -273,17 +273,23 @@ async def cancel(db, user, identifier):
 
 async def recheck(db, user, identifier):
     await owned_attempt(db, user, identifier)
-    attempt, _ = await locked(db, identifier)
+    attempt, selection = await locked(db, identifier)
     await member(db, user.id)
     if get_settings().recovery_mode:
         raise HTTPException(409, "Downloads are paused for recovery")
-    if attempt.state in TERMINAL:
+    if attempt.state == "cancelled":
         return attempt
     now = datetime.now(UTC)
     if (attempt.lease_until and attempt.lease_until > now) or (
         attempt.next_check_at and attempt.next_check_at > now
     ):
         raise HTTPException(409, "A download check is running or cooling down")
+    if attempt.state == "complete":
+        from app.domain.download_fulfillment import reconcile_work
+
+        await reconcile_work(db, UUID(selection.frozen["origin_work_id"]))
+        attempt.next_check_at = now + timedelta(seconds=60)
+        return attempt
     from sqlalchemy import text
 
     operation = await db.get(Operation, attempt.operation_id)
