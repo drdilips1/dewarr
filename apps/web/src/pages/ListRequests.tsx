@@ -30,15 +30,47 @@ export default function ListRequests({
   listId: string;
   works: Work[];
 }) {
+  const policy = useQuery({
+    queryKey: ["list-policy", listId],
+    queryFn: async () =>
+      result(
+        await api.GET("/api/lists/{list_id}/acquisition", {
+          params: { path: { list_id: listId } },
+        }),
+      ),
+  });
+  if (policy.isPending) return <Loading />;
+  if (policy.isError) return <Notice error={policy.error} />;
+  return (
+    <ListRequestEditor
+      key={`${listId}:${policy.data?.revision || 0}`}
+      listId={listId}
+      works={works}
+      defaults={policy.data?.configuration.specification}
+    />
+  );
+}
+
+function ListRequestEditor({
+  listId,
+  works,
+  defaults,
+}: {
+  listId: string;
+  works: Work[];
+  defaults?: Spec;
+}) {
   const client = useQueryClient();
   const path = { list_id: listId };
   const [id, setId] = useState<string | null>(null);
   const [selected, setSelected] = useState<string[]>([]);
-  const [spec, setSpec] = useState<Spec>({
-    mode: "either",
-    preferred_medium: "audio",
-    standalone: false,
-  });
+  const [spec, setSpec] = useState<Spec>(
+    defaults ?? {
+      mode: "either",
+      preferred_medium: "audio",
+      standalone: false,
+    },
+  );
   const [filter, setFilter] = useState("");
   const [page, setPage] = useState(0);
   const [historyOffset, setHistoryOffset] = useState(0);
@@ -155,6 +187,12 @@ export default function ListRequests({
         Choose up to 100 books, check what you already have, then save the media
         you want. Release selection and download remain separate steps.
       </p>
+      {defaults && (
+        <p className="muted">
+          Media, destinations and download limits start from this list’s saved
+          policy. You can change them for this request.
+        </p>
+      )}
       <Notice
         error={
           preview.error ||

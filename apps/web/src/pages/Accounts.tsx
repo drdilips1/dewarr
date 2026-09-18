@@ -27,6 +27,16 @@ export default function Accounts() {
     },
     onSuccess: () => client.invalidateQueries({ queryKey: ["accounts"] }),
   });
+  const automation = useMutation({
+    mutationFn: async ({ id, allowed }: { id: string; allowed: boolean }) =>
+      result(
+        await api.PUT("/api/auth/users/{user_id}/automation", {
+          params: { path: { user_id: id } },
+          body: { allowed: !allowed, expected_allowed: allowed },
+        }),
+      ),
+    onSuccess: () => client.invalidateQueries({ queryKey: ["accounts"] }),
+  });
   return (
     <>
       <div className="page-heading">
@@ -86,7 +96,7 @@ export default function Accounts() {
         </button>
         <Notice error={create.error} />
       </form>
-      <Notice error={accounts.error} />
+      <Notice error={accounts.error || automation.error} />
       {accounts.isPending ? (
         <Loading />
       ) : (
@@ -98,6 +108,20 @@ export default function Accounts() {
                 <p>{user.username}</p>
               </div>
               <span className="status">{user.role}</span>
+              {user.role === "member" && (
+                <button
+                  disabled={automation.isPending}
+                  onClick={() =>
+                    automation.mutate({
+                      id: user.id,
+                      allowed: user.can_automate,
+                    })
+                  }
+                >
+                  {user.can_automate ? "Revoke" : "Allow"} list automation for{" "}
+                  {user.display_name}
+                </button>
+              )}
             </div>
           ))}
         </div>

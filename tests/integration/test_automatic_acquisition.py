@@ -53,6 +53,7 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     medium,
     delayed_backend,
     request_limits,
+    via_list=False,
 ):
     route = ready_route
     work_id = route["plan"]["document"]["groups"][0]["work_id"]
@@ -125,7 +126,8 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
         db.add(downloader)
         await db.flush()
         downloader_id = str(downloader.id)
-        (await db.get(User, UUID(admin["id"]))).role = "member"
+        member = await db.get(User, UUID(admin["id"]))
+        member.role, member.can_automate = "member", True
         db.add(LibraryGrant(user_id=UUID(admin["id"]), library_id=UUID(route["library_id"])))
 
     monkeypatch.setattr(get_settings(), "download_dispatch_enabled", True)
@@ -153,52 +155,101 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     qbit = Client(database, descriptor.model_dump(mode="json"))
     qbit.complete = True
     monkeypatch.setattr(downloads, "QbitClient", lambda *args: qbit)
-    wanted = await request(
-        client,
-        body(
-            {"work": work_id},
-            medium,
-            **{medium + "_library_id": route["library_id"]},
-            **(
-                {
+    policy = None
+    if via_list:
+        from tests.integration.test_list_policies import tick
+
+        shelf = (await client.post("/api/lists", json={"name": "List-to-library fixture"})).json()[
+            "id"
+        ]
+        route["scan_backend"].detect = not delayed_backend
+        response = await client.post(
+            f"/api/lists/{shelf}/acquisition/preview",
+            json={
+                "mode": "automatic",
+                "specification": {
+                    "mode": medium,
                     "download_constraints": {
                         "maximum_bytes": descriptor.torrent_bytes,
                         "blocked_formats": ["pdf" if medium == "ebook" else "flac"],
+                    },
+                },
+                "downloader_id": downloader_id,
+                "downloader_generation": 1,
+                "routes": {
+                    medium: {
+                        "destination_id": route["destination"]["id"],
+                        "destination_revision": route["destination"]["revision"],
                     }
-                }
-                if request_limits
-                else {}
+                },
+            },
+            headers={"Idempotency-Key": "list-to-library-preview"},
+        )
+        assert response.status_code == 201, response.text
+        activation_url = f"/api/lists/{shelf}/acquisition/previews/{response.json()['id']}/activate"
+        activation = await client.post(activation_url)
+        assert activation.status_code == 200, activation.text
+        policy = activation.json()
+        added = await client.post(f"/api/lists/{shelf}/entries", json={"work_id": work_id})
+        assert added.status_code == 204
+        await tick(database, policy)
+        await tick(database, policy, force_books=True)
+        async with database() as db:
+            from app.db.models import Operation
+
+            operation = await db.scalar(
+                select(Operation).where(Operation.kind == automatic_selection.KIND)
+            )
+            assert operation is not None
+            identifier = operation.id
+        result = (await client.get(f"/api/acquisition/automatic-selections/{identifier}")).json()
+    else:
+        wanted = await request(
+            client,
+            body(
+                {"work": work_id},
+                medium,
+                **{medium + "_library_id": route["library_id"]},
+                **(
+                    {
+                        "download_constraints": {
+                            "maximum_bytes": descriptor.torrent_bytes,
+                            "blocked_formats": ["pdf" if medium == "ebook" else "flac"],
+                        }
+                    }
+                    if request_limits
+                    else {}
+                ),
             ),
-        ),
-    )
-    search = await client.post(
-        f"/api/catalog/works/{work_id}/source-searches",
-        json={"medium": medium},
-        headers={"Idempotency-Key": "automatic-acquisition-search"},
-    )
-    assert search.status_code == 202, search.text
-    await get_queue().run_worker_async(wait=False, concurrency=1)
-    command = {
-        "intent_id": wanted["request"]["id"],
-        "slot": medium,
-        "search_id": search.json()["id"],
-        "downloader_id": downloader_id,
-        "downloader_generation": 1,
-        "destination_id": route["destination"]["id"],
-        "destination_revision": route["destination"]["revision"],
-        "download_when_ready": True,
-    }
-    route["scan_backend"].detect = not delayed_backend
-    response = await client.post(
-        "/api/acquisition/automatic-selections",
-        json=command,
-        headers={"Idempotency-Key": "automatic-acquisition-command"},
-    )
-    assert response.status_code == 202, response.text
-    await get_queue().run_worker_async(wait=False, concurrency=1)
-    result = (
-        await client.get(f"/api/acquisition/automatic-selections/{response.json()['id']}")
-    ).json()
+        )
+        search = await client.post(
+            f"/api/catalog/works/{work_id}/source-searches",
+            json={"medium": medium},
+            headers={"Idempotency-Key": "automatic-acquisition-search"},
+        )
+        assert search.status_code == 202, search.text
+        await get_queue().run_worker_async(wait=False, concurrency=1)
+        command = {
+            "intent_id": wanted["request"]["id"],
+            "slot": medium,
+            "search_id": search.json()["id"],
+            "downloader_id": downloader_id,
+            "downloader_generation": 1,
+            "destination_id": route["destination"]["id"],
+            "destination_revision": route["destination"]["revision"],
+            "download_when_ready": True,
+        }
+        route["scan_backend"].detect = not delayed_backend
+        response = await client.post(
+            "/api/acquisition/automatic-selections",
+            json=command,
+            headers={"Idempotency-Key": "automatic-acquisition-command"},
+        )
+        assert response.status_code == 202, response.text
+        await get_queue().run_worker_async(wait=False, concurrency=1)
+        result = (
+            await client.get(f"/api/acquisition/automatic-selections/{response.json()['id']}")
+        ).json()
     assert result["status"] == "completed" and result["download_id"], result
     async with database() as db:
         selection = await db.get(AcquisitionSelection, UUID(result["selection_id"]))
@@ -232,12 +283,35 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     assert not list(route["target"].rglob("private-neighbor.epub"))
     book = (await client.get(f"/api/catalog/works/{work_id}")).json()
     assert book["availability"]["owned"] and book["availability"][medium]
-    repeated = await client.post(
-        "/api/acquisition/automatic-selections",
-        json=command,
-        headers={"Idempotency-Key": "automatic-acquisition-command"},
-    )
-    assert repeated.json()["download_id"] == result["download_id"]
+    if via_list:
+        assert (await client.post(activation_url)).json()["id"] == policy["id"]
+        await tick(database, policy, force_books=True)
+    else:
+        repeated = await client.post(
+            "/api/acquisition/automatic-selections",
+            json=command,
+            headers={"Idempotency-Key": "automatic-acquisition-command"},
+        )
+        assert repeated.json()["download_id"] == result["download_id"]
     await automatic_selection.run(UUID(result["id"]))
     await downloads.run(UUID(result["download_id"]))
     assert qbit.calls.count("submit") == 1 and source_calls == ["search", "resolve"]
+
+
+@pytest.mark.parametrize("medium", ["ebook", "audio"])
+@pytest.mark.parametrize("delayed_backend", [False, True])
+async def test_list_addition_reaches_confirmed_library_without_per_title_commands(
+    client, admin, database, ready_route, review_account, monkeypatch, medium, delayed_backend
+):
+    await test_search_to_automatic_download_and_confirmed_member_library(
+        client,
+        admin,
+        database,
+        ready_route,
+        review_account,
+        monkeypatch,
+        medium,
+        delayed_backend,
+        request_limits=True,
+        via_list=True,
+    )

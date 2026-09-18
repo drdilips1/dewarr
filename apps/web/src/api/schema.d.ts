@@ -141,6 +141,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/auth/users/{user_id}/automation": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Automation Permission */
+    put: operations["automation_permission_api_auth_users__user_id__automation_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/activity": {
     parameters: {
       query?: never;
@@ -515,6 +532,108 @@ export interface paths {
     put?: never;
     /** Cancel */
     post: operations["cancel_api_lists__list_id__requests__operation_id__cancel_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/acquisition": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Detail */
+    get: operations["detail_api_lists__list_id__acquisition_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/acquisition/preview": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Preview */
+    post: operations["preview_api_lists__list_id__acquisition_preview_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/acquisition/previews/{identifier}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Saved Preview */
+    get: operations["saved_preview_api_lists__list_id__acquisition_previews__identifier__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/acquisition/previews/{identifier}/activate": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Activate */
+    post: operations["activate_api_lists__list_id__acquisition_previews__identifier__activate_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/acquisition/pause": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Pause */
+    post: operations["pause_api_lists__list_id__acquisition_pause_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/acquisition/books": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Books */
+    get: operations["books_api_lists__list_id__acquisition_books_get"];
+    put?: never;
+    post?: never;
     delete?: never;
     options?: never;
     head?: never;
@@ -2034,6 +2153,48 @@ export interface components {
       /** Last Success At */
       last_success_at?: string | null;
     };
+    /** ActivationRecord */
+    ActivationRecord: {
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /** Title */
+      title: string;
+      /** Targets */
+      targets: components["schemas"]["TargetView"][];
+      /** Selected */
+      selected: boolean;
+    };
+    /** ActivationView */
+    ActivationView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Status */
+      status: string;
+      /** Message */
+      message: string;
+      /**
+       * Expires At
+       * Format: date-time
+       */
+      expires_at: string;
+      configuration: components["schemas"]["PolicyConfiguration"];
+      /** Records */
+      records: components["schemas"]["ActivationRecord"][];
+      /** Total */
+      total: number;
+      /** Selected */
+      selected: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+    };
     /** AssetPage */
     AssetPage: {
       /** Items */
@@ -2213,6 +2374,13 @@ export interface components {
       download_when_ready: boolean;
       /** Download Id */
       download_id?: string | null;
+    };
+    /** AutomationPermissionInput */
+    AutomationPermissionInput: {
+      /** Allowed */
+      allowed: boolean;
+      /** Expected Allowed */
+      expected_allowed: boolean;
     };
     /** Availability */
     Availability: {
@@ -3448,6 +3616,61 @@ export interface components {
        */
       shared: boolean;
     };
+    /** ListPolicyInput */
+    ListPolicyInput: {
+      /**
+       * Mode
+       * @default browse
+       * @enum {string}
+       */
+      mode: "browse" | "manual" | "automatic";
+      specification: components["schemas"]["RequestSpec"];
+      /** Profile Id */
+      profile_id?: string | null;
+      /** Profile Generation */
+      profile_generation?: number | null;
+      /** Downloader Id */
+      downloader_id?: string | null;
+      /** Downloader Generation */
+      downloader_generation?: number | null;
+      /** Routes */
+      routes?: {
+        [key: string]: components["schemas"]["PolicyRoute"];
+      };
+      /** Include Work Ids */
+      include_work_ids?: string[];
+      /**
+       * Expected Revision
+       * @default 0
+       */
+      expected_revision: number;
+    };
+    /** ListPolicyView */
+    ListPolicyView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Revision */
+      revision: number;
+      /** Generation */
+      generation: number;
+      /** Active */
+      active: boolean;
+      configuration: components["schemas"]["PolicyConfiguration"];
+      /**
+       * Baseline At
+       * Format: date-time
+       */
+      baseline_at: string;
+      /** Message */
+      message: string;
+      /** Counts */
+      counts: {
+        [key: string]: number;
+      };
+    };
     /** ListView */
     ListView: {
       /** Name */
@@ -3859,6 +4082,38 @@ export interface components {
        */
       enrichment_retryable: boolean;
     };
+    /** MonitoredBook */
+    MonitoredBook: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /** State */
+      state: string;
+      /** Message */
+      message: string;
+      /** Intent Id */
+      intent_id: string | null;
+      /** Next Check At */
+      next_check_at: string | null;
+    };
+    /** MonitoringPage */
+    MonitoringPage: {
+      /** Items */
+      items: components["schemas"]["MonitoredBook"][];
+      /** Total */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+    };
     /** NamingMetadata */
     NamingMetadata: {
       /** Title */
@@ -4097,12 +4352,38 @@ export interface components {
       /** Disc */
       disc?: number | null;
     };
+    /** PolicyConfiguration */
+    PolicyConfiguration: {
+      /** Mode */
+      mode: string;
+      specification: components["schemas"]["RequestSpec"];
+      profile: components["schemas"]["ProfileSnapshot"];
+      /** Downloader Id */
+      downloader_id: string | null;
+      /** Downloader Generation */
+      downloader_generation: number | null;
+      /** Routes */
+      routes: {
+        [key: string]: components["schemas"]["PolicyRoute"];
+      };
+      request_constraints?: components["schemas"]["DownloadConstraints"] | null;
+    };
     /** PolicyInput */
     PolicyInput: {
       /** Enabled */
       enabled: boolean;
       /** Expected Generation */
       expected_generation: number;
+      /** Destination Revision */
+      destination_revision: string;
+    };
+    /** PolicyRoute */
+    PolicyRoute: {
+      /**
+       * Destination Id
+       * Format: uuid
+       */
+      destination_id: string;
       /** Destination Revision */
       destination_revision: string;
     };
@@ -4651,11 +4932,6 @@ export interface components {
        * @default false
        */
       same_edition: boolean;
-    };
-    /** RevisionInput */
-    RevisionInput: {
-      /** Expected Revision */
-      expected_revision: string;
     };
     /** RunView */
     RunView: {
@@ -5244,12 +5520,22 @@ export interface components {
       provisional: boolean;
       availability: components["schemas"]["Availability"];
     };
+    /** RevisionInput */
+    app__api__identity__RevisionInput: {
+      /** Expected Revision */
+      expected_revision: string;
+    };
     /** MatchInput */
     app__api__library__MatchInput: {
       /** Work Id */
       work_id: string | null;
       /** Expected Revision */
       expected_revision?: string | null;
+    };
+    /** RevisionInput */
+    app__api__list_policies__RevisionInput: {
+      /** Expected Revision */
+      expected_revision: number;
     };
     /** MatchInput */
     app__api__metadata__MatchInput: {
@@ -5476,6 +5762,41 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["UserView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  automation_permission_api_auth_users__user_id__automation_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        user_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AutomationPermissionInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
         headers: {
           [name: string]: unknown;
         };
@@ -6387,6 +6708,210 @@ export interface operations {
       };
     };
   };
+  detail_api_lists__list_id__acquisition_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ListPolicyView"] | null;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  preview_api_lists__list_id__acquisition_preview_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ListPolicyInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ActivationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  saved_preview_api_lists__list_id__acquisition_previews__identifier__get: {
+    parameters: {
+      query?: {
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        list_id: string;
+        identifier: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ActivationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  activate_api_lists__list_id__acquisition_previews__identifier__activate_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        list_id: string;
+        identifier: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ListPolicyView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  pause_api_lists__list_id__acquisition_pause_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["app__api__list_policies__RevisionInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ListPolicyView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  books_api_lists__list_id__acquisition_books_get: {
+    parameters: {
+      query?: {
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MonitoringPage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   connections_api_integrations_get: {
     parameters: {
       query?: never;
@@ -7159,7 +7684,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["RevisionInput"];
+        "application/json": components["schemas"]["app__api__identity__RevisionInput"];
       };
     };
     responses: {

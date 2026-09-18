@@ -156,9 +156,12 @@ async def context(db, user_id, body):
     return user, work, search, profile, rule, version
 
 
-async def begin(db, user, body, key):
+async def begin(db, user, body, key, *, list_authority=None):
     if get_settings().recovery_mode:
         raise HTTPException(409, "Automatic selection is paused for recovery")
+    from app.domain.list_policies import require_authority
+
+    await require_authority(db, user.id, list_authority, intent_id=body.intent_id)
     await transaction_lock(db, f"operation:{user.id}:{key}")
     command = body.model_dump(mode="json")
     if not body.download_when_ready:
@@ -167,7 +170,11 @@ async def begin(db, user, body, key):
         select(Operation).where(Operation.owner_id == user.id, Operation.idempotency_key == key)
     )
     if previous:
-        if previous.kind != KIND or previous.payload["command"] != command:
+        if (
+            previous.kind != KIND
+            or previous.payload["command"] != command
+            or (previous.payload.get("list_authority") != list_authority)
+        ):
             raise HTTPException(409, "This command key was already used for another selection")
         return previous
     _, work, search, profile, rule, _ = await context(db, user.id, body)
@@ -218,6 +225,7 @@ async def begin(db, user, body, key):
             "token": None,
             "dispatch_approval": approval,
             "download_id": None,
+            "list_authority": list_authority,
         },
     )
     db.add(operation)
@@ -379,6 +387,14 @@ async def run(identifier):
             )
         body = AutomaticSelectionInput.model_validate(operation.payload["command"])
         try:
+            from app.domain.list_policies import require_authority
+
+            await require_authority(
+                db,
+                operation.owner_id,
+                operation.payload.get("list_authority"),
+                intent_id=body.intent_id,
+            )
             user, work, search, profile, rule, version = await context(db, operation.owner_id, body)
             if body.download_when_ready:
                 await automatic_dispatch.approve_route(
@@ -502,9 +518,15 @@ async def run(identifier):
         if operation.status in TERMINAL or operation.payload.get("token") != token:
             return
         await automatic_dispatch.lock_principals(
-            db, owner_id, operation.payload.get("dispatch_approval")
+            db,
+            owner_id,
+            operation.payload.get("dispatch_approval"),
+            operation.payload.get("list_authority"),
         )
         try:
+            await require_authority(
+                db, owner_id, operation.payload.get("list_authority"), intent_id=body.intent_id
+            )
             user, work, search, profile, rule, version = await context(db, owner_id, body)
             if (
                 rule != operation.payload["requirements"]
@@ -624,6 +646,7 @@ async def run(identifier):
                         "scope": "Fetched source page; single-book manifest; "
                         "actual file identity checked after downloading",
                         "dispatch_approval": operation.payload.get("dispatch_approval"),
+                        "list_authority": operation.payload.get("list_authority"),
                     },
                 )
                 operation.payload = {**operation.payload, "selection_id": str(selected.id)}

@@ -581,7 +581,7 @@ async def evaluate(db, user, intent):
     await retire_satisfied(db, intent.work_id)
 
 
-async def submit(db, user, work_id, spec, reason, key):
+async def submit(db, user, work_id, spec, reason, key, *, policy_reference=None):
     if get_settings().recovery_mode:
         raise HTTPException(409, "Request evaluation is paused for recovery")
     payload = {
@@ -589,6 +589,10 @@ async def submit(db, user, work_id, spec, reason, key):
         "specification": spec.model_dump(mode="json"),
         "reason": reason.model_dump(mode="json"),
     }
+    if policy_reference is not None:
+        if not reason.list_id:
+            raise ValueError("Policy requests require a list")
+        payload["policy_reference"] = policy_reference
     await transaction_lock(db, f"operation:{user.id}:{key}")
     await db.refresh(user)
     if not user.active or user.role == "viewer":
@@ -639,6 +643,7 @@ async def submit(db, user, work_id, spec, reason, key):
         db.add(intent)
         await db.flush()
     kind, reference = ("list", str(reason.list_id)) if reason.list_id else ("manual", "manual")
+    reference = policy_reference or reference
     record = await db.scalar(
         select(AcquisitionReason).where(
             AcquisitionReason.intent_id == intent.id,
@@ -673,7 +678,8 @@ async def submit(db, user, work_id, spec, reason, key):
 async def withdraw_list_reasons(db, user, list_id, work_id=None):
     conditions = [
         AcquisitionReason.kind == "list",
-        AcquisitionReason.reference == str(list_id),
+        AcquisitionReason.reference.in_([str(list_id)])
+        | AcquisitionReason.reference.startswith(f"policy:{list_id}:"),
         AcquisitionIntent.owner_id == user.id,
     ]
     if work_id:
@@ -697,7 +703,8 @@ async def withdraw_list_reasons(db, user, list_id, work_id=None):
                 select(AcquisitionReason).where(
                     AcquisitionReason.intent_id == intent.id,
                     AcquisitionReason.kind == "list",
-                    AcquisitionReason.reference == str(list_id),
+                    (AcquisitionReason.reference == str(list_id))
+                    | AcquisitionReason.reference.startswith(f"policy:{list_id}:"),
                 )
             )
         ).all()

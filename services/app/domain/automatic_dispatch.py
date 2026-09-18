@@ -26,7 +26,10 @@ def consent(selection):
     return (selection.frozen.get("automatic_selection") or {}).get("dispatch_approval")
 
 
-async def lock_principals(db, owner_id, approval):
+async def lock_principals(db, owner_id, approval, list_authority=None):
+    from app.domain.list_policies import lock_authority
+
+    await lock_authority(db, list_authority)
     if approval:
         await db.scalars(
             select(User)
@@ -86,6 +89,11 @@ async def require_selection(db, selection):
     if not approval:
         return
     proof = selection.frozen["automatic_selection"]
+    from app.domain.list_policies import require_authority
+
+    await require_authority(
+        db, selection.owner_id, proof.get("list_authority"), intent_id=selection.intent_id
+    )
     operation = await db.get(Operation, UUID(proof["operation_id"]), populate_existing=True)
     if (
         not operation
@@ -95,6 +103,7 @@ async def require_selection(db, selection):
         or not operation.payload["command"].get("download_when_ready")
         or operation.payload.get("dispatch_approval") != approval
         or operation.payload.get("selection_id") != str(selection.id)
+        or operation.payload.get("list_authority") != proof.get("list_authority")
     ):
         raise HTTPException(409, "Automatic acquisition authorization is no longer current")
     await approve_route(

@@ -301,3 +301,18 @@ async def select_best_release(operation_id: str) -> None:
     from app.domain.automatic_selection import run
 
     await run(UUID(operation_id))
+
+
+@tasks.periodic(cron="* * * * *")
+@tasks.task(name="lists.acquisition.schedule", queue="lists", retry=3)
+async def schedule_list_acquisition(timestamp: int) -> None:
+    from app.domain.list_automation import schedule
+
+    await schedule()
+
+
+@tasks.task(name="lists.acquire", queue="lists", retry=3)
+async def acquire_list_books(operation_id: str) -> None:
+    from app.domain.list_automation import run
+
+    await run(UUID(operation_id))

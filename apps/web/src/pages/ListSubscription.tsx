@@ -130,8 +130,8 @@ export default function ListSubscription({ listId }: { listId: string }) {
         Removing an imported book excludes it from future refreshes.
       </p>
       <p className="muted">
-        Browsing only: shelf observation does not start downloads or change
-        reading status.
+        Shelf sync updates list membership. Download behavior is controlled by
+        this list’s acquisition policy; reading status stays unchanged.
       </p>
       <Notice
         error={subscription.error || save.error || sync.error || detach.error}

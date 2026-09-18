@@ -216,6 +216,48 @@ async def cancel(db, user, operation):
     db.add(AuditEvent(actor_id=user.id, action="lists.requests.cancelled", entity_id=operation.id))
 
 
+async def pending_targets(db, user, work_id, spec, outcomes):
+    """Add owner-visible compatible requests without changing ownership or reserving work."""
+    # Never disclose another account's pending targets or private list reasons.
+    pending = list(
+        await db.scalars(
+            select(AcquisitionReservation)
+            .join(AcquisitionTarget, AcquisitionTarget.reservation_id == AcquisitionReservation.id)
+            .join(AcquisitionIntent)
+            .where(
+                AcquisitionIntent.owner_id == user.id,
+                AcquisitionIntent.work_id == work_id,
+                AcquisitionReservation.state.in_(["planned", "selected", "committed"]),
+                AcquisitionTarget.state == "wanted",
+                select(AcquisitionReason.id)
+                .where(
+                    AcquisitionReason.intent_id == AcquisitionIntent.id,
+                    AcquisitionReason.active.is_(True),
+                )
+                .exists(),
+            )
+        )
+    )
+    targets = []
+    for outcome in outcomes:
+        value = {k: outcome[k] for k in ("slot", "state", "message")}
+        compatible = False
+        for candidate in pending:
+            for medium in spec.media(outcome["slot"]):
+                scope = str(getattr(spec, medium + "_library_id") or "unconfigured:" + str(user.id))
+                if candidate.scope == scope and await compatible_reservation(
+                    db, candidate, spec.rule(medium)
+                ):
+                    compatible = True
+        if value["state"] == "wanted" and compatible:
+            value.update(
+                state="pending",
+                message="An active compatible request already exists",
+            )
+        targets.append(value)
+    return targets
+
+
 async def status_records(db, user, operation):
     """Current, owner-visible projection, distinct from the immutable completion receipt."""
     records = []
@@ -254,47 +296,7 @@ async def status_records(db, user, operation):
                 }
             )
             continue
-        # Never disclose another account's pending targets or private list reasons.
-        pending = list(
-            await db.scalars(
-                select(AcquisitionReservation)
-                .join(
-                    AcquisitionTarget, AcquisitionTarget.reservation_id == AcquisitionReservation.id
-                )
-                .join(AcquisitionIntent)
-                .where(
-                    AcquisitionIntent.owner_id == user.id,
-                    AcquisitionIntent.work_id == work_id,
-                    AcquisitionReservation.state.in_(["planned", "selected", "committed"]),
-                    AcquisitionTarget.state == "wanted",
-                    select(AcquisitionReason.id)
-                    .where(
-                        AcquisitionReason.intent_id == AcquisitionIntent.id,
-                        AcquisitionReason.active.is_(True),
-                    )
-                    .exists(),
-                )
-            )
-        )
-        targets = []
-        for outcome in outcomes:
-            value = {k: outcome[k] for k in ("slot", "state", "message")}
-            compatible = False
-            for candidate in pending:
-                for medium in spec.media(outcome["slot"]):
-                    scope = str(
-                        getattr(spec, medium + "_library_id") or "unconfigured:" + str(user.id)
-                    )
-                    if candidate.scope == scope and await compatible_reservation(
-                        db, candidate, spec.rule(medium)
-                    ):
-                        compatible = True
-            if value["state"] == "wanted" and compatible:
-                value.update(
-                    state="pending",
-                    message="An active compatible request already exists",
-                )
-            targets.append(value)
+        targets = await pending_targets(db, user, work_id, spec, outcomes)
         records.append({"work_id": work_id, "title": work.title, "targets": targets, "issue": None})
     return records
 

@@ -252,6 +252,35 @@ class ListEntry(Identity, Base):
     locally_added: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
 
 
+class ListAcquisitionPolicy(Identity, Base):
+    __tablename__ = "list_acquisition_policies"
+    list_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("book_lists.id", ondelete="SET NULL"), unique=True
+    )
+    owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
+    revision: Mapped[int] = mapped_column(Integer, default=1)
+    generation: Mapped[int] = mapped_column(Integer, default=1)
+    active: Mapped[bool] = mapped_column(Boolean, default=True)
+    configuration: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    baseline_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    next_check_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    message: Mapped[str] = mapped_column(Text)
+    operation_id: Mapped[UUID | None] = mapped_column(ForeignKey("operations.id"))
+
+
+class ListAcquisitionBook(Identity, Base):
+    __tablename__ = "list_acquisition_books"
+    __table_args__ = (UniqueConstraint("policy_id", "work_id"),)
+    policy_id: Mapped[UUID] = mapped_column(ForeignKey("list_acquisition_policies.id"))
+    work_id: Mapped[UUID] = mapped_column(ForeignKey("works.id"))
+    generation: Mapped[int] = mapped_column(Integer)
+    state: Mapped[str] = mapped_column(String(30), default="baseline")
+    message: Mapped[str] = mapped_column(Text)
+    intent_id: Mapped[UUID | None] = mapped_column(ForeignKey("acquisition_intents.id"))
+    progress: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+    next_check_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), index=True)
+
+
 class ListCsvImport(Identity, Base):
     __tablename__ = "list_csv_imports"
     owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)

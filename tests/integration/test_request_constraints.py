@@ -178,11 +178,13 @@ async def test_legacy_requests_replay_across_migration_and_new_constraints_block
         assert repeated == legacy
         await request(client, wanted(catalog, maximum_bytes=100))
         await get_engine().dispose()
+        async with database() as db:
+            current_revision = await db.scalar(text("SELECT version_num FROM alembic_version"))
         rejected = await migrate("downgrade", "0028_capacity")
         assert rejected.returncode != 0 and "pre-upgrade backup" in rejected.stderr
         async with database() as db:
-            assert await db.scalar(text("SELECT version_num FROM alembic_version")) == (
-                "0029_request_constraints"
+            assert (
+                await db.scalar(text("SELECT version_num FROM alembic_version")) == current_revision
             )
             assert await db.scalar(select(func.count()).select_from(AcquisitionIntent)) == 2
     finally:

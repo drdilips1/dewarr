@@ -251,6 +251,59 @@
         }
       }
     },
+    "/api/auth/users/{user_id}/automation": {
+      "put": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Automation Permission",
+        "operationId": "automation_permission_api_auth_users__user_id__automation_put",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "User Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AutomationPermissionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/activity": {
       "get": {
         "tags": [
@@ -1661,6 +1714,369 @@
         }
       }
     },
+    "/api/lists/{list_id}/acquisition": {
+      "get": {
+        "tags": [
+          "list-policies"
+        ],
+        "summary": "Detail",
+        "operationId": "detail_api_lists__list_id__acquisition_get",
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "List Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ListPolicyView"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Detail Api Lists  List Id  Acquisition Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lists/{list_id}/acquisition/preview": {
+      "post": {
+        "tags": [
+          "list-policies"
+        ],
+        "summary": "Preview",
+        "operationId": "preview_api_lists__list_id__acquisition_preview_post",
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "List Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListPolicyInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lists/{list_id}/acquisition/previews/{identifier}": {
+      "get": {
+        "tags": [
+          "list-policies"
+        ],
+        "summary": "Saved Preview",
+        "operationId": "saved_preview_api_lists__list_id__acquisition_previews__identifier__get",
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "List Id"
+            }
+          },
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Identifier"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lists/{list_id}/acquisition/previews/{identifier}/activate": {
+      "post": {
+        "tags": [
+          "list-policies"
+        ],
+        "summary": "Activate",
+        "operationId": "activate_api_lists__list_id__acquisition_previews__identifier__activate_post",
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "List Id"
+            }
+          },
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Identifier"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListPolicyView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lists/{list_id}/acquisition/pause": {
+      "post": {
+        "tags": [
+          "list-policies"
+        ],
+        "summary": "Pause",
+        "operationId": "pause_api_lists__list_id__acquisition_pause_post",
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "List Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/app__api__list_policies__RevisionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListPolicyView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lists/{list_id}/acquisition/books": {
+      "get": {
+        "tags": [
+          "list-policies"
+        ],
+        "summary": "Books",
+        "operationId": "books_api_lists__list_id__acquisition_books_get",
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "List Id"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 25,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonitoringPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/integrations": {
       "get": {
         "tags": [
@@ -2890,7 +3306,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RevisionInput"
+                "$ref": "#/components/schemas/app__api__identity__RevisionInput"
               }
             }
           }
@@ -6502,6 +6918,100 @@
         ],
         "title": "AccountView"
       },
+      "ActivationRecord": {
+        "properties": {
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "targets": {
+            "items": {
+              "$ref": "#/components/schemas/TargetView"
+            },
+            "type": "array",
+            "title": "Targets"
+          },
+          "selected": {
+            "type": "boolean",
+            "title": "Selected"
+          }
+        },
+        "type": "object",
+        "required": [
+          "work_id",
+          "title",
+          "targets",
+          "selected"
+        ],
+        "title": "ActivationRecord"
+      },
+      "ActivationView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "configuration": {
+            "$ref": "#/components/schemas/PolicyConfiguration"
+          },
+          "records": {
+            "items": {
+              "$ref": "#/components/schemas/ActivationRecord"
+            },
+            "type": "array",
+            "title": "Records"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "selected": {
+            "type": "integer",
+            "title": "Selected"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "message",
+          "expires_at",
+          "configuration",
+          "records",
+          "total",
+          "selected",
+          "offset",
+          "limit"
+        ],
+        "title": "ActivationView"
+      },
       "AssetPage": {
         "properties": {
           "items": {
@@ -6960,6 +7470,24 @@
           "decisions"
         ],
         "title": "AutomaticSelectionView"
+      },
+      "AutomationPermissionInput": {
+        "properties": {
+          "allowed": {
+            "type": "boolean",
+            "title": "Allowed"
+          },
+          "expected_allowed": {
+            "type": "boolean",
+            "title": "Expected Allowed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "allowed",
+          "expected_allowed"
+        ],
+        "title": "AutomationPermissionInput"
       },
       "Availability": {
         "properties": {
@@ -10191,6 +10719,157 @@
         ],
         "title": "ListInput"
       },
+      "ListPolicyInput": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "browse",
+              "manual",
+              "automatic"
+            ],
+            "title": "Mode",
+            "default": "browse"
+          },
+          "specification": {
+            "$ref": "#/components/schemas/RequestSpec"
+          },
+          "profile_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile Id"
+          },
+          "profile_generation": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile Generation"
+          },
+          "downloader_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Downloader Id"
+          },
+          "downloader_generation": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Downloader Generation"
+          },
+          "routes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PolicyRoute"
+            },
+            "propertyNames": {
+              "enum": [
+                "ebook",
+                "audio"
+              ]
+            },
+            "type": "object",
+            "title": "Routes"
+          },
+          "include_work_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 25,
+            "title": "Include Work Ids"
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Expected Revision",
+            "default": 0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "specification"
+        ],
+        "title": "ListPolicyInput"
+      },
+      "ListPolicyView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision"
+          },
+          "generation": {
+            "type": "integer",
+            "title": "Generation"
+          },
+          "active": {
+            "type": "boolean",
+            "title": "Active"
+          },
+          "configuration": {
+            "$ref": "#/components/schemas/PolicyConfiguration"
+          },
+          "baseline_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Baseline At"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Counts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "revision",
+          "generation",
+          "active",
+          "configuration",
+          "baseline_at",
+          "message",
+          "counts"
+        ],
+        "title": "ListPolicyView"
+      },
       "ListView": {
         "properties": {
           "name": {
@@ -11265,6 +11944,93 @@
         ],
         "title": "MetadataView"
       },
+      "MonitoredBook": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "intent_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Intent Id"
+          },
+          "next_check_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Check At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "work_id",
+          "state",
+          "message",
+          "intent_id",
+          "next_check_at"
+        ],
+        "title": "MonitoredBook"
+      },
+      "MonitoringPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MonitoredBook"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "offset",
+          "limit"
+        ],
+        "title": "MonitoringPage"
+      },
       "NamingMetadata": {
         "properties": {
           "title": {
@@ -11948,6 +12714,70 @@
         ],
         "title": "PlannedSourceFile"
       },
+      "PolicyConfiguration": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "specification": {
+            "$ref": "#/components/schemas/RequestSpec"
+          },
+          "profile": {
+            "$ref": "#/components/schemas/ProfileSnapshot"
+          },
+          "downloader_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Downloader Id"
+          },
+          "downloader_generation": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Downloader Generation"
+          },
+          "routes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PolicyRoute"
+            },
+            "type": "object",
+            "title": "Routes"
+          },
+          "request_constraints": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DownloadConstraints"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode",
+          "specification",
+          "profile",
+          "downloader_id",
+          "downloader_generation",
+          "routes"
+        ],
+        "title": "PolicyConfiguration"
+      },
       "PolicyInput": {
         "properties": {
           "enabled": {
@@ -11973,6 +12803,27 @@
           "destination_revision"
         ],
         "title": "PolicyInput"
+      },
+      "PolicyRoute": {
+        "properties": {
+          "destination_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Destination Id"
+          },
+          "destination_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Destination Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "destination_id",
+          "destination_revision"
+        ],
+        "title": "PolicyRoute"
       },
       "PolicyView": {
         "properties": {
@@ -13431,20 +14282,6 @@
           "files"
         ],
         "title": "ReviewedGroup"
-      },
-      "RevisionInput": {
-        "properties": {
-          "expected_revision": {
-            "type": "string",
-            "pattern": "^[a-f0-9]{64}$",
-            "title": "Expected Revision"
-          }
-        },
-        "type": "object",
-        "required": [
-          "expected_revision"
-        ],
-        "title": "RevisionInput"
       },
       "RunView": {
         "properties": {
@@ -14986,6 +15823,20 @@
         ],
         "title": "WorkView"
       },
+      "app__api__identity__RevisionInput": {
+        "properties": {
+          "expected_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Expected Revision"
+          }
+        },
+        "type": "object",
+        "required": [
+          "expected_revision"
+        ],
+        "title": "RevisionInput"
+      },
       "app__api__library__MatchInput": {
         "properties": {
           "work_id": {
@@ -15018,6 +15869,20 @@
           "work_id"
         ],
         "title": "MatchInput"
+      },
+      "app__api__list_policies__RevisionInput": {
+        "properties": {
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Revision"
+          }
+        },
+        "type": "object",
+        "required": [
+          "expected_revision"
+        ],
+        "title": "RevisionInput"
       },
       "app__api__metadata__MatchInput": {
         "properties": {

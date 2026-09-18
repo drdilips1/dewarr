@@ -123,16 +123,19 @@ async def mam_fixture(path: str, request: Request):
             {"tid": "502"},
             {"tid": "503"},
             {"tid": "504"},
+            {"tid": "505"},
         ):
             raise HTTPException(400)
         content = (
             torrent_bytes(
                 name=b"Hardcover Later Arrival"
                 if request.query_params["tid"] == "503"
+                else b"List Policy Arrival"
+                if request.query_params["tid"] == "505"
                 else b"Hardcover List Arrival",
                 files=[{b"length": 24, b"path": [b"book.epub"]}],
             )
-            if request.query_params["tid"] in {"503", "504"}
+            if request.query_params["tid"] in {"503", "504", "505"}
             else torrent_bytes(
                 name=b"The Next Harbor", files=[{b"length": 24, b"path": [b"book.epub"]}]
             )
@@ -164,7 +167,11 @@ async def mam_fixture(path: str, request: Request):
                     )
                 ]
             )
-        titles = {503: "Hardcover Later Arrival", 504: "Hardcover List Arrival"}
+        titles = {
+            503: "Hardcover Later Arrival",
+            504: "Hardcover List Arrival",
+            505: "List Policy Arrival",
+        }
         identifier = next(
             (
                 key
@@ -330,7 +337,7 @@ async def catalog(request: Request, authorization: str = Header(default="")):
         mode = hardcover_list_state["mode"]
         if mode == "omission":
             members = members[:1]
-        if mode == "addition":
+        if mode in {"addition", "automation"}:
             members.append(
                 {
                     "id": 3,
@@ -341,6 +348,21 @@ async def catalog(request: Request, authorization: str = Header(default="")):
                     "book": {
                         "id": 7002,
                         "title": "Hardcover Later Arrival",
+                        "cached_contributors": [{"author": {"name": "Catalog Author"}}],
+                    },
+                }
+            )
+        if mode == "automation":
+            members.append(
+                {
+                    "id": 4,
+                    "book_id": 7003,
+                    "edition_id": None,
+                    "position": 4,
+                    "date_added": None,
+                    "book": {
+                        "id": 7003,
+                        "title": "List Policy Arrival",
                         "cached_contributors": [{"author": {"name": "Catalog Author"}}],
                     },
                 }

@@ -1,0 +1,207 @@
+from datetime import datetime
+from uuid import UUID
+
+from fastapi import APIRouter, Header, Query
+from pydantic import BaseModel, Field
+from sqlalchemy import func, select
+
+from app.api.dependencies import Database, Member
+from app.api.requests import TargetView
+from app.db.models import ListAcquisitionBook
+from app.domain import list_policies as policies
+from app.domain.acquisition import RequestSpec
+from app.domain.list_requests import owner_context
+from app.domain.release_profiles import ProfileSnapshot
+from app.domain.request_constraints import DownloadConstraints
+
+router = APIRouter(prefix="/lists/{list_id}/acquisition", tags=["list-policies"])
+
+
+class PolicyConfiguration(BaseModel):
+    mode: str
+    specification: RequestSpec
+    profile: ProfileSnapshot
+    downloader_id: UUID | None
+    downloader_generation: int | None
+    routes: dict[str, policies.PolicyRoute]
+    request_constraints: DownloadConstraints | None = None
+
+
+class ListPolicyView(BaseModel):
+    id: UUID
+    revision: int
+    generation: int
+    active: bool
+    configuration: PolicyConfiguration
+    baseline_at: datetime
+    message: str
+    counts: dict[str, int]
+
+
+class ActivationRecord(BaseModel):
+    work_id: UUID
+    title: str
+    targets: list[TargetView]
+    selected: bool
+
+
+class ActivationView(BaseModel):
+    id: UUID
+    status: str
+    message: str
+    expires_at: datetime
+    configuration: PolicyConfiguration
+    records: list[ActivationRecord]
+    total: int
+    selected: int
+    offset: int
+    limit: int
+
+
+class RevisionInput(BaseModel):
+    expected_revision: int = Field(ge=1)
+
+
+class MonitoredBook(BaseModel):
+    id: UUID
+    work_id: UUID
+    state: str
+    message: str
+    intent_id: UUID | None
+    next_check_at: datetime | None
+
+
+class MonitoringPage(BaseModel):
+    items: list[MonitoredBook]
+    total: int
+    offset: int
+    limit: int
+
+
+async def view(db, policy):
+    counts = dict(
+        (
+            await db.execute(
+                select(ListAcquisitionBook.state, func.count())
+                .where(
+                    ListAcquisitionBook.policy_id == policy.id,
+                    ListAcquisitionBook.generation == policy.generation,
+                )
+                .group_by(ListAcquisitionBook.state)
+            )
+        ).all()
+    )
+    return ListPolicyView(
+        id=policy.id,
+        revision=policy.revision,
+        generation=policy.generation,
+        active=policy.active,
+        configuration=policy.configuration,
+        baseline_at=policy.baseline_at,
+        message=policy.message,
+        counts=counts,
+    )
+
+
+def preview_view(operation, offset=0, limit=50):
+    data = operation.payload
+    return ActivationView(
+        id=operation.id,
+        status=operation.status,
+        message=operation.message,
+        expires_at=data["expires_at"],
+        configuration=data["configuration"],
+        records=data["records"][offset : offset + limit],
+        total=len(data["records"]),
+        selected=sum(r["selected"] for r in data["records"]),
+        offset=offset,
+        limit=limit,
+    )
+
+
+@router.get("", response_model=ListPolicyView | None)
+async def detail(list_id: UUID, user: Member, db: Database):
+    await owner_context(db, user.id, list_id)
+    policy = await policies.current_policy(db, list_id)
+    return await view(db, policy) if policy else None
+
+
+@router.post("/preview", response_model=ActivationView, status_code=201)
+async def preview(
+    list_id: UUID,
+    body: policies.ListPolicyInput,
+    user: Member,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    operation = await policies.preview(db, user, list_id, body, idempotency_key)
+    result = preview_view(operation)
+    await db.commit()
+    return result
+
+
+@router.get("/previews/{identifier}", response_model=ActivationView)
+async def saved_preview(
+    list_id: UUID,
+    identifier: UUID,
+    user: Member,
+    db: Database,
+    offset: int = Query(default=0, ge=0),
+    limit: int = Query(default=50, ge=1, le=100),
+):
+    return preview_view(await policies.owned_preview(db, user, list_id, identifier), offset, limit)
+
+
+@router.post("/previews/{identifier}/activate", response_model=ListPolicyView)
+async def activate(list_id: UUID, identifier: UUID, user: Member, db: Database):
+    operation = await policies.owned_preview(db, user, list_id, identifier)
+    policy = await policies.activate(db, user, operation)
+    result = await view(db, policy)
+    await db.commit()
+    return result
+
+
+@router.post("/pause", response_model=ListPolicyView)
+async def pause(list_id: UUID, body: RevisionInput, user: Member, db: Database):
+    policy = await policies.pause(db, user, list_id, body.expected_revision)
+    result = await view(db, policy)
+    await db.commit()
+    return result
+
+
+@router.get("/books", response_model=MonitoringPage)
+async def books(
+    list_id: UUID,
+    user: Member,
+    db: Database,
+    offset: int = Query(default=0, ge=0),
+    limit: int = Query(default=25, ge=1, le=100),
+):
+    await owner_context(db, user.id, list_id)
+    policy = await policies.current_policy(db, list_id)
+    if not policy:
+        return MonitoringPage(items=[], total=0, offset=offset, limit=limit)
+    where = [
+        ListAcquisitionBook.policy_id == policy.id,
+        ListAcquisitionBook.generation == policy.generation,
+    ]
+    rows = await db.scalars(
+        select(ListAcquisitionBook)
+        .where(*where)
+        .order_by(ListAcquisitionBook.created_at.desc(), ListAcquisitionBook.id)
+        .offset(offset)
+        .limit(limit)
+    )
+    items = [
+        MonitoredBook(
+            id=b.id,
+            work_id=b.work_id,
+            state=b.state,
+            message=b.message,
+            intent_id=b.intent_id,
+            next_check_at=b.next_check_at,
+        )
+        for b in rows
+    ]
+    total = await db.scalar(select(func.count()).select_from(ListAcquisitionBook).where(*where))
+    return MonitoringPage(items=items, total=total, offset=offset, limit=limit)

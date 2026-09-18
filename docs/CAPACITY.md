@@ -1,6 +1,6 @@
 # Transfer and storage capacity
 
-This checkpoint implements the shared capacity part of PRD section 19. It applies to the existing download-attempt and import services. Standing list-to-download policies remain separate unfinished work; saving these limits does not enable downloads or list automation.
+This checkpoint implements the shared capacity part of PRD section 19. It applies to the existing download-attempt and import services. Standing [list policies](LIST-POLICIES.md) now consume the same capacity service; saving these limits does not enable downloads or list automation.
 
 ## Operator behavior
 
@@ -13,7 +13,7 @@ Open **Connections → Downloaders → Transfer and storage limits** as an admin
 | Minimum free bytes | 5 GiB | Per measured filesystem |
 | Minimum free percentage | 5% | Per measured filesystem; use the larger of the two reserves |
 
-Manual downloads require a slot and storage capacity. The automatic budget is enforced for attempts created by the trusted internal automatic-dispatch path; it is not a public client-supplied flag. There is currently no standing list policy that calls that path. The original attempt retains its automatic/manual classification when another command returns the same attempt.
+Manual downloads require a slot and storage capacity. The automatic budget is enforced for attempts created by the trusted internal automatic-dispatch path; it is not a public client-supplied flag. Standing list policies now call that same trusted path. The original attempt retains its automatic/manual classification when another command returns the same attempt.
 
 Lowering limits does not stop an already-submitted transfer. Completed seed-only transfers stop using active download slots. A lost submission response keeps the slot and daily debit until the existing transfer is reconciled, even when the uncertainty lasts longer than 24 hours. Cancellation before submission releases capacity; an uncertain external attempt cannot be cancelled as though nothing happened.
 

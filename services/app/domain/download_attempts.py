@@ -79,7 +79,10 @@ async def locked(db, identifier):
         return None, None
     selection = await db.get(AcquisitionSelection, attempt.selection_id)
     await automatic_dispatch.lock_principals(
-        db, selection.owner_id, automatic_dispatch.consent(selection)
+        db,
+        selection.owner_id,
+        automatic_dispatch.consent(selection),
+        (selection.frozen.get("automatic_selection") or {}).get("list_authority"),
     )
     await acquisition_lock(db, UUID(selection.frozen["origin_work_id"]))
     await db.refresh(attempt, with_for_update=True)
@@ -165,7 +168,12 @@ async def start(db, user, selection_id, key, *, automatic=False):
     if not get_settings().download_dispatch_enabled:
         raise HTTPException(409, "Download dispatch is not enabled for this installation")
     selection = await owned_selection(db, user, selection_id)
-    await automatic_dispatch.lock_principals(db, user.id, automatic_dispatch.consent(selection))
+    await automatic_dispatch.lock_principals(
+        db,
+        user.id,
+        automatic_dispatch.consent(selection),
+        (selection.frozen.get("automatic_selection") or {}).get("list_authority"),
+    )
     await acquisition_lock(db, UUID(selection.frozen["origin_work_id"]))
     await db.refresh(selection)
     existing = await db.scalar(

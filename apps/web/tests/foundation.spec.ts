@@ -2223,3 +2223,177 @@ test("approved automatic selection queues one download and preserves its receipt
   );
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });
+
+test("list policy activates future additions and acquires a synced title without a title request", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(360_000);
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Sign out", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Accounts", exact: true }).click();
+  await page
+    .getByRole("button", {
+      name: "Allow list automation for Guest reader",
+      exact: true,
+    })
+    .click();
+  await expect(
+    page.getByRole("button", {
+      name: "Revoke list automation for Guest reader",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", {
+      name: "Revoke list automation for Guest reader",
+      exact: true,
+    })
+    .click();
+  await page.getByRole("link", { name: "Connections", exact: true }).click();
+  await page.getByRole("link", { name: "Downloaders", exact: true }).click();
+  await page.getByText("Transfer and storage limits", { exact: true }).click();
+  const capacity = page.getByRole("form", {
+    name: "Transfer and storage limits",
+  });
+  await capacity.getByLabel("Active downloads per downloader").fill("5");
+  await capacity.getByRole("button", { name: "Save capacity limits" }).click();
+  await expect(page.getByRole("status")).toContainText("Capacity limits saved");
+  await page.getByRole("link", { name: "Lists", exact: true }).click();
+  await page.getByRole("link", { name: /Hardcover curated shelf/ }).click();
+  const subscription = page.getByRole("region", {
+    name: "Hardcover list subscription",
+  });
+  await subscription
+    .getByText("Shelf connection settings", { exact: true })
+    .click();
+  await subscription.getByLabel("Observe shelf additions").check();
+  await subscription
+    .getByRole("button", { name: "Save shelf settings", exact: true })
+    .click();
+  await subscription
+    .getByRole("button", { name: "Refresh Hardcover list", exact: true })
+    .click();
+  await expect(subscription.getByRole("status")).toContainText(
+    "Hardcover list verified: 3 books",
+    { timeout: 50_000 },
+  );
+  await page
+    .getByRole("button", { name: "Acquisition policy", exact: true })
+    .click();
+  const policy = page.getByRole("region", {
+    name: "List acquisition policy",
+    exact: true,
+  });
+  const form = policy.getByRole("form", { name: "List policy settings" });
+  await form.getByLabel("Acquisition mode").selectOption("automatic");
+  await form.getByLabel("Desired media").selectOption("ebook");
+  await form
+    .getByRole("button", { name: "Preview list policy", exact: true })
+    .click();
+  const preview = policy.getByLabel("List activation preview", { exact: true });
+  await expect(preview).toContainText("0 selected for acquisition");
+  await preview
+    .getByRole("button", {
+      name: "Activate automatic acquisition",
+      exact: true,
+    })
+    .click();
+  await expect(policy.getByRole("status")).toContainText(
+    "Monitoring future additions",
+  );
+  await page.reload();
+  await page
+    .getByRole("button", { name: "Acquisition policy", exact: true })
+    .click();
+  await expect(
+    policy.getByRole("button", {
+      name: "Pause automatic acquisition",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Request books", exact: true })
+    .click();
+  await expect(
+    page
+      .getByRole("region", { name: "List wanted media", exact: true })
+      .getByLabel("Media to request"),
+  ).toHaveValue("ebook");
+  await page
+    .getByRole("button", { name: "Close list requests", exact: true })
+    .click();
+  await page.request.post("http://127.0.0.1:13379/fixture/hardcover-list", {
+    data: { mode: "automation" },
+  });
+  await subscription
+    .getByRole("button", { name: "Refresh Hardcover list", exact: true })
+    .click();
+  await expect(subscription.getByRole("status")).toContainText(
+    "Hardcover list verified: 4 books",
+    { timeout: 60_000 },
+  );
+  await policy
+    .getByText("Monitored books and backlog", { exact: true })
+    .click();
+  const monitored = policy.getByRole("article").filter({
+    has: page.getByRole("link", { name: "List Policy Arrival", exact: true }),
+  });
+  await expect(monitored).toContainText("pending", { timeout: 240_000 });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("list-policy-mobile.png"),
+    fullPage: true,
+  });
+  // Confirm the external transfer before pausing. A reservation alone can still
+  // be awaiting dispatch, and pausing correctly blocks that unstarted action.
+  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  await expect(
+    page
+      .getByRole("region", { name: "Downloads", exact: true })
+      .getByRole("article")
+      .filter({
+        has: page.getByRole("heading", {
+          name: "List Policy Arrival",
+          exact: true,
+        }),
+      }),
+  ).toContainText("downloading", { timeout: 30_000 });
+  await page.getByRole("link", { name: "Lists", exact: true }).click();
+  await page.getByRole("link", { name: /Hardcover curated shelf/ }).click();
+  await page
+    .getByRole("button", { name: "Acquisition policy", exact: true })
+    .click();
+  await policy
+    .getByRole("button", { name: "Pause automatic acquisition", exact: true })
+    .click();
+  await expect(policy.getByRole("status")).toContainText("Acquisition paused");
+  await page.reload();
+  await page
+    .getByRole("button", { name: "Acquisition policy", exact: true })
+    .click();
+  await expect(policy.getByRole("status")).toContainText("Acquisition paused");
+  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  const download = page
+    .getByRole("region", { name: "Downloads", exact: true })
+    .getByRole("article")
+    .filter({
+      has: page.getByRole("heading", {
+        name: "List Policy Arrival",
+        exact: true,
+      }),
+    });
+  await expect(download).toContainText("downloading", { timeout: 20_000 });
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+});

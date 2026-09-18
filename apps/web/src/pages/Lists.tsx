@@ -6,6 +6,7 @@ import { api, result } from "../api/client";
 import { BookCard, Empty, Loading, Notice } from "../components";
 
 const ListRequests = lazy(() => import("./ListRequests"));
+const ListPolicy = lazy(() => import("./ListPolicy"));
 
 const ListCsv = lazy(() => import("./ListCsv"));
 
@@ -105,6 +106,7 @@ function ListDetail({ id, canEdit }: { id: string; canEdit: boolean }) {
   const path = { list_id: id };
   const [csvOpen, setCsvOpen] = useState(false);
   const [requestsOpen, setRequestsOpen] = useState(false);
+  const [policyOpen, setPolicyOpen] = useState(false);
   const list = useQuery({
     queryKey: ["list", id],
     queryFn: async () =>
@@ -202,6 +204,17 @@ function ListDetail({ id, canEdit }: { id: string; canEdit: boolean }) {
           {requestsOpen && (
             <Suspense fallback={<Loading />}>
               <ListRequests key={id} listId={id} works={list.data.items} />
+            </Suspense>
+          )}
+          <button
+            onClick={() => setPolicyOpen(!policyOpen)}
+            aria-expanded={policyOpen}
+          >
+            {policyOpen ? "Close acquisition policy" : "Acquisition policy"}
+          </button>
+          {policyOpen && (
+            <Suspense fallback={<Loading />}>
+              <ListPolicy key={id} listId={id} works={list.data.items} />
             </Suspense>
           )}
           <button onClick={() => setCsvOpen(!csvOpen)} aria-expanded={csvOpen}>

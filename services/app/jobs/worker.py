@@ -22,6 +22,8 @@ async def recover_stalled_jobs() -> None:
                 "lists.csv",
                 "lists.requests",
                 "lists.schedule",
+                "lists.acquire",
+                "lists.acquisition.schedule",
                 "library.sync",
                 "library.schedule",
                 "metadata.enrich",

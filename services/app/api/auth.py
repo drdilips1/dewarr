@@ -3,6 +3,7 @@ import hmac
 import secrets
 from datetime import UTC, datetime, timedelta
 from typing import Literal
+from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, Request, Response
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -197,5 +198,47 @@ async def create_user(body: UserInput, admin: Admin, db: Database):
     db.add(user)
     await db.flush()
     db.add(AuditEvent(actor_id=admin_id, action="user.created", entity_id=user.id))
+    await db.commit()
+    return user_view(user)
+
+
+class AutomationPermissionInput(BaseModel):
+    allowed: bool
+    expected_allowed: bool
+
+
+@router.put("/users/{user_id}/automation", response_model=UserView)
+async def automation_permission(
+    user_id: UUID, body: AutomationPermissionInput, admin: Admin, db: Database
+):
+    rows = {
+        u.id: u
+        for u in await db.scalars(
+            select(User)
+            .where(User.id.in_([admin.id, user_id]))
+            .order_by(User.id)
+            .with_for_update()
+            .execution_options(populate_existing=True)
+        )
+    }
+    actor = rows.get(admin.id)
+    if not actor or not actor.active or actor.role != "admin":
+        raise HTTPException(403, "Administrator access changed")
+    user = rows.get(user_id)
+    if not user:
+        raise HTTPException(404, "Account not found")
+    if user.role != "member":
+        raise HTTPException(422, "List automation grants apply to member accounts")
+    if user.can_automate != body.expected_allowed:
+        raise HTTPException(409, "This permission changed; reload the account")
+    user.can_automate = body.allowed
+    db.add(
+        AuditEvent(
+            actor_id=admin.id,
+            action="user.automation.changed",
+            entity_id=user.id,
+            detail={"allowed": body.allowed},
+        )
+    )
     await db.commit()
     return user_view(user)
