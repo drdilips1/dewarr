@@ -2364,6 +2364,12 @@ export interface components {
       source_path: string;
       /** Relative Path */
       relative_path: string;
+      /**
+       * Source Kind
+       * @default directory
+       * @enum {string}
+       */
+      source_kind: "directory" | "file";
       /** Directory Identity */
       directory_identity: {
         [key: string]: number;

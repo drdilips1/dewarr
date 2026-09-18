@@ -141,6 +141,7 @@ async def probe_route(operation_id: UUID, *, client_factory=None):
             PublishFile.model_validate(payload["file"]),
             Path(configuration["root_path"]),
             Path(configuration["staging_path"]),
+            **({"source_kind": "file"} if payload.get("source_kind") == "file" else {}),
         )
         ok = report["no_replace"] and report[configuration["mode"]]
         if ok:

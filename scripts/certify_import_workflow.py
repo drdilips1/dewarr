@@ -70,7 +70,7 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook", *,
         audio(source / "part-a/01.mp3", title=title, author="Fixture Author", track=1)
         if case == "audio-companion":
             pdf(source / "companion.pdf", title="Supporting notes", author="Fixture Author")
-        else:
+        elif case != "audio-single":
             audio(source / "part-b/02.mp3", title=title, author="Fixture Author", track=2)
     source_bytes = {path: path.read_bytes() for path in source.rglob("*") if path.is_file()}
     queue = get_queue()
@@ -191,16 +191,23 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook", *,
                 headers={"Idempotency-Key": "native-inspection"},
                 json={
                     "source_key": "native",
-                    "relative_path": source.name,
+                    "relative_path": (
+                        str(next(iter(source_bytes)).relative_to(root / "downloads"))
+                        if case.endswith("-single")
+                        else source.name
+                    ),
                     "completed_download": True,
                 },
             )
             await drain()
             inspection = await request("GET", f"/api/organization/inspections/{inspection['id']}")
+            if case.endswith("-single"):
+                assert inspection["snapshot"]["source_kind"] == "file"
+                assert len(inspection["snapshot"]["files"]) == 1
             grouping = await request(
                 "GET", f"/api/organization/inspections/{inspection['id']}/grouping"
             )
-            if medium == "audio" or case == "ebook-formats":
+            if (medium == "audio" and case != "audio-single") or case == "ebook-formats":
                 assert len(grouping["content"]["groups"]) == 2
                 grouping = await request(
                     "PUT",
@@ -403,7 +410,9 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook", *,
                 "formats": expected_formats,
                 "formats_survive_inventory_refresh": True,
                 "single_catalog_version": True,
-                "reviewed_group_merge": medium == "audio" or case == "ebook-formats",
+                "reviewed_group_merge": (medium == "audio" and case != "audio-single")
+                or case == "ebook-formats",
+                "file_scoped_inspection": case.endswith("-single"),
                 "playback_order_confirmed": case == "audio",
                 "companion_not_owned_as_ebook": case == "audio-companion",
                 "catalog_version_seeded": True,

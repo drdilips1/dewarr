@@ -54,6 +54,27 @@ def beneath(root: int, relative: str, *, folder=False):
         os.close(fd)
 
 
+@contextmanager
+def source_scope(root: int, relative: str, kind: str):
+    """Open the source directory without broadening a single-file selection."""
+    parts = relative_parts(relative)
+    if kind == "directory":
+        with beneath(root, relative, folder=True) as fd:
+            yield fd
+    elif kind == "file":
+        if len(parts) > 1:
+            with beneath(root, "/".join(parts[:-1]), folder=True) as fd:
+                yield fd
+        else:
+            fd = os.dup(root)
+            try:
+                yield fd
+            finally:
+                os.close(fd)
+    else:
+        raise InspectionError("Unknown source inspection scope")
+
+
 def identity(info):
     return {
         "device": info.st_dev,

@@ -182,6 +182,7 @@ async def probe_destination(
         "source_key": source["key"],
         "source_path": source["path"],
         "source_relative": source["relative_path"],
+        **({"source_kind": "file"} if source.get("source_kind") == "file" else {}),
         "file": {
             "source": source_file,
             "name": "probe",

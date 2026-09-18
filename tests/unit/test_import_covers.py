@@ -345,7 +345,19 @@ def test_cover_publication_is_independent_frozen_and_recoverable(specification):
     assert not list(spec.source_root.rglob("*.jpg"))
 
 
-def test_legacy_publication_fingerprints_remain_stable(specification):  # noqa: F811
+@pytest.mark.parametrize("with_cover", [False, True])
+def test_legacy_publication_fingerprints_remain_stable(specification, with_cover):  # noqa: F811
+    if with_cover:
+        specification = specification.model_copy(
+            update={
+                "binary_sidecars": {
+                    "cover.jpg": base64.b64encode(normalize(cover_bytes())).decode()
+                },
+            }
+        )
     old = specification.model_dump(mode="json")
-    old.pop("binary_sidecars")
+    # Both legacy eras predate source_kind; only the oldest predates binary artwork.
+    old.pop("source_kind")
+    if not with_cover:
+        old.pop("binary_sidecars")
     assert specification_fingerprint(specification) == fingerprint(old)

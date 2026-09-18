@@ -161,3 +161,69 @@ def test_download_root_cannot_be_filesystem_root():
     with pytest.raises(InspectionError, match="filesystem root"):
         with directory(Path("/")):
             pass
+
+
+@pytest.mark.parametrize("relative", ["book.epub", "batch/book.epub"])
+def test_single_file_scope_does_not_enumerate_sibling_downloads(tmp_path, relative, monkeypatch):
+    root = tmp_path.resolve()
+    epub(root / relative)
+    epub(root / "unrelated.epub", title="Do not inspect this")
+    original = (root / relative).read_bytes()
+
+    def refuse_enumeration(*args, **kwargs):
+        raise AssertionError("A selected file must not enumerate its parent directory")
+
+    monkeypatch.setattr(inspection, "enumerate_files", refuse_enumeration)
+    snapshot = inspect_download(root, relative)
+    assert snapshot["source_kind"] == "file"
+    assert snapshot["relative_path"] == relative
+    assert [file["path"] for file in snapshot["files"]] == ["book.epub"]
+    assert snapshot["files"][0]["sha256"] == hashlib.sha256(original).hexdigest()
+    assert len(snapshot["groups"]) == 1
+    assert (root / relative).read_bytes() == original
+
+
+@pytest.mark.parametrize("kind", ["file-link", "parent-link", "fifo"])
+def test_single_file_scope_refuses_links_and_special_files(tmp_path, kind):
+    root = tmp_path.resolve()
+    epub(root / "real/book.epub")
+    if kind == "file-link":
+        (root / "book.epub").symlink_to(root / "real/book.epub")
+        path = "book.epub"
+    elif kind == "parent-link":
+        (root / "link").symlink_to(root / "real")
+        path = "link/book.epub"
+    else:
+        os.mkfifo(root / "book.epub")
+        path = "book.epub"
+    with pytest.raises((OSError, InspectionError)):
+        inspect_download(root, path)
+
+
+@pytest.mark.parametrize("change", ["selected", "parent", "sibling"])
+def test_file_scoped_inspection_detects_replacement_but_allows_sibling_activity(
+    tmp_path, monkeypatch, change
+):
+    root = tmp_path.resolve()
+    epub(root / "batch/book.epub")
+    original = inspection.inspect_file
+
+    def mutate(fd, path, deadline):
+        result = original(fd, path, deadline)
+        if change == "selected":
+            (root / "batch/book.epub").rename(root / "batch/old.epub")
+            epub(root / "batch/book.epub")
+        elif change == "parent":
+            (root / "batch").rename(root / "old-batch")
+            epub(root / "batch/book.epub")
+        else:
+            epub(root / "batch/other.epub", title="Another download")
+        return result
+
+    monkeypatch.setattr(inspection, "inspect_file", mutate)
+    if change == "sibling":
+        snapshot = inspect_download(root, "batch/book.epub")
+        assert [file["path"] for file in snapshot["files"]] == ["book.epub"]
+    else:
+        with pytest.raises(InspectionError, match="changed"):
+            inspect_download(root, "batch/book.epub")

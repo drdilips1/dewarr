@@ -4,11 +4,14 @@ import json
 import math
 import os
 import re
+import stat
 import subprocess
 import sys
 import time
 import zipfile
+from contextlib import ExitStack
 from pathlib import Path, PurePosixPath
+from typing import Literal
 from urllib.parse import unquote, urlsplit
 
 from defusedxml import ElementTree
@@ -23,6 +26,7 @@ from app.importing.filesystem import (
     enumerate_files,
     identity,
     relative_parts,
+    source_scope,
 )
 from app.importing.naming import PlannedSourceFile, StrictModel, fingerprint
 from app.importing.probe import probe_output
@@ -56,6 +60,7 @@ class InspectionSnapshot(StrictModel):
     schema_version: int
     source_path: str
     relative_path: str
+    source_kind: Literal["directory", "file"] = "directory"
     directory_identity: dict[str, int]
     files: list[InspectedFile]
     groups: list[InspectedGroup]
@@ -299,9 +304,27 @@ def suggest_groups(files):
 
 def inspect_download(root: Path, relative: str, *, max_bytes=200 * 1024**3, timeout=300):
     deadline = time.monotonic() + timeout
-    with directory(root) as mount, beneath(mount, relative, folder=True) as folder:
+    with ExitStack() as scopes:
+        mount = scopes.enter_context(directory(root))
+        parent = scopes.enter_context(source_scope(mount, relative, "file"))
+        leaf = relative_parts(relative)[-1]
+        selected = os.stat(leaf, dir_fd=parent, follow_symlinks=False)
+        if stat.S_ISDIR(selected.st_mode):
+            kind = "directory"
+            folder = scopes.enter_context(beneath(parent, leaf, folder=True))
+        elif stat.S_ISREG(selected.st_mode):
+            kind, folder = "file", parent
+        else:
+            raise InspectionError("Download contains a symlink or special file")
+
+        def listing_now():
+            if kind == "directory":
+                return enumerate_files(folder)
+            with beneath(folder, leaf) as fd:
+                return [(leaf, identity(os.fstat(fd)))]
+
         root_identity = identity(os.fstat(folder))
-        listing = enumerate_files(folder)
+        listing = listing_now()
         if sum(info["size"] for _, info in listing) > max_bytes:
             raise InspectionError("Download exceeds the supported inspection byte budget")
         files = []
@@ -314,14 +337,22 @@ def inspect_download(root: Path, relative: str, *, max_bytes=200 * 1024**3, time
                 if identity(os.fstat(fd)) != expected:
                     raise InspectionError("Source changed while being inspected")
                 files.append({**inspected, "identity": expected, "sha256": sha256})
-        if enumerate_files(folder) != listing:
+        if listing_now() != listing:
             raise InspectionError(
                 "Download changed during inspection; inspect it again when stable"
             )
         # Reopen from the configured root to detect a renamed/replaced directory.
-        with beneath(mount, relative, folder=True) as current:
-            if identity(os.fstat(current)) != root_identity:
+        with source_scope(mount, relative, kind) as current:
+            current_identity = identity(os.fstat(current))
+            # Sibling downloads may change a single file's parent mtime/size.
+            # Its directory identity and the selected file must still agree.
+            keys = ("device", "inode") if kind == "file" else root_identity.keys()
+            if any(current_identity[key] != root_identity[key] for key in keys):
                 raise InspectionError("Download directory changed during inspection")
+            if kind == "file":
+                with beneath(current, leaf) as fd:
+                    if identity(os.fstat(fd)) != listing[0][1]:
+                        raise InspectionError("Selected download file changed during inspection")
         snapshot = {
             "schema_version": 1,
             "source_path": str(root),
@@ -332,4 +363,6 @@ def inspect_download(root: Path, relative: str, *, max_bytes=200 * 1024**3, time
             "publication_available": False,
             "limits": {"max_bytes": max_bytes, "timeout_seconds": timeout},
         }
+        if kind == "file":
+            snapshot["source_kind"] = "file"
         return {**snapshot, "revision": fingerprint(snapshot)}

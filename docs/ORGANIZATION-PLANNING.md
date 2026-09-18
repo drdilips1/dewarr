@@ -1,8 +1,8 @@
 # Organization, inspection and frozen plans
 
-September 17, 2026. Implemented S04 foundation; the importer stage is not complete.
+September 18, 2026. Implemented S04 foundation; the importer stage is not complete.
 
-The administrator can edit naming presets, inspect a completed download directory, map proposed file groups to existing catalog versions, save an immutable review plan, configure/test a destination, and import the resolved books. Each item is independently published and confirmed through ABS. An inspected file, saved plan, completed publication or successful scan request never establishes library ownership by itself.
+The administrator can edit naming presets, inspect a completed download file or directory, map proposed file groups to existing catalog versions, save an immutable review plan, configure/test a destination, and import the resolved books. Each item is independently published and confirmed through ABS. An inspected file, saved plan, completed publication or successful scan request never establishes library ownership by itself.
 
 ## Naming
 
@@ -162,3 +162,5 @@ Forty cover unit cases and seven integration cases cover bounded retrieval/decod
 Seventeen filesystem and nine API/database cases verify cancellation, uncertain-publication recovery, reserved-file protection and replanning beside a confirmed sibling. The browser also stops a held import and submits it again after repair.
 
 Next: fuller grouping/format/omnibus coverage, file-alias reconciliation and the complete recovery/compatibility matrix. These remain required before enabling the MAM/qBittorrent acquisition path. No S04 acceptance gate is claimed complete.
+
+File-scoped inspection and publication preserve the exact selected file and existing directory receipts; see [Single-file imports](SINGLE-FILE-IMPORTS.md) for the source-boundary contract and verification.

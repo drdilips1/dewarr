@@ -141,17 +141,19 @@ export default function ImportReview() {
           </select>
         </label>
         <label>
-          Download folder
+          Download path
           <input
             value={path}
             onChange={(event) => setPath(event.target.value)}
-            placeholder="Series pack / completed folder"
+            placeholder="Series pack folder or completed-book.epub"
             maxLength={1024}
             required
             disabled={create.isPending}
           />
         </label>
-        <p className="muted">Enter the folder relative to the selected root.</p>
+        <p className="muted">
+          Enter a completed file or folder relative to the selected root.
+        </p>
         <label className="check-label">
           <input
             type="checkbox"
@@ -296,10 +298,18 @@ function Review({ inspection }: { inspection: Inspection }) {
       {snapshot && (
         <>
           <p className="muted">
-            {snapshot.files.length} files inspected · {groups.length} book
-            groups. Embedded metadata is evidence; choose a catalog version to
-            confirm each mapping.
+            {snapshot.files.length}{" "}
+            {snapshot.files.length === 1 ? "file" : "files"} inspected ·{" "}
+            {groups.length} book {groups.length === 1 ? "group" : "groups"}.
+            Embedded metadata is evidence; choose a catalog version to confirm
+            each mapping.
           </p>
+          {snapshot.source_kind === "file" && (
+            <p className="muted">
+              Only the selected file is included. Other downloads in its folder
+              are untouched.
+            </p>
+          )}
           <Notice error={grouping.error} />
           {grouping.isPending && <Loading />}
           {grouping.data && !editingGroups && (
@@ -407,7 +417,9 @@ function Review({ inspection }: { inspection: Inspection }) {
             </button>
           </div>
           <p className="muted">
-            {Object.keys(selections).length} groups selected for this plan.
+            {Object.keys(selections).length}{" "}
+            {Object.keys(selections).length === 1 ? "group" : "groups"} selected
+            for this plan.
           </p>
           <details>
             <summary>File evidence and items needing review</summary>

@@ -343,6 +343,7 @@ async def freeze_plan(inspection_id: UUID, body: FreezeInput, admin: Admin, db: 
             "key": row.source_key,
             "path": row.source_path,
             "relative_path": row.relative_path,
+            **({"source_kind": "file"} if row.snapshot.get("source_kind") == "file" else {}),
             "directory_identity": row.snapshot["directory_identity"],
         },
         "files": [files[path] for path in selected_files],

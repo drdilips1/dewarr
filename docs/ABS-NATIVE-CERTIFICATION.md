@@ -1,6 +1,6 @@
 # Native Audiobookshelf certification evidence
 
-September 17, 2026. Bounded compatibility checks against a real disposable ABS server, including six application import workflows for ebooks, audio, reviewed formats and companions. This is not full S03/S04 certification.
+September 18, 2026. Bounded compatibility checks against a real disposable ABS server, including eight application import workflows for ebooks, audio, reviewed formats and companions. This is not full S03/S04 certification.
 
 ## Reproduce
 
@@ -44,7 +44,7 @@ The default ABS metadata precedence applies the generated OPF after folder and a
 
 ## Explicit boundaries
 
-The additional application tests pass bootstrap → ABS connection/inventory → file inspection → frozen plan → destination probe → import API/worker → real ABS scan/confirmation for six cases:
+The additional application tests pass bootstrap → ABS connection/inventory → file inspection → frozen plan → destination probe → import API/worker → real ABS scan/confirmation for eight cases:
 
 | Application case | Additional assertion |
 |---|---|
@@ -54,11 +54,13 @@ The additional application tests pass bootstrap → ABS connection/inventory →
 | CBZ | Decoded image-page container recognized as an ebook |
 | EPUB + PDF | Explicit same-edition review; one catalog version/item, both formats retained after inventory refresh |
 | Audio + PDF companion | PDF stays with the recording; no ebook availability or phantom ebook edition |
+| Single EPUB file | File-scoped inspection/probe/publication confirms one ebook without a directory selection |
+| Single audio file | File-scoped inspection/probe/publication confirms one recording |
 
 Every case first stops a queued import, confirms no media was published and sources are unchanged, then submits a fresh import. Each verifies exact-version ownership, source byte/inode preservation, inventory refresh and a second request skipping the owned version. Each also retrieves synthetic artwork through the production bounded HTTP/decoder path, verifies that real ABS selects the generated independent cover, changes that cover locally, and proves a duplicate import leaves the changed bytes intact. The image HTTP transport is a fixture; decoding and ABS scanning are real. Catalog versions are seeded deliberately; this does not certify an external metadata provider or acquisition source. All content is generated in disposable directories.
 
 The script disables the watcher and triggers manual scans. The actual backend path-existence endpoint passes an absent → visible → absent empty-folder challenge, verifying the worker/ABS root mapping. Library media settings and OPF precedence are read through the real API. Watcher-driven imports, additional formats, omnibus coverage, wider international metadata, full disc-order, deletion/move, user-progress, permission and crash/scanner matrices remain pending. The audio application case establishes one two-track ordering scenario, not the complete matrix. Concurrent reservation and permission-race cases use the separate HTTP fixture integration tests.
 
-Nested layouts remain preview-only in the app. No complete stage or acceptance gate is marked passed from these eight item checks and six application workflows. Logs and sanitized JSON evidence are saved in ignored `.local/evidence/abs-native.*`; server credentials and fixture databases are not retained in the JSON report.
+Nested layouts remain preview-only in the app. No complete stage or acceptance gate is marked passed from these eight item checks and eight application workflows. Logs and sanitized JSON evidence are saved in ignored `.local/evidence/abs-native.*`; server credentials and fixture databases are not retained in the JSON report.
 
 Reference: [pinned ABS source](https://github.com/advplyr/audiobookshelf/tree/v2.36.1), [OPF parser](https://github.com/advplyr/audiobookshelf/blob/v2.36.1/server/utils/parsers/parseOpfMetadata.js), [library metadata defaults](https://github.com/advplyr/audiobookshelf/blob/v2.36.1/server/models/Library.js).

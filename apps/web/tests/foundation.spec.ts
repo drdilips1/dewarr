@@ -428,7 +428,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await page.getByRole("button", { name: "Save naming settings" }).click();
   expect((await namingReset).status()).toBe(200);
   await page.getByRole("link", { name: "Inspect completed downloads" }).click();
-  await page.getByLabel("Download folder", { exact: true }).fill("completed");
+  await page.getByLabel("Download path", { exact: true }).fill("completed");
   await page
     .getByLabel(
       "The download has finished and its files are no longer changing",
@@ -590,7 +590,9 @@ test("setup, catalog, private list and durable worker are usable together", asyn
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBe(true);
-  await page.getByLabel("Download folder", { exact: true }).fill("matched");
+  await page
+    .getByLabel("Download path", { exact: true })
+    .fill("matched/book.epub");
   await page
     .getByLabel(
       "The download has finished and its files are no longer changing",
@@ -602,6 +604,8 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await expect(inspected).toContainText(
     "One catalog edition agrees with the embedded identity evidence",
   );
+  await expect(inspected).toContainText("Only the selected file is included.");
+
   await inspected
     .getByRole("button", {
       name: "Use clear matches on this page (1)",
@@ -641,6 +645,8 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     .getByRole("button", { name: "Save import plan", exact: true })
     .click();
   const matchedPlan = await (await matchedPlanResponse).json();
+  expect(matchedPlan.document.source.source_kind).toBe("file");
+  expect(matchedPlan.document.source.relative_path).toBe("matched/book.epub");
   const matchProof =
     matchedPlan.document.matching_evidence[matchedPlan.document.groups[0].id];
   expect(matchProof.status).toBe("matched");
@@ -663,7 +669,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await expect(savedPlan).toContainText(
     "1 planned item folders · 0 need attention",
   );
-  await page.getByLabel("Download folder", { exact: true }).fill("formats");
+  await page.getByLabel("Download path", { exact: true }).fill("formats");
   await page
     .getByLabel(
       "The download has finished and its files are no longer changing",
@@ -718,7 +724,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await groupEditor
     .getByRole("button", { name: "Cancel group changes" })
     .click();
-  await page.getByLabel("Download folder", { exact: true }).fill("companion");
+  await page.getByLabel("Download path", { exact: true }).fill("companion");
   await page
     .getByLabel(
       "The download has finished and its files are no longer changing",

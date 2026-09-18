@@ -531,8 +531,8 @@ async def test_known_padding_is_not_mistaken_for_missing_payload(
     assert downloader.calls.count("submit") == 1
 
 
-async def test_single_file_cannot_dispatch_until_file_scoped_import_is_supported(
-    client, database, selected
+async def test_single_file_dispatch_hands_off_exact_file_path(
+    client, database, selected, downloader
 ):
     import base64
     import hashlib
@@ -564,10 +564,15 @@ async def test_single_file_cannot_dispatch_until_file_scoped_import_is_supported
             "descriptor": descriptor,
             "artifact_sha256": descriptor["artifact_sha256"],
         }
+    downloader.descriptor, downloader.complete = descriptor, True
     response = await start(client, selected)
-    assert response.status_code == 409 and "file-scoped" in response.text
+    assert response.status_code == 202, response.text
+    await downloads.run(UUID(response.json()["id"]))
+    attempt = await row(database, response.json()["id"])
+    assert attempt.state == "complete" and attempt.inspection_id
     async with database() as db:
-        assert not await db.scalar(select(DownloadAttempt.id))
+        inspection = await db.get(DownloadInspection, attempt.inspection_id)
+        assert inspection.relative_path == "Harbor.m4b"
 
 
 async def test_removed_attempt_tag_cannot_confirm_or_restart_transfer(

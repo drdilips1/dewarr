@@ -51,6 +51,25 @@ def attempt_tag(attempt):
     return "book-search:" + str(attempt.id)
 
 
+def inspection_path(selection):
+    descriptor = selection.frozen["descriptor"]
+    paths = [item["path"] for item in descriptor["files"]]
+    if len(paths) == 1 and "/" not in paths[0]:
+        name = paths[0]
+    elif all(path.startswith(descriptor["name"] + "/") for path in paths):
+        name = descriptor["name"]
+    else:
+        raise HTTPException(409, "Torrent files do not have one supported inspection root")
+    relative = "/".join(
+        part
+        for part in (selection.frozen["mapping"]["relative_path"], name)
+        if part not in {"", "."}
+    )
+    if len(relative) > 1024:
+        raise HTTPException(409, "Completed download path exceeds the inspection limit")
+    return relative
+
+
 async def locked(db, identifier):
     attempt = await db.get(DownloadAttempt, identifier)
     if not attempt:
@@ -109,13 +128,7 @@ async def authority(db, selection, *, wanted):
     ):
         raise HTTPException(409, "Saved torrent identity changed; inspect the release again")
     if wanted:
-        descriptor = selection.frozen["descriptor"]
-        if not all(
-            item["path"].startswith(descriptor["name"] + "/") for item in descriptor["files"]
-        ):
-            raise HTTPException(
-                409, "Single-file torrents need file-scoped import support before dispatch"
-            )
+        inspection_path(selection)
     return await db.get(Integration, selection.downloader_id), content
 
 
@@ -337,11 +350,7 @@ async def finish_observation(db, attempt, selection, state):
         return
     await authority(db, selection, wanted=True)
     mapping = selection.frozen["mapping"]
-    name = selection.frozen["descriptor"]["name"]
-    relative = "/".join(part for part in (mapping["relative_path"], name) if part not in {"", "."})
-    if len(relative) > 1024:
-        await record(db, attempt, "held", "Completed download path exceeds the inspection limit")
-        return
+    relative = inspection_path(selection)
     operation = Operation(
         owner_id=user.id,
         kind="organization.inspect",

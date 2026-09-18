@@ -232,7 +232,16 @@ async def exercise(base, root, process, workflow=False):
                         "audio" if case.startswith("audio") else "ebook",
                         case=case,
                     )
-                    for case in ("ebook", "audio", "pdf", "cbz", "ebook-formats", "audio-companion")
+                    for case in (
+                        "ebook",
+                        "audio",
+                        "pdf",
+                        "cbz",
+                        "ebook-formats",
+                        "audio-companion",
+                        "ebook-single",
+                        "audio-single",
+                    )
                 }
             return {
                 "server_version": status["serverVersion"],

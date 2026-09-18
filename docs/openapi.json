@@ -6981,6 +6981,15 @@
             "type": "string",
             "title": "Relative Path"
           },
+          "source_kind": {
+            "type": "string",
+            "enum": [
+              "directory",
+              "file"
+            ],
+            "title": "Source Kind",
+            "default": "directory"
+          },
           "directory_identity": {
             "additionalProperties": {
               "type": "integer"

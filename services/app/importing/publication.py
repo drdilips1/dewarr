@@ -28,6 +28,7 @@ from app.importing.filesystem import (
     directory,
     identity,
     relative_parts,
+    source_scope,
 )
 from app.importing.naming import StrictModel, collision_key, fingerprint
 
@@ -59,6 +60,7 @@ class PublicationSpec(StrictModel):
     plan_revision: str = Field(pattern=r"^[a-f0-9]{64}$")
     source_root: Path
     source_relative: str
+    source_kind: Literal["directory", "file"] = "directory"
     source_directory: dict[str, int]
     destination_root: Path
     staging_root: Path
@@ -71,6 +73,10 @@ class PublicationSpec(StrictModel):
     @model_validator(mode="after")
     def confined(self):
         relative_parts(self.source_relative)
+        if self.source_kind == "file" and (
+            len(self.files) != 1 or self.files[0].source != PurePosixPath(self.source_relative).name
+        ):
+            raise ValueError("A single-file import can publish only its inspected file")
         relative_parts(self.folder)
         names = [file.name for file in self.files]
         for name in self.sidecars:
@@ -121,6 +127,8 @@ def generated_files(spec):
 
 def specification_fingerprint(spec):
     payload = spec.model_dump(mode="json")
+    if spec.source_kind == "directory":
+        payload.pop("source_kind")  # Preserve existing directory publication receipts.
     if not spec.binary_sidecars:
         payload.pop("binary_sidecars")  # Preserve receipts created before cover support.
     return fingerprint(payload)
@@ -467,7 +475,7 @@ def publish_item(
                     ) from None
             with (
                 directory(spec.source_root) as source_root,
-                beneath(source_root, spec.source_relative, folder=True) as source,
+                source_scope(source_root, spec.source_relative, spec.source_kind) as source,
             ):
                 if not same_object(source, spec.source_directory):
                     raise PublicationError("Completed-download directory identity changed")
@@ -537,8 +545,12 @@ def probe_destination(
     file: PublishFile,
     destination_root: Path,
     staging_root: Path,
+    *,
+    source_kind: Literal["directory", "file"] = "directory",
 ):
     """Probe an actual selected file's link route, plus empty-directory no-replace rename."""
+    if source_kind == "file" and file.source != relative_parts(source_relative)[-1]:
+        raise PublicationError("A single-file probe must use its selected file")
     if any(
         left.is_relative_to(right) or right.is_relative_to(left)
         for left, right in (
@@ -555,7 +567,7 @@ def probe_destination(
     write_name = "write-" + token
     with (
         directory(source_root) as source_mount,
-        beneath(source_mount, source_relative, folder=True) as source,
+        source_scope(source_mount, source_relative, source_kind) as source,
         private_staging(staging_root) as staging,
         directory(destination_root) as destination,
         ExitStack() as handles,

@@ -296,3 +296,84 @@ def test_deleted_or_changed_published_item_is_not_replaced(specification):
     with pytest.raises(PublicationError, match="unplanned files"):
         publish_item(spec)
     assert not published.exists()
+
+
+@pytest.fixture(params=["book.epub", "nested/book.epub"])
+def file_spec(specification, request):
+    spec = specification
+    relative = request.param
+    selected = spec.source_root / relative
+    selected.parent.mkdir(exist_ok=True)
+    (spec.source_root / "pack/book.epub").rename(selected)
+    epub(spec.source_root / "neighbor.epub", title="Unrelated download")
+    snapshot = inspect_download(spec.source_root, relative)
+    file = snapshot["files"][0]
+    return PublicationSpec.model_validate(
+        {
+            **spec.model_dump(),
+            "source_kind": "file",
+            "source_relative": relative,
+            "source_directory": snapshot["directory_identity"],
+            "files": [
+                {
+                    "source": file["path"],
+                    "name": "First Harbor.epub",
+                    "identity": file["identity"],
+                    "sha256": file["sha256"],
+                }
+            ],
+        }
+    )
+
+
+@pytest.mark.parametrize("mode", ["hardlink", "copy"])
+def test_file_scoped_publication_is_source_preserving_and_resumable(file_spec, mode):
+    spec = file_spec.model_copy(update={"mode": mode})
+    selected = spec.source_root / spec.source_relative
+    before = selected.read_bytes()
+    neighbor = (spec.source_root / "neighbor.epub").read_bytes()
+
+    def crash(phase):
+        if phase == "file-staged":
+            raise RuntimeError("Synthetic interrupted file import")
+
+    with pytest.raises(RuntimeError, match="interrupted"):
+        publish_item(spec, checkpoint=crash)
+    epub(selected.parent / "new-download.epub", title="Concurrent download")
+    assert publish_item(spec)["state"] == "published"
+    published = spec.destination_root / spec.folder / "First Harbor.epub"
+    assert before == selected.read_bytes() == published.read_bytes()
+    assert (selected.stat().st_ino == published.stat().st_ino) == (mode == "hardlink")
+    assert (spec.source_root / "neighbor.epub").read_bytes() == neighbor
+    assert len(list(spec.destination_root.rglob("*.epub"))) == 1
+    selected.unlink()
+    assert publish_item(spec)["state"] == "published"
+
+
+def test_file_scope_cannot_expand_to_a_different_or_additional_file(file_spec):
+    original = file_spec.model_dump()
+    for files in (
+        [{**original["files"][0], "source": "neighbor.epub"}],
+        [
+            *original["files"],
+            {**original["files"][0], "source": "neighbor.epub", "name": "Extra.epub"},
+        ],
+    ):
+        with pytest.raises(ValueError, match="only its inspected file"):
+            PublicationSpec.model_validate({**original, "files": files})
+
+
+def test_file_scope_cannot_publish_a_replaced_source(file_spec):
+    selected = file_spec.source_root / file_spec.source_relative
+    selected.rename(selected.with_suffix(".old"))
+    epub(selected)
+    with pytest.raises(PublicationError, match="changed"):
+        publish_item(file_spec)
+    assert not (file_spec.destination_root / file_spec.folder).exists()
+
+
+def test_directory_receipt_fingerprint_remains_backward_compatible(specification):
+    old_document = specification.model_dump(mode="json")
+    old_document.pop("source_kind")
+    old_document.pop("binary_sidecars")
+    assert publication.specification_fingerprint(specification) == fingerprint(old_document)

@@ -234,6 +234,7 @@ async def start_import(
             plan_revision=plan.revision,
             source_root=Path(source["path"]),
             source_relative=source["relative_path"],
+            source_kind=source.get("source_kind", "directory"),
             source_directory=source["directory_identity"],
             destination_root=Path(configuration["root_path"]),
             staging_root=Path(configuration["staging_path"]),
