@@ -14,6 +14,7 @@ from pathlib import PurePosixPath
 from uuid import UUID, uuid4
 
 from cryptography.fernet import InvalidToken
+from fastapi import HTTPException
 from sqlalchemy import select
 
 from app.adapters.audiobookshelf import Audiobookshelf
@@ -21,6 +22,7 @@ from app.adapters.contracts import AdapterError, FailureKind
 from app.config import get_settings
 from app.db.models import (
     AuditEvent,
+    FrozenImportPlan,
     ImportDestination,
     ImportEntry,
     ImportRun,
@@ -33,6 +35,7 @@ from app.db.models import (
     Version,
 )
 from app.db.session import session_factory
+from app.domain import download_reviews
 from app.domain.identity import normalized
 from app.domain.inventory import apply_item
 from app.importing.backend import verify_backend
@@ -61,6 +64,9 @@ class AlreadyOwned(PublicationError):
 
 async def context(db, entry, token, *, lock=False):
     run = await db.get(ImportRun, entry.run_id)
+    plan = await db.get(FrozenImportPlan, run.plan_id)
+    if lock:
+        await download_reviews.lock_principals(db, plan.inspection_id)
     destination = await db.get(ImportDestination, entry.destination_id)
     backend = entry.configuration["destination"]["backend"]
     actor = await db.get(
@@ -111,6 +117,12 @@ async def context(db, entry, token, *, lock=False):
     )
     if conflicts:
         raise PublicationError("Resolve this catalog version's metadata conflict first")
+    try:
+        await download_reviews.validate_inspection(
+            db, plan.inspection_id, destination_id=destination.id, version=version, lock=lock
+        )
+    except HTTPException as error:
+        raise PublicationError(str(error.detail)) from error
     return run, destination, integration, library
 
 

@@ -883,6 +883,40 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/acquisition/reviews": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Listing */
+    get: operations["listing_api_acquisition_reviews_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/acquisition/reviews/{attempt_id}/claim": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Claim */
+    post: operations["claim_api_acquisition_reviews__attempt_id__claim_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organization/settings": {
     parameters: {
       query?: never;
@@ -1704,6 +1738,11 @@ export interface components {
       undone_at: string | null;
       /** Can Undo */
       can_undo: boolean;
+    };
+    /** ClaimInput */
+    ClaimInput: {
+      /** Revision */
+      revision: string;
     };
     /** ConnectionView */
     ConnectionView: {
@@ -3301,6 +3340,41 @@ export interface components {
        * @enum {string}
        */
       decision: "keep" | "separate";
+    };
+    /** ReviewPage */
+    ReviewPage: {
+      /** Items */
+      items: components["schemas"]["ReviewView"][];
+      /** Total */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+    };
+    /** ReviewView */
+    ReviewView: {
+      /**
+       * Attempt Id
+       * Format: uuid
+       */
+      attempt_id: string;
+      /** Work Title */
+      work_title: string;
+      /** Medium */
+      medium: string;
+      /** Message */
+      message: string;
+      /** Revision */
+      revision: string;
+      /** Inspection Id */
+      inspection_id: string | null;
+      /** Can Claim */
+      can_claim: boolean;
+      /** Reassignment */
+      reassignment: boolean;
+      /** Retry */
+      retry: boolean;
     };
     /** ReviewedFile */
     ReviewedFile: {
@@ -5698,6 +5772,75 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["RepairView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  listing_api_acquisition_reviews_get: {
+    parameters: {
+      query?: {
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ReviewPage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  claim_api_acquisition_reviews__attempt_id__claim_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        attempt_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ClaimInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ReviewView"];
         };
       };
       /** @description Validation Error */

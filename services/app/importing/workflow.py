@@ -2,11 +2,14 @@ import asyncio
 from pathlib import Path
 from uuid import UUID, uuid4
 
+from fastapi import HTTPException
 from sqlalchemy import select
 
 from app.config import get_settings
 from app.db.models import AuditEvent, DownloadInspection, Operation, User
 from app.db.session import session_factory
+from app.domain.download_reviews import validate_inspection
+from app.domain.operations import transaction_lock
 from app.importing.filesystem import InspectionError
 from app.importing.inspection import inspect_download
 
@@ -18,6 +21,12 @@ def source_matches(row):
 async def run_inspection(operation_id: UUID):
     token = uuid4()
     async with session_factory()() as db, db.begin():
+        identifier = await db.scalar(
+            select(DownloadInspection.id).where(DownloadInspection.operation_id == operation_id)
+        )
+        if not identifier:
+            return
+        await transaction_lock(db, f"inspection-plan:{identifier}")
         row = await db.scalar(
             select(DownloadInspection)
             .where(DownloadInspection.operation_id == operation_id)
@@ -26,6 +35,12 @@ async def run_inspection(operation_id: UUID):
         if not row or row.state in {"ready", "failed"}:
             return
         operation = await db.get(Operation, operation_id)
+        try:
+            await validate_inspection(db, row.id)
+        except HTTPException as error:
+            row.state, operation.status = "failed", "failed"
+            row.message = operation.message = str(error.detail)
+            return
         actor = await db.get(User, row.owner_id)
         if (
             get_settings().recovery_mode
@@ -52,6 +67,7 @@ async def run_inspection(operation_id: UUID):
             else ("Inspection could not read a stable download tree; check the worker mount")
         )
     async with session_factory()() as db, db.begin():
+        await transaction_lock(db, f"inspection-plan:{identifier}")
         row = await db.scalar(
             select(DownloadInspection)
             .where(DownloadInspection.operation_id == operation_id)
@@ -60,6 +76,10 @@ async def run_inspection(operation_id: UUID):
         if not row or row.run_token != token or row.state != "running":
             return
         actor = await db.get(User, row.owner_id, populate_existing=True)
+        try:
+            await validate_inspection(db, row.id)
+        except HTTPException as error:
+            snapshot, message = None, str(error.detail)
         if (
             get_settings().recovery_mode
             or not actor.active

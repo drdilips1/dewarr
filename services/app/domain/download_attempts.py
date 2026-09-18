@@ -376,12 +376,16 @@ async def finish_observation(db, attempt, selection, state):
         (await db.get(Operation, attempt.operation_id)).message = attempt.message
         return
     await authority(db, selection, wanted=True)
+    await create_inspection(db, attempt, selection, user)
+
+
+async def create_inspection(db, attempt, selection, user, *, key=None):
     mapping = selection.frozen["mapping"]
     relative = inspection_path(selection)
     operation = Operation(
         owner_id=user.id,
         kind="organization.inspect",
-        idempotency_key="download-inspection:" + str(attempt.id),
+        idempotency_key=key or "download-inspection:" + str(attempt.id),
     )
     db.add(operation)
     await db.flush()
@@ -396,6 +400,7 @@ async def finish_observation(db, attempt, selection, state):
     await db.flush()
     attempt.inspection_id = inspection.id
     operation.job_id = await enqueue(db, "organization.inspect", operation_id=str(operation.id))
+    return inspection
 
 
 async def run(identifier):

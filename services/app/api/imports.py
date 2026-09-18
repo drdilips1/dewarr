@@ -18,6 +18,7 @@ from app.db.models import (
     User,
     Version,
 )
+from app.domain.download_reviews import validate_inspection
 from app.domain.operations import transaction_lock
 from app.domain.work_graph import canonical_work, graph_lock
 from app.importing.filesystem import relative_parts
@@ -204,6 +205,7 @@ async def owned_inspection(db, actor_id, inspection_id):
     )
     if not row:
         raise HTTPException(404, "Inspection not found")
+    await validate_inspection(db, row.id)
     return row
 
 
@@ -245,6 +247,7 @@ async def freeze_plan(inspection_id: UUID, body: FreezeInput, admin: Admin, db: 
         version = await db.get(Version, selection.version_id)
         if not version or (await canonical_work(db, version.work_id)).id != work.id:
             raise HTTPException(422, "Choose a catalog version belonging to the selected book")
+        await validate_inspection(db, row.id, version=version)
         if version.medium != group["medium"]:
             raise HTTPException(422, "Catalog version and inspected medium differ")
         if selection.match_revision:

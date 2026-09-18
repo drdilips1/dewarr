@@ -451,6 +451,20 @@ class DownloadAttempt(Identity, Base):
     inspection_id: Mapped[UUID | None] = mapped_column(ForeignKey("download_inspections.id"))
 
 
+class DownloadHandoff(Identity, Base):
+    __tablename__ = "download_handoffs"
+    __table_args__ = (
+        Index(
+            "uq_active_download_handoff", "attempt_id", unique=True, postgresql_where=text("active")
+        ),
+    )
+    attempt_id: Mapped[UUID] = mapped_column(ForeignKey("download_attempts.id"), index=True)
+    reviewer_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
+    inspection_id: Mapped[UUID] = mapped_column(ForeignKey("download_inspections.id"), unique=True)
+    operation_id: Mapped[UUID] = mapped_column(ForeignKey("operations.id"), unique=True)
+    active: Mapped[bool] = mapped_column(Boolean, default=True)
+
+
 class DownloadRepair(Identity, Base):
     __tablename__ = "download_repairs"
     __table_args__ = (

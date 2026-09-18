@@ -1205,3 +1205,86 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   ).toBe(true);
   expect(errors).toEqual([]);
 });
+
+test("administrator review queue retries a command and shows its assigned inspection", async ({
+  page,
+}, testInfo) => {
+  // UI contract fixture; the PostgreSQL/file suite exercises real claims and publication.
+  const attempt = "a8c84f97-b555-4843-a10d-10bf505e774b";
+  const inspection = "fc7cc890-65d5-4bdb-98ef-d19481a5db56";
+  let assigned = false;
+  const keys: string[] = [];
+  const row = () => ({
+    attempt_id: attempt,
+    work_title: "Member review fixture",
+    medium: "audio",
+    message: assigned
+      ? "Assigned to you"
+      : "Ready for administrator inspection",
+    revision: (assigned ? "b" : "a").repeat(64),
+    inspection_id: assigned ? inspection : null,
+    can_claim: !assigned,
+    reassignment: assigned,
+    retry: false,
+  });
+  await page.route("**/api/acquisition/reviews?*", (route) =>
+    route.fulfill({
+      json: { items: [row()], total: 1, offset: 0, limit: 10 },
+    }),
+  );
+  await page.route(
+    `**/api/acquisition/reviews/${attempt}/claim`,
+    async (route) => {
+      keys.push(route.request().headers()["idempotency-key"]);
+      if (keys.length === 1) {
+        await route.fulfill({
+          status: 503,
+          json: { detail: "Temporary review connection failure" },
+        });
+      } else {
+        assigned = true;
+        await route.fulfill({ status: 202, json: row() });
+      }
+    },
+  );
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  const review = page.getByRole("region", { name: "Download import reviews" });
+  await review.getByRole("button", { name: "Review this download" }).click();
+  await expect(review).toContainText("Temporary review connection failure");
+  await review.getByRole("button", { name: "Review this download" }).click();
+  await expect(review).toContainText("Assigned to you");
+  await expect(
+    review.getByRole("link", { name: "Open file review" }),
+  ).toHaveAttribute(
+    "href",
+    `/organization/inspections?inspection=${inspection}`,
+  );
+  expect(keys).toHaveLength(2);
+  expect(keys[0]).toBe(keys[1]);
+  await page.reload();
+  await expect(review).toContainText("Assigned to you");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("download-review-mobile.png"),
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+  await page.getByLabel("Username", { exact: true }).fill("guest");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("guest reader password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  await expect(review).toHaveCount(0);
+});

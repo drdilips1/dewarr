@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Clock } from "lucide-react";
 import { api, result } from "../api/client";
 import Downloads from "./Downloads";
+import DownloadReviews from "./DownloadReviews";
 import { Empty, Loading, Notice } from "../components";
 
 export default function Activity({
@@ -69,6 +70,7 @@ export default function Activity({
         ) : null}
       </div>
       <Downloads canManage={canRequest} />
+      {admin && <DownloadReviews />}
       <Notice error={activity.error || probe.error} />
       {activity.isPending ? <Loading /> : null}
       {activity.data?.length ? (
@@ -100,11 +102,13 @@ export default function Activity({
                           ? "Book download"
                           : item.kind === "acquisition.repair"
                             ? "Download connection repair"
-                            : item.kind === "acquisition.select"
-                              ? "Release selection"
-                              : item.kind === "metadata.enrich"
-                                ? "Automatic metadata lookup"
-                                : item.kind}
+                            : item.kind === "acquisition.review"
+                              ? "Download import review"
+                              : item.kind === "acquisition.select"
+                                ? "Release selection"
+                                : item.kind === "metadata.enrich"
+                                  ? "Automatic metadata lookup"
+                                  : item.kind}
                 </h2>
                 <p>{item.message}</p>
               </div>

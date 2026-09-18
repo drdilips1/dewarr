@@ -1,35 +1,47 @@
 # ruff: noqa: F811
 """Reviewed single-file acquisition through real file publication and fixture ABS."""
 
+import asyncio
 import base64
 import hashlib
+import json
+from contextlib import aclosing
 from datetime import UTC, datetime
-from uuid import UUID
+from uuid import UUID, uuid4
 
 import libtorrent as lt
 import pytest
-from sqlalchemy import select
+from sqlalchemy import delete, select
 
 from app.adapters.mam import release
 from app.adapters.torrent_descriptor import inspect_torrent
 from app.config import get_settings
 from app.db.models import (
+    AcquisitionReason,
     AcquisitionReservation,
     AcquisitionSelection,
     DownloadAttempt,
     DownloadFulfillment,
     DownloadIdentityClaim,
+    ImportEntry,
     Integration,
+    LibraryGrant,
     SourceArtifact,
     SourceConnection,
+    User,
 )
 from app.domain import download_attempts as downloads
+from app.importing import execution
 from app.jobs.queue import get_queue
 from app.security import encrypt_secrets
 from tests.integration.test_acquisition import body, request
 from tests.integration.test_acquisition_selections import prepare
 from tests.integration.test_download_attempts import Client
 from tests.integration.test_download_attempts import start as start_download
+from tests.integration.test_download_reviews import (
+    admin_client,
+    review_account,  # noqa: F401
+)
 from tests.integration.test_import_destinations import route as destination_route  # noqa: F401
 from tests.integration.test_import_destinations import start_probe
 from tests.integration.test_import_execution import ready_route  # noqa: F401
@@ -41,8 +53,9 @@ pytestmark = pytest.mark.integration
 
 
 @pytest.mark.parametrize("save_relative", ["", "nested"])
+@pytest.mark.parametrize("handoff", [False, True, "grant", "withdraw", "requester", "reviewer"])
 async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
-    client, admin, database, ready_route, monkeypatch, save_relative
+    client, admin, database, ready_route, monkeypatch, save_relative, handoff, review_account
 ):
     route = ready_route
     old = route["plan"]["document"]["groups"][0]
@@ -128,6 +141,11 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
         },
     )
     assert selected_response.status_code == 201, selected_response.text
+    owner_client = client
+    if handoff:
+        async with database() as db, db.begin():
+            (await db.get(User, UUID(admin["id"]))).role = "member"
+            db.add(LibraryGrant(user_id=UUID(admin["id"]), library_id=UUID(route["library_id"])))
     monkeypatch.setattr(get_settings(), "download_dispatch_enabled", True)
     qbit = Client(database, descriptor.model_dump(mode="json"))
     qbit.complete = True
@@ -135,6 +153,16 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
     started = await start_download(client, selected_response.json())
     assert started.status_code == 202, started.text
     await get_queue().run_worker_async(wait=False, concurrency=1)
+    if handoff:
+        client = review_account[0]
+        pending = (await client.get("/api/acquisition/reviews")).json()["items"][0]
+        claimed = await client.post(
+            f"/api/acquisition/reviews/{pending['attempt_id']}/claim",
+            json={"revision": pending["revision"]},
+            headers={"Idempotency-Key": "single-file-member-review"},
+        )
+        assert claimed.status_code == 202, claimed.text
+        await get_queue().run_worker_async(wait=False, concurrency=1)
     async with database() as db:
         attempt = await db.scalar(select(DownloadAttempt))
         assert attempt.inspection_id
@@ -162,15 +190,70 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
         },
     )
     assert response.status_code == 201, response.text
+    if handoff is True:
+        async with database() as db, db.begin():
+            selection = await db.get(AcquisitionSelection, UUID(selected_response.json()["id"]))
+            frozen = selection.frozen
+            selection.frozen = {
+                **frozen,
+                "requirements": {**frozen["requirements"], "version_id": str(uuid4())},
+            }
+        rejected = await client.post(
+            f"/api/organization/inspections/{inspected['id']}/plans",
+            json=json.loads(response.request.content),
+        )
+        assert rejected.status_code == 422, rejected.text
+        async with database() as db, db.begin():
+            (
+                await db.get(AcquisitionSelection, UUID(selected_response.json()["id"]))
+            ).frozen = frozen
     route["plan"], route["plan_id"] = response.json(), response.json()["id"]
     assert route["plan"]["document"]["source"]["source_kind"] == "file"
     # Prove a first-time route probe can use the selected file, not only a folder.
-    await start_probe(client, route, key="file-scope-destination-probe")
-    await get_queue().run_worker_async(wait=False, concurrency=1)
+    if not handoff:
+        await start_probe(client, route, key="file-scope-destination-probe")
+        await get_queue().run_worker_async(wait=False, concurrency=1)
     destination = (await client.get("/api/organization/destinations")).json()[0]
     assert destination["probe"]["status"] == "verified", destination
     result = await start_import(client, route, key="file-scoped-import")
     assert result.status_code == 202, result.text
+    if handoff:
+        other, _ = await admin_client(database, "third-reviewer")
+        async with aclosing(other):
+            current_review = (await other.get("/api/acquisition/reviews")).json()["items"][0]
+            denied = await other.post(
+                f"/api/acquisition/reviews/{attempt.id}/claim",
+                json={"revision": current_review["revision"]},
+                headers={"Idempotency-Key": "cannot-reassign-reserved-import"},
+            )
+            assert denied.status_code == 409, denied.text
+    if handoff in {"grant", "withdraw", "requester", "reviewer"}:
+        loop = asyncio.get_running_loop()
+
+        async def revoke():
+            async with database() as db, db.begin():
+                if handoff == "grant":
+                    await db.execute(delete(LibraryGrant))
+                elif handoff == "withdraw":
+                    for reason in await db.scalars(select(AcquisitionReason)):
+                        reason.active = False
+                else:
+                    identifier = UUID(admin["id"]) if handoff == "requester" else review_account[1]
+                    (await db.get(User, identifier)).role = "viewer"
+
+        def checkpoint(phase):
+            if phase == "prepared":
+                asyncio.run_coroutine_threadsafe(revoke(), loop).result(timeout=10)
+
+        entry = result.json()["entries"][0]
+        await execution.execute(UUID(entry["operation_id"]), checkpoint=checkpoint)
+        async with database() as db:
+            assert (await db.get(ImportEntry, UUID(entry["id"]))).state == "held"
+            assert not await db.scalar(select(DownloadFulfillment.id))
+        assert not list(route["target"].rglob("*.epub"))
+        assert source.read_bytes() == original
+        assert qbit.calls.count("submit") == 1
+        return
     await get_queue().run_worker_async(wait=False, concurrency=1)
     imported = (await client.get(f"/api/organization/imports/{result.json()['id']}")).json()
     assert imported["entries"][0]["state"] == "confirmed", imported
@@ -182,7 +265,7 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
         assert selection.state == "fulfilled"
         assert (await db.get(AcquisitionReservation, selection.reservation_id)).state == "released"
         assert (await db.scalar(select(DownloadIdentityClaim))).active
-    activity = (await client.get(f"/api/acquisition/downloads/{attempt.id}")).json()
+    activity = (await owner_client.get(f"/api/acquisition/downloads/{attempt.id}")).json()
     assert activity["fulfillment"]["basis"] == "imported"
     assert activity["fulfillment"]["available_now"]
     output = list(route["target"].rglob("*.epub"))
@@ -192,7 +275,7 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
     assert (await client.get(f"/api/catalog/works/{old['work_id']}")).json()["availability"][
         "owned"
     ]
-    repeated = await start_download(client, selected_response.json())
+    repeated = await start_download(owner_client, selected_response.json())
     assert repeated.json()["id"] == started.json()["id"]
     assert qbit.calls.count("submit") == 1
     assert (await start_import(client, route, key="file-scoped-import-again")).json()["entries"][0][

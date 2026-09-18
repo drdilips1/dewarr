@@ -14,6 +14,7 @@ from app.db.models import (
     AcquisitionTarget,
     DownloadAttempt,
     DownloadFulfillment,
+    DownloadInspection,
 )
 from app.domain import download_attempts as downloads
 from app.domain import download_repairs as repairs
@@ -81,6 +82,7 @@ class AttemptPage(BaseModel):
 
 
 async def view(db, user, row, selection):
+    inspection = await db.get(DownloadInspection, row.inspection_id) if row.inspection_id else None
     repair = await repairs.latest(db, row.id)
     repairing = bool(repair and repair.state == "pending")
     repairable = (
@@ -132,7 +134,9 @@ async def view(db, user, row, selection):
         and (not row.lease_until or row.lease_until <= datetime.now(UTC))
         and (not row.next_check_at or row.next_check_at <= datetime.now(UTC)),
         progress=(row.observation or {}).get("progress"),
-        inspection_id=row.inspection_id,
+        inspection_id=inspection.id
+        if inspection and inspection.owner_id == user.id and user.role == "admin"
+        else None,
         fulfillment=confirmed,
         repair=RepairView.model_validate(repair) if repair else None,
         can_repair=needs_review,

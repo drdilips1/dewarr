@@ -21,6 +21,7 @@ from app.db.models import (
     Operation,
     Version,
 )
+from app.domain.download_reviews import validate_inspection
 from app.domain.operations import transaction_lock
 from app.importing.destinations import destination_configuration
 from app.importing.grouping import current_grouping
@@ -134,6 +135,7 @@ async def start_import(
     if not plan:
         raise HTTPException(404, "Import plan not found")
     await transaction_lock(db, f"inspection-plan:{plan.inspection_id}")
+    await validate_inspection(db, plan.inspection_id)
     inspection = await db.get(DownloadInspection, plan.inspection_id)
     grouping_revision, _ = await current_grouping(db, inspection)
     document = plan.document
@@ -190,6 +192,9 @@ async def start_import(
         if item["state"] != "ready" or not destination:
             continue
         version = await db.get(Version, entry.version_id)
+        await validate_inspection(
+            db, plan.inspection_id, destination_id=destination.id, version=version
+        )
         if version_revision(version) != document["version_revisions"].get(str(version.id)):
             entry.message = "Catalog version changed; inspect its identity and create a fresh plan"
             continue

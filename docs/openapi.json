@@ -2779,6 +2779,126 @@
         }
       }
     },
+    "/api/acquisition/reviews": {
+      "get": {
+        "tags": [
+          "downloads"
+        ],
+        "summary": "Listing",
+        "operationId": "listing_api_acquisition_reviews_get",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/acquisition/reviews/{attempt_id}/claim": {
+      "post": {
+        "tags": [
+          "downloads"
+        ],
+        "summary": "Claim",
+        "operationId": "claim_api_acquisition_reviews__attempt_id__claim_post",
+        "parameters": [
+          {
+            "name": "attempt_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Attempt Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClaimInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/organization/settings": {
       "get": {
         "tags": [
@@ -5221,6 +5341,21 @@
           "can_undo"
         ],
         "title": "ChangeView"
+      },
+      "ClaimInput": {
+        "properties": {
+          "revision": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "revision"
+        ],
+        "title": "ClaimInput"
       },
       "ConnectionView": {
         "properties": {
@@ -9527,6 +9662,99 @@
           "decision"
         ],
         "title": "ReviewInput"
+      },
+      "ReviewPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewView"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "offset",
+          "limit"
+        ],
+        "title": "ReviewPage"
+      },
+      "ReviewView": {
+        "properties": {
+          "attempt_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Attempt Id"
+          },
+          "work_title": {
+            "type": "string",
+            "title": "Work Title"
+          },
+          "medium": {
+            "type": "string",
+            "title": "Medium"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          },
+          "inspection_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inspection Id"
+          },
+          "can_claim": {
+            "type": "boolean",
+            "title": "Can Claim"
+          },
+          "reassignment": {
+            "type": "boolean",
+            "title": "Reassignment"
+          },
+          "retry": {
+            "type": "boolean",
+            "title": "Retry"
+          }
+        },
+        "type": "object",
+        "required": [
+          "attempt_id",
+          "work_title",
+          "medium",
+          "message",
+          "revision",
+          "inspection_id",
+          "can_claim",
+          "reassignment",
+          "retry"
+        ],
+        "title": "ReviewView"
       },
       "ReviewedFile": {
         "properties": {

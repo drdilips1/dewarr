@@ -9,7 +9,7 @@ An administrator can now repair their outstanding submitted acquisition after sa
 3. Review the affected connections and choose **Confirm and check existing transfer**.
 4. The worker checks the existing transfer. Activity reports the repair outcome and retains the original download progress and history.
 
-The preview and command are owner-only and administrator-only. Preview returns a revision and plain-language changes, not credentials, source artifacts or private filesystem settings. Other administrators cannot use this route to access another owner's attempt. Member-to-administrator operational handoff remains a separate pending capability.
+The preview and command are owner-only and administrator-only. Preview returns a revision and plain-language changes, not credentials, source artifacts or private filesystem settings. Other administrators cannot use this route to access another owner's attempt. Completed member downloads use the separate [administrator import-review handoff](DOWNLOAD-REVIEWS.md).
 
 ## What can change
 
@@ -33,4 +33,4 @@ New download dispatch may be disabled while an existing transfer is repaired and
 
 Integration cases cover each connection generation, preview staleness, concurrent/replayed commands, pending-repair guards, endpoint/path/category/destination/probe changes, permission/configuration changes during I/O, unknown/transient/conflicting observations, worker death, recovery mode, disabled dispatch, atomic rollback, successive repairs, completed-file handoff, already-satisfied completion and guarded downgrade. The browser edits a saved downloader, tests it, reviews and applies a repair, retains one synthetic transfer and verifies reload plus desktop/mobile layout.
 
-These are fixture-based source/downloader checks. Live account/client certification, migration to a different physical endpoint or file route, shared-pack reuse, withdrawn-owner resolution and administrator handoff for member-owned work remain pending. A populated repair ledger refuses lossy downgrade; restore a pre-upgrade backup with external-state reconciliation rather than discarding repair history.
+These are fixture-based source/downloader checks. Live account/client certification, migration to a different physical endpoint or file route, shared-pack reuse and withdrawn-owner resolution remain pending. Completed member-owned work now has a separately tested administrator import-review handoff. A populated repair ledger refuses lossy downgrade; restore a pre-upgrade backup with external-state reconciliation rather than discarding repair history.
