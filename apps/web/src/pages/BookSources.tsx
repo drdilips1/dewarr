@@ -62,6 +62,7 @@ export default function BookSources({
             offset,
             profile_id: chosen?.id,
             profile_generation: chosen?.generation,
+            profile_effective_revision: chosen?.effective_revision,
           },
         }),
       ),
@@ -103,6 +104,11 @@ export default function BookSources({
           String(search.data.profile.generation),
         );
       }
+      if (search.data?.profile.effective_revision)
+        context.set(
+          "profile_effective_revision",
+          search.data.profile.effective_revision,
+        );
       for (const field of ["request", "slot"])
         if (params.get(field)) context.set(field, params.get(field)!);
       navigate(`/sources/artifacts/${artifact.id}?${context}`);
@@ -181,8 +187,9 @@ export default function BookSources({
       </form>
       {chosen && canAcquire && (
         <ReleaseProfiles
-          key={`${chosen.id}:${chosen.generation}`}
+          key={`${chosen.id}:${chosen.effective_revision}`}
           profile={chosen}
+          defaults={profiles.data![0]}
           onSaved={(p) => setSelectedId(p.id || "")}
         />
       )}

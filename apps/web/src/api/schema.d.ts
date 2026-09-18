@@ -2051,6 +2051,24 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/acquisition/preferences/{scope}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Read */
+    get: operations["read_api_acquisition_preferences__scope__get"];
+    /** Save */
+    put: operations["save_api_acquisition_preferences__scope__put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/acquisition/selections/options": {
     parameters: {
       query?: never;
@@ -2814,6 +2832,22 @@ export interface components {
     CsvSelection: {
       /** Rows */
       rows: number[];
+    };
+    /** DefaultsView */
+    DefaultsView: {
+      overrides: components["schemas"]["PreferenceOverrides"];
+      effective: components["schemas"]["ReleasePreferences"];
+      inherited: components["schemas"]["ReleasePreferences"];
+      /** Inherited Origins */
+      inherited_origins: {
+        [key: string]: string;
+      };
+      /** Origins */
+      origins: {
+        [key: string]: string;
+      };
+      /** Revision */
+      revision: string;
     };
     /** DestinationChoice */
     "DestinationChoice-Input": {
@@ -3629,6 +3663,8 @@ export interface components {
       profile_id?: string | null;
       /** Profile Generation */
       profile_generation?: number | null;
+      /** Profile Effective Revision */
+      profile_effective_revision?: string | null;
       /** Downloader Id */
       downloader_id?: string | null;
       /** Downloader Generation */
@@ -4402,6 +4438,24 @@ export interface components {
       /** Message */
       message: string;
     };
+    /**
+     * PreferenceOverrides
+     * @description Omitted fields inherit; explicit empty block lists and null limits override.
+     */
+    PreferenceOverrides: {
+      /** Ebook Formats */
+      ebook_formats?: string[];
+      /** Audio Formats */
+      audio_formats?: string[];
+      /** Source Order */
+      source_order?: string[];
+      /** Criteria */
+      criteria?: ("format" | "source" | "seeders")[];
+      /** Blocked Formats */
+      blocked_formats?: string[];
+      /** Maximum Bytes */
+      maximum_bytes?: number | null;
+    };
     /** PreviewInput */
     PreviewInput: {
       profile?: components["schemas"]["NamingProfile"] | null;
@@ -4432,7 +4486,7 @@ export interface components {
     ProfileInput: {
       /** Name */
       name: string;
-      preferences?: components["schemas"]["ReleasePreferences"];
+      preferences?: components["schemas"]["PreferenceOverrides"];
       /**
        * Expected Generation
        * @default 0
@@ -4454,6 +4508,13 @@ export interface components {
        */
       name: string;
       preferences: components["schemas"]["ReleasePreferences"];
+      overrides?: components["schemas"]["PreferenceOverrides"];
+      /** Origins */
+      origins?: {
+        [key: string]: string;
+      };
+      /** Effective Revision */
+      effective_revision?: string | null;
     };
     /** ProwlarrConnectionInput */
     ProwlarrConnectionInput: {
@@ -4961,6 +5022,12 @@ export interface components {
       /** Expected Revision */
       expected_revision: string;
     };
+    /** SaveDefaults */
+    SaveDefaults: {
+      overrides: components["schemas"]["PreferenceOverrides"];
+      /** Expected Revision */
+      expected_revision: string;
+    };
     /** SaveSettings */
     SaveSettings: {
       profile: components["schemas"]["NamingProfile"];
@@ -4980,6 +5047,8 @@ export interface components {
       profile_id?: string | null;
       /** Profile Generation */
       profile_generation?: number | null;
+      /** Profile Effective Revision */
+      profile_effective_revision?: string | null;
       /**
        * Offset
        * @default 0
@@ -5070,6 +5139,8 @@ export interface components {
       profile_id?: string | null;
       /** Profile Generation */
       profile_generation?: number | null;
+      /** Profile Effective Revision */
+      profile_effective_revision?: string | null;
     };
     /** SelectionOptions */
     SelectionOptions: {
@@ -9928,6 +9999,72 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["SourceArtifactView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  read_api_acquisition_preferences__scope__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        scope: "personal" | "installation";
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DefaultsView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  save_api_acquisition_preferences__scope__put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        scope: "personal" | "installation";
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SaveDefaults"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DefaultsView"];
         };
       };
       /** @description Validation Error */

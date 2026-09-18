@@ -54,6 +54,9 @@ class SelectionInput(BaseModel):
     confirmed_work_id: UUID
     profile_id: UUID | None = None
     profile_generation: int | None = Field(default=None, ge=0)
+    profile_effective_revision: str | None = Field(
+        default=None, pattern=r"^[a-f0-9]{64}$", exclude_if=lambda value: value is None
+    )
 
 
 async def owned_selection(db, user, identifier):
@@ -178,7 +181,9 @@ async def prepare(db, user, body, key, *, automatic_evidence=None):
     release = (MAMRelease if artifact.source_key == "mam" else ProwlarrRelease).model_validate(
         artifact.release_snapshot
     )
-    profile = await profile_snapshot(db, user.id, body.profile_id, body.profile_generation)
+    profile = await profile_snapshot(
+        db, user.id, body.profile_id, body.profile_generation, body.profile_effective_revision
+    )
     if automatic_evidence:
         maximum = automatic_evidence["maximum_bytes"]
         profile = profile.model_copy(

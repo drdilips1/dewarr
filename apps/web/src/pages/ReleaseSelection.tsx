@@ -1,3 +1,4 @@
+import { EffectivePreferences } from "./PreferenceFields";
 import { useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
@@ -141,6 +142,10 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
             destination_revision: destination!.revision,
             confirmed_work_id: selected!.intent.work_id,
             profile_id: params.get("profile") || undefined,
+            profile_effective_revision:
+              params.get("profile_effective_revision") ||
+              selectedProfile?.effective_revision ||
+              undefined,
             profile_generation: params.get("profile_generation")
               ? Number(params.get("profile_generation"))
               : undefined,
@@ -188,6 +193,12 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
       aria-label="Release selection"
     >
       <h2>Select for a book request</h2>
+      {selectedProfile && (
+        <EffectivePreferences
+          preferences={selectedProfile.preferences}
+          origins={selectedProfile.origins || {}}
+        />
+      )}
       <p>
         Download profile:{" "}
         {selectedProfile?.name ||
@@ -308,6 +319,8 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
         className="primary"
         disabled={
           !artifact.current_connection ||
+          !selectedProfile ||
+          profiles.isFetching ||
           !selected ||
           !downloader ||
           !destination ||

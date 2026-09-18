@@ -10,7 +10,7 @@ MAM and eligible Prowlarr indexers contribute to one ranked page. Results retain
 
 Balanced preferences require no configuration: EPUB leads ebook formats, M4B leads audio formats, and MAM leads sources. The default ordered comparison is format, source, then seed count. Users can save private named profiles, reorder those criteria and preferred formats/sources, block formats, and optionally cap total transfer size. Advanced format controls stay collapsed. Explanations show the applied preferences and missing evidence.
 
-Profiles affect the current source comparison and the selected acquisition. They do not yet inherit from account, request or list defaults. An edited profile receives a new generation; historical searches and selections retain their original snapshot. Selecting with an obsolete saved-profile generation requires refreshing it.
+Profiles affect the current source comparison and the selected acquisition. Sparse profile fields now inherit personal and installation defaults through [Download preferences](DOWNLOAD-PREFERENCES.md); complete request/list ranking and media/language inheritance remain pending. An edited profile receives a new generation; historical searches and selections retain their original snapshot. Selecting with an obsolete saved-profile generation requires refreshing it.
 
 ## Contracts and boundaries
 
@@ -34,7 +34,7 @@ Migration `0024_book_sources` adds private profiles and links cached results to 
 
 ## Remaining S06 work
 
-Native AudiobookBay, cross-source release equivalence, full language/exact-version eligibility, verified series coverage and bounded pack expansion, source-local popularity, profile inheritance/default management, search cancellation, shared-transfer reuse and unattended source selection remain pending. This foundation does not claim automatic ranking is safe to dispatch without review. Live MAM/Prowlarr/qBittorrent certification, external Hardcover/Goodreads list automation and the remaining PRD stages remain unimplemented or uncertified as recorded in the status document.
+Native AudiobookBay, cross-source release equivalence, full language/exact-version eligibility, verified series coverage and bounded pack expansion, source-local popularity, complete request/list policy inheritance, search cancellation, shared-transfer reuse and unattended source selection remain pending. This foundation does not claim automatic ranking is safe to dispatch without review. Live MAM/Prowlarr/qBittorrent certification, external Hardcover/Goodreads list automation and the remaining PRD stages remain unimplemented or uncertified as recorded in the status document.
 
 
 ## Automatic release preparation

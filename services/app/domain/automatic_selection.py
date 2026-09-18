@@ -44,6 +44,7 @@ from app.domain.release_profiles import (
     normalized,
     profile_snapshot,
     ranking_key,
+    same_profile,
 )
 from app.domain.request_constraints import constrained_preferences
 from app.domain.source_artifacts import persist_artifact
@@ -118,7 +119,7 @@ async def context(db, user_id, body):
         raise HTTPException(409, "Source results expired; refresh the source search")
     profile = ProfileSnapshot.model_validate(search.payload["profile"])
     current = await profile_snapshot(db, user_id, profile.id, profile.generation)
-    if current.model_dump(mode="json") != profile.model_dump(mode="json"):
+    if not same_profile(current, profile):
         raise HTTPException(409, "Download preferences changed; refresh the source search")
     # A matched source/provider identity is required; manually typed titles alone
     # remain usable in the reviewed flow rather than silently acquiring namesakes.
@@ -632,6 +633,7 @@ async def run(identifier):
                         confirmed_work_id=work.id,
                         profile_id=profile.id,
                         profile_generation=profile.generation,
+                        profile_effective_revision=profile.effective_revision,
                     ),
                     child_key,
                     automatic_evidence={

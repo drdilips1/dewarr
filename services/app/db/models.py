@@ -151,6 +151,20 @@ class SourceConnection(Base):
     lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
+class AcquisitionDefaults(Base):
+    __tablename__ = "acquisition_defaults"
+    __table_args__ = (
+        CheckConstraint(
+            "(key = 'installation' AND owner_id IS NULL) OR "
+            "(owner_id IS NOT NULL AND key = 'user:' || owner_id::text)"
+        ),
+    )
+    key: Mapped[str] = mapped_column(String(80), primary_key=True)
+    owner_id: Mapped[UUID | None] = mapped_column(ForeignKey("users.id"), unique=True)
+    generation: Mapped[int] = mapped_column(Integer, default=1)
+    preferences: Mapped[dict[str, Any]] = mapped_column(JSONB)
+
+
 class AcquisitionProfile(Identity, Base):
     __tablename__ = "acquisition_profiles"
     owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)

@@ -32,6 +32,9 @@ class SearchInput(BaseModel):
     medium: str = Field(default="all", pattern="^(all|ebook|audio)$")
     profile_id: UUID | None = None
     profile_generation: int | None = Field(default=None, ge=0)
+    profile_effective_revision: str | None = Field(
+        default=None, pattern=r"^[a-f0-9]{64}$", exclude_if=lambda value: value is None
+    )
     offset: int = Field(default=0, ge=0, le=10000)
 
 
@@ -60,7 +63,9 @@ async def start(db, user, work_id, body, key):
         if existing.kind != "sources.search" or existing.payload.get("command") != command:
             raise HTTPException(409, "This search command was already used for different options")
         return existing
-    profile = await profile_snapshot(db, user.id, body.profile_id, body.profile_generation)
+    profile = await profile_snapshot(
+        db, user.id, body.profile_id, body.profile_generation, body.profile_effective_revision
+    )
     query = (body.q if body.q is not None else work.title[:300]).strip()
     if not query:
         raise HTTPException(422, "Enter a source-search query")

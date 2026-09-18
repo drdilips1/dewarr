@@ -58,6 +58,7 @@ def configuration_input(config):
         },
         profile_id=config["profile"]["id"],
         profile_generation=config["profile"]["generation"],
+        profile_effective_revision=config["profile"].get("effective_revision"),
         downloader_id=config["downloader_id"],
         downloader_generation=config["downloader_generation"],
         routes=config["routes"],
@@ -280,6 +281,7 @@ async def advance_target(db, user, policy, book, target, progress, now):
             medium=medium,
             profile_id=config["profile"]["id"],
             profile_generation=config["profile"]["generation"],
+            profile_effective_revision=config["profile"].get("effective_revision"),
         ),
         f"list-search:{cycle}:{progress['round']}",
     )

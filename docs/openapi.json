@@ -6553,6 +6553,106 @@
         }
       }
     },
+    "/api/acquisition/preferences/{scope}": {
+      "get": {
+        "tags": [
+          "acquisition-preferences"
+        ],
+        "summary": "Read",
+        "operationId": "read_api_acquisition_preferences__scope__get",
+        "parameters": [
+          {
+            "name": "scope",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "personal",
+                "installation"
+              ],
+              "type": "string",
+              "title": "Scope"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefaultsView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "acquisition-preferences"
+        ],
+        "summary": "Save",
+        "operationId": "save_api_acquisition_preferences__scope__put",
+        "parameters": [
+          {
+            "name": "scope",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "personal",
+                "installation"
+              ],
+              "type": "string",
+              "title": "Scope"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveDefaults"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DefaultsView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/acquisition/selections/options": {
       "get": {
         "tags": [
@@ -8657,6 +8757,47 @@
         ],
         "title": "CsvSelection"
       },
+      "DefaultsView": {
+        "properties": {
+          "overrides": {
+            "$ref": "#/components/schemas/PreferenceOverrides"
+          },
+          "effective": {
+            "$ref": "#/components/schemas/ReleasePreferences"
+          },
+          "inherited": {
+            "$ref": "#/components/schemas/ReleasePreferences"
+          },
+          "inherited_origins": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Inherited Origins"
+          },
+          "origins": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Origins"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          }
+        },
+        "type": "object",
+        "required": [
+          "overrides",
+          "effective",
+          "inherited",
+          "inherited_origins",
+          "origins",
+          "revision"
+        ],
+        "title": "DefaultsView"
+      },
       "DestinationChoice-Input": {
         "properties": {
           "id": {
@@ -10757,6 +10898,18 @@
               }
             ],
             "title": "Profile Generation"
+          },
+          "profile_effective_revision": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile Effective Revision"
           },
           "downloader_id": {
             "anyOf": [
@@ -12864,6 +13017,76 @@
         ],
         "title": "PolicyView"
       },
+      "PreferenceOverrides": {
+        "properties": {
+          "ebook_formats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "minItems": 1,
+            "title": "Ebook Formats"
+          },
+          "audio_formats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "minItems": 1,
+            "title": "Audio Formats"
+          },
+          "source_order": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Source Order"
+          },
+          "criteria": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "format",
+                "source",
+                "seeders"
+              ]
+            },
+            "type": "array",
+            "maxItems": 3,
+            "minItems": 3,
+            "title": "Criteria"
+          },
+          "blocked_formats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Blocked Formats"
+          },
+          "maximum_bytes": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 9007199254740991.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maximum Bytes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "PreferenceOverrides",
+        "description": "Omitted fields inherit; explicit empty block lists and null limits override."
+      },
       "PreviewInput": {
         "properties": {
           "profile": {
@@ -12948,7 +13171,7 @@
             "title": "Name"
           },
           "preferences": {
-            "$ref": "#/components/schemas/ReleasePreferences"
+            "$ref": "#/components/schemas/PreferenceOverrides"
           },
           "expected_generation": {
             "type": "integer",
@@ -12989,6 +13212,27 @@
           },
           "preferences": {
             "$ref": "#/components/schemas/ReleasePreferences"
+          },
+          "overrides": {
+            "$ref": "#/components/schemas/PreferenceOverrides"
+          },
+          "origins": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Origins"
+          },
+          "effective_revision": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Effective Revision"
           }
         },
         "type": "object",
@@ -14341,6 +14585,25 @@
         ],
         "title": "SaveCapacity"
       },
+      "SaveDefaults": {
+        "properties": {
+          "overrides": {
+            "$ref": "#/components/schemas/PreferenceOverrides"
+          },
+          "expected_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Expected Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "overrides",
+          "expected_revision"
+        ],
+        "title": "SaveDefaults"
+      },
       "SaveSettings": {
         "properties": {
           "profile": {
@@ -14404,6 +14667,18 @@
               }
             ],
             "title": "Profile Generation"
+          },
+          "profile_effective_revision": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile Effective Revision"
           },
           "offset": {
             "type": "integer",
@@ -14586,6 +14861,18 @@
               }
             ],
             "title": "Profile Generation"
+          },
+          "profile_effective_revision": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile Effective Revision"
           }
         },
         "additionalProperties": false,

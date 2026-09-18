@@ -10,6 +10,7 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.api import (
+    acquisition_preferences,
     acquisition_selections,
     auth,
     automatic_imports,
@@ -134,6 +135,7 @@ def create_app() -> FastAPI:
     app.include_router(prowlarr.router, prefix="/api")
     app.include_router(downloaders.router, prefix="/api")
     app.include_router(source_artifacts.router, prefix="/api")
+    app.include_router(acquisition_preferences.router, prefix="/api")
     app.include_router(acquisition_selections.router, prefix="/api")
     dist: Path = get_settings().web_dist
     if (dist / "assets").is_dir():

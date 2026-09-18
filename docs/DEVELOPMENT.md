@@ -135,3 +135,8 @@ Explicit automatic selection-to-download handoff also uses `0028_capacity`; ther
 Migration `0030_list_policies` adds durable activation and per-book monitoring. The list scheduler shares existing source, selection, download and import workers. Follow [List acquisition policies](LIST-POLICIES.md) for prerequisites, future-only/backlog behavior, permissions and remaining qualification. The browser suite uses a later Hardcover fixture addition to trigger acquisition without a per-title request. Development dispatch remains disabled unless deliberately enabled for a qualified isolated integration.
 
 Membership re-addition and canonical merge/undo monitoring reuse `0030_list_policies`; there is no new migration. Restart API and worker together after backing up. Monitoring progress now records membership and identity evidence, with defaults for existing rows. The generated monitored-book API includes its canonical title. Original monitoring and request rows are retained for history and merge undo.
+
+
+## Acquisition defaults
+
+Apply `0031_acquisition_defaults` after backing up, then restart API and worker together. It adds sparse personal and installation preferences without rewriting existing complete profiles. The Sources profile editor links to `/download-preferences`; members can edit personal defaults and administrators can also edit installation defaults. Stale effective revisions require a refreshed preview/search. Populated defaults block downgrade. See [Download preferences](DOWNLOAD-PREFERENCES.md) for the boundary between ordinary preferences, request restrictions and remaining inheritance work.

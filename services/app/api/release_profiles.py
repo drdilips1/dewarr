@@ -7,36 +7,32 @@ from sqlalchemy import select
 from app.api.dependencies import CurrentUser, Database, Member
 from app.db.models import AcquisitionProfile, AuditEvent
 from app.domain.operations import transaction_lock
-from app.domain.release_profiles import ProfileSnapshot, ReleasePreferences
+from app.domain.release_profiles import (
+    DEFAULTS_LOCK,
+    PreferenceOverrides,
+    ProfileSnapshot,
+    profile_snapshot,
+)
 
 router = APIRouter(prefix="/acquisition/profiles", tags=["acquisition-profiles"])
 
 
 class ProfileInput(BaseModel):
     name: str = Field(min_length=1, max_length=100)
-    preferences: ReleasePreferences = Field(default_factory=ReleasePreferences)
+    preferences: PreferenceOverrides = Field(default_factory=PreferenceOverrides)
     expected_generation: int = Field(default=0, ge=0)
-
-
-def view(row):
-    return ProfileSnapshot(
-        id=row.id, generation=row.generation, name=row.name, preferences=row.preferences
-    )
 
 
 @router.get("", response_model=list[ProfileSnapshot])
 async def profiles(user: CurrentUser, db: Database):
-    return [
-        ProfileSnapshot(preferences=ReleasePreferences()),
-        *(
-            view(row)
-            for row in await db.scalars(
-                select(AcquisitionProfile)
-                .where(AcquisitionProfile.owner_id == user.id)
-                .order_by(AcquisitionProfile.name, AcquisitionProfile.id)
-            )
-        ),
-    ]
+    result = [await profile_snapshot(db, user.id)]
+    for row in await db.scalars(
+        select(AcquisitionProfile)
+        .where(AcquisitionProfile.owner_id == user.id)
+        .order_by(AcquisitionProfile.name, AcquisitionProfile.id)
+    ):
+        result.append(await profile_snapshot(db, user.id, row.id))
+    return result
 
 
 @router.post("", response_model=ProfileSnapshot, status_code=201)
@@ -52,12 +48,14 @@ async def create(body: ProfileInput, user: Member, db: Database):
     db.add(row)
     await db.flush()
     db.add(AuditEvent(actor_id=user.id, action="acquisition.profile.created", entity_id=row.id))
+    result = await profile_snapshot(db, user.id, row.id)
     await db.commit()
-    return view(row)
+    return result
 
 
 @router.put("/{profile_id}", response_model=ProfileSnapshot)
 async def update(profile_id: UUID, body: ProfileInput, user: Member, db: Database):
+    await transaction_lock(db, DEFAULTS_LOCK)
     await transaction_lock(db, f"profile:{profile_id}")
     row = await db.get(AcquisitionProfile, profile_id, populate_existing=True)
     if not row or row.owner_id != user.id:
@@ -69,5 +67,6 @@ async def update(profile_id: UUID, body: ProfileInput, user: Member, db: Databas
     row.name, row.preferences = body.name.strip(), body.preferences.model_dump(mode="json")
     row.generation += 1
     db.add(AuditEvent(actor_id=user.id, action="acquisition.profile.updated", entity_id=row.id))
+    result = await profile_snapshot(db, user.id, row.id)
     await db.commit()
-    return view(row)
+    return result

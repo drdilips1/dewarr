@@ -203,7 +203,7 @@ function PolicyEditor({
   const destination = (m: string) =>
     available(m).find((d) => d.id === destinations[m]) ||
     (available(m).length === 1 ? available(m)[0] : undefined);
-  const profile = profiles.data?.find((p) => p.id === profileId);
+  const profile = profiles.data?.find((p) => (p.id || "") === profileId);
   const specification: Input["specification"] = {
     ...policy?.configuration.specification,
     mode: medium,
@@ -219,6 +219,7 @@ function PolicyEditor({
     specification,
     profile_id: profile?.id || null,
     profile_generation: profile?.generation || 0,
+    profile_effective_revision: profile?.effective_revision,
     expected_revision: policy?.revision || 0,
     include_work_ids: mode === "automatic" ? selected : [],
     downloader_id: mode === "automatic" ? downloader?.id : null,

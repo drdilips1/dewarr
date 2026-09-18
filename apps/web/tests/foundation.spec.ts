@@ -2541,3 +2541,105 @@ test("list monitoring follows canonical identity and restores original rows afte
   });
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });
+
+test("download defaults inherit per field and persist after reload", async ({
+  page,
+}, testInfo) => {
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Sign out", exact: true }),
+  ).toBeVisible();
+  await page.goto("/download-preferences");
+  const panel = page.getByRole("region", {
+    name: "Download defaults",
+    exact: true,
+  });
+  await panel.getByLabel("Defaults scope").selectOption("installation");
+  await panel.getByText("Formats and transfer limits", { exact: true }).click();
+  await panel
+    .getByRole("button", {
+      name: "Move pdf up in Ebook format preference",
+      exact: true,
+    })
+    .click();
+  await panel
+    .getByRole("button", { name: "Save download defaults", exact: true })
+    .click();
+  await expect(panel.getByRole("status")).toContainText(
+    "Download defaults saved",
+  );
+  await panel.getByLabel("Defaults scope").selectOption("personal");
+  await panel.getByText("Formats and transfer limits", { exact: true }).click();
+  const ebooks = panel.getByRole("group", {
+    name: "Ebook format preference",
+    exact: true,
+  });
+  await expect(ebooks.getByRole("listitem").first()).toContainText("pdf");
+  await panel
+    .getByRole("button", {
+      name: "Move epub up in Ebook format preference",
+      exact: true,
+    })
+    .click();
+  await panel
+    .getByRole("button", { name: "Save download defaults", exact: true })
+    .click();
+  await expect(panel.getByRole("status")).toContainText(
+    "Download defaults saved",
+  );
+  await page.reload();
+  await panel.getByText("Formats and transfer limits", { exact: true }).click();
+  await expect(ebooks.getByRole("listitem").first()).toContainText("epub");
+  await panel
+    .getByRole("button", {
+      name: "Use inherited Ebook format preference",
+      exact: true,
+    })
+    .click();
+  await expect(ebooks.getByRole("listitem").first()).toContainText("pdf");
+  await panel
+    .getByRole("button", { name: "Save download defaults", exact: true })
+    .click();
+  await expect(panel.getByRole("status")).toContainText(
+    "Download defaults saved",
+  );
+  await expect(panel.getByRole("status")).toContainText(
+    "Download defaults saved",
+  );
+  await page.reload();
+  await panel
+    .getByText("Effective download preferences", { exact: true })
+    .click();
+  await expect(panel).toContainText("Installation default");
+  const profiles = await (
+    await page.request.get("/api/acquisition/profiles")
+  ).json();
+  expect(profiles[0].preferences.ebook_formats[0]).toBe("pdf");
+  expect(profiles[0].origins.ebook_formats).toBe("Installation default");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("download-defaults-mobile.png"),
+    fullPage: true,
+  });
+  await panel.getByLabel("Defaults scope").selectOption("installation");
+  await panel
+    .getByRole("button", { name: "Use inherited defaults", exact: true })
+    .click();
+  await panel
+    .getByRole("button", { name: "Save download defaults", exact: true })
+    .click();
+  await expect(panel.getByRole("status")).toContainText(
+    "Download defaults saved",
+  );
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+});

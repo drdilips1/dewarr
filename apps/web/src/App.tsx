@@ -27,6 +27,7 @@ const BookDetail = lazy(() => import("./pages/BookDetail"));
 const Lists = lazy(() => import("./pages/Lists"));
 const ActivityPage = lazy(() => import("./pages/Activity"));
 const Connections = lazy(() => import("./pages/Connections"));
+const DownloadPreferences = lazy(() => import("./pages/DownloadPreferences"));
 const Downloaders = lazy(() => import("./pages/Downloaders"));
 const ProwlarrSources = lazy(() => import("./pages/ProwlarrSources"));
 const Sources = lazy(() => import("./pages/Sources"));
@@ -343,6 +344,16 @@ function Shell({ auth }: { auth: Auth }) {
           <Notice error={logout.error} />
           <Suspense fallback={<Loading />}>
             <Routes>
+              <Route
+                path="/download-preferences"
+                element={
+                  auth.user.role !== "viewer" ? (
+                    <DownloadPreferences admin={auth.user.role === "admin"} />
+                  ) : (
+                    <Navigate to="/" replace />
+                  )
+                }
+              />
               <Route
                 path="/"
                 element={<Catalog canEdit={auth.user.role !== "viewer"} />}

@@ -50,6 +50,9 @@ class ListPolicyInput(BaseModel):
     specification: RequestSpec
     profile_id: UUID | None = None
     profile_generation: int | None = Field(default=None, ge=0)
+    profile_effective_revision: str | None = Field(
+        default=None, pattern=r"^[a-f0-9]{64}$", exclude_if=lambda value: value is None
+    )
     downloader_id: UUID | None = None
     downloader_generation: int | None = Field(default=None, ge=1)
     routes: dict[Literal["ebook", "audio"], PolicyRoute] = Field(default_factory=dict)
@@ -121,7 +124,9 @@ async def members(db, user, list_id):
 
 async def configuration(db, user, list_id, body):
     spec = body.specification
-    profile = await profile_snapshot(db, user.id, body.profile_id, body.profile_generation)
+    profile = await profile_snapshot(
+        db, user.id, body.profile_id, body.profile_generation, body.profile_effective_revision
+    )
     constraints = combine(
         spec.download_constraints.model_dump() if spec.download_constraints else None,
         profile.preferences.model_dump(include={"blocked_formats", "maximum_bytes"}),

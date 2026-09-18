@@ -6,10 +6,12 @@ from typing import Literal
 from uuid import UUID
 
 from fastapi import HTTPException
-from pydantic import BaseModel, ConfigDict, Field, ValidationInfo, field_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationInfo, field_validator, model_serializer
 from sqlalchemy import select
 
-from app.db.models import AcquisitionProfile
+from app.db.models import AcquisitionDefaults, AcquisitionProfile
+from app.domain.operations import transaction_lock
+from app.importing.naming import fingerprint
 
 FORMATS = {
     "epub",
@@ -72,29 +74,111 @@ class ReleasePreferences(BaseModel):
         return values
 
 
+DEFAULTS_LOCK = "acquisition-preferences"
+
+
+def sparse_schema(schema):
+    for field in schema.get("properties", {}).values():
+        field.pop("default", None)
+
+
+class PreferenceOverrides(ReleasePreferences):
+    """Omitted fields inherit; explicit empty block lists and null limits override."""
+
+    model_config = ConfigDict(extra="forbid", json_schema_extra=sparse_schema)
+
+    @model_serializer(mode="wrap")
+    def sparse(self, handler):
+        return {key: value for key, value in handler(self).items() if key in self.model_fields_set}
+
+
 class ProfileSnapshot(BaseModel):
     id: UUID | None = None
     generation: int = 0
     name: str = "Balanced"
     preferences: ReleasePreferences
+    overrides: PreferenceOverrides = Field(default_factory=PreferenceOverrides)
+    origins: dict[str, str] = Field(default_factory=dict)
+    effective_revision: str | None = None
 
 
-async def profile_snapshot(db, user_id, identifier=None, generation=None):
+def resolve_preferences(layers):
+    values = ReleasePreferences().model_dump()
+    origins = dict.fromkeys(values, "Built-in default")
+    for label, overrides in layers:
+        sparse = PreferenceOverrides.model_validate(overrides).model_dump()
+        values.update(sparse)
+        origins.update(dict.fromkeys(sparse, label))
+    return ReleasePreferences.model_validate(values), origins
+
+
+async def default_layers(db, user_id=None):
+    await transaction_lock(db, DEFAULTS_LOCK)
+    keys = ["installation", f"user:{user_id}"] if user_id else ["installation"]
+    rows = {
+        row.key: row
+        for row in await db.scalars(
+            select(AcquisitionDefaults)
+            .where(AcquisitionDefaults.key.in_(keys))
+            .execution_options(populate_existing=True)
+        )
+    }
+    return [
+        (
+            "Installation default" if key == "installation" else "Personal default",
+            rows[key].preferences,
+        )
+        for key in keys
+        if key in rows
+    ]
+
+
+async def profile_snapshot(db, user_id, identifier=None, generation=None, expected_revision=None):
+    layers = await default_layers(db, user_id)
+    row = None
     if identifier is None:
         if generation not in (None, 0):
             raise HTTPException(422, "Choose a saved profile before specifying its revision")
-        return ProfileSnapshot(preferences=ReleasePreferences())
-    row = await db.scalar(
-        select(AcquisitionProfile).where(
-            AcquisitionProfile.id == identifier, AcquisitionProfile.owner_id == user_id
+    else:
+        await transaction_lock(db, f"profile:{identifier}")
+        row = await db.scalar(
+            select(AcquisitionProfile)
+            .where(AcquisitionProfile.id == identifier, AcquisitionProfile.owner_id == user_id)
+            .execution_options(populate_existing=True)
         )
+        if not row:
+            raise HTTPException(404, "Acquisition profile not found")
+        if generation is not None and row.generation != generation:
+            raise HTTPException(409, "This acquisition profile changed. Refresh the preferences.")
+        layers.append(("Profile", row.preferences))
+    preferences, origins = resolve_preferences(layers)
+    revision = fingerprint(
+        {
+            "id": str(identifier) if identifier else None,
+            "generation": row.generation if row else 0,
+            "preferences": preferences.model_dump(),
+            "origins": origins,
+        }
     )
-    if not row:
-        raise HTTPException(404, "Acquisition profile not found")
-    if generation is not None and row.generation != generation:
-        raise HTTPException(409, "This acquisition profile changed. Refresh the preferences.")
+    if expected_revision is not None and expected_revision != revision:
+        raise HTTPException(409, "Effective download preferences changed. Refresh the preferences.")
     return ProfileSnapshot(
-        id=row.id, generation=row.generation, name=row.name, preferences=row.preferences
+        id=row.id if row else None,
+        generation=row.generation if row else 0,
+        name=row.name if row else "Balanced",
+        preferences=preferences,
+        overrides=PreferenceOverrides.model_validate(row.preferences if row else {}),
+        origins=origins,
+        effective_revision=revision,
+    )
+
+
+def same_profile(current, frozen):
+    # Old receipts lack provenance. Their actual frozen policy remains authoritative.
+    return (current.id, current.generation, current.preferences) == (
+        frozen.id,
+        frozen.generation,
+        frozen.preferences,
     )
 
 
