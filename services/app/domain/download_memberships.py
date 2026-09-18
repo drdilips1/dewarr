@@ -32,15 +32,8 @@ async def attempt_for(db, selection_id):
 
 
 async def lock(db, selections):
-    # Manual groups currently have one owner. Automatic selections retain their
-    # existing list/principal lock order and are not accepted in reviewed batches.
-    for selection in sorted(selections, key=lambda item: item.id):
-        await automatic_dispatch.lock_principals(
-            db,
-            selection.owner_id,
-            automatic_dispatch.consent(selection),
-            (selection.frozen.get("automatic_selection") or {}).get("list_authority"),
-        )
+    # Freeze all list authority before principal and canonical-work locks.
+    await automatic_dispatch.lock_group_principals(db, selections)
     await graph_lock(db)
     roots = {
         (await canonical_work(db, UUID(item.frozen["origin_work_id"]))).id for item in selections
@@ -51,7 +44,7 @@ async def lock(db, selections):
         await db.refresh(selection)
 
 
-def require_compatible(selections):
+def require_compatible(selections, *, automatic=False):
     """Reviewed groups freeze one physical route, while retaining every child rule."""
     first = selections[0]
     keys = (
@@ -65,7 +58,14 @@ def require_compatible(selections):
     for item in selections:
         if item.owner_id != first.owner_id or item.artifact_id != first.artifact_id:
             raise HTTPException(422, "Choose your saved selections for the same source artifact")
-        if item.frozen.get("automatic_selection"):
+        proof = item.frozen.get("automatic_selection")
+        if automatic and (
+            not proof or not proof.get("dispatch_approval") or not proof.get("coverage")
+        ):
+            raise HTTPException(
+                422, "Every automatic pack member needs independent coverage and dispatch consent"
+            )
+        if not automatic and proof:
             raise HTTPException(
                 422, "Automatic selections retain their own acquisition authorization"
             )

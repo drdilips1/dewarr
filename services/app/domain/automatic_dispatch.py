@@ -39,6 +39,28 @@ async def lock_principals(db, owner_id, approval, list_authority=None):
         )
 
 
+async def lock_group_principals(db, selections):
+    from app.domain.list_policies import lock_authority
+
+    proofs = [
+        (
+            item.owner_id,
+            consent(item),
+            (item.frozen.get("automatic_selection") or {}).get("list_authority"),
+        )
+        for item in selections
+    ]
+    lists = {proof["list_id"]: proof for _, _, proof in proofs if proof}
+    for key in sorted(lists):
+        await lock_authority(db, lists[key])
+    principals = {owner for owner, _, _ in proofs}
+    principals.update(UUID(approval["approved_by"]) for _, approval, _ in proofs if approval)
+    if principals:
+        await db.scalars(
+            select(User).where(User.id.in_(principals)).order_by(User.id).with_for_update(read=True)
+        )
+
+
 async def approve_route(db, owner_id, destination_id, revision, *, expected=None, lock=False):
     from app.importing.automatic import check_policy
 

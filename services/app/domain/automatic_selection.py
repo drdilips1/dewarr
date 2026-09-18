@@ -291,7 +291,9 @@ async def repair(db, operation):
         if status not in {"todo", "doing"}:
             operation.status, operation.message = (
                 "failed",
-                "Selection worker stopped; start a new selection from fresh results",
+                "Pack coordination stopped; cancel this preparation before retrying"
+                if operation.payload.get("pack_dispatch", {}).get("state") == "waiting"
+                else "Selection worker stopped; start a new selection from fresh results",
             )
 
 
@@ -428,6 +430,8 @@ async def run(identifier):
         await transaction_lock(db, f"auto-select:{identifier}")
         operation = await db.get(Operation, identifier, populate_existing=True)
         if not operation or operation.kind != KIND or operation.status in TERMINAL:
+            return
+        if operation.payload.get("pack_dispatch", {}).get("state") == "waiting":
             return
         if operation.payload.get("token") and datetime.fromisoformat(
             operation.payload["lease_until"]
@@ -754,13 +758,19 @@ async def run(identifier):
                     },
                 )
                 operation.payload = {**operation.payload, "selection_id": str(selected.id)}
-                if body.download_when_ready:
+                if body.download_when_ready and coverage:
+                    from app.domain.automatic_packs import defer
+
+                    await defer(db, operation, selected)
+                elif body.download_when_ready:
                     from app.domain.download_attempts import start as start_download
 
                     attempt = await start_download(
                         db, user, selected.id, dispatch_key, automatic=True
                     )
                     operation.payload = {**operation.payload, "download_id": str(attempt.id)}
+            if body.download_when_ready and coverage:
+                return
             finish(
                 operation,
                 "completed",

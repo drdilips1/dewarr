@@ -2529,6 +2529,26 @@ test("approved automatic selection queues one download and preserves its receipt
   await expect(
     page.getByRole("button", { name: "Sign out", exact: true }),
   ).toBeVisible();
+  // Make the required downloader state explicit instead of relying on another test.
+  await page.goto("/downloaders");
+  const downloader = page.getByRole("article", {
+    name: "qBittorrent",
+    exact: true,
+  });
+  await downloader
+    .getByRole("button", { name: "Edit downloader", exact: true })
+    .click();
+  const settings = page.getByRole("form", {
+    name: "qBittorrent connection settings",
+  });
+  await settings.getByLabel("Enable connection", { exact: true }).check();
+  await settings
+    .getByRole("button", { name: "Save downloader", exact: true })
+    .click();
+  await downloader
+    .getByRole("button", { name: "Test saved connection", exact: true })
+    .click();
+  await expect(downloader).toContainText("connected");
   await page.goto("/organization/destinations");
   const policy = page.getByRole("region", { name: "Automatic import policy" });
   await policy
@@ -2594,9 +2614,9 @@ test("approved automatic selection queues one download and preserves its receipt
     exact: true,
   });
   await expect(
-    page.getByRole("status").filter({ hasText: "Search finished" }),
+    page.getByRole("status").filter({ hasText: "Source search completed" }),
   ).toBeVisible({ timeout: 20_000 });
-  await expect(selection).toContainText("Maximum transfer size: 32 MiB");
+  await expect(selection).toContainText("Single-book transfer limit: 32 MiB");
   await expect(automatic).toBeEnabled();
   await automatic.click();
   await expect(selection.getByRole("status")).toContainText(
@@ -2630,6 +2650,7 @@ test("approved automatic selection queues one download and preserves its receipt
     path: testInfo.outputPath("automatic-dispatch-mobile.png"),
     fullPage: true,
   });
+  const sourcePage = page.url();
   await selection
     .getByRole("link", { name: "View automatic download", exact: true })
     .click();
@@ -2646,6 +2667,52 @@ test("approved automatic selection queues one download and preserves its receipt
   await expect(page.locator("body")).not.toContainText(
     "fixture-private-download-token",
   );
+  // UI recovery contract; the DB suite exercises cancellation of a real prepared pack.
+  let cancelled = false;
+  let recovery: Record<string, unknown> = {};
+  await page.route(
+    "**/api/acquisition/automatic-selections/**",
+    async (route) => {
+      if (
+        route.request().method() === "POST" &&
+        route.request().url().endsWith("/cancel")
+      ) {
+        cancelled = true;
+        await route.fulfill({
+          json: {
+            ...recovery,
+            status: "cancelled",
+            message: "Automatic selection cancelled; no download was started",
+          },
+        });
+        return;
+      }
+      const response = await route.fetch();
+      const value = await response.json();
+      if (!value?.selection_id) {
+        await route.fulfill({ response });
+        return;
+      }
+      recovery = {
+        ...value,
+        status: cancelled ? "cancelled" : "failed",
+        download_id: null,
+        message: cancelled
+          ? "Automatic selection cancelled; no download was started"
+          : "Pack coordination stopped; cancel this preparation before retrying",
+      };
+      await route.fulfill({ json: recovery });
+    },
+  );
+  await page.goto(sourcePage);
+  await expect(selection).toContainText("Pack coordination stopped");
+  await selection
+    .getByRole("button", { name: "Cancel release preparation", exact: true })
+    .click();
+  await expect(selection.getByRole("status")).toContainText(
+    "Automatic selection cancelled",
+  );
+  expect(cancelled).toBe(true);
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });
 

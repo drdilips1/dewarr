@@ -284,7 +284,10 @@ export default function AutomaticSelection({
               receipt.data.maximum_pack_bytes &&
               ` · Eligible series pack limit: ${transferSize(receipt.data.maximum_pack_bytes)}`}
           </p>
-          {active && (
+          {(active ||
+            (receipt.data.selection_id &&
+              !receipt.data.download_id &&
+              ["held", "failed"].includes(receipt.data.status))) && (
             <button disabled={cancel.isPending} onClick={() => cancel.mutate()}>
               Cancel release preparation
             </button>

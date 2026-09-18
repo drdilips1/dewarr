@@ -1,6 +1,6 @@
 # Reviewed shared downloads
 
-One reviewed source artifact can now serve several saved book selections through one qBittorrent attempt. Each selection retains its work, requested medium/version, frozen profile, reservation and independent request reasons. This is a bounded implementation of shared-pack acquisition, not automatic series coverage selection or a completed S06 gate.
+One reviewed source artifact can now serve several saved book selections through one qBittorrent attempt. Each selection retains its work, requested medium/version, frozen profile, reservation and independent request reasons. [Automatic pack grouping](AUTOMATIC-PACK-GROUPS.md) now uses this ledger for independently authorized compatible selections. Full series automation and S06 acceptance remain pending.
 
 ## User flow
 

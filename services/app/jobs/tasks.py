@@ -348,3 +348,14 @@ async def prepare_search_catalog(search_id: str) -> None:
     from app.domain.series_preparation import run
 
     await run(UUID(search_id))
+
+
+@tasks.task(
+    name="acquisition.pack-dispatch",
+    queue="acquisition",
+    retry=DependencyRetryStrategy(max_attempts=3, wait=10),
+)
+async def dispatch_automatic_pack(operation_id: str) -> None:
+    from app.domain.automatic_packs import run
+
+    await run(UUID(operation_id))

@@ -210,11 +210,7 @@ async def start(db, user, selection_id, key, *, automatic=False, additional_sele
         await owned_selection(db, user, identifier) for identifier in additional
     ]
     if additional:
-        if automatic:
-            raise HTTPException(
-                422, "Reviewed grouping cannot replace automatic selection authorization"
-            )
-        download_memberships.require_compatible(members)
+        download_memberships.require_compatible(members, automatic=automatic)
     await download_memberships.lock(db, members)
     existing = await download_memberships.attempt_for(db, selection.id)
     if existing and additional:
@@ -239,6 +235,8 @@ async def start(db, user, selection_id, key, *, automatic=False, additional_sele
             )
         )
         return existing
+    if not automatic and any(automatic_dispatch.consent(item) for item in members):
+        raise HTTPException(409, "Automatic selections must use their authorized dispatch workflow")
     for item in members:
         if item.state != "prepared" or await download_memberships.attempt_for(db, item.id):
             raise HTTPException(

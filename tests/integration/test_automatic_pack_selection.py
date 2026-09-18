@@ -176,6 +176,9 @@ async def test_changed_catalog_before_dispatch_holds_existing_attempt_without_su
 
     saved = await start(client, authorized)
     await automatic.run(UUID(saved["id"]))
+    from app.domain import automatic_packs
+
+    await automatic_packs.run(UUID(saved["id"]))
     value = await detail(client, saved["id"])
     assert value["download_id"], value
     async with database() as db, db.begin():

@@ -1,6 +1,6 @@
 # Automatic series-pack coverage
 
-The automatic selector can now acquire a known series pack for one missing requested book. This implements the catalog/manifest eligibility dependency of automatic pack acquisition. It does not yet create additional series targets, combine several automatic requests into one transfer, adopt an existing transfer, or import unrequested books.
+The automatic selector can now acquire a known series pack for one missing requested book. This implements the catalog/manifest eligibility dependency of automatic pack acquisition. [Automatic pack groups](AUTOMATIC-PACK-GROUPS.md) now combine independently authorized compatible selections before dispatch. Additional series target expansion, later/submitted-transfer reuse and import of unrequested books remain outside this checkpoint.
 
 ## Default behavior
 

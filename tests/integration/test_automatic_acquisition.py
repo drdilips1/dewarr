@@ -56,6 +56,7 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     via_list=False,
     series_pack=False,
     counterfeit=False,
+    automatic_group=False,
 ):
     route = ready_route
     if series_pack:
@@ -242,15 +243,56 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
         activation = await client.post(activation_url)
         assert activation.status_code == 200, activation.text
         policy = activation.json()
+        if automatic_group:
+            import json
+
+            second_shelf = (
+                await client.post("/api/lists", json={"name": "Second independent pack list"})
+            ).json()["id"]
+            second_preview = await client.post(
+                f"/api/lists/{second_shelf}/acquisition/preview",
+                json=json.loads(response.request.content),
+                headers={"Idempotency-Key": "second-pack-list-preview"},
+            )
+            assert second_preview.status_code == 201, second_preview.text
+            second_activation = await client.post(
+                f"/api/lists/{second_shelf}/acquisition/previews/{second_preview.json()['id']}/activate"
+            )
+            assert second_activation.status_code == 200, second_activation.text
+            second_policy = second_activation.json()
+            assert (
+                await client.post(
+                    f"/api/lists/{second_shelf}/entries", json={"work_id": str(second["work"])}
+                )
+            ).status_code == 204
+            assert (
+                await client.post(f"/api/lists/{second_shelf}/entries", json={"work_id": work_id})
+            ).status_code == 204
         added = await client.post(f"/api/lists/{shelf}/entries", json={"work_id": work_id})
         assert added.status_code == 204
-        await tick(database, policy)
-        await tick(database, policy, force_books=True)
+        if automatic_group:
+            # Both independent policies authorize searches before either transfer starts.
+            for saved_policy in [policy, second_policy]:
+                await tick(database, saved_policy, worker=False)
+            await get_queue().run_worker_async(
+                wait=False, concurrency=1, listen_notify=False, install_signal_handlers=False
+            )
+            for saved_policy in [policy, second_policy]:
+                await tick(database, saved_policy, worker=False, force_books=True)
+            await get_queue().run_worker_async(
+                wait=False, concurrency=1, listen_notify=False, install_signal_handlers=False
+            )
+        else:
+            await tick(database, policy)
+            await tick(database, policy, force_books=True)
         async with database() as db:
             from app.db.models import Operation
 
             operation = await db.scalar(
-                select(Operation).where(Operation.kind == automatic_selection.KIND)
+                select(Operation).where(
+                    Operation.kind == automatic_selection.KIND,
+                    Operation.payload["work"]["id"].astext == str(work_id),
+                )
             )
             assert operation is not None
             identifier = operation.id
@@ -299,11 +341,92 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             headers={"Idempotency-Key": "automatic-acquisition-command"},
         )
         assert response.status_code == 202, response.text
-        await get_queue().run_worker_async(wait=False, concurrency=1)
+        if automatic_group:
+            second_wanted = await request(
+                client,
+                body({"work": second["work"]}, "ebook", ebook_library_id=route["library_id"]),
+            )
+            second_search = await client.post(
+                f"/api/catalog/works/{second['work']}/source-searches",
+                json={"medium": "ebook"},
+                headers={"Idempotency-Key": "second-automatic-pack-search"},
+            )
+            assert second_search.status_code == 202, second_search.text
+            await book_sources.run(UUID(second_search.json()["id"]), "mam")
+            second_command = {
+                **command,
+                "intent_id": second_wanted["request"]["id"],
+                "search_id": second_search.json()["id"],
+            }
+            second_response = await client.post(
+                "/api/acquisition/automatic-selections",
+                json=second_command,
+                headers={"Idempotency-Key": "second-automatic-pack-command"},
+            )
+            assert second_response.status_code == 202, second_response.text
+        await get_queue().run_worker_async(
+            wait=False, concurrency=1, listen_notify=False, install_signal_handlers=False
+        )
         result = (
             await client.get(f"/api/acquisition/automatic-selections/{response.json()['id']}")
         ).json()
     assert result["status"] == "completed" and result["download_id"], result
+    if automatic_group:
+        from app.db.models import DownloadMembership, Operation
+        from app.domain import automatic_packs
+
+        async with database() as db:
+            second_operation = await db.scalar(
+                select(Operation).where(
+                    Operation.kind == automatic_selection.KIND,
+                    Operation.payload["work"]["id"].astext == str(second["work"]),
+                )
+            )
+            assert second_operation is not None
+        second_result = (
+            await client.get(f"/api/acquisition/automatic-selections/{second_operation.id}")
+        ).json()
+
+        assert second_result["download_id"] == result["download_id"], second_result
+        async with database() as db:
+            entries = list(await db.scalars(select(ImportEntry)))
+            assert len(entries) == 2
+            assert {entry.state for entry in entries} == {
+                "awaiting-library" if delayed_backend else "confirmed"
+            }
+            assert await db.scalar(select(func.count()).select_from(DownloadMembership)) == 2
+            assert await db.scalar(select(func.count()).select_from(DownloadAttempt)) == 1
+            if via_list:
+                proofs = [
+                    item.frozen["automatic_selection"]["list_authority"]
+                    for item in await db.scalars(select(AcquisitionSelection))
+                ]
+                assert {proof["list_id"] for proof in proofs} == {shelf, second_shelf}
+        if delayed_backend:
+            route["scan_backend"].detect = True
+            route["scan_backend"].scan()
+            for entry in entries:
+                await execution.execute(entry.operation_id)
+            await get_queue().run_worker_async(
+                wait=False, concurrency=1, listen_notify=False, install_signal_handlers=False
+            )
+        async with database() as db:
+            assert set(await db.scalars(select(ImportEntry.state))) == {"confirmed"}
+            assert await db.scalar(select(func.count()).select_from(DownloadFulfillment)) == 2
+        for identifier in [result["id"], second_result["id"]]:
+            await automatic_packs.run(UUID(identifier))
+        await downloads.run(UUID(result["download_id"]))
+        assert qbit.calls.count("submit") == 1
+        for identifier in [work_id, second["work"]]:
+            assert (await client.get(f"/api/catalog/works/{identifier}")).json()["availability"][
+                "owned"
+            ]
+        assert {p.name: p.read_bytes() for p in source.parent.glob("*.epub")} == contents
+        imported = list(route["target"].rglob("*.epub"))
+        assert len(imported) == 2
+        for path in source.parent.glob("*.epub"):
+            assert any(dest.stat().st_ino == path.stat().st_ino for dest in imported)
+        return
     if counterfeit:
         from app.db.models import AutomaticImport
 
@@ -440,4 +563,25 @@ async def test_pack_filename_cannot_override_wrong_downloaded_book_identity(
         request_limits=True,
         series_pack=True,
         counterfeit=True,
+    )
+
+
+@pytest.mark.parametrize("delayed_backend", [False, True])
+@pytest.mark.parametrize("via_list", [False, True])
+async def test_automatic_pack_groups_two_requests_and_confirms_both_books(
+    client, admin, database, ready_route, review_account, monkeypatch, delayed_backend, via_list
+):
+    await test_search_to_automatic_download_and_confirmed_member_library(
+        client,
+        admin,
+        database,
+        ready_route,
+        review_account,
+        monkeypatch,
+        "ebook",
+        delayed_backend,
+        request_limits=True,
+        series_pack=True,
+        automatic_group=True,
+        via_list=via_list,
     )

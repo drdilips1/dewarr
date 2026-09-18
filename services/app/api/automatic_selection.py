@@ -139,6 +139,16 @@ async def cancel(operation_id: UUID, user: Member, db: Database):
     operation = await automatic.owned(db, user, operation_id)
     if operation.status == "completed":
         raise HTTPException(409, "Selection has completed; check its result or saved release")
+    if operation.payload.get("pack_dispatch", {}).get("state") in {"waiting", "held"}:
+        from app.domain.acquisition_selection import cancel as cancel_selection
+
+        selection = await db.get(AcquisitionSelection, UUID(operation.payload["selection_id"]))
+        if selection and selection.state == "prepared":
+            await cancel_selection(db, user, selection)
+        operation.payload = {
+            **operation.payload,
+            "pack_dispatch": {**operation.payload["pack_dispatch"], "state": "cancelled"},
+        }
     automatic.finish(
         operation, "cancelled", "Automatic selection cancelled; no download was started"
     )
