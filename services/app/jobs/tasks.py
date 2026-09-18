@@ -175,3 +175,45 @@ async def schedule_inventory(timestamp: int) -> None:
         for record in records:
             await enqueue_sync(db, admin.id, record.id, f"inventory:{record.id}:{timestamp}")
             record.next_sync_at = datetime.now(UTC) + timedelta(minutes=30)
+
+
+@tasks.task(name="acquisition.download", queue="acquisition", retry=3)
+async def download_attempt(attempt_id: str) -> None:
+    from app.domain.download_attempts import run
+
+    await run(UUID(attempt_id))
+
+
+@tasks.periodic(cron="* * * * *")
+@tasks.task(name="acquisition.downloads.schedule", queue="acquisition", retry=3)
+async def schedule_downloads(timestamp: int) -> None:
+    from sqlalchemy import or_, text
+
+    from app.db.models import DownloadAttempt
+    from app.jobs.queue import enqueue
+
+    if get_settings().recovery_mode:
+        return
+    async with session_factory()() as db, db.begin():
+        now = datetime.now(UTC)
+        rows = await db.scalars(
+            select(DownloadAttempt)
+            .where(
+                DownloadAttempt.state.not_in(["complete", "cancelled", "held"]),
+                DownloadAttempt.next_check_at <= now,
+                or_(DownloadAttempt.lease_until.is_(None), DownloadAttempt.lease_until <= now),
+            )
+            .order_by(DownloadAttempt.next_check_at, DownloadAttempt.id)
+            .limit(20)
+            .with_for_update(skip_locked=True)
+        )
+        for row in rows:
+            operation = await db.get(Operation, row.operation_id)
+            status = await db.scalar(
+                text("SELECT status::text FROM book_queue.procrastinate_jobs WHERE id=:id"),
+                {"id": operation.job_id},
+            )
+            if status in {"todo", "doing"}:
+                continue
+            operation.job_id = await enqueue(db, "acquisition.download", attempt_id=str(row.id))
+            row.next_check_at = now + timedelta(minutes=1)

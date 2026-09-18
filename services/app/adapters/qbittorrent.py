@@ -104,6 +104,7 @@ class QbitState(DownloadState):
     progress: float
     total_bytes: int
     all_files_selected: bool
+    reported_complete: bool = False
 
     @property
     def identities(self) -> set[str]:
@@ -206,18 +207,19 @@ def parse_state(row: dict, properties: dict, files: list) -> QbitState:
                     complete=progress(file["progress"]) == 1,
                 )
             )
+        reported_complete = (
+            row["state"] in READY_STATES
+            and completed == 1
+            and amount_left == 0
+            and total > 0
+            and all_selected
+            and all(f.complete for f in parsed)
+        )
         return QbitState(
+            reported_complete=reported_complete,
             external_id=key,
             state=row["state"],
-            completed=(
-                row["state"] in READY_STATES
-                and completed == 1
-                and amount_left == 0
-                and total > 0
-                and all_selected
-                and sum(f.size_bytes for f in parsed) == total
-                and all(f.complete for f in parsed)
-            ),
+            completed=(reported_complete and sum(f.size_bytes for f in parsed) == total),
             save_path=path,
             files=parsed,
             infohash_v1=hashes[0],

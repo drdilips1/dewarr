@@ -2,12 +2,15 @@
 
 import json
 import sys
+from email import policy
+from email.parser import BytesParser
 from pathlib import Path
 from urllib.parse import parse_qs
 
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import JSONResponse, PlainTextResponse, Response
 
+from app.adapters.torrent_probe import describe
 from app.config import get_settings
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -18,6 +21,7 @@ from tests.torrent_fixture import torrent_bytes  # noqa: E402
 app = FastAPI()
 catalog_state = {"narrator": "Sample Narrator"}
 backend_state = {"watcher_enabled": True}
+qbit_state = {"transfers": {}, "adds": 0}
 mam_state = {"cookie": "browser-mam-fixture", "requests": 0}
 item = json.loads(
     (Path(__file__).resolve().parents[1] / "tests/fixtures/audiobookshelf-item.json").read_text()
@@ -44,7 +48,67 @@ async def qbit_fixture(path: str, request: Request):
         return PlainTextResponse("v5.2.3")
     if path == "app/webapiVersion":
         return PlainTextResponse("2.15.1")
-    raise HTTPException(404, "No download action is available in the connection fixture")
+    if path == "torrents/add":
+        message = BytesParser(policy=policy.default).parsebytes(
+            ("Content-Type: " + request.headers["content-type"] + "\r\n\r\n").encode()
+            + await request.body()
+        )
+        fields = {
+            part.get_param("name", header="content-disposition"): part.get_payload(decode=True)
+            for part in message.iter_parts()
+        }
+        descriptor = describe(fields["torrents"])
+        digest = descriptor["infohash_v1"]
+        if digest in qbit_state["transfers"]:
+            raise HTTPException(409, "Duplicate synthetic add")
+        qbit_state["adds"] += 1
+        qbit_state["transfers"][digest] = {
+            "row": {
+                "hash": digest,
+                "save_path": fields["savepath"].decode(),
+                "tags": fields["tags"].decode(),
+                "category": fields["category"].decode(),
+                "auto_tmm": False,
+                "state": "downloading",
+                "amount_left": 18,
+                "total_size": descriptor["content_bytes"],
+                "progress": 0.25,
+            },
+            "descriptor": descriptor,
+        }
+        return PlainTextResponse("Ok.")
+    if path == "torrents/info":
+        return [
+            value["row"]
+            for digest, value in qbit_state["transfers"].items()
+            if (not request.query_params.get("hashes") or request.query_params["hashes"] == digest)
+            and (
+                not request.query_params.get("tag")
+                or request.query_params["tag"] == value["row"]["tags"]
+            )
+        ]
+    if path in {"torrents/properties", "torrents/files"}:
+        value = qbit_state["transfers"].get(request.query_params.get("hash"))
+        if not value:
+            raise HTTPException(404)
+        descriptor = value["descriptor"]
+        if path.endswith("properties"):
+            return {
+                "save_path": value["row"]["save_path"],
+                "infohash_v1": descriptor["infohash_v1"],
+                "infohash_v2": descriptor["infohash_v2"] or "",
+            }
+        return [
+            {
+                "index": item["index"],
+                "name": item["path"],
+                "size": item["size_bytes"],
+                "priority": 1,
+                "progress": 0.25,
+            }
+            for item in descriptor["files"]
+        ]
+    raise HTTPException(404, "Unknown synthetic downloader operation")
 
 
 @app.api_route("/mam/{path:path}", methods=["GET", "POST"])

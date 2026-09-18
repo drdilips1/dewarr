@@ -436,7 +436,12 @@ function Shell({ auth }: { auth: Auth }) {
               />
               <Route
                 path="/activity"
-                element={<ActivityPage admin={auth.user.role === "admin"} />}
+                element={
+                  <ActivityPage
+                    admin={auth.user.role === "admin"}
+                    canRequest={auth.user.role !== "viewer"}
+                  />
+                }
               />
               <Route
                 path="/accounts"

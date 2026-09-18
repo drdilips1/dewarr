@@ -388,7 +388,7 @@ async def release_unused(db, work_id):
 
 async def reserve(db, user, intent, spec, slot, *, only_medium=None):
     media = [only_medium] if only_medium else spec.media(slot)
-    for state in ("selected", "planned"):
+    for state in ("committed", "selected", "planned"):
         for medium in media:
             destination = getattr(spec, medium + "_library_id")
             scope = str(destination) if destination else "unconfigured:" + str(user.id)
@@ -412,7 +412,7 @@ async def reserve(db, user, intent, spec, slot, *, only_medium=None):
                 compatible = intersect_rules(candidate.requirements, rule)
                 if not compatible:
                     continue
-                if candidate.state == "selected":
+                if candidate.state in {"selected", "committed"}:
                     if compatible == candidate.requirements:
                         return candidate
                     continue
@@ -506,7 +506,9 @@ async def evaluate(db, user, intent):
         reservation = await reserve(db, user, intent, spec, slot)
         target.reservation_id = reservation.id
         target.message = (
-            "Release selected; download has not started"
+            "Acquisition pending; check download activity"
+            if reservation.state == "committed"
+            else "Release selected; download has not started"
             if reservation.state == "selected"
             else "Saved to wanted; automatic downloading is not available yet"
         )

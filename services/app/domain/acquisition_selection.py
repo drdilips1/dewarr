@@ -288,6 +288,8 @@ async def cancel(db, user, selection):
     await db.refresh(selection)
     if selection.state == "cancelled":
         return selection
+    if selection.state != "prepared":
+        raise HTTPException(409, "Use download activity to cancel an unsubmitted attempt")
     selection.state, selection.message = (
         "cancelled",
         "Release selection cancelled; no download was started",
@@ -305,8 +307,11 @@ async def cancel(db, user, selection):
     return selection
 
 
-async def configuration_current(db, selection):
-    if selection.state != "prepared" or get_settings().recovery_mode:
+async def configuration_current(db, selection, *, committed=False):
+    if (
+        selection.state not in ({"prepared", "committed"} if committed else {"prepared"})
+        or get_settings().recovery_mode
+    ):
         return False
     frozen = selection.frozen
     artifact = await db.get(SourceArtifact, selection.artifact_id)

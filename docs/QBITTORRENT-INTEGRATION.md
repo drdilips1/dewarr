@@ -1,6 +1,6 @@
 # qBittorrent transport and reconciliation contract
 
-Implementation checkpoint: the adapter, association rules, administrator settings UI/API, read-only connection diagnostics and path mapping preview are implemented and fixture verified. Persisted dispatch and live qBittorrent certification remain pending. Nothing in the application currently calls this adapter to start a download.
+Implementation checkpoint: the adapter, association rules, administrator settings UI/API, read-only connection diagnostics and path mapping preview are implemented and fixture verified. The opt-in [durable attempt workflow](DOWNLOAD-ATTEMPTS.md) now calls this adapter for reviewed acquisitions and observation-based recovery. Live qBittorrent certification and the complete acquisition/import gate remain pending; dispatch defaults off.
 
 ## Configure a downloader
 
@@ -16,7 +16,7 @@ For example, qBittorrent root `/data/downloads` can map to the configured worker
 
 Multiple disjoint mappings are supported. The save folder must lie inside one mapping; overlapping roots, traversal and unconfigured worker roots are rejected. Worker paths come from configured `BOOK_IMPORT_SOURCES`, not arbitrary browser-supplied filesystem paths. Saving snapshots those bindings. If a configured worker root changes, mappings become stale and require review/save before preview or later acquisition use.
 
-Preview shows the predicted mapping and performs no filesystem access. It never asserts that files exist, mounts refer to the same storage or hardlinks work. The existing inspection and destination-probe workflow remains responsible for actual filesystem evidence and source confinement. The API always reports dispatch unavailable at this stage.
+Preview shows the predicted mapping and performs no filesystem access. It never asserts that files exist, mounts refer to the same storage or hardlinks work. The existing inspection and destination-probe workflow remains responsible for actual filesystem evidence and source confinement. The settings API does not submit torrents. The separate reviewed-selection lifecycle remains gated by `BOOK_DOWNLOAD_DISPATCH_ENABLED`; see [Download attempts](DOWNLOAD-ATTEMPTS.md).
 
 ## Implemented boundary
 
@@ -32,7 +32,7 @@ These references describe external interfaces. No qBittorrent implementation is 
 
 ## Submission and association
 
-Submission accepts one bounded torrent byte payload or one supported v1/v2/hybrid magnet. Remote torrent URLs must be resolved by their source adapter. Magnet identity validation rejects conflicting hashes and multiple-line inputs. The [source artifact parser](SOURCE-ARTIFACTS.md) now validates native MAM torrent descriptors; persisted acquisition validation must still connect that evidence to a production dispatch workflow.
+Submission accepts one bounded torrent byte payload or one supported v1/v2/hybrid magnet. Remote torrent URLs must be resolved by their source adapter. Magnet identity validation rejects conflicting hashes and multiple-line inputs. The [source artifact parser](SOURCE-ARTIFACTS.md) now validates native MAM torrent descriptors; the opt-in download-attempt workflow now consumes that frozen evidence.
 
 Every add specifies the application attempt tag, category, save path, original content layout, enabled hash checking and disabled automatic torrent management. It does not set ratio/seeding limits, rename files, choose partial file priorities or copy MAM credentials into the downloader. This preserves the planned whole-pack and tracker-seeding behavior.
 
@@ -44,23 +44,16 @@ Association requires one candidate, the expected attempt tag, all known artifact
 
 ## Completion evidence
 
-The adapter reports a transfer ready only when the client is in a stable complete state, progress and remaining-byte values agree, every file is selected and complete, and the file-size sum matches the torrent total. Checking, moving, missing-file, error, metadata-only and unknown states cannot become ready merely because their progress is one. Paths, file indexes and sizes are validated; duplicate or unsafe file records fail the observation.
+The adapter records reported completion only when the client is in a stable complete state, progress and remaining-byte values agree, and every returned file is selected and complete. Its conservative `completed` flag additionally requires the file-size sum to match the torrent total. Known padding is reconciled by the download workflow against the exact saved manifest and padding-inclusive total before inspection. Checking, moving, missing-file, error, metadata-only and unknown states cannot become ready merely because their progress is one. Paths, file indexes and sizes are validated; duplicate or unsafe file records fail the observation.
 
 This is client evidence only. The importer must still map paths, inspect actual bytes, verify the manifest and publish safely. Audiobookshelf observation remains necessary for the book's in-library indicator.
 
 ## Evidence and remaining work
 
-Seventy-five adapter cases cover the selected 5.2.3 response shapes, legacy and asynchronous receipts, session reuse, rejected login, expired access, lost submission response, cancellation, v2/hybrid identity, unrelated preexisting transfers, destination changes, partial files, unsafe paths, malformed data and bounded responses. Twenty-one PostgreSQL/API cases cover settings, encrypted credentials, authorization, path confinement and stale bindings, concurrent edits/tests, cooldowns, deadlines, account revocation and cancelled-test recovery. A stateful HTTP fixture models successful and response-lost adds followed by independent lookup. These are not live-client or crash-recoverable dispatch workflow tests.
+Seventy-six adapter cases cover the selected 5.2.3 response shapes, legacy and asynchronous receipts, session reuse, rejected login, expired access, lost submission response, cancellation, v2/hybrid identity, unrelated preexisting transfers, destination changes, partial files, unsafe paths, malformed data and bounded responses. Twenty-one PostgreSQL/API cases cover settings, encrypted credentials, authorization, path confinement and stale bindings, concurrent edits/tests, cooldowns, deadlines, account revocation and cancelled-test recovery. A stateful HTTP fixture models successful and response-lost adds followed by independent lookup. These are not live-client or crash-recoverable dispatch workflow tests.
 
 The integrated browser journey covers saving and testing a connection, mapped path preview, desktop/mobile layout, secret-free reload and disabling the saved connection. qBittorrent responses are synthetic; no personal client or torrents are used.
 
-The next integration slice must supply:
+The [durable attempt workflow](DOWNLOAD-ATTEMPTS.md) now persists full identity claims, freezes committed reservations, journals submission before the side effect, observes uncertain outcomes and queues administrator inspection of verified completed manifests. API/Activity controls and crash/concurrency fixtures cover that workflow. It is opt-in and fixture verified, not live-client certification.
 
-1. Actual configured-client certification and enforcement of saved connection generation, enablement and path bindings by the dispatch worker.
-2. Integration with saved, owner-scoped source artifacts and validated v1/v2/hybrid descriptors, enforcing artifact integrity and current source generation. Native MAM resolution is implemented; other sources remain pending.
-3. Consume [frozen release selections](RELEASE-SELECTION.md) and add persisted attempt identity/dispatch state before network side effects. Preparation now retains client revisions and selected reservation requirements.
-4. A preflight existing-transfer check, dispatch journaling and recovery that reconciles before any retry; no adoption of unrelated torrents.
-5. Monitoring linked to the current inspection/import pipeline, with current permission and configuration checks.
-6. API/UI selection and Activity states, fixture-driven crash tests and actual supported-client certification.
-
-The adapter must remain behind that workflow. A generic add endpoint would bypass the PRD's identity, authorization and duplicate-prevention requirements.
+Remaining integration work includes single-file inspection, explicit repair after saved connection changes, post-import reservation/claim reconciliation, member-to-administrator review handoff, broader collection matching, and actual supported-client/filesystem certification. No generic unreviewed add endpoint is exposed.

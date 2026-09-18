@@ -24,19 +24,20 @@ Known medium/language/narrator conflicts are rejected. Unknown or incomplete con
 |---|---|
 | `planned` | Compatible wanted requirements may be combined and recomputed |
 | `selected` | Requirements are frozen by a prepared selection; compatible broader requests may join without changing them |
+| `committed` | A durable download attempt owns the frozen reservation; reconciliation cannot release it |
 | `released` | No active planned use remains |
 
-Selected reservations are considered before planned reservations across either-medium alternatives. A stricter or incompatible later request receives a separate planned reservation; it cannot modify a prepared choice. A deliberate manual choice can use the other medium for an Either request. Reconciliation preserves that selected medium.
+Committed reservations, then selected reservations, are considered before planned reservations across either-medium alternatives. A stricter or incompatible later request receives a separate planned reservation; it cannot modify a prepared choice. A deliberate manual choice can use the other medium for an Either request. Reconciliation preserves that selected medium.
 
-A prepared selection has states `prepared` and `cancelled`. Cancelling it returns still-needed requirements to planning. If the initiating target becomes satisfied, loses authority or loses its last active reason, reconciliation cancels preparation. Remaining compatible requests retain their own reasons and are replanned. Canonical merge/undo cancels affected preparation before rebuilding reservations; historical documents remain unchanged.
+A selection has states `prepared`, `committed` and `cancelled`. Preparation cancellation applies only before commitment. Cancelling it returns still-needed requirements to planning. If the initiating target becomes satisfied, loses authority or loses its last active reason, reconciliation cancels preparation. Remaining compatible requests retain their own reasons and are replanned. Canonical merge/undo cancels affected preparation before rebuilding reservations; historical documents remain unchanged.
 
-These cancellation rules are safe because preparation performs no external mutation. **They must not be reused for a submitted or uncertain download.** The later dispatch ledger needs a distinct irreversible boundary, attempt identity, leases and observation-based recovery. Neither a cancelled selection nor a released planned reservation authorizes deleting a torrent or media.
+These cancellation rules are safe because preparation performs no external mutation. **They must not be reused for a submitted or uncertain download.** The [download-attempt ledger](DOWNLOAD-ATTEMPTS.md) now supplies a distinct irreversible boundary, attempt identity, leases and observation-based recovery. Neither a cancelled selection nor a released planned reservation authorizes deleting a torrent or media.
 
 ## Commands, history and privacy
 
 Preparation uses the shared actor/idempotency-key operation lock. Every accepted key receives a durable completed `acquisition.select` receipt, including a new key that resolves to an identical existing selection. Reusing a key with different input conflicts. Replaying an old command returns its historical selection, including cancellation; it cannot reactivate it. No worker job is enqueued by preparation.
 
-One partial unique index permits one prepared selection per reservation. Request reconciliation, selection and cancellation share canonical work locks. Owner-only read/list/cancel endpoints hide another account's selection even from a different administrator. Shared reservations disclose only a generic selected status to other request owners, without source-artifact IDs or another user's history.
+One partial unique index permits one prepared or committed selection per reservation. Request reconciliation, selection and cancellation share canonical work locks. Owner-only read/list/cancel endpoints hide another account's selection even from a different administrator. Shared reservations disclose only a generic selected status to other request owners, without source-artifact IDs or another user's history.
 
 A later source/downloader/destination/mount/version change makes the saved configuration stale. The manifest page shows this explicitly. This read projection is not dispatch authorization: a dispatcher must recheck inventory, active reasons, permissions, requirements and current settings immediately before its side-effect boundary.
 
@@ -54,4 +55,4 @@ Request views include their book title and, only for the selection owner, a link
 
 Twenty-one API/database cases cover concurrent/replayed commands, receipt binding, cancellation, no downloader jobs, fixed requirements, broader/stricter sharing, Either-medium selection, inventory satisfaction, actor/library/artifact ownership, settings and recording changes, canonical merging, pagination and downgrade protection. The browser journey follows a new ebook request through MAM detail, native artifact inspection, a previously verified library route, saved selection, reload and cancellation. Source/downloader responses are synthetic; the existing import journey performs the filesystem and synthetic ABS route probe.
 
-Persisted dispatch/uncertain-add recovery, cross-work pack sharing, format profiles, live MAM/qBittorrent certification and transfer-to-import orchestration remain required for S05/S06. List automation must use that eventual acquisition workflow rather than bypassing preparation or import verification.
+The opt-in [download lifecycle](DOWNLOAD-ATTEMPTS.md) consumes this selection with persisted dispatch and recovery. Cross-work pack sharing, file-scoped inspection, format profiles, live certification and the complete transfer-to-library gate remain required for S05/S06. List automation must use this acquisition workflow rather than bypassing preparation or import verification.

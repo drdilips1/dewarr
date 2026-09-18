@@ -372,7 +372,7 @@ class AcquisitionReason(Identity, Base):
 
 class AcquisitionReservation(Identity, Base):
     __tablename__ = "acquisition_reservations"
-    __table_args__ = (CheckConstraint("state IN ('planned', 'selected', 'released')"),)
+    __table_args__ = (CheckConstraint("state IN ('planned', 'selected', 'committed', 'released')"),)
     work_id: Mapped[UUID] = mapped_column(ForeignKey("works.id"), index=True)
     destination_id: Mapped[UUID | None] = mapped_column(ForeignKey("libraries.id"))
     scope: Mapped[str] = mapped_column(String(80))
@@ -403,12 +403,12 @@ class AcquisitionSelection(Identity, Base):
     __tablename__ = "acquisition_selections"
     __table_args__ = (
         UniqueConstraint("owner_id", "command_key"),
-        CheckConstraint("state IN ('prepared', 'cancelled')"),
+        CheckConstraint("state IN ('prepared', 'committed', 'cancelled')"),
         Index(
             "uq_acquisition_selected_reservation",
             "reservation_id",
             unique=True,
-            postgresql_where=text("state = 'prepared'"),
+            postgresql_where=text("state IN ('prepared', 'committed')"),
         ),
     )
     owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
@@ -425,6 +425,47 @@ class AcquisitionSelection(Identity, Base):
     message: Mapped[str] = mapped_column(
         String(300), default="Release selected; download not started"
     )
+
+
+class DownloadAttempt(Identity, Base):
+    __tablename__ = "download_attempts"
+    __table_args__ = (
+        CheckConstraint(
+            "state IN ('queued', 'preflight', 'submitting', 'uncertain', "
+            "'downloading', 'complete', 'held', 'cancelled')"
+        ),
+        CheckConstraint("NOT external_may_exist OR state != 'cancelled'"),
+    )
+    owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
+    selection_id: Mapped[UUID] = mapped_column(ForeignKey("acquisition_selections.id"), unique=True)
+    operation_id: Mapped[UUID] = mapped_column(ForeignKey("operations.id"), unique=True)
+    state: Mapped[str] = mapped_column(String(20), default="queued")
+    message: Mapped[str] = mapped_column(String(300), default="Waiting to check the downloader")
+    external_may_exist: Mapped[bool] = mapped_column(Boolean, default=False)
+    endpoint_key: Mapped[str] = mapped_column(String(64))
+    run_token: Mapped[UUID | None] = mapped_column()
+    lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    next_check_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), index=True)
+    receipt: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
+    observation: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
+    inspection_id: Mapped[UUID | None] = mapped_column(ForeignKey("download_inspections.id"))
+
+
+class DownloadIdentityClaim(Identity, Base):
+    __tablename__ = "download_identity_claims"
+    __table_args__ = (
+        Index(
+            "uq_active_download_identity",
+            "endpoint_key",
+            "torrent_hash",
+            unique=True,
+            postgresql_where=text("active"),
+        ),
+    )
+    attempt_id: Mapped[UUID] = mapped_column(ForeignKey("download_attempts.id"), index=True)
+    endpoint_key: Mapped[str] = mapped_column(String(64))
+    torrent_hash: Mapped[str] = mapped_column(String(64))
+    active: Mapped[bool] = mapped_column(Boolean, default=True)
 
 
 class OrganizationSettings(Base):

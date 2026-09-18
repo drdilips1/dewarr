@@ -2,9 +2,16 @@ import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Clock } from "lucide-react";
 import { api, result } from "../api/client";
+import Downloads from "./Downloads";
 import { Empty, Loading, Notice } from "../components";
 
-export default function Activity({ admin }: { admin: boolean }) {
+export default function Activity({
+  admin,
+  canRequest,
+}: {
+  admin: boolean;
+  canRequest: boolean;
+}) {
   const client = useQueryClient();
   const activity = useQuery({
     queryKey: ["activity"],
@@ -61,6 +68,7 @@ export default function Activity({ admin }: { admin: boolean }) {
           </button>
         ) : null}
       </div>
+      <Downloads canManage={canRequest} />
       <Notice error={activity.error || probe.error} />
       {activity.isPending ? <Loading /> : null}
       {activity.data?.length ? (
@@ -88,11 +96,13 @@ export default function Activity({ admin }: { admin: boolean }) {
                       ? "Audiobookshelf inventory sync"
                       : item.kind === "acquisition.evaluate"
                         ? "Wanted media check"
-                        : item.kind === "acquisition.select"
-                          ? "Release selection"
-                          : item.kind === "metadata.enrich"
-                            ? "Automatic metadata lookup"
-                            : item.kind}
+                        : item.kind === "acquisition.download"
+                          ? "Book download"
+                          : item.kind === "acquisition.select"
+                            ? "Release selection"
+                            : item.kind === "metadata.enrich"
+                              ? "Automatic metadata lookup"
+                              : item.kind}
                 </h2>
                 <p>{item.message}</p>
               </div>

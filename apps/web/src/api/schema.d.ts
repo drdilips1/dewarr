@@ -796,6 +796,59 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/acquisition/downloads": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Listing */
+    get: operations["listing_api_acquisition_downloads_get"];
+    put?: never;
+    /** Start */
+    post: operations["start_api_acquisition_downloads_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/acquisition/downloads/{attempt_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Detail */
+    get: operations["detail_api_acquisition_downloads__attempt_id__get"];
+    put?: never;
+    post?: never;
+    /** Cancel */
+    delete: operations["cancel_api_acquisition_downloads__attempt_id__delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/acquisition/downloads/{attempt_id}/recheck": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Recheck */
+    post: operations["recheck_api_acquisition_downloads__attempt_id__recheck_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organization/settings": {
     parameters: {
       query?: never;
@@ -1429,6 +1482,58 @@ export interface components {
       open_url: string;
       /** Match Revision */
       match_revision?: string | null;
+    };
+    /** AttemptPage */
+    AttemptPage: {
+      /** Items */
+      items: components["schemas"]["AttemptView"][];
+      /** Total */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+    };
+    /** AttemptView */
+    AttemptView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /**
+       * Selection Id
+       * Format: uuid
+       */
+      selection_id: string;
+      /**
+       * Operation Id
+       * Format: uuid
+       */
+      operation_id: string;
+      /** State */
+      state: string;
+      /** Work Title */
+      work_title: string;
+      /** Release Title */
+      release_title: string;
+      /** Message */
+      message: string;
+      /** External May Exist */
+      external_may_exist: boolean;
+      /** Can Recheck */
+      can_recheck: boolean;
+      /** Can Cancel */
+      can_cancel: boolean;
+      /** Progress */
+      progress: number | null;
+      /** Inspection Id */
+      inspection_id: string | null;
     };
     /** AuthView */
     AuthView: {
@@ -3386,6 +3491,14 @@ export interface components {
       /** Series */
       series: components["schemas"]["SeriesData"][];
     };
+    /** StartInput */
+    StartInput: {
+      /**
+       * Selection Id
+       * Format: uuid
+       */
+      selection_id: string;
+    };
     /** SubmittedView */
     SubmittedView: {
       request: components["schemas"]["RequestView"];
@@ -5267,6 +5380,167 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["RequestView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  listing_api_acquisition_downloads_get: {
+    parameters: {
+      query?: {
+        selection_id?: string | null;
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttemptPage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  start_api_acquisition_downloads_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["StartInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttemptView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  detail_api_acquisition_downloads__attempt_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        attempt_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttemptView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  cancel_api_acquisition_downloads__attempt_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        attempt_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttemptView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  recheck_api_acquisition_downloads__attempt_id__recheck_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        attempt_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttemptView"];
         };
       };
       /** @description Validation Error */

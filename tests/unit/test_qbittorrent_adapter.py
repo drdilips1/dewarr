@@ -549,3 +549,9 @@ async def test_malformed_or_multi_artifact_receipt_stays_uncertain(changes):
         with pytest.raises(AdapterError) as error:
             await client.submit(MAGNET, attempt_tag=TAG, save_path="/downloads/books")
         assert error.value.kind == FailureKind.UNCERTAIN
+
+
+def test_padding_requires_manifest_evidence_before_confirming_complete():
+    state = parse_state(row(total_size=24), properties(), files())
+    assert state.reported_complete
+    assert not state.completed  # The caller must reconcile the known padding/file manifest.

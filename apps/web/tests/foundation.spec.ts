@@ -1020,6 +1020,49 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await expect(selectionForm).toContainText(
     "Release selection cancelled; no download was started",
   );
+  await selectionForm
+    .getByRole("checkbox", {
+      name: "I checked the release details and it contains The Next Harbor.",
+      exact: true,
+    })
+    .check();
+  await selectionForm
+    .getByRole("button", { name: "Save release selection", exact: true })
+    .click();
+  await selectionForm
+    .getByRole("button", { name: "Start download", exact: true })
+    .click();
+  await selectionForm
+    .getByRole("link", { name: "View download", exact: true })
+    .click();
+  const downloadActivity = page.getByRole("region", {
+    name: "Downloads",
+    exact: true,
+  });
+  await expect(downloadActivity).toContainText(
+    "Transfer associated; waiting for complete files",
+  );
+  await expect(downloadActivity).toContainText("25% downloaded");
+  await expect(
+    downloadActivity.getByRole("button", { name: "Cancel before submission" }),
+  ).toHaveCount(0);
+  await page.reload();
+  await expect(downloadActivity).toContainText("The Next Harbor");
+  await page.screenshot({
+    path: testInfo.outputPath("download-activity-mobile.png"),
+    fullPage: true,
+  });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.screenshot({
+    path: testInfo.outputPath("download-activity-desktop.png"),
+    fullPage: true,
+  });
+
   await page.getByRole("link", { name: "Connections", exact: true }).click();
   await page.getByRole("link", { name: "Downloaders", exact: true }).click();
   await page.reload();

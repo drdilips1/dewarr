@@ -1,13 +1,13 @@
 # Acquisition requests and inventory satisfaction
 
-This implements part of S01 and the request contracts needed by S05–S07. It saves wanted media and evaluates fulfillment against the current library. Native MAM browsing/artifacts, reviewed release selection and manual importing now have separate implementations. Transfer dispatch, quality profiles and external-list automation remain unfinished. A saved request is not a torrent submission.
+This implements part of S01 and the request contracts needed by S05–S07. It saves wanted media and evaluates fulfillment against the current library. Native MAM browsing/artifacts, reviewed release selection and manual importing now have separate implementations. An opt-in durable transfer workflow now consumes selections; the complete acquisition/import gate, quality profiles and external-list automation remain unfinished. A saved request is not a torrent submission.
 
 ## Persisted model
 
 - `AcquisitionIntent`: an owner's normalized work/media/version/destination requirements. Equivalent specifications reuse one intent.
 - `AcquisitionReason`: an independent manual or owned-local-list reason. Removing a membership or deleting a list withdraws only that list's reason; history remains available.
 - `AcquisitionTarget`: ebook, audio, or either. Both creates two independently satisfied targets. Each target records state and any confirmed satisfying asset.
-- `AcquisitionReservation`: a planned, compatible fulfillment shared by targets with the same destination scope. Unconfigured destinations are isolated by owner. Selected reservations now have a frozen candidate/route handoff; no reservation represents a submitted download yet. See [Release selection](RELEASE-SELECTION.md).
+- `AcquisitionReservation`: a planned, compatible fulfillment shared by targets with the same destination scope. Unconfigured destinations are isolated by owner. Selected reservations have a frozen candidate/route handoff; committed reservations are retained by the [download-attempt ledger](DOWNLOAD-ATTEMPTS.md), including uncertain submissions. See [Release selection](RELEASE-SELECTION.md).
 
 Exact edition/recording IDs require accepted catalog or accessible inventory evidence. An arbitrary UUID is insufficient. Required language, known abridgment and standalone-copy constraints are checked independently. An unknown language cannot satisfy an explicit required language. An inseparable multi-work asset cannot satisfy a standalone-copy request.
 

@@ -8,6 +8,7 @@ from sqlalchemy import func, select
 from app.adapters.contracts import AdapterError
 from app.api.dependencies import Database, Member
 from app.api.metadata import adapter_http_error
+from app.config import get_settings
 from app.db.models import AcquisitionSelection, ImportDestination, Integration, Library
 from app.domain import acquisition_selection as selections
 from app.domain.acquisition_selection import SelectionInput
@@ -65,6 +66,7 @@ class SelectionOptions(BaseModel):
 
 
 async def view(db, row):
+    current = await selections.configuration_current(db, row)
     return SelectionView(
         id=row.id,
         created_at=row.created_at,
@@ -76,7 +78,8 @@ async def view(db, row):
         work_title=row.frozen["work_title"],
         medium=row.frozen["requirements"]["medium"],
         release_title=row.frozen["release"]["title"],
-        configuration_current=await selections.configuration_current(db, row),
+        configuration_current=current,
+        dispatch_available=current and get_settings().download_dispatch_enabled,
     )
 
 

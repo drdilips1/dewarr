@@ -92,6 +92,16 @@ async def reconcile_groups(db, work_ids):
 
     from app.db.models import AcquisitionReservation, AcquisitionSelection, AcquisitionTarget
 
+    if await db.scalar(
+        select(AcquisitionReservation.id)
+        .where(
+            AcquisitionReservation.work_id.in_(work_ids),
+            AcquisitionReservation.state == "committed",
+        )
+        .limit(1)
+    ):
+        raise HTTPException(409, "Resolve outstanding downloads before changing book identity")
+
     await db.execute(
         update(AcquisitionSelection)
         .where(

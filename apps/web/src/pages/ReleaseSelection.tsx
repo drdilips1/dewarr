@@ -21,6 +21,7 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
   const [destinationId, setDestinationId] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const key = useRef(crypto.randomUUID());
+  const downloadKeys = useRef(new Map<string, string>());
   const options = useQuery({
     queryKey: ["selection-options"],
     queryFn: async () =>
@@ -105,9 +106,13 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
     (destinations.length === 1 ? destinations[0] : undefined);
   const refresh = async () => {
     await Promise.all(
-      ["requests", "release-selections", "selection-options"].map((name) =>
-        cache.invalidateQueries({ queryKey: [name] }),
-      ),
+      [
+        "requests",
+        "release-selections",
+        "selection-options",
+        "downloads",
+        "activity",
+      ].map((name) => cache.invalidateQueries({ queryKey: [name] })),
     );
   };
   const save = useMutation({
@@ -142,6 +147,21 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
       ),
     onSuccess: refresh,
   });
+  const startDownload = useMutation({
+    mutationFn: async (id: string) => {
+      if (!downloadKeys.current.has(id))
+        downloadKeys.current.set(id, crypto.randomUUID());
+      return result(
+        await api.POST("/api/acquisition/downloads", {
+          params: {
+            header: { "idempotency-key": downloadKeys.current.get(id)! },
+          },
+          body: { selection_id: id },
+        }),
+      );
+    },
+    onSuccess: refresh,
+  });
   const changed = () => {
     setConfirmed(false);
     key.current = crypto.randomUUID();
@@ -165,7 +185,8 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
           linkedRequest.error ||
           history.error ||
           save.error ||
-          cancel.error
+          cancel.error ||
+          startDownload.error
         }
       />
       <label>
@@ -298,6 +319,20 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
                   </small>
                 )}
               </span>
+              {item.dispatch_available && (
+                <button
+                  className="primary"
+                  disabled={startDownload.isPending}
+                  onClick={() => startDownload.mutate(item.id)}
+                >
+                  {startDownload.isPending
+                    ? "Queuing download…"
+                    : "Start download"}
+                </button>
+              )}
+              {item.state === "committed" && (
+                <Link to="/activity">View download</Link>
+              )}
               {item.state === "prepared" && (
                 <button
                   disabled={cancel.isPending}

@@ -135,11 +135,15 @@ async def view(db, user, intent):
                     .where(
                         AcquisitionTarget.intent_id == intent.id,
                         AcquisitionTarget.slot == target.slot,
-                        AcquisitionSelection.state == "prepared",
+                        AcquisitionSelection.state.in_(["prepared", "committed"]),
                     )
                 )
                 if selection:
-                    target.message = "Release selected; download has not started"
+                    target.message = (
+                        "Acquisition pending; check download activity"
+                        if selection.state == "committed"
+                        else "Release selected; download has not started"
+                    )
                     if selection.owner_id == user.id:
                         target.source_artifact_id = selection.artifact_id
     except HTTPException:

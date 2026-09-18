@@ -14,6 +14,7 @@ from app.api import (
     auth,
     catalog,
     destinations,
+    download_attempts,
     downloaders,
     identity,
     import_runs,
@@ -101,6 +102,7 @@ def create_app() -> FastAPI:
     app.include_router(metadata.router, prefix="/api")
     app.include_router(identity.router, prefix="/api")
     app.include_router(requests.router, prefix="/api")
+    app.include_router(download_attempts.router, prefix="/api")
     app.include_router(organization.router, prefix="/api")
     app.include_router(imports.router, prefix="/api")
     app.include_router(inspection_groupings.router, prefix="/api")

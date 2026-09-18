@@ -53,6 +53,7 @@ os.environ.update(
         "BOOK_BOOTSTRAP_TOKEN": "browser-test-bootstrap-token",
         "BOOK_PUBLIC_URL": "http://127.0.0.1:8001",
         "BOOK_COOKIE_SECURE": "false",
+        "BOOK_DOWNLOAD_DISPATCH_ENABLED": "true",
         "BOOK_HARDCOVER_URL": "http://127.0.0.1:13379/catalog",
         "BOOK_OPENLIBRARY_URL": "http://127.0.0.1:13379/openlibrary",
         "BOOK_IMPORT_SOURCES": json.dumps({"synthetic": str(download_root)}),
