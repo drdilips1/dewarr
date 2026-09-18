@@ -588,6 +588,79 @@ test("setup, catalog, private list and durable worker are usable together", asyn
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBe(true);
+  await page.getByLabel("Download folder", { exact: true }).fill("matched");
+  await page
+    .getByLabel(
+      "The download has finished and its files are no longer changing",
+    )
+    .check();
+  await page
+    .getByRole("button", { name: "Inspect files", exact: true })
+    .click();
+  await expect(inspected).toContainText(
+    "One catalog edition agrees with the embedded identity evidence",
+  );
+  await inspected
+    .getByRole("button", {
+      name: "Use clear matches on this page (1)",
+      exact: true,
+    })
+    .click();
+  await expect(inspected).toContainText(
+    "Selected from catalog evidence: My protected catalog title",
+  );
+  const completeMatchedBook = inspected.getByLabel(
+    "These files contain the complete book, not a sample or companion document",
+  );
+  await expect(completeMatchedBook).not.toBeChecked();
+  await inspected
+    .getByRole("button", { name: "Save import plan", exact: true })
+    .click();
+  await expect(savedPlan).toContainText(
+    "0 planned item folders · 1 need attention",
+  );
+  await completeMatchedBook.check();
+  await inspected
+    .getByRole("button", { name: "Refresh catalog matches", exact: true })
+    .click();
+  await expect(completeMatchedBook).toBeChecked();
+  await expect(
+    inspected.getByRole("button", {
+      name: "Use clear matches on this page (0)",
+      exact: true,
+    }),
+  ).toBeDisabled();
+  const matchedPlanResponse = page.waitForResponse(
+    (response) =>
+      response.url().endsWith("/plans") &&
+      response.request().method() === "POST",
+  );
+  await inspected
+    .getByRole("button", { name: "Save import plan", exact: true })
+    .click();
+  const matchedPlan = await (await matchedPlanResponse).json();
+  const matchProof =
+    matchedPlan.document.matching_evidence[matchedPlan.document.groups[0].id];
+  expect(matchProof.status).toBe("matched");
+  expect(matchProof.evidence.identifiers).toEqual([
+    { namespace: "isbn", value: "9781234567897" },
+  ]);
+  await expect(savedPlan).toContainText(
+    "1 planned item folders · 0 need attention",
+  );
+  await page.screenshot({
+    path: testInfo.outputPath("catalog-match-mobile.png"),
+    fullPage: true,
+  });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.reload();
+  await expect(savedPlan).toContainText(
+    "1 planned item folders · 0 need attention",
+  );
   await page.getByLabel("Download folder", { exact: true }).fill("formats");
   await page
     .getByLabel(

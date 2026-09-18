@@ -128,6 +128,7 @@ async def catalog(request: Request, authorization: str = Header(default="")):
                     {
                         "id": 51,
                         "book_id": 42,
+                        "isbn_13": "9781234567897",
                         "title": "The Catalog Journey",
                         "reading_format": {"format": "Ebook"},
                         "language": {"code2": "en"},

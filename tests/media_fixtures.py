@@ -17,7 +17,9 @@ def cover_bytes(*, color="navy", size=(240, 360), format="PNG", **save_options):
     return output.getvalue()
 
 
-def epub(path, title="First Harbor", author="Alex Morgan", *, chapter=True, metadata=None):
+def epub(
+    path, title="First Harbor", author="Alex Morgan", *, chapter=True, metadata=None, isbn=None
+):
     path.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(path, "w") as book:
         book.writestr("mimetype", "application/epub+zip")
@@ -32,7 +34,8 @@ def epub(path, title="First Harbor", author="Alex Morgan", *, chapter=True, meta
                 '<package xmlns="http://www.idpf.org/2007/opf"><metadata '
                 'xmlns:dc="http://purl.org/dc/elements/1.1/">'
                 f"<dc:title>{escape(title)}</dc:title><dc:creator>{escape(author)}</dc:creator>"
-                "<dc:language>en</dc:language><dc:identifier>synthetic-fixture</dc:identifier>"
+                "<dc:language>en</dc:language>"
+                f"<dc:identifier>{escape(isbn or 'synthetic-fixture')}</dc:identifier>"
                 '</metadata><manifest><item id="chapter" href="chapter.xhtml" '
                 'media-type="application/xhtml+xml"/></manifest>'
                 '<spine><itemref idref="chapter"/></spine></package>'
@@ -77,7 +80,9 @@ def cbz(path, title="First Harbor", author="Alex Morgan", *, pages=2):
         )
 
 
-def audio(path, title="First Harbor", author="Alex Morgan", narrator="Jordan Lee", track=1):
+def audio(
+    path, title="First Harbor", author="Alex Morgan", narrator="Jordan Lee", track=1, tags=None
+):
     if not shutil.which("ffmpeg") or not shutil.which("ffprobe"):
         pytest.skip("Actual audio inspection requires ffmpeg/ffprobe")
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -100,6 +105,11 @@ def audio(path, title="First Harbor", author="Alex Morgan", narrator="Jordan Lee
             f"composer={narrator}",
             "-metadata",
             f"track={track}",
+            *(
+                argument
+                for key, value in (tags or {}).items()
+                for argument in ("-metadata", f"{key}={value}")
+            ),
             str(path),
         ],
         check=True,

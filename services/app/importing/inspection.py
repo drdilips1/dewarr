@@ -79,7 +79,7 @@ ARCHIVES = {"zip", "rar", "7z", "tar", "gz"}
 DISC = re.compile(r"^(?:cd|disc|disk)\s*(\d+)$", re.I)
 TAG_NAMES = (
     "title,album,artist,album_artist,composer,narrator,track,disc,date,year,"
-    "language,isbn,asin,series,series-part"
+    "language,isbn,isbn10,isbn13,isbn_10,isbn_13,asin,abridged,series,series-part"
 )
 
 
@@ -185,6 +185,15 @@ def inspect_epub(fd):
             "authors": values("creator"),
             "languages": values("language"),
             "identifiers": values("identifier"),
+            "identifier_assertions": [
+                {
+                    "scheme": node.attrib.get("{http://www.idpf.org/2007/opf}scheme")
+                    or node.attrib.get("scheme"),
+                    "value": node.text.strip()[:600],
+                }
+                for node in metadata.findall("{*}identifier")
+                if node.text and node.text.strip()
+            ][:30],
             "spine_entries": len(spine),
         }
 

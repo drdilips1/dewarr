@@ -28,6 +28,12 @@ staging_root.mkdir(mode=0o700)
 download_root = media_root / "downloads"
 download_root.mkdir()
 (media_root / "completed").rename(download_root / "completed")
+epub(
+    download_root / "matched/book.epub",
+    title="The Catalog Journey",
+    author="Catalog Author",
+    isbn="9781234567897",
+)
 epub(download_root / "formats/book.epub", title="Format Review", author="Catalog Author")
 pdf(download_root / "formats/book.pdf", title="Format Review", author="Catalog Author")
 audio(download_root / "companion/book.mp3", title="Companion Review", author="Catalog Author")

@@ -10,6 +10,22 @@ import GroupingEditor from "../components/GroupingEditor";
 type Group = components["schemas"]["InspectedGroup"];
 type Selection = components["schemas"]["GroupSelection"];
 type Inspection = components["schemas"]["InspectionView"];
+type CatalogMatch = components["schemas"]["GroupMatch"];
+
+function matchedSelection(match: CatalogMatch): Selection | null {
+  const candidate = match.candidates.find(
+    (item) => item.version_id === match.selected_version_id,
+  );
+  return match.status === "matched" && candidate
+    ? {
+        group_key: match.group_key,
+        work_id: candidate.work_id,
+        version_id: candidate.version_id,
+        match_revision: match.revision,
+        full_content: false,
+      }
+    : null;
+}
 
 export default function ImportReview() {
   const [params, setParams] = useSearchParams();
@@ -216,6 +232,31 @@ function Review({ inspection }: { inspection: Inspection }) {
       ),
   });
   const groups = grouping.data?.content.groups || [];
+  const matches = useQuery({
+    queryKey: [
+      "inspection-matches",
+      inspection.id,
+      grouping.data?.revision,
+      groupOffset,
+    ],
+    enabled: !!grouping.data && inspection.state === "ready" && !editingGroups,
+    queryFn: async () =>
+      result(
+        await api.GET("/api/organization/inspections/{inspection_id}/matches", {
+          params: {
+            path: { inspection_id: inspection.id },
+            query: {
+              grouping_revision: grouping.data!.revision,
+              offset: groupOffset,
+              limit: 10,
+            },
+          },
+        }),
+      ),
+  });
+  const clearMatches = (matches.data?.items || [])
+    .map(matchedSelection)
+    .filter((item): item is Selection => !!item && !selections[item.group_key]);
   const planId = params.get("plan");
   const settings = useQuery({
     queryKey: ["naming-review-settings"],
@@ -293,11 +334,52 @@ function Review({ inspection }: { inspection: Inspection }) {
               plan. Review file groups to see why.
             </p>
           ) : null}
+          {!editingGroups && grouping.data && (
+            <section aria-label="Catalog matching">
+              <p className="muted">
+                Catalog matching uses embedded identifiers and supporting
+                metadata. A match does not confirm that the files contain the
+                complete book.
+              </p>
+              <Notice error={matches.error} />
+              {matches.isFetching && (
+                <p role="status">Checking catalog matches…</p>
+              )}
+              <div className="actions">
+                <button
+                  disabled={
+                    save.isPending || matches.isFetching || !clearMatches.length
+                  }
+                  onClick={() =>
+                    setSelections((current) => {
+                      const next = { ...current };
+                      for (const selection of clearMatches) {
+                        if (!next[selection.group_key])
+                          next[selection.group_key] = selection;
+                      }
+                      return next;
+                    })
+                  }
+                >
+                  Use clear matches on this page ({clearMatches.length})
+                </button>
+                <button
+                  disabled={save.isPending || matches.isFetching}
+                  onClick={() => matches.refetch()}
+                >
+                  Refresh catalog matches
+                </button>
+              </div>
+            </section>
+          )}
           {!editingGroups &&
             groups.slice(groupOffset, groupOffset + 10).map((group) => (
               <GroupMatch
                 key={`${grouping.data?.revision}:${group.key}`}
                 group={group}
+                match={matches.data?.items.find(
+                  (item) => item.group_key === group.key,
+                )}
                 selection={selections[group.key]}
                 disabled={save.isPending}
                 onChange={(selection) =>
@@ -372,6 +454,7 @@ function Review({ inspection }: { inspection: Inspection }) {
               onClick={() => {
                 settings.refetch();
                 grouping.refetch();
+                matches.refetch();
                 setSelections({});
               }}
             >
@@ -422,11 +505,13 @@ function Review({ inspection }: { inspection: Inspection }) {
 
 function GroupMatch({
   group,
+  match,
   selection,
   disabled,
   onChange,
 }: {
   group: Group;
+  match?: CatalogMatch;
   selection?: Selection;
   disabled: boolean;
   onChange: (selection: Selection | null) => void;
@@ -434,10 +519,15 @@ function GroupMatch({
   const [input, setInput] = useState(group.title || "");
   const [q, setQ] = useState("");
   const [offset, setOffset] = useState(0);
-  const [workId, setWorkId] = useState(selection?.work_id || "");
-  const [versionId, setVersionId] = useState(selection?.version_id || "");
+  const [manualWorkId, setWorkId] = useState("");
+  const workId = selection?.work_id || manualWorkId;
+  const versionId = selection?.version_id || "";
   const [versionOffset, setVersionOffset] = useState(0);
-  const [full, setFull] = useState(selection?.full_content || false);
+  const full = selection?.full_content || false;
+  const suggested = match ? matchedSelection(match) : null;
+  const selectedCandidate = match?.candidates.find(
+    (item) => item.version_id === versionId,
+  );
   const books = useQuery({
     queryKey: ["import-match-books", q, offset],
     enabled: !!q,
@@ -461,9 +551,11 @@ function GroupMatch({
         }),
       ),
   });
-  function update(version: string, complete: boolean) {
-    setVersionId(version);
-    setFull(complete);
+  function update(
+    version: string,
+    complete: boolean,
+    matchRevision?: string | null,
+  ) {
     onChange(
       version
         ? {
@@ -471,6 +563,7 @@ function GroupMatch({
             work_id: workId,
             version_id: version,
             full_content: complete,
+            match_revision: matchRevision,
           }
         : null,
     );
@@ -504,6 +597,59 @@ function GroupMatch({
           </div>
         ))}
       </details>
+      {match && (
+        <>
+          <p role="status">{match.message}</p>
+          {suggested && (
+            <button
+              disabled={disabled}
+              onClick={() => {
+                setWorkId(suggested.work_id);
+                setVersionOffset(0);
+                onChange(suggested);
+              }}
+            >
+              Use matched edition
+            </button>
+          )}
+          {selection?.match_revision && (
+            <p className="muted">
+              Selected from catalog evidence:{" "}
+              {selectedCandidate?.title || "catalog edition"}. The evidence will
+              be rechecked when you save.
+            </p>
+          )}
+          <details>
+            <summary>
+              Catalog evidence and possible versions ({match.candidates.length})
+            </summary>
+            {(match.evidence.issues || []).map((issue) => (
+              <p key={issue}>{issue}</p>
+            ))}
+            {match.candidates.map((candidate) => (
+              <div className="import-path" key={candidate.version_id}>
+                <strong>
+                  {candidate.title} · {candidate.authors.join(", ")}
+                </strong>
+                <span>
+                  {candidate.version_title || candidate.title} ·{" "}
+                  {candidate.narrators.join(", ") || candidate.medium} ·{" "}
+                  {candidate.year || "Year unknown"}
+                </span>
+                <span>
+                  {candidate.reasons.join(" · ") || "No matching identifiers"}
+                </span>
+                {candidate.conflicts.length > 0 && (
+                  <span>Review: {candidate.conflicts.join(" · ")}</span>
+                )}
+              </div>
+            ))}
+            {match.truncated && (
+              <p>Additional candidates exist. Search for the book manually.</p>
+            )}
+          </details>
+        </>
+      )}
       <form
         className="inline-form"
         onSubmit={(event) => {
@@ -532,7 +678,6 @@ function GroupMatch({
               disabled={disabled}
               onChange={(event) => {
                 setWorkId(event.target.value);
-                setVersionId("");
                 setVersionOffset(0);
                 onChange(null);
               }}
@@ -568,9 +713,19 @@ function GroupMatch({
             <select
               value={versionId}
               disabled={disabled}
-              onChange={(event) => update(event.target.value, full)}
+              onChange={(event) => update(event.target.value, false)}
             >
               <option value="">Choose the matching edition or recording</option>
+              {versionId &&
+                !versions.data.versions.some(
+                  (version) => version.id === versionId,
+                ) && (
+                  <option value={versionId}>
+                    {selectedCandidate?.version_title ||
+                      "Selected catalog version"}{" "}
+                    · outside this page
+                  </option>
+                )}
               {versions.data.versions
                 .filter(
                   (version) =>
@@ -610,8 +765,14 @@ function GroupMatch({
             <input
               type="checkbox"
               checked={full}
-              disabled={disabled}
-              onChange={(event) => update(versionId, event.target.checked)}
+              disabled={disabled || !versionId}
+              onChange={(event) =>
+                update(
+                  versionId,
+                  event.target.checked,
+                  selection?.match_revision,
+                )
+              }
             />
             These files contain the complete book, not a sample or companion
             document

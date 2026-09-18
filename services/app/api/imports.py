@@ -23,6 +23,8 @@ from app.domain.work_graph import canonical_work, graph_lock
 from app.importing.filesystem import relative_parts
 from app.importing.grouping import current_grouping
 from app.importing.inspection import InspectedFile, InspectionSnapshot
+from app.importing.match_evidence import isbn_key
+from app.importing.matching import GroupMatch, match_group
 from app.importing.metadata import ExportMetadata, initial_sidecars
 from app.importing.naming import (
     ImportGroup,
@@ -69,6 +71,7 @@ class GroupSelection(StrictModel):
     work_id: UUID
     version_id: UUID
     full_content: bool
+    match_revision: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
 
 
 class FreezeInput(StrictModel):
@@ -95,6 +98,7 @@ class FrozenDocument(StrictModel):
     initial_sidecars: dict[str, dict[str, str]] = Field(default_factory=dict)
     version_revisions: dict[str, str] = Field(default_factory=dict)
     cover_sources: dict[str, str] = Field(default_factory=dict)
+    matching_evidence: dict[str, GroupMatch] = Field(default_factory=dict)
 
 
 class FrozenPlanView(BaseModel):
@@ -231,7 +235,7 @@ async def freeze_plan(inspection_id: UUID, body: FreezeInput, admin: Admin, db: 
         )
     observed = {group.key: group.model_dump() for group in grouping.groups}
     files = {file["path"]: file for file in row.snapshot["files"]}
-    groups, sidecars, versions, covers = [], {}, {}, {}
+    groups, sidecars, versions, covers, matches = [], {}, {}, {}, {}
     await graph_lock(db)
     for selection in body.selections:
         group = observed.get(selection.group_key)
@@ -243,6 +247,24 @@ async def freeze_plan(inspection_id: UUID, body: FreezeInput, admin: Admin, db: 
             raise HTTPException(422, "Choose a catalog version belonging to the selected book")
         if version.medium != group["medium"]:
             raise HTTPException(422, "Catalog version and inspected medium differ")
+        if selection.match_revision:
+            reviewed_group = next(
+                item for item in grouping.groups if item.key == selection.group_key
+            )
+            match = await match_group(db, row.snapshot, grouping_revision, reviewed_group)
+            if (
+                match.revision != selection.match_revision
+                or match.status != "matched"
+                or match.selected_version_id != version.id
+                or not any(
+                    candidate.version_id == version.id and candidate.work_id == work.id
+                    for candidate in match.candidates
+                )
+            ):
+                raise HTTPException(
+                    409, "Catalog matching evidence changed; refresh and review this group"
+                )
+            matches[str(uuid5(row.id, selection.group_key))] = match.model_dump(mode="json")
         pending = await db.scalar(
             select(ProviderObject.id)
             .where(
@@ -274,9 +296,9 @@ async def freeze_plan(inspection_id: UUID, body: FreezeInput, admin: Admin, db: 
                     recording_year=version.publication_year if version.medium == "audio" else None,
                     isbn=next(
                         (
-                            version.identifiers[key]
-                            for key in ("isbn13", "isbn10", "isbn")
-                            if isinstance(version.identifiers.get(key), str)
+                            value
+                            for key in ("isbn13", "isbn_13", "isbn10", "isbn_10", "isbn")
+                            if (value := isbn_key(version.identifiers.get(key)))
                         ),
                         None,
                     ),
@@ -310,6 +332,7 @@ async def freeze_plan(inspection_id: UUID, body: FreezeInput, admin: Admin, db: 
         "initial_sidecars": sidecars,
         "version_revisions": versions,
         "cover_sources": covers,
+        "matching_evidence": matches,
         "inspection_revision": row.snapshot["revision"],
         "grouping_revision": grouping_revision,
         "excluded_files": [file.model_dump() for file in grouping.excluded],

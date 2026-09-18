@@ -73,7 +73,7 @@ The worker opens each directory component relative to an already-open descriptor
 - PDF and CBZ now have bounded child-process inspectors: PDF page structure/content streams and decoded CBZ image pages, with optional document metadata. See [ebook formats and companions](EBOOK-IMPORTS.md) for limits and evidence boundaries.
 - Other ebook formats, extras and generic archives remain held for review because their byte-level inspectors are not yet implemented. Invalid supported files are held independently so other inspectable groups remain usable. A compromised or changing directory invalidates the entire snapshot instead of committing a partial tree.
 
-Grouping uses directory boundaries and observed album/author/narrator/format evidence. Disc directories are folded into their parent recording; contradictory disc evidence is held. Flat ebooks remain separate proposed groups. Filename-only track inference, automatic provider-identifier matching, verified omnibus coverage, automatic companion classification and broader formats remain S04 work. All proposed groups begin with unresolved identity and unverified full contents.
+Grouping uses directory boundaries and observed album/author/narrator/format evidence. Disc directories are folded into their parent recording; contradictory disc evidence is held. Flat ebooks remain separate proposed groups. [Local catalog matching](IMPORT-MATCHING.md) now uses embedded identifiers plus supporting metadata, with reviewable candidates and stale-evidence rejection. Filename-only track inference, broader provider/source resolution, verified omnibus coverage, automatic companion classification and broader formats remain S04 work. All proposed groups begin with unverified full contents; a clear identity match never asserts completeness.
 
 ## Correct collection groups
 
@@ -96,6 +96,7 @@ New multi-file audio imports also freeze the expected playback sequence. Confirm
 | `GET /api/organization/inspections` | Owner-scoped history, 25 summaries per page without loading file snapshots |
 | `GET /api/organization/inspections/{id}` | Owner-scoped result, file evidence and proposed groups |
 | `GET/PUT /api/organization/inspections/{id}/grouping` | Read/save reviewed membership, ordering and exclusions, or restore proposals with expected revision |
+| `GET /api/organization/inspections/{id}/matches` | Page local catalog candidates and clear identifier matches for the current grouping revision |
 | `POST /api/organization/inspections/{id}/plans` | Validate selected catalog versions and profile/inspection revisions; save immutable plan |
 | `GET /api/organization/plans/{id}` | Reload the recorded plan independently of later settings changes |
 | `GET /api/organization/destination-roots` | Configured destination keys |

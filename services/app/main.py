@@ -17,6 +17,7 @@ from app.api import (
     import_runs,
     imports,
     inspection_groupings,
+    inspection_matches,
     integrations,
     library,
     lists,
@@ -99,6 +100,7 @@ def create_app() -> FastAPI:
     app.include_router(organization.router, prefix="/api")
     app.include_router(imports.router, prefix="/api")
     app.include_router(inspection_groupings.router, prefix="/api")
+    app.include_router(inspection_matches.router, prefix="/api")
     app.include_router(import_runs.router, prefix="/api")
     app.include_router(destinations.router, prefix="/api")
     dist: Path = get_settings().web_dist

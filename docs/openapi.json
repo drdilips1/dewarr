@@ -2900,6 +2900,82 @@
         }
       }
     },
+    "/api/organization/inspections/{inspection_id}/matches": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Matches",
+        "operationId": "matches_api_organization_inspections__inspection_id__matches_get",
+        "parameters": [
+          {
+            "name": "inspection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Inspection Id"
+            }
+          },
+          {
+            "name": "grouping_revision",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$",
+              "title": "Grouping Revision"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 25,
+              "minimum": 1,
+              "default": 10,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MatchPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/organization/plans/{plan_id}/imports": {
       "post": {
         "tags": [
@@ -4793,6 +4869,13 @@
             },
             "type": "object",
             "title": "Cover Sources"
+          },
+          "matching_evidence": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/GroupMatch"
+            },
+            "type": "object",
+            "title": "Matching Evidence"
           }
         },
         "additionalProperties": false,
@@ -4864,6 +4947,69 @@
         ],
         "title": "GrantInput"
       },
+      "GroupMatch": {
+        "properties": {
+          "group_key": {
+            "type": "string",
+            "title": "Group Key"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "matched",
+              "review",
+              "unmatched"
+            ],
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "evidence": {
+            "$ref": "#/components/schemas/MatchEvidence"
+          },
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/MatchCandidate"
+            },
+            "type": "array",
+            "title": "Candidates"
+          },
+          "selected_version_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Selected Version Id"
+          },
+          "truncated": {
+            "type": "boolean",
+            "title": "Truncated",
+            "default": false
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "group_key",
+          "status",
+          "message",
+          "evidence",
+          "candidates",
+          "revision"
+        ],
+        "title": "GroupMatch"
+      },
       "GroupSelection": {
         "properties": {
           "group_key": {
@@ -4884,6 +5030,18 @@
           "full_content": {
             "type": "boolean",
             "title": "Full Content"
+          },
+          "match_revision": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Match Revision"
           }
         },
         "additionalProperties": false,
@@ -5002,6 +5160,25 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "IdentifierEvidence": {
+        "properties": {
+          "namespace": {
+            "type": "string",
+            "title": "Namespace"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "namespace",
+          "value"
+        ],
+        "title": "IdentifierEvidence"
       },
       "ImportGroup": {
         "properties": {
@@ -5656,6 +5833,236 @@
           "editable"
         ],
         "title": "ListView"
+      },
+      "MatchCandidate": {
+        "properties": {
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Version Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Authors"
+          },
+          "version_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Title"
+          },
+          "medium": {
+            "type": "string",
+            "title": "Medium"
+          },
+          "narrators": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Narrators"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year"
+          },
+          "identifier_match": {
+            "type": "boolean",
+            "title": "Identifier Match"
+          },
+          "reasons": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Reasons"
+          },
+          "conflicts": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Conflicts"
+          },
+          "version_revision": {
+            "type": "string",
+            "title": "Version Revision"
+          },
+          "work_revision": {
+            "type": "string",
+            "title": "Work Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "work_id",
+          "version_id",
+          "title",
+          "authors",
+          "version_title",
+          "medium",
+          "narrators",
+          "language",
+          "year",
+          "identifier_match",
+          "reasons",
+          "conflicts",
+          "version_revision",
+          "work_revision"
+        ],
+        "title": "MatchCandidate"
+      },
+      "MatchEvidence": {
+        "properties": {
+          "titles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Titles"
+          },
+          "authors": {
+            "items": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "type": "array",
+            "title": "Authors"
+          },
+          "narrators": {
+            "items": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "type": "array",
+            "title": "Narrators"
+          },
+          "languages": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Languages"
+          },
+          "years": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Years"
+          },
+          "abridged": {
+            "items": {
+              "type": "boolean"
+            },
+            "type": "array",
+            "title": "Abridged"
+          },
+          "identifiers": {
+            "items": {
+              "$ref": "#/components/schemas/IdentifierEvidence"
+            },
+            "type": "array",
+            "title": "Identifiers"
+          },
+          "issues": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Issues"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "MatchEvidence"
+      },
+      "MatchPage": {
+        "properties": {
+          "inspection_revision": {
+            "type": "string",
+            "title": "Inspection Revision"
+          },
+          "grouping_revision": {
+            "type": "string",
+            "title": "Grouping Revision"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/GroupMatch"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "matcher_version": {
+            "type": "integer",
+            "title": "Matcher Version",
+            "default": 1
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "inspection_revision",
+          "grouping_revision",
+          "items",
+          "total",
+          "offset",
+          "limit"
+        ],
+        "title": "MatchPage"
       },
       "MergeCommand": {
         "properties": {

@@ -48,7 +48,7 @@ The additional application tests pass bootstrap → ABS connection/inventory →
 
 | Application case | Additional assertion |
 |---|---|
-| EPUB | Complete ebook availability |
+| EPUB | Embedded ISBN resolves the seeded catalog edition through the matching API; frozen evidence proceeds to complete ebook availability |
 | Two-track audiobook | Separate source groups merged; reviewed playback order confirmed |
 | PDF | Structurally inspected PDF recognized as a complete standalone ebook |
 | CBZ | Decoded image-page container recognized as an ebook |

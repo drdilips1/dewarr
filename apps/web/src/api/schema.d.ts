@@ -952,6 +952,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organization/inspections/{inspection_id}/matches": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Matches */
+    get: operations["matches_api_organization_inspections__inspection_id__matches_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organization/plans/{plan_id}/imports": {
     parameters: {
       query?: never;
@@ -1618,6 +1635,10 @@ export interface components {
       cover_sources?: {
         [key: string]: string;
       };
+      /** Matching Evidence */
+      matching_evidence?: {
+        [key: string]: components["schemas"]["GroupMatch"];
+      };
     };
     /** FrozenPlanView */
     FrozenPlanView: {
@@ -1645,6 +1666,30 @@ export interface components {
       /** User Ids */
       user_ids: string[];
     };
+    /** GroupMatch */
+    GroupMatch: {
+      /** Group Key */
+      group_key: string;
+      /**
+       * Status
+       * @enum {string}
+       */
+      status: "matched" | "review" | "unmatched";
+      /** Message */
+      message: string;
+      evidence: components["schemas"]["MatchEvidence"];
+      /** Candidates */
+      candidates: components["schemas"]["MatchCandidate"][];
+      /** Selected Version Id */
+      selected_version_id?: string | null;
+      /**
+       * Truncated
+       * @default false
+       */
+      truncated: boolean;
+      /** Revision */
+      revision: string;
+    };
     /** GroupSelection */
     GroupSelection: {
       /** Group Key */
@@ -1661,6 +1706,8 @@ export interface components {
       version_id: string;
       /** Full Content */
       full_content: boolean;
+      /** Match Revision */
+      match_revision?: string | null;
     };
     /** GroupingContent */
     GroupingContent: {
@@ -1698,6 +1745,13 @@ export interface components {
     HTTPValidationError: {
       /** Detail */
       detail?: components["schemas"]["ValidationError"][];
+    };
+    /** IdentifierEvidence */
+    IdentifierEvidence: {
+      /** Namespace */
+      namespace: string;
+      /** Value */
+      value: string;
     };
     /** ImportGroup */
     ImportGroup: {
@@ -1969,6 +2023,82 @@ export interface components {
       count: number;
       /** Editable */
       editable: boolean;
+    };
+    /** MatchCandidate */
+    MatchCandidate: {
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /**
+       * Version Id
+       * Format: uuid
+       */
+      version_id: string;
+      /** Title */
+      title: string;
+      /** Authors */
+      authors: string[];
+      /** Version Title */
+      version_title: string | null;
+      /** Medium */
+      medium: string;
+      /** Narrators */
+      narrators: string[];
+      /** Language */
+      language: string | null;
+      /** Year */
+      year: number | null;
+      /** Identifier Match */
+      identifier_match: boolean;
+      /** Reasons */
+      reasons: string[];
+      /** Conflicts */
+      conflicts: string[];
+      /** Version Revision */
+      version_revision: string;
+      /** Work Revision */
+      work_revision: string;
+    };
+    /** MatchEvidence */
+    MatchEvidence: {
+      /** Titles */
+      titles?: string[];
+      /** Authors */
+      authors?: string[][];
+      /** Narrators */
+      narrators?: string[][];
+      /** Languages */
+      languages?: string[];
+      /** Years */
+      years?: number[];
+      /** Abridged */
+      abridged?: boolean[];
+      /** Identifiers */
+      identifiers?: components["schemas"]["IdentifierEvidence"][];
+      /** Issues */
+      issues?: string[];
+    };
+    /** MatchPage */
+    MatchPage: {
+      /** Inspection Revision */
+      inspection_revision: string;
+      /** Grouping Revision */
+      grouping_revision: string;
+      /** Items */
+      items: components["schemas"]["GroupMatch"][];
+      /** Total */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+      /**
+       * Matcher Version
+       * @default 1
+       */
+      matcher_version: number;
     };
     /** MergeCommand */
     MergeCommand: {
@@ -4723,6 +4853,41 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["GroupingView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  matches_api_organization_inspections__inspection_id__matches_get: {
+    parameters: {
+      query: {
+        grouping_revision: string;
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        inspection_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MatchPage"];
         };
       };
       /** @description Validation Error */

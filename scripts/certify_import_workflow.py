@@ -2,14 +2,16 @@
 
 import asyncio
 import hashlib
+from datetime import UTC, datetime
 from unittest.mock import patch
 from uuid import UUID
 
 import httpx
 from sqlalchemy import select, text
 
+from app.adapters.catalog_types import BookData, EditionData
 from app.config import get_settings
-from app.db.models import Base, Version, Work
+from app.db.models import Base, ProviderObject, Version, Work, WorkMetadataSource
 from app.db.session import get_engine, session_factory
 from app.importing.execution import execute
 from app.jobs.queue import get_queue
@@ -55,7 +57,12 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook", *,
                 source / f"book.{case}", title=title, author="Fixture Author"
             )
         else:
-            epub(source / "book.epub", title=title, author="Fixture Author")
+            epub(
+                source / "book.epub",
+                title=title,
+                author="Fixture Author",
+                isbn="9781234567897" if case == "ebook" else None,
+            )
             if case == "ebook-formats":
                 pdf(source / "book.pdf", title=title, author="Fixture Author")
     else:
@@ -134,10 +141,49 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook", *,
                     language="en",
                     publication_year=2024,
                     narrators=["Jordan Lee"] if medium == "audio" else [],
+                    identifiers={"isbn_13": "9781234567897"} if case == "ebook" else {},
                 )
                 db.add(version)
                 await db.flush()
                 version_id = str(version.id)
+                if case == "ebook":
+                    # Seed a provider catalog contract, then use the application's
+                    # matching API; this does not claim a live metadata-provider test.
+                    edition = EditionData(
+                        external_id="native-ebook",
+                        title=title,
+                        medium="ebook",
+                        language="en",
+                        identifiers=version.identifiers,
+                    )
+                    metadata = WorkMetadataSource(
+                        work_id=version.work_id,
+                        provider="hardcover",
+                        external_id="native-work",
+                        accepted=True,
+                        fetched_at=datetime.now(UTC),
+                        snapshot=BookData(
+                            provider="hardcover",
+                            external_id="native-work",
+                            title=title,
+                            authors=["Fixture Author"],
+                            editions=[edition],
+                        ).model_dump(mode="json"),
+                    )
+                    db.add(metadata)
+                    await db.flush()
+                    db.add(
+                        ProviderObject(
+                            provider=f"hardcover:{work['id']}",
+                            kind="edition",
+                            external_id=edition.external_id,
+                            work_id=version.work_id,
+                            version_id=version.id,
+                            metadata_source_id=metadata.id,
+                            snapshot=edition.model_dump(mode="json"),
+                            match_status="matched",
+                        )
+                    )
             inspection = await request(
                 "POST",
                 "/api/organization/inspections",
@@ -183,6 +229,16 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook", *,
                 )
                 assert len(grouping["content"]["groups"]) == 1
             naming = await request("GET", "/api/organization/settings")
+            match_revision = None
+            if case == "ebook":
+                matching = await request(
+                    "GET",
+                    f"/api/organization/inspections/{inspection['id']}/matches",
+                    params={"grouping_revision": grouping["revision"]},
+                )
+                match = matching["items"][0]
+                assert match["status"] == "matched" and match["selected_version_id"] == version_id
+                match_revision = match["revision"]
             plan = await request(
                 "POST",
                 f"/api/organization/inspections/{inspection['id']}/plans",
@@ -197,6 +253,7 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook", *,
                             "work_id": work["id"],
                             "version_id": version_id,
                             "full_content": True,
+                            "match_revision": match_revision,
                         }
                     ],
                 },
@@ -350,6 +407,7 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook", *,
                 "playback_order_confirmed": case == "audio",
                 "companion_not_owned_as_ebook": case == "audio-companion",
                 "catalog_version_seeded": True,
+                "automatic_identity_match": case == "ebook",
                 "server_library_id": external_library,
             }
     finally:
