@@ -1,10 +1,12 @@
 # Implementation status and evidence
 
-Latest checkpoint: [Reusable main-book reviews](SERIES-SCOPE-REVIEW.md) supplies finite owner-reviewed membership evidence and proof reuse in accepted series requests. See the final checkpoint below for exact verification. Inherited series scope and list-derived expansion remain incomplete.
+Latest checkpoint: [Inherited series scope and automatic lists](LIST-SERIES.md) connects Complete reviewed series to finite list-derived acquisition, with frozen membership authority and per-child import checks. See the final checkpoint for exact verification. Prefer-pack incidental expansion and the remaining PRD stages are incomplete.
 
 Updated September 18, 2026. Objective remains **implement the full PRD end to end**, including the planned later capabilities. This is an implementation checkpoint, not a completion declaration.
 
 ## Current code
+
+- [List-derived series acquisition](LIST-SERIES.md) adds inherited Just book / Prefer packs / Complete reviewed series settings, finite backlog previews, future-entry scope resolution and originating-list links. Child selection and publication retain the originating policy generation and membership episode. Pause/resume, removal/re-addition and review changes have bounded lifecycle evidence. A post-download publication check rejects withdrawn origin even when another manual reason survives; a pause preserves already-submitted lifecycle work. Manual Complete-series requests still use the series page, and incidental Prefer-pack expansion remains unfinished.
 
 - [Inherited route defaults](ROUTE-DEFAULTS.md) now carry a downloader and ebook/audio destinations through installation, personal, profile, list and request preferences. Manual/automatic selectors and list/series automation consume them while preserving explicit choices, current approval and frozen routes. Unavailable defaults never silently choose a replacement. This adds no migration; precise checkpoint evidence is recorded below. Inherited Complete series expansion and broader PRD qualification remain pending.
 
@@ -447,3 +449,25 @@ Both selected browser runs passed **two journeys in 2.2 minutes**. The final run
 Backend lint/format, frontend build/format, generated API/client reproducibility, model alignment, wheel equality for the four changed backend modules, documentation links and diff checks pass. The development database/key backup was saved privately and the dump catalog verified. The matching API and worker restarted with no active development jobs; readiness, one fresh worker heartbeat, schema `0037_download_joins`, the new API route and disabled installation dispatch were verified. Logs, backup location reference, runtime and commit evidence are recorded in `.local/evidence/series-scope-checkpoint.json`.
 
 This implements the explicit reviewed-evidence foundation of SC-01 and connects it to the existing finite-series workflow. Continue SC-02/SC-03 with inherited series scope and upstream list authority, then bounded Prefer packs/Complete series expansion and lifecycle qualification. It does not implement standing-list expansion, authorize downloads merely from catalog facts, close S06/S07, or complete the full PRD. All remaining source, version/omnibus, discovery, compatibility, production and S10 gates remain required.
+
+## Inherited series scope and list-derived acquisition checkpoint · September 18, 2026
+
+This increment builds on `0cb4649` and implements bounded SC-02/SC-03/SC-05/SC-06 behavior. [List series](LIST-SERIES.md) documents the contract and its remaining limits. It is progress toward the full PRD, not completion of S06/S07 or the overall goal.
+
+Series scope now inherits through the shared preferences resolver, preserves legacy pack booleans/fingerprints and appears in settings/effective-value views. A Complete reviewed series automatic list resolves one finite main-book review, previews selected backlog children and creates a parent with the originating list, policy generation, root request and membership episode. The existing controller drives selection, compatible shared transfers, separate imports and ABS-confirmed per-child availability. Monitoring links to the series request and its originating list; manual single-book Complete previews direct users to the reviewed series page.
+
+Lifecycle checks distinguish unaccepted previews from accepted scope, temporary pause from permanent withdrawal, and old membership episodes from re-additions. Missing main-book evidence holds only the affected root with a scheduled recheck. Scope planning does not wait behind a catalog publication while holding list/identity locks. Derived proofs participate in stable grouped list/series locking before selection and dispatch.
+
+Review exposed a publication gap: a generic surviving request reason could otherwise allow a derived child's import after its originating list episode was withdrawn. New automatic publication checks verify the specific series/list origin and series reason. Publisher locks include upstream list/series authority and both root/child reasons through the publication guard. A pause retains the already-submitted transfer lifecycle; permanent removal holds new publication even when manual reasons survive. Published files and original seeded data remain unchanged.
+
+Verification:
+
+- Before the final publication fix: complete backend suite **1,402 passed in 381.36 s** (`.local/evidence/list-series-full.log`). This is baseline evidence, not a claim that a full suite was rerun after the fix.
+- Final affected list, automatic-acquisition, review, importer and catalog-resolution regression: **117 passed in 94.70 s** (`list-series-import-regression.log`). Includes actual generated EPUBs, one two-book transfer, two hardlinks, immediate/delayed synthetic ABS confirmation, removal versus pause before publication, and real PostgreSQL root/child cancellation lock waits.
+- Final shared-import, cancellation, capacity, grouping, reuse, shared-download, preference-concurrency and series regression: **134 passed in 53.68 s** (`list-series-shared-regression.log`).
+- Browser journeys: **3 passed in 3.0 min** (`list-series-browser.log`): foundational setup/import/source flow, list/request preference inheritance, and series curation/review/list-derived request with reload and mobile layout. An initial browser run exposed an exact label locator mismatch; the corrected locator uses the observed accessible combobox role. The successful mobile series-request screenshot was visually inspected.
+- Frontend build and formatting passed; Ruff passed across services/tests/scripts. Alembic reported no new upgrade operations. The built wheel matched all **182 backend Python modules**. OpenAPI and generated client include the new scope/origin response fields. All links in the 11 affected planning/feature documents and the 54-requirement/61-package/35-scenario traceability were verified (`list-series-docs.json`).
+
+Deployment: a private database/key backup was created and its archive listing verified before restart. The backup path is recorded in `.local/evidence/list-series-backup-path.txt`. Development API/worker were restarted together with no active jobs at shutdown. Readiness returned **200**, one fresh worker was observed, schema remains `0037_download_joins`, and download dispatch remains **disabled** (`list-series-runtime.json`). No live tracker account or external library was used for certification.
+
+Remaining scope: SC-04 Prefer-pack incidental child expansion; complete manual-surface integration; broader recording/edition/omnibus and route/media combinations; reviewed changes to unsatisfied policies; full multi-source and actual-service qualification; external-list release qualification; discovery/curation; production and S10. A main-book review and a passing list-derived pack journey do not establish these unfinished requirements.

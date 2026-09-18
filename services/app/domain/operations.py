@@ -14,6 +14,11 @@ async def transaction_lock(db: AsyncSession, key: str) -> None:
     await db.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": number})
 
 
+async def try_transaction_lock(db: AsyncSession, key: str) -> bool:
+    number = int.from_bytes(hashlib.sha256(key.encode()).digest()[:8], signed=True)
+    return bool(await db.scalar(text("SELECT pg_try_advisory_xact_lock(:key)"), {"key": number}))
+
+
 async def enqueue_sync(
     db: AsyncSession, owner_id: UUID, integration_id: UUID, key: str
 ) -> Operation:

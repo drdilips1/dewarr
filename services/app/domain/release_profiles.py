@@ -42,6 +42,18 @@ class ReleasePreferences(ScopePreferences):
     audio_destination_id: UUID | None = Field(default=None, exclude_if=lambda value: value is None)
     search_series: bool = True
     prefer_series_packs: bool = True
+    series_scope: Literal["just_book", "prefer_packs", "complete_series"] | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
+
+    @property
+    def effective_series_scope(self):
+        return self.series_scope or ("prefer_packs" if self.prefer_series_packs else "just_book")
+
+    @property
+    def allows_series_packs(self):
+        return self.effective_series_scope != "just_book"
+
     ebook_formats: list[str] = Field(
         default=["epub", "pdf", "azw3", "mobi", "azw", "cbz", "cbr"], min_length=1, max_length=20
     )
@@ -105,7 +117,12 @@ class PreferenceOverrides(ReleasePreferences):
     @model_serializer(mode="wrap")
     def sparse(self, handler):
         values = handler(self)
-        for field in {"downloader_id", "ebook_destination_id", "audio_destination_id"}:
+        for field in {
+            "downloader_id",
+            "ebook_destination_id",
+            "audio_destination_id",
+            "series_scope",
+        }:
             if field in self.model_fields_set and getattr(self, field) is None:
                 values[field] = None
         return {key: value for key, value in values.items() if key in self.model_fields_set}
@@ -125,13 +142,25 @@ class ProfileSnapshot(BaseModel):
     scope_origins: dict[str, str] = Field(default_factory=dict)
 
 
+def apply_layer(values, origins, label, sparse):
+    # Legacy explicit pack preferences still override less-specific new scope
+    # settings. Preserve old snapshots byte-for-byte when no new field is set.
+    if "prefer_series_packs" in sparse and "series_scope" not in sparse:
+        values.pop("series_scope", None)
+        origins.pop("series_scope", None)
+    values.update(sparse)
+    origins.update(dict.fromkeys(sparse, label))
+    if values.get("series_scope") is None:
+        values.pop("series_scope", None)
+        origins.pop("series_scope", None)
+
+
 def resolve_preferences(layers):
     values = ReleasePreferences().model_dump(mode="json")
     origins = dict.fromkeys(values, "Built-in default")
     for label, overrides in layers:
         sparse = PreferenceOverrides.model_validate(overrides).model_dump(mode="json")
-        values.update(sparse)
-        origins.update(dict.fromkeys(sparse, label))
+        apply_layer(values, origins, label, sparse)
     return ReleasePreferences.model_validate(values), origins
 
 
@@ -229,8 +258,7 @@ def overlay_profile(profile, *, list_overrides=None, request_overrides=None):
     ]:
         if overrides is not None:
             sparse = PreferenceOverrides.model_validate(overrides).model_dump(mode="json")
-            values.update(sparse)
-            origins.update(dict.fromkeys(sparse, label))
+            apply_layer(values, origins, label, sparse)
     return profile.model_copy(
         update={
             "preferences": ReleasePreferences.model_validate(values),

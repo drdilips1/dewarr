@@ -78,7 +78,7 @@ def eligibility(
     if PARTIAL.search(text):
         reasons.append("The source labels this release as partial content")
     if is_pack:
-        if not preferences.prefer_series_packs:
+        if not preferences.allows_series_packs:
             reasons.append("Collection downloads are disabled by this request's preferences")
         if not pack_sources:
             reasons.append("Collection coverage needs review before automatic selection")

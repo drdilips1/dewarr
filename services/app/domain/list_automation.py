@@ -308,6 +308,30 @@ async def advance_target(db, user, policy, book, target, progress, now, *, serie
 
 
 async def advance_book(db, user, policy, book, now):
+    from app.domain import list_series
+    from app.domain.release_profiles import ProfileSnapshot
+
+    if book.progress.get("series_request_id"):
+        await list_series.advance(db, user, policy, book, None, now)
+        return
+    scope = ProfileSnapshot.model_validate(
+        policy.configuration["profile"]
+    ).preferences.effective_series_scope
+    planned = None
+    if scope == "complete_series" and not book.progress.get("single_book_scope"):
+        planned = book.progress.get("accepted_series_plan") or await list_series.plan(
+            db, user, book.work_id
+        )
+        if planned["state"] not in {"ready", "single"}:
+            book.state = "wanted" if planned["state"] == "busy" else "held"
+            book.message, book.next_check_at = planned["message"], next_tick(now)
+            book.progress = {**book.progress, "series_scope_issue": planned}
+            return
+        book.progress = {
+            key: value for key, value in book.progress.items() if key != "series_scope_issue"
+        }
+        if planned["state"] == "single":
+            book.progress = {**book.progress, "single_book_scope": planned}
     await acquisition_lock(db, book.work_id)
     spec = RequestSpec.model_validate(policy.configuration["specification"])
     if not book.intent_id:
@@ -330,6 +354,9 @@ async def advance_book(db, user, policy, book, now):
         intent = await db.get(AcquisitionIntent, book.intent_id)
         await acquisition.evaluate(db, user, intent)
         await db.flush()
+    if planned and planned["state"] == "ready":
+        await list_series.advance(db, user, policy, book, planned, now)
+        return
     outcomes = []
     progress = deepcopy(book.progress)
     targets = list(

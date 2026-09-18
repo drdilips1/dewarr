@@ -1,6 +1,6 @@
 # Product and development handoff
 
-September 18, 2026 · v1.9 product baseline · Execution handoff refreshed against `3475bdf`. This guide is a plan, not a claim of completed functionality.
+September 18, 2026 · v1.9 product baseline · Execution handoff refreshed against committed revision `0cb4649`. This guide is a plan, not a claim of completed functionality.
 
 Build a self-hosted book discovery, curation and acquisition app above Audiobookshelf. The experience should feel familiar to a Seerr user: browse attractive shelves, open one book page, see what is already owned, inspect available versions and sources, and request missing media. The app also owns organizing its newly downloaded files so that Audiobookshelf can serve them correctly.
 
@@ -171,7 +171,7 @@ After that increment, follow the existing package dependencies through complete 
 
 ## 9. Remaining development batches from the current checkpoint
 
-This sequence makes the existing stage backlog actionable; it adds no packages and does not mark any stage complete. Baseline `3475bdf` includes automatic pack grouping, same-owner transfer reuse, automatic acquisition of a finite reviewed series and inherited downloader/destination defaults. Use the [current handoff](IMPLEMENTATION-PLAN.md#18-current-development-handoff) and implementation status for exact verification, deployment state and the next unfinished contract.
+This sequence makes the existing stage backlog actionable; it adds no packages and does not mark any stage complete. Committed baseline `0cb4649` includes automatic pack grouping, same-owner transfer reuse, automatic acquisition of a finite reviewed series, inherited downloader/destination defaults and reusable main-book scope reviews. The subsequent [list-derived series increment](docs/LIST-SERIES.md) has bounded inheritance, lifecycle and real-file evidence. It does not complete the parent stages or incidental Prefer-pack expansion. Use the [current handoff](IMPLEMENTATION-PLAN.md#18-current-development-handoff) and implementation status for exact verification, deployment state and the next unfinished contract.
 
 Batch 1 now has bounded narrator inheritance, source/import, ownership, ranking and browser evidence. Its wider recording-equivalence and live-service gates are not implied by those results; see the narrator checkpoint in implementation status. Continue with the earliest unmet dependencies in batches 2–7.
 
@@ -188,6 +188,30 @@ Batch 1 now has bounded narrator inheritance, source/import, ownership, ranking 
 
 Batch 4's independent connector work can proceed once its contracts are stable; the automation beta still waits for all required source, series and import evidence. No launch estimate should be inferred from the number of batches. Estimate each remaining ticket after inspecting its code, fixtures and external-service access needs.
 
-Batch 2 is decomposed into [six series implementation tasks](IMPLEMENTATION-PLAN.md#series-increment-reviewable-implementation-sequence): catalog observation, browsing/curation, target-set preview, shared pack selection, verified child fulfillment and list-to-library demonstration. Bounded evidence covers those foundations, automatic pack coverage/grouping, later same-owner transfer reuse and automatic acquisition of a finite reviewed series. The [next reviewable packets](IMPLEMENTATION-PLAN.md#next-reviewable-packets-series-scope-and-list-expansion) specify the remaining scope proof, inheritance, derived authority, pack expansion and recovery work. Broader route/media and ownership combinations, full recording/edition and omnibus handling, and actual-service qualification remain open. Saved requests or a completed download never substitute for confirmed library coverage.
+Batch 2 is decomposed into [six series implementation tasks](IMPLEMENTATION-PLAN.md#series-increment-reviewable-implementation-sequence): catalog observation, browsing/curation, target-set preview, shared pack selection, verified child fulfillment and list-to-library demonstration. Bounded evidence covers those foundations, automatic pack coverage/grouping, later same-owner transfer reuse and automatic acquisition of a finite reviewed series. The [next reviewable packets](IMPLEMENTATION-PLAN.md#next-reviewable-packets-series-scope-and-list-expansion) build on the committed scope-review foundation to finish inheritance, derived authority, pack expansion and recovery. Broader route/media and ownership combinations, full recording/edition and omnibus handling, and actual-service qualification remain open. Saved requests or a completed download never substitute for confirmed library coverage.
 
 For the next milestone, demonstrate two overlapping lists and a partly owned trilogy: the automatic policy resolves a finite authorized scope, one compatible pack downloads, each missing verified child imports independently, an ambiguous child enters review, and a delayed ABS scan eventually confirms each successful child. Repeating sync, refreshing the catalog and restarting the worker must neither expand the accepted scope nor repeat the transfer. Then continue batches 3–7; passing this demonstration alone does not deliver the entire product.
+
+
+## 10. Development start and release handoff
+
+Use the existing implementation as the starting point. Keep the 61 parent packages and 54 requirements as the stable scope; use smaller implementation tickets beneath them rather than restarting the project or rewriting the backlog after each checkpoint.
+
+The inherited series/list increment now has bounded evidence against SC-02, SC-03, SC-05 and SC-06, recorded in implementation status. Its defining flow is: activate a list with Complete series, observe a new root book, freeze its eligible series set, preserve independent authority for each child, select compatible releases, import the missing children and confirm them in ABS. Include pause, removal/re-addition, changed settings, overlapping lists and worker restart. A settings dropdown or passing happy path is insufficient. Prefer-pack incidental expansion is the separate SC-04 outcome and remains required even if Complete series passes first.
+
+For full series-stage acceptance, demonstrate all of these distinct cases; the bounded increment does not establish them all:
+
+| Case | Required result |
+|---|---|
+| Ebook owned; list requests Both | Overall ownership remains checked; only the missing qualifying audiobook is acquired. |
+| Two narrations and multiple trackers | Catalog recordings remain distinct; tracker duplicates do not create new versions. Exact narration requirements survive search, import and inventory matching. |
+| Partly owned trilogy in one pack | One transfer; skip the satisfied child, independently import the missing resolved children and hold uncertain mappings. |
+| Prefer packs for one missing book | Additional authorized, covered, qualifying children are imported. Merely retaining their bytes in the torrent is insufficient. |
+| Complete series without a suitable pack | Missing targets can use individual releases; one failed child does not discard successful siblings. |
+| New sequel or changed series metadata | Previously accepted scope does not expand. Future monitoring requires its own active policy. |
+| List root removed and later re-added | Old authority cannot revive accidentally; the new membership episode rechecks inventory, surviving reasons and compatible pending work. |
+| Proxy, source or ABS outage | No route bypass, fabricated empty library or repeat transfer; useful partial results and the next recovery action stay visible. |
+
+Finish SC-04 and the remaining series/version qualification first, then execute batches 3–7 above and close any earlier unmet stage gates. S08 is essential to the requested product: bookstore browsing, recommendations, list curation and simple settings are release requirements, not polish deferred beyond v1. S09 accepts the combined product only after the documented source/backend/filesystem matrix and operational rehearsals pass.
+
+For every milestone, deliver a runnable build, migrations and rollback/repair guidance where relevant, API/client contracts, a default-path browser demonstration, failure evidence, operator documentation and a list of remaining limitations. Record an accountable implementation owner and acceptance reviewer; one person may fill both roles with separate review steps. Estimate from the remaining work and available integration access, then reforecast at each milestone rather than assigning unsupported calendar dates.

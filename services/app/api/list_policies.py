@@ -12,6 +12,7 @@ from app.domain import list_policies as policies
 from app.domain.acquisition import RequestOptions, RequestSpec
 from app.domain.automatic_routes import AutomaticRoutes
 from app.domain.list_requests import owner_context
+from app.domain.list_series import SeriesPlanView
 from app.domain.release_profiles import PreferenceOverrides, ProfileSnapshot
 from app.domain.request_constraints import DownloadConstraints
 
@@ -49,6 +50,7 @@ class ActivationRecord(BaseModel):
     title: str
     targets: list[TargetView]
     selected: bool
+    series_scope: SeriesPlanView | None = None
 
 
 class ActivationView(BaseModel):
@@ -76,6 +78,9 @@ class MonitoredBook(BaseModel):
     message: str
     intent_id: UUID | None
     next_check_at: datetime | None
+    series_request_id: UUID | None = None
+    series_external_id: str | None = None
+    series_scope_issue: SeriesPlanView | None = None
 
 
 class MonitoringPage(BaseModel):
@@ -202,5 +207,17 @@ async def books(
     )
     total = await db.scalar(select(func.count()).select_from(rows).where(rows.c.position == 1))
     return MonitoringPage(
-        items=[MonitoredBook(**row) for row in page], total=total, offset=offset, limit=limit
+        items=[
+            MonitoredBook(
+                **row,
+                **{
+                    key: row["progress"].get(key)
+                    for key in ("series_request_id", "series_external_id", "series_scope_issue")
+                },
+            )
+            for row in page
+        ],
+        total=total,
+        offset=offset,
+        limit=limit,
     )

@@ -80,21 +80,21 @@ async def publication_authority(db, run_id, *, version=None, destination_id=None
         )
     if row:
         await check_policy(db, row, lock=lock)
+        members = await download_memberships.for_attempt(db, row.attempt_id)
         if isinstance(row, AutomaticImportContinuation):
             members = [
-                item
-                for item in await download_memberships.for_attempt(db, row.attempt_id)
-                if str(item.id) in row.evidence["authorized_selection_ids"]
+                item for item in members if str(item.id) in row.evidence["authorized_selection_ids"]
             ]
-            await download_reviews.validate_shared_inspection(
-                db,
-                await db.get(DownloadAttempt, row.attempt_id),
-                members,
-                destination_id=destination_id,
-                version=version,
-                group=None,
-                lock=lock,
-            )
+        await download_reviews.validate_shared_inspection(
+            db,
+            await db.get(DownloadAttempt, row.attempt_id),
+            members,
+            destination_id=destination_id,
+            version=version,
+            group=None,
+            lock=lock,
+            publication=True,
+        )
 
 
 async def schedule(db, attempt, selection):

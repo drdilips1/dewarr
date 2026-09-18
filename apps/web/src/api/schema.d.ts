@@ -2355,6 +2355,7 @@ export interface components {
       targets: components["schemas"]["TargetView"][];
       /** Selected */
       selected: boolean;
+      series_scope?: components["schemas"]["SeriesPlanView"] | null;
     };
     /** ActivationView */
     ActivationView: {
@@ -4417,6 +4418,11 @@ export interface components {
       intent_id: string | null;
       /** Next Check At */
       next_check_at: string | null;
+      /** Series Request Id */
+      series_request_id?: string | null;
+      /** Series External Id */
+      series_external_id?: string | null;
+      series_scope_issue?: components["schemas"]["SeriesPlanView"] | null;
     };
     /** MonitoringPage */
     MonitoringPage: {
@@ -4798,6 +4804,8 @@ export interface components {
       search_series?: boolean;
       /** Prefer Series Packs */
       prefer_series_packs?: boolean;
+      /** Series Scope */
+      series_scope?: ("just_book" | "prefer_packs" | "complete_series") | null;
       /** Ebook Formats */
       ebook_formats?: string[];
       /** Audio Formats */
@@ -4830,6 +4838,7 @@ export interface components {
        */
       download_available: boolean;
       release_policy?: components["schemas"]["ProfileSnapshot"] | null;
+      series_scope?: components["schemas"]["SeriesPlanView"] | null;
     };
     /** ProbeInput */
     ProbeInput: {
@@ -5178,6 +5187,8 @@ export interface components {
        * @default true
        */
       prefer_series_packs: boolean;
+      /** Series Scope */
+      series_scope?: ("just_book" | "prefer_packs" | "complete_series") | null;
       /**
        * Ebook Formats
        * @default [
@@ -5799,6 +5810,25 @@ export interface components {
       publication: string;
       work: components["schemas"]["WorkView"];
     };
+    /** SeriesPlanView */
+    SeriesPlanView: {
+      /**
+       * State
+       * @enum {string}
+       */
+      state: "single" | "ready" | "review" | "busy";
+      /** Message */
+      message: string;
+      /** External Id */
+      external_id?: string | null;
+      /** Series Name */
+      series_name?: string | null;
+      /**
+       * Records
+       * @default []
+       */
+      records: components["schemas"]["ScopeBook"][];
+    };
     /** SeriesRequestHistory */
     SeriesRequestHistory: {
       /** Items */
@@ -5915,6 +5945,8 @@ export interface components {
        * @default false
        */
       can_retry_acquisition: boolean;
+      /** Originating List Id */
+      originating_list_id?: string | null;
     };
     /** SeriesView */
     SeriesView: {

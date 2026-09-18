@@ -14,6 +14,8 @@ Manual list requests initialize media, destinations and effective download restr
 
 The monitored-books view shows baseline, wanted, searching, selecting, pending, available, held or removed states, with the next check and a reason. The policy summary and monitored entries refresh while automatic acquisition is active. Availability still comes from the connected library: a selected release, completed torrent or scan request cannot create a green library check.
 
+[Complete reviewed series](LIST-SERIES.md) can derive a finite set of child requests from one automatic-list root. Backlog previews show the saved books; the monitor links to per-child progress and retains the originating membership authority. Missing or ambiguous main-book evidence enters focused review. Prefer-pack incidental expansion remains separate unfinished work.
+
 ## Standing authority and lifecycle
 
 Activation stores a versioned policy, provider/profile and destination snapshots, and a durable per-book record. Policy revision changes on every control edit, including pause/resume; its generation changes when effective configuration changes. Acquisition reasons are specific to the policy generation and remain separate from ordinary manual-list reasons and other lists.

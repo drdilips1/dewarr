@@ -265,6 +265,7 @@ async def projection(db, policy):
             ListAcquisitionBook.message,
             ListAcquisitionBook.intent_id,
             ListAcquisitionBook.next_check_at,
+            ListAcquisitionBook.progress,
             ListAcquisitionBook.created_at,
             func.row_number()
             .over(

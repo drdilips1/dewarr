@@ -225,6 +225,24 @@ export default function Wanted({
               <span className="muted">{target.message}</span>
             </p>
           ))}
+          {preview.data.series_scope &&
+            preview.data.series_scope.state !== "single" && (
+              <p>
+                {preview.data.series_scope.message}. Complete this request from
+                the reviewed series page, or choose Just this book in download
+                preferences.
+                {preview.data.series_scope.external_id && (
+                  <>
+                    <br />
+                    <Link
+                      to={`/series/hardcover/${preview.data.series_scope.external_id}`}
+                    >
+                      Open reviewed series
+                    </Link>
+                  </>
+                )}
+              </p>
+            )}
         </div>
       )}
       <button
@@ -232,7 +250,14 @@ export default function Wanted({
         type="button"
         onClick={() => save.mutate()}
         disabled={
-          !valid || !preview.data || preview.isFetching || save.isPending
+          !valid ||
+          !preview.data ||
+          preview.isFetching ||
+          save.isPending ||
+          Boolean(
+            preview.data.series_scope &&
+            preview.data.series_scope.state !== "single",
+          )
         }
       >
         Save to wanted

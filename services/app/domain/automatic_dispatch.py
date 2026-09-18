@@ -29,7 +29,10 @@ def consent(selection):
 async def lock_principals(db, owner_id, approval, list_authority=None, series_authority=None):
     from app.domain.list_policies import lock_authority
 
-    await lock_authority(db, list_authority)
+    origins = [list_authority, (series_authority or {}).get("list_origin", {}).get("authority")]
+    lists = {value["list_id"]: value for value in origins if value}
+    for key in sorted(lists):
+        await lock_authority(db, lists[key])
     from app.domain.series_acquisition import lock_authority as lock_series
 
     await lock_series(db, series_authority)
@@ -42,7 +45,7 @@ async def lock_principals(db, owner_id, approval, list_authority=None, series_au
         )
 
 
-async def lock_group_principals(db, selections):
+async def lock_group_principals(db, selections, *, additional_user_ids=()):
     from app.domain.list_policies import lock_authority
 
     proofs = [
@@ -53,9 +56,6 @@ async def lock_group_principals(db, selections):
         )
         for item in selections
     ]
-    lists = {proof["list_id"]: proof for _, _, proof in proofs if proof}
-    for key in sorted(lists):
-        await lock_authority(db, lists[key])
     from app.domain.series_acquisition import lock_authority as lock_series
 
     series = {
@@ -63,9 +63,15 @@ async def lock_group_principals(db, selections):
         for item in selections
         if (proof := (item.frozen.get("automatic_selection") or {}).get("series_authority"))
     }
+    lists = {proof["list_id"]: proof for _, _, proof in proofs if proof}
+    for proof in series.values():
+        if saved := proof.get("list_origin"):
+            lists[saved["authority"]["list_id"]] = saved["authority"]
+    for key in sorted(lists):
+        await lock_authority(db, lists[key])
     for key in sorted(series):
         await lock_series(db, series[key])
-    principals = {owner for owner, _, _ in proofs}
+    principals = {owner for owner, _, _ in proofs} | set(additional_user_ids)
     principals.update(UUID(approval["approved_by"]) for _, approval, _ in proofs if approval)
     if principals:
         await db.scalars(

@@ -146,7 +146,9 @@ def validate_version(rule, version, inspection, group):
             raise HTTPException(422, "Inspected audio does not confirm every required narrator")
 
 
-async def validate_shared_inspection(db, attempt, members, *, destination_id, version, group, lock):
+async def validate_shared_inspection(
+    db, attempt, members, *, destination_id, version, group, lock, publication=False
+):
     inspection = await db.get(DownloadInspection, attempt.inspection_id)
     for item in members:
         if inspection.snapshot and item.frozen.get("profile"):
@@ -169,6 +171,10 @@ async def validate_shared_inspection(db, attempt, members, *, destination_id, ve
     last_error = HTTPException(422, "This book is outside the reviewed transfer scope")
     for item in candidates:
         try:
+            if publication:
+                from app.domain.list_series import require_import_authority
+
+                await require_import_authority(db, item)
             _, _, destination = await requester_authority(db, item, lock=lock)
             if destination_id and destination.id != destination_id:
                 raise HTTPException(422, "Use the destination selected for this acquisition")
@@ -181,17 +187,20 @@ async def validate_shared_inspection(db, attempt, members, *, destination_id, ve
 
 
 async def lock_principals(db, inspection_id):
-    """Acquire both users before the publisher acquires backend/library rows."""
+    """Acquire list/series origins and users before backend/library rows."""
     handoff = await for_inspection(db, inspection_id)
     if handoff:
         attempt = await db.get(DownloadAttempt, handoff.attempt_id)
-        selection = await db.get(AcquisitionSelection, attempt.selection_id)
-        await db.scalars(
-            select(User)
-            .where(User.id.in_([selection.owner_id, handoff.reviewer_id]))
-            .order_by(User.id)
-            .with_for_update(read=True)
+        from app.domain.automatic_dispatch import lock_group_principals
+        from app.domain.list_series import lock_import_reasons
+
+        members = await download_memberships.for_attempt(db, attempt.id)
+        await lock_group_principals(
+            db,
+            members,
+            additional_user_ids=(handoff.reviewer_id,),
         )
+        await lock_import_reasons(db, members)
 
 
 async def validate_inspection(

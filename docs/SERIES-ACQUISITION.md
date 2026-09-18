@@ -1,6 +1,6 @@
 # Automatic acquisition of a reviewed series
 
-The series page can acquire the missing media for an explicitly reviewed, finite set of books. This continues S06-05c–f using the existing source search, selection, shared-transfer and import services. It does not yet implement inherited Complete series expansion from an individual book or a standing list policy.
+The series page can acquire the missing media for an explicitly reviewed, finite set of books. This continues S06-05c–f using the existing source search, selection, shared-transfer and import services. The [list-derived series increment](LIST-SERIES.md) adds inherited Complete reviewed series for automatic list entries; manual single-book previews link to this series page.
 
 ## User flow
 
@@ -36,4 +36,4 @@ The PostgreSQL integration tests cover preview without dispatch, idempotent cont
 
 Exact integrated test and browser results are recorded in [Implementation status](IMPLEMENTATION-STATUS.md). These tests do not certify a live MAM account, every recording/edition combination, mixed-route transfers or a complete production release.
 
-Remaining series work includes inherited Just book / Prefer packs / Complete series scope, list-derived finite expansion, reviewed policy changes, broader recording/edition and omnibus fulfillment, and actual-service qualification. Native ABB, discovery and production stages remain part of the full PRD.
+Inherited series scope and list-derived finite expansion are documented separately in [List series](LIST-SERIES.md). Remaining series work includes Prefer-pack incidental expansion, complete manual-surface integration, reviewed policy changes, broader recording/edition and omnibus fulfillment, and actual-service qualification. Native ABB, discovery and production stages remain part of the full PRD.

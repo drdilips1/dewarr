@@ -224,7 +224,7 @@ Document-only planning updates require requirement/backlog cross-reference and l
 
 ## 14. Series catalog and acquisition boundary
 
-The current [series-scope execution packets](IMPLEMENTATION-PLAN.md#next-reviewable-packets-series-scope-and-list-expansion) refine existing assertions, without adding new AT scenario IDs. Their integrated proof must distinguish catalog facts, authorized targets, pack contents and confirmed inventory. If implementation adds reusable reviewed scope, test that a one-off series request cannot become standing permission, a changed catalog cannot enlarge an accepted set, and withdrawing upstream list authority prevents new child side effects while preserving independently authorized work. Test explicit policy precedence, list membership episodes and deterministic concurrent expansion/revocation in addition to the per-child publication assertions below.
+The current [series-scope execution packets](IMPLEMENTATION-PLAN.md#next-reviewable-packets-series-scope-and-list-expansion) refine existing assertions, without adding new AT scenario IDs. Their integrated proof must distinguish catalog facts, authorized targets, pack contents and confirmed inventory. For the reusable reviewed scope, test that a one-off series request cannot become standing permission, a changed catalog cannot enlarge an accepted set, and withdrawing upstream list authority prevents new child side effects while preserving independently authorized work. Test explicit policy precedence, list membership episodes and deterministic concurrent expansion/revocation in addition to the per-child publication assertions below.
 
 These assertions refine AT-02, AT-04–AT-06 and AT-14–AT-15, with automated fulfillment still covered by AT-20–AT-22 and AT-30. They introduce no new scenario IDs. Apply them to the S06-05 child tasks in the implementation plan.
 
@@ -252,3 +252,17 @@ These refine the existing AT-13–AT-15, AT-19, AT-22, AT-27 and AT-30 scenarios
 | Unverified coverage | An advertised but absent child remains wanted. A series name alone never proves membership. An indivisible omnibus grants only verified containment, with one physical-asset relationship. |
 | Privacy | Shared transfer views expose only granted request/library details. Cross-owner reuse does not reveal another user's private lists, source credentials or inaccessible holdings. |
 | Full automation | Repeat the trilogy case through two external-list reasons and the automatic selector, interrupt dispatch/import, then reconcile delayed ABS inventory. No routine per-title approval, duplicate transfer or premature owned badge occurs for supported unambiguous inputs. |
+
+
+### List-derived series lifecycle assertions
+
+These cases refine AT-12–AT-14, AT-20–AT-22 and AT-30 for SC-02–SC-07. They are required evidence, not a report that the current changes pass.
+
+- Resolve all preference layers identically in manual requests, list activation previews, search, selection and import. Legacy saved pack preferences retain their meaning; explicit clearing differs from omission.
+- Bind derived targets to the originating list, policy generation and membership episode. Remove/re-add, exclusion, account revocation and settings changes cannot revive stale authority. A separate manual request cannot lend authority to an automatic action it did not authorize.
+- Accepting backlog scope freezes its finite evidence. Future additions obtain a current scope at their own activation. Review withdrawal invalidates unaccepted previews while preserving independently accepted requests; catalog refresh never enlarges them.
+- Missing, stale or ambiguous main-book evidence holds only the affected entry with an actionable explanation. Saving valid evidence allows eligible monitoring to continue without requiring routine per-book approval.
+- Pause before child creation, before dispatch and between child imports; then resume or remove the list reason. Surviving independent work and completed publications remain intact. Other request reasons never inherit a cancelled reason's constraints or privileges.
+- Overlapping list jobs, series refresh, review updates and dispatch run concurrently without lock-order deadlock, duplicate targets or duplicate physical transfers. Restart at those boundaries and repeat the same observations.
+- Prefer-pack expansion imports its additional qualifying children; Complete series also handles separate releases and an advertised-but-absent child. Test both modes separately rather than using one successful pack case as proof of both.
+- Exercise the resulting controls and per-child states in the browser, and run real-file import with immediate and delayed backend confirmation. If a confirmed item later becomes missing, preserve acquisition history and expose reconciliation; do not silently declare it still present or reacquire it.

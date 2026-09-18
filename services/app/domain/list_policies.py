@@ -195,14 +195,28 @@ async def preview(db, user, list_id, body, key):
         raise HTTPException(409, "Backlog selection is no longer in this list")
     spec = RequestSpec.model_validate(config["specification"])
     projected = []
+    series_plans = {}
     for record in records:
         await validate_request(db, user, UUID(record["work_id"]), spec)
         outcomes = await assess(db, user, UUID(record["work_id"]), spec)
+        if (
+            config["mode"] == "automatic"
+            and config["profile"]["preferences"].get("series_scope") == "complete_series"
+            and record["work_id"] in set(map(str, body.include_work_ids))
+        ):
+            from app.domain.list_series import plan
+
+            series_plans[record["work_id"]] = await plan(db, user, UUID(record["work_id"]))
         projected.append(
             {
                 **record,
                 "targets": await pending_targets(db, user, UUID(record["work_id"]), spec, outcomes),
                 "selected": record["work_id"] in set(map(str, body.include_work_ids)),
+                **(
+                    {"series_scope": series_plans[record["work_id"]]}
+                    if record["work_id"] in series_plans
+                    else {}
+                ),
             }
         )
     operation = Operation(
@@ -216,6 +230,7 @@ async def preview(db, user, list_id, body, key):
             "configuration": config,
             "members": records,
             "records": projected,
+            **({"series_plans": series_plans} if series_plans else {}),
             "expires_at": (datetime.now(UTC) + timedelta(minutes=15)).isoformat(),
         },
     )
@@ -282,6 +297,11 @@ async def activate(db, user, operation):
         raise HTTPException(
             409, "List membership, book identity or settings changed; preview again"
         )
+    for work_id, frozen in payload.get("series_plans", {}).items():
+        from app.domain.list_series import plan
+
+        if await plan(db, user, UUID(work_id)) != frozen:
+            raise HTTPException(409, "Reviewed series scope changed; preview list activation again")
     now = datetime.now(UTC)
     if policy:
         policy.revision += 1
@@ -299,9 +319,16 @@ async def activate(db, user, operation):
     await db.flush()
     from app.domain.list_monitoring import reconcile
 
-    await reconcile(
+    leaders = await reconcile(
         db, policy, records, now, activation=True, selected=set(map(str, body.include_work_ids))
     )
+    for book in await db.scalars(
+        select(ListAcquisitionBook).where(ListAcquisitionBook.id.in_(leaders))
+    ):
+        root = book.progress.get("identity", {}).get("root", str(book.work_id))
+        saved = payload.get("series_plans", {}).get(root)
+        if saved and saved["state"] in {"ready", "single"}:
+            book.progress = {**book.progress, "accepted_series_plan": deepcopy(saved)}
     operation.status, operation.message = "completed", "List policy saved"
     operation.payload = {**payload, "policy_id": str(policy.id), "policy_revision": policy.revision}
     return policy

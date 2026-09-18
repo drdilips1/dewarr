@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
@@ -35,7 +35,8 @@ export default function SeriesRequests({
   mainBookReview?: MainBookReview;
 }) {
   const cache = useQueryClient();
-  const [id, setId] = useState<string | null>(null);
+  const [params] = useSearchParams();
+  const [id, setId] = useState<string | null>(() => params.get("request"));
   const [scope, setScope] = useState<"selected" | "complete_series">(
     "selected",
   );
@@ -333,6 +334,14 @@ export default function SeriesRequests({
       ) : value ? (
         <>
           <p role="status">{value.message}</p>
+          {value.originating_list_id && (
+            <p>
+              Automatically requested by a list policy.{" "}
+              <Link to={`/lists/${value.originating_list_id}`}>
+                Open originating list
+              </Link>
+            </p>
+          )}
           {value.automatic && (
             <p>
               {value.acquisition_message ||

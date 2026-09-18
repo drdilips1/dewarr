@@ -22,7 +22,7 @@ Automatic dispatch has a narrower fence: immediately before the final authority 
 
 Keep ordinary profile reads free of transaction-scoped configuration locks. The final dispatch transaction already owns its list/principal/book/attempt locks before taking the configuration fence; configuration writers must not start acquiring those workflow locks while holding it. Changing these boundaries requires cross-workflow concurrency tests. PostgreSQL documents statement snapshots under [Read Committed](https://www.postgresql.org/docs/16/transaction-iso.html#XACT-READ-COMMITTED) and transaction lock lifetimes in [Explicit Locking](https://www.postgresql.org/docs/16/explicit-locking.html).
 
-The current slice does **not** claim the entire FR-20 inheritance contract. Supported request scope and narrator preferences use the same precedence model, while series preferences, automatic destination-route defaults, and reviewed scope changes for already-unsatisfied requests remain follow-ups. Exact recording requests and required library choices do not substitute for those capabilities. Full S06/S07 acceptance remains open.
+The current slice does **not** claim the entire FR-20 inheritance contract. Supported request scope and narrator preferences use the same precedence model, with [route defaults](ROUTE-DEFAULTS.md) and [inherited series scope](LIST-SERIES.md) documented separately. Prefer-pack incidental expansion and reviewed scope changes for already-unsatisfied requests remain follow-ups. Exact recording requests and required library choices do not substitute for those capabilities. Full S06/S07 acceptance remains open.
 
 ## Narrator ranking
 
@@ -69,3 +69,8 @@ Deterministic PostgreSQL tests reproduce the former manual-request/list-batch de
 ## Series search preference
 
 `search_series` defaults to true and uses the same sparse inheritance, explicit false override, snapshots and field-origin display as other download preferences. [Series source search](SERIES-SOURCE-SEARCH.md) explains its bounded catalog-derived terms and provenance. It controls discovery queries; acquisition scope and pack coverage remain separate requirements.
+
+
+## Series acquisition scope
+
+`series_scope` selects Just this book, Prefer series packs or Complete reviewed series. The shared resolver preserves legacy pack booleans and unchanged historical snapshots. Automatic lists can derive a finite reviewed main-book set; manual Complete-series previews lead to the series request page. See [List series](LIST-SERIES.md) for authority, lifecycle, limits and remaining expansion work.

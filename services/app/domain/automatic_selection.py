@@ -251,7 +251,7 @@ async def begin(db, user, body, key, *, list_authority=None, series_authority=No
             "profile": profile.model_dump(mode="json"),
             "requirements": rule,
             "pack_catalog": await pack_coverage.catalog(db, user, work)
-            if profile.preferences.prefer_series_packs
+            if profile.preferences.allows_series_packs
             else None,
             "maximum_bytes": limit_bytes(
                 constrained_preferences(profile.preferences, rule), rule["medium"]
@@ -259,7 +259,7 @@ async def begin(db, user, body, key, *, list_authority=None, series_authority=No
             "maximum_pack_bytes": limit_bytes(
                 constrained_preferences(profile.preferences, rule), rule["medium"], pack=True
             )
-            if profile.preferences.prefer_series_packs
+            if profile.preferences.allows_series_packs
             else None,
             "inspected": [],
             "verified": {},
@@ -357,7 +357,7 @@ async def candidates(db, operation, work, profile, rule, version):
         rank = ranking_key(ranked_release, assessment, profile.preferences)
         ranked.append(
             (
-                (0 if is_pack and profile.preferences.prefer_series_packs else 1, *rank),
+                (0 if is_pack and profile.preferences.allows_series_packs else 1, *rank),
                 row,
                 release,
                 problems,

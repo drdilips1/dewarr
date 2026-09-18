@@ -220,6 +220,11 @@ async def preview(db, user, external_id, body, key):
 
 
 async def owned(db, user, external_id, operation_id):
+    from app.domain.list_series import lock_origin, origin
+
+    initial = await db.get(Operation, operation_id)
+    if initial and initial.owner_id == user.id and initial.kind == KIND:
+        await lock_origin(db, origin(initial))
     _, user = await context(db, user.id, external_id)
     operation = await db.scalar(
         select(Operation)
@@ -261,6 +266,9 @@ async def validate_identities(db, user, operation):
 async def start(db, user, operation):
     if get_settings().recovery_mode:
         raise HTTPException(409, "Series requests are paused for recovery")
+    from app.domain.list_series import origin, require_origin
+
+    await require_origin(db, user.id, origin(operation))
     if operation.status in {"queued", "running", "completed"}:
         return
     if operation.status == "cancelled":
@@ -295,6 +303,7 @@ async def start(db, user, operation):
         await validate_configuration(db, user, operation.payload["automatic_configuration"])
     operation.payload = {
         **operation.payload,
+        **({"upstream_hold": False} if operation.payload.get("list_origin") else {}),
         "accepted_at": operation.payload.get("accepted_at") or datetime.now(UTC).isoformat(),
     }
     operation.status, operation.message = "queued", "Waiting to save the selected series requests"
@@ -308,6 +317,9 @@ async def run(operation_id):
         operation = await db.get(Operation, operation_id)
         if not operation or operation.kind != KIND:
             return
+        from app.domain.list_series import lock_origin, origin, require_origin
+
+        await lock_origin(db, origin(operation))
         # Reserve child command locks before parent/identity/work locks, matching submit.
         for work_id in operation.payload["command"]["work_ids"]:
             await transaction_lock(
@@ -327,6 +339,12 @@ async def run(operation_id):
             return
         await db.refresh(operation, with_for_update=True)
         if operation.status not in {"queued", "running"}:
+            return
+        try:
+            await require_origin(db, operation.owner_id, origin(operation))
+        except HTTPException as error:
+            operation.payload = {**operation.payload, "upstream_hold": True}
+            operation.status, operation.message = "failed", str(error.detail)
             return
         try:
             works, spec = await validate_identities(db, user, operation)

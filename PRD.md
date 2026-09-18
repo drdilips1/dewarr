@@ -8,7 +8,7 @@ Read sections 1–6 for the product and UX, section 7 for tracked requirements, 
 
 The [requirement traceability export](REQUIREMENTS-TRACEABILITY.csv) maps every functional and nonfunctional requirement to its acceptance scenarios. Section 19 sets initial finite automation defaults; these are product decisions to implement and qualify, not claims about the current runtime.
 
-For a compact development handoff, see the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md).
+For a compact development handoff, see the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md), including the [next increment and end-to-end release handoff](DEVELOPMENT-ROADMAP.md#10-development-start-and-release-handoff). The product baseline remains v1.9; a newer implementation checkpoint does not change the requirements or imply their completion.
 
 The [launch journey checklist](#20-launch-journey-checklist) makes the combined product behavior reviewable. It adds no scope beyond the existing requirements. Use the implementation plan's [release delivery contract](IMPLEMENTATION-PLAN.md#16-release-delivery-contract) to sequence and accept development.
 
@@ -417,7 +417,7 @@ The [portable development backlog](DEVELOPMENT-BACKLOG.csv) exports those packag
 
 Use [stage evidence scopes](ACCEPTANCE-PLAN.md#7-stage-evidence-scopes) to avoid requiring later functionality at an earlier gate. Partial evidence stays partial until the complete scenario runs. The walkthrough above becomes executable fixtures incrementally, then a complete release rehearsal in S09.
 
-The [stage closure plan](IMPLEMENTATION-PLAN.md#17-stage-closure-and-implementation-packets) decomposes the remaining implementation. Use the [current development handoff](IMPLEMENTATION-PLAN.md#18-current-development-handoff), refreshed against `3475bdf`, to distinguish the implemented foundations from remaining work. Its next series-scope packets are engineering subdivisions of existing requirements, not a reduction to a manual-only product. Completion still requires automatic source selection, independent child fulfillment, external-list automation, discovery and production qualification.
+The [stage closure plan](IMPLEMENTATION-PLAN.md#17-stage-closure-and-implementation-packets) decomposes the remaining implementation. Use the [current development handoff](IMPLEMENTATION-PLAN.md#18-current-development-handoff), refreshed against committed revision `0cb4649`, to distinguish the implemented foundations from remaining work. Its next series-scope packets are engineering subdivisions of existing requirements, not a reduction to a manual-only product. Completion still requires automatic source selection, independent child fulfillment, external-list automation, discovery and production qualification.
 
 The visual implementation should preserve the familiarity of Seerr's navigation, cover shelves, book-detail hierarchy and request dialogs. Component reuse is optional where adapting its framework dependencies would cost more than implementing the same presentation against this app's contracts. The success criterion is the requested familiar experience, not a percentage of reused Seerr code.
 

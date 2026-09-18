@@ -1581,12 +1581,12 @@ test("list and request preferences survive previews, saving and source reload", 
   await policy.getByLabel("Desired media").selectOption("ebook");
   await policy.getByText("List download overrides", { exact: true }).click();
   await policy.getByText("Series search", { exact: true }).click();
-  const packs = policy.getByRole("checkbox", {
-    name: "Prefer eligible series packs",
+  const packs = policy.getByRole("combobox", {
+    name: "Series scope",
     exact: true,
   });
-  await expect(packs).toBeChecked();
-  await packs.uncheck();
+  await expect(packs).toHaveValue("prefer_packs");
+  await packs.selectOption("just_book");
   await policy
     .getByRole("button", {
       name: "Move seeders up in Ranking priorities",
@@ -1666,10 +1666,8 @@ test("list and request preferences survive previews, saving and source reload", 
   expect(wanted.release_policy.preferences.ebook_formats[0]).toBe("epub");
   expect(wanted.release_policy.origins.ebook_formats).toBe("Request override");
   expect(wanted.release_policy.origins.criteria).toBe("List override");
-  expect(wanted.release_policy.preferences.prefer_series_packs).toBe(false);
-  expect(wanted.release_policy.origins.prefer_series_packs).toBe(
-    "List override",
-  );
+  expect(wanted.release_policy.preferences.series_scope).toBe("just_book");
+  expect(wanted.release_policy.origins.series_scope).toBe("List override");
   await page.goto(`/books/${work.id}`);
   await page
     .getByRole("region", { name: "Wanted media", exact: true })
@@ -3183,7 +3181,7 @@ test("download defaults inherit per field and persist after reload", async ({
 test("series catalog preserves uncertainty and curates selected books", async ({
   page,
 }, testInfo) => {
-  test.setTimeout(120_000);
+  test.setTimeout(240_000);
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
@@ -3349,6 +3347,7 @@ test("series catalog preserves uncertainty and curates selected books", async ({
   await expect(
     page.getByLabel("Select Journey Without Date", { exact: true }),
   ).not.toBeChecked();
+  const seriesUrl = page.url();
   const mainBooks = page.getByRole("region", {
     name: "Main-book review",
     exact: true,
@@ -3592,6 +3591,128 @@ test("series catalog preserves uncertainty and curates selected books", async ({
     "Source search completed",
     { timeout: 30_000 },
   );
+  // Complete-series policy uses the saved evidence and inherited routes.
+  await page.goto(seriesUrl);
+  await curation
+    .getByRole("button", { name: "Select published books on this page" })
+    .click();
+  await mainBooks
+    .getByText("Reusable main-book selection", { exact: true })
+    .click();
+  await mainBooks
+    .getByLabel(
+      "I reviewed the selected books as a reusable main-series selection.",
+    )
+    .check();
+  await mainBooks
+    .getByRole("button", { name: "Save main-book review (2)", exact: true })
+    .click();
+  await expect(mainBooks.getByRole("status")).toContainText(
+    "Reviewed main books are unchanged",
+  );
+  await expect(mainBooks).toContainText("Revision 2 · 2 reviewed books");
+  const session = await (await page.request.get("/api/auth/me")).json();
+  const headers = {
+    Origin: "http://127.0.0.1:8001",
+    "X-CSRF-Token": session.csrf_token,
+  };
+  const seriesId = new URL(seriesUrl).pathname.split("/").pop();
+  const mainReview = await (
+    await page.request.get(
+      `/api/catalog/series/hardcover/${seriesId}/main-books`,
+    )
+  ).json();
+  const rootBook = mainReview.books.find(
+    (book: { title: string }) => book.title === "My protected catalog title",
+  );
+  expect(rootBook).toBeTruthy();
+  const listResponse = await page.request.post("/api/lists", {
+    headers,
+    data: { name: "Reviewed series policy" },
+  });
+  expect(listResponse.status()).toBe(201);
+  const derivedListId = (await listResponse.json()).id;
+  expect(
+    (
+      await page.request.post(`/api/lists/${derivedListId}/entries`, {
+        headers,
+        data: { work_id: rootBook.work_id },
+      })
+    ).status(),
+  ).toBe(204);
+  await page.goto(`/lists/${derivedListId}`);
+  await page
+    .getByRole("button", { name: "Acquisition policy", exact: true })
+    .click();
+  const policy = page.getByRole("region", {
+    name: "List acquisition policy",
+    exact: true,
+  });
+  await policy.getByLabel("Acquisition mode").selectOption("automatic");
+  await policy.getByLabel("Desired media").selectOption("ebook");
+  await policy.getByText("List download overrides", { exact: true }).click();
+  await policy.getByText("Series search", { exact: true }).click();
+  await policy
+    .getByRole("combobox", { name: "Series scope", exact: true })
+    .selectOption("complete_series");
+  await policy
+    .getByText("Include current books (0 selected, maximum 25)", {
+      exact: true,
+    })
+    .click();
+  await policy
+    .getByRole("checkbox", { name: "My protected catalog title", exact: true })
+    .check();
+  await policy
+    .getByRole("button", { name: "Preview list policy", exact: true })
+    .click();
+  await expect(policy).toContainText("Complete 2 reviewed main books");
+  await expect(policy).toContainText("Hardcover List Arrival");
+  await policy
+    .getByRole("button", {
+      name: "Activate automatic acquisition",
+      exact: true,
+    })
+    .click();
+  await expect(
+    policy.getByText("Monitored books and backlog", { exact: true }),
+  ).toBeVisible();
+  await policy
+    .getByText("Monitored books and backlog", { exact: true })
+    .click();
+  const seriesRequestLink = policy.getByRole("link", {
+    name: "Open list-derived series request",
+    exact: true,
+  });
+  await expect(seriesRequestLink).toBeVisible({ timeout: 90_000 });
+  await seriesRequestLink.click();
+  await expect(requests).toContainText("2 selected books");
+  await expect(requests).toContainText("Reused main-book review 2");
+  await expect(requests).toContainText("Ebook: Available");
+  await expect(
+    requests.getByRole("link", { name: "Open originating list", exact: true }),
+  ).toHaveAttribute("href", `/lists/${derivedListId}`);
+  await page.reload();
+  await expect(requests).toContainText("2 selected books");
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("list-derived-series-mobile.png"),
+    fullPage: true,
+  });
+  await requests
+    .getByRole("link", { name: "Open originating list", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Acquisition policy", exact: true })
+    .click();
+  await policy
+    .getByRole("button", { name: "Pause automatic acquisition", exact: true })
+    .click();
+  await expect(policy.getByRole("status")).toContainText("Acquisition paused");
   expect(errors).toEqual([]);
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });

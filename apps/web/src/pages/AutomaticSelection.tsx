@@ -6,6 +6,7 @@ import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
 import { chooseRoute, destinationPreference } from "./RouteFields";
+import { effectiveSeriesScope } from "./PreferenceFields";
 
 type Search = components["schemas"]["BookSearchView"];
 type Receipt = components["schemas"]["AutomaticSelectionView"];
@@ -187,14 +188,14 @@ export default function AutomaticSelection({
       <p>
         Use this page’s results and saved profile to inspect up to five
         candidates for your wanted {medium === "ebook" ? "ebook" : "audiobook"}.
-        {search.profile.preferences.prefer_series_packs
+        {effectiveSeriesScope(search.profile.preferences) !== "just_book"
           ? " Eligible series packs are preferred when catalog and filenames establish coverage. Only this requested book is authorized for import."
           : " Single-book torrents only."}
         Uncertain coverage and exact versions need review.
       </p>
       <p className="muted">
         Single-book transfer limit: {transferSize(limit)}.
-        {search.profile.preferences.prefer_series_packs &&
+        {effectiveSeriesScope(search.profile.preferences) !== "just_book" &&
           ` Series pack limit: ${transferSize(packLimit)}, with at most 20 additional known published books.`}{" "}
         Shared requests may impose stricter limits, which are checked before
         selection. Preparing a release does not start a download.

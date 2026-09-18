@@ -61,6 +61,7 @@ class SeriesRequestView(BaseModel):
     acquisition_status: str | None = None
     acquisition_message: str | None = None
     can_retry_acquisition: bool = False
+    originating_list_id: UUID | None = None
 
 
 class SeriesRequestHistory(BaseModel):
@@ -122,6 +123,7 @@ async def view(db, user, operation):
         counts=counts,
         receipt=payload.get("receipt"),
         automatic=bool(payload.get("automatic_configuration")),
+        originating_list_id=payload.get("list_origin", {}).get("authority", {}).get("list_id"),
         acquisition_status=controller.status if controller else None,
         acquisition_message=controller.message if controller else None,
         can_retry_acquisition=bool(

@@ -114,6 +114,20 @@ export default function ListPolicy({
                 <p>
                   {book.state} · {book.message}
                 </p>
+                {book.series_request_id && book.series_external_id && (
+                  <Link
+                    to={`/series/hardcover/${book.series_external_id}?request=${book.series_request_id}`}
+                  >
+                    Open list-derived series request
+                  </Link>
+                )}
+                {book.series_scope_issue?.external_id && (
+                  <Link
+                    to={`/series/hardcover/${book.series_scope_issue.external_id}`}
+                  >
+                    Review main-series books
+                  </Link>
+                )}
                 {book.next_check_at && (
                   <small>
                     Next check: {new Date(book.next_check_at).toLocaleString()}
@@ -579,6 +593,25 @@ function PolicyEditor({
                   {r.selected ? "Selected" : "Not selected for backlog"} ·{" "}
                   {r.targets.map((t) => `${t.slot}: ${t.state}`).join(" · ")}
                 </p>
+                {r.series_scope && (
+                  <div>
+                    <p>{r.series_scope.message}</p>
+                    {!!r.series_scope.records.length && (
+                      <ul>
+                        {r.series_scope.records.map((book) => (
+                          <li key={book.work_id}>{book.title}</li>
+                        ))}
+                      </ul>
+                    )}
+                    {r.series_scope.external_id && (
+                      <Link
+                        to={`/series/hardcover/${r.series_scope.external_id}`}
+                      >
+                        Open series
+                      </Link>
+                    )}
+                  </div>
+                )}
               </div>
             </article>
           ))}

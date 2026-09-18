@@ -14,7 +14,21 @@ export const preferenceLabels: Partial<Record<keyof Preferences, string>> = {
   preferred_narrators: "Preferred narrators",
   search_series: "Search known series names",
   prefer_series_packs: "Prefer eligible series packs",
+  series_scope: "Series scope",
 };
+export const seriesScopeLabels = {
+  just_book: "Just this book",
+  prefer_packs: "Prefer series packs",
+  complete_series: "Complete reviewed series",
+};
+export function effectiveSeriesScope(
+  preferences: Pick<Preferences, "series_scope" | "prefer_series_packs">,
+) {
+  return (
+    preferences.series_scope ||
+    (preferences.prefer_series_packs ? "prefer_packs" : "just_book")
+  );
+}
 const formats = [
   "epub",
   "pdf",
@@ -100,6 +114,11 @@ export default function PreferenceFields({
   includeMedia?: boolean;
 }) {
   const effective = { ...inherited, ...overrides };
+  if (
+    Object.hasOwn(overrides, "prefer_series_packs") &&
+    !Object.hasOwn(overrides, "series_scope")
+  )
+    delete effective.series_scope;
   const origin = (key: keyof Preferences) => (
     <p className="muted">
       {Object.hasOwn(overrides, key)
@@ -163,25 +182,38 @@ export default function PreferenceFields({
           Search known series names alongside the title
         </label>
         {origin("search_series")}
-        <label className="check-label">
-          <input
-            type="checkbox"
-            checked={effective.prefer_series_packs ?? true}
-            onChange={(event) =>
-              onChange({
+        <label>
+          Series scope
+          <select
+            value={effectiveSeriesScope(effective)}
+            onChange={(event) => {
+              const next = {
                 ...overrides,
-                prefer_series_packs: event.target.checked,
-              })
-            }
-          />
-          Prefer eligible series packs
+                series_scope: event.target.value as NonNullable<
+                  Overrides["series_scope"]
+                >,
+              };
+              delete next.prefer_series_packs;
+              onChange(next);
+            }}
+          >
+            {Object.entries(seriesScopeLabels).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
         </label>
-        {origin("prefer_series_packs")}
+        {origin(
+          effective.series_scope ? "series_scope" : "prefer_series_packs",
+        )}
         <p className="muted">
           Known published series books and torrent filenames must agree. Up to
           20 additional books and 50 GiB per pack, subject to your lower size
-          limit. Only requested books are imported; this does not request an
-          entire series.
+          limit. Complete reviewed series lets automatic lists request a finite,
+          saved main-book set. Manual complete-series requests use the series
+          page. Prefer packs imports independently requested books from a
+          qualifying pack.
         </p>
         <p className="muted">
           Searches up to three names from accessible catalog evidence. Finding a
@@ -315,23 +347,33 @@ export function EffectivePreferences({
       <summary>Effective download preferences</summary>
       <EffectiveRoutes preferences={preferences} origins={origins} />
       <dl>
-        {(Object.keys(preferenceLabels) as (keyof Preferences)[]).map((key) => (
-          <div key={key}>
-            <dt>{preferenceLabels[key]}</dt>
-            <dd>
-              {Array.isArray(preferences[key])
-                ? (preferences[key] as string[]).join(" → ") || "None"
-                : typeof preferences[key] === "boolean"
-                  ? preferences[key]
-                    ? "Yes"
-                    : "No"
-                  : preferences[key] == null
-                    ? "No profile limit"
-                    : `${preferences[key]} bytes`}
-              <small> · {origins[key] || "Saved profile"}</small>
-            </dd>
-          </div>
-        ))}
+        {(Object.keys(preferenceLabels) as (keyof Preferences)[])
+          .filter((key) => key !== "prefer_series_packs")
+          .map((key) => (
+            <div key={key}>
+              <dt>{preferenceLabels[key]}</dt>
+              <dd>
+                {key === "series_scope"
+                  ? seriesScopeLabels[effectiveSeriesScope(preferences)]
+                  : Array.isArray(preferences[key])
+                    ? (preferences[key] as string[]).join(" → ") || "None"
+                    : typeof preferences[key] === "boolean"
+                      ? preferences[key]
+                        ? "Yes"
+                        : "No"
+                      : preferences[key] == null
+                        ? "No profile limit"
+                        : `${preferences[key]} bytes`}
+                <small>
+                  {" "}
+                  ·{" "}
+                  {origins[key] ||
+                    (key === "series_scope" && origins.prefer_series_packs) ||
+                    "Saved profile"}
+                </small>
+              </dd>
+            </div>
+          ))}
       </dl>
     </details>
   );

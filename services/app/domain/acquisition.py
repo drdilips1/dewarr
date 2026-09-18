@@ -568,6 +568,12 @@ async def evaluate(db, user, intent):
     ).all()
     # Deleting a list or removing its member must not leave a durable acquisition reason alive.
     for reason in reasons:
+        if reason.kind == "series":
+            from app.domain.list_series import origin, removed
+
+            parent = await db.get(Operation, UUID(reason.reference))
+            if await removed(db, origin(parent)):
+                reason.active = False
         if reason.kind == "list" and not await db.scalar(
             select(BookList.id)
             .join(ListEntry)
@@ -706,6 +712,20 @@ async def submit(
         expected=expected_preference_revision,
     )
     await validate_request(db, user, work_id, spec, reason)
+    if (
+        not series_reference
+        and not policy_reference
+        and profile.preferences.effective_series_scope == "complete_series"
+    ):
+        from app.domain.list_series import plan
+
+        expansion = await plan(db, user, work_id)
+        if expansion["state"] != "single":
+            raise HTTPException(
+                409,
+                "Complete series requires the reviewed series request page; "
+                "open this book's series or choose Just this book",
+            )
     if series_reference is not None:
         parent = await db.get(Operation, series_reference)
         if (

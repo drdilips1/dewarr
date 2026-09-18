@@ -122,7 +122,7 @@ async def start(db, user, work_id, body, key):
         status="queued" if sources else "completed",
     )
     preparation = (
-        await series_preparation.plan(db, user, work, profile.preferences.prefer_series_packs)
+        await series_preparation.plan(db, user, work, profile.preferences.allows_series_packs)
         if sources
         else None
     )

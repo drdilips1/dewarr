@@ -7665,6 +7665,16 @@
           "selected": {
             "type": "boolean",
             "title": "Selected"
+          },
+          "series_scope": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SeriesPlanView"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -13115,6 +13125,39 @@
               }
             ],
             "title": "Next Check At"
+          },
+          "series_request_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Series Request Id"
+          },
+          "series_external_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Series External Id"
+          },
+          "series_scope_issue": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SeriesPlanView"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -14272,6 +14315,22 @@
             "type": "boolean",
             "title": "Prefer Series Packs"
           },
+          "series_scope": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "just_book",
+                  "prefer_packs",
+                  "complete_series"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Series Scope"
+          },
           "ebook_formats": {
             "items": {
               "type": "string"
@@ -14405,6 +14464,16 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ProfileSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "series_scope": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SeriesPlanView"
               },
               {
                 "type": "null"
@@ -15384,6 +15453,22 @@
             "type": "boolean",
             "title": "Prefer Series Packs",
             "default": true
+          },
+          "series_scope": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "just_book",
+                  "prefer_packs",
+                  "complete_series"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Series Scope"
           },
           "ebook_formats": {
             "items": {
@@ -17097,6 +17182,60 @@
         ],
         "title": "SeriesEntryView"
       },
+      "SeriesPlanView": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "single",
+              "ready",
+              "review",
+              "busy"
+            ],
+            "title": "State"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "external_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External Id"
+          },
+          "series_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Series Name"
+          },
+          "records": {
+            "items": {
+              "$ref": "#/components/schemas/ScopeBook"
+            },
+            "type": "array",
+            "title": "Records",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "state",
+          "message"
+        ],
+        "title": "SeriesPlanView"
+      },
       "SeriesRequestHistory": {
         "properties": {
           "items": {
@@ -17447,6 +17586,18 @@
             "type": "boolean",
             "title": "Can Retry Acquisition",
             "default": false
+          },
+          "originating_list_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Originating List Id"
           }
         },
         "type": "object",

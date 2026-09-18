@@ -25,6 +25,7 @@ from app.domain.acquisition import (
     submit,
     validate_request,
 )
+from app.domain.list_series import SeriesPlanView
 from app.domain.release_profiles import ProfileSnapshot
 from app.domain.request_preferences import PreferenceChoice, resolve
 from app.domain.work_graph import acquisition_lock, canonical_work, family_ids
@@ -73,6 +74,7 @@ class PreviewView(BaseModel):
     targets: list[TargetView]
     download_available: bool = False
     release_policy: ProfileSnapshot | None = None
+    series_scope: SeriesPlanView | None = None
 
 
 class SubmittedView(BaseModel):
@@ -202,9 +204,15 @@ async def preview(body: RequestInput, user: CurrentUser, db: Database):
         db, user, body.specification, body.reason, body.release_preferences
     )
     await validate_request(db, user, body.work_id, specification, body.reason)
+    expansion = None
+    if profile.preferences.effective_series_scope == "complete_series":
+        from app.domain.list_series import plan
+
+        expansion = await plan(db, user, (await canonical_work(db, body.work_id)).id)
     return PreviewView(
         specification=specification,
         release_policy=profile,
+        series_scope=expansion,
         targets=[
             TargetView(**item)
             for item in await assess(

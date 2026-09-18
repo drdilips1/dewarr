@@ -24,6 +24,32 @@ from tests.torrent_fixture import torrent_bytes
 WORK = {"title": "Harbor", "authors": ["Writer"]}
 
 
+def test_series_scope_inheritance_and_legacy_boolean_compatibility():
+    defaults = ReleasePreferences()
+    assert "series_scope" not in defaults.model_dump(mode="json")
+    assert defaults.effective_series_scope == "prefer_packs"
+    preferences, origins = resolve_preferences(
+        [
+            ("Installation default", {"series_scope": "complete_series"}),
+            ("Personal default", {"prefer_series_packs": False}),
+        ]
+    )
+    assert preferences.effective_series_scope == "just_book"
+    assert not preferences.allows_series_packs and "series_scope" not in origins
+    result = overlay_profile(
+        ProfileSnapshot(preferences=preferences, origins=origins),
+        list_overrides={"series_scope": "complete_series"},
+    )
+    assert result.preferences.effective_series_scope == "complete_series"
+    assert result.origins["series_scope"] == "List override"
+    result = overlay_profile(result, request_overrides={"series_scope": "just_book"})
+    assert not result.preferences.allows_series_packs
+    assert result.origins["series_scope"] == "Request override"
+    cleared = overlay_profile(result, request_overrides={"series_scope": None})
+    assert cleared.preferences.effective_series_scope == "just_book"
+    assert cleared.request_overrides.model_dump(mode="json") == {"series_scope": None}
+
+
 def test_route_layers_preserve_explicit_clearing_and_legacy_unset_snapshots():
     fields = {"downloader_id", "ebook_destination_id", "audio_destination_id"}
     assert not fields & ReleasePreferences().model_dump(mode="json").keys()

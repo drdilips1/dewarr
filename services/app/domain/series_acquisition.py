@@ -67,6 +67,11 @@ def scope_revision(parent):
             "records": parent.payload["records"],
             "configuration": parent.payload["automatic_configuration"],
             "specification": parent.payload["effective_specification"],
+            **(
+                {"list_origin": parent.payload["list_origin"]}
+                if parent.payload.get("list_origin")
+                else {}
+            ),
         }
     )
 
@@ -76,12 +81,20 @@ def proof(controller):
         "operation_id": controller.payload["parent_id"],
         "acquisition_id": str(controller.id),
         "scope_revision": controller.payload["scope_revision"],
+        **(
+            {"list_origin": controller.payload["list_origin"]}
+            if controller.payload.get("list_origin")
+            else {}
+        ),
     }
 
 
 async def lock_authority(db, authority):
     if not authority:
         return
+    from app.domain.list_series import lock_origin
+
+    await lock_origin(db, authority.get("list_origin"))
     for key in ("operation_id", "acquisition_id"):
         await db.get(
             Operation, UUID(authority[key]), with_for_update={"read": True}, populate_existing=True
@@ -123,6 +136,9 @@ async def require_authority(db, owner_id, authority, *, intent_id):
         raise HTTPException(
             409, "Series acquisition authorization changed; review the saved request"
         )
+    from app.domain.list_series import require_origin
+
+    await require_origin(db, owner_id, parent.payload.get("list_origin"))
     intent = await db.get(AcquisitionIntent, intent_id)
     work = await canonical_work(db, intent.work_id)
     receipt = next(r for r in parent.payload["receipt"] if r["request_id"] == str(intent_id))
@@ -146,6 +162,11 @@ async def initialize(db, parent):
         message="Waiting to acquire the reviewed series books",
         payload={
             "parent_id": str(parent.id),
+            **(
+                {"list_origin": deepcopy(parent.payload["list_origin"])}
+                if parent.payload.get("list_origin")
+                else {}
+            ),
             "scope_revision": scope_revision(parent),
             "configuration": parent.payload["automatic_configuration"],
             "enabled": True,
@@ -183,6 +204,9 @@ async def cancel(db, parent):
 async def retry(db, user, parent):
     if not parent.payload.get("acquisition_id") or parent.status != "completed":
         raise HTTPException(409, "No active accepted series acquisition to retry")
+    from app.domain.list_series import require_origin
+
+    await require_origin(db, user.id, parent.payload.get("list_origin"))
     row = await db.get(Operation, UUID(parent.payload["acquisition_id"]), with_for_update=True)
     if not row.payload["enabled"]:
         raise HTTPException(409, "This series acquisition has finished or was cancelled")
@@ -191,6 +215,7 @@ async def retry(db, user, parent):
     if status in {"todo", "doing"}:
         return
     payload = deepcopy(row.payload)
+    payload.pop("upstream_hold", None)
     payload["revision"] += 1
     payload["next_at"] = datetime.now(UTC).isoformat()
     for book in payload["books"].values():
@@ -251,6 +276,9 @@ async def run(identifier):
         row = await db.get(Operation, identifier)
         if not row or row.kind != KIND:
             return
+        from app.domain.list_series import lock_origin, require_origin
+
+        await lock_origin(db, row.payload.get("list_origin"))
         parent = await db.get(
             Operation, UUID(row.payload["parent_id"]), with_for_update={"read": True}
         )
@@ -259,6 +287,12 @@ async def run(identifier):
             return
         payload = deepcopy(row.payload)
         user = await db.get(User, row.owner_id)
+        try:
+            await require_origin(db, row.owner_id, parent.payload.get("list_origin"))
+        except HTTPException as error:
+            row.payload = {**payload, "upstream_hold": True}
+            row.status, row.message = "held", str(error.detail)
+            return
         try:
             automatic_routes.permitted(user)
             if parent.status != "completed" or scope_revision(parent) != payload["scope_revision"]:

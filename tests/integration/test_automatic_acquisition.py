@@ -42,6 +42,41 @@ from tests.media_fixtures import audio, epub
 pytestmark = pytest.mark.integration
 
 
+async def activate_series_list(client, database, work_id, medium):
+    from app.db.models import ListAcquisitionBook
+    from tests.integration.test_list_policies import tick
+
+    shelf = (await client.post("/api/lists", json={"name": "Complete series automation"})).json()[
+        "id"
+    ]
+    response = await client.post(
+        f"/api/lists/{shelf}/acquisition/preview",
+        json={
+            "mode": "automatic",
+            "specification": {"mode": medium},
+            "preference_overrides": {"series_scope": "complete_series"},
+        },
+        headers={"Idempotency-Key": "complete-series-list-preview"},
+    )
+    assert response.status_code == 201, response.text
+    activated = await client.post(
+        f"/api/lists/{shelf}/acquisition/previews/{response.json()['id']}/activate"
+    )
+    assert activated.status_code == 200, activated.text
+    assert (
+        await client.post(f"/api/lists/{shelf}/entries", json={"work_id": work_id})
+    ).status_code == 204
+    await tick(database, activated.json(), worker=False)
+    async with database() as db:
+        book = await db.scalar(
+            select(ListAcquisitionBook).where(
+                ListAcquisitionBook.policy_id == UUID(activated.json()["id"])
+            )
+        )
+        assert book.state == "pending", book.message
+        return book.progress["series_request_id"]
+
+
 @pytest.mark.parametrize("medium", ["ebook", "audio"])
 @pytest.mark.parametrize("delayed_backend", [False, True])
 @pytest.mark.parametrize("request_limits", [False, True])
@@ -64,6 +99,8 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     via_series=False,
     inherited_routes=False,
     via_scope_review=False,
+    via_series_list=False,
+    list_import_change=None,
 ):
     route = ready_route
     if series_pack:
@@ -241,7 +278,7 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
 
         series_base = "/api/catalog/series/hardcover/pack-series/requests"
         scope_review = None
-        if via_scope_review:
+        if via_scope_review or via_series_list:
             response = await client.post(
                 "/api/catalog/series/hardcover/pack-series/main-books",
                 headers={"Idempotency-Key": "automatic-main-book-review"},
@@ -254,40 +291,85 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             )
             assert response.status_code == 201, response.text
             scope_review = response.json()["id"]
-        response = await client.post(
-            series_base + "/preview",
-            headers={"Idempotency-Key": "automatic-series-preview"},
-            json={
-                "work_ids": [work_id, str(second["work"])],
-                "scope": "complete_series",
-                "confirm_main_membership": not via_scope_review,
-                **({"scope_review_id": scope_review} if scope_review else {}),
-                "expected_generation": 1,
-                "specification": {"mode": medium},
-                "automatic": {}
-                if inherited_routes
-                else {
-                    "downloader_id": downloader_id,
-                    "downloader_generation": 1,
-                    "routes": {
-                        medium: {
-                            "destination_id": route["destination"]["id"],
-                            "destination_revision": route["destination"]["revision"],
-                        }
+        if via_series_list:
+            series_request = await activate_series_list(client, database, work_id, medium)
+            if list_import_change:
+                original_context = execution.context
+                changed = False
+
+                async def change_before_publication(db, entry, token, **options):
+                    nonlocal changed
+                    if not changed and not options.get("lock") and not entry.published_at:
+                        changed = True
+                        from app.db.models import (
+                            AcquisitionReason,
+                            ListAcquisitionPolicy,
+                        )
+
+                        async with database() as read:
+                            parent = await read.get(Operation, UUID(series_request))
+                            proof = parent.payload["list_origin"]["authority"]
+                            policy = await read.get(ListAcquisitionPolicy, UUID(proof["policy_id"]))
+                        if list_import_change == "remove":
+                            # Even a surviving manual reason must not substitute
+                            # for the revoked automatic selection's provenance.
+                            async with database() as write, write.begin():
+                                for saved in parent.payload["receipt"]:
+                                    write.add(
+                                        AcquisitionReason(
+                                            intent_id=UUID(saved["request_id"]),
+                                            kind="manual",
+                                            reference="manual",
+                                        )
+                                    )
+                            response = await client.delete(
+                                f"/api/lists/{policy.list_id}/entries/{work_id}"
+                            )
+                            assert response.status_code == 204, response.text
+                        else:
+                            response = await client.post(
+                                f"/api/lists/{policy.list_id}/acquisition/pause",
+                                json={"expected_revision": policy.revision},
+                            )
+                            assert response.status_code == 200, response.text
+                    return await original_context(db, entry, token, **options)
+
+                monkeypatch.setattr(execution, "context", change_before_publication)
+        else:
+            response = await client.post(
+                series_base + "/preview",
+                headers={"Idempotency-Key": "automatic-series-preview"},
+                json={
+                    "work_ids": [work_id, str(second["work"])],
+                    "scope": "complete_series",
+                    "confirm_main_membership": not via_scope_review,
+                    **({"scope_review_id": scope_review} if scope_review else {}),
+                    "expected_generation": 1,
+                    "specification": {"mode": medium},
+                    "automatic": {}
+                    if inherited_routes
+                    else {
+                        "downloader_id": downloader_id,
+                        "downloader_generation": 1,
+                        "routes": {
+                            medium: {
+                                "destination_id": route["destination"]["id"],
+                                "destination_revision": route["destination"]["revision"],
+                            }
+                        },
                     },
                 },
-            },
-        )
-        assert response.status_code == 201, response.text
-        series_request = response.json()["id"]
-        assert response.json()["automatic"]
-        assert (await client.post(f"{series_base}/{series_request}/submit")).status_code == 202
-        if scope_review:
-            assert response.json()["scope_review_id"] == scope_review
-            withdrawn = await client.delete(
-                f"/api/catalog/series/hardcover/pack-series/main-books/{scope_review}"
             )
-            assert withdrawn.status_code == 200
+            assert response.status_code == 201, response.text
+            series_request = response.json()["id"]
+            assert response.json()["automatic"]
+            assert (await client.post(f"{series_base}/{series_request}/submit")).status_code == 202
+            if scope_review:
+                assert response.json()["scope_review_id"] == scope_review
+                withdrawn = await client.delete(
+                    f"/api/catalog/series/hardcover/pack-series/main-books/{scope_review}"
+                )
+                assert withdrawn.status_code == 200
         route["scan_backend"].detect = not delayed_backend
         await get_queue().run_worker_async(
             wait=False, concurrency=1, listen_notify=False, install_signal_handlers=False
@@ -569,6 +651,17 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
                 ).created_at == created
 
         assert second_result["download_id"] == result["download_id"], second_result
+        if list_import_change == "remove":
+            async with database() as db:
+                entries = list(await db.scalars(select(ImportEntry)))
+                assert len(entries) == 2
+                assert {entry.state for entry in entries} == {"held"}
+                assert all("authority was withdrawn" in entry.message for entry in entries)
+                assert not await db.scalar(select(DownloadFulfillment.id))
+            assert not list(route["target"].rglob("*.epub"))
+            assert {p.name: p.read_bytes() for p in source.parent.glob("*.epub")} == contents
+            assert qbit.calls.count("submit") == 1
+            return
         async with database() as db:
             entries = list(await db.scalars(select(ImportEntry)))
             assert len(entries) == 2
@@ -647,8 +740,11 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
         if via_series:
             await series_tick()
             final = (await client.get(f"{series_base}/{series_request}")).json()
-            assert final["acquisition_status"] == "completed", final
-            assert {r["acquisition_state"] for r in final["records"]} == {"available"}, final
+            if list_import_change == "pause":
+                assert final["acquisition_status"] == "held", final
+            else:
+                assert final["acquisition_status"] == "completed", final
+                assert {r["acquisition_state"] for r in final["records"]} == {"available"}, final
             assert final["counts"]["satisfied"] == 2
             async with database() as db:
                 selections = list(await db.scalars(select(AcquisitionSelection)))
@@ -657,6 +753,28 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
                     == series_request
                     for s in selections
                 )
+                if via_series_list:
+                    from app.db.models import ListAcquisitionBook, ListAcquisitionPolicy
+
+                    monitored = await db.scalar(select(ListAcquisitionBook))
+                    policy_id = monitored.policy_id
+                    origins = [
+                        s.frozen["automatic_selection"]["series_authority"]["list_origin"]
+                        for s in selections
+                    ]
+                    assert {p["authority"]["policy_id"] for p in origins} == {str(policy_id)}
+                    assert {p["activation"] for p in origins} == {monitored.progress["activation"]}
+                    list_policy = await db.get(ListAcquisitionPolicy, policy_id)
+                    assert final["originating_list_id"] == str(list_policy.list_id)
+            if via_series_list and not list_import_change:
+                from tests.integration.test_list_policies import tick
+
+                await tick(database, {"id": str(policy_id)}, force_books=True)
+                async with database() as db:
+                    monitored = await db.scalar(select(ListAcquisitionBook))
+                    assert monitored.state == "available", monitored.message
+                await tick(database, {"id": str(policy_id)}, force_books=True)
+                assert qbit.calls.count("submit") == 1
         assert {p.name: p.read_bytes() for p in source.parent.glob("*.epub")} == contents
         imported = list(route["target"].rglob("*.epub"))
         assert len(imported) == 2
@@ -923,4 +1041,47 @@ async def test_saved_main_book_review_reaches_confirmed_library_after_review_wit
         via_series=True,
         inherited_routes=True,
         via_scope_review=True,
+    )
+
+
+@pytest.mark.parametrize("delayed_backend", [False, True])
+async def test_list_addition_completes_reviewed_series_through_one_pack_and_abs(
+    client, admin, database, ready_route, review_account, monkeypatch, delayed_backend
+):
+    await test_search_to_automatic_download_and_confirmed_member_library(
+        client,
+        admin,
+        database,
+        ready_route,
+        review_account,
+        monkeypatch,
+        "ebook",
+        delayed_backend,
+        request_limits=True,
+        series_pack=True,
+        via_series=True,
+        inherited_routes=True,
+        via_series_list=True,
+    )
+
+
+@pytest.mark.parametrize("change", ["remove", "pause"])
+async def test_list_series_rechecks_publication_authority_after_download(
+    client, admin, database, ready_route, review_account, monkeypatch, change
+):
+    await test_search_to_automatic_download_and_confirmed_member_library(
+        client,
+        admin,
+        database,
+        ready_route,
+        review_account,
+        monkeypatch,
+        "ebook",
+        False,
+        request_limits=True,
+        series_pack=True,
+        via_series=True,
+        inherited_routes=True,
+        via_series_list=True,
+        list_import_change=change,
     )
