@@ -4,6 +4,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
+import AutomaticImportPolicy from "./AutomaticImportPolicy";
 
 type Destination = components["schemas"]["DestinationView"];
 type Library = components["schemas"]["LibraryView"];
@@ -258,6 +259,16 @@ function DestinationEditor({
           {save.isPending ? "Saving…" : "Save destination"}
         </button>
       </form>
+      {saved && (
+        <AutomaticImportPolicy
+          destinationId={saved.id}
+          revision={saved.revision}
+          verified={
+            (status.data?.destination || saved).publication_available ?? false
+          }
+          unsaved={changed || !!busy}
+        />
+      )}
       <div className="form-actions">
         <button
           disabled={

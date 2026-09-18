@@ -12,9 +12,11 @@ from app.db.models import (
     AcquisitionIntent,
     AcquisitionSelection,
     AcquisitionTarget,
+    AutomaticImport,
     DownloadAttempt,
     DownloadFulfillment,
     DownloadInspection,
+    ImportEntry,
 )
 from app.domain import download_attempts as downloads
 from app.domain import download_repairs as repairs
@@ -82,6 +84,18 @@ class AttemptPage(BaseModel):
 
 
 async def view(db, user, row, selection):
+    message = row.message
+    automatic = await db.scalar(select(AutomaticImport).where(AutomaticImport.attempt_id == row.id))
+    if automatic and automatic.state == "held":
+        message = automatic.message
+    if automatic and automatic.import_run_id:
+        if await db.scalar(
+            select(ImportEntry.id).where(
+                ImportEntry.run_id == automatic.import_run_id,
+                ImportEntry.state.in_(["held", "cancel-held"]),
+            )
+        ):
+            message = "Import needs administrator attention; the completed download is preserved"
     inspection = await db.get(DownloadInspection, row.inspection_id) if row.inspection_id else None
     repair = await repairs.latest(db, row.id)
     repairing = bool(repair and repair.state == "pending")
@@ -126,7 +140,7 @@ async def view(db, user, row, selection):
         state=row.state,
         work_title=selection.frozen["work_title"],
         release_title=selection.frozen["release"]["title"],
-        message=row.message,
+        message=message,
         external_may_exist=row.external_may_exist,
         can_cancel=not row.external_may_exist and row.state != "cancelled",
         can_recheck=row.state != "cancelled"

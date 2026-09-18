@@ -1,4 +1,4 @@
-from typing import Any, Literal
+from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Header, HTTPException
@@ -18,9 +18,10 @@ from app.db.models import (
     Operation,
 )
 from app.domain.operations import transaction_lock
+from app.importing.destination_view import DestinationView, view
 from app.importing.destinations import destination_configuration, permitted
 from app.importing.filesystem import relative_parts
-from app.importing.naming import StrictModel, fingerprint
+from app.importing.naming import StrictModel
 from app.jobs.queue import enqueue
 
 router = APIRouter(prefix="/organization", tags=["organization"])
@@ -40,48 +41,6 @@ class DestinationInput(StrictModel):
             raise ValueError("Enter the absolute library root as Audiobookshelf sees it")
         relative_parts(self.backend_path[1:])
         return self
-
-
-class DestinationView(StrictModel):
-    id: UUID
-    root_key: str
-    library_id: UUID
-    medium: str
-    backend_path: str
-    mode: str
-    enabled: bool
-    revision: str
-    configured: bool
-    probe: dict[str, Any] | None
-    publication_available: bool = False
-
-
-async def view(db, row):
-    configuration = await destination_configuration(db, row)
-    revision = fingerprint(configuration)
-    probe = row.probe if row.probe and row.probe.get("configuration_revision") == revision else None
-    if probe and str(get_settings().import_sources.get(probe.get("source_key"))) != probe.get(
-        "source_path"
-    ):
-        probe = None
-    return DestinationView(
-        id=row.id,
-        root_key=row.root_key,
-        library_id=row.library_id,
-        medium=row.medium,
-        backend_path=row.backend_path,
-        mode=row.mode,
-        enabled=row.enabled,
-        revision=revision,
-        configured=bool(configuration["root_path"] and configuration["staging_path"]),
-        probe=probe,
-        publication_available=bool(
-            probe
-            and probe.get("status") == "verified"
-            and probe.get("backend", {}).get("root_mapping")
-            and row.enabled
-        ),
-    )
 
 
 @router.get("/destination-roots", response_model=list[str])

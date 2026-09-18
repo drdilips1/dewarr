@@ -1,0 +1,223 @@
+# ruff: noqa: F811
+import asyncio
+from uuid import UUID
+
+import pytest
+from sqlalchemy import func, select, text
+
+from app.config import get_settings
+from app.db.models import (
+    AutomaticImport,
+    AutomaticImportPolicy,
+    DownloadAttempt,
+    DownloadHandoff,
+    DownloadInspection,
+    ImportDestination,
+    Operation,
+    User,
+)
+from app.domain import download_attempts as downloads
+from app.importing import automatic
+from app.jobs.tasks import schedule_downloads
+from tests.integration.test_acquisition import catalog  # noqa: F401
+from tests.integration.test_acquisition_selections import selection_route  # noqa: F401
+from tests.integration.test_correction_migration import migrate
+from tests.integration.test_download_attempts import downloader, selected, start  # noqa: F401
+
+pytestmark = pytest.mark.integration
+
+
+async def policy(client, selected, *, enabled=True, generation=0):
+    return await client.put(
+        f"/api/organization/destinations/{selected['destination_id']}/automatic-import",
+        json={
+            "enabled": enabled,
+            "expected_generation": generation,
+            "destination_revision": selected["destination_revision"],
+        },
+    )
+
+
+@pytest.fixture
+async def automatic_job(client, admin, database, selected, selection_route, downloader):
+    approved = await policy(client, selection_route)
+    assert approved.status_code == 200, approved.text
+    downloader.complete = True
+    response = await start(client, selected)
+    assert response.status_code == 202, response.text
+    await downloads.run(UUID(response.json()["id"]))
+    async with database() as db:
+        row = await db.scalar(select(AutomaticImport))
+        assert row and row.state == "queued"
+        assert not (await db.get(DownloadAttempt, row.attempt_id)).inspection_id
+        return row.id
+
+
+async def test_policy_defaults_privacy_stale_edit_and_no_backlog(
+    client, admin, database, selected, selection_route
+):
+    endpoint = (
+        f"/api/organization/destinations/{selection_route['destination_id']}/automatic-import"
+    )
+    initial = (await client.get(endpoint)).json()
+    assert not initial["enabled"] and initial["generation"] == 0
+    assert (await policy(client, selection_route)).json()["ready"]
+    assert (await policy(client, selection_route)).status_code == 409
+    disabled = await policy(client, selection_route, enabled=False, generation=1)
+    assert disabled.status_code == 200 and not disabled.json()["enabled"]
+    async with database() as db, db.begin():
+        assert not await db.scalar(select(AutomaticImport.id))
+        assert not await db.scalar(select(DownloadAttempt.id))
+        (await db.get(User, UUID(admin["id"]))).role = "member"
+    assert (await client.get(endpoint)).status_code == 403
+    assert (await policy(client, selection_route, generation=2)).status_code == 403
+
+
+@pytest.mark.parametrize("change", ["probe", "route", "recovery"])
+async def test_policy_requires_current_certified_route(
+    client, database, selected, selection_route, monkeypatch, change
+):
+    if change == "recovery":
+        monkeypatch.setattr(get_settings(), "recovery_mode", True)
+    else:
+        async with database() as db, db.begin():
+            row = await db.get(ImportDestination, UUID(selection_route["destination_id"]))
+            if change == "probe":
+                row.probe = None
+            else:
+                row.backend_path = "/changed-root"
+    result = await policy(client, selection_route)
+    assert result.status_code == 409, result.text
+    async with database() as db:
+        assert not await db.scalar(select(AutomaticImportPolicy.id))
+
+
+async def test_duplicate_workers_create_one_inspection_and_never_submit_again(
+    database, automatic_job, downloader
+):
+    await asyncio.gather(*(automatic.run(automatic_job) for _ in range(3)))
+    async with database() as db:
+        row = await db.get(AutomaticImport, automatic_job)
+        assert row.state == "inspecting" and row.inspection_id
+        assert await db.scalar(select(func.count()).select_from(DownloadInspection)) == 1
+        assert await db.scalar(select(func.count()).select_from(DownloadHandoff)) == 1
+    assert downloader.calls.count("submit") == 1
+
+
+@pytest.mark.parametrize("change", ["disabled", "reapproved", "approver", "route", "recovery"])
+async def test_queued_automatic_work_rechecks_approval(
+    client, admin, database, automatic_job, selection_route, monkeypatch, change
+):
+    if change == "recovery":
+        monkeypatch.setattr(get_settings(), "recovery_mode", True)
+    elif change in {"disabled", "reapproved"}:
+        response = await policy(
+            client, selection_route, enabled=change == "reapproved", generation=1
+        )
+        assert response.status_code == 200
+    else:
+        async with database() as db, db.begin():
+            if change == "approver":
+                (await db.get(User, UUID(admin["id"]))).active = False
+            else:
+                (
+                    await db.get(ImportDestination, UUID(selection_route["destination_id"]))
+                ).probe = None
+    await automatic.run(automatic_job)
+    async with database() as db:
+        row = await db.get(AutomaticImport, automatic_job)
+        assert row.state == "held" and row.inspection_id is None
+        assert not await db.scalar(select(DownloadHandoff.id))
+        assert (await db.get(Operation, row.operation_id)).status == "failed"
+
+
+async def test_inspection_enqueue_failure_rolls_back_handoff_and_can_resume(
+    database, automatic_job, monkeypatch
+):
+    original = downloads.enqueue
+
+    async def fail(*args, **kwargs):
+        raise RuntimeError("queue temporarily unavailable")
+
+    monkeypatch.setattr(downloads, "enqueue", fail)
+    with pytest.raises(RuntimeError, match="queue temporarily unavailable"):
+        await automatic.run(automatic_job)
+    async with database() as db:
+        row = await db.get(AutomaticImport, automatic_job)
+        assert row.state == "queued" and row.inspection_id is None
+        assert not await db.scalar(select(DownloadHandoff.id))
+    monkeypatch.setattr(downloads, "enqueue", original)
+    await automatic.run(automatic_job)
+    async with database() as db:
+        assert (await db.get(AutomaticImport, automatic_job)).state == "inspecting"
+
+
+async def test_periodic_recovery_repairs_lost_continuation_without_duplicate_jobs(
+    database, automatic_job
+):
+    await automatic.run(automatic_job)
+    async with database() as db, db.begin():
+        row = await db.get(AutomaticImport, automatic_job)
+        inspection = await db.get(DownloadInspection, row.inspection_id)
+        inspection.state, inspection.message = "failed", "Fixture lost inspection callback"
+        operation = await db.get(Operation, row.operation_id)
+        await db.execute(
+            text("UPDATE book_queue.procrastinate_jobs SET status='succeeded' WHERE id=:id"),
+            {"id": operation.job_id},
+        )
+        before = operation.job_id
+    await schedule_downloads(100)
+    async with database() as db:
+        after = (await db.get(Operation, row.operation_id)).job_id
+        assert after != before
+    await schedule_downloads(101)
+    async with database() as db:
+        assert (await db.get(Operation, row.operation_id)).job_id == after
+    await automatic.run(automatic_job)
+    async with database() as db:
+        assert (await db.get(AutomaticImport, automatic_job)).state == "held"
+
+
+async def test_automatic_history_cannot_be_discarded_by_downgrade(database, automatic_job):
+    async with database() as db:
+        before = await db.scalar(text("SELECT version_num FROM alembic_version"))
+    result = await migrate("downgrade", "0021_handoffs")
+    assert (
+        result.returncode != 0 and "Automatic import authority and history require" in result.stderr
+    )
+    async with database() as db:
+        assert await db.scalar(text("SELECT version_num FROM alembic_version")) == before
+
+
+@pytest.mark.parametrize("stage", ["automatic", "inspection"])
+@pytest.mark.parametrize("status", ["failed", "aborted"])
+async def test_recovery_holds_exhausted_jobs_without_restarting_retry_budget(
+    database, automatic_job, stage, status
+):
+    if stage == "inspection":
+        await automatic.run(automatic_job)
+    async with database() as db, db.begin():
+        row = await db.get(AutomaticImport, automatic_job)
+        operation = await db.get(Operation, row.operation_id)
+        original_job = operation.job_id
+        terminal_job = original_job
+        if stage == "inspection":
+            inspection = await db.get(DownloadInspection, row.inspection_id)
+            terminal_job = (await db.get(Operation, inspection.operation_id)).job_id
+            await db.execute(
+                text("UPDATE book_queue.procrastinate_jobs SET status='succeeded' WHERE id=:id"),
+                {"id": original_job},
+            )
+        await db.execute(
+            text("UPDATE book_queue.procrastinate_jobs SET status=:status WHERE id=:id"),
+            {"id": terminal_job, "status": status},
+        )
+    await asyncio.gather(schedule_downloads(200), schedule_downloads(201))
+    await schedule_downloads(202)
+    async with database() as db:
+        row = await db.get(AutomaticImport, automatic_job)
+        operation = await db.get(Operation, row.operation_id)
+        assert row.state == "held" and "retries stopped" in row.message
+        assert operation.status == "failed" and operation.job_id == original_job
+        if stage == "inspection":
+            assert (await db.get(DownloadInspection, row.inspection_id)).state == "failed"

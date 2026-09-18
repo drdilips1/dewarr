@@ -3879,6 +3879,100 @@
         }
       }
     },
+    "/api/organization/destinations/{destination_id}/automatic-import": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Detail",
+        "operationId": "detail_api_organization_destinations__destination_id__automatic_import_get",
+        "parameters": [
+          {
+            "name": "destination_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Destination Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PolicyView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Save",
+        "operationId": "save_api_organization_destinations__destination_id__automatic_import_put",
+        "parameters": [
+          {
+            "name": "destination_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Destination Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PolicyInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PolicyView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/sources/mam/connection": {
       "get": {
         "tags": [
@@ -9145,6 +9239,66 @@
           "path"
         ],
         "title": "PlannedSourceFile"
+      },
+      "PolicyInput": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "expected_generation": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Expected Generation"
+          },
+          "destination_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Destination Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "enabled",
+          "expected_generation",
+          "destination_revision"
+        ],
+        "title": "PolicyInput"
+      },
+      "PolicyView": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "generation": {
+            "type": "integer",
+            "title": "Generation"
+          },
+          "ready": {
+            "type": "boolean",
+            "title": "Ready"
+          },
+          "can_enable": {
+            "type": "boolean",
+            "title": "Can Enable"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "enabled",
+          "generation",
+          "ready",
+          "can_enable",
+          "message"
+        ],
+        "title": "PolicyView"
       },
       "PreviewInput": {
         "properties": {

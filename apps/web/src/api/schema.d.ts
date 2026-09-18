@@ -1227,6 +1227,24 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organization/destinations/{destination_id}/automatic-import": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Detail */
+    get: operations["detail_api_organization_destinations__destination_id__automatic_import_get"];
+    /** Save */
+    put: operations["save_api_organization_destinations__destination_id__automatic_import_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/sources/mam/connection": {
     parameters: {
       query?: never;
@@ -3159,6 +3177,28 @@ export interface components {
       track?: number | null;
       /** Disc */
       disc?: number | null;
+    };
+    /** PolicyInput */
+    PolicyInput: {
+      /** Enabled */
+      enabled: boolean;
+      /** Expected Generation */
+      expected_generation: number;
+      /** Destination Revision */
+      destination_revision: string;
+    };
+    /** PolicyView */
+    PolicyView: {
+      /** Enabled */
+      enabled: boolean;
+      /** Generation */
+      generation: number;
+      /** Ready */
+      ready: boolean;
+      /** Can Enable */
+      can_enable: boolean;
+      /** Message */
+      message: string;
     };
     /** PreviewInput */
     PreviewInput: {
@@ -6506,6 +6546,72 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["OperationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  detail_api_organization_destinations__destination_id__automatic_import_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        destination_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PolicyView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  save_api_organization_destinations__destination_id__automatic_import_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        destination_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PolicyInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PolicyView"];
         };
       };
       /** @description Validation Error */

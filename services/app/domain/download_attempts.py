@@ -367,6 +367,10 @@ async def finish_observation(db, attempt, selection, state):
         )
         (await db.get(Operation, attempt.operation_id)).message = attempt.message
         return
+    from app.importing.automatic import schedule
+
+    if await schedule(db, attempt, selection):
+        return
     # Existing reviewed import UI is administrator-only. Do not silently elevate
     # a member's source-directory access or manufacture library availability.
     if user.role != "admin":

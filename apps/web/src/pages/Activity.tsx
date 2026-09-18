@@ -94,21 +94,23 @@ export default function Activity({
                 <h2>
                   {item.kind === "system.probe"
                     ? "Background worker check"
-                    : item.kind === "library.sync"
-                      ? "Audiobookshelf inventory sync"
-                      : item.kind === "acquisition.evaluate"
-                        ? "Wanted media check"
-                        : item.kind === "acquisition.download"
-                          ? "Book download"
-                          : item.kind === "acquisition.repair"
-                            ? "Download connection repair"
-                            : item.kind === "acquisition.review"
-                              ? "Download import review"
-                              : item.kind === "acquisition.select"
-                                ? "Release selection"
-                                : item.kind === "metadata.enrich"
-                                  ? "Automatic metadata lookup"
-                                  : item.kind}
+                    : item.kind === "organization.automatic"
+                      ? "Automatic library import"
+                      : item.kind === "library.sync"
+                        ? "Audiobookshelf inventory sync"
+                        : item.kind === "acquisition.evaluate"
+                          ? "Wanted media check"
+                          : item.kind === "acquisition.download"
+                            ? "Book download"
+                            : item.kind === "acquisition.repair"
+                              ? "Download connection repair"
+                              : item.kind === "acquisition.review"
+                                ? "Download import review"
+                                : item.kind === "acquisition.select"
+                                  ? "Release selection"
+                                  : item.kind === "metadata.enrich"
+                                    ? "Automatic metadata lookup"
+                                    : item.kind}
                 </h2>
                 <p>{item.message}</p>
               </div>

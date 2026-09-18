@@ -20,18 +20,23 @@ from app.db.models import (
     AcquisitionReason,
     AcquisitionReservation,
     AcquisitionSelection,
+    AutomaticImport,
+    AutomaticImportPolicy,
     DownloadAttempt,
     DownloadFulfillment,
     DownloadIdentityClaim,
+    FrozenImportPlan,
     ImportEntry,
+    ImportRun,
     Integration,
     LibraryGrant,
     SourceArtifact,
     SourceConnection,
     User,
+    Version,
 )
 from app.domain import download_attempts as downloads
-from app.importing import execution
+from app.importing import automatic, execution
 from app.jobs.queue import get_queue
 from app.security import encrypt_secrets
 from tests.integration.test_acquisition import body, request
@@ -46,22 +51,49 @@ from tests.integration.test_import_destinations import route as destination_rout
 from tests.integration.test_import_destinations import start_probe
 from tests.integration.test_import_execution import ready_route  # noqa: F401
 from tests.integration.test_import_execution import start as start_import
+from tests.integration.test_inspection_matching import edition
 from tests.mam_fixture import release_row
-from tests.media_fixtures import epub
+from tests.media_fixtures import audio, epub
 
 pytestmark = pytest.mark.integration
 
 
 @pytest.mark.parametrize("save_relative", ["", "nested"])
-@pytest.mark.parametrize("handoff", [False, True, "grant", "withdraw", "requester", "reviewer"])
+@pytest.mark.parametrize(
+    "handoff",
+    [
+        False,
+        True,
+        "grant",
+        "withdraw",
+        "requester",
+        "reviewer",
+        "automatic",
+        "automatic-audio",
+        "automatic-unmatched",
+        "automatic-manifest",
+        "automatic-disable",
+        "automatic-sample",
+        "automatic-ambiguous",
+    ],
+)
 async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
     client, admin, database, ready_route, monkeypatch, save_relative, handoff, review_account
 ):
     route = ready_route
+    automatic_mode = isinstance(handoff, str) and handoff.startswith("automatic")
     old = route["plan"]["document"]["groups"][0]
-    name = "selected.epub"
+    medium = "audio" if handoff == "automatic-audio" else "ebook"
+    name = "selected.mp3" if medium == "audio" else "selected.epub"
     source = route["source"] / save_relative / name
-    epub(source)
+    if medium == "audio":
+        audio(source, tags={"isbn": "9781234567897", "language": "en"})
+        await prepare_audio_route(client, database, route, old["work_id"], source)
+    else:
+        epub(
+            source,
+            isbn="9781234567897" if automatic_mode and handoff != "automatic-unmatched" else None,
+        )
     epub(source.parent / "unrelated.epub", title="Not part of this torrent")
     original = source.read_bytes()
     pieces = b"".join(
@@ -116,7 +148,13 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
             encrypted_content=encrypt_secrets({"torrent": base64.b64encode(raw).decode()}),
             release_snapshot=release(
                 release_row(
-                    id=502, title="First Harbor", main_cat=14, filetype="EPUB", narrator_info="{}"
+                    id=502,
+                    title="First Harbor sample"
+                    if handoff == "automatic-sample"
+                    else "First Harbor",
+                    main_cat=13 if medium == "audio" else 14,
+                    filetype="MP3" if medium == "audio" else "EPUB",
+                    narrator_info='{"1":"Jordan Lee"}' if medium == "audio" else "{}",
                 ),
                 datetime.now(UTC),
             ).model_dump(mode="json"),
@@ -125,13 +163,14 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
         await db.flush()
         downloader_id, artifact_id = str(downloader.id), str(artifact.id)
     wanted = await request(
-        client, body({"work": old["work_id"]}, "ebook", ebook_library_id=route["library_id"])
+        client,
+        body({"work": old["work_id"]}, medium, **{medium + "_library_id": route["library_id"]}),
     )
     selected_response = await prepare(
         client,
         {
             "intent_id": wanted["request"]["id"],
-            "slot": "ebook",
+            "slot": medium,
             "artifact_id": artifact_id,
             "downloader_id": downloader_id,
             "downloader_generation": 1,
@@ -142,6 +181,20 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
     )
     assert selected_response.status_code == 201, selected_response.text
     owner_client = client
+    if automatic_mode:
+        if medium == "ebook":
+            await edition(database, work_id=UUID(old["work_id"]))
+        if handoff == "automatic-ambiguous":
+            await edition(database, work_id=UUID(old["work_id"]))
+        response = await review_account[0].put(
+            f"/api/organization/destinations/{route['destination']['id']}/automatic-import",
+            json={
+                "enabled": True,
+                "expected_generation": 0,
+                "destination_revision": route["destination"]["revision"],
+            },
+        )
+        assert response.status_code == 200 and response.json()["ready"], response.text
     if handoff:
         async with database() as db, db.begin():
             (await db.get(User, UUID(admin["id"]))).role = "member"
@@ -152,7 +205,63 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
     monkeypatch.setattr(downloads, "QbitClient", lambda *args: qbit)
     started = await start_download(client, selected_response.json())
     assert started.status_code == 202, started.text
+    if handoff == "automatic-manifest":
+        epub(source, title="Changed file size after download", isbn="9781234567897")
+    if handoff == "automatic-disable":
+        loop = asyncio.get_running_loop()
+        original_publish = execution.publish_item
+
+        async def disable():
+            async with database() as db, db.begin():
+                policy = await db.scalar(select(AutomaticImportPolicy))
+                policy.enabled = False
+                policy.generation += 1
+
+        def publish(spec, *, checkpoint, publication_guard):
+            def before(phase):
+                if phase == "prepared":
+                    asyncio.run_coroutine_threadsafe(disable(), loop).result(timeout=10)
+                checkpoint(phase)
+
+            return original_publish(spec, checkpoint=before, publication_guard=publication_guard)
+
+        monkeypatch.setattr(execution, "publish_item", publish)
     await get_queue().run_worker_async(wait=False, concurrency=1)
+    if automatic_mode and handoff not in {"automatic", "automatic-audio"}:
+        async with database() as db:
+            auto = await db.scalar(select(AutomaticImport))
+            if handoff == "automatic-disable":
+                entries = list(await db.scalars(select(ImportEntry)))
+                assert len(entries) == 1 and entries[0].state == "held"
+            else:
+                assert auto.state == "held", auto.message
+                assert not await db.scalar(select(ImportEntry.id))
+            assert not await db.scalar(select(DownloadFulfillment.id))
+        assert qbit.calls.count("submit") == 1 and not list(route["target"].rglob("*.epub"))
+        return
+    if handoff in {"automatic", "automatic-audio"}:
+        async with database() as db:
+            auto = await db.scalar(select(AutomaticImport))
+            assert auto.state == "importing", auto.message
+            plan = await db.get(
+                FrozenImportPlan, (await db.get(ImportRun, auto.import_run_id)).plan_id
+            )
+            entries = list(await db.scalars(select(ImportEntry)))
+            assert len(entries) == 1 and entries[0].state == "confirmed"
+            assert plan.document["matching_evidence"]
+            fulfilled = await db.scalar(select(DownloadFulfillment))
+            assert fulfilled and fulfilled.import_entry_id == entries[0].id
+            assert (await db.scalar(select(DownloadIdentityClaim))).active
+        assert qbit.calls.count("submit") == 1
+        output = list(route["target"].rglob("*.mp3" if medium == "audio" else "*.epub"))
+        assert len(output) == 1 and output[0].stat().st_ino == source.stat().st_ino
+        assert output[0].read_bytes() == original == source.read_bytes()
+        assert (source.parent / "unrelated.epub").exists()
+        await automatic.run(auto.id)
+        assert qbit.calls.count("submit") == 1
+        activity = (await owner_client.get(f"/api/acquisition/downloads/{auto.attempt_id}")).json()
+        assert activity["fulfillment"]["available_now"] and activity["inspection_id"] is None
+        return
     if handoff:
         client = review_account[0]
         pending = (await client.get("/api/acquisition/reviews")).json()["items"][0]
@@ -268,7 +377,7 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
     activity = (await owner_client.get(f"/api/acquisition/downloads/{attempt.id}")).json()
     assert activity["fulfillment"]["basis"] == "imported"
     assert activity["fulfillment"]["available_now"]
-    output = list(route["target"].rglob("*.epub"))
+    output = list(route["target"].rglob("*.mp3" if medium == "audio" else "*.epub"))
     assert len(output) == 1 and output[0].stat().st_ino == source.stat().st_ino
     assert output[0].read_bytes() == source.read_bytes() == original
     assert (source.parent / "unrelated.epub").exists()
@@ -281,3 +390,59 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
     assert (await start_import(client, route, key="file-scoped-import-again")).json()["entries"][0][
         "state"
     ] == "skipped"
+
+
+async def prepare_audio_route(client, database, route, work_id, source):
+    catalog = await edition(database, work_id=UUID(work_id), medium="audio")
+    async with database() as db, db.begin():
+        (await db.get(Version, catalog["version"])).narrators = ["Jordan Lee"]
+    inspected = await client.post(
+        "/api/organization/inspections",
+        headers={"Idempotency-Key": "audio-setup-inspection"},
+        json={
+            "source_key": "fixture",
+            "relative_path": str(source.relative_to(route["source"])),
+            "completed_download": True,
+        },
+    )
+    assert inspected.status_code == 202, inspected.text
+    await get_queue().run_worker_async(wait=False, concurrency=1)
+    snapshot = (await client.get(f"/api/organization/inspections/{inspected.json()['id']}")).json()[
+        "snapshot"
+    ]
+    profile = (await client.get("/api/organization/settings")).json()
+    plan = await client.post(
+        f"/api/organization/inspections/{inspected.json()['id']}/plans",
+        json={
+            "inspection_revision": snapshot["revision"],
+            "profile_revision": profile["revision"],
+            "selections": [
+                {
+                    "group_key": snapshot["groups"][0]["key"],
+                    "work_id": work_id,
+                    "version_id": str(catalog["version"]),
+                    "full_content": True,
+                }
+            ],
+        },
+    )
+    assert plan.status_code == 201, plan.text
+    changed = await client.put(
+        "/api/organization/destinations/ebooks",
+        json={
+            "library_id": route["library_id"],
+            "medium": "audio",
+            "backend_path": "/books",
+            "expected_revision": route["destination"]["revision"],
+        },
+    )
+    assert changed.status_code == 200, changed.text
+    route["destination"], route["plan"], route["plan_id"] = (
+        changed.json(),
+        plan.json(),
+        plan.json()["id"],
+    )
+    assert (await start_probe(client, route, key="audio-setup-probe")).status_code == 202
+    await get_queue().run_worker_async(wait=False, concurrency=1)
+    route["destination"] = (await client.get("/api/organization/destinations")).json()[0]
+    assert route["destination"]["publication_available"]

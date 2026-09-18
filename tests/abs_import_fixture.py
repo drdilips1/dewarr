@@ -1,6 +1,7 @@
 """Synthetic ABS import HTTP contract backed by a disposable worker folder."""
 
 import json
+import subprocess
 
 import httpx
 from defusedxml.ElementTree import parse
@@ -81,6 +82,7 @@ class ScanningBackend(ImportBackendFixture):
         if not self.detect:
             return
         dc = "{http://purl.org/dc/elements/1.1/}"
+        role = "{http://www.idpf.org/2007/opf}role"
         for index, opf in enumerate(sorted(self.root.rglob("metadata.opf"))):
             xml = parse(opf)
             folder = opf.parent
@@ -104,8 +106,16 @@ class ScanningBackend(ImportBackendFixture):
                 else None,
                 "metadata": {
                     "title": xml.find(f".//{dc}title").text,
-                    "authors": [{"name": node.text} for node in xml.findall(f".//{dc}creator")],
-                    "narrators": [],
+                    "authors": [
+                        {"name": node.text}
+                        for node in xml.findall(f".//{dc}creator")
+                        if node.get(role) != "nrt"
+                    ],
+                    "narrators": [
+                        node.text
+                        for node in xml.findall(f".//{dc}creator")
+                        if node.get(role) == "nrt"
+                    ],
                     "language": xml.findtext(f".//{dc}language"),
                     "publishedYear": xml.findtext(f".//{dc}date"),
                 },
@@ -115,9 +125,29 @@ class ScanningBackend(ImportBackendFixture):
                 (file for file in files if file["metadata"]["ext"] in {".epub", ".pdf", ".cbz"}),
                 key=lambda file: (file["metadata"]["ext"] != ".epub", file["metadata"]["path"]),
             )
-            media["ebookFile"] = {**ebooks[0], "ebookFormat": ebooks[0]["metadata"]["ext"][1:]}
+            if ebooks:
+                media["ebookFile"] = {**ebooks[0], "ebookFormat": ebooks[0]["metadata"]["ext"][1:]}
             for file in ebooks:
                 file["isSupplementary"] = file is not ebooks[0]
+            for file in files:
+                if file["metadata"]["ext"] not in {".mp3", ".m4b"}:
+                    continue
+                path = folder / file["metadata"]["path"].rsplit("/", 1)[-1]
+                probe = json.loads(
+                    subprocess.run(
+                        ["ffprobe", "-v", "error", "-show_format", "-of", "json", str(path)],
+                        capture_output=True,
+                        check=True,
+                        timeout=10,
+                    ).stdout
+                )["format"]
+                media["audioFiles"].append(
+                    {
+                        **file,
+                        "duration": float(probe["duration"]),
+                        "index": int(probe.get("tags", {}).get("track", "1").split("/")[0]),
+                    }
+                )
             item_id = f"import-{index}"
             self.items[item_id] = {
                 "id": item_id,

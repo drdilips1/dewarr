@@ -574,6 +574,31 @@ class ImportDestination(Identity, Base):
     probe_token: Mapped[UUID | None] = mapped_column()
 
 
+class AutomaticImportPolicy(Identity, Base):
+    __tablename__ = "automatic_import_policies"
+    destination_id: Mapped[UUID] = mapped_column(ForeignKey("import_destinations.id"), unique=True)
+    approved_by: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
+    enabled: Mapped[bool] = mapped_column(Boolean, default=False)
+    generation: Mapped[int] = mapped_column(Integer, default=1)
+    configuration: Mapped[dict[str, Any]] = mapped_column(JSONB)
+
+
+class AutomaticImport(Identity, Base):
+    __tablename__ = "automatic_imports"
+    __table_args__ = (CheckConstraint("state IN ('queued', 'inspecting', 'held', 'importing')"),)
+    attempt_id: Mapped[UUID] = mapped_column(ForeignKey("download_attempts.id"), unique=True)
+    policy_id: Mapped[UUID] = mapped_column(ForeignKey("automatic_import_policies.id"))
+    policy_generation: Mapped[int] = mapped_column(Integer)
+    operation_id: Mapped[UUID] = mapped_column(ForeignKey("operations.id"), unique=True)
+    inspection_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("download_inspections.id"), unique=True
+    )
+    import_run_id: Mapped[UUID | None] = mapped_column(ForeignKey("import_runs.id"), unique=True)
+    state: Mapped[str] = mapped_column(String(20), default="queued")
+    message: Mapped[str] = mapped_column(String(500), default="Waiting for automatic import checks")
+    evidence: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+
+
 class ImportRun(Identity, Base):
     __tablename__ = "import_runs"
     __table_args__ = (UniqueConstraint("owner_id", "command_key"),)

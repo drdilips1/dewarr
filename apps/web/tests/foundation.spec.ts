@@ -526,6 +526,21 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   ).toContainText(
     "Filesystem and ABS folder mapping verified; ready for a reviewed import plan",
   );
+  const automaticPolicy = page.getByRole("region", {
+    name: "Automatic import policy",
+  });
+  await expect(automaticPolicy).toContainText("Automatic importing is off");
+  await automaticPolicy
+    .getByRole("button", { name: "Enable automatic import", exact: true })
+    .click();
+  await expect(automaticPolicy).toContainText(
+    "New completed downloads with clear catalog and file evidence can import automatically",
+  );
+  await page.reload();
+  await automaticPolicy
+    .getByRole("button", { name: "Disable automatic import", exact: true })
+    .click();
+  await expect(automaticPolicy).toContainText("Automatic importing is off");
   await page.screenshot({
     path: testInfo.outputPath("destinations-mobile.png"),
     fullPage: true,

@@ -118,6 +118,10 @@ async def context(db, entry, token, *, lock=False):
     if conflicts:
         raise PublicationError("Resolve this catalog version's metadata conflict first")
     try:
+        from app.importing.automatic import publication_authority
+
+        if not entry.published_at:
+            await publication_authority(db, run.id, lock=lock)
         await download_reviews.validate_inspection(
             db, plan.inspection_id, destination_id=destination.id, version=version, lock=lock
         )

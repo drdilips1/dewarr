@@ -184,6 +184,13 @@ async def download_attempt(attempt_id: str) -> None:
     await run(UUID(attempt_id))
 
 
+@tasks.task(name="organization.automatic", queue="imports", retry=3)
+async def automatic_import(automatic_id: str) -> None:
+    from app.importing.automatic import run
+
+    await run(UUID(automatic_id))
+
+
 @tasks.task(name="acquisition.fulfillment", queue="acquisition", retry=3)
 async def reconcile_fulfillment(work_id: str) -> None:
     from app.domain.download_fulfillment import reconcile_work
@@ -197,7 +204,8 @@ async def reconcile_fulfillment(work_id: str) -> None:
 async def schedule_downloads(timestamp: int) -> None:
     from sqlalchemy import or_, text
 
-    from app.db.models import DownloadAttempt
+    from app.db.models import AutomaticImport, DownloadAttempt
+    from app.importing.automatic import recover
     from app.jobs.queue import enqueue
 
     if get_settings().recovery_mode:
@@ -225,3 +233,11 @@ async def schedule_downloads(timestamp: int) -> None:
                 continue
             operation.job_id = await enqueue(db, "acquisition.download", attempt_id=str(row.id))
             row.next_check_at = now + timedelta(minutes=1)
+        automatic_rows = await db.scalars(
+            select(AutomaticImport)
+            .where(AutomaticImport.state.in_(["queued", "inspecting"]))
+            .order_by(AutomaticImport.created_at)
+            .limit(20)
+        )
+        for automatic in automatic_rows:
+            await recover(db, automatic.id)

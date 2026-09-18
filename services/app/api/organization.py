@@ -15,6 +15,7 @@ from app.importing.naming import (
     fingerprint,
     plan_import,
 )
+from app.importing.settings import current_profile
 
 router = APIRouter(prefix="/organization", tags=["organization"])
 
@@ -34,11 +35,6 @@ class SaveSettings(StrictModel):
 class PreviewInput(StrictModel):
     profile: NamingProfile | None = None
     groups: list[ImportGroup] | None = Field(default=None, min_length=1, max_length=100)
-
-
-async def current_profile(db):
-    row = await db.get(OrganizationSettings, 1, populate_existing=True)
-    return NamingProfile.model_validate(row.profile if row else {})
 
 
 @router.get("/settings", response_model=SettingsView)

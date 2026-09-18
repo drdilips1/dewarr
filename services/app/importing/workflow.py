@@ -93,6 +93,9 @@ async def run_inspection(operation_id: UUID):
         operation = await db.get(Operation, operation_id)
         operation.status = "completed" if snapshot is not None else "failed"
         operation.message = message
+        from app.importing.automatic import continue_inspection
+
+        await continue_inspection(db, row.id)
         db.add(
             AuditEvent(
                 actor_id=row.owner_id,

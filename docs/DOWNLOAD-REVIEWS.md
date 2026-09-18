@@ -1,6 +1,6 @@
 # Administrator review of member downloads
 
-Completed member-owned acquisitions now have an administrator review queue in Activity. This closes the authorization handoff from a member's download to the existing reviewed importer. It does not yet enable unattended import or automatic external-list acquisition.
+Completed member-owned acquisitions have an administrator review queue in Activity. This closes the authorization handoff from a member's download to the reviewed importer. [Automatic import](AUTOMATIC-IMPORTS.md) reuses this handoff under a destination's explicit standing approval; unapproved routes and unresolved files continue through review. External-list acquisition remains pending.
 
 ## User flow
 
@@ -28,4 +28,4 @@ Ordinary administrator-owned imports retain their existing behavior. General dow
 - The browser exercises claim failure/retry with the same command key, assigned-review navigation, reload, mobile layout and member exclusion using an explicitly mocked review API contract. Real review mutations and filesystem behavior are covered by the separate integration cases above.
 - Existing native ABS scanner and application import certification is rerun as a regression; it does not certify a live MAM account or real qBittorrent transfer.
 
-Remaining acquisition work includes automatic continuation for unambiguous supported imports, broader source-to-catalog/pack resolution, changed-endpoint/path recovery, withdrawn-owner resolution, shared-pack reuse and live-client qualification. This checkpoint does not close the complete S05 gate or the full PRD.
+Automatic continuation for qualifying local catalog matches is documented separately. Remaining acquisition work includes broader source-to-catalog/pack resolution, changed-endpoint/path recovery, withdrawn-owner resolution, shared-pack reuse and live-client qualification. This checkpoint does not close the complete S05 gate or the full PRD.
