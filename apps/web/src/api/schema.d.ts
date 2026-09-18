@@ -1106,6 +1106,75 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/sources/mam/connection": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Connection */
+    get: operations["connection_api_sources_mam_connection_get"];
+    /** Save Connection */
+    put: operations["save_connection_api_sources_mam_connection_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/sources/mam/connection/test": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Test Connection */
+    post: operations["test_connection_api_sources_mam_connection_test_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/sources/mam/search": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Search */
+    post: operations["search_api_sources_mam_search_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/sources/mam/releases/{source_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Detail */
+    get: operations["detail_api_sources_mam_releases__source_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1382,6 +1451,23 @@ export interface components {
       backend_selected?: boolean | null;
       /** Unchanged */
       unchanged?: boolean | null;
+    };
+    /** CoverageClaim */
+    CoverageClaim: {
+      /** Title */
+      title: string;
+      /** Authors */
+      authors?: string[];
+      /** Work Id */
+      work_id?: string | null;
+      /** Version Id */
+      version_id?: string | null;
+      /**
+       * Evidence
+       * @default claimed
+       * @enum {string}
+       */
+      evidence: "claimed" | "corroborated" | "verified";
     };
     /** Credentials */
     Credentials: {
@@ -2024,6 +2110,189 @@ export interface components {
       /** Editable */
       editable: boolean;
     };
+    /** MAMConnectionInput */
+    MAMConnectionInput: {
+      /**
+       * Base Url
+       * @default https://www.myanonamouse.net
+       */
+      base_url: string;
+      /** Proxy Url */
+      proxy_url?: string | null;
+      /** Mam Id */
+      mam_id?: string | null;
+      /** Proxy Username */
+      proxy_username?: string | null;
+      /** Proxy Password */
+      proxy_password?: string | null;
+      /**
+       * Clear Proxy Credentials
+       * @default false
+       */
+      clear_proxy_credentials: boolean;
+      /**
+       * Enabled
+       * @default true
+       */
+      enabled: boolean;
+      /**
+       * Expected Generation
+       * @default 0
+       */
+      expected_generation: number;
+    };
+    /** MAMConnectionView */
+    MAMConnectionView: {
+      /** Configured */
+      configured: boolean;
+      /** Enabled */
+      enabled: boolean;
+      /** Base Url */
+      base_url: string;
+      /** Proxy Url */
+      proxy_url: string | null;
+      /** Has Session */
+      has_session: boolean;
+      /** Has Proxy Credentials */
+      has_proxy_credentials: boolean;
+      /** Generation */
+      generation: number;
+      /** Status */
+      status: string;
+      /** Last Error */
+      last_error: string | null;
+      /** Last Success At */
+      last_success_at: string | null;
+      /** Route */
+      route: string;
+    };
+    /** MAMRelease */
+    MAMRelease: {
+      /**
+       * Source
+       * @default mam
+       * @constant
+       */
+      source: "mam";
+      /** Source Id */
+      source_id: string;
+      /** Indexer Id */
+      indexer_id?: string | null;
+      /** Raw Title */
+      raw_title: string;
+      /** Medium */
+      medium?: ("ebook" | "audio") | null;
+      /** Authors */
+      authors?: string[];
+      /** Narrators */
+      narrators?: string[];
+      /** Language */
+      language?: string | null;
+      /** Formats */
+      formats?: string[];
+      /** Size Bytes */
+      size_bytes?: number | null;
+      /** Seeders */
+      seeders?: number | null;
+      /** Description */
+      description?: string | null;
+      /** Coverage */
+      coverage?: components["schemas"]["CoverageClaim"][];
+      /**
+       * Protocol
+       * @default unknown
+       * @enum {string}
+       */
+      protocol: "torrent" | "nzb" | "direct" | "unknown";
+      /** Details */
+      details?: {
+        [key: string]: unknown;
+      };
+      /** Title */
+      title: string;
+      /** Series */
+      series?: components["schemas"]["SourceSeries"][];
+      /** Category */
+      category?: string | null;
+      /** Language Id */
+      language_id?: number | null;
+      /** Size Display */
+      size_display?: string | null;
+      /** Filetype Display */
+      filetype_display?: string | null;
+      /** Leechers */
+      leechers?: number | null;
+      /** Snatches */
+      snatches?: number | null;
+      /** Uploaded At */
+      uploaded_at?: string | null;
+      /** Freeleech */
+      freeleech?: boolean | null;
+      /** Vip */
+      vip?: boolean | null;
+      /** Tags */
+      tags?: string[];
+      /** Isbn */
+      isbn?: string | null;
+      /** Media Info */
+      media_info?: string | null;
+      /**
+       * Observed At
+       * Format: date-time
+       */
+      observed_at: string;
+    };
+    /** MAMSearch */
+    MAMSearch: {
+      /** Q */
+      q: string;
+      /**
+       * Medium
+       * @default all
+       * @enum {string}
+       */
+      medium: "all" | "ebook" | "audio";
+      /**
+       * Fields
+       * @default [
+       *       "title",
+       *       "author",
+       *       "series"
+       *     ]
+       */
+      fields: (
+        | "title"
+        | "author"
+        | "series"
+        | "narrator"
+        | "description"
+        | "tags"
+        | "filenames"
+      )[];
+      /**
+       * Language Ids
+       * @default [
+       *       1
+       *     ]
+       */
+      language_ids: number[];
+      /**
+       * Sort
+       * @default relevance
+       * @enum {string}
+       */
+      sort: "relevance" | "seeders";
+      /**
+       * Offset
+       * @default 0
+       */
+      offset: number;
+      /**
+       * Limit
+       * @default 25
+       */
+      limit: number;
+    };
     /** MatchCandidate */
     MatchCandidate: {
       /**
@@ -2427,6 +2696,27 @@ export interface components {
       /** List Id */
       list_id: string | null;
     };
+    /** ReleasePage */
+    ReleasePage: {
+      /**
+       * Source
+       * @default mam
+       * @constant
+       */
+      source: "mam";
+      /** Items */
+      items: components["schemas"]["MAMRelease"][];
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+      /** Total */
+      total: number | null;
+      /** Has More */
+      has_more: boolean;
+      /** Warnings */
+      warnings?: string[];
+    };
     /** RequestInput */
     RequestInput: {
       /**
@@ -2620,6 +2910,15 @@ export interface components {
     SetupView: {
       /** Needs Setup */
       needs_setup: boolean;
+    };
+    /** SourceSeries */
+    SourceSeries: {
+      /** Source Id */
+      source_id: string;
+      /** Name */
+      name: string;
+      /** Position */
+      position?: string | null;
     };
     /** SourceView */
     SourceView: {
@@ -5163,6 +5462,143 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["OperationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  connection_api_sources_mam_connection_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MAMConnectionView"];
+        };
+      };
+    };
+  };
+  save_connection_api_sources_mam_connection_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MAMConnectionInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MAMConnectionView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  test_connection_api_sources_mam_connection_test_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MAMConnectionView"];
+        };
+      };
+    };
+  };
+  search_api_sources_mam_search_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MAMSearch"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ReleasePage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  detail_api_sources_mam_releases__source_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        source_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MAMRelease"];
         };
       };
       /** @description Validation Error */

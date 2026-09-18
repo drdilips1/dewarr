@@ -1028,3 +1028,26 @@ img.detail-cover {
   flex: 1 1 120px;
   min-width: 0;
 }
+
+.source-description {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.source-release {
+  overflow-wrap: anywhere;
+}
+
+.source-facts {
+  display: grid;
+  grid-template-columns: minmax(5.5rem, 0.4fr) minmax(0, 1fr);
+  gap: 0.5rem 1rem;
+}
+
+.source-facts dt {
+  color: var(--muted);
+}
+
+.source-facts dd {
+  margin: 0;
+}

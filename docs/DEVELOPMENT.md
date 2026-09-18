@@ -55,7 +55,7 @@ npm --prefix apps/web run test:e2e
 
 Backend tests require a database name ending `_test`; browser tests require `_browser_test`. They truncate those disposable databases. With no `BOOK_TEST_DATABASE_URL`, integration tests skip explicitly, so a unit-only run is not integration evidence. Browser tests launch their own API and worker, use generated encryption keys and a fixture-only bootstrap token, and stop those processes afterward. Override `BOOK_E2E_DATABASE_URL` when needed.
 
-The browser journey covers bootstrap, catalog/list/library/metadata/request workflows, real worker execution, reviewed imports and cancellation, same-edition format consent, PDF companions, reload persistence and mobile layout/sign-out. Test data is deliberately identified as synthetic. Screenshots are saved under `apps/web/test-results/`.
+The browser journey covers bootstrap, catalog/list/library/metadata/request workflows, real worker execution, reviewed imports and cancellation, same-edition formats, PDF companions, local catalog matching, native MAM setup/search/detail, reload persistence and mobile layout/sign-out. MAM and ABS HTTP responses in this journey are synthetic fixtures; actual ABS compatibility has a separate harness. Screenshots are saved under `apps/web/test-results/`.
 
 ## Container deployment scaffold
 

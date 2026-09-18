@@ -35,6 +35,10 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["services/app"]
 
+[tool.hatch.build.targets.wheel.force-include]
+"docs/notices/MouseSearch-MIT.txt" = "app/notices/MouseSearch-MIT.txt"
+"docs/notices/myanonamouse-mcp-MIT.txt" = "app/notices/myanonamouse-mcp-MIT.txt"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]

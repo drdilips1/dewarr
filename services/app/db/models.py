@@ -133,6 +133,23 @@ class Integration(Identity, Base):
     lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
+class SourceConnection(Base):
+    __tablename__ = "source_connections"
+    key: Mapped[str] = mapped_column(String(40), primary_key=True)
+    base_url: Mapped[str] = mapped_column(Text)
+    proxy_url: Mapped[str | None] = mapped_column(Text)
+    encrypted_secrets: Mapped[str] = mapped_column(Text)
+    enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    generation: Mapped[int] = mapped_column(Integer, default=1)
+    status: Mapped[str] = mapped_column(String(40), default="untested")
+    last_error: Mapped[str | None] = mapped_column(String(500))
+    last_success_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    next_request_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    blocked_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    lease_token: Mapped[UUID | None] = mapped_column()
+    lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
 class Library(Identity, Base):
     __tablename__ = "libraries"
     __table_args__ = (UniqueConstraint("integration_id", "external_id"),)

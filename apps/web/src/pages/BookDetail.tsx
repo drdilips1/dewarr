@@ -91,6 +91,9 @@ function BookDetailContent({
           <p className="author-line">
             {work.authors.join(", ") || "Author unknown"}
           </p>
+          <Link to={`/sources?q=${encodeURIComponent(work.title)}`}>
+            Search download sources
+          </Link>
           <div className="status-row">
             <span
               className={work.availability.owned ? "status owned" : "status"}

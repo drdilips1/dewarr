@@ -5,20 +5,45 @@ import sys
 from pathlib import Path
 
 from fastapi import FastAPI, Header, HTTPException, Request
+from fastapi.responses import JSONResponse
 
 from app.config import get_settings
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from tests.abs_import_fixture import ScanningBackend  # noqa: E402
+from tests.mam_fixture import search_response  # noqa: E402
 
 app = FastAPI()
 catalog_state = {"narrator": "Sample Narrator"}
 backend_state = {"watcher_enabled": True}
+mam_state = {"cookie": "browser-mam-fixture", "requests": 0}
 item = json.loads(
     (Path(__file__).resolve().parents[1] / "tests/fixtures/audiobookshelf-item.json").read_text()
 )
 scanner = ScanningBackend(get_settings().import_destinations["ebooks"])
 scanner.backend_path, scanner.library_id = "/fixture/books", "library-one"
+
+
+@app.api_route("/mam/{path:path}", methods=["GET", "POST"])
+async def mam_fixture(path: str, request: Request):
+    if request.cookies.get("mam_id") != mam_state["cookie"]:
+        raise HTTPException(401)
+    mam_state["requests"] += 1
+    mam_state["cookie"] = f"browser-mam-rotated-{mam_state['requests']}"
+    if path == "jsonLoad.php":
+        body = {"uid": 99, "username": "Synthetic MAM account"}
+    elif path == "tor/js/loadSearchJSONbasic.php":
+        query = await request.json()
+        body = (
+            {"error": "Nothing returned, out of 0"}
+            if query["tor"].get("text") == "No source matches"
+            else search_response()
+        )
+    else:
+        raise HTTPException(404)
+    response = JSONResponse(body)
+    response.set_cookie("mam_id", mam_state["cookie"], httponly=True)
+    return response
 
 
 @app.api_route("/abs/{path:path}", methods=["GET", "POST"])

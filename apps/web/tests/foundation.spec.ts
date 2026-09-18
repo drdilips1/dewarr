@@ -762,6 +762,85 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     .getByRole("button", { name: "Cancel group changes" })
     .click();
   await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.getByRole("link", { name: "Sources", exact: true }).click();
+  await page
+    .getByText("MAM connection · not-configured", { exact: true })
+    .click();
+  const mamConnection = page.getByRole("form", {
+    name: "MAM connection settings",
+  });
+  await mamConnection
+    .getByLabel("MAM URL", { exact: true })
+    .fill("http://127.0.0.1:13379/mam");
+  await mamConnection
+    .getByLabel("mam_id", { exact: true })
+    .fill("browser-mam-fixture");
+  await mamConnection
+    .getByRole("button", { name: "Save MAM connection", exact: true })
+    .click();
+  await expect(mamConnection.getByLabel("mam_id", { exact: true })).toHaveValue(
+    "",
+  );
+  await mamConnection
+    .getByRole("button", { name: "Test saved connection", exact: true })
+    .click();
+  await expect(mamConnection).toContainText("Connection: connected");
+  await page
+    .getByLabel("Search title, author or series", { exact: true })
+    .fill("Harbor Stories");
+  await page
+    .getByRole("button", { name: "Search source", exact: true })
+    .click();
+  const sourceResults = page.getByRole("region", {
+    name: "MAM results",
+    exact: true,
+  });
+  await expect(sourceResults).toContainText(
+    "Harbor & Roads — Complete Stories",
+  );
+  await expect(sourceResults).toContainText("42 seeders");
+  await expect(sourceResults).toContainText("321 snatches");
+  await sourceResults
+    .getByRole("button", { name: "View source details", exact: true })
+    .click();
+  const mamDetails = sourceResults.getByRole("region", {
+    name: "Details for Harbor & Roads — Complete Stories",
+    exact: true,
+  });
+  await expect(mamDetails).toContainText("Harbor Stories · 1-3");
+  await expect(mamDetails).toContainText("An invented three-book collection.");
+  await expect(mamDetails).not.toContainText("unsafe()");
+  await expect(mamDetails).not.toContainText("fixture-private-download-token");
+  await expect(
+    mamDetails.getByText("Refreshing source details…", { exact: true }),
+  ).toHaveCount(0);
+  await page.screenshot({
+    path: testInfo.outputPath("mam-search-desktop.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("mam-search-mobile.png"),
+    fullPage: true,
+  });
+  await page
+    .getByLabel("Search title, author or series", { exact: true })
+    .fill("No source matches");
+  await page
+    .getByRole("button", { name: "Search source", exact: true })
+    .click();
+  await expect(sourceResults).toContainText("No matching releases");
+  await page.reload();
+  await page.getByText("MAM connection · connected", { exact: true }).click();
+  await expect(mamConnection.getByLabel("mam_id", { exact: true })).toHaveValue(
+    "",
+  );
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.getByRole("link", { name: "Accounts", exact: true }).click();
   await page.getByLabel("Name", { exact: true }).fill("Guest reader");
   await page.getByLabel("Username", { exact: true }).fill("guest");

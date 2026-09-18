@@ -25,6 +25,7 @@ from app.api import (
     operations,
     organization,
     requests,
+    sources,
 )
 from app.config import get_settings
 from app.db.session import get_engine
@@ -103,6 +104,7 @@ def create_app() -> FastAPI:
     app.include_router(inspection_matches.router, prefix="/api")
     app.include_router(import_runs.router, prefix="/api")
     app.include_router(destinations.router, prefix="/api")
+    app.include_router(sources.router, prefix="/api")
     dist: Path = get_settings().web_dist
     if (dist / "assets").is_dir():
         app.mount("/assets", StaticFiles(directory=dist / "assets"), name="assets")

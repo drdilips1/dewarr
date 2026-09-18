@@ -27,6 +27,7 @@ const BookDetail = lazy(() => import("./pages/BookDetail"));
 const Lists = lazy(() => import("./pages/Lists"));
 const ActivityPage = lazy(() => import("./pages/Activity"));
 const Connections = lazy(() => import("./pages/Connections"));
+const Sources = lazy(() => import("./pages/Sources"));
 const MyLibrary = lazy(() => import("./pages/MyLibrary"));
 const Accounts = lazy(() => import("./pages/Accounts"));
 const ProviderSearch = lazy(() => import("./pages/ProviderSearch"));
@@ -268,6 +269,10 @@ function Shell({ auth }: { auth: Auth }) {
             <Search size={19} />
             Search books
           </NavLink>
+          <NavLink to="/sources">
+            <Search size={19} />
+            Sources
+          </NavLink>
           <NavLink to="/metadata">
             <Settings size={19} />
             Metadata
@@ -359,6 +364,10 @@ function Shell({ auth }: { auth: Auth }) {
                 element={
                   <MetadataSettings admin={auth.user.role === "admin"} />
                 }
+              />
+              <Route
+                path="/sources"
+                element={<Sources admin={auth.user.role === "admin"} />}
               />
               <Route
                 path="/organization/destinations"
