@@ -76,6 +76,7 @@ class FreezeInput(StrictModel):
     profile_revision: str = Field(pattern=r"^[a-f0-9]{64}$")
     grouping_revision: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
     selections: list[GroupSelection] = Field(min_length=1, max_length=100)
+    include_covers: bool = True
 
 
 class FrozenDocument(StrictModel):
@@ -93,6 +94,7 @@ class FrozenDocument(StrictModel):
     pending_checks: list[str]
     initial_sidecars: dict[str, dict[str, str]] = Field(default_factory=dict)
     version_revisions: dict[str, str] = Field(default_factory=dict)
+    cover_sources: dict[str, str] = Field(default_factory=dict)
 
 
 class FrozenPlanView(BaseModel):
@@ -229,7 +231,7 @@ async def freeze_plan(inspection_id: UUID, body: FreezeInput, admin: Admin, db: 
         )
     observed = {group.key: group.model_dump() for group in grouping.groups}
     files = {file["path"]: file for file in row.snapshot["files"]}
-    groups, sidecars, versions = [], {}, {}
+    groups, sidecars, versions, covers = [], {}, {}, {}
     await graph_lock(db)
     for selection in body.selections:
         group = observed.get(selection.group_key)
@@ -286,6 +288,8 @@ async def freeze_plan(inspection_id: UUID, body: FreezeInput, admin: Admin, db: 
             )
         )
         try:
+            if body.include_covers and work.cover_url:
+                covers[str(groups[-1].id)] = work.cover_url
             versions[str(version.id)] = version_revision(version)
             sidecars[str(groups[-1].id)] = initial_sidecars(
                 ExportMetadata(
@@ -305,6 +309,7 @@ async def freeze_plan(inspection_id: UUID, body: FreezeInput, admin: Admin, db: 
         "schema_version": 2,
         "initial_sidecars": sidecars,
         "version_revisions": versions,
+        "cover_sources": covers,
         "inspection_revision": row.snapshot["revision"],
         "grouping_revision": grouping_revision,
         "excluded_files": [file.model_dump() for file in grouping.excluded],

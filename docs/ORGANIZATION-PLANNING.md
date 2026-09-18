@@ -62,7 +62,7 @@ New frozen plans use document schema 2 and record deterministic per-group `metad
 
 The exporter writes clean title/subtitle, credited authors, audio narrators, language, the relevant edition/recording year, publisher, description, genres, supported identifiers and selected filing-series sequence when resolved. It escapes XML, preserves Unicode, rejects invalid XML characters and validates ISBN checksums. Original-work and tracker-posting dates do not substitute for a missing version year. Ebook exports do not invent narrator metadata. Uncertified fields such as abridgment, edition labels and app IDs remain in app metadata rather than pretending to be supported ABS OPF fields or identifiers.
 
-This is initial export only. It never edits seeded tags or existing library/ABS metadata. Generated-file hashes remain part of the publisher's frozen specification. The current plan builder supplies resolved title/contributors/language/year, identifiers and work description; canonical series selection and broader edition/publisher metadata still need their domain/UI work before they flow automatically into export. Cover download/validation and later metadata reconciliation remain pending. Nine exporter tests and the real ABS cases verify the supported initial OPF path.
+This is initial export only. It never edits seeded tags or existing library/ABS metadata. Generated-file hashes remain part of the publisher's frozen specification. The current plan builder supplies resolved title/contributors/language/year, identifiers and work description; canonical series selection and broader edition/publisher metadata still need their domain/UI work before they flow automatically into export. Selected catalog covers now export as independent frozen JPEGs; see [Initial cover export](COVER-EXPORT.md). Later metadata reconciliation remains pending. Nine exporter tests and the real ABS cases verify the supported initial OPF path.
 
 ## File evidence
 
@@ -118,6 +118,8 @@ Migration 0011 adds durable runs, per-child publication state and reservations. 
 
 Migration 0012 adds immutable file-group review history. Its populated-state guard prevents lossy rollback. The latest grouping is separate from the original inspection snapshot and from every frozen plan.
 
+Migration 0013 adds initial-cover export evidence. Prepared JPEG bytes are frozen in the publication specification; populated history requires a pre-upgrade backup for rollback.
+
 ## Reviewed publication and availability
 
 After saving a conventional-layout plan, select a verified destination for each medium and choose **Import resolved books**. The UI chooses a destination automatically only when exactly one verified binding matches the medium. Unresolved or unverified children remain held; other children proceed independently. Full ownership of this exact version in the selected ABS library skips publication. Another reserved import for the version in that library holds the new entry, including when different destination bindings point to the same library. Reservations and queue jobs commit atomically; command replay returns the same run.
@@ -136,7 +138,7 @@ Current limits: reservations stay attached to held/published entries; cancellati
 
 All receipts, locks and partial staging stay outside scanned roots. Existing destination folders are never adopted by filename alone or overwritten. Recovery recognizes a published item through recorded directory identity and an exact file/hash manifest, including when the seeded download has subsequently gone away. Staged copy recovery removes only the recorded partial inode; unknown files and unconfirmed staging directories remain untouched for review. A missing or changed published item is held instead of silently recreated. Source media bytes, names, modes and timestamps are not rewritten; hardlink creation necessarily changes link counts and inode change time.
 
-The implementation uses Linux [renameat2 with RENAME_NOREPLACE](https://man7.org/linux/man-pages/man2/rename.2.html) and Darwin [renameatx_np with RENAME_EXCL](https://github.com/apple-oss-distributions/xnu/blob/main/bsd/sys/stdio.h). Only Darwin has been executed locally. Ordinary overwrite-capable rename is not a fallback. Kernel I/O interruption, Linux/container behavior, bind aliases, full orphan cleanup/restore recovery, generated covers and broader export/identity mapping remain gate work.
+The implementation uses Linux [renameat2 with RENAME_NOREPLACE](https://man7.org/linux/man-pages/man2/rename.2.html) and Darwin [renameatx_np with RENAME_EXCL](https://github.com/apple-oss-distributions/xnu/blob/main/bsd/sys/stdio.h). Only Darwin has been executed locally. Ordinary overwrite-capable rename is not a fallback. Kernel I/O interruption, Linux/container behavior, bind aliases, full orphan cleanup/restore recovery and broader export/identity mapping remain gate work.
 
 ## Verification and remaining gate
 
@@ -148,6 +150,8 @@ Fourteen integrated publication tests cover command/reservation races, shared-li
 
 Twelve grouping integration cases cover merge/split/reset, immutable source evidence, stale/concurrent reviews, invalid file assignments, frozen-plan invalidation, active-import protection, owner isolation and downgrade protection. Four additional cases reject reversed, missing or duplicate playback indices while accepting explicit correct indices independent of API array order. The browser persists exclusions, restores proposals, maps the restored group and completes its import.
 
-The [native ABS certification](ABS-NATIVE-CERTIFICATION.md) passed eight pinned-server scanner cases through the publisher and inventory adapter, plus real ebook and merged two-track audio application workflows through the import API and durable worker. The audio case confirms playback order. Initial OPF export participates in these checks. Actual watcher behavior and broader compatibility remain unverified; nested layout is still preview-only.
+The [native ABS certification](ABS-NATIVE-CERTIFICATION.md) passed eight pinned-server scanner cases through the publisher and inventory adapter, plus real ebook and merged two-track audio application workflows through the import API and durable worker. The audio case confirms playback order. Initial OPF and cover export participate in these checks; ABS selects generated artwork and later changed cover bytes remain untouched. Actual watcher behavior and broader compatibility remain unverified; nested layout is still preview-only.
 
-Next: generated covers, fuller grouping/format/omnibus coverage, cancellation/replanning and the complete recovery/compatibility matrix. These remain required before enabling the MAM/qBittorrent acquisition path. No S04 acceptance gate is claimed complete.
+Forty cover unit cases and seven integration cases cover bounded retrieval/decoding, publication consistency, optional failure and artwork-edit preservation. See [Initial cover export](COVER-EXPORT.md) for the live-provider evidence and remaining limits.
+
+Next: fuller grouping/format/omnibus coverage, cancellation/replanning and the complete recovery/compatibility matrix. These remain required before enabling the MAM/qBittorrent acquisition path. No S04 acceptance gate is claimed complete.

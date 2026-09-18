@@ -48,6 +48,7 @@ class ABSItem(BaseModel):
     path: str | None = None
     library_files: list[ABSFile] = Field(default_factory=list)
     series: list[dict] = Field(default_factory=list)
+    cover_path: str | None = None
 
 
 class ABSImportConfiguration(BaseModel):
@@ -138,6 +139,7 @@ def parse_item(value: dict) -> ABSItem:
             path=value.get("path"),
             library_files=[file_evidence(file) for file in files],
             series=metadata.get("series") or [],
+            cover_path=media.get("coverPath"),
             old_id=external_id(value["oldLibraryItemId"])
             if value.get("oldLibraryItemId")
             else None,

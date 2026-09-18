@@ -5,6 +5,8 @@ Bulk file work happens outside database transactions in private staging.
 """
 
 import asyncio
+import base64
+import hashlib
 import time
 from contextlib import contextmanager
 from datetime import UTC, datetime, timedelta
@@ -34,6 +36,7 @@ from app.db.session import session_factory
 from app.domain.identity import normalized
 from app.domain.inventory import apply_item
 from app.importing.backend import verify_backend
+from app.importing.covers import CoverError, fetch_cover
 from app.importing.destinations import destination_configuration
 from app.importing.filesystem import beneath, digest, directory
 from app.importing.naming import AUDIO, EBOOK
@@ -157,15 +160,15 @@ def verify_published_media(spec):
 
 
 def matches(entry, item):
-    spec = PublicationSpec.model_validate(entry.specification)
     config, metadata = entry.configuration["destination"], entry.expected_metadata
-    folder = str(PurePosixPath(config["backend_path"]) / spec.folder)
+    folder = str(PurePosixPath(config["backend_path"]) / entry.specification["folder"])
+    if item.path != folder:
+        return False
+    spec = PublicationSpec.model_validate(entry.specification)
     selected = {
         str(PurePosixPath(folder) / file.name): file.identity["size"] for file in spec.files
     }
     media = {file.path: file.size for file in item.library_files if file.format in AUDIO | EBOOK}
-    if item.path != folder:
-        return False
     if (
         media != selected
         or item.missing
@@ -206,6 +209,62 @@ def matches(entry, item):
     ):
         raise PublicationError("ABS series metadata differs from the export")
     return True
+
+
+async def prepare_cover(entry_id, token):
+    async with session_factory()() as db:
+        entry = await db.get(ImportEntry, entry_id)
+        await context(db, entry, token)
+        source = entry.expected_metadata.get("cover_source")
+        if entry.cover_export is not None or not source or entry.published_at:
+            return PublicationSpec.model_validate(entry.specification)
+    try:
+        content = await fetch_cover(source)
+        cover = {
+            "state": "prepared",
+            "message": "Selected catalog cover prepared for initial export",
+            "sha256": hashlib.sha256(content).hexdigest(),
+        }
+    except CoverError as error:
+        content = None
+        cover = {"state": "unavailable", "message": f"No cover exported: {error}"}
+    async with session_factory()() as db, db.begin():
+        current = await db.get(ImportEntry, entry_id)
+        run, _, _, _ = await context(db, current, token, lock=True)
+        spec = PublicationSpec.model_validate(current.specification)
+        if current.cover_export is None:
+            if content:
+                spec = PublicationSpec.model_validate(
+                    {
+                        **spec.model_dump(mode="json"),
+                        "binary_sidecars": {"cover.jpg": base64.b64encode(content).decode("ascii")},
+                    }
+                )
+            current.specification = spec.model_dump(mode="json")
+            current.cover_export = cover
+            db.add(
+                AuditEvent(
+                    actor_id=run.owner_id,
+                    action="organization.cover.prepared",
+                    entity_id=current.id,
+                    detail={"state": cover["state"], "sha256": cover.get("sha256")},
+                )
+            )
+        return spec
+
+
+def observe_cover(spec):
+    if not spec.binary_sidecars:
+        return None
+    try:
+        with (
+            directory(spec.destination_root) as root,
+            beneath(root, spec.folder, folder=True) as item,
+            beneath(item, "cover.jpg") as file,
+        ):
+            return digest(file, time.monotonic() + 15)
+    except (OSError, ValueError):
+        return None  # External artwork changes do not invalidate the book's media.
 
 
 async def find_item(adapter, entry, library_external_id):
@@ -283,6 +342,8 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                 entry.expected_metadata["medium"],
             )
             if not entry.published_at:
+                spec = await prepare_cover(entry_id, token)
+                entry.specification = spec.model_dump(mode="json")
                 guard = RenameGuard(asyncio.get_running_loop(), entry_id, token)
                 task = asyncio.create_task(
                     asyncio.to_thread(
@@ -331,6 +392,7 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                     else "Published; waiting for Audiobookshelf to detect the complete item",
                 )
                 return
+            observed_cover = await asyncio.to_thread(observe_cover, spec)
             async with session_factory()() as db, db.begin():
                 current = await db.get(ImportEntry, entry_id)
                 _, _, integration, library = await context(db, current, token, lock=True)
@@ -376,6 +438,24 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                         "ABS observation did not produce the intended full library asset"
                     )
                 current.asset_id, current.confirmed_at = asset.id, datetime.now(UTC)
+                if current.cover_export and current.cover_export["state"] == "prepared":
+                    selected = item.cover_path == str(
+                        PurePosixPath(current.configuration["destination"]["backend_path"])
+                        / spec.folder
+                        / "cover.jpg"
+                    )
+                    unchanged = observed_cover == current.cover_export["sha256"]
+                    current.cover_export = {
+                        **current.cover_export,
+                        "backend_selected": selected,
+                        "unchanged": unchanged,
+                        "message": "Selected cover detected in Audiobookshelf"
+                        if selected and unchanged
+                        else (
+                            "Artwork changed or ABS selected another cover; "
+                            "the initial export will not overwrite it"
+                        ),
+                    }
                 current.state, current.message, current.run_token, current.next_check_at = (
                     "confirmed",
                     "Available in Audiobookshelf",

@@ -3981,6 +3981,61 @@
         ],
         "title": "ConnectionView"
       },
+      "CoverExportView": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "prepared",
+              "unavailable"
+            ],
+            "title": "State"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sha256"
+          },
+          "backend_selected": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Backend Selected"
+          },
+          "unchanged": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unchanged"
+          }
+        },
+        "type": "object",
+        "required": [
+          "state",
+          "message"
+        ],
+        "title": "CoverExportView"
+      },
       "Credentials": {
         "properties": {
           "username": {
@@ -4461,6 +4516,16 @@
             "type": "boolean",
             "title": "Can Retry",
             "default": false
+          },
+          "cover_export": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CoverExportView"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -4557,6 +4622,11 @@
             "maxItems": 100,
             "minItems": 1,
             "title": "Selections"
+          },
+          "include_covers": {
+            "type": "boolean",
+            "title": "Include Covers",
+            "default": true
           }
         },
         "additionalProperties": false,
@@ -4658,6 +4728,13 @@
             },
             "type": "object",
             "title": "Version Revisions"
+          },
+          "cover_sources": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Cover Sources"
           }
         },
         "additionalProperties": false,

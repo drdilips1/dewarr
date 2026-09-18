@@ -495,6 +495,9 @@ test("setup, catalog, private list and durable worker are usable together", asyn
       "These files contain the complete book, not a sample or companion document",
     )
     .check();
+  await expect(
+    inspected.getByLabel("Include selected catalog covers in new imports"),
+  ).toBeChecked();
   await inspected.getByRole("button", { name: "Save import plan" }).click();
   const savedPlan = page.getByRole("article", { name: "Saved import plan" });
   await expect(savedPlan).toContainText(
@@ -502,6 +505,9 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   );
   await page.reload();
   await expect(savedPlan).toContainText("book.epub → ebooks/");
+  await expect(savedPlan).toContainText(
+    "0 selected covers. Unavailable artwork is reported without blocking the book import.",
+  );
   await savedPlan.getByRole("link", { name: "Check destination" }).click();
   await page
     .getByRole("combobox", { name: "Audiobookshelf library", exact: true })

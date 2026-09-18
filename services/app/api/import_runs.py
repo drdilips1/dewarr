@@ -43,6 +43,14 @@ class ImportInput(StrictModel):
     destinations: dict[Literal["ebook", "audio"], DestinationChoice]
 
 
+class CoverExportView(BaseModel):
+    state: Literal["prepared", "unavailable"]
+    message: str
+    sha256: str | None = None
+    backend_selected: bool | None = None
+    unchanged: bool | None = None
+
+
 class EntryView(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: UUID
@@ -56,6 +64,7 @@ class EntryView(BaseModel):
     confirmed_at: datetime | None
     asset_id: UUID | None
     can_retry: bool = False
+    cover_export: CoverExportView | None = None
 
 
 class RunView(BaseModel):
@@ -232,6 +241,7 @@ async def start_import(
             **group["metadata"],
             "medium": item["medium"],
             "version_revision": version_revision(version),
+            "cover_source": document.get("cover_sources", {}).get(item["group_id"]),
         }
         if item["medium"] == "audio" and len(specification.files) > 1:
             names = {file.source: file.name for file in specification.files}

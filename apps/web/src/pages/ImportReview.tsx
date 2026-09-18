@@ -200,6 +200,7 @@ function Review({ inspection }: { inspection: Inspection }) {
   const [groupOffset, setGroupOffset] = useState(0);
   const [fileLimit, setFileLimit] = useState(100);
   const [editingGroups, setEditingGroups] = useState(false);
+  const [includeCovers, setIncludeCovers] = useState(true);
   const snapshot = inspection.snapshot;
   const grouping = useQuery({
     queryKey: ["inspection-grouping", inspection.id],
@@ -239,6 +240,7 @@ function Review({ inspection }: { inspection: Inspection }) {
             inspection_revision: snapshot!.revision,
             profile_revision: settings.data!.revision,
             grouping_revision: grouping.data!.revision,
+            include_covers: includeCovers,
             selections: Object.values(selections),
           },
         }),
@@ -343,6 +345,15 @@ function Review({ inspection }: { inspection: Inspection }) {
             )}
           </details>
           <Notice error={settings.error || save.error} />
+          <label className="check-label">
+            <input
+              type="checkbox"
+              checked={includeCovers}
+              disabled={save.isPending}
+              onChange={(event) => setIncludeCovers(event.target.checked)}
+            />
+            Include selected catalog covers in new imports
+          </label>
           <button
             className="primary"
             disabled={
@@ -383,6 +394,11 @@ function Review({ inspection }: { inspection: Inspection }) {
           <p className="notice">
             Recorded for review. Source revalidation, destination checks and
             Audiobookshelf compatibility are still required before publication.
+          </p>
+          <p className="muted">
+            {Object.keys(frozen.data.document.cover_sources || {}).length}{" "}
+            selected covers. Unavailable artwork is reported without blocking
+            the book import.
           </p>
           {frozen.data.document.plan.items.map((item) => (
             <div className="import-path" key={item.group_id}>

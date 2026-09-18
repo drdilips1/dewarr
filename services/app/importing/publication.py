@@ -3,6 +3,7 @@
 All recovery bookkeeping stays in the private staging root, never in an ABS library.
 """
 
+import base64
 import ctypes
 import errno
 import fcntl
@@ -65,6 +66,7 @@ class PublicationSpec(StrictModel):
     mode: Literal["hardlink", "copy"] = "hardlink"
     files: list[PublishFile] = Field(min_length=1, max_length=5000)
     sidecars: dict[str, str] = Field(default_factory=dict)
+    binary_sidecars: dict[str, str] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def confined(self):
@@ -79,6 +81,19 @@ class PublicationSpec(StrictModel):
         if sum(len(value.encode()) for value in self.sidecars.values()) > 1024 * 1024:
             raise ValueError("Generated sidecars exceed the supported limit")
         names.extend(self.sidecars)
+        if set(self.binary_sidecars) - {"cover.jpg"}:
+            raise ValueError("Only a generated JPEG cover may be exported as binary metadata")
+        for content in self.binary_sidecars.values():
+            if len(content) > 700000:
+                raise ValueError("Generated cover exceeds its size limit")
+            decoded = base64.b64decode(content, validate=True)
+            if (
+                len(decoded) > 512 * 1024
+                or not decoded.startswith(b"\xff\xd8")
+                or not decoded.endswith(b"\xff\xd9")
+            ):
+                raise ValueError("Generated cover is not a bounded JPEG")
+        names.extend(self.binary_sidecars)
         if len({collision_key(name) for name in names}) != len(names):
             raise ValueError("Published filenames collide")
         for root in (self.source_root, self.destination_root, self.staging_root):
@@ -92,6 +107,23 @@ class PublicationSpec(StrictModel):
             if left.is_relative_to(right) or right.is_relative_to(left):
                 raise ValueError("Source, library and staging roots must not overlap")
         return self
+
+
+def generated_files(spec):
+    return {
+        **{name: content.encode() for name, content in spec.sidecars.items()},
+        **{
+            name: base64.b64decode(content, validate=True)
+            for name, content in spec.binary_sidecars.items()
+        },
+    }
+
+
+def specification_fingerprint(spec):
+    payload = spec.model_dump(mode="json")
+    if not spec.binary_sidecars:
+        payload.pop("binary_sidecars")  # Preserve receipts created before cover support.
+    return fingerprint(payload)
 
 
 def object_id(fd):
@@ -219,7 +251,7 @@ def checked_source(source, file, deadline):
 
 
 def verify_item(folder, spec, deadline):
-    expected = {file.name for file in spec.files} | set(spec.sidecars)
+    expected = {file.name for file in spec.files} | set(generated_files(spec))
     if set(os.listdir(folder)) != expected:
         raise PublicationError("Item contains missing or unplanned files")
     for file in spec.files:
@@ -228,9 +260,9 @@ def verify_item(folder, spec, deadline):
                 raise PublicationError("Published media does not match its frozen manifest")
             if spec.mode == "hardlink" and not same_object(fd, file.identity):
                 raise PublicationError("Published media is not the expected hardlink")
-    for name, content in spec.sidecars.items():
+    for name, content in generated_files(spec).items():
         with beneath(folder, name) as fd:
-            if digest(fd, deadline) != hashlib.sha256(content.encode()).hexdigest():
+            if digest(fd, deadline) != hashlib.sha256(content).hexdigest():
                 raise PublicationError("Generated metadata differs from its frozen manifest")
 
 
@@ -349,14 +381,14 @@ def stage_files(staging, stage, source, receipt_name, receipt, spec, deadline, c
                     os.close(output)
         sync_directory(stage)
         checkpoint("file-staged")
-    for name, content in spec.sidecars.items():
+    for name, content in generated_files(spec).items():
         try:
             output = os.open(
                 name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o644, dir_fd=stage
             )
         except FileExistsError:
             with beneath(stage, name) as fd:
-                if digest(fd, deadline) != hashlib.sha256(content.encode()).hexdigest():
+                if digest(fd, deadline) != hashlib.sha256(content).hexdigest():
                     # Sidecar byte writes can be interrupted. Only remove a journaled own inode.
                     owned = receipt.get("partial_files", {}).get(name)
                     if not owned or not same_object(fd, owned) or os.fstat(fd).st_nlink != 1:
@@ -375,7 +407,7 @@ def stage_files(staging, stage, source, receipt_name, receipt, spec, deadline, c
         try:
             receipt.setdefault("partial_files", {})[name] = object_id(output)
             write_receipt(staging, receipt_name, receipt)
-            write_all(output, content.encode())
+            write_all(output, content)
             os.fsync(output)
         finally:
             os.close(output)
@@ -390,7 +422,7 @@ def publish_item(
     publication_guard: Callable = nullcontext,
 ):
     deadline = time.monotonic() + timeout
-    spec_hash = fingerprint(spec.model_dump(mode="json"))
+    spec_hash = specification_fingerprint(spec)
     receipt_name = str(spec.entry_id) + ".json"
     with (
         private_staging(spec.staging_root) as staging,

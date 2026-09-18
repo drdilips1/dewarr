@@ -1,11 +1,20 @@
 """Small original synthetic book content, generated in disposable test directories."""
 
+import io
 import shutil
 import subprocess
 import zipfile
 from xml.sax.saxutils import escape
 
 import pytest
+
+
+def cover_bytes(*, color="navy", size=(240, 360), format="PNG", **save_options):
+    from PIL import Image
+
+    output = io.BytesIO()
+    Image.new("RGB", size, color).save(output, format=format, **save_options)
+    return output.getvalue()
 
 
 def epub(path, title="First Harbor", author="Alex Morgan", *, chapter=True, metadata=None):

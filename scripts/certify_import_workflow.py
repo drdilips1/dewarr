@@ -1,17 +1,20 @@
 """Optional real-server import workflow used by certify_abs, with a disposable DB."""
 
 import asyncio
+import hashlib
+from unittest.mock import patch
 from uuid import UUID
 
 import httpx
 from sqlalchemy import text
 
 from app.config import get_settings
-from app.db.models import Base, Version
+from app.db.models import Base, Version, Work
 from app.db.session import get_engine, session_factory
 from app.importing.execution import execute
 from app.jobs.queue import get_queue
 from app.main import create_app
+from tests.cover_fixture import COVER_URL, CoverServiceFixture
 from tests.media_fixtures import audio, epub
 
 
@@ -53,6 +56,9 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook"):
         audio(source / "part-b/02.mp3", title=title, author="Fixture Author", track=2)
     source_bytes = {path: path.read_bytes() for path in source.rglob("*") if path.is_file()}
     queue = get_queue()
+    cover_service = CoverServiceFixture()
+    cover_patch = patch("app.importing.execution.fetch_cover", new=cover_service.fetch)
+    cover_patch.start()
     try:
         async with (
             queue.open_async(),
@@ -110,6 +116,7 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook"):
                 json={"title": title, "authors": ["Fixture Author"], "language": "en"},
             )
             async with session_factory()() as db, db.begin():
+                (await db.get(Work, UUID(work["id"]))).cover_url = COVER_URL
                 version = Version(
                     work_id=UUID(work["id"]),
                     medium=medium,
@@ -214,6 +221,15 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook"):
                 await asyncio.sleep(0.25)
                 await execute(UUID(entry["operation_id"]))
             assert entry["state"] == "confirmed", entry
+            assert (
+                entry["cover_export"]["backend_selected"] and entry["cover_export"]["unchanged"]
+            ), entry
+            covers = list(target.rglob("cover.jpg"))
+            assert len(covers) == 1 and covers[0].stat().st_nlink == 1
+            assert (
+                hashlib.sha256(covers[0].read_bytes()).hexdigest()
+                == entry["cover_export"]["sha256"]
+            )
             owned = await request("GET", f"/api/catalog/works/{work['id']}")
             assert owned["availability"]["owned"] and owned["availability"][medium]
             assert not owned["availability"]["audio" if medium == "ebook" else "ebook"]
@@ -227,6 +243,12 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook"):
                     len(matches) == 1
                     and matches[0].read_bytes() == original.read_bytes() == content
                 )
+            # A later operator edit is never replaced by a repeat import.
+            from app.importing.cover_image import normalize
+            from tests.media_fixtures import cover_bytes
+
+            changed_cover = normalize(cover_bytes(color="green"))
+            covers[0].write_bytes(changed_cover)
             second = await request(
                 "POST",
                 f"/api/organization/plans/{plan['id']}/imports",
@@ -235,11 +257,15 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook"):
                 json=body,
             )
             assert second["entries"][0]["state"] == "skipped"
+            assert covers[0].read_bytes() == changed_cover and len(cover_service.calls) == 1
             return {
                 "confirmed": True,
                 "owned": True,
                 "source_preserved": True,
                 "duplicate_skipped": True,
+                "cover_selected_by_abs": True,
+                "later_cover_edit_preserved": True,
+                "cover_http": "synthetic fixture; real decoder and ABS scanner",
                 "medium": medium,
                 "reviewed_group_merge": medium == "audio",
                 "playback_order_confirmed": medium == "audio",
@@ -247,6 +273,7 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook"):
                 "server_library_id": external_library,
             }
     finally:
+        cover_patch.stop()
         # This database is disposable; do not retain ephemeral server credentials.
         async with get_engine().begin() as db:
             await db.execute(

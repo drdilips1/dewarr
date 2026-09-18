@@ -98,6 +98,9 @@ class ScanningBackend(ImportBackendFixture):
                 if path.is_file()
             ]
             media = {
+                "coverPath": f"{self.backend_path}/{relative}/cover.jpg"
+                if (folder / "cover.jpg").is_file()
+                else None,
                 "metadata": {
                     "title": xml.find(f".//{dc}title").text,
                     "authors": [{"name": node.text} for node in xml.findall(f".//{dc}creator")],

@@ -1333,6 +1333,22 @@ export interface components {
       /** Last Success At */
       last_success_at: string | null;
     };
+    /** CoverExportView */
+    CoverExportView: {
+      /**
+       * State
+       * @enum {string}
+       */
+      state: "prepared" | "unavailable";
+      /** Message */
+      message: string;
+      /** Sha256 */
+      sha256?: string | null;
+      /** Backend Selected */
+      backend_selected?: boolean | null;
+      /** Unchanged */
+      unchanged?: boolean | null;
+    };
     /** Credentials */
     Credentials: {
       /** Username */
@@ -1504,6 +1520,7 @@ export interface components {
        * @default false
        */
       can_retry: boolean;
+      cover_export?: components["schemas"]["CoverExportView"] | null;
     };
     /** ExcludedFile */
     ExcludedFile: {
@@ -1531,6 +1548,11 @@ export interface components {
       grouping_revision?: string | null;
       /** Selections */
       selections: components["schemas"]["GroupSelection"][];
+      /**
+       * Include Covers
+       * @default true
+       */
+      include_covers: boolean;
     };
     /** FrozenDocument */
     FrozenDocument: {
@@ -1568,6 +1590,10 @@ export interface components {
       };
       /** Version Revisions */
       version_revisions?: {
+        [key: string]: string;
+      };
+      /** Cover Sources */
+      cover_sources?: {
         [key: string]: string;
       };
     };

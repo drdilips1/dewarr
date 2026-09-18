@@ -458,6 +458,7 @@ class ImportEntry(Identity, Base):
     specification: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
     configuration: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
     expected_metadata: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
+    cover_export: Mapped[dict[str, Any] | None] = mapped_column(JSONB(none_as_null=True))
     receipt: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
     run_token: Mapped[UUID | None] = mapped_column()
     published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

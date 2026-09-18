@@ -175,6 +175,9 @@ export default function ImportExecution({ plan }: { plan: Plan }) {
                   {item?.title || "Book"} · {labels[entry.state] || entry.state}
                 </strong>
                 <p role="status">{entry.message}</p>
+                {entry.cover_export && (
+                  <p className="muted">{entry.cover_export.message}</p>
+                )}
                 {entry.state === "confirmed" && item && (
                   <Link to={`/books/${item.work_id}`}>View library book</Link>
                 )}
