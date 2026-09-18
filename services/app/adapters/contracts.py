@@ -98,6 +98,13 @@ class DownloadState(BaseModel):
     association_verified: bool = False
 
 
+class SubmissionReceipt(BaseModel):
+    """Transport acknowledgement; identifiers are hints until independently reconciled."""
+
+    external_ids: list[str] = Field(default_factory=list)
+    pending: bool = False
+
+
 class InventoryPage(BaseModel):
     items: list[dict[str, Any]]
     cursor: str | None = None
@@ -128,4 +135,6 @@ class DownloadClient(Protocol):
     async def capabilities(self) -> Capabilities: ...
     async def find(self, *, attempt_tag: str, torrent_hash: str | None) -> list[DownloadState]: ...
     async def status(self, external_id: str) -> DownloadState: ...
-    async def submit(self, artifact: bytes | str, *, attempt_tag: str, save_path: str) -> None: ...
+    async def submit(
+        self, artifact: bytes | str, *, attempt_tag: str, save_path: str
+    ) -> SubmissionReceipt: ...
