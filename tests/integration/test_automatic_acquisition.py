@@ -62,6 +62,7 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     late_join=False,
     reuse_failure=None,
     via_series=False,
+    inherited_routes=False,
 ):
     route = ready_route
     if series_pack:
@@ -226,6 +227,16 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     if via_series:
         from app.db.models import Operation
         from app.domain import series_acquisition
+        from tests.integration.test_acquisition_defaults import save as save_defaults
+
+        if inherited_routes:
+            await save_defaults(
+                client,
+                {
+                    "downloader_id": downloader_id,
+                    medium + "_destination_id": route["destination"]["id"],
+                },
+            )
 
         series_base = "/api/catalog/series/hardcover/pack-series/requests"
         response = await client.post(
@@ -237,7 +248,9 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
                 "confirm_main_membership": True,
                 "expected_generation": 1,
                 "specification": {"mode": medium},
-                "automatic": {
+                "automatic": {}
+                if inherited_routes
+                else {
                     "downloader_id": downloader_id,
                     "downloader_generation": 1,
                     "routes": {
@@ -298,6 +311,14 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
                 "language": "en",
                 "required_narrators": ["Jordan Lee"],
                 medium + "_library_id": route["library_id"],
+                **(
+                    {
+                        "downloader_id": downloader_id,
+                        medium + "_destination_id": route["destination"]["id"],
+                    }
+                    if inherited_routes
+                    else {}
+                ),
             },
         )
         shelf = (await client.post("/api/lists", json={"name": "List-to-library fixture"})).json()[
@@ -315,9 +336,11 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
                     },
                 },
                 "preference_overrides": {"criteria": ["seeders", "format", "source"]},
-                "downloader_id": downloader_id,
-                "downloader_generation": 1,
-                "routes": {
+                "downloader_id": None if inherited_routes else downloader_id,
+                "downloader_generation": None if inherited_routes else 1,
+                "routes": {}
+                if inherited_routes
+                else {
                     medium: {
                         "destination_id": route["destination"]["id"],
                         "destination_revision": route["destination"]["revision"],
@@ -835,4 +858,26 @@ async def test_reviewed_complete_series_automatically_acquires_and_confirms_each
         request_limits=True,
         series_pack=True,
         via_series=True,
+    )
+
+
+@pytest.mark.parametrize("via_series", [False, True])
+@pytest.mark.parametrize("delayed_backend", [False, True])
+async def test_inherited_routes_reach_confirmed_library_through_list_or_series(
+    client, admin, database, ready_route, review_account, monkeypatch, via_series, delayed_backend
+):
+    await test_search_to_automatic_download_and_confirmed_member_library(
+        client,
+        admin,
+        database,
+        ready_route,
+        review_account,
+        monkeypatch,
+        "ebook",
+        delayed_backend,
+        request_limits=True,
+        series_pack=via_series,
+        via_series=via_series,
+        via_list=not via_series,
+        inherited_routes=True,
     )

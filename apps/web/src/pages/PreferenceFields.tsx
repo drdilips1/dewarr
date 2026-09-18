@@ -1,4 +1,5 @@
 import ScopeFields from "./ScopeFields";
+import RouteFields, { EffectiveRoutes } from "./RouteFields";
 import NarratorNamesField from "./NarratorNamesField";
 import type { components } from "../api/schema";
 type Preferences = components["schemas"]["ReleasePreferences"];
@@ -141,6 +142,12 @@ export default function PreferenceFields({
         origins={origins}
         onChange={onChange}
         includeMedia={includeMedia}
+      />
+      <RouteFields
+        overrides={overrides}
+        inherited={inherited}
+        origins={origins}
+        onChange={onChange}
       />
       {order("criteria")}
       <details>
@@ -306,6 +313,7 @@ export function EffectivePreferences({
   return (
     <details>
       <summary>Effective download preferences</summary>
+      <EffectiveRoutes preferences={preferences} origins={origins} />
       <dl>
         {(Object.keys(preferenceLabels) as (keyof Preferences)[]).map((key) => (
           <div key={key}>

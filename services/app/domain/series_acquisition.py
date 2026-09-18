@@ -22,6 +22,7 @@ KIND = "series.acquire"
 
 
 async def configuration(db, user, specification, profile, routes):
+    routes, route_origins = await automatic_routes.inherit(db, user, specification, profile, routes)
     libraries, approvals = await automatic_routes.resolve(
         db, user, specification, routes.downloader_id, routes.downloader_generation, routes.routes
     )
@@ -30,6 +31,7 @@ async def configuration(db, user, specification, profile, routes):
         update={
             "scope_origins": {
                 **profile.scope_origins,
+                **route_origins,
                 **dict.fromkeys(libraries, "Series import route"),
             }
         }

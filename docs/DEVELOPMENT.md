@@ -6,6 +6,8 @@ Current request contract: back up the database and apply migrations through `003
 
 [Automatic reviewed-series acquisition](SERIES-ACQUISITION.md) adds a durable `series.acquire` task without a new migration. Update API and worker together before accepting automatic series requests. Finite accepted sets retain their own scope and authority; this does not enable future-sequel monitoring or installation dispatch.
 
+[Route defaults](ROUTE-DEFAULTS.md) add inherited downloader and per-medium destination references to the existing JSON preferences. Deploy API and worker together before saving these fields; no new migration is required. Automatic acquisition still needs current route approval, and deployment does not enable dispatch.
+
 ## Native development
 
 Requires Python 3.13, uv, Node 24+ and PostgreSQL. The current workspace uses a dedicated PostgreSQL 16.14 cluster on loopback port 55438; PostgreSQL 18 container certification is pending.

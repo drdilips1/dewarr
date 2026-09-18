@@ -35,6 +35,11 @@ FORMATS = {
 
 class ReleasePreferences(ScopePreferences):
     model_config = ConfigDict(extra="forbid")
+    # Omit unset routes from full snapshots so legacy effective revisions stay
+    # valid. Sparse overrides still retain explicit nulls to clear inheritance.
+    downloader_id: UUID | None = Field(default=None, exclude_if=lambda value: value is None)
+    ebook_destination_id: UUID | None = Field(default=None, exclude_if=lambda value: value is None)
+    audio_destination_id: UUID | None = Field(default=None, exclude_if=lambda value: value is None)
     search_series: bool = True
     prefer_series_packs: bool = True
     ebook_formats: list[str] = Field(
@@ -99,7 +104,11 @@ class PreferenceOverrides(ReleasePreferences):
 
     @model_serializer(mode="wrap")
     def sparse(self, handler):
-        return {key: value for key, value in handler(self).items() if key in self.model_fields_set}
+        values = handler(self)
+        for field in {"downloader_id", "ebook_destination_id", "audio_destination_id"}:
+            if field in self.model_fields_set and getattr(self, field) is None:
+                values[field] = None
+        return {key: value for key, value in values.items() if key in self.model_fields_set}
 
 
 class ProfileSnapshot(BaseModel):

@@ -5,6 +5,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
+import { chooseRoute, destinationPreference } from "./RouteFields";
 
 type Artifact = components["schemas"]["SourceArtifactView"];
 
@@ -100,9 +101,14 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
     : !params.get("work") || params.get("work") === selected?.intent.work_id;
   const downloaders =
     options.data?.downloaders.filter((item) => item.ready) || [];
-  const downloader =
-    downloaders.find((item) => item.id === downloaderId) ||
-    (downloaders.length === 1 ? downloaders[0] : undefined);
+  const preferences =
+    selected?.intent.release_policy?.preferences ||
+    selectedProfile?.preferences;
+  const downloader = chooseRoute(
+    downloaders,
+    downloaderId,
+    preferences?.downloader_id,
+  );
   const requiredLibrary =
     selected?.intent.specification[
       artifact.release.medium === "audio"
@@ -117,9 +123,11 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
         item.source_key === downloader?.source_key &&
         (!requiredLibrary || item.library_id === requiredLibrary),
     ) || [];
-  const destination =
-    destinations.find((item) => item.id === destinationId) ||
-    (destinations.length === 1 ? destinations[0] : undefined);
+  const destination = chooseRoute(
+    destinations,
+    destinationId,
+    destinationPreference(preferences, artifact.release.medium || "audio"),
+  );
   const refresh = async () => {
     await Promise.all(
       [

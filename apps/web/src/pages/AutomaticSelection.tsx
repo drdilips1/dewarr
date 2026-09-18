@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
+import { chooseRoute, destinationPreference } from "./RouteFields";
 
 type Search = components["schemas"]["BookSearchView"];
 type Receipt = components["schemas"]["AutomaticSelectionView"];
@@ -77,9 +78,13 @@ export default function AutomaticSelection({
       medium === "audio" ? "audio_library_id" : "ebook_library_id"
     ];
   const downloaders = options.data?.downloaders.filter((d) => d.ready) || [];
-  const downloader =
-    downloaders.find((d) => d.id === downloaderId) ||
-    (downloaders.length === 1 ? downloaders[0] : undefined);
+  const preferences =
+    request.data?.release_policy?.preferences || search.profile.preferences;
+  const downloader = chooseRoute(
+    downloaders,
+    downloaderId,
+    preferences.downloader_id,
+  );
   const destinations =
     options.data?.destinations.filter(
       (d) =>
@@ -88,9 +93,11 @@ export default function AutomaticSelection({
         d.source_key === downloader?.source_key &&
         (!library || d.library_id === library),
     ) || [];
-  const destination =
-    destinations.find((d) => d.id === destinationId) ||
-    (destinations.length === 1 ? destinations[0] : undefined);
+  const destination = chooseRoute(
+    destinations,
+    destinationId,
+    destinationPreference(preferences, medium || "audio"),
+  );
   const saveReceipt = (value: Receipt) => {
     cache.setQueryData(queryKey, value);
     for (const name of ["activity", "requests", "release-selections"])

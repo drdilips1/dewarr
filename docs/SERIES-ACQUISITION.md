@@ -20,7 +20,7 @@ The controller uses the same target advancement service as list automation. A pe
 
 Every automatic selection carries a series proof naming both the accepted parent and controller. Selection, physical dispatch and import authority verify the original owner, current automation permission, active series reason, accepted work identity and unchanged profile/routes. Surviving manual or list reasons do not substitute for revoked series authorization. Shared transfers retain each child's separate proof.
 
-The common route resolver validates downloader generation, path mapping, accessible target library, administrator import approval and actual route probe. List policy behavior uses this same resolver. Routes remain explicit in this increment; installation/personal/profile destination inheritance is still required work.
+The common route resolver validates downloader generation, path mapping, accessible target library, administrator import approval and actual route probe. List policy behavior uses this same resolver. [Route defaults](ROUTE-DEFAULTS.md) now add inherited downloader and per-medium destination references; accepted routes and approvals remain frozen.
 
 ## API and deployment
 
@@ -36,4 +36,4 @@ The PostgreSQL integration tests cover preview without dispatch, idempotent cont
 
 Exact integrated test and browser results are recorded in [Implementation status](IMPLEMENTATION-STATUS.md). These tests do not certify a live MAM account, every recording/edition combination, mixed-route transfers or a complete production release.
 
-Remaining series work includes inherited Just book / Prefer packs / Complete series scope, automatic destination defaults, list-derived finite expansion, reviewed policy changes, broader recording/edition and omnibus fulfillment, and actual-service qualification. Native ABB, discovery and production stages remain part of the full PRD.
+Remaining series work includes inherited Just book / Prefer packs / Complete series scope, list-derived finite expansion, reviewed policy changes, broader recording/edition and omnibus fulfillment, and actual-service qualification. Native ABB, discovery and production stages remain part of the full PRD.

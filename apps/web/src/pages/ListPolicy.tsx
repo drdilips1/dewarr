@@ -10,6 +10,7 @@ import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
 import DownloadConstraints from "./DownloadConstraints";
+import { chooseRoute, destinationPreference } from "./RouteFields";
 
 type Policy = components["schemas"]["ListPolicyView"];
 type Input = components["schemas"]["ListPolicyInput"];
@@ -190,14 +191,15 @@ function PolicyEditor({
     policy?.configuration.profile.id || "",
   );
   const [downloaderId, setDownloaderId] = useState(
-    policy?.configuration.downloader_id || "",
+    (policy?.configuration.route_options || policy?.configuration)
+      ?.downloader_id || "",
   );
   const [destinations, setDestinations] = useState<Record<string, string>>(() =>
     Object.fromEntries(
-      Object.entries(policy?.configuration.routes || {}).map(([m, r]) => [
-        m,
-        r.destination_id,
-      ]),
+      Object.entries(
+        (policy?.configuration.route_options || policy?.configuration)
+          ?.routes || {},
+      ).map(([m, r]) => [m, r.destination_id]),
     ),
   );
   const [selected, setSelected] = useState<string[]>([]);
@@ -217,10 +219,13 @@ function PolicyEditor({
     queryFn: async () => result(await api.GET("/api/acquisition/profiles")),
   });
   const downloaders = options.data?.downloaders.filter((d) => d.ready) || [];
-  const downloader =
-    downloaders.find((d) => d.id === downloaderId) ||
-    (downloaders.length === 1 ? downloaders[0] : undefined);
   const profile = profiles.data?.find((p) => (p.id || "") === profileId);
+  const preferences = { ...profile?.preferences, ...overrides };
+  const downloader = chooseRoute(
+    downloaders,
+    downloaderId,
+    preferences.downloader_id,
+  );
   const effectiveMedium =
     medium || overrides.desired_media || profile?.preferences.desired_media;
   const media =
@@ -238,8 +243,11 @@ function PolicyEditor({
         d.source_key === downloader?.source_key,
     ) || [];
   const destination = (m: string) =>
-    available(m).find((d) => d.id === destinations[m]) ||
-    (available(m).length === 1 ? available(m)[0] : undefined);
+    chooseRoute(
+      available(m),
+      destinations[m],
+      destinationPreference(preferences, m),
+    );
   const specification: Input["specification"] = {
     mode: medium || undefined,
     ...(medium === "either" ? { preferred_medium: preferred } : {}),
@@ -255,12 +263,20 @@ function PolicyEditor({
     preference_overrides: overrides,
     expected_revision: policy?.revision || 0,
     include_work_ids: mode === "automatic" ? selected : [],
-    downloader_id: mode === "automatic" ? downloader?.id : null,
-    downloader_generation: mode === "automatic" ? downloader?.generation : null,
+    downloader_id:
+      mode === "automatic" && (downloaderId || !preferences.downloader_id)
+        ? downloader?.id
+        : null,
+    downloader_generation:
+      mode === "automatic" && (downloaderId || !preferences.downloader_id)
+        ? downloader?.generation
+        : null,
     routes:
       mode === "automatic"
         ? Object.fromEntries(
             media.flatMap((m) => {
+              if (!destinations[m] && destinationPreference(preferences, m))
+                return [];
               const d = destination(m);
               return d
                 ? [

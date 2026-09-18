@@ -2467,15 +2467,12 @@ export interface components {
     };
     /** AutomaticRoutes */
     AutomaticRoutes: {
-      /**
-       * Downloader Id
-       * Format: uuid
-       */
-      downloader_id: string;
+      /** Downloader Id */
+      downloader_id?: string | null;
       /** Downloader Generation */
-      downloader_generation: number;
+      downloader_generation?: number | null;
       /** Routes */
-      routes: {
+      routes?: {
         [key: string]: components["schemas"]["PolicyRoute"];
       };
     };
@@ -4687,6 +4684,7 @@ export interface components {
       routes: {
         [key: string]: components["schemas"]["PolicyRoute"];
       };
+      route_options?: components["schemas"]["AutomaticRoutes"] | null;
       request_constraints?: components["schemas"]["DownloadConstraints"] | null;
     };
     /** PolicyInput */
@@ -4755,6 +4753,12 @@ export interface components {
       ebook_library_id?: string | null;
       /** Audio Library Id */
       audio_library_id?: string | null;
+      /** Downloader Id */
+      downloader_id?: string | null;
+      /** Ebook Destination Id */
+      ebook_destination_id?: string | null;
+      /** Audio Destination Id */
+      audio_destination_id?: string | null;
       /** Search Series */
       search_series?: boolean;
       /** Prefer Series Packs */
@@ -5123,6 +5127,12 @@ export interface components {
       ebook_library_id?: string | null;
       /** Audio Library Id */
       audio_library_id?: string | null;
+      /** Downloader Id */
+      downloader_id?: string | null;
+      /** Ebook Destination Id */
+      ebook_destination_id?: string | null;
+      /** Audio Destination Id */
+      audio_destination_id?: string | null;
       /**
        * Search Series
        * @default true

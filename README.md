@@ -12,7 +12,9 @@ Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md), then u
 
 Delivery milestones are manual acquisition at S05, list automation at S07, complete discovery and curation at S08, and production v1 at S09. S10 contains separately scoped extensions. The documents describe required outcomes; [implementation status](docs/IMPLEMENTATION-STATUS.md) records what has actually been verified.
 
-Latest series checkpoint: [Automatic reviewed-series acquisition](docs/SERIES-ACQUISITION.md) connects a finite accepted set to source search, shared transfers and confirmed imports, with per-book progress, cancellation and retry. Inherited Complete series/list expansion, destination defaults and broader version/omnibus behavior remain pending.
+Latest defaults checkpoint: [Inherited downloader and destinations](docs/ROUTE-DEFAULTS.md) apply the same preference hierarchy to manual selection and list/series automation. Defaults retain explicit clearing, access checks and frozen approval. Full inherited series expansion and remaining PRD stages are still open.
+
+Latest series checkpoint: [Automatic reviewed-series acquisition](docs/SERIES-ACQUISITION.md) connects a finite accepted set to source search, shared transfers and confirmed imports, with per-book progress, cancellation and retry. Inherited Complete series/list expansion and broader version/omnibus behavior remain pending; route defaults have a separate checkpoint above.
 
 Latest pack-eligibility checkpoint: [Automatic series-pack coverage](docs/AUTOMATIC-PACK-COVERAGE.md) replaces blanket collection rejection with bounded catalog/manifest matching, inherited pack preference and target-specific format ranking. Manual automatic requests and list automation can acquire the requested book from a qualifying pack. Multi-target automatic grouping/expansion and full series fulfillment remain required.
 

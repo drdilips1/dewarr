@@ -7916,13 +7916,27 @@
       "AutomaticRoutes": {
         "properties": {
           "downloader_id": {
-            "type": "string",
-            "format": "uuid",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Downloader Id"
           },
           "downloader_generation": {
-            "type": "integer",
-            "minimum": 1.0,
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Downloader Generation"
           },
           "routes": {
@@ -7941,11 +7955,6 @@
         },
         "additionalProperties": false,
         "type": "object",
-        "required": [
-          "downloader_id",
-          "downloader_generation",
-          "routes"
-        ],
         "title": "AutomaticRoutes"
       },
       "AutomaticSelectionInput": {
@@ -13816,6 +13825,16 @@
             "type": "object",
             "title": "Routes"
           },
+          "route_options": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AutomaticRoutes"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "request_constraints": {
             "anyOf": [
               {
@@ -14053,6 +14072,42 @@
               }
             ],
             "title": "Audio Library Id"
+          },
+          "downloader_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Downloader Id"
+          },
+          "ebook_destination_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ebook Destination Id"
+          },
+          "audio_destination_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Destination Id"
           },
           "search_series": {
             "type": "boolean",
@@ -15128,6 +15183,42 @@
               }
             ],
             "title": "Audio Library Id"
+          },
+          "downloader_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Downloader Id"
+          },
+          "ebook_destination_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ebook Destination Id"
+          },
+          "audio_destination_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Destination Id"
           },
           "search_series": {
             "type": "boolean",

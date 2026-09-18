@@ -10,6 +10,7 @@ from app.api.requests import TargetView
 from app.domain import list_monitoring
 from app.domain import list_policies as policies
 from app.domain.acquisition import RequestOptions, RequestSpec
+from app.domain.automatic_routes import AutomaticRoutes
 from app.domain.list_requests import owner_context
 from app.domain.release_profiles import PreferenceOverrides, ProfileSnapshot
 from app.domain.request_constraints import DownloadConstraints
@@ -26,6 +27,9 @@ class PolicyConfiguration(BaseModel):
     downloader_id: UUID | None
     downloader_generation: int | None
     routes: dict[str, policies.PolicyRoute]
+    route_options: AutomaticRoutes | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
     request_constraints: DownloadConstraints | None = None
 
 

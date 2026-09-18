@@ -5,12 +5,15 @@ from uuid import UUID
 
 from fastapi import HTTPException
 from pydantic import BaseModel, ConfigDict, Field
+from sqlalchemy import select
 
-from app.db.models import ImportDestination
+from app.db.models import ImportDestination, Integration, Library
 from app.domain.acquisition_selection import verified_probe
 from app.domain.automatic_dispatch import approve_route
 from app.domain.downloaders import connection_or_404, mapped_path
+from app.domain.visibility import visible_library
 from app.importing.destinations import destination_configuration
+from app.importing.naming import fingerprint
 
 
 class PolicyRoute(BaseModel):
@@ -21,9 +24,66 @@ class PolicyRoute(BaseModel):
 
 class AutomaticRoutes(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    downloader_id: UUID
-    downloader_generation: int = Field(ge=1)
-    routes: dict[Literal["ebook", "audio"], PolicyRoute]
+    downloader_id: UUID | None = None
+    downloader_generation: int | None = Field(default=None, ge=1)
+    routes: dict[Literal["ebook", "audio"], PolicyRoute] = Field(default_factory=dict)
+
+
+async def inherit(db, user, spec, profile, options):
+    """Resolve defaults once for a review; validation never renews saved consent."""
+    permitted(user)
+    downloader_id = options.downloader_id or profile.preferences.downloader_id
+    if not downloader_id:
+        raise HTTPException(422, "Choose a tested downloader or save a downloader default")
+    downloader = await connection_or_404(db, downloader_id)
+    generation = options.downloader_generation
+    if options.downloader_id:
+        if generation is None:
+            raise HTTPException(422, "Refresh the selected downloader before previewing")
+    else:
+        if generation is not None:
+            raise HTTPException(422, "Choose a downloader before specifying its revision")
+        generation = downloader.credential_generation
+    media = {spec.mode} if spec.mode in {"ebook", "audio"} else {"ebook", "audio"}
+    if set(options.routes) - media:
+        raise HTTPException(422, "Choose destinations only for the requested media")
+    routes = {}
+    origins = {}
+    if not options.downloader_id:
+        origins["downloader_id"] = profile.origins.get("downloader_id", "Saved default")
+    for medium in sorted(media):
+        if medium in options.routes:
+            route = options.routes[medium]
+        else:
+            field = medium + "_destination_id"
+            destination_id = getattr(profile.preferences, field)
+            if not destination_id:
+                raise HTTPException(
+                    422, "Choose an import destination or save a destination default"
+                )
+            destination = await db.scalar(
+                select(ImportDestination)
+                .join(Library)
+                .join(Integration)
+                .where(
+                    ImportDestination.id == destination_id,
+                    ImportDestination.enabled.is_(True),
+                    Library.accessible.is_(True),
+                    Integration.enabled.is_(True),
+                    visible_library(user),
+                )
+            )
+            if not destination:
+                raise HTTPException(409, "Saved import destination is unavailable; choose a route")
+            config = await destination_configuration(db, destination)
+            route = PolicyRoute(
+                destination_id=destination.id, destination_revision=fingerprint(config)
+            )
+            origins[field] = profile.origins.get(field, "Saved default")
+        routes[medium] = route
+    return AutomaticRoutes(
+        downloader_id=downloader_id, downloader_generation=generation, routes=routes
+    ), origins
 
 
 def permitted(user):

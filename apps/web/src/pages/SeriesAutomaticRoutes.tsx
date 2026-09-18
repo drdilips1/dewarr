@@ -4,6 +4,7 @@ import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
 import type { Choice } from "./RequestPreferences";
+import { chooseRoute, destinationPreference } from "./RouteFields";
 
 export function useSeriesRoutes(
   enabled: boolean,
@@ -26,6 +27,7 @@ export function useSeriesRoutes(
   const profile = profiles.data?.find(
     (p) => (p.id || "") === (choice.profile_id || ""),
   );
+  const preferences = { ...profile?.preferences, ...choice.overrides };
   const mode =
     requested ||
     choice.overrides?.desired_media ||
@@ -37,9 +39,11 @@ export function useSeriesRoutes(
         ? [mode]
         : [];
   const downloaders = options.data?.downloaders.filter((d) => d.ready) || [];
-  const downloader =
-    downloaders.find((d) => d.id === downloaderId) ||
-    (downloaders.length === 1 ? downloaders[0] : undefined);
+  const downloader = chooseRoute(
+    downloaders,
+    downloaderId,
+    preferences.downloader_id,
+  );
   const available = (medium: string) =>
     options.data?.destinations.filter(
       (d) =>
@@ -49,11 +53,18 @@ export function useSeriesRoutes(
         d.source_key === downloader?.source_key,
     ) || [];
   const destination = (medium: string) =>
-    available(medium).find((d) => d.id === destinations[medium]) ||
-    (available(medium).length === 1 ? available(medium)[0] : undefined);
+    chooseRoute(
+      available(medium),
+      destinations[medium],
+      destinationPreference(preferences, medium),
+    );
   const routes = Object.fromEntries(
     media
-      .filter((m) => destination(m))
+      .filter(
+        (m) =>
+          destination(m) &&
+          (destinations[m] || !destinationPreference(preferences, m)),
+      )
       .map((m) => [
         m,
         {
@@ -63,10 +74,16 @@ export function useSeriesRoutes(
       ]),
   );
   const input: components["schemas"]["AutomaticRoutes"] | undefined =
-    downloader && media.length && Object.keys(routes).length === media.length
+    downloader && media.length && media.every((m) => destination(m))
       ? {
-          downloader_id: downloader.id,
-          downloader_generation: downloader.generation,
+          downloader_id:
+            downloaderId || !preferences.downloader_id
+              ? downloader.id
+              : undefined,
+          downloader_generation:
+            downloaderId || !preferences.downloader_id
+              ? downloader.generation
+              : undefined,
           routes,
         }
       : undefined;

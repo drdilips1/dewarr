@@ -3229,6 +3229,61 @@ test("series catalog preserves uncertainty and curates selected books", async ({
   await expect(importPolicy).toContainText(
     "New completed downloads with clear catalog and file evidence can import automatically",
   );
+  await page.goto("/download-preferences");
+  const routeDefaults = page.getByRole("region", {
+    name: "Download defaults",
+    exact: true,
+  });
+  await routeDefaults
+    .getByText("Downloader and destination defaults", { exact: true })
+    .click();
+  const defaultDownloader = routeDefaults.getByLabel("Default downloader", {
+    exact: true,
+  });
+  const defaultDestination = routeDefaults.getByLabel(
+    "Default ebook destination",
+    { exact: true },
+  );
+  await expect(defaultDownloader.locator("option")).toHaveCount(2);
+  await defaultDownloader.selectOption({ index: 1 });
+  await defaultDestination.selectOption({ index: 1 });
+  const savedDownloader = await defaultDownloader.inputValue();
+  const savedDestination = await defaultDestination.inputValue();
+  await routeDefaults
+    .getByRole("button", { name: "Save download defaults", exact: true })
+    .click();
+  await expect(routeDefaults.getByRole("status")).toContainText(
+    "Download defaults saved",
+  );
+  await page.reload();
+  await routeDefaults
+    .getByText("Downloader and destination defaults", { exact: true })
+    .click();
+  await expect(defaultDownloader).toHaveValue(savedDownloader);
+  await expect(defaultDestination).toHaveValue(savedDestination);
+  await defaultDestination.selectOption("");
+  await routeDefaults
+    .getByRole("button", { name: "Save download defaults", exact: true })
+    .click();
+  await expect(routeDefaults.getByRole("status")).toContainText(
+    "Download defaults saved",
+  );
+  const clearedRoutes = await (
+    await page.request.get("/api/acquisition/preferences/personal")
+  ).json();
+  expect(clearedRoutes.overrides.ebook_destination_id).toBeNull();
+  await page.reload();
+  await routeDefaults
+    .getByText("Downloader and destination defaults", { exact: true })
+    .click();
+  await expect(defaultDestination).toHaveValue("");
+  await defaultDestination.selectOption(savedDestination);
+  await routeDefaults
+    .getByRole("button", { name: "Save download defaults", exact: true })
+    .click();
+  await expect(routeDefaults.getByRole("status")).toContainText(
+    "Download defaults saved",
+  );
   await page.goto("/");
   await page.getByRole("link", { name: /My protected catalog title/ }).click();
   await page
@@ -3352,9 +3407,11 @@ test("series catalog preserves uncertainty and curates selected books", async ({
   await requests
     .getByLabel("Automatically acquire missing books after review")
     .check();
-  await expect(requests.getByLabel("Series downloader")).not.toHaveValue("");
-  await expect(requests.getByLabel("Ebook series destination")).not.toHaveValue(
-    "",
+  await expect(requests.getByLabel("Series downloader")).toHaveValue(
+    savedDownloader,
+  );
+  await expect(requests.getByLabel("Ebook series destination")).toHaveValue(
+    savedDestination,
   );
   await requests
     .getByRole("button", { name: "Preview series requests", exact: true })

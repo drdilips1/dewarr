@@ -49,6 +49,7 @@ def proof(policy, book):
 
 
 def configuration_input(config):
+    routes = config.get("route_options", config)
     return list_policies.ListPolicyInput(
         mode=config["mode"],
         specification=config.get(
@@ -65,9 +66,9 @@ def configuration_input(config):
         preference_overrides=config.get(
             "preference_overrides", config["profile"].get("list_overrides") or {}
         ),
-        downloader_id=config["downloader_id"],
-        downloader_generation=config["downloader_generation"],
-        routes=config["routes"],
+        downloader_id=routes["downloader_id"],
+        downloader_generation=routes["downloader_generation"],
+        routes=routes["routes"],
     )
 
 

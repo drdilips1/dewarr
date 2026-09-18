@@ -869,6 +869,8 @@ Start with same-owner, identical-artifact, compatible-route reuse as a reviewabl
 
 ### Delivery order after that packet
 
+The [route-default increment](docs/ROUTE-DEFAULTS.md) now supplies inherited downloader and per-medium destinations to the manual, list and series surfaces, while freezing actual approved routes at acceptance. This supersedes earlier statements that route defaults are wholly unimplemented; verification and remaining compatibility limits belong in implementation status. The next policy dependency is inherited series scope and list-derived expansion.
+
 The reviewed finite-set controller is now the execution foundation for series work. The next series packet must resolve Just book / Prefer packs / Complete series through the existing settings precedence, derive bounded targets from current catalog evidence, show the same effective scope in manual and list previews, and carry independently valid reasons/routes into this controller. Automatic list expansion must not require a new routine approval for each unambiguous supported series; ambiguous scope enters review without blocking unrelated books. Reuse the current controller and acquisition services rather than creating another transfer path. Prove the whole list-to-series-to-ABS journey before closing S06-05f.
 
 1. **Finish series and version semantics:** inherited scope, bounded Complete series targets, coverage evidence, alternate recordings/editions, omnibus containment and independently recoverable children. Apply the same contracts to reviewed and automatic requests.

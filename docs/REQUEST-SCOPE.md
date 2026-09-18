@@ -42,6 +42,6 @@ Default changes can invalidate unsubmitted previews or standing list authority. 
 
 This extends existing JSON policy records without adding a database table or column; schema remains `0032_request_release_policy`. Back up before upgrading and restart API and worker together. Expanded effective-profile fingerprints can require refreshing old previews/searches and reactivating a standing list. Do not run an old binary against newly written policy JSON; rollback uses the pre-upgrade backup and existing external-transfer reconciliation procedure.
 
-Full series policy/expansion and reviewed revisions of unsatisfied requests remain unfinished. Narrator requirements and preferences do not establish automatic recording equivalence. Existing library preferences do not complete destination-route default inheritance: automatic route selection/approval remains explicit. Live provider, deployment and full S06/S07 qualification remain separate gates.
+Full series policy/expansion and reviewed revisions of unsatisfied requests remain unfinished. Narrator requirements and preferences do not establish automatic recording equivalence. [Route defaults](ROUTE-DEFAULTS.md) now provide inherited downloader and destination references, with current verification/approval and frozen activation evidence. Live provider, deployment and full S06/S07 qualification remain separate gates.
 
 Implementation and test evidence are recorded in [Implementation Status](IMPLEMENTATION-STATUS.md). Fixture services do not certify live MAM, qBittorrent or Hardcover accounts.

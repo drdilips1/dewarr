@@ -1,4 +1,5 @@
 from datetime import UTC, datetime
+from uuid import uuid4
 
 import pytest
 from fastapi import HTTPException
@@ -7,17 +8,51 @@ from pydantic import ValidationError
 from app.adapters.mam import release
 from app.adapters.torrent_descriptor import inspect_torrent
 from app.domain.release_profiles import (
+    PreferenceOverrides,
     ProfileSnapshot,
     ReleasePreferences,
     assess_release,
     enforce_inspected_profile,
     enforce_profile,
+    overlay_profile,
     ranking_key,
+    resolve_preferences,
 )
 from tests.mam_fixture import release_row
 from tests.torrent_fixture import torrent_bytes
 
 WORK = {"title": "Harbor", "authors": ["Writer"]}
+
+
+def test_route_layers_preserve_explicit_clearing_and_legacy_unset_snapshots():
+    fields = {"downloader_id", "ebook_destination_id", "audio_destination_id"}
+    assert not fields & ReleasePreferences().model_dump(mode="json").keys()
+    installation, personal, saved, listed, requested = [str(uuid4()) for _ in range(5)]
+    preferences, origins = resolve_preferences(
+        [
+            (
+                "Installation default",
+                {"ebook_destination_id": installation, "audio_destination_id": installation},
+            ),
+            ("Personal default", {"ebook_destination_id": personal}),
+            ("Profile", {"ebook_destination_id": saved}),
+        ]
+    )
+    base = ProfileSnapshot(preferences=preferences, origins=origins)
+    result = overlay_profile(
+        base,
+        list_overrides={"ebook_destination_id": listed},
+        request_overrides={"ebook_destination_id": requested},
+    )
+    assert str(result.preferences.ebook_destination_id) == requested
+    assert result.origins["ebook_destination_id"] == "Request override"
+    assert str(result.preferences.audio_destination_id) == installation
+    cleared = overlay_profile(base, request_overrides={"ebook_destination_id": None})
+    assert cleared.preferences.ebook_destination_id is None
+    assert cleared.request_overrides.model_dump(mode="json") == {"ebook_destination_id": None}
+    assert PreferenceOverrides.model_validate(
+        cleared.request_overrides.model_dump()
+    ).model_fields_set == {"ebook_destination_id"}
 
 
 def candidate(**changes):

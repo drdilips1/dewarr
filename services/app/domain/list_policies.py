@@ -24,7 +24,7 @@ from app.db.models import (
 )
 from app.domain import request_scope
 from app.domain.acquisition import RequestOptions, RequestSpec, assess, evaluate, validate_request
-from app.domain.automatic_routes import PolicyRoute, permitted
+from app.domain.automatic_routes import AutomaticRoutes, PolicyRoute, inherit, permitted
 from app.domain.automatic_routes import resolve as resolve_routes
 from app.domain.list_requests import owner_context, pending_targets
 from app.domain.operations import transaction_lock
@@ -134,6 +134,12 @@ async def configuration(db, user, list_id, body):
     values = spec.model_dump(mode="json")
     values["download_constraints"] = constraints
     approvals = {}
+    inherited_routes = {}
+    routes = AutomaticRoutes(
+        downloader_id=body.downloader_id,
+        downloader_generation=body.downloader_generation,
+        routes=body.routes,
+    )
     subscription = await db.scalar(
         select(ListSubscription).where(ListSubscription.list_id == list_id)
     )
@@ -141,10 +147,15 @@ async def configuration(db, user, list_id, body):
         permitted(user)
         if subscription and not subscription.baseline_at:
             raise HTTPException(409, "Complete a successful list sync before activating automation")
+        route_options = routes.model_dump(mode="json")
+        routes, route_origins = await inherit(db, user, spec, profile, routes)
+        if route_origins:
+            inherited_routes["route_options"] = route_options
         libraries, approvals = await resolve_routes(
-            db, user, spec, body.downloader_id, body.downloader_generation, body.routes
+            db, user, spec, routes.downloader_id, routes.downloader_generation, routes.routes
         )
         values.update(libraries)
+        profile.scope_origins.update(route_origins)
         profile.scope_origins.update(dict.fromkeys(libraries, "List import route"))
     return {
         "mode": body.mode,
@@ -155,9 +166,8 @@ async def configuration(db, user, list_id, body):
         else None,
         "specification": RequestSpec.model_validate(values).model_dump(mode="json"),
         "profile": profile.model_dump(mode="json"),
-        "downloader_id": str(body.downloader_id) if body.downloader_id else None,
-        "downloader_generation": body.downloader_generation,
-        "routes": {medium: route.model_dump(mode="json") for medium, route in body.routes.items()},
+        **routes.model_dump(mode="json"),
+        **inherited_routes,
         "approvals": approvals,
         "subscription": {"id": str(subscription.id), "generation": subscription.generation}
         if subscription
