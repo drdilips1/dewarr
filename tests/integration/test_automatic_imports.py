@@ -182,9 +182,7 @@ async def test_automatic_history_cannot_be_discarded_by_downgrade(database, auto
     async with database() as db:
         before = await db.scalar(text("SELECT version_num FROM alembic_version"))
     result = await migrate("downgrade", "0021_handoffs")
-    assert (
-        result.returncode != 0 and "Automatic import authority and history require" in result.stderr
-    )
+    assert result.returncode != 0 and "Capacity history requires" in result.stderr
     async with database() as db:
         assert await db.scalar(text("SELECT version_num FROM alembic_version")) == before
 

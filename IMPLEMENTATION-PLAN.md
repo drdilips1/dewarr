@@ -653,7 +653,7 @@ Release review must answer four questions: can the user complete the promised jo
 
 ## 15. Refreshed implementation starting point and delivery order
 
-This is the current execution handoff for the v1.7 planning baseline. It supplements the stable S00–S10 packages rather than adding new scope or restarting the scaffold. The committed status records inbound Goodreads/CSV/Hardcover observations, reviewed list batches, MAM/Prowlarr aggregation, durable attempts, scoped fulfillment and selected automatic-import cases. These are partial proofs, not accepted whole stages. Bounded single-book automatic preparation now has targeted and full-backend evidence recorded in current status. Complete S06 selection, capacity scheduling and list automation remain open; no whole stage is accepted by that checkpoint.
+This is the current execution handoff for the v1.7 planning baseline. It supplements the stable S00–S10 packages rather than adding new scope or restarting the scaffold. Current status records inbound Goodreads/CSV/Hardcover observations, reviewed list batches, MAM/Prowlarr aggregation, durable attempts, scoped fulfillment and selected automatic-import cases. Bounded single-book automatic preparation and shared transfer/storage capacity now have separate implementation evidence. These are partial proofs, not accepted whole stages. Complete S06 selection, standing policy scheduling and list automation remain open.
 
 | Sequence | Deliverable within existing packages | Acceptance before activation |
 |---|---|---|
@@ -667,6 +667,8 @@ This is the current execution handoff for the v1.7 planning baseline. It supplem
 | H. Expand separately | S10: other backends/clients, deliberate upgrades/reorganization, additional recommendation providers and SSO | Independent acceptance for each extension plus affected v1 regression |
 
 C and D may be developed against qualified single-book fixtures while E progresses, but **automated-list beta is not accepted until its required S06 dependencies pass**. Shipping an internal single-book slice does not waive native ABB, packs or version handling from the promised beta/v1 scope. Actual account/service and Compose certification remain separate from synthetic HTTP or native-process evidence.
+
+The current C checkpoint supplies endpoint slots, rolling automatic-transfer accounting, byte reservations and periodic capacity waits; see [Capacity](docs/CAPACITY.md). Continue C/D with versioned list activation, baseline/backfill/catch-up, independent reasons and the automatic request-to-preparation-to-dispatch continuation. Reuse the existing trusted `automatic=True` attempt boundary and shared importer. Do not count saving a policy, preparing a candidate or passing capacity tests as an unattended list-to-library demonstration.
 
 ### Reviewable development units
 

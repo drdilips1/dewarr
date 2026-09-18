@@ -123,3 +123,5 @@ Apply `0025_list_subscriptions` before restarting the API and worker. The `lists
 
 
 [Automatic release preparation](AUTOMATIC-SELECTION.md) adds `acquisition.auto-select` in the sources queue with bounded retries and stalled-job recovery. It reuses schema `0027_hardcover_lists`; restart API and worker together so both know the new task and routes. The worker saves a selection through the existing acquisition service. Download dispatch remains disabled by default and is not enabled by this feature.
+
+[Transfer and storage limits](CAPACITY.md) require `0028_capacity`. Stop old API/worker processes, back up the database and publication journals, apply the migration, and restart both at the same revision. Existing external transfers and unpublished reserved imports need storage reconciliation before new work can bypass their unknown costs. The existing download and import schedulers resume capacity waits; no new queue or service is required. Populated capacity history requires backup-based rollback. Keep dispatch disabled until the installation's acquisition gates pass.

@@ -182,7 +182,7 @@ async def test_cover_history_prevents_lossy_downgrade(client, admin, database, c
     await get_engine().dispose()
     try:
         result = await migrate("downgrade", "0012_groupings")
-        assert result.returncode != 0 and "Cover export history" in result.stderr
+        assert result.returncode != 0 and "Capacity history requires" in result.stderr
         async with database() as db:
             assert (await db.get(ImportEntry, UUID(run["entries"][0]["id"]))).cover_export
     finally:

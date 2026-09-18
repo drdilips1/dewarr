@@ -1553,6 +1553,24 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/acquisition/capacity": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Settings */
+    get: operations["settings_api_acquisition_capacity_get"];
+    /** Save */
+    put: operations["save_api_acquisition_capacity_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/sources/mam/connection": {
     parameters: {
       query?: never;
@@ -2416,6 +2434,16 @@ export interface components {
        * @default false
        */
       selected: boolean;
+    };
+    /** CapacityView */
+    CapacityView: {
+      limits: components["schemas"]["Limits"];
+      /** Revision */
+      revision: string;
+      /** Occupied Slots */
+      occupied_slots: number;
+      /** Reserved Bytes */
+      reserved_bytes: number;
     };
     /** ChangePage */
     ChangePage: {
@@ -3319,6 +3347,29 @@ export interface components {
       last_complete_sync: string | null;
       /** Granted User Ids */
       granted_user_ids: string[];
+    };
+    /** Limits */
+    Limits: {
+      /**
+       * Active Transfers
+       * @default 3
+       */
+      active_transfers: number;
+      /**
+       * Automatic Per Day
+       * @default 10
+       */
+      automatic_per_day: number;
+      /**
+       * Minimum Free Bytes
+       * @default 5368709120
+       */
+      minimum_free_bytes: number;
+      /**
+       * Minimum Free Percent
+       * @default 5
+       */
+      minimum_free_percent: number;
     };
     /** ListChoice */
     ListChoice: {
@@ -4599,6 +4650,12 @@ export interface components {
       created_at: string;
       /** Entries */
       entries: components["schemas"]["EntryView"][];
+    };
+    /** SaveCapacity */
+    SaveCapacity: {
+      limits: components["schemas"]["Limits"];
+      /** Expected Revision */
+      expected_revision: string;
     };
     /** SaveSettings */
     SaveSettings: {
@@ -8536,6 +8593,59 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["AutomaticSelectionView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  settings_api_acquisition_capacity_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CapacityView"];
+        };
+      };
+    };
+  };
+  save_api_acquisition_capacity_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SaveCapacity"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CapacityView"];
         };
       };
       /** @description Validation Error */

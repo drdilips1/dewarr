@@ -479,7 +479,7 @@ async def test_dispatch_history_refuses_lossy_downgrade(client, database, select
         before = await db.scalar(text("SELECT version_num FROM alembic_version"))
     result = await migrate("downgrade", "0017_selections")
     assert result.returncode != 0
-    assert "Download attempt history requires" in result.stderr
+    assert "Capacity history requires" in result.stderr
     async with database() as db:
         assert await db.scalar(text("SELECT version_num FROM alembic_version")) == before
 

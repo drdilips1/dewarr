@@ -328,7 +328,7 @@ async def test_populated_review_history_blocks_lossy_downgrade(database, reviewe
     async with database() as db:
         before = await db.scalar(text("SELECT version_num FROM alembic_version"))
     result = await migrate("downgrade", "0020_repairs")
-    assert result.returncode != 0 and "Download review history requires" in result.stderr
+    assert result.returncode != 0 and "Capacity history requires" in result.stderr
     async with database() as db:
         assert await db.scalar(text("SELECT version_num FROM alembic_version")) == before
 

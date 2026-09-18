@@ -18,6 +18,7 @@ from app.db.models import (
     AcquisitionTarget,
     AuditEvent,
     DownloadAttempt,
+    DownloadCapacity,
     DownloadIdentityClaim,
     DownloadInspection,
     DownloadRepair,
@@ -28,6 +29,7 @@ from app.db.models import (
     User,
 )
 from app.db.session import session_factory
+from app.domain import capacity
 from app.domain.acquisition import RequestSpec, evaluate, validate_request
 from app.domain.acquisition_selection import configuration_current, owned_selection
 from app.domain.downloaders import SETTINGS_LOCK
@@ -138,7 +140,7 @@ async def authority(db, selection, *, wanted, configuration=None):
     return await db.get(Integration, selection.downloader_id), content
 
 
-async def start(db, user, selection_id, key):
+async def start(db, user, selection_id, key, *, automatic=False):
     await transaction_lock(db, f"operation:{user.id}:{key}")
     await member(db, user.id)
     receipt = await db.scalar(
@@ -148,8 +150,10 @@ async def start(db, user, selection_id, key):
         )
     )
     if receipt:
-        if receipt.kind != "acquisition.download" or receipt.payload.get("selection_id") != str(
-            selection_id
+        if (
+            receipt.kind != "acquisition.download"
+            or receipt.payload.get("selection_id") != str(selection_id)
+            or receipt.payload.get("automatic", False) != automatic
         ):
             raise HTTPException(409, "This command key was already used for another operation")
         return await owned_attempt(db, user, UUID(receipt.payload["attempt_id"]))
@@ -170,7 +174,11 @@ async def start(db, user, selection_id, key):
                 idempotency_key=key,
                 status="completed",
                 message="Existing download attempt returned",
-                payload={"selection_id": str(selection.id), "attempt_id": str(existing.id)},
+                payload={
+                    "selection_id": str(selection.id),
+                    "attempt_id": str(existing.id),
+                    "automatic": automatic,
+                },
             )
         )
         return existing
@@ -203,7 +211,11 @@ async def start(db, user, selection_id, key):
         kind="acquisition.download",
         integration_id=downloader.id,
         idempotency_key=key,
-        payload={"selection_id": str(selection.id), "attempt_id": str(attempt_id)},
+        payload={
+            "selection_id": str(selection.id),
+            "attempt_id": str(attempt_id),
+            "automatic": automatic,
+        },
     )
     db.add(operation)
     await db.flush()
@@ -217,6 +229,7 @@ async def start(db, user, selection_id, key):
     )
     db.add(attempt)
     await db.flush()
+    db.add(DownloadCapacity(attempt_id=attempt.id, automatic=automatic))
     db.add_all(
         [
             DownloadIdentityClaim(
@@ -246,6 +259,8 @@ async def record(db, attempt, state, message, *, poll=False):
         else "running"
     )
     operation.message = message
+    if not attempt.external_may_exist:
+        await capacity.release_unsubmitted(db, attempt)
 
 
 async def cancel(db, user, identifier):
@@ -367,11 +382,11 @@ async def finish_observation(db, attempt, selection, state):
             else "Download complete; review the request before importing its files"
         )
         (await db.get(Operation, attempt.operation_id)).message = attempt.message
-        return
+        return False
     from app.importing.automatic import schedule
 
     if await schedule(db, attempt, selection):
-        return
+        return True
     # Existing reviewed import UI is administrator-only. Do not silently elevate
     # a member's source-directory access or manufacture library availability.
     if user.role != "admin":
@@ -379,9 +394,10 @@ async def finish_observation(db, attempt, selection, state):
             "Download complete; administrator inspection is required before library import"
         )
         (await db.get(Operation, attempt.operation_id)).message = attempt.message
-        return
+        return True
     await authority(db, selection, wanted=True)
     await create_inspection(db, attempt, selection, user)
+    return True
 
 
 async def create_inspection(db, attempt, selection, user, *, key=None):
@@ -457,6 +473,18 @@ async def run(identifier):
         frozen = dict(selection.frozen)
     # Detached selection contains only frozen metadata; no DB connection over I/O.
     try:
+        # Measure storage outside transactions; admission commits before client I/O.
+        try:
+            storage = await capacity.observe_download(frozen)
+            async with session_factory()() as db, db.begin():
+                attempt, current = await locked(db, identifier)
+                if attempt.run_token != token:
+                    return
+                await capacity.admit(db, attempt, current, storage)
+        except capacity.CapacityWait:
+            if not already_submitted:
+                raise
+            # Existing external work must remain observable even during a mount outage.
         async with (
             asyncio.timeout(NETWORK_SECONDS),
             QbitClient(endpoint, credentials["username"], credentials["password"]) as client,
@@ -469,6 +497,7 @@ async def run(identifier):
                         FailureKind.UNCERTAIN,
                         "An existing transfer conflicts with this new attempt; it was not adopted",
                     )
+                storage = await capacity.observe_download(frozen)
                 async with session_factory()() as db, db.begin():
                     attempt, current = await locked(db, identifier)
                     if (
@@ -478,6 +507,8 @@ async def run(identifier):
                     ):
                         return
                     await authority(db, current, wanted=True)
+                    await capacity.admit(db, attempt, current, storage)
+                    await capacity.submitted(db, attempt)
                     # This sticky marker commits before any mutating request.
                     attempt.external_may_exist, attempt.state = True, "submitting"
                     attempt.message = (
@@ -524,7 +555,11 @@ async def run(identifier):
                         "Updated connections verified against the existing transfer; "
                         "no download was added",
                     )
-                await finish_observation(db, attempt, current, observed)
+                needs_import = await finish_observation(db, attempt, current, observed)
+                if attempt.state == "complete":
+                    # Capacity is last in the lock order, after request evaluation
+                    # and continuation authority have acquired their domain locks.
+                    await capacity.downloaded(db, attempt, needs_import=bool(needs_import))
                 db.add(
                     AuditEvent(
                         actor_id=attempt.owner_id,
@@ -533,12 +568,12 @@ async def run(identifier):
                         detail={"state": attempt.state},
                     )
                 )
-    except (AdapterError, HTTPException, TimeoutError) as error:
+    except (AdapterError, HTTPException, TimeoutError, capacity.CapacityWait) as error:
         async with session_factory()() as db, db.begin():
             attempt, _ = await locked(db, identifier)
             if attempt.run_token != token:
                 return
-            transient = isinstance(error, TimeoutError) or (
+            transient = isinstance(error, (TimeoutError, capacity.CapacityWait)) or (
                 isinstance(error, AdapterError)
                 and error.kind
                 in {
@@ -552,7 +587,7 @@ async def run(identifier):
             )
             message = (
                 str(error)
-                if isinstance(error, AdapterError)
+                if isinstance(error, (AdapterError, capacity.CapacityWait))
                 else "Download check timed out"
                 if transient
                 else "Download access, request or saved settings changed"

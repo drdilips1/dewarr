@@ -35,10 +35,10 @@ async def schedule_import_confirmation(timestamp: int) -> None:
             await db.scalars(
                 select(ImportEntry)
                 .where(
-                    ImportEntry.state.in_(["awaiting-library", "cancelling"]),
+                    ImportEntry.state.in_(["awaiting-library", "cancelling", "queued"]),
                     ImportEntry.next_check_at <= datetime.now(UTC),
                 )
-                .order_by(ImportEntry.id)
+                .order_by(ImportEntry.next_check_at, ImportEntry.id)
                 .limit(20)
                 .with_for_update(skip_locked=True)
             )

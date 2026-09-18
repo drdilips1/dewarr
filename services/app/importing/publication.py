@@ -422,6 +422,44 @@ def stage_files(staging, stage, source, receipt_name, receipt, spec, deadline, c
     sync_directory(stage)
 
 
+def remaining_stage_bytes(staging, receipt, spec, deadline):
+    if receipt and receipt.get("stage_identity"):
+        try:
+            with beneath(staging, receipt["stage_name"], folder=True) as stage:
+                if same_object(stage, receipt["stage_identity"]):
+                    verify_item(stage, spec, deadline)
+                    return 0
+        except (FileNotFoundError, PublicationError):
+            pass  # Incomplete staging conservatively reserves a fresh complete copy.
+    return sum(len(value) for value in generated_files(spec).values()) + (
+        sum(file.identity["size"] for file in spec.files) if spec.mode == "copy" else 0
+    )
+
+
+def remaining_import_bytes(spec, *, timeout=600):
+    """Read durable publication evidence before reserving additional storage."""
+    deadline = time.monotonic() + timeout
+    with private_staging(spec.staging_root) as staging, directory(spec.destination_root) as target:
+        with publication_lock(staging, json.dumps(object_id(target), sort_keys=True)):
+            receipt = read_receipt(staging, str(spec.entry_id) + ".json")
+            if receipt:
+                if receipt.get("spec_hash") != specification_fingerprint(spec) or receipt.get(
+                    "destination_identity"
+                ) != object_id(target):
+                    raise PublicationError("Publication settings or destination identity changed")
+                try:
+                    with beneath(target, spec.folder, folder=True) as existing:
+                        if not receipt.get("stage_identity") or not same_object(
+                            existing, receipt["stage_identity"]
+                        ):
+                            raise PublicationError("Destination belongs to another item")
+                        verify_item(existing, spec, deadline)
+                        return 0
+                except FileNotFoundError:
+                    pass
+            return remaining_stage_bytes(staging, receipt, spec, deadline)
+
+
 def publish_item(
     spec: PublicationSpec,
     *,
@@ -481,9 +519,7 @@ def publish_item(
                     raise PublicationError("Completed-download directory identity changed")
                 for file in spec.files:
                     checked_source(source, file, deadline)
-                needed = (
-                    sum(file.identity["size"] for file in spec.files) if spec.mode == "copy" else 0
-                )
+                needed = remaining_stage_bytes(staging, receipt, spec, deadline)
                 space = os.fstatvfs(staging)
                 if space.f_bavail * space.f_frsize < needed + 1024 * 1024:
                     raise PublicationError("Not enough free space for this import")

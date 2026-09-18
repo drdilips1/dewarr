@@ -106,6 +106,21 @@ def test_retry_recognizes_published_item_even_if_download_was_later_removed(spec
     assert publish_item(spec)["state"] == "published"
 
 
+@pytest.mark.parametrize("point", ["prepared", "published-before-receipt"])
+def test_completed_copy_recovery_needs_no_additional_media_bytes(specification, point):
+    spec = specification.model_copy(update={"mode": "copy"})
+    assert publication.remaining_import_bytes(spec) > spec.files[0].identity["size"]
+
+    def crash(phase):
+        if phase == point:
+            raise RuntimeError("Interrupted copy")
+
+    with pytest.raises(RuntimeError, match="Interrupted copy"):
+        publish_item(spec, checkpoint=crash)
+    assert publication.remaining_import_bytes(spec) == 0
+    assert publish_item(spec)["state"] == "published"
+
+
 @pytest.mark.parametrize("contents", [None, "unrelated"])
 def test_existing_destination_never_replaced_or_adopted(specification, contents):
     spec = specification

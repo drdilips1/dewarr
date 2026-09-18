@@ -271,7 +271,7 @@ async def test_repair_history_refuses_lossy_rollback(client, database, selected,
     async with database() as db:
         before = await db.scalar(text("SELECT version_num FROM alembic_version"))
     result = await migrate("downgrade", "0019_fulfillment")
-    assert result.returncode != 0 and "Download repair history requires" in result.stderr
+    assert result.returncode != 0 and "Capacity history requires" in result.stderr
     async with database() as db:
         assert await db.scalar(text("SELECT version_num FROM alembic_version")) == before
 

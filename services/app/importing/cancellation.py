@@ -94,6 +94,9 @@ async def execute(operation_id: UUID, *, checkpoint=lambda _: None):
                 )
                 operation.status = "completed"
             operation.message = entry.message
+            from app.domain.capacity import release_import
+
+            await release_import(db, entry)
             db.add(
                 AuditEvent(
                     actor_id=owner_id,

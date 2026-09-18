@@ -2030,3 +2030,63 @@ test("wanted list title prepares an eligible release and reloads its saved selec
   );
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });
+
+test("installation capacity limits persist and remain usable on mobile", async ({
+  page,
+}, testInfo) => {
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.getByRole("link", { name: "Connections", exact: true }).click();
+  await page.getByRole("link", { name: "Downloaders", exact: true }).click();
+  await page.getByText("Transfer and storage limits", { exact: true }).click();
+  const settings = page.getByRole("form", {
+    name: "Transfer and storage limits",
+  });
+  await expect(
+    settings.getByLabel("Active downloads per downloader"),
+  ).toHaveValue("3");
+  await expect(
+    settings.getByLabel("Automatic transfers per 24 hours"),
+  ).toHaveValue("10");
+  await settings.getByLabel("Active downloads per downloader").fill("2");
+  await settings.getByLabel("Automatic transfers per 24 hours").fill("7");
+  await settings.getByLabel("Minimum free storage (GiB)").fill("6");
+  await settings.getByLabel("Minimum free storage (%)").fill("6");
+  await settings.getByRole("button", { name: "Save capacity limits" }).click();
+  await expect(page.getByRole("status")).toContainText("Capacity limits saved");
+  await page.reload();
+  await page.getByText("Transfer and storage limits", { exact: true }).click();
+  await expect(
+    settings.getByLabel("Active downloads per downloader"),
+  ).toHaveValue("2");
+  await expect(
+    settings.getByLabel("Automatic transfers per 24 hours"),
+  ).toHaveValue("7");
+  await expect(settings.getByLabel("Minimum free storage (GiB)")).toHaveValue(
+    "6",
+  );
+  await expect(settings.getByLabel("Minimum free storage (%)")).toHaveValue(
+    "6",
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("capacity-mobile.png"),
+    fullPage: true,
+  });
+  await settings.getByLabel("Active downloads per downloader").fill("3");
+  await settings.getByLabel("Automatic transfers per 24 hours").fill("10");
+  await settings.getByLabel("Minimum free storage (GiB)").fill("5");
+  await settings.getByLabel("Minimum free storage (%)").fill("5");
+  await settings.getByRole("button", { name: "Save capacity limits" }).click();
+  await expect(page.getByRole("status")).toContainText("Capacity limits saved");
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+});

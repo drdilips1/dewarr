@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Empty, Loading, Notice } from "../components";
+import CapacitySettings from "./CapacitySettings";
 
 type Connection = components["schemas"]["DownloaderView"];
 type Mapping = components["schemas"]["DownloadMapping"];
@@ -48,10 +49,11 @@ export default function Downloaders() {
         </button>
       </header>
       <p className="notice">
-        Connection setup is available. Download dispatch remains unavailable
-        while the acquisition workflow is being completed.
+        Downloads require an enabled acquisition workflow and verified library
+        destinations.
       </p>
       <Notice error={connections.error || roots.error || test.error} />
+      <CapacitySettings />
       {editing && roots.data && (editing === "new" || selected) && (
         <ConnectionForm
           key={`${editing}:${selected?.generation || 0}`}

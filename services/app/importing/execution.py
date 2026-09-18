@@ -35,7 +35,7 @@ from app.db.models import (
     Version,
 )
 from app.db.session import session_factory
-from app.domain import download_reviews
+from app.domain import capacity, download_reviews
 from app.domain.identity import normalized
 from app.domain.inventory import apply_item
 from app.importing.backend import verify_backend
@@ -131,11 +131,20 @@ async def context(db, entry, token, *, lock=False):
 
 
 class RenameGuard:
-    def __init__(self, loop, entry_id, token):
+    def __init__(self, loop, entry_id, token, spec=None):
         self.loop, self.entry_id, self.token = loop, entry_id, token
+        self.spec = spec
         self.db = None
 
     async def enter(self):
+        observation = None
+        if self.spec:
+            observation = await capacity.observe_publication(self.spec)
+            async with session_factory()() as db, db.begin():
+                entry = await db.get(ImportEntry, self.entry_id)
+                await context(db, entry, self.token, lock=True)
+                await capacity.staged_import(db, entry, observation)
+            observation = await capacity.observe_publication(self.spec)
         self.db = session_factory()()
         try:
             await self.db.begin()
@@ -143,6 +152,8 @@ class RenameGuard:
             _, _, _, library = await context(self.db, entry, self.token, lock=True)
             if await already_owned(self.db, entry.version_id, library.id):
                 raise AlreadyOwned("This version became available before publication")
+            if observation:
+                await capacity.publication_capacity(self.db, entry, observation)
         except BaseException:
             await self.db.rollback()
             await self.db.close()
@@ -319,11 +330,18 @@ async def finish_state(entry_id, token, state, message, *, receipt=None):
             entry.receipt = receipt
         if state == "skipped":
             entry.reserved = False
+            await capacity.release_import(db, entry)
         entry.next_check_at = (
-            datetime.now(UTC) + timedelta(minutes=1) if state == "awaiting-library" else None
+            datetime.now(UTC) + timedelta(minutes=1)
+            if state in {"awaiting-library", "queued"}
+            else None
         )
         operation.status = (
-            "completed" if state in {"confirmed", "skipped", "awaiting-library"} else "failed"
+            "completed"
+            if state in {"confirmed", "skipped", "awaiting-library"}
+            else "queued"
+            if state == "queued"
+            else "failed"
         )
         operation.message = message
 
@@ -367,7 +385,20 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
             if not entry.published_at:
                 spec = await prepare_cover(entry_id, token)
                 entry.specification = spec.model_dump(mode="json")
-                guard = RenameGuard(asyncio.get_running_loop(), entry_id, token)
+                observation = await capacity.observe_import(spec)
+                async with session_factory()() as db, db.begin():
+                    current = await db.get(ImportEntry, entry_id)
+                    await context(db, current, token, lock=True)
+                    await capacity.reconcile_import(db, current, observation)
+                observation = {
+                    **await capacity.observe_publication(spec),
+                    "required_bytes": observation["required_bytes"],
+                }
+                async with session_factory()() as db, db.begin():
+                    current = await db.get(ImportEntry, entry_id)
+                    await context(db, current, token, lock=True)
+                    await capacity.reserve_import(db, current, spec, observation)
+                guard = RenameGuard(asyncio.get_running_loop(), entry_id, token, spec)
                 task = asyncio.create_task(
                     asyncio.to_thread(
                         publish_item, spec, checkpoint=checkpoint, publication_guard=guard.hold
@@ -389,6 +420,7 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                         "Published; awaiting ABS item confirmation",
                     )
                     current.next_check_at = datetime.now(UTC) + timedelta(minutes=1)
+                    await capacity.release_import(db, current)
                     db.add(
                         AuditEvent(
                             actor_id=operation.owner_id,
@@ -517,6 +549,8 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
         return
     except AlreadyOwned as error:
         await finish_state(entry_id, token, "skipped", str(error))
+    except capacity.CapacityWait as error:
+        await finish_state(entry_id, token, "queued", str(error))
     except PublicationBusy:
         raise
     except (PublicationError, AdapterError, OSError, ValueError, InvalidToken, KeyError) as error:

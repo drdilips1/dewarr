@@ -532,6 +532,32 @@ class DownloadAttempt(Identity, Base):
     inspection_id: Mapped[UUID | None] = mapped_column(ForeignKey("download_inspections.id"))
 
 
+class CapacitySettings(Base):
+    __tablename__ = "capacity_settings"
+    __table_args__ = (CheckConstraint("id = 1"),)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    configuration: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    storage_generation: Mapped[int] = mapped_column(BigInteger, default=0)
+
+
+class DownloadCapacity(Base):
+    __tablename__ = "download_capacity"
+    attempt_id: Mapped[UUID] = mapped_column(ForeignKey("download_attempts.id"), primary_key=True)
+    automatic: Mapped[bool] = mapped_column(Boolean, default=False)
+    slot_active: Mapped[bool] = mapped_column(Boolean, default=False)
+    submitted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), index=True)
+    resources: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+    import_resources: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+    observed_mounts: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+
+
+class ImportCapacity(Base):
+    __tablename__ = "import_capacity"
+    entry_id: Mapped[UUID] = mapped_column(ForeignKey("import_entries.id"), primary_key=True)
+    resources: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+    observed_mounts: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+
+
 class DownloadHandoff(Identity, Base):
     __tablename__ = "download_handoffs"
     __table_args__ = (
