@@ -13,6 +13,7 @@ from app.config import get_settings
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from tests.abs_import_fixture import ScanningBackend  # noqa: E402
 from tests.mam_fixture import search_response  # noqa: E402
+from tests.torrent_fixture import torrent_bytes  # noqa: E402
 
 app = FastAPI()
 catalog_state = {"narrator": "Sample Narrator"}
@@ -52,6 +53,12 @@ async def mam_fixture(path: str, request: Request):
         raise HTTPException(401)
     mam_state["requests"] += 1
     mam_state["cookie"] = f"browser-mam-rotated-{mam_state['requests']}"
+    if path == "tor/download.php/fixture-private-download-token":
+        if dict(request.query_params) != {"tid": "501"}:
+            raise HTTPException(400)
+        response = Response(torrent_bytes(), media_type="application/x-bittorrent")
+        response.set_cookie("mam_id", mam_state["cookie"], httponly=True)
+        return response
     if path == "jsonLoad.php":
         body = {"uid": 99, "username": "Synthetic MAM account"}
     elif path == "tor/js/loadSearchJSONbasic.php":

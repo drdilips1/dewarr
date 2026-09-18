@@ -150,6 +150,21 @@ class SourceConnection(Base):
     lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
+class SourceArtifact(Identity, Base):
+    __tablename__ = "source_artifacts"
+    __table_args__ = (
+        UniqueConstraint("owner_id", "source_key", "source_id", "source_generation", "sha256"),
+    )
+    owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
+    source_key: Mapped[str] = mapped_column(ForeignKey("source_connections.key"))
+    source_id: Mapped[str] = mapped_column(String(200))
+    source_generation: Mapped[int] = mapped_column(Integer)
+    sha256: Mapped[str] = mapped_column(String(64))
+    encrypted_content: Mapped[str] = mapped_column(Text)
+    descriptor: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    release_snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB)
+
+
 class Library(Identity, Base):
     __tablename__ = "libraries"
     __table_args__ = (UniqueConstraint("integration_id", "external_id"),)

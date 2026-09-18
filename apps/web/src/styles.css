@@ -874,6 +874,20 @@ nav a.active {
 .break-text {
   overflow-wrap: anywhere;
 }
+
+.artifact-files {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.artifact-files li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--line);
+}
 .library-access {
   margin-top: 36px;
 }

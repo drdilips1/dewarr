@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Empty, Notice } from "../components";
@@ -9,7 +9,13 @@ type Query = components["schemas"]["MAMSearch"];
 type Connection = components["schemas"]["MAMConnectionView"];
 type Release = components["schemas"]["MAMRelease"];
 
-export default function Sources({ admin }: { admin: boolean }) {
+export default function Sources({
+  admin,
+  canAcquire,
+}: {
+  admin: boolean;
+  canAcquire: boolean;
+}) {
   const [params] = useSearchParams();
   const [q, setQ] = useState(params.get("q") || "");
   const [medium, setMedium] = useState<Query["medium"]>("all");
@@ -220,6 +226,7 @@ export default function Sources({ admin }: { admin: boolean }) {
                 <ReleaseDetail
                   release={detail}
                   loading={fetchDetail.isPending}
+                  canAcquire={canAcquire}
                 />
               )}
             </article>
@@ -259,9 +266,11 @@ export default function Sources({ admin }: { admin: boolean }) {
 function ReleaseDetail({
   release,
   loading,
+  canAcquire,
 }: {
   release: Release;
   loading: boolean;
+  canAcquire: boolean;
 }) {
   return (
     <section aria-label={`Details for ${release.title}`}>
@@ -319,7 +328,48 @@ function ReleaseDetail({
         Source metadata describes this release; it does not confirm a catalog
         edition, collection coverage or library ownership.
       </p>
+      {canAcquire && !loading && (
+        <TorrentInspection
+          key={release.source_id}
+          sourceId={release.source_id}
+        />
+      )}
     </section>
+  );
+}
+
+function TorrentInspection({ sourceId }: { sourceId: string }) {
+  const cache = useQueryClient();
+  const inspect = useMutation({
+    mutationFn: async () =>
+      result(
+        await api.POST("/api/sources/mam/releases/{source_id}/artifact", {
+          params: { path: { source_id: sourceId } },
+        }),
+      ),
+    onSuccess: (artifact) =>
+      cache.setQueryData(["source-artifact", artifact.id], artifact),
+    onSettled: () => cache.invalidateQueries({ queryKey: ["mam-connection"] }),
+  });
+  return (
+    <div>
+      <button disabled={inspect.isPending} onClick={() => inspect.mutate()}>
+        {inspect.isPending ? "Inspecting torrent…" : "Inspect torrent manifest"}
+      </button>
+      <Notice error={inspect.error} />
+      {inspect.data && (
+        <p role="status">
+          {inspect.data.descriptor.files.length} file entries inspected.{" "}
+          <Link to={`/sources/artifacts/${inspect.data.id}`}>
+            View saved manifest
+          </Link>
+        </p>
+      )}
+      <p className="muted">
+        Fetches the torrent metadata through your MAM connection. Does not start
+        a download.
+      </p>
+    </div>
   );
 }
 

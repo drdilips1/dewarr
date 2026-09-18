@@ -29,6 +29,7 @@ const ActivityPage = lazy(() => import("./pages/Activity"));
 const Connections = lazy(() => import("./pages/Connections"));
 const Downloaders = lazy(() => import("./pages/Downloaders"));
 const Sources = lazy(() => import("./pages/Sources"));
+const SourceArtifact = lazy(() => import("./pages/SourceArtifact"));
 const MyLibrary = lazy(() => import("./pages/MyLibrary"));
 const Accounts = lazy(() => import("./pages/Accounts"));
 const ProviderSearch = lazy(() => import("./pages/ProviderSearch"));
@@ -368,7 +369,22 @@ function Shell({ auth }: { auth: Auth }) {
               />
               <Route
                 path="/sources"
-                element={<Sources admin={auth.user.role === "admin"} />}
+                element={
+                  <Sources
+                    admin={auth.user.role === "admin"}
+                    canAcquire={auth.user.role !== "viewer"}
+                  />
+                }
+              />
+              <Route
+                path="/sources/artifacts/:id"
+                element={
+                  auth.user.role !== "viewer" ? (
+                    <SourceArtifact />
+                  ) : (
+                    <Navigate to="/" replace />
+                  )
+                }
               />
               <Route
                 path="/downloaders"

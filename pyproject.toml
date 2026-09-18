@@ -18,6 +18,7 @@ dependencies = [
   "defusedxml>=0.7.1,<1",
   "pillow>=12.3,<13",
   "pypdf>=6.19,<7",
+  "libtorrent==2.1.1",
 ]
 
 [dependency-groups]
@@ -38,6 +39,9 @@ packages = ["services/app"]
 [tool.hatch.build.targets.wheel.force-include]
 "docs/notices/MouseSearch-MIT.txt" = "app/notices/MouseSearch-MIT.txt"
 "docs/notices/myanonamouse-mcp-MIT.txt" = "app/notices/myanonamouse-mcp-MIT.txt"
+"docs/notices/libtorrent-BSD.txt" = "app/notices/libtorrent-BSD.txt"
+"docs/notices/Boost-LICENSE-1.0.txt" = "app/notices/Boost-LICENSE-1.0.txt"
+"docs/notices/OpenSSL-3-LICENSE.txt" = "app/notices/OpenSSL-3-LICENSE.txt"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -3777,6 +3777,92 @@
           }
         }
       }
+    },
+    "/api/sources/mam/releases/{source_id}/artifact": {
+      "post": {
+        "tags": [
+          "source-artifacts"
+        ],
+        "summary": "Resolve Artifact",
+        "operationId": "resolve_artifact_api_sources_mam_releases__source_id__artifact_post",
+        "parameters": [
+          {
+            "name": "source_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[1-9][0-9]{0,17}$",
+              "title": "Source Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceArtifactView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/source-artifacts/{artifact_id}": {
+      "get": {
+        "tags": [
+          "source-artifacts"
+        ],
+        "summary": "Get Artifact",
+        "operationId": "get_artifact_api_source_artifacts__artifact_id__get",
+        "parameters": [
+          {
+            "name": "artifact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Artifact Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceArtifactView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -8756,6 +8842,59 @@
         ],
         "title": "SetupView"
       },
+      "SourceArtifactView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "source_key": {
+            "type": "string",
+            "title": "Source Key"
+          },
+          "source_id": {
+            "type": "string",
+            "title": "Source Id"
+          },
+          "source_generation": {
+            "type": "integer",
+            "title": "Source Generation"
+          },
+          "current_connection": {
+            "type": "boolean",
+            "title": "Current Connection"
+          },
+          "descriptor": {
+            "$ref": "#/components/schemas/TorrentDescriptor"
+          },
+          "release": {
+            "$ref": "#/components/schemas/MAMRelease"
+          },
+          "dispatch_available": {
+            "type": "boolean",
+            "title": "Dispatch Available",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "source_key",
+          "source_id",
+          "source_generation",
+          "current_connection",
+          "descriptor",
+          "release"
+        ],
+        "title": "SourceArtifactView"
+      },
       "SourceSeries": {
         "properties": {
           "source_id": {
@@ -8898,6 +9037,118 @@
           "message"
         ],
         "title": "TargetView"
+      },
+      "TorrentDescriptor": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "artifact_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Artifact Sha256"
+          },
+          "infohash_v1": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{40}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Infohash V1"
+          },
+          "infohash_v2": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Infohash V2"
+          },
+          "private": {
+            "type": "boolean",
+            "title": "Private"
+          },
+          "content_bytes": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Content Bytes"
+          },
+          "torrent_bytes": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Torrent Bytes"
+          },
+          "padding_bytes": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Padding Bytes"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/TorrentFile"
+            },
+            "type": "array",
+            "maxItems": 10000,
+            "minItems": 1,
+            "title": "Files"
+          },
+          "parser": {
+            "type": "string",
+            "title": "Parser"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "artifact_sha256",
+          "private",
+          "content_bytes",
+          "torrent_bytes",
+          "padding_bytes",
+          "files",
+          "parser"
+        ],
+        "title": "TorrentDescriptor"
+      },
+      "TorrentFile": {
+        "properties": {
+          "index": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Index"
+          },
+          "path": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 1,
+            "title": "Path"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Size Bytes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "index",
+          "path",
+          "size_bytes"
+        ],
+        "title": "TorrentFile"
       },
       "UserInput": {
         "properties": {

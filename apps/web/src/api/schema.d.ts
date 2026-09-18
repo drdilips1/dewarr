@@ -1244,6 +1244,40 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/sources/mam/releases/{source_id}/artifact": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Resolve Artifact */
+    post: operations["resolve_artifact_api_sources_mam_releases__source_id__artifact_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/source-artifacts/{artifact_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Artifact */
+    get: operations["get_artifact_api_source_artifacts__artifact_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -3091,6 +3125,34 @@ export interface components {
       /** Needs Setup */
       needs_setup: boolean;
     };
+    /** SourceArtifactView */
+    SourceArtifactView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /** Source Key */
+      source_key: string;
+      /** Source Id */
+      source_id: string;
+      /** Source Generation */
+      source_generation: number;
+      /** Current Connection */
+      current_connection: boolean;
+      descriptor: components["schemas"]["TorrentDescriptor"];
+      release: components["schemas"]["MAMRelease"];
+      /**
+       * Dispatch Available
+       * @default false
+       */
+      dispatch_available: boolean;
+    };
     /** SourceSeries */
     SourceSeries: {
       /** Source Id */
@@ -3143,6 +3205,38 @@ export interface components {
       state: string;
       /** Message */
       message: string;
+    };
+    /** TorrentDescriptor */
+    TorrentDescriptor: {
+      /** Name */
+      name: string;
+      /** Artifact Sha256 */
+      artifact_sha256: string;
+      /** Infohash V1 */
+      infohash_v1?: string | null;
+      /** Infohash V2 */
+      infohash_v2?: string | null;
+      /** Private */
+      private: boolean;
+      /** Content Bytes */
+      content_bytes: number;
+      /** Torrent Bytes */
+      torrent_bytes: number;
+      /** Padding Bytes */
+      padding_bytes: number;
+      /** Files */
+      files: components["schemas"]["TorrentFile"][];
+      /** Parser */
+      parser: string;
+    };
+    /** TorrentFile */
+    TorrentFile: {
+      /** Index */
+      index: number;
+      /** Path */
+      path: string;
+      /** Size Bytes */
+      size_bytes: number;
     };
     /** UserInput */
     UserInput: {
@@ -5933,6 +6027,68 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["PathPreviewView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  resolve_artifact_api_sources_mam_releases__source_id__artifact_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        source_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SourceArtifactView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_artifact_api_source_artifacts__artifact_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        artifact_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SourceArtifactView"];
         };
       };
       /** @description Validation Error */

@@ -122,7 +122,11 @@ async def test_http_search_detail_and_session_rotation_only_return_public_fields
         page = await client.search(MAMSearch(q="Harbor"))
         assert client.rotated_cookie == "rotated-fixture"
         assert (await client.detail("501")).source_id == page.items[0].source_id
-    assert all(request.headers["cookie"] == "mam_id=original-fixture" for request in seen)
+    assert [request.headers["cookie"] for request in seen] == [
+        "mam_id=original-fixture",
+        "mam_id=original-fixture",
+        "mam_id=rotated-fixture",
+    ]
 
 
 @pytest.mark.parametrize(

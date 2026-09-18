@@ -32,7 +32,7 @@ These references describe external interfaces. No qBittorrent implementation is 
 
 ## Submission and association
 
-Submission accepts one bounded torrent byte payload or one supported v1/v2/hybrid magnet. Remote torrent URLs must be resolved by their source adapter. Magnet identity validation rejects conflicting hashes and multiple-line inputs. Opaque torrent bytes still require the planned descriptor parser and acquisition validation before they can enter a production dispatch workflow.
+Submission accepts one bounded torrent byte payload or one supported v1/v2/hybrid magnet. Remote torrent URLs must be resolved by their source adapter. Magnet identity validation rejects conflicting hashes and multiple-line inputs. The [source artifact parser](SOURCE-ARTIFACTS.md) now validates native MAM torrent descriptors; persisted acquisition validation must still connect that evidence to a production dispatch workflow.
 
 Every add specifies the application attempt tag, category, save path, original content layout, enabled hash checking and disabled automatic torrent management. It does not set ratio/seeding limits, rename files, choose partial file priorities or copy MAM credentials into the downloader. This preserves the planned whole-pack and tracker-seeding behavior.
 
@@ -57,7 +57,7 @@ The integrated browser journey covers saving and testing a connection, mapped pa
 The next integration slice must supply:
 
 1. Actual configured-client certification and enforcement of saved connection generation, enablement and path bindings by the dispatch worker.
-2. Source artifact resolution and a validated v1/v2/hybrid torrent descriptor, retaining source credentials privately.
+2. Integration with saved, owner-scoped source artifacts and validated v1/v2/hybrid descriptors, enforcing artifact integrity and current source generation. Native MAM resolution is implemented; other sources remain pending.
 3. Persisted release selection, attempt identity, client configuration revision and reservations before network side effects.
 4. A preflight existing-transfer check, dispatch journaling and recovery that reconciles before any retry; no adoption of unrelated torrents.
 5. Monitoring linked to the current inspection/import pipeline, with current permission and configuration checks.

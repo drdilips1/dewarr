@@ -1,6 +1,6 @@
 # Native MAM search integration
 
-The Sources page now provides native MAM search and release detail. Catalog book pages link to a title-prefilled source search. Administrators configure the installation's shared MAM connection; authenticated readers can search without access to its credentials. This is the read-only source portion of S05. Download dispatch, acquisition ranking and source-to-catalog mapping remain unfinished.
+The Sources page now provides native MAM search and release detail. Catalog book pages link to a title-prefilled source search. Administrators configure the installation's shared MAM connection; authenticated readers can search without access to its credentials. Members can also [inspect and privately save a torrent manifest](SOURCE-ARTIFACTS.md). Download dispatch, acquisition ranking and source-to-catalog mapping remain unfinished.
 
 ## Search and source evidence
 
@@ -40,4 +40,4 @@ Twenty-nine adapter tests and eleven PostgreSQL/API tests cover request fields, 
 
 The browser journey configures a synthetic MAM endpoint, verifies token-free reload, tests the account, searches, reads full details, checks plain-text rendering and exercises a valid empty response. Desktop/mobile screenshots are retained locally. All source fixtures are invented; no personal MAM account, tracker posting or download was used.
 
-Live account/IP/proxy certification, source-native provisional catalog creation, richer filters/autosuggest, cross-source aggregation, release ranking, download artifact resolution and qBittorrent dispatch remain pending. Current source ordering is a browse control and does not change acquisition policies. This checkpoint does not satisfy the complete S05 manual acquisition gate.
+Live account/IP/proxy certification, source-native provisional catalog creation, richer filters/autosuggest, cross-source aggregation, release ranking and qBittorrent dispatch remain pending. Artifact resolution/inspection now has its own fixture and native-parser evidence in the linked contract. Current source ordering is a browse control and does not change acquisition policies. This checkpoint does not satisfy the complete S05 manual acquisition gate.

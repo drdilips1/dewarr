@@ -828,6 +828,46 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     path: testInfo.outputPath("mam-search-mobile.png"),
     fullPage: true,
   });
+  await mamDetails
+    .getByRole("button", { name: "Inspect torrent manifest", exact: true })
+    .click();
+  await mamDetails
+    .getByRole("link", { name: "View saved manifest", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Torrent manifest", exact: true }),
+  ).toBeVisible();
+  const torrentFiles = page.getByRole("list", {
+    name: "Torrent files",
+    exact: true,
+  });
+  await expect(torrentFiles).toContainText("Harbor Stories/01 - Harbor.m4b");
+  await expect(torrentFiles).toContainText("Harbor Stories/02 - Roads.m4b");
+  await expect(page.getByRole("main")).not.toContainText(
+    "fixture-private-download-token",
+  );
+  await expect(page.getByRole("main")).not.toContainText(
+    "private-fixture-passkey",
+  );
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("torrent-manifest-mobile.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.reload();
+  await expect(torrentFiles).toContainText("Harbor Stories/02 - Roads.m4b");
+  await page.screenshot({
+    path: testInfo.outputPath("torrent-manifest-desktop.png"),
+    fullPage: true,
+  });
+  await page
+    .getByRole("link", { name: "Return to source search", exact: true })
+    .click();
   await page
     .getByLabel("Search title, author or series", { exact: true })
     .fill("No source matches");

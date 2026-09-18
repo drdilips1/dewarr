@@ -7,10 +7,13 @@ and docs/notices; exact upstream revisions are in docs/REUSE-LEDGER.md.
 
 import asyncio
 import json
+import logging
 import re
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from html.parser import HTMLParser
 from typing import Literal
+from urllib.parse import parse_qsl, unquote, urlencode, urlsplit
 
 import httpx
 from pydantic import BaseModel, Field, field_validator
@@ -21,6 +24,54 @@ from app.domain.catalog_network import retry_delay
 
 MAX_RESPONSE_BYTES = 8 * 1024 * 1024
 SEARCH_PATH = "tor/js/loadSearchJSONbasic.php"
+
+
+class PrivateDownloadLogFilter(logging.Filter):
+    def filter(self, record):
+        # httpx logs complete request URLs at INFO, including MAM passkeys.
+        return not any(
+            isinstance(value, httpx.URL) and "/tor/download.php/" in value.path
+            for value in (record.args if isinstance(record.args, tuple) else ())
+        )
+
+
+logging.getLogger("httpx").addFilter(PrivateDownloadLogFilter())
+
+
+def download_path(value, source_id):
+    if not isinstance(value, str) or not 0 < len(value) <= 4096:
+        raise AdapterError(FailureKind.PARSER, "MAM did not provide a usable download reference.")
+    try:
+        parts = urlsplit(value)
+    except ValueError as error:
+        raise AdapterError(
+            FailureKind.PARSER, "MAM returned an invalid download reference."
+        ) from error
+    segments = [unquote(segment) for segment in parts.path.split("/")]
+    if (
+        parts.scheme
+        or parts.netloc
+        or parts.fragment
+        or any(ord(c) < 33 or ord(c) == 127 for c in value)
+        or any(
+            segment in {".", ".."} or not re.fullmatch(r"[A-Za-z0-9._~=-]+", segment)
+            for segment in segments
+        )
+    ):
+        raise AdapterError(FailureKind.PARSER, "MAM returned an unsupported download reference.")
+    try:
+        query = parse_qsl(parts.query, keep_blank_values=True, max_num_fields=10)
+    except ValueError as error:
+        raise AdapterError(
+            FailureKind.PARSER, "MAM returned an unsupported download query."
+        ) from error
+    if any(key.lower() != "tid" for key, _ in query):
+        # Personal-freeleech flags require a separate explicit policy. Resolving
+        # an artifact must not spend account tokens as a hidden URL side effect.
+        raise AdapterError(
+            FailureKind.UNSUPPORTED, "MAM download reference has unsupported options."
+        )
+    return "tor/download.php/" + parts.path + "?" + urlencode({"tid": source_id})
 
 
 class MAMSearch(BaseModel):
@@ -92,6 +143,12 @@ class MAMRelease(Release):
     isbn: str | None = None
     media_info: str | None = None
     observed_at: datetime
+
+
+@dataclass(frozen=True)
+class MAMArtifact:
+    release: MAMRelease
+    content: bytes = field(repr=False)
 
 
 class ReleasePage(BaseModel):
@@ -326,6 +383,7 @@ class MAMClient:
         proxy_username=None,
         proxy_password=None,
         transport=None,
+        request_interval=2.0,
     ):
         proxy = (
             httpx.Proxy(proxy_url, auth=(proxy_username or "", proxy_password or ""))
@@ -346,6 +404,7 @@ class MAMClient:
             transport=transport,
         )
         self.rotated_cookie = None
+        self.request_interval = request_interval
         self.cooldown = 0
 
     async def __aenter__(self):
@@ -354,11 +413,16 @@ class MAMClient:
     async def __aexit__(self, *args):
         await self.client.aclose()
 
-    async def request(self, path, payload=None):
+    async def request(self, path, payload=None, *, binary=False):
         try:
             async with (
                 asyncio.timeout(40),
-                self.client.stream("POST" if payload else "GET", path, json=payload) as response,
+                self.client.stream(
+                    "POST" if payload else "GET",
+                    path,
+                    json=payload,
+                    headers={"Accept": "application/x-bittorrent"} if binary else None,
+                ) as response,
             ):
                 self.cooldown = retry_delay(dict(response.headers), datetime.now(UTC))
                 # Only the named session cookie from this non-redirected response is persisted.
@@ -376,6 +440,7 @@ class MAMClient:
                 if len(cookies) == 1:
                     try:
                         self.rotated_cookie = cookie_value(cookies[0].value)
+                        self.client.headers["Cookie"] = f"mam_id={self.rotated_cookie}"
                     except ValueError:
                         pass
                 status = response.status_code
@@ -407,11 +472,17 @@ class MAMClient:
                         raise AdapterError(
                             FailureKind.PARSER, "MAM's response exceeded the supported page limit."
                         )
-                if "text/html" in response.headers.get("content-type", ""):
+                if "text/html" in response.headers.get("content-type", "").lower():
                     raise AdapterError(
                         FailureKind.AUTHENTICATION,
                         "MAM returned a login or challenge page. Check the session and route.",
                     )
+                if binary:
+                    if not content or not content.startswith(b"d"):
+                        raise AdapterError(
+                            FailureKind.PARSER, "MAM did not return torrent metadata."
+                        )
+                    return bytes(content)
                 try:
                     value = json.loads(content)
                 except (ValueError, UnicodeError, RecursionError) as error:
@@ -458,3 +529,38 @@ class MAMClient:
                 "MAM did not confirm an authenticated account. Check mam_id and route.",
             )
         return None
+
+    async def resolve(self, source_id):
+        if not re.fullmatch(r"[1-9][0-9]{0,17}", source_id):
+            raise ValueError("Invalid MAM release identifier")
+        query = MAMSearch(q="detail", limit=1)
+        payload = query.payload()
+        payload["dlLink"] = "true"
+        payload["tor"] = {
+            "id": int(source_id),
+            "searchType": "all",
+            "searchIn": "torrents",
+            "startNumber": 0,
+        }
+        value = await self.request(SEARCH_PATH, payload)
+        page = parse_page(value, query)
+        if not page.items:
+            raise AdapterError(FailureKind.NOT_FOUND, "This MAM release is no longer available.")
+        if (
+            len(page.items) != 1
+            or page.items[0].source_id != source_id
+            or len(value.get("data", [])) != 1
+        ):
+            raise AdapterError(
+                FailureKind.PARSER, "MAM returned a different release than requested."
+            )
+        path = download_path(value["data"][0].get("dl"), source_id)
+        if self.cooldown:
+            raise AdapterError(
+                FailureKind.RATE_LIMIT,
+                "MAM requested a cooldown before fetching torrent metadata. Retry later.",
+                retry_after=int(self.cooldown),
+            )
+        await asyncio.sleep(self.request_interval)
+        content = await self.request(path, binary=True)
+        return MAMArtifact(release=page.items[0], content=content)

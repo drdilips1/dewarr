@@ -26,7 +26,7 @@ async def check_actor(db, user_id, *, admin=False):
         raise HTTPException(403, "Administrator access is required")
 
 
-async def source_call(user_id, operation, argument=None):
+async def source_call(user_id, operation, argument=None, *, with_generation=False):
     token = uuid4()
     async with session_factory()() as db, db.begin():
         await check_actor(db, user_id, admin=operation == "test")
@@ -55,7 +55,10 @@ async def source_call(user_id, operation, argument=None):
                 "MAM is cooling down. Wait before retrying.",
                 retry_after=math.ceil(wait),
             )
-        row.lease_token, row.lease_until = token, now + timedelta(seconds=LEASE_SECONDS)
+        row.lease_token, row.lease_until = (
+            token,
+            now + timedelta(seconds=120 if operation == "resolve" else LEASE_SECONDS),
+        )
         row.next_request_at = due + timedelta(seconds=REQUEST_INTERVAL)
         generation, endpoint, proxy = row.generation, row.base_url, row.proxy_url
         secrets = decrypt_secrets(row.encrypted_secrets)
@@ -70,6 +73,7 @@ async def source_call(user_id, operation, argument=None):
             proxy_url=proxy,
             proxy_username=secrets.get("proxy_username"),
             proxy_password=secrets.get("proxy_password"),
+            request_interval=REQUEST_INTERVAL,
         )
         async with client:
             value = (
@@ -89,6 +93,8 @@ async def source_call(user_id, operation, argument=None):
         if not row or row.lease_token != token:
             raise HTTPException(409, "MAM connection changed during this request")
         row.lease_token, row.lease_until = None, None
+        interval_deadline = datetime.now(UTC) + timedelta(seconds=REQUEST_INTERVAL)
+        row.next_request_at = max(row.next_request_at or interval_deadline, interval_deadline)
         changed = row.generation != generation or not row.enabled
         current_secrets = decrypt_secrets(row.encrypted_secrets)
         same_session = (
@@ -117,4 +123,4 @@ async def source_call(user_id, operation, argument=None):
         await check_actor(db, user_id, admin=operation == "test")
     if failure:
         raise failure
-    return value
+    return (value, generation) if with_generation else value
