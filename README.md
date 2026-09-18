@@ -38,7 +38,9 @@ Latest downloader checkpoint: [qBittorrent integration](docs/QBITTORRENT-INTEGRA
 
 Automatic pack-group checkpoint: [Independently authorized pack groups](docs/AUTOMATIC-PACK-GROUPS.md) coalesce compatible automatic selections before dispatch. Each requested book retains its own list/request proof and fulfillment; overlapping list workflows share one transfer. Later/submitted-transfer reuse remains pending.
 
-Series preparation checkpoint: [Automatic metadata preparation](docs/SERIES-PREPARATION.md) loads missing or stale Hardcover series catalogs before source queries, shares active observations, exposes fallback reasons and excludes stale catalogs from automatic pack eligibility. Automatic multi-target grouping and pack reuse remain pending.
+Series preparation checkpoint: [Automatic metadata preparation](docs/SERIES-PREPARATION.md) loads missing or stale Hardcover series catalogs before source queries, shares active observations, exposes fallback reasons and excludes stale catalogs from automatic pack eligibility. [Automatic pack groups](docs/AUTOMATIC-PACK-GROUPS.md) now coalesce independently authorized compatible selections before dispatch.
+
+Saved-transfer reuse checkpoint: [Later pack requests](docs/DOWNLOAD-REUSE.md) can join compatible same-owner transfers and import additional authorized books through separate continuations. Original receipts and earlier imports remain intact; Activity exposes verification and repair. Migration `0037_download_joins` is required. Cross-owner/mixed-route reuse, full series/version/omnibus handling and the remaining PRD stages are still open.
 
 Series checkpoint: [Series catalog and curation](docs/SERIES-CATALOG.md) adds durable Hardcover series observations, book-linked browsing, distinct ownership counts and selected additions to existing lists. [Reviewed series requests](docs/SERIES-REQUESTS.md) now add finite previews, frozen scope, independent request reasons, cancellation and durable receipts. Automatic series policy inheritance and pack fulfillment remain pending.
 

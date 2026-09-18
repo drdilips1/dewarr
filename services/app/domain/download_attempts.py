@@ -75,6 +75,7 @@ def inspection_path(selection):
 
 
 async def locked(db, identifier):
+    await transaction_lock(db, f"download-members:{identifier}")
     attempt = await db.get(DownloadAttempt, identifier)
     if not attempt:
         return None, None
@@ -378,6 +379,9 @@ async def recheck(db, user, identifier):
         raise HTTPException(409, "A download check is running or cooling down")
     if attempt.state == "complete":
         from app.domain.download_fulfillment import reconcile_work
+        from app.importing.reuse import recheck as recheck_reuse
+
+        await recheck_reuse(db, attempt)
 
         for item in await download_memberships.for_attempt(db, attempt.id):
             await reconcile_work(db, UUID(item.frozen["origin_work_id"]))

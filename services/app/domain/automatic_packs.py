@@ -10,7 +10,7 @@ from app.adapters.contracts import AdapterError
 from app.config import get_settings
 from app.db.models import AcquisitionSelection, AcquisitionTarget, Operation, User
 from app.db.session import session_factory
-from app.domain import download_memberships
+from app.domain import download_memberships, download_reuse
 from app.domain.operations import transaction_lock
 from app.jobs.queue import enqueue
 from app.jobs.retry import DependencyRetry
@@ -96,7 +96,9 @@ async def run(identifier):
         if not pairs:
             return
         operations, selections = map(list, zip(*pairs, strict=True))
-        await download_memberships.lock(db, selections)
+        reusable = await download_reuse.candidates(db, selections)
+        existing_members = [item for _, members in reusable for item in members]
+        await download_memberships.lock(db, [*selections, *existing_members])
         # A current automatic selector for another covered book can finish its own
         # assessment. Never manufacture consent from a wanted target or series row.
         covered = {
@@ -178,14 +180,23 @@ async def run(identifier):
             lead, selection = group[0]
             try:
                 async with db.begin_nested():
-                    attempt = await download_attempts.start(
+                    attempt = await download_reuse.join(
                         db,
                         user,
-                        selection.id,
-                        f"auto-download:{lead.id}",
-                        automatic=True,
-                        additional_selection_ids=[item.id for _, item in group[1:]],
+                        [item for _, item in group],
+                        reusable,
+                        f"auto-pack-join:{lead.id}",
                     )
+                    reused = attempt is not None
+                    if attempt is None:
+                        attempt = await download_attempts.start(
+                            db,
+                            user,
+                            selection.id,
+                            f"auto-download:{lead.id}",
+                            automatic=True,
+                            additional_selection_ids=[item.id for _, item in group[1:]],
+                        )
                     members = [str(item.id) for _, item in group]
                     for operation, _ in group:
                         operation.payload = {
@@ -193,15 +204,20 @@ async def run(identifier):
                             "download_id": str(attempt.id),
                             "pack_dispatch": {
                                 **operation.payload["pack_dispatch"],
-                                "state": "queued",
+                                "state": "reused" if reused else "queued",
                                 "selection_ids": members,
                             },
                         }
                         automatic_selection.finish(
                             operation,
                             "completed",
-                            f"Automatic pack download queued for {len(group)} "
-                            "independently authorized books",
+                            (
+                                f"Saved pack reused for {len(group)} independently authorized "
+                                "books; no download added"
+                                if reused
+                                else f"Automatic pack download queued for {len(group)} "
+                                "independently authorized books"
+                            ),
                         )
             except (HTTPException, AdapterError) as error:
                 for operation, _ in group:

@@ -2,7 +2,7 @@
 
 This is an early development build. The full [PRD](../PRD.md) remains the target; [Implementation Status](IMPLEMENTATION-STATUS.md) records actual coverage. Do not connect production acquisition automation until the relevant import and recovery gates pass.
 
-Current request contract: back up the database and apply migrations through `0036_download_memberships` before restarting API and worker together. [Request restrictions](ACQUISITION-FOUNDATION.md#request-download-restrictions) preserve independent format and whole-transfer size limits across shared acquisitions. Populated new restrictions block lossy downgrade. Default dispatch remains disabled; this migration does not activate list automation.
+Current request contract: back up the database and apply migrations through `0037_download_joins` before restarting API and worker together. [Saved-transfer reuse](DOWNLOAD-REUSE.md) adds independent join receipts and later import continuations. [Request restrictions](ACQUISITION-FOUNDATION.md#request-download-restrictions) preserve independent format and whole-transfer size limits across shared acquisitions. Populated history blocks lossy downgrade. Default dispatch remains disabled; this migration does not activate list automation.
 
 ## Native development
 

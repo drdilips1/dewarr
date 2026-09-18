@@ -8,7 +8,7 @@ The [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md) provides a concise
 
 For the existing workspace, use its [remaining development batches](DEVELOPMENT-ROADMAP.md#9-remaining-development-batches-from-the-current-checkpoint) alongside section 16. These batches map outstanding work to the stable packages below; they do not add scope or supersede stage acceptance gates.
 
-The [stage closure plan](#17-stage-closure-and-implementation-packets) turns the current `3e6fc70` checkpoint into an execution order, including the first shared-pack implementation packets. Use it with the complete S00–S10 backlog; it does not replace the PRD or mark partially implemented stages complete.
+The [stage closure plan](#17-stage-closure-and-implementation-packets) defines the remaining execution order. Its original packet breakdown starts at `3e6fc70`; the [current handoff](#18-current-development-handoff) accounts for subsequent verified work through `b6db47c`. Use both with the complete S00–S10 backlog; neither marks partially implemented stages complete.
 
 ## 1. Delivery strategy
 
@@ -843,3 +843,38 @@ This closes neither automatic group authorization nor full series acquisition. N
 Prepared automatic pack selections now enter a durable coordinator. Compatible same-owner selections retain independent operation/list/profile/route proofs and become one explicit download membership set before dispatch. The existing importer fulfills each child independently. Four real-file workflows cover explicit requests and overlapping automatic lists with immediate/delayed ABS confirmation; exact run evidence belongs in [Implementation status](docs/IMPLEMENTATION-STATUS.md). The contract is [Automatic pack groups](docs/AUTOMATIC-PACK-GROUPS.md).
 
 Continue with compatible later/submitted-transfer reuse and its import-continuation contract. Do not append a new child to immutable historical receipts or treat endpoint/hash equality alone as adoption permission. Record a separate authorized join command, revalidate per-child authority/coverage/routes, reserve its target atomically and continue only the unresolved import/fulfillment work. Preserve the full remaining series-scope, mixed-route/media, cross-owner, version/omnibus, source, discovery, production and S10 requirements.
+
+## 18. Current development handoff
+
+This handoff began September 18, 2026 at committed revision `b6db47c`. It supersedes earlier statements about which packet comes next without changing the PRD, package counts or release gates. The subsequent [saved-transfer reuse increment](docs/DOWNLOAD-REUSE.md) implements same-owner, identical-artifact, compatible-route joins and independent import continuation under migration `0037_download_joins`. Targeted domain and real-file verification now exists; exact integrated and deployment results belong in [Implementation Status](docs/IMPLEMENTATION-STATUS.md). Broader reuse combinations and stage acceptance remain open.
+
+The verified baseline includes reviewed shared transfers, catalog-qualified automatic pack selection, automatic series-metadata preparation and grouping of independently authorized selections before dispatch. The last recorded checkpoint reports 1,318 passing backend tests, followed by 40 focused tests after a recovery adjustment, four real-file automatic pack workflows and three selected browser journeys. These are historical results documented in [Implementation Status](docs/IMPLEMENTATION-STATUS.md), not tests rerun for this plan or full-stage acceptance.
+
+### Transfer-reuse packet and remaining qualification
+
+Parent scope: S01 durability, S04 imports, S05 download lifecycle, S06-05 shared packs and S07-05 automation. Outcome: a later independently authorized request can use qualifying files from an existing transfer without adding the torrent again or republishing an already imported sibling.
+
+| Responsibility | Implementation contract | Acceptance evidence |
+|---|---|---|
+| Domain and persistence | Separate join receipt and explicit membership; preserve original command, selection and publication history. Validate each new target's authority, constraints, artifact and route. | Replays and competing joins yield one membership and one physical transfer. An unrelated torrent is never adopted merely because its hash matches. |
+| Worker and locking | Serialize membership changes with transfer reconciliation; use deterministic principal/list/work lock order. Reconcile external state before any retry with possible side effects. | Join during queued, submitted and completed states; concurrent cancellation, revoked grants and interrupted workers preserve independent surviving requests. |
+| Import continuation | Keep historical import runs intact. Recheck saved transfer/files and authorize only the new unresolved targets. Respect existing reservations and verified published children. | A later second book imports from the original seeded pack; first-book bytes, paths, receipt and publication remain unchanged; missing or altered files enter actionable review. |
+| Inventory and fulfillment | Reconcile each target against accessible ABS items. Overall ownership and requested-medium/version satisfaction remain separate. | Immediate and delayed scans converge correctly; a completed transfer alone never produces a green ownership check; already-owned targets do not republish. |
+| API and Activity | Expose reuse, joined-child provenance, continuation state and correctly scoped repair. Preserve private request details. | Reload/retry/cancel behavior agrees with durable state; a failed continuation is visible and recoverable without a fresh torrent submission. |
+| Migration and operations | Verify fresh upgrade, populated upgrade, supported downgrade behavior and restoration. Back up before a development-runtime upgrade. | Isolated migration and recovery evidence precedes deployment; state that cannot be preserved on downgrade causes an actionable refusal. |
+
+Start with same-owner, identical-artifact, compatible-route reuse as a reviewable increment. Broader source equivalence, route/media differences, cross-owner privacy and version/omnibus behavior remain explicit subsequent work, not implicitly supported by that increment. Do not weaken the existing source-integrity or authorization checks to make a fixture pass.
+
+### Delivery order after that packet
+
+1. **Finish series and version semantics:** inherited scope, bounded Complete series targets, coverage evidence, alternate recordings/editions, omnibus containment and independently recoverable children. Apply the same contracts to reviewed and automatic requests.
+2. **Finish effective policy and routes:** consistent per-field inheritance, approved destinations, previewed revisions to unsatisfied requests and immutable submitted evidence.
+3. **Finish source support and qualification:** native ABB, native/Prowlarr equivalence, partial failures, metadata resolution and actual MAM/qBittorrent/ABS capabilities. Independent adapter work can proceed alongside the preceding packets.
+4. **Qualify full external-list automation:** Hardcover and Goodreads observations, baseline/backlog/catch-up, exclusions, overlapping reasons, quotas and restart recovery through the shared acquisition path.
+5. **Complete discovery and curation:** attributed shelves, related-title explanations, community-list following, local sharing, supported optional Hardcover write-back and polished normal/advanced settings.
+6. **Close production gates:** remaining foundation gaps, supported deployment, filesystem/scanner compatibility, migrations and restore, accessibility, performance, operator documentation and the complete mandatory acceptance corpus.
+7. **Deliver S10 extensions separately:** each additional backend/client, upgrade/reorganization, recommendation or SSO package retains its own requirements and acceptance gate.
+
+Each packet must have an accountable owner, mapped requirements, input/output contracts, migration implications, success and failure evidence, and a reviewable user journey. Estimate implementation, verification, external-service access and contingency separately. No calendar estimate or stage completion percentage is implied by the number of packets or passing tests.
+
+The planning package is complete enough to execute without another product-preference decision. The application remains under development; the full implementation objective remains open until all required stage outcomes are accepted.

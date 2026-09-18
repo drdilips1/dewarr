@@ -44,7 +44,7 @@ async def lock(db, selections):
         await db.refresh(selection)
 
 
-def require_compatible(selections, *, automatic=False):
+def require_same_transfer(selections):
     """Reviewed groups freeze one physical route, while retaining every child rule."""
     first = selections[0]
     keys = (
@@ -58,6 +58,20 @@ def require_compatible(selections, *, automatic=False):
     for item in selections:
         if item.owner_id != first.owner_id or item.artifact_id != first.artifact_id:
             raise HTTPException(422, "Choose your saved selections for the same source artifact")
+        if (
+            item.downloader_id != first.downloader_id
+            or item.destination_id != first.destination_id
+            or item.frozen["requirements"]["medium"] != first.frozen["requirements"]["medium"]
+            or any(item.frozen.get(key) != first.frozen.get(key) for key in keys)
+        ):
+            raise HTTPException(
+                422, "Grouped selections need the same downloader and verified import route"
+            )
+
+
+def require_compatible(selections, *, automatic=False):
+    require_same_transfer(selections)
+    for item in selections:
         proof = item.frozen.get("automatic_selection")
         if automatic and (
             not proof or not proof.get("dispatch_approval") or not proof.get("coverage")
@@ -68,13 +82,4 @@ def require_compatible(selections, *, automatic=False):
         if not automatic and proof:
             raise HTTPException(
                 422, "Automatic selections retain their own acquisition authorization"
-            )
-        if (
-            item.downloader_id != first.downloader_id
-            or item.destination_id != first.destination_id
-            or item.frozen["requirements"]["medium"] != first.frozen["requirements"]["medium"]
-            or any(item.frozen.get(key) != first.frozen.get(key) for key in keys)
-        ):
-            raise HTTPException(
-                422, "Grouped selections need the same downloader and verified import route"
             )

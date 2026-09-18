@@ -1180,6 +1180,50 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     fullPage: true,
   });
 
+  // Presentation fixture only; real join/import/recovery is tested with the API,
+  // queue, filesystem and synthetic external services in the integration suite.
+  await page.route("**/api/acquisition/downloads?*", async (route) => {
+    const response = await route.fetch();
+    const body = await response.json();
+    const shared = body.items.find(
+      (item: { members: unknown[] }) => item.members.length === 2,
+    );
+    expect(shared).toBeTruthy();
+    shared.state = "complete";
+    shared.can_recheck = true;
+    shared.members[1].join_operation_id = shared.operation_id;
+    shared.import_continuations = [
+      {
+        id: shared.operation_id,
+        state: "held",
+        selection_ids: [shared.members[1].selection_id],
+        message:
+          "Saved-transfer verification stopped; recheck this transfer to retry joined books",
+      },
+    ];
+    await route.fulfill({ response, json: body });
+  });
+  await page.reload();
+  await expect(downloadActivity).toContainText("Uses this existing download");
+  await expect(downloadActivity).toContainText(
+    "Additional books need attention",
+  );
+  await expect(
+    downloadActivity.getByRole("button", { name: "Recheck saved files" }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("joined-download-recovery-mobile.png"),
+    fullPage: true,
+  });
+  await page.unroute("**/api/acquisition/downloads?*");
+  await page.setViewportSize({ width: 1440, height: 1000 });
+
   await page.getByRole("link", { name: "Connections", exact: true }).click();
   await page.getByRole("link", { name: "Downloaders", exact: true }).click();
   await page.reload();

@@ -1,7 +1,9 @@
 # ruff: noqa: F811
 """Source search and authorized dispatch through real files and fixture ABS confirmation."""
 
+import asyncio
 import hashlib
+from copy import deepcopy
 from datetime import UTC, datetime
 from uuid import UUID
 
@@ -57,6 +59,8 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     series_pack=False,
     counterfeit=False,
     automatic_group=False,
+    late_join=False,
+    reuse_failure=None,
 ):
     route = ready_route
     if series_pack:
@@ -198,6 +202,25 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     qbit = Client(database, descriptor.model_dump(mode="json"))
     qbit.complete = True
     monkeypatch.setattr(downloads, "QbitClient", lambda *args: qbit)
+
+    async def remember_first():
+        from app.db.models import AutomaticImport, Operation
+
+        async with database() as db:
+            base = await db.scalar(select(AutomaticImport))
+            entry = await db.scalar(select(ImportEntry))
+            attempt = await db.scalar(select(DownloadAttempt))
+            assert base.import_run_id and attempt.state == "complete"
+            paths = {str(p): p.stat().st_ino for p in route["target"].rglob("*.epub")}
+            assert len(paths) == 1
+            return {
+                "run_id": base.import_run_id,
+                "entry_id": entry.id,
+                "entry_operation": entry.operation_id,
+                "receipt": deepcopy((await db.get(Operation, attempt.operation_id)).payload),
+                "paths": paths,
+            }
+
     policy = None
     if via_list:
         from tests.integration.test_acquisition_defaults import save as save_defaults
@@ -243,7 +266,7 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
         activation = await client.post(activation_url)
         assert activation.status_code == 200, activation.text
         policy = activation.json()
-        if automatic_group:
+        if automatic_group or late_join:
             import json
 
             second_shelf = (
@@ -260,14 +283,17 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             )
             assert second_activation.status_code == 200, second_activation.text
             second_policy = second_activation.json()
-            assert (
-                await client.post(
-                    f"/api/lists/{second_shelf}/entries", json={"work_id": str(second["work"])}
-                )
-            ).status_code == 204
-            assert (
-                await client.post(f"/api/lists/{second_shelf}/entries", json={"work_id": work_id})
-            ).status_code == 204
+            if not late_join:
+                assert (
+                    await client.post(
+                        f"/api/lists/{second_shelf}/entries", json={"work_id": str(second["work"])}
+                    )
+                ).status_code == 204
+                assert (
+                    await client.post(
+                        f"/api/lists/{second_shelf}/entries", json={"work_id": work_id}
+                    )
+                ).status_code == 204
         added = await client.post(f"/api/lists/{shelf}/entries", json={"work_id": work_id})
         assert added.status_code == 204
         if automatic_group:
@@ -297,6 +323,14 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             assert operation is not None
             identifier = operation.id
         result = (await client.get(f"/api/acquisition/automatic-selections/{identifier}")).json()
+        if late_join:
+            prior_import = await remember_first()
+            for value in [str(second["work"]), work_id]:
+                assert (
+                    await client.post(f"/api/lists/{second_shelf}/entries", json={"work_id": value})
+                ).status_code == 204
+            await tick(database, second_policy)
+            await tick(database, second_policy, force_books=True)
     else:
         wanted = await request(
             client,
@@ -341,7 +375,12 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             headers={"Idempotency-Key": "automatic-acquisition-command"},
         )
         assert response.status_code == 202, response.text
-        if automatic_group:
+        if late_join:
+            await get_queue().run_worker_async(
+                wait=False, concurrency=1, listen_notify=False, install_signal_handlers=False
+            )
+            prior_import = await remember_first()
+        if automatic_group or late_join:
             second_wanted = await request(
                 client,
                 body({"work": second["work"]}, "ebook", ebook_library_id=route["library_id"]),
@@ -364,6 +403,12 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
                 headers={"Idempotency-Key": "second-automatic-pack-command"},
             )
             assert second_response.status_code == 202, second_response.text
+        if reuse_failure:
+            saved_states = deepcopy(qbit.states)
+            if reuse_failure == "missing":
+                qbit.states = []
+            else:
+                qbit.states[0].files[0].relative_path += ".renamed"
         await get_queue().run_worker_async(
             wait=False, concurrency=1, listen_notify=False, install_signal_handlers=False
         )
@@ -371,7 +416,7 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             await client.get(f"/api/acquisition/automatic-selections/{response.json()['id']}")
         ).json()
     assert result["status"] == "completed" and result["download_id"], result
-    if automatic_group:
+    if automatic_group or late_join:
         from app.db.models import DownloadMembership, Operation
         from app.domain import automatic_packs
 
@@ -387,6 +432,32 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             await client.get(f"/api/acquisition/automatic-selections/{second_operation.id}")
         ).json()
 
+        if reuse_failure:
+            from app.db.models import AutomaticImportContinuation
+            from app.importing import reuse
+
+            async with database() as db:
+                continuation = await db.scalar(select(AutomaticImportContinuation))
+                assert continuation.state == "held", continuation.message
+                created = continuation.created_at
+                assert await db.scalar(select(func.count()).select_from(ImportEntry)) == 1
+            current = (
+                await client.get(f"/api/acquisition/downloads/{result['download_id']}")
+            ).json()
+            assert current["import_continuations"][0]["state"] == "held", current
+            assert qbit.calls.count("submit") == 1
+            qbit.states = saved_states
+            async with database() as db, db.begin():
+                attempt = await db.get(DownloadAttempt, UUID(result["download_id"]))
+                await reuse.recheck(db, attempt)
+            await get_queue().run_worker_async(
+                wait=False, concurrency=1, listen_notify=False, install_signal_handlers=False
+            )
+            async with database() as db:
+                assert (
+                    await db.get(AutomaticImportContinuation, continuation.id)
+                ).created_at == created
+
         assert second_result["download_id"] == result["download_id"], second_result
         async with database() as db:
             entries = list(await db.scalars(select(ImportEntry)))
@@ -396,6 +467,42 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             }
             assert await db.scalar(select(func.count()).select_from(DownloadMembership)) == 2
             assert await db.scalar(select(func.count()).select_from(DownloadAttempt)) == 1
+            if late_join:
+                from app.db.models import AutomaticImport, AutomaticImportContinuation
+
+                base = await db.scalar(select(AutomaticImport))
+                continuation = await db.scalar(select(AutomaticImportContinuation))
+                assert base.import_run_id == prior_import["run_id"]
+                assert continuation and continuation.state == "importing", (
+                    continuation.message if continuation else second_result
+                )
+                assert continuation.import_run_id != prior_import["run_id"]
+                assert (
+                    await db.get(ImportEntry, prior_import["entry_id"])
+                ).operation_id == prior_import["entry_operation"]
+                from fastapi import HTTPException
+
+                from app.db.models import Version
+                from app.importing.automatic import publication_authority
+
+                original_entry = await db.get(ImportEntry, prior_import["entry_id"])
+                # The old book still has a valid request, but cannot lend its
+                # authorization to the separate continuation for the new book.
+                with pytest.raises(HTTPException, match="outside the reviewed transfer scope"):
+                    await publication_authority(
+                        db,
+                        continuation.import_run_id,
+                        version=await db.get(Version, original_entry.version_id),
+                        destination_id=original_entry.destination_id,
+                    )
+                attempt = await db.scalar(select(DownloadAttempt))
+                assert (await db.get(Operation, attempt.operation_id)).payload == prior_import[
+                    "receipt"
+                ]
+                for path, inode in prior_import["paths"].items():
+                    from pathlib import Path
+
+                    assert (await asyncio.to_thread(Path(path).stat)).st_ino == inode
             if via_list:
                 proofs = [
                     item.frozen["automatic_selection"]["list_authority"]
@@ -413,6 +520,12 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
         async with database() as db:
             assert set(await db.scalars(select(ImportEntry.state))) == {"confirmed"}
             assert await db.scalar(select(func.count()).select_from(DownloadFulfillment)) == 2
+        if late_join:
+            current = (
+                await client.get(f"/api/acquisition/downloads/{result['download_id']}")
+            ).json()
+            assert current["import_continuations"][0]["state"] == "complete", current
+            assert sum(bool(item["join_operation_id"]) for item in current["members"]) == 1
         for identifier in [result["id"], second_result["id"]]:
             await automatic_packs.run(UUID(identifier))
         await downloads.run(UUID(result["download_id"]))
@@ -584,4 +697,45 @@ async def test_automatic_pack_groups_two_requests_and_confirms_both_books(
         series_pack=True,
         automatic_group=True,
         via_list=via_list,
+    )
+
+
+@pytest.mark.parametrize("delayed_backend", [False, True])
+@pytest.mark.parametrize("via_list", [False, True])
+async def test_later_pack_request_imports_from_completed_transfer_without_republishing(
+    client, admin, database, ready_route, review_account, monkeypatch, delayed_backend, via_list
+):
+    await test_search_to_automatic_download_and_confirmed_member_library(
+        client,
+        admin,
+        database,
+        ready_route,
+        review_account,
+        monkeypatch,
+        "ebook",
+        delayed_backend,
+        request_limits=True,
+        series_pack=True,
+        late_join=True,
+        via_list=via_list,
+    )
+
+
+@pytest.mark.parametrize("failure", ["missing", "renamed"])
+async def test_completed_pack_reuse_checks_saved_files_and_recovers_without_new_transfer(
+    client, admin, database, ready_route, review_account, monkeypatch, failure
+):
+    await test_search_to_automatic_download_and_confirmed_member_library(
+        client,
+        admin,
+        database,
+        ready_route,
+        review_account,
+        monkeypatch,
+        "ebook",
+        False,
+        request_limits=True,
+        series_pack=True,
+        late_join=True,
+        reuse_failure=failure,
     )

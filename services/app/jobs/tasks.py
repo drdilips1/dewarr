@@ -231,8 +231,9 @@ async def reconcile_fulfillment(work_id: str) -> None:
 async def schedule_downloads(timestamp: int) -> None:
     from sqlalchemy import or_, text
 
-    from app.db.models import AutomaticImport, DownloadAttempt
+    from app.db.models import AutomaticImport, AutomaticImportContinuation, DownloadAttempt
     from app.importing.automatic import recover
+    from app.importing.reuse import recover as recover_reuse
     from app.jobs.queue import enqueue
 
     if get_settings().recovery_mode:
@@ -268,6 +269,14 @@ async def schedule_downloads(timestamp: int) -> None:
         )
         for automatic in automatic_rows:
             await recover(db, automatic.id)
+        continuations = await db.scalars(
+            select(AutomaticImportContinuation)
+            .where(AutomaticImportContinuation.state.in_(["queued", "inspecting"]))
+            .order_by(AutomaticImportContinuation.created_at, AutomaticImportContinuation.id)
+            .limit(20)
+        )
+        for continuation in continuations:
+            await recover_reuse(db, continuation.id)
 
 
 @tasks.task(
@@ -359,3 +368,14 @@ async def dispatch_automatic_pack(operation_id: str) -> None:
     from app.domain.automatic_packs import run
 
     await run(UUID(operation_id))
+
+
+@tasks.task(
+    name="organization.reuse",
+    queue="imports",
+    retry=DependencyRetryStrategy(max_attempts=3, wait=10),
+)
+async def reuse_completed_transfer(continuation_id: str) -> None:
+    from app.importing.reuse import run
+
+    await run(UUID(continuation_id))

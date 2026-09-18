@@ -76,6 +76,12 @@ export default function Downloads({ canManage }: { canManage: boolean }) {
                   <li key={member.selection_id}>
                     <strong>{member.work_title}</strong> ·{" "}
                     {member.medium === "audio" ? "Audiobook" : "Ebook"}
+                    {member.join_operation_id && (
+                      <span className="muted">
+                        {" "}
+                        · Uses this existing download
+                      </span>
+                    )}
                     <p>
                       {member.fulfillment?.available_now
                         ? "Confirmed in your library"
@@ -85,6 +91,17 @@ export default function Downloads({ canManage }: { canManage: boolean }) {
                 ))}
               </ul>
             )}
+            {(item.import_continuations ?? []).map((continuation) => (
+              <p key={continuation.id}>
+                <strong>
+                  {continuation.state === "held" ||
+                  continuation.state === "attention"
+                    ? "Additional books need attention: "
+                    : "Additional books: "}
+                </strong>
+                {continuation.message}
+              </p>
+            ))}
             {item.members.length === 1 && item.fulfillment && (
               <p>
                 {item.fulfillment.available_now
@@ -116,7 +133,11 @@ export default function Downloads({ canManage }: { canManage: boolean }) {
                   onClick={() => action.mutate({ id: item.id, cancel: false })}
                 >
                   {item.state === "complete"
-                    ? "Check library availability"
+                    ? (item.import_continuations ?? []).some(
+                        (continuation) => continuation.state === "held",
+                      )
+                      ? "Recheck saved files"
+                      : "Check library availability"
                     : "Check existing transfer"}
                 </button>
               )}

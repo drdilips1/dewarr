@@ -2439,6 +2439,8 @@ export interface components {
       can_repair: boolean;
       /** Members */
       members: components["schemas"]["DownloadMemberView"][];
+      /** Import Continuations */
+      import_continuations?: components["schemas"]["ImportContinuationView"][];
     };
     /** AuthView */
     AuthView: {
@@ -3159,6 +3161,8 @@ export interface components {
       /** Message */
       message: string;
       fulfillment: components["schemas"]["FulfillmentView"] | null;
+      /** Join Operation Id */
+      join_operation_id?: string | null;
     };
     /** DownloaderChoice */
     DownloaderChoice: {
@@ -3557,6 +3561,20 @@ export interface components {
       namespace: string;
       /** Value */
       value: string;
+    };
+    /** ImportContinuationView */
+    ImportContinuationView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** State */
+      state: string;
+      /** Message */
+      message: string;
+      /** Selection Ids */
+      selection_ids: string[];
     };
     /** ImportGroup */
     ImportGroup: {

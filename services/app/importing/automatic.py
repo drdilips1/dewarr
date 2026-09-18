@@ -3,7 +3,7 @@
 import re
 from collections import Counter
 from pathlib import PurePosixPath
-from uuid import UUID
+from uuid import UUID, uuid5
 
 from fastapi import HTTPException
 from sqlalchemy import select, text
@@ -12,10 +12,12 @@ from app.config import get_settings
 from app.db.models import (
     AcquisitionSelection,
     AutomaticImport,
+    AutomaticImportContinuation,
     AutomaticImportPolicy,
     DownloadAttempt,
     DownloadInspection,
     ImportDestination,
+    ImportEntry,
     Operation,
     User,
     Version,
@@ -68,10 +70,31 @@ async def check_policy(db, row, *, lock=False):
     return policy, approver, destination, current
 
 
-async def publication_authority(db, run_id, *, lock=False):
+async def publication_authority(db, run_id, *, version=None, destination_id=None, lock=False):
     row = await db.scalar(select(AutomaticImport).where(AutomaticImport.import_run_id == run_id))
+    if not row:
+        row = await db.scalar(
+            select(AutomaticImportContinuation).where(
+                AutomaticImportContinuation.import_run_id == run_id
+            )
+        )
     if row:
         await check_policy(db, row, lock=lock)
+        if isinstance(row, AutomaticImportContinuation):
+            members = [
+                item
+                for item in await download_memberships.for_attempt(db, row.attempt_id)
+                if str(item.id) in row.evidence["authorized_selection_ids"]
+            ]
+            await download_reviews.validate_shared_inspection(
+                db,
+                await db.get(DownloadAttempt, row.attempt_id),
+                members,
+                destination_id=destination_id,
+                version=version,
+                group=None,
+                lock=lock,
+            )
 
 
 async def schedule(db, attempt, selection):
@@ -236,6 +259,11 @@ async def plan_ready(db, row, selection, inspection, approver, destination, curr
     if len(grouping.groups) > 100:
         raise HTTPException(409, "This collection exceeds the automatic review limit")
     members = await download_memberships.for_attempt(db, row.attempt_id)
+    continuation = isinstance(row, AutomaticImportContinuation)
+    if continuation:
+        members = [
+            item for item in members if str(item.id) in row.evidence["authorized_selection_ids"]
+        ]
     works, wanted = set(), {}
     for item in members:
         work_id = (await canonical_work(db, UUID(item.frozen["origin_work_id"]))).id
@@ -254,6 +282,7 @@ async def plan_ready(db, row, selection, inspection, approver, destination, curr
             wanted.setdefault(work_id, []).append(item)
     files = {file["path"]: file for file in inspection.snapshot["files"]}
     choices, held, unresolved, skipped = [], [], [], []
+    covered_by_existing = set()
     for group in grouping.groups:
         match = await match_group(db, inspection.snapshot, grouping_revision, group)
         reason = content_reason(group, files, selection.frozen["release"])
@@ -300,6 +329,24 @@ async def plan_ready(db, row, selection, inspection, approver, destination, curr
         if reason:
             held.append({"group_key": group.key, "reason": reason})
             continue
+        if continuation and await db.scalar(
+            select(ImportEntry.id)
+            .where(
+                ImportEntry.group_id == uuid5(inspection.id, group.key),
+                ImportEntry.reserved.is_(True),
+                ImportEntry.version_id == candidate.version_id,
+                ImportEntry.destination_id == destination.id,
+            )
+            .limit(1)
+        ):
+            covered_by_existing.add(candidate.work_id)
+            skipped.append(
+                {
+                    "group_key": group.key,
+                    "reason": "An existing import already reserves these files",
+                }
+            )
+            continue
         choices.append(
             GroupSelection(
                 group_key=group.key,
@@ -321,7 +368,7 @@ async def plan_ready(db, row, selection, inspection, approver, destination, curr
         if item.work_id in ambiguous
     )
     choices = [item for item in choices if item.work_id not in ambiguous]
-    if not choices and len(members) == 1 and not ambiguous:
+    if not choices and not continuation and len(members) == 1 and not ambiguous:
         from app.importing.catalog_resolution import schedule
 
         if await schedule(db, row, unresolved):
@@ -334,6 +381,12 @@ async def plan_ready(db, row, selection, inspection, approver, destination, curr
         "skipped_groups": skipped,
         "excluded_files": [item.model_dump() for item in grouping.excluded],
     }
+    if not choices and continuation and set(wanted) <= covered_by_existing:
+        row.state, row.message = (
+            "complete",
+            "Joined books are available or covered by existing imports; no files republished",
+        )
+        return
     if not choices:
         row.state, row.message = (
             "held",

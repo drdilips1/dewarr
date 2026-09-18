@@ -7813,6 +7813,13 @@
             },
             "type": "array",
             "title": "Members"
+          },
+          "import_continuations": {
+            "items": {
+              "$ref": "#/components/schemas/ImportContinuationView"
+            },
+            "type": "array",
+            "title": "Import Continuations"
           }
         },
         "type": "object",
@@ -9706,6 +9713,18 @@
                 "type": "null"
               }
             ]
+          },
+          "join_operation_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Join Operation Id"
           }
         },
         "type": "object",
@@ -10845,6 +10864,39 @@
           "value"
         ],
         "title": "IdentifierEvidence"
+      },
+      "ImportContinuationView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "selection_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Selection Ids"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "state",
+          "message",
+          "selection_ids"
+        ],
+        "title": "ImportContinuationView"
       },
       "ImportGroup": {
         "properties": {

@@ -13,6 +13,7 @@ from app.db.models import (
     AcquisitionSelection,
     AcquisitionTarget,
     AutomaticImport,
+    AutomaticImportContinuation,
     DownloadAttempt,
     DownloadFulfillment,
     DownloadInspection,
@@ -49,6 +50,14 @@ class DownloadMemberView(BaseModel):
     target_state: str
     message: str
     fulfillment: FulfillmentView | None
+    join_operation_id: UUID | None = None
+
+
+class ImportContinuationView(BaseModel):
+    id: UUID
+    state: str
+    message: str
+    selection_ids: list[UUID]
 
 
 class RepairInput(BaseModel):
@@ -89,6 +98,7 @@ class AttemptView(BaseModel):
     repair: RepairView | None
     can_repair: bool
     members: list[DownloadMemberView]
+    import_continuations: list[ImportContinuationView] = Field(default_factory=list)
 
 
 class AttemptPage(BaseModel):
@@ -128,6 +138,12 @@ async def view(db, user, row, selection):
         configuration=await repairs.accepted_configuration(db, selection),
     )
     members = []
+    memberships = {
+        item.selection_id: item
+        for item in await db.scalars(
+            select(DownloadMembership).where(DownloadMembership.attempt_id == row.id)
+        )
+    }
     for item in await download_memberships.for_attempt(db, row.id):
         if item.owner_id != user.id:
             continue
@@ -142,11 +158,42 @@ async def view(db, user, row, selection):
                 target_state=target.state,
                 message=target.message,
                 fulfillment=await fulfillment_view(db, user, row, item),
+                join_operation_id=memberships[item.id].join_operation_id,
             )
         )
     confirmed = next(
         (item.fulfillment for item in members if item.selection_id == selection.id), None
     )
+    visible = {str(item.selection_id) for item in members}
+    continuations = []
+    for item in await db.scalars(
+        select(AutomaticImportContinuation)
+        .where(AutomaticImportContinuation.attempt_id == row.id)
+        .order_by(AutomaticImportContinuation.created_at, AutomaticImportContinuation.id)
+    ):
+        ids = [value for value in item.evidence["authorized_selection_ids"] if value in visible]
+        if ids:
+            state, detail = item.state, item.message
+            joined = [member for member in members if str(member.selection_id) in ids]
+            if joined and all(
+                member.fulfillment and member.fulfillment.available_now for member in joined
+            ):
+                state, detail = "complete", "Joined books are confirmed in your library"
+            elif item.import_run_id and await db.scalar(
+                select(ImportEntry.id)
+                .where(
+                    ImportEntry.run_id == item.import_run_id,
+                    ImportEntry.state.in_(["held", "cancel-held"]),
+                )
+                .limit(1)
+            ):
+                state, detail = (
+                    "attention",
+                    "Additional imports need administrator file review; the download is preserved",
+                )
+            continuations.append(
+                ImportContinuationView(id=item.id, state=state, message=detail, selection_ids=ids)
+            )
     return AttemptView(
         id=row.id,
         created_at=row.created_at,
@@ -170,6 +217,7 @@ async def view(db, user, row, selection):
         repair=RepairView.model_validate(repair) if repair else None,
         can_repair=needs_review,
         members=members,
+        import_continuations=continuations,
     )
 
 
