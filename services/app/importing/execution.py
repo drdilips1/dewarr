@@ -75,7 +75,7 @@ async def context(db, entry, token, *, lock=False):
     if lock:
         await db.refresh(destination, with_for_update=True)
         await db.refresh(entry, with_for_update=True)
-    if entry.run_token != token:
+    if entry.run_token != token or entry.state not in {"publishing", "awaiting-library"}:
         raise Superseded("A newer import attempt owns this entry")
     if (
         get_settings().recovery_mode
@@ -320,12 +320,19 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
         if not operation or operation.kind != "organization.publish":
             return
         entry = await db.get(ImportEntry, UUID(operation.payload["entry_id"]), with_for_update=True)
-        if entry.state in {"confirmed", "skipped", "held"}:
+        if entry.state in {"confirmed", "skipped", "held", "cancel-held", "cancelled"}:
             return
-        entry.run_token = token
+        cancelling = entry.state == "cancelling"
         entry_id = entry.id
-        entry.state = "awaiting-library" if entry.published_at else "publishing"
-        operation.status, operation.message = "running", "Checking this book's import state"
+        if not cancelling:
+            entry.run_token = token
+            entry.state = "awaiting-library" if entry.published_at else "publishing"
+            operation.status, operation.message = "running", "Checking this book's import state"
+    if cancelling:
+        from app.importing.cancellation import execute as cancel
+
+        await cancel(operation_id, checkpoint=checkpoint)
+        return
     try:
         async with session_factory()() as db:
             entry = await db.get(ImportEntry, entry_id)

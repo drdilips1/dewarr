@@ -1,11 +1,11 @@
-from datetime import datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path, PurePosixPath
 from typing import Literal
 from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Header, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
-from sqlalchemy import select
+from sqlalchemy import select, text
 
 from app.api.dependencies import Admin, Database
 from app.api.destinations import view as destination_view
@@ -64,6 +64,7 @@ class EntryView(BaseModel):
     confirmed_at: datetime | None
     asset_id: UUID | None
     can_retry: bool = False
+    can_cancel: bool = False
     cover_export: CoverExportView | None = None
 
 
@@ -93,7 +94,9 @@ async def view(db, run):
                         entry.reserved
                         and entry.specification
                         and entry.state in {"held", "awaiting-library"}
-                    )
+                    ),
+                    "can_cancel": not entry.published_at
+                    and entry.state in {"queued", "publishing", "held", "cancel-held"},
                 }
             )
             for entry in entries
@@ -209,6 +212,22 @@ async def start_import(
         if reserved:
             entry.message = "Another import already reserves this version; review that import first"
             continue
+        same_files = await db.scalar(
+            select(ImportEntry.id)
+            .join(ImportRun)
+            .join(FrozenImportPlan)
+            .where(
+                FrozenImportPlan.inspection_id == plan.inspection_id,
+                ImportEntry.group_id == entry.group_id,
+                ImportEntry.reserved.is_(True),
+            )
+            .limit(1)
+        )
+        if same_files:
+            entry.message = (
+                "These files already belong to a reserved import; review that import first"
+            )
+            continue
         configuration = await destination_configuration(db, destination)
         specification = PublicationSpec(
             entry_id=entry.id,
@@ -269,6 +288,52 @@ async def start_import(
         entry.operation_id = operation.id
         operation.job_id = await enqueue(db, "organization.publish", operation_id=str(operation.id))
     db.add(AuditEvent(actor_id=admin.id, action="organization.import.requested", entity_id=run.id))
+    await db.commit()
+    return await view(db, run)
+
+
+@router.post("/imports/{run_id}/entries/{entry_id}/cancel", response_model=RunView, status_code=202)
+async def cancel_entry(run_id: UUID, entry_id: UUID, admin: Admin, db: Database):
+    await assert_admin(db, admin.id)
+    if get_settings().recovery_mode:
+        raise HTTPException(409, "Import changes are paused for recovery")
+    run = await db.scalar(
+        select(ImportRun).where(ImportRun.id == run_id, ImportRun.owner_id == admin.id)
+    )
+    entry = await db.get(ImportEntry, entry_id, with_for_update=True)
+    if not run or not entry or entry.run_id != run.id:
+        raise HTTPException(404, "Import entry not found")
+    if entry.state == "cancelled":
+        return await view(db, run)
+    if entry.published_at or entry.state in {"confirmed", "skipped", "awaiting-library"}:
+        raise HTTPException(
+            409, "This book was already published or satisfied; its files are preserved"
+        )
+    if entry.state == "cancelling":
+        return await view(db, run)  # Periodic recovery handles failed/expired queue attempts.
+    entry.run_token, entry.next_check_at = None, None
+    if not entry.specification and not entry.reserved:
+        entry.state = "cancelled"
+        entry.message = "Unstarted import stopped; you can review a new plan"
+    else:
+        operation = await db.get(Operation, entry.operation_id)
+        status = await db.scalar(
+            text("SELECT status::text FROM book_queue.procrastinate_jobs WHERE id=:id"),
+            {"id": operation.job_id},
+        )
+        entry.state = "cancelling"
+        entry.message = "Stopping import after checking whether any files were already published"
+        entry.next_check_at = datetime.now(UTC) + timedelta(minutes=1)
+        operation.status, operation.message = "queued", entry.message
+        if status != "todo":
+            operation.job_id = await enqueue(
+                db, "organization.publish", operation_id=str(operation.id)
+            )
+    db.add(
+        AuditEvent(
+            actor_id=admin.id, action="organization.import.cancel-requested", entity_id=entry.id
+        )
+    )
     await db.commit()
     return await view(db, run)
 

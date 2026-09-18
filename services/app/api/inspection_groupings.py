@@ -1,5 +1,5 @@
 from typing import Literal
-from uuid import UUID
+from uuid import UUID, uuid5
 
 from fastapi import APIRouter, HTTPException
 from pydantic import Field
@@ -84,18 +84,27 @@ async def save_grouping(inspection_id: UUID, body: GroupingInput, admin: Admin, 
         raise HTTPException(409, "File groups changed; reload before saving your review")
     if serialized == current.content.model_dump(mode="json"):
         return current
-    reserved = await db.scalar(
-        select(ImportEntry.id)
-        .join(ImportRun)
-        .join(FrozenImportPlan)
-        .where(FrozenImportPlan.inspection_id == inspection_id, ImportEntry.reserved.is_(True))
-        .limit(1)
-    )
-    if reserved:
-        raise HTTPException(
-            409,
-            "This inspection has reserved or published imports; review them before changing groups",
+    reserved = (
+        await db.execute(
+            select(ImportEntry, FrozenImportPlan)
+            .select_from(ImportEntry)
+            .join(ImportRun, ImportEntry.run_id == ImportRun.id)
+            .join(FrozenImportPlan, ImportRun.plan_id == FrozenImportPlan.id)
+            .where(FrozenImportPlan.inspection_id == inspection_id, ImportEntry.reserved.is_(True))
         )
+    ).all()
+    revised = {str(uuid5(inspection_id, group.key)): group for group in content.groups}
+    for entry, plan in reserved:
+        frozen = next(
+            group for group in plan.document["groups"] if group["id"] == str(entry.group_id)
+        )
+        group = revised.get(str(entry.group_id))
+        if not group or [file.model_dump(mode="json") for file in group.files] != frozen["files"]:
+            raise HTTPException(
+                409,
+                "Keep reserved or published book groups unchanged; "
+                "stop pending imports before regrouping their files",
+            )
     row = InspectionGrouping(
         inspection_id=inspection_id,
         position=current.position + 1,

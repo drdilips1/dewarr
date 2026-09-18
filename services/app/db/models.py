@@ -437,7 +437,8 @@ class ImportEntry(Identity, Base):
     __table_args__ = (
         UniqueConstraint("run_id", "group_id"),
         CheckConstraint(
-            "state IN ('queued', 'publishing', 'awaiting-library', 'confirmed', 'held', 'skipped')"
+            "state IN ('queued', 'publishing', 'awaiting-library', 'confirmed', 'held', 'skipped', "
+            "'cancelling', 'cancel-held', 'cancelled')"
         ),
         Index(
             "uq_import_reserved_version",

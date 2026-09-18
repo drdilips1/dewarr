@@ -535,6 +535,34 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   ).toBe(true);
   await page.goBack();
   await expect(savedPlan).toContainText("book.epub → ebooks/");
+  await page.request.post("http://127.0.0.1:13379/fixture/watcher", {
+    data: { enabled: false },
+  });
+  await page
+    .getByRole("button", { name: "Import resolved books", exact: true })
+    .click();
+  const stoppedImport = page
+    .getByRole("region", { name: "Import result" })
+    .first();
+  await expect(stoppedImport).toContainText("Needs attention");
+  await stoppedImport
+    .getByRole("button", { name: "Stop pending import" })
+    .click();
+  await expect(stoppedImport).toContainText(
+    "Import stopped; downloaded files are unchanged",
+  );
+  await expect(
+    stoppedImport.getByRole("link", {
+      name: "Review files and create a new plan",
+    }),
+  ).toHaveAttribute("href", /\/organization\/inspections\?inspection=/);
+  await page.reload();
+  await expect(stoppedImport).toContainText(
+    "Import stopped; downloaded files are unchanged",
+  );
+  await page.request.post("http://127.0.0.1:13379/fixture/watcher", {
+    data: { enabled: true },
+  });
   await page
     .getByRole("button", { name: "Import resolved books", exact: true })
     .click();

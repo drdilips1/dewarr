@@ -80,7 +80,7 @@ Choose **Review file groups** on a completed inspection. Assign files to an exis
 
 Saving creates an immutable grouping revision, clears the current catalog selections and asks the user to map the resulting groups. Common embedded metadata supplies suggestions only; identity and completeness remain unverified until reviewed. An excluded file remains in the seeded download. **Restore proposed groups** saves a new revision of the original proposals, preserving previous review history. Optimistic revision checks reject stale competing edits; replaying the same saved change returns its existing revision.
 
-Frozen plans include the reviewed grouping revision and exclusions. A later grouping correction leaves the old plan readable but prevents starting a new import from it. Creating import reservations and saving group changes share a transaction lock; an inspection with reserved or published children cannot be regrouped through this editor. Selective replanning/cancellation of those children remains separate unfinished work.
+Frozen plans include the reviewed grouping revision and exclusions. A later grouping correction leaves the old plan readable but prevents starting a new import from it. Creating import reservations and saving group changes share a transaction lock; reserved or published groups must remain unchanged while unresolved siblings may be corrected. Stop unpublished reserved children and await worker reconciliation before regrouping their files. See [Import cancellation and replanning](IMPORT-CANCELLATION.md).
 
 New multi-file audio imports also freeze the expected playback sequence. Confirmation compares that sequence with ABS's explicit audio-file indices, not the order of an API array. Missing, duplicate or differing indices hold confirmation. ABS can prefer embedded tags over filename numbers; the app does not rewrite seeded tags to force an order. A real two-track merged-group workflow passes the pinned-server check, but the full disc/track and manual-order repair matrix remains pending.
 
@@ -104,11 +104,12 @@ New multi-file audio imports also freeze the expected playback sequence. Confirm
 | `POST /api/organization/plans/{id}/imports` | Reserve resolved versions and atomically enqueue per-book publication; requires a command key and current plan/destination revisions |
 | `GET /api/organization/plans/{id}/imports` | Latest 25 owner-scoped runs and per-child states |
 | `GET /api/organization/imports/{id}` | Owner-scoped publication and backend-confirmation state |
+| `POST /api/organization/imports/{id}/entries/{entry_id}/cancel` | Stop unpublished work through durable filesystem reconciliation; preserve published items |
 | `POST /api/organization/imports/{id}/entries/{entry_id}/retry` | Retry a held reserved import or pending detection without duplicating an active queue job |
 
 Administrator access is enforced server-side. Each inspection belongs to its initiating administrator. Queue enqueue and inspection creation share one PostgreSQL transaction. Worker attempts use generation tokens; a superseded attempt cannot commit over the newer one. Check actor/root configuration before and after filesystem work. Stalled read-only jobs are eligible for existing worker recovery. Deterministic file failures expose an actionable state; a new inspection command retries after repair.
 
-Frozen plans retain source identity/hash evidence, original version/work bindings, selected groups, unselected-group keys, the naming profile, resolved relative destinations and pending publication checks. Concurrent equivalent saves share one plan record. Changing settings cannot mutate a saved plan. Publication freezes its route and checks existing-media satisfaction, source evidence, active permissions and ABS boundaries. Plan revisions do not yet implement selective edit/replanning of already published entries.
+Frozen plans retain source identity/hash evidence, original version/work bindings, selected groups, unselected-group keys, the naming profile, resolved relative destinations and pending publication checks. Concurrent equivalent saves share one plan record. Changing settings cannot mutate a saved plan. Publication freezes its route and checks existing-media satisfaction, source evidence, active permissions and ABS boundaries. Unresolved children can be corrected in a new plan while published groups stay unchanged. Editing already published entries remains separate work.
 
 Migrations 0008 and 0009 add organization settings, download inspections and frozen plans. Populated settings/history guard against lossy downgrade; restore a pre-upgrade backup for such rollback. A new installation can round-trip the empty schema.
 
@@ -120,6 +121,8 @@ Migration 0012 adds immutable file-group review history. Its populated-state gua
 
 Migration 0013 adds initial-cover export evidence. Prepared JPEG bytes are frozen in the publication specification; populated history requires a pre-upgrade backup for rollback.
 
+Migration 0014 adds recoverable cancellation states and a populated-state downgrade guard. Cancellation receipts fence delayed publishers and preserve cleanup progress.
+
 ## Reviewed publication and availability
 
 After saving a conventional-layout plan, select a verified destination for each medium and choose **Import resolved books**. The UI chooses a destination automatically only when exactly one verified binding matches the medium. Unresolved or unverified children remain held; other children proceed independently. Full ownership of this exact version in the selected ABS library skips publication. Another reserved import for the version in that library holds the new entry, including when different destination bindings point to the same library. Reservations and queue jobs commit atomically; command replay returns the same run.
@@ -130,7 +133,7 @@ Once published, detection retries verify the selected library bytes without repu
 
 Pending detection is checked every minute while workers are running. After 30 minutes without confirmation it becomes actionable attention. Retry does not duplicate a live queue job or replace media. An explicit retry can accept a rotated credential generation for the same frozen server/library/paths; changed bindings still require resolution. Unrelated destination content is never overwritten or adopted by its filename. A failed route does not silently switch from hardlink to copy.
 
-Current limits: reservations stay attached to held/published entries; cancellation, explicit reservation release, replacement, and selective replanning are not yet exposed. Confirmation currently scans the library inventory per entry; batched/coalesced lookup remains future work. Equivalent libraries registered through different integration records and filesystem aliases require broader reconciliation. Existing user library content is not reorganized. Source downloads, external lists and automatic acquisition are not connected to this manual workflow yet.
+Current limits: published entries retain reservations. Unpublished entries can be stopped through journaled reconciliation and unresolved siblings can be replanned; replacement and modification of published entries are not exposed. Confirmation currently scans the library inventory per entry; batched/coalesced lookup remains future work. Equivalent libraries registered through different integration records and filesystem aliases require broader reconciliation. Existing user library content is not reorganized. Source downloads, external lists and automatic acquisition are not connected to this manual workflow yet.
 
 ## Filesystem publisher primitive
 
@@ -154,4 +157,6 @@ The [native ABS certification](ABS-NATIVE-CERTIFICATION.md) passed eight pinned-
 
 Forty cover unit cases and seven integration cases cover bounded retrieval/decoding, publication consistency, optional failure and artwork-edit preservation. See [Initial cover export](COVER-EXPORT.md) for the live-provider evidence and remaining limits.
 
-Next: fuller grouping/format/omnibus coverage, cancellation/replanning and the complete recovery/compatibility matrix. These remain required before enabling the MAM/qBittorrent acquisition path. No S04 acceptance gate is claimed complete.
+Seventeen filesystem and nine API/database cases verify cancellation, uncertain-publication recovery, reserved-file protection and replanning beside a confirmed sibling. The browser also stops a held import and submits it again after repair.
+
+Next: fuller grouping/format/omnibus coverage, file-alias reconciliation and the complete recovery/compatibility matrix. These remain required before enabling the MAM/qBittorrent acquisition path. No S04 acceptance gate is claimed complete.

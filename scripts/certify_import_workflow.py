@@ -204,6 +204,23 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook"):
                     medium: {"id": destination["id"], "revision": destination["revision"]}
                 },
             }
+            stopped = await request(
+                "POST",
+                f"/api/organization/plans/{plan['id']}/imports",
+                202,
+                headers={"Idempotency-Key": "native-cancel-before-publication"},
+                json=body,
+            )
+            await request(
+                "POST",
+                f"/api/organization/imports/{stopped['id']}/entries/{stopped['entries'][0]['id']}/cancel",
+                202,
+            )
+            await drain()
+            stopped = await request("GET", f"/api/organization/imports/{stopped['id']}")
+            assert stopped["entries"][0]["state"] == "cancelled", stopped
+            assert not list(target.rglob("*.epub")) and not list(target.rglob("*.mp3"))
+            assert all(path.read_bytes() == data for path, data in source_bytes.items())
             run = await request(
                 "POST",
                 f"/api/organization/plans/{plan['id']}/imports",
@@ -263,6 +280,7 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook"):
                 "owned": True,
                 "source_preserved": True,
                 "duplicate_skipped": True,
+                "cancelled_before_publication": True,
                 "cover_selected_by_abs": True,
                 "later_cover_edit_preserved": True,
                 "cover_http": "synthetic fixture; real decoder and ABS scanner",

@@ -970,6 +970,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organization/imports/{run_id}/entries/{entry_id}/cancel": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Cancel Entry */
+    post: operations["cancel_entry_api_organization_imports__run_id__entries__entry_id__cancel_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organization/imports/{run_id}": {
     parameters: {
       query?: never;
@@ -1520,6 +1537,11 @@ export interface components {
        * @default false
        */
       can_retry: boolean;
+      /**
+       * Can Cancel
+       * @default false
+       */
+      can_cancel: boolean;
       cover_export?: components["schemas"]["CoverExportView"] | null;
     };
     /** ExcludedFile */
@@ -4745,6 +4767,38 @@ export interface operations {
         "application/json": components["schemas"]["ImportInput"];
       };
     };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RunView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  cancel_entry_api_organization_imports__run_id__entries__entry_id__cancel_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        run_id: string;
+        entry_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       /** @description Successful Response */
       202: {

@@ -13,6 +13,7 @@ from tests.abs_import_fixture import ScanningBackend  # noqa: E402
 
 app = FastAPI()
 catalog_state = {"narrator": "Sample Narrator"}
+backend_state = {"watcher_enabled": True}
 item = json.loads(
     (Path(__file__).resolve().parents[1] / "tests/fixtures/audiobookshelf-item.json").read_text()
 )
@@ -40,7 +41,7 @@ async def endpoint(path: str, request: Request, authorization: str = Header(defa
             "folders": [{"fullPath": "/fixture/books"}],
             "settings": {
                 "audiobooksOnly": False,
-                "disableWatcher": False,
+                "disableWatcher": not backend_state["watcher_enabled"],
                 "metadataPrecedence": [
                     "folderStructure",
                     "audioMetatags",
@@ -85,6 +86,13 @@ async def endpoint(path: str, request: Request, authorization: str = Header(defa
 async def fixture_watch():
     scanner.scan()
     return {"items": len(scanner.items)}
+
+
+@app.post("/fixture/watcher")
+async def fixture_watcher(request: Request):
+    body = await request.json()
+    backend_state["watcher_enabled"] = body["enabled"] is True
+    return backend_state
 
 
 @app.post("/catalog/v1/graphql")

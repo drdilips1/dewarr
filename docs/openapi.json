@@ -3009,6 +3009,59 @@
         }
       }
     },
+    "/api/organization/imports/{run_id}/entries/{entry_id}/cancel": {
+      "post": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Cancel Entry",
+        "operationId": "cancel_entry_api_organization_imports__run_id__entries__entry_id__cancel_post",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Run Id"
+            }
+          },
+          {
+            "name": "entry_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Entry Id"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/organization/imports/{run_id}": {
       "get": {
         "tags": [
@@ -4515,6 +4568,11 @@
           "can_retry": {
             "type": "boolean",
             "title": "Can Retry",
+            "default": false
+          },
+          "can_cancel": {
+            "type": "boolean",
+            "title": "Can Cancel",
             "default": false
           },
           "cover_export": {

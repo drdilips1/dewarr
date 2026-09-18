@@ -14,6 +14,9 @@ const labels: Record<string, string> = {
   confirmed: "Available",
   held: "Needs attention",
   skipped: "Already available",
+  cancelling: "Stopping import",
+  "cancel-held": "Cancellation needs attention",
+  cancelled: "Stopped",
 };
 
 export default function ImportExecution({ plan }: { plan: Plan }) {
@@ -38,7 +41,9 @@ export default function ImportExecution({ plan }: { plan: Plan }) {
     refetchInterval: (query) =>
       query.state.data?.runs.some((run) =>
         run.entries.some((entry) =>
-          ["queued", "publishing", "awaiting-library"].includes(entry.state),
+          ["queued", "publishing", "awaiting-library", "cancelling"].includes(
+            entry.state,
+          ),
         ),
       )
         ? 2000
@@ -108,6 +113,24 @@ export default function ImportExecution({ plan }: { plan: Plan }) {
   const executable =
     plan.document.profile.layout === "conventional" &&
     !!Object.keys(plan.document.version_revisions || {}).length;
+  const cancel = useMutation({
+    mutationFn: async ({
+      runId,
+      entryId,
+    }: {
+      runId: string;
+      entryId: string;
+    }) =>
+      result(
+        await api.POST(
+          "/api/organization/imports/{run_id}/entries/{entry_id}/cancel",
+          {
+            params: { path: { run_id: runId, entry_id: entryId } },
+          },
+        ),
+      ),
+    onSuccess: () => cache.invalidateQueries({ queryKey }),
+  });
   return (
     <section className="library-access" aria-label="Import books">
       <h3>Import into your library</h3>
@@ -143,7 +166,9 @@ export default function ImportExecution({ plan }: { plan: Plan }) {
           evidence before publishing.
         </p>
       )}
-      <Notice error={query.error || publish.error || retry.error} />
+      <Notice
+        error={query.error || publish.error || retry.error || cancel.error}
+      />
       <button
         className="primary"
         disabled={
@@ -192,6 +217,31 @@ export default function ImportExecution({ plan }: { plan: Plan }) {
                       ? "Retry library detection"
                       : "Retry import"}
                   </button>
+                )}
+                {entry.can_cancel && (
+                  <div>
+                    <button
+                      disabled={cancel.isPending || retry.isPending}
+                      onClick={() =>
+                        cancel.mutate({ runId: run.id, entryId: entry.id })
+                      }
+                    >
+                      {entry.state === "cancel-held"
+                        ? "Retry stopping import"
+                        : "Stop pending import"}
+                    </button>
+                    <p className="muted">
+                      Downloaded files and already published books are
+                      preserved.
+                    </p>
+                  </div>
+                )}
+                {entry.state === "cancelled" && (
+                  <Link
+                    to={`/organization/inspections?inspection=${plan.inspection_id}`}
+                  >
+                    Review files and create a new plan
+                  </Link>
                 )}
               </div>
             );

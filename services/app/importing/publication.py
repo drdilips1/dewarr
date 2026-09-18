@@ -446,6 +446,8 @@ def publish_item(
                 "destination_identity"
             ) != object_id(destination):
                 raise PublicationError("Publication settings or destination identity changed")
+            if receipt["state"] in {"cancelling", "cancelled"}:
+                raise PublicationError("This import was cancelled; review a new plan")
             # Inspect an existing leaf before touching source or staging: a previous publication
             # may have succeeded even when DB acknowledgement or receipt update was interrupted.
             try:
