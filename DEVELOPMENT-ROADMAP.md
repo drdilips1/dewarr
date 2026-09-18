@@ -1,6 +1,6 @@
 # Product and development handoff
 
-September 18, 2026 · v1.6 planning guide, not a claim of implemented functionality.
+September 18, 2026 · v1.7 planning guide, not a claim of implemented functionality.
 
 Build a self-hosted book discovery, curation and acquisition app above Audiobookshelf. The experience should feel familiar to a Seerr user: browse attractive shelves, open one book page, see what is already owned, inspect available versions and sources, and request missing media. The app also owns organizing its newly downloaded files so that Audiobookshelf can serve them correctly.
 
@@ -8,7 +8,7 @@ This guide is the short entry point. The complete specification is in [PRD](PRD.
 
 For issue-tracker import, use the [61-package backlog export](DEVELOPMENT-BACKLOG.csv). The plan's [execution batches](IMPLEMENTATION-PLAN.md#12-development-backlog-and-execution-batches) sequence the remaining development from the existing code through manual alpha, automation beta, production v1 and separate extensions.
 
-For the current implementation, start with [the next eight development slices](IMPLEMENTATION-PLAN.md#13-next-development-slices-from-the-current-checkpoint). First close requests using confirmed library evidence and provide recovery for existing attempts; then complete and qualify the manual path before enabling multi-source selection and external-list automation. The [acquisition closure contract](PRD.md#17-closing-the-acquisition-loop) keeps request satisfaction separate from transfer deduplication and makes partial-pack behavior explicit.
+For the current implementation, start with the [refreshed delivery order](IMPLEMENTATION-PLAN.md#15-refreshed-implementation-starting-point-and-delivery-order). Existing fulfillment, review, inbound lists and manual request batches have partial evidence. Finish automatic release preparation, then shared capacity/dispatch and list policy activation; complete source/pack coverage and certification before accepting automated-list beta. The earlier eight slices retain dependency rationale, not a fresh instruction to rebuild completed components.
 
 The v1.6 baseline defines [unattended operation and exception review](PRD.md#18-unattended-operation-and-exception-review): a clean, authorized list acquisition reaches ABS without per-title approvals; ambiguous children receive scoped review. The [execution sequence](IMPLEMENTATION-PLAN.md#14-executing-the-complete-automation-path) assigns this work to existing packages, and the [acceptance assertions](ACCEPTANCE-PLAN.md#11-unattended-acquisition-and-review-assertions) prove authority, restart recovery and the actual list-to-library result.
 
@@ -116,7 +116,7 @@ The plan defines **42 functional requirements**: 36 for v1 and six later capabil
 
 Code existence, fixture success, live compatibility and stage acceptance are separate statuses. Missing service credentials or container/runtime certification must remain visible as unverified gates. No P0/P1 integrity, privacy, wrong-book acquisition, false-ownership or mandatory-workflow failure is acceptable for production v1.
 
-For the existing workspace, use the verified [status](docs/IMPLEMENTATION-STATUS.md) instead of rebuilding the scaffold. Close the remaining S01 contracts, finish S02 metadata/catalog and S03 inventory compatibility, and complete S04 from its existing reviewed-import implementation. Local identifier matching is implemented; S04 still needs broader format/collection handling and source resolution, file-alias reconciliation and the full recovery/compatibility matrix. Keep unverified integration work distinct from tested checkpoints. Partial import evidence does not establish the complete source-to-library workflow; source acquisition and external-list automation remain pending.
+For the existing workspace, use verified [status](docs/IMPLEMENTATION-STATUS.md) and the refreshed delivery order. Retain the working foundation, metadata, inventory, importer, acquisition and list-observation modules. Automatic list-to-library orchestration, native ABB, full series/identity coverage and complete deployment/live-service qualification remain open. Current uncommitted automatic-selection work is not accepted functionality.
 
 At each stage start, split its packages into reviewable tickets with an owner, affected FR/AT IDs, input/output contract, success/failure fixtures and demo. Estimate after inspecting the existing implementation and measuring throughput; revise estimates for provider and filesystem uncertainty. At stage end, attach the revision and actual results, update coverage, and resolve blockers before enabling the dependent capability.
 
@@ -152,3 +152,6 @@ This table is the product review checklist. Requirement and acceptance IDs refer
 | Recover and operate the finished app | Stage-specific repair, redacted diagnostics, migrations, backups, restore reconciliation and a supported deployment matrix | FR-35–FR-36; NFR-01–NFR-12 | Continuous work; S09 release; AT-24–AT-30 |
 
 The core requested product is delivered through S09. Additional backends such as BookOrbit, more advanced recommendations, other download clients and deliberate existing-library reorganization are explicit S10 expansions. Basic related-title recommendations, useful customization and organization of new downloads are already v1 requirements; they must not be deferred under those expansion headings.
+
+
+The v1.7 handoff adds [finite automation defaults](PRD.md#19-initial-automation-defaults-and-activation-contract), a [54-requirement traceability export](REQUIREMENTS-TRACEABILITY.csv), and a current development starting point. Size, concurrency, retry, backlog and storage limits are recommended implementation defaults to qualify, not asserted runtime behavior.

@@ -1,10 +1,12 @@
 # Product requirements: book discovery and acquisition
 
-Version 1.6 planning baseline · September 18, 2026 · Working product name: Book discovery app.
+Version 1.7 planning baseline · September 18, 2026 · Working product name: Book discovery app.
 
 Status: product specification for staged development; implementation is in progress and recorded separately. User requirements from the conversation take precedence. This PRD defines product behavior; [Implementation Decisions](IMPLEMENTATION-DECISIONS.md) defines the researched engineering baseline; [Development Plan](IMPLEMENTATION-PLAN.md) defines delivery; [Acceptance Plan](ACCEPTANCE-PLAN.md) defines verification. Earlier research remains rationale, not an alternative product direction.
 
 Read sections 1–6 for the product and UX, section 7 for tracked requirements, and sections 13–14 for precise behavior and release decisions. Implementation evidence is recorded separately in [Implementation Status](docs/IMPLEMENTATION-STATUS.md); planned functionality must not be presented as shipped.
+
+The [requirement traceability export](REQUIREMENTS-TRACEABILITY.csv) maps every functional and nonfunctional requirement to its acceptance scenarios. Section 19 sets initial finite automation defaults; these are product decisions to implement and qualify, not claims about the current runtime.
 
 For a compact development handoff, see the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md).
 
@@ -476,3 +478,33 @@ The normal book page continues to show ownership and alternative versions indepe
 ### Completion criterion
 
 The S07 beta must demonstrate an authorized external-list addition reaching an ABS-confirmed item with **zero per-title approval steps** for a supported, unambiguous acquisition. In the same run, introduce an ambiguous pack child and show that only that child needs review. Repeat the observations and restart the worker: no second transfer, no repeated completed import and no lost review decision. S09 repeats this journey on the supported release deployment and after restore.
+
+
+## 19. Initial automation defaults and activation contract
+
+These are recommended starting values for implementation and qualification. They are finite household defaults, not upstream service guarantees or measured capacity claims. Keep them in one inherited Automation limits panel. Normal list setup needs only mode, media, profile and current-versus-future entries; administrators can change installation limits, and a list may narrow but never exceed them. Provider quotas and explicit Retry-After always override faster local scheduling.
+
+| Control | Initial value / behavior | Enforcement |
+|---|---|---|
+| New subscription | Browse mode; Automatic activation initially selects future additions only | No dispatch before a successful baseline and an explicit versioned activation command |
+| List refresh | Every 30 minutes with up to 5 minutes of jitter | Per-account rate budget; at most one running refresh per subscription; coalesce missed ticks |
+| Source search | At most two concurrent calls per configured integration; one for a session-serialized MAM connection | Shared across users/workers; provider limits may reduce concurrency |
+| Candidate inspection | At most five resolved torrent manifests per selection attempt | Persist inspected candidates; restart does not reset the budget; report scope and continuation options |
+| Automatic single-book transfer | 1 GiB ebook, 10 GiB audiobook | Compare actual torrent total bytes, including extras, before submission; a profile can lower the cap |
+| Automatic series pack | 50 GiB total and at most 20 additional published main-series works | Requested scope, known coverage and both limits must qualify; wrong-version books cannot satisfy targets |
+| Active app-owned transfers | Three per downloader across the installation | Atomic slot reservation; seed-only completed transfers do not consume a download slot |
+| New automatic transfers | Ten per installation in a rolling 24-hour window | One shared pack consumes one transfer; attempts with uncertain submission retain the debit until reconciled |
+| Backfill activation | Preview all known memberships; initially select at most 25 missing works per approved batch | Show work count and estimated media targets separately; larger backlogs remain paused/queued for explicit continuation |
+| Missing release | Re-search after six hours, then daily for seven days, then weekly while monitoring remains active | Remain visibly Wanted with next-search time; coalesce one due-search record per target; user retry uses the same budgets |
+| Destination capacity | Retain max(5 GiB, 5% of filesystem capacity) after projected work | Reserve required bytes per actual filesystem; copy/extraction costs differ from hardlinks; low/unknown capacity pauses dispatch |
+| Deletions and upgrades | Off | An absent list entry, new narrator or better-seeded release never implies deletion or replacement |
+
+Search results with unknown size may be inspected to obtain a reliable torrent size. Do not submit automatically while total transfer size or required storage remains unknown. Magnet-only releases need a supported bounded metadata-resolution path before they can qualify for unattended acquisition. Missing seed counts remain unknown; a profile can allow such releases only when other availability evidence meets its documented rule. This is distinct from inventing a zero or positive seed count.
+
+Capacity reservations belong to domain records, not worker memory. Two simultaneous list jobs must not each spend the last free slot or space budget. Count pending/submitted work until reconciliation proves it released its reservation. An uncertain add cannot free capacity and launch a replacement. For packs, reserve the full downloaded payload even if only missing children will be imported. On a shared filesystem, hardlinked media is not counted twice; copies, staging overhead and extracted files are accounted for where they consume bytes. Recheck before dispatch and before publication because unrelated applications can also consume disk space.
+
+Activation shows: included lists, desired media, eligible current entries, already-owned entries, compatible pending work, exclusions, pack scope, effective profile, verified destinations and limits. Distinguish a preview estimate from a dispatch guarantee. Revalidate identities, permissions, settings revision, ownership and capacity when applying it. Expired or materially changed previews require a refreshed preview, not silent reinterpretation.
+
+Pausing list acquisition keeps membership sync running and stops new dispatch from that reason. Already-submitted transfers retain their lifecycle and other lists' reasons; pausing is not qBittorrent cancellation. Pause membership synchronization is a separate control. Resume previews accumulated additions and does not reinterpret them as newly authorized historical backfill.
+
+A title gets the green In library state only from confirmed accessible inventory. Prepared, downloading, imported-awaiting-ABS and owned are separate states. A successful list refresh or candidate preparation does not satisfy the end-to-end automation requirement.

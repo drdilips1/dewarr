@@ -1,6 +1,6 @@
 # End-to-end development plan
 
-Planning baseline v1.6 · September 18, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
+Planning baseline v1.7 · September 18, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
 
 This plan implements [the PRD](PRD.md) using [the researched decisions](IMPLEMENTATION-DECISIONS.md). [Acceptance Plan](ACCEPTANCE-PLAN.md) specifies the evidence required at each gate. A stage is complete only when its exit gate passes; this document does not report completed engineering or tested compatibility.
 
@@ -241,7 +241,7 @@ Acceptance scenarios often span several stages. The [stage evidence scopes](ACCE
 | S07-02 | Goodreads RSS conditional fetch and dedupe; CSV snapshot import with field mapping/preview. Distinguish observed additions from authoritative removals; record feed truncation/partial status. |
 | S07-03 | Local membership/subscription reconciliation, explicit detach/remove semantics, source-owned memberships and durable exclusions. List deletion never deletes library files. |
 | S07-04 | Browse/manual/automatic modes; ebook/audio/both/either and profile inheritance; backlog preview versus future-only first-successful-sync baseline. Start paused if no valid baseline can be established. |
-| S07-05 | Scheduled due-sync jobs, initially around 30 minutes with jitter, shared budgets, adaptive backoff, bounded backfill batches and request reasons. Recheck inventory, reservations and suppressions at dispatch time, not just list ingest. Polling cadence is adjustable and subordinate to provider limits. |
+| S07-05 | Scheduled due-sync jobs using PRD section 19 defaults (30 minutes with bounded jitter), shared budgets, adaptive backoff, bounded backfill batches and request reasons. Recheck inventory, reservations and suppressions at dispatch time, not just list ingest. Polling cadence is adjustable and subordinate to provider limits. |
 | S07-06 | List status/policy summary, per-item pending/owned/attention, manual selection, pause/resume, backlog cancellation and clear next actions. Pausing acquisition continues list observation; resuming previews accumulated additions. Policy changes preview their effect on existing unsatisfied entries. |
 
 **Demo:** add a new title to a connected list → the app acquires the missing requested medium → imports and confirms it. Repeating sync, following an overlapping list and restarting workers add no duplicate transfer. Already-owned books remain checked and skipped according to media requirements.
@@ -584,6 +584,8 @@ The next development action is to review and close the earliest incomplete depen
 
 ## 13. Next development slices from the current checkpoint
 
+This section preserves the earlier checkpoint's dependency sequence. Several narrow slices now have implementation evidence. Use section 15 for the refreshed starting point; do not recreate completed fulfillment, review, list-observation or manual-request components.
+
 This is the execution order within the existing 61 packages, not a second backlog or an assertion that earlier stages have passed. The September 18 checkpoint includes reviewed single-file and directory imports, synthetic durable downloader attempts and partial native ABS certification. It does not yet provide a fully qualified manual acquisition release. Review [actual evidence](docs/IMPLEMENTATION-STATUS.md) before each slice; preserve working components and close their missing contracts.
 
 | Order | Existing packages | Concrete implementation outcome | Exit evidence |
@@ -647,3 +649,37 @@ Responsibility labels are roles, not required headcount. A single developer can 
 For each unit record separate estimates for implementation, browser/domain verification, external-service certification and contingency for unresolved integration facts. Establish a date forecast only after estimating the actual remaining code and identifying who supplies certification access. Do not derive a delivery date by multiplying 61 packages by an arbitrary sprint length. Reforecast at manual alpha, automated-list beta and the production release candidate.
 
 Release review must answer four questions: can the user complete the promised journey; do its relevant failure cases recover correctly; was it demonstrated on the claimed deployment/integrations; and are any P0/P1 findings still open? A happy-path demonstration, a large test count or a complete settings page alone cannot accept a stage.
+
+
+## 15. Refreshed implementation starting point and delivery order
+
+This is the current execution handoff for the v1.7 planning baseline. It supplements the stable S00–S10 packages rather than adding new scope or restarting the scaffold. The committed status records inbound Goodreads/CSV/Hardcover observations, reviewed list batches, MAM/Prowlarr aggregation, durable attempts, scoped fulfillment and selected automatic-import cases. These are partial proofs, not accepted whole stages. Automatic-selection files currently in the working tree are work in progress; their presence is not release evidence.
+
+| Sequence | Deliverable within existing packages | Acceptance before activation |
+|---|---|---|
+| A. Establish the evidence baseline | Compare current code, migrations, generated API and test evidence with each outstanding S00–S05 assertion; preserve existing uncommitted work | Record implemented, fixture-verified, service-verified and stage-accepted separately; identify the precise remaining gaps rather than rebuilding working modules |
+| B. Finish release preparation | S06-03–S06-04: eligibility, deterministic ranking, bounded artifact inspection, current source/actor/profile checks, saved explanations and a simple title-page action | Wrong work/language/version cannot win; stale evidence holds; failures remain actionable; preparation alone does not dispatch or mark ownership |
+| C. Add scheduling and capacity authority | S01-04, S05-05, S07-04–S07-05: durable installation limits, fair scheduling, byte/slot reservations and shared request-to-dispatch continuation | Implement PRD section 19; concurrent jobs cannot overspend capacity; a crash or unknown submission cannot create another transfer |
+| D. Finish list policy activation | S07-01–S07-06: Browse/Manual/Automatic, baseline, reviewed backlog, future additions, pause/resume, exclusions and frozen policy reasons | A new list addition reaches the existing qualified import path without per-title approval; overlapping lists and repeated observations produce one compatible acquisition |
+| E. Complete sources, packs and identity coverage | Remaining S02/S04/S06: ABB, missing direct-source/provisional paths, exact edition/recording evidence, series selection, per-child coverage, omnibus and shared-pack reuse | Each actual child maps to its correct catalog identity and ABS item; ambiguous siblings alone wait; no release row becomes a fabricated edition |
+| F. Complete the bookstore experience | S08 and remaining S02 UI: Discover shelves, related titles, series views, community-list following, local sharing and supported optional write-back | Defaults support browse → curate → request/open; provider outage has an attributed cached/local fallback; keyboard/mobile flows are complete |
+| G. Qualify and ship | Remaining S00–S09: deployment, live compatibility, filesystem layouts, permissions, correction/repair, migrations, restore, performance and accessibility | Full AT-01–AT-30 evidence and zero applicable P0/P1 blockers; publish supported combinations, operator guide and release notes |
+| H. Expand separately | S10: other backends/clients, deliberate upgrades/reorganization, additional recommendation providers and SSO | Independent acceptance for each extension plus affected v1 regression |
+
+C and D may be developed against qualified single-book fixtures while E progresses, but **automated-list beta is not accepted until its required S06 dependencies pass**. Shipping an internal single-book slice does not waive native ABB, packs or version handling from the promised beta/v1 scope. Actual account/service and Compose certification remain separate from synthetic HTTP or native-process evidence.
+
+### Reviewable development units
+
+Each change should close one observable path across domain, API, worker and UI where applicable. Example for B: select a wanted audiobook, fetch sources, prepare the best eligible candidate, reload its persisted explanation, invalidate its source configuration and show a safe repair action. Include only the migration and tests needed for that unit; do not turn the 61 planning packages into 61 oversized pull requests.
+
+For each unit attach: parent package IDs; FR/AT assertions; preconditions; typed input/output; durable transitions; idempotency and cancellation rules; a browser demonstration; relevant failure/restart evidence; migration/rollback effect; and any capability restriction. Update current status after verification. Never treat a prepared selection as a completed automatic acquisition.
+
+### Planning deliverables and handoff checks
+
+- PRD: 36 v1 functional requirements, six expansion requirements and 12 nonfunctional requirements, with observable behavior and normal/advanced UX.
+- Engineering backlog: 55 v1 work packages and six expansion packages, each with role ownership, dependencies, deliverables and gates.
+- Acceptance: 30 v1 scenarios and five expansion scenarios, with early-stage assertion scopes and full release expectations.
+- Traceability: [requirements export](REQUIREMENTS-TRACEABILITY.csv) maps all 54 requirements to acceptance IDs; [backlog export](DEVELOPMENT-BACKLOG.csv) maps packages to their stage scope.
+- Decision references: provider APIs/capabilities, identity, naming/ABS boundaries, hardlinks, source routing, durability and reuse licensing remain in Implementation Decisions and supporting research.
+
+No calendar commitment is implied. At each stage start, assign named owners and estimate remaining implementation, verification, integration access and contingency separately; reforecast at manual alpha and automation beta. A complete planning package makes development reviewable; it does not certify the application as complete.

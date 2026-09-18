@@ -1,6 +1,6 @@
 # Acceptance, compatibility and release verification
 
-Planning baseline v1.5 · September 18, 2026.
+Planning baseline v1.7 · September 18, 2026.
 
 **Status: acceptance definitions; implementation evidence is tracked in [Implementation Status](docs/IMPLEMENTATION-STATUS.md).** Some foundation subsets have now been tested; no full scenario is yet certified complete. This document maps [PRD requirements](PRD.md) to the gates in [Development Plan](IMPLEMENTATION-PLAN.md). Research/source inspection is evidence for a design choice, not a passing runtime test.
 
@@ -197,3 +197,17 @@ These assertions complete the [automation contract](PRD.md#18-unattended-operati
 | AT-25, AT-29–AT-30 | The same unattended journey works on the shipped deployment and resumes correctly after restore reconciliation; historical list entries do not launch an unintended backlog | S09 |
 
 Measure approval steps and inspect the resulting ABS items, persisted reasons, source hashes and external submission counts. A list entry merely appearing in Wanted or a completed torrent waiting indefinitely for routine manual import does not pass the S07 defining journey.
+
+
+## 12. Automation limits and planning traceability
+
+Apply these assertions to AT-12–AT-14, AT-20–AT-22, AT-26 and AT-30 under the existing S06/S07/S09 gates; they add no acceptance-scenario IDs. The [requirement traceability export](REQUIREMENTS-TRACEABILITY.csv) includes all 42 functional and 12 nonfunctional requirements. It records obligations, not pass/fail results.
+
+- Two workers competing for the final transfer slot or free-space reservation admit at most one qualifying transfer. Restart retains unresolved reservations; seed-only completed transfers do not consume active-download slots.
+- Actual torrent bytes include extras and already-owned pack children. Unknown bytes or unresolved magnet metadata cannot be dispatched automatically. Shared-filesystem hardlinks, separate-filesystem copies and extraction use the correct storage accounting without counting linked media twice.
+- Pack size/expansion, five-manifest inspection, rolling automatic-transfer budget and reviewed backfill limits are enforced by the server. UI changes, retries and alternative list reasons cannot reset them. Manual requests cannot bypass physical-capacity or permission checks.
+- Future-only activation dispatches no baseline members. One later entry reaches ABS without per-title approval. Pausing acquisition still refreshes membership; resuming offers a catch-up preview; pausing one reason does not cancel another reason's shared transfer.
+- Missing releases progress from the initial search to bounded daily/weekly monitoring without duplicate scheduled work. Provider cooldown supersedes local cadence. A stale lease, permanent authentication failure or unavailable source has an actionable state rather than an unbounded retry loop.
+- A stale activation preview, changed profile, revoked grant or newly owned title is re-evaluated before dispatch. The recorded explanation matches the effective rules and actual selected candidate.
+
+Qualification records the tested values from PRD section 19. Changing a default updates product documentation and its boundary fixtures; limits may be tuned with evidence without inventing a new feature or silently broadening an active list's authority.
