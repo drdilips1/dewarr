@@ -7,7 +7,7 @@ from sqlalchemy import func, select
 
 from app.api.dependencies import Database, Member
 from app.api.requests import TargetView
-from app.db.models import ListAcquisitionBook
+from app.domain import list_monitoring
 from app.domain import list_policies as policies
 from app.domain.acquisition import RequestSpec
 from app.domain.list_requests import owner_context
@@ -65,6 +65,7 @@ class RevisionInput(BaseModel):
 class MonitoredBook(BaseModel):
     id: UUID
     work_id: UUID
+    title: str
     state: str
     message: str
     intent_id: UUID | None
@@ -79,15 +80,13 @@ class MonitoringPage(BaseModel):
 
 
 async def view(db, policy):
+    rows = await list_monitoring.projection(db, policy)
     counts = dict(
         (
             await db.execute(
-                select(ListAcquisitionBook.state, func.count())
-                .where(
-                    ListAcquisitionBook.policy_id == policy.id,
-                    ListAcquisitionBook.generation == policy.generation,
-                )
-                .group_by(ListAcquisitionBook.state)
+                select(rows.c.state, func.count())
+                .where(rows.c.position == 1)
+                .group_by(rows.c.state)
             )
         ).all()
     )
@@ -181,27 +180,21 @@ async def books(
     policy = await policies.current_policy(db, list_id)
     if not policy:
         return MonitoringPage(items=[], total=0, offset=offset, limit=limit)
-    where = [
-        ListAcquisitionBook.policy_id == policy.id,
-        ListAcquisitionBook.generation == policy.generation,
-    ]
-    rows = await db.scalars(
-        select(ListAcquisitionBook)
-        .where(*where)
-        .order_by(ListAcquisitionBook.created_at.desc(), ListAcquisitionBook.id)
-        .offset(offset)
-        .limit(limit)
-    )
-    items = [
-        MonitoredBook(
-            id=b.id,
-            work_id=b.work_id,
-            state=b.state,
-            message=b.message,
-            intent_id=b.intent_id,
-            next_check_at=b.next_check_at,
+    rows = await list_monitoring.projection(db, policy)
+    page = (
+        (
+            await db.execute(
+                select(rows)
+                .where(rows.c.position == 1)
+                .order_by(rows.c.created_at.desc(), rows.c.id.desc())
+                .offset(offset)
+                .limit(limit)
+            )
         )
-        for b in rows
-    ]
-    total = await db.scalar(select(func.count()).select_from(ListAcquisitionBook).where(*where))
-    return MonitoringPage(items=items, total=total, offset=offset, limit=limit)
+        .mappings()
+        .all()
+    )
+    total = await db.scalar(select(func.count()).select_from(rows).where(rows.c.position == 1))
+    return MonitoringPage(
+        items=[MonitoredBook(**row) for row in page], total=total, offset=offset, limit=limit
+    )

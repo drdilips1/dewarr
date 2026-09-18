@@ -104,10 +104,7 @@ export default function ListPolicy({
           {books.data.items.map((book) => (
             <article className="source-attribution" key={book.id}>
               <div>
-                <Link to={`/books/${book.work_id}`}>
-                  {works.find((work) => work.id === book.work_id)?.title ||
-                    "Open book"}
-                </Link>
+                <Link to={`/books/${book.work_id}`}>{book.title}</Link>
                 <p>
                   {book.state} · {book.message}
                 </p>

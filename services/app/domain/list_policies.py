@@ -302,36 +302,11 @@ async def activate(db, user, operation):
         "Monitoring future additions" if body.mode == "automatic" else f"{body.mode.title()} mode"
     )
     await db.flush()
-    books = {
-        str(b.work_id): b
-        for b in await db.scalars(
-            select(ListAcquisitionBook).where(ListAcquisitionBook.policy_id == policy.id)
-        )
-    }
-    selected = set(map(str, body.include_work_ids))
-    for record in records:
-        work_id = record["work_id"]
-        book = books.get(work_id)
-        if (
-            book
-            and book.generation == policy.generation
-            and book.state not in {"baseline", "removed"}
-            and work_id not in selected
-        ):
-            book.next_check_at = now
-            continue  # Resume previously authorized work; additions still need explicit selection.
-        if not book:
-            book = ListAcquisitionBook(policy_id=policy.id, work_id=UUID(work_id))
-            db.add(book)
-        book.generation = policy.generation
-        book.state = "wanted" if work_id in selected else "baseline"
-        book.message = (
-            "Selected for acquisition"
-            if work_id in selected
-            else "Existing member; not selected for acquisition"
-        )
-        book.intent_id, book.progress = None, {"activation": policy.revision}
-        book.next_check_at = now if work_id in selected else None
+    from app.domain.list_monitoring import reconcile
+
+    await reconcile(
+        db, policy, records, now, activation=True, selected=set(map(str, body.include_work_ids))
+    )
     operation.status, operation.message = "completed", "List policy saved"
     operation.payload = {**payload, "policy_id": str(policy.id), "policy_revision": policy.revision}
     return policy

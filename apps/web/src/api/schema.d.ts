@@ -4094,6 +4094,8 @@ export interface components {
        * Format: uuid
        */
       work_id: string;
+      /** Title */
+      title: string;
       /** State */
       state: string;
       /** Message */

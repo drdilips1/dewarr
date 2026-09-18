@@ -19,7 +19,13 @@ from app.db.models import (
     Operation,
 )
 from app.db.session import session_factory
-from app.domain import acquisition, automatic_selection, book_sources, list_policies
+from app.domain import (
+    acquisition,
+    automatic_selection,
+    book_sources,
+    list_monitoring,
+    list_policies,
+)
 from app.domain.acquisition import RequestReason, RequestSpec
 from app.domain.list_requests import owner_context
 from app.domain.work_graph import acquisition_lock
@@ -156,7 +162,10 @@ async def advance_target(db, user, policy, book, target, progress, now):
                 and not attempt.external_may_exist
                 and (selected.frozen.get("automatic_selection") or {}).get("list_authority")
                 == proof(policy, book)
-                and policy.revision > progress.get("policy_revision", policy.revision)
+                and (
+                    progress.get("resume_attempt")
+                    or policy.revision > progress.get("policy_revision", policy.revision)
+                )
             ):
                 attempt.state, attempt.message = (
                     "queued",
@@ -169,6 +178,7 @@ async def advance_target(db, user, policy, book, target, progress, now):
                 progress["policy_revision"] = policy.revision
             elif attempt and attempt.state == "held":
                 return "held", "This download needs attention in Activity", None
+        progress.pop("resume_attempt", None)
         return (
             "pending",
             "A compatible acquisition is already in progress",
@@ -311,7 +321,10 @@ async def advance_book(db, user, policy, book, now):
     )
     for target in targets:
         state = progress.setdefault(target.slot, {})
+        if progress.get("resume_attempts"):
+            state["resume_attempt"] = True
         outcomes.append(await advance_target(db, user, policy, book, target, state, now))
+    progress.pop("resume_attempts", None)
     book.progress = progress
     priority = {
         "held": 0,
@@ -357,35 +370,14 @@ async def run(identifier):
             return
         now = datetime.now(UTC)
         records = await list_policies.members(db, user, policy.list_id)
-        books = {
-            str(b.work_id): b
-            for b in await db.scalars(
-                select(ListAcquisitionBook).where(ListAcquisitionBook.policy_id == policy.id)
-            )
-        }
-        additions = [r for r in records if r["work_id"] not in books][:25]
-        for record in additions:
-            future = datetime.fromisoformat(record["added_at"]) > policy.baseline_at
-            book = ListAcquisitionBook(
-                policy_id=policy.id,
-                work_id=UUID(record["work_id"]),
-                generation=policy.generation,
-                state="wanted" if future else "baseline",
-                message="New list addition"
-                if future
-                else "Existing member; preview acquisition first",
-                progress={"activation": policy.revision},
-                next_check_at=now if future else None,
-            )
-            db.add(book)
-        await db.flush()
-        present = {r["work_id"] for r in records}
+        leaders = await list_monitoring.reconcile(db, policy, records, now)
         due = list(
             await db.scalars(
                 select(ListAcquisitionBook)
                 .where(
                     ListAcquisitionBook.policy_id == policy.id,
                     ListAcquisitionBook.generation == policy.generation,
+                    ListAcquisitionBook.id.in_(leaders),
                     ListAcquisitionBook.next_check_at <= now,
                 )
                 .order_by(ListAcquisitionBook.next_check_at, ListAcquisitionBook.id)
@@ -393,13 +385,6 @@ async def run(identifier):
             )
         )
         for book in due:
-            if str(book.work_id) not in present:
-                book.state, book.message, book.next_check_at = (
-                    "removed",
-                    "No longer in this list",
-                    None,
-                )
-                continue
             try:
                 async with db.begin_nested():
                     await advance_book(db, user, policy, book, now)

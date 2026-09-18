@@ -676,6 +676,9 @@ async def submit(db, user, work_id, spec, reason, key, *, policy_reference=None)
 
 
 async def withdraw_list_reasons(db, user, list_id, work_id=None):
+    from app.domain.list_monitoring import withdraw_membership
+
+    await withdraw_membership(db, list_id, work_id)
     conditions = [
         AcquisitionReason.kind == "list",
         AcquisitionReason.reference.in_([str(list_id)])

@@ -2397,3 +2397,147 @@ test("list policy activates future additions and acquires a synced title without
   await expect(download).toContainText("downloading", { timeout: 20_000 });
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });
+
+test("list monitoring follows canonical identity and restores original rows after undo", async ({
+  page,
+}, testInfo) => {
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Sign out", exact: true }),
+  ).toBeVisible();
+  const session = await (await page.request.get("/api/auth/me")).json();
+  const headers = {
+    Origin: "http://127.0.0.1:8001",
+    "X-CSRF-Token": session.csrf_token,
+  };
+  const works: string[] = [];
+  for (const title of ["Monitoring original", "Monitoring canonical"]) {
+    const result = await page.request.post("/api/catalog/works", {
+      headers,
+      data: { title, authors: ["Fixture Author"] },
+    });
+    expect(result.status()).toBe(201);
+    works.push((await result.json()).id);
+  }
+  const created = await page.request.post("/api/lists", {
+    headers,
+    data: { name: "Identity monitoring fixture" },
+  });
+  expect(created.status()).toBe(201);
+  const listId = (await created.json()).id;
+  for (const workId of works) {
+    expect(
+      (
+        await page.request.post(`/api/lists/${listId}/entries`, {
+          headers,
+          data: { work_id: workId },
+        })
+      ).status(),
+    ).toBe(204);
+  }
+  await page.goto(`/lists/${listId}`);
+  await page
+    .getByRole("button", { name: "Acquisition policy", exact: true })
+    .click();
+  const policy = page.getByRole("region", {
+    name: "List acquisition policy",
+    exact: true,
+  });
+  await policy.getByLabel("Acquisition mode").selectOption("browse");
+  await policy
+    .getByRole("button", { name: "Preview list policy", exact: true })
+    .click();
+  await policy
+    .getByRole("button", { name: "Save list mode", exact: true })
+    .click();
+  await policy
+    .getByText("Monitored books and backlog", { exact: true })
+    .click();
+  await expect(policy.getByRole("article")).toHaveCount(2);
+  const previewResponse = await page.request.post(
+    "/api/identity/works/merge/preview",
+    {
+      headers,
+      data: { source_id: works[0], target_id: works[1] },
+    },
+  );
+  expect(previewResponse.status()).toBe(200);
+  const revision = (await previewResponse.json()).revision;
+  const merged = await page.request.post("/api/identity/works/merge", {
+    headers,
+    data: {
+      source_id: works[0],
+      target_id: works[1],
+      expected_revision: revision,
+    },
+  });
+  expect(merged.status()).toBe(204);
+  await page.reload();
+  await page
+    .getByRole("button", { name: "Acquisition policy", exact: true })
+    .click();
+  await policy
+    .getByText("Monitored books and backlog", { exact: true })
+    .click();
+  await expect(policy.getByRole("article")).toHaveCount(1);
+  await expect(
+    policy.getByRole("link", { name: "Monitoring canonical", exact: true }),
+  ).toHaveAttribute("href", `/books/${works[1]}`);
+  await expect(policy.getByRole("article")).toContainText("baseline");
+  const history = await (
+    await page.request.get(`/api/identity/changes?work_id=${works[1]}`)
+  ).json();
+  const change = history.items.find(
+    (item: { kind: string; entity_id: string }) =>
+      item.kind === "work_merge" && item.entity_id === works[0],
+  );
+  expect(
+    (
+      await page.request.post(`/api/identity/changes/${change.id}/undo`, {
+        headers,
+      })
+    ).status(),
+  ).toBe(204);
+  expect(
+    (
+      await page.request.delete(`/api/lists/${listId}/entries/${works[0]}`, {
+        headers,
+      })
+    ).status(),
+  ).toBe(204);
+  await page.reload();
+  await page
+    .getByRole("button", { name: "Acquisition policy", exact: true })
+    .click();
+  await policy
+    .getByText("Monitored books and backlog", { exact: true })
+    .click();
+  await expect(policy.getByRole("article")).toHaveCount(2);
+  await expect(
+    policy.getByRole("article").filter({
+      has: page.getByRole("link", {
+        name: "Monitoring original",
+        exact: true,
+      }),
+    }),
+  ).toContainText("removed");
+  await expect(
+    policy.getByRole("link", { name: "Monitoring canonical", exact: true }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("list-monitoring-mobile.png"),
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+});
