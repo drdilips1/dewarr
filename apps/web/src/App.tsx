@@ -27,6 +27,7 @@ const BookDetail = lazy(() => import("./pages/BookDetail"));
 const Lists = lazy(() => import("./pages/Lists"));
 const ActivityPage = lazy(() => import("./pages/Activity"));
 const Connections = lazy(() => import("./pages/Connections"));
+const Downloaders = lazy(() => import("./pages/Downloaders"));
 const Sources = lazy(() => import("./pages/Sources"));
 const MyLibrary = lazy(() => import("./pages/MyLibrary"));
 const Accounts = lazy(() => import("./pages/Accounts"));
@@ -368,6 +369,16 @@ function Shell({ auth }: { auth: Auth }) {
               <Route
                 path="/sources"
                 element={<Sources admin={auth.user.role === "admin"} />}
+              />
+              <Route
+                path="/downloaders"
+                element={
+                  auth.user.role === "admin" ? (
+                    <Downloaders />
+                  ) : (
+                    <Navigate to="/" replace />
+                  )
+                }
               />
               <Route
                 path="/organization/destinations"

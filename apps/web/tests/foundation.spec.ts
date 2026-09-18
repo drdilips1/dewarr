@@ -841,6 +841,89 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     "",
   );
   await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.getByRole("link", { name: "Connections", exact: true }).click();
+  await page.getByRole("link", { name: "Downloaders", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Connect qBittorrent", exact: true })
+    .click();
+  const downloaderForm = page.getByRole("form", {
+    name: "qBittorrent connection settings",
+  });
+  await downloaderForm
+    .getByLabel("qBittorrent URL", { exact: true })
+    .fill("http://127.0.0.1:13379/qbit");
+  await downloaderForm
+    .getByLabel("qBittorrent username", { exact: true })
+    .fill("browser-qbit-user");
+  await downloaderForm
+    .getByLabel("qBittorrent password", { exact: true })
+    .fill("browser-qbit-password");
+  await downloaderForm
+    .getByRole("button", { name: "Save downloader", exact: true })
+    .click();
+  const downloaderCard = page.getByRole("article", {
+    name: "qBittorrent",
+    exact: true,
+  });
+  await expect(downloaderCard).toBeVisible();
+  await downloaderCard
+    .getByRole("button", { name: "Test saved connection", exact: true })
+    .click();
+  await expect(downloaderCard).toContainText("connected");
+  await expect(downloaderCard).toContainText("v5.2.3");
+  await downloaderCard
+    .getByText("Preview path mapping", { exact: true })
+    .click();
+  await downloaderCard
+    .getByLabel("Path in qBittorrent", { exact: true })
+    .fill("/downloads/books/Example/book.m4b");
+  await downloaderCard
+    .getByRole("button", { name: "Preview saved mapping", exact: true })
+    .click();
+  await expect(downloaderCard).toContainText(
+    "Relative path: books/Example/book.m4b",
+  );
+  await expect(downloaderCard).toContainText("Mapping preview only");
+  await page.screenshot({
+    path: testInfo.outputPath("downloaders-desktop.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
+    )
+    .toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("downloaders-mobile.png"),
+    fullPage: true,
+  });
+  await page.reload();
+  await downloaderCard
+    .getByRole("button", { name: "Edit downloader", exact: true })
+    .click();
+  await expect(
+    downloaderForm.getByLabel("qBittorrent username", { exact: true }),
+  ).toHaveValue("");
+  await expect(
+    downloaderForm.getByLabel("qBittorrent password", { exact: true }),
+  ).toHaveValue("");
+  await downloaderForm
+    .getByLabel("Enable connection", { exact: true })
+    .uncheck();
+  await downloaderForm
+    .getByRole("button", { name: "Save downloader", exact: true })
+    .click();
+  await expect(downloaderCard).toContainText("Disabled");
+  await expect(
+    downloaderCard.getByRole("button", {
+      name: "Test saved connection",
+      exact: true,
+    }),
+  ).toBeDisabled();
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.getByRole("link", { name: "Accounts", exact: true }).click();
   await page.getByLabel("Name", { exact: true }).fill("Guest reader");
   await page.getByLabel("Username", { exact: true }).fill("guest");

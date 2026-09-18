@@ -3564,6 +3564,219 @@
           }
         }
       }
+    },
+    "/api/downloaders": {
+      "get": {
+        "tags": [
+          "downloaders"
+        ],
+        "summary": "Connections",
+        "operationId": "connections_api_downloaders_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DownloaderView"
+                  },
+                  "type": "array",
+                  "title": "Response Connections Api Downloaders Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "downloaders"
+        ],
+        "summary": "Create Connection",
+        "operationId": "create_connection_api_downloaders_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DownloaderInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DownloaderView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/downloaders/{connection_id}": {
+      "put": {
+        "tags": [
+          "downloaders"
+        ],
+        "summary": "Update Connection",
+        "operationId": "update_connection_api_downloaders__connection_id__put",
+        "parameters": [
+          {
+            "name": "connection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Connection Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DownloaderInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DownloaderView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/downloaders/{connection_id}/test": {
+      "post": {
+        "tags": [
+          "downloaders"
+        ],
+        "summary": "Test Connection",
+        "operationId": "test_connection_api_downloaders__connection_id__test_post",
+        "parameters": [
+          {
+            "name": "connection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Connection Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DownloaderView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/downloaders/{connection_id}/preview-path": {
+      "post": {
+        "tags": [
+          "downloaders"
+        ],
+        "summary": "Preview Path",
+        "operationId": "preview_path_api_downloaders__connection_id__preview_path_post",
+        "parameters": [
+          {
+            "name": "connection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Connection Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PathPreviewInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PathPreviewView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -4558,6 +4771,247 @@
           "probe"
         ],
         "title": "DestinationView"
+      },
+      "DownloadMapping": {
+        "properties": {
+          "download_root": {
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Download Root"
+          },
+          "source_key": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]{1,60}$",
+            "title": "Source Key"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "download_root",
+          "source_key"
+        ],
+        "title": "DownloadMapping"
+      },
+      "DownloaderInput": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name",
+            "default": "qBittorrent"
+          },
+          "base_url": {
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Base Url"
+          },
+          "username": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300,
+                "minLength": 1,
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Username"
+          },
+          "password": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 1,
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Password"
+          },
+          "save_path": {
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Save Path"
+          },
+          "category": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,100}$",
+            "title": "Category",
+            "default": "book-search"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/components/schemas/DownloadMapping"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "minItems": 1,
+            "title": "Mappings"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": true
+          },
+          "expected_generation": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Expected Generation",
+            "default": 0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "base_url",
+          "save_path",
+          "mappings"
+        ],
+        "title": "DownloaderInput"
+      },
+      "DownloaderMappingView": {
+        "properties": {
+          "download_root": {
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Download Root"
+          },
+          "source_key": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]{1,60}$",
+            "title": "Source Key"
+          },
+          "worker_path": {
+            "type": "string",
+            "title": "Worker Path"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "download_root",
+          "source_key",
+          "worker_path"
+        ],
+        "title": "DownloaderMappingView"
+      },
+      "DownloaderView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "base_url": {
+            "type": "string",
+            "title": "Base Url"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "has_credentials": {
+            "type": "boolean",
+            "title": "Has Credentials"
+          },
+          "generation": {
+            "type": "integer",
+            "title": "Generation"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "last_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Error"
+          },
+          "last_success_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Success At"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          },
+          "save_path": {
+            "type": "string",
+            "title": "Save Path"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/components/schemas/DownloaderMappingView"
+            },
+            "type": "array",
+            "title": "Mappings"
+          },
+          "mappings_current": {
+            "type": "boolean",
+            "title": "Mappings Current"
+          },
+          "dispatch_available": {
+            "type": "boolean",
+            "title": "Dispatch Available",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "base_url",
+          "enabled",
+          "has_credentials",
+          "generation",
+          "status",
+          "last_error",
+          "last_success_at",
+          "version",
+          "save_path",
+          "category",
+          "mappings",
+          "mappings_current"
+        ],
+        "title": "DownloaderView"
       },
       "EditValues": {
         "properties": {
@@ -7406,6 +7860,59 @@
           "work_ids"
         ],
         "title": "OrderInput"
+      },
+      "PathPreviewInput": {
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Path"
+          },
+          "expected_generation": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Generation"
+          }
+        },
+        "type": "object",
+        "required": [
+          "path",
+          "expected_generation"
+        ],
+        "title": "PathPreviewInput"
+      },
+      "PathPreviewView": {
+        "properties": {
+          "download_path": {
+            "type": "string",
+            "title": "Download Path"
+          },
+          "source_key": {
+            "type": "string",
+            "title": "Source Key"
+          },
+          "relative_path": {
+            "type": "string",
+            "title": "Relative Path"
+          },
+          "worker_path": {
+            "type": "string",
+            "title": "Worker Path"
+          },
+          "filesystem_verified": {
+            "type": "boolean",
+            "title": "Filesystem Verified",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "download_path",
+          "source_key",
+          "relative_path",
+          "worker_path"
+        ],
+        "title": "PathPreviewView"
       },
       "PlannedItem": {
         "properties": {

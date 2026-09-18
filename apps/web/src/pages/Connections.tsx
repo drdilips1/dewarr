@@ -63,6 +63,7 @@ export default function Connections() {
           <p className="muted">
             Keep your catalog in sync with Audiobookshelf.
           </p>
+          <Link to="/downloaders">Downloaders</Link>
         </div>
         <button className="primary" onClick={() => setEditing("new")}>
           Connect Audiobookshelf

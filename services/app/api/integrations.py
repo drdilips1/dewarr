@@ -76,7 +76,9 @@ async def connection_or_404(db, identifier):
 async def connections(admin: Admin, db: Database):
     records = (
         await db.scalars(
-            select(Integration).where(Integration.owner_id.is_(None)).order_by(Integration.name)
+            select(Integration)
+            .where(Integration.owner_id.is_(None), Integration.kind == "audiobookshelf")
+            .order_by(Integration.name)
         )
     ).all()
     return [connection_view(record) for record in records]

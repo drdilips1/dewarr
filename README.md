@@ -10,7 +10,7 @@ Latest import checkpoint: [catalog matching](docs/IMPORT-MATCHING.md) resolves e
 
 Latest source checkpoint: [native MAM search](docs/MAM-INTEGRATION.md) adds rich release browsing, source details, encrypted session settings and required proxy routing. It is fixture verified; live account compatibility and download dispatch remain pending.
 
-Latest downloader checkpoint: [qBittorrent adapter](docs/QBITTORRENT-INTEGRATION.md) implements submission acknowledgements, transfer/file observations and strict attempt association with fixture coverage. Persisted dispatch, connection UI and the complete source-to-library flow remain pending.
+Latest downloader checkpoint: [qBittorrent integration](docs/QBITTORRENT-INTEGRATION.md) includes encrypted administrator settings, read-only connection tests, path mappings and preview, plus submission acknowledgements, transfer/file observations and strict attempt association. Settings and adapter behavior have fixture/browser coverage. Persisted dispatch and the complete source-to-library flow remain pending.
 
 Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md) for the product boundary, end-to-end journey, P0/P1 decisions, stage summary and release milestones.
 

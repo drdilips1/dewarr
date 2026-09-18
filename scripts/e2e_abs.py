@@ -3,9 +3,10 @@
 import json
 import sys
 from pathlib import Path
+from urllib.parse import parse_qs
 
 from fastapi import FastAPI, Header, HTTPException, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, PlainTextResponse, Response
 
 from app.config import get_settings
 
@@ -22,6 +23,27 @@ item = json.loads(
 )
 scanner = ScanningBackend(get_settings().import_destinations["ebooks"])
 scanner.backend_path, scanner.library_id = "/fixture/books", "library-one"
+
+
+@app.api_route("/qbit/api/v2/{path:path}", methods=["GET", "POST"])
+async def qbit_fixture(path: str, request: Request):
+    if path == "auth/login":
+        credentials = parse_qs((await request.body()).decode())
+        if credentials != {
+            "username": ["browser-qbit-user"],
+            "password": ["browser-qbit-password"],
+        }:
+            raise HTTPException(401)
+        response = Response(status_code=204)
+        response.set_cookie("SID", "browser-qbit-session", httponly=True)
+        return response
+    if request.cookies.get("SID") != "browser-qbit-session":
+        raise HTTPException(403)
+    if path == "app/version":
+        return PlainTextResponse("v5.2.3")
+    if path == "app/webapiVersion":
+        return PlainTextResponse("2.15.1")
+    raise HTTPException(404, "No download action is available in the connection fixture")
 
 
 @app.api_route("/mam/{path:path}", methods=["GET", "POST"])

@@ -13,6 +13,7 @@ from app.api import (
     auth,
     catalog,
     destinations,
+    downloaders,
     identity,
     import_runs,
     imports,
@@ -105,6 +106,7 @@ def create_app() -> FastAPI:
     app.include_router(import_runs.router, prefix="/api")
     app.include_router(destinations.router, prefix="/api")
     app.include_router(sources.router, prefix="/api")
+    app.include_router(downloaders.router, prefix="/api")
     dist: Path = get_settings().web_dist
     if (dist / "assets").is_dir():
         app.mount("/assets", StaticFiles(directory=dist / "assets"), name="assets")

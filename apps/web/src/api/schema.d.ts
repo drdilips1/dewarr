@@ -1175,6 +1175,75 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/downloaders": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Connections */
+    get: operations["connections_api_downloaders_get"];
+    put?: never;
+    /** Create Connection */
+    post: operations["create_connection_api_downloaders_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/downloaders/{connection_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Update Connection */
+    put: operations["update_connection_api_downloaders__connection_id__put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/downloaders/{connection_id}/test": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Test Connection */
+    post: operations["test_connection_api_downloaders__connection_id__test_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/downloaders/{connection_id}/preview-path": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Preview Path */
+    post: operations["preview_path_api_downloaders__connection_id__preview_path_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1549,6 +1618,94 @@ export interface components {
        * @default false
        */
       publication_available: boolean;
+    };
+    /** DownloadMapping */
+    DownloadMapping: {
+      /** Download Root */
+      download_root: string;
+      /** Source Key */
+      source_key: string;
+    };
+    /** DownloaderInput */
+    DownloaderInput: {
+      /**
+       * Name
+       * @default qBittorrent
+       */
+      name: string;
+      /** Base Url */
+      base_url: string;
+      /** Username */
+      username?: string | null;
+      /** Password */
+      password?: string | null;
+      /** Save Path */
+      save_path: string;
+      /**
+       * Category
+       * @default book-search
+       */
+      category: string;
+      /** Mappings */
+      mappings: components["schemas"]["DownloadMapping"][];
+      /**
+       * Enabled
+       * @default true
+       */
+      enabled: boolean;
+      /**
+       * Expected Generation
+       * @default 0
+       */
+      expected_generation: number;
+    };
+    /** DownloaderMappingView */
+    DownloaderMappingView: {
+      /** Download Root */
+      download_root: string;
+      /** Source Key */
+      source_key: string;
+      /** Worker Path */
+      worker_path: string;
+    };
+    /** DownloaderView */
+    DownloaderView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Name */
+      name: string;
+      /** Base Url */
+      base_url: string;
+      /** Enabled */
+      enabled: boolean;
+      /** Has Credentials */
+      has_credentials: boolean;
+      /** Generation */
+      generation: number;
+      /** Status */
+      status: string;
+      /** Last Error */
+      last_error: string | null;
+      /** Last Success At */
+      last_success_at: string | null;
+      /** Version */
+      version: string | null;
+      /** Save Path */
+      save_path: string;
+      /** Category */
+      category: string;
+      /** Mappings */
+      mappings: components["schemas"]["DownloaderMappingView"][];
+      /** Mappings Current */
+      mappings_current: boolean;
+      /**
+       * Dispatch Available
+       * @default false
+       */
+      dispatch_available: boolean;
     };
     /** EditValues */
     EditValues: {
@@ -2596,6 +2753,29 @@ export interface components {
     OrderInput: {
       /** Work Ids */
       work_ids: string[];
+    };
+    /** PathPreviewInput */
+    PathPreviewInput: {
+      /** Path */
+      path: string;
+      /** Expected Generation */
+      expected_generation: number;
+    };
+    /** PathPreviewView */
+    PathPreviewView: {
+      /** Download Path */
+      download_path: string;
+      /** Source Key */
+      source_key: string;
+      /** Relative Path */
+      relative_path: string;
+      /** Worker Path */
+      worker_path: string;
+      /**
+       * Filesystem Verified
+       * @default false
+       */
+      filesystem_verified: boolean;
     };
     /** PlannedItem */
     PlannedItem: {
@@ -5599,6 +5779,160 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["MAMRelease"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  connections_api_downloaders_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DownloaderView"][];
+        };
+      };
+    };
+  };
+  create_connection_api_downloaders_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DownloaderInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DownloaderView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_connection_api_downloaders__connection_id__put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        connection_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DownloaderInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DownloaderView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  test_connection_api_downloaders__connection_id__test_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        connection_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DownloaderView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  preview_path_api_downloaders__connection_id__preview_path_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        connection_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PathPreviewInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PathPreviewView"];
         };
       };
       /** @description Validation Error */

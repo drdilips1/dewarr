@@ -1,6 +1,22 @@
 # qBittorrent transport and reconciliation contract
 
-Implementation checkpoint: the adapter and association rules exist and are tested against synthetic HTTP responses. There is no downloader settings UI, persisted dispatch workflow or live qBittorrent certification yet. Nothing in the application currently calls this adapter to start a download.
+Implementation checkpoint: the adapter, association rules, administrator settings UI/API, read-only connection diagnostics and path mapping preview are implemented and fixture verified. Persisted dispatch and live qBittorrent certification remain pending. Nothing in the application currently calls this adapter to start a download.
+
+## Configure a downloader
+
+Open **Connections → Downloaders → Connect qBittorrent**. Enter its Web UI URL and credentials, choose the save folder as qBittorrent sees it, and map that folder to a named worker download root. The default category is `book-search`; advanced settings allow a different category. Save, then test the saved connection. Editing retains credentials when both credential fields are blank; changing the endpoint requires a replacement pair. Disable the connection without removing its configuration or any files.
+
+Connection records use the existing generic integration table with kind `qbittorrent`. Library connection endpoints and inventory scheduling exclude them. No schema migration is needed for this checkpoint. Credentials are encrypted and never returned by the API, included in audit details or populated into the browser after reload. Reads, writes, tests and previews require administrator access; writes additionally require the existing session/origin/CSRF checks.
+
+Settings use an optimistic generation and serialized writes. A concurrent edit cannot silently overwrite another edit, and a test of an old generation cannot mark new settings connected. Diagnostic calls run outside database transactions, have a total deadline and a persisted lease, and impose a cooldown after failures. Cancellation leaves a lease that expires before another test can authenticate. Configuration edits retain active leases and cooldowns. A diagnostic never queries or changes torrents. A connected status confirms API access only, not acquisition or filesystem readiness.
+
+### Path mappings
+
+For example, qBittorrent root `/data/downloads` can map to the configured worker root `downloads`, whose host/container path is `/storage/downloads`. Then `/data/downloads/Series/Book` previews as `/storage/downloads/Series/Book`, with inspection-relative path `Series/Book`. Prefixes are matched on directory boundaries, so `/data/downloads-other` is not inside `/data/downloads`.
+
+Multiple disjoint mappings are supported. The save folder must lie inside one mapping; overlapping roots, traversal and unconfigured worker roots are rejected. Worker paths come from configured `BOOK_IMPORT_SOURCES`, not arbitrary browser-supplied filesystem paths. Saving snapshots those bindings. If a configured worker root changes, mappings become stale and require review/save before preview or later acquisition use.
+
+Preview shows the predicted mapping and performs no filesystem access. It never asserts that files exist, mounts refer to the same storage or hardlinks work. The existing inspection and destination-probe workflow remains responsible for actual filesystem evidence and source confinement. The API always reports dispatch unavailable at this stage.
 
 ## Implemented boundary
 
@@ -34,11 +50,13 @@ This is client evidence only. The importer must still map paths, inspect actual 
 
 ## Evidence and remaining work
 
-Seventy-five adapter cases cover the selected 5.2.3 response shapes, legacy and asynchronous receipts, session reuse, rejected login, expired access, lost submission response, cancellation, v2/hybrid identity, unrelated preexisting transfers, destination changes, partial files, unsafe paths, malformed data and bounded responses. A stateful HTTP fixture models successful and response-lost adds followed by independent lookup. It is not a live-client or crash-recoverable database workflow test.
+Seventy-five adapter cases cover the selected 5.2.3 response shapes, legacy and asynchronous receipts, session reuse, rejected login, expired access, lost submission response, cancellation, v2/hybrid identity, unrelated preexisting transfers, destination changes, partial files, unsafe paths, malformed data and bounded responses. Twenty-one PostgreSQL/API cases cover settings, encrypted credentials, authorization, path confinement and stale bindings, concurrent edits/tests, cooldowns, deadlines, account revocation and cancelled-test recovery. A stateful HTTP fixture models successful and response-lost adds followed by independent lookup. These are not live-client or crash-recoverable dispatch workflow tests.
+
+The integrated browser journey covers saving and testing a connection, mapped path preview, desktop/mobile layout, secret-free reload and disabling the saved connection. qBittorrent responses are synthetic; no personal client or torrents are used.
 
 The next integration slice must supply:
 
-1. Encrypted administrator connection settings, capability diagnostics and path mappings.
+1. Actual configured-client certification and enforcement of saved connection generation, enablement and path bindings by the dispatch worker.
 2. Source artifact resolution and a validated v1/v2/hybrid torrent descriptor, retaining source credentials privately.
 3. Persisted release selection, attempt identity, client configuration revision and reservations before network side effects.
 4. A preflight existing-transfer check, dispatch journaling and recovery that reconciles before any retry; no adoption of unrelated torrents.
