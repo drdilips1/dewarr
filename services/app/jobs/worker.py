@@ -17,6 +17,8 @@ async def recover_stalled_jobs() -> None:
             for task_name in (
                 "system.probe",
                 "sources.search",
+                "lists.sync",
+                "lists.schedule",
                 "library.sync",
                 "library.schedule",
                 "metadata.enrich",

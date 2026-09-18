@@ -377,3 +377,40 @@ async def prowlarr_fixture(path: str, request: Request):
             raise HTTPException(404)
         return Response(torrent_bytes(), media_type="application/x-bittorrent")
     raise HTTPException(404)
+
+
+shelf_state = {"version": 1, "mode": "normal"}
+
+
+@app.post("/goodreads/control")
+async def shelf_control(request: Request):
+    body = await request.json()
+    shelf_state.update(body)
+    return shelf_state
+
+
+@app.get("/goodreads/rss")
+async def shelf_fixture(request: Request):
+    from xml.sax.saxutils import escape
+
+    if shelf_state["mode"] == "outage":
+        return Response(status_code=503)
+    etag = f'"shelf-{shelf_state["version"]}"'
+    if request.headers.get("if-none-match") == etag:
+        return Response(status_code=304, headers={"ETag": etag})
+    titles = [(100, "Goodreads Shelf Arrival"), (101, "Goodreads Next Read")]
+    if shelf_state["mode"] == "omission":
+        titles = titles[1:]
+    if shelf_state["mode"] == "addition":
+        titles.append((102, "Goodreads Later Addition"))
+    items = "".join(
+        f"<item><book_id>{titles_id}</book_id><title>{escape(title)}</title>"
+        "<author_name>Fixture Shelf Author</author_name></item>"
+        for titles_id, title in titles
+    )
+    return Response(
+        '<rss version="2.0"><channel><title>Fixture shelf</title>'
+        "<link>https://www.goodreads.com/review/list/123</link>" + items + "</channel></rss>",
+        media_type="application/rss+xml",
+        headers={"ETag": etag},
+    )

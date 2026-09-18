@@ -84,7 +84,7 @@ processes = [
             "13379",
         ]
     ),
-    subprocess.Popen(["uv", "run", "python", "-m", "app.jobs.worker"]),
+    subprocess.Popen(["uv", "run", "python", "scripts/e2e_worker.py"]),
     subprocess.Popen(
         [
             "uv",

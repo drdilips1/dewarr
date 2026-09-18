@@ -27,3 +27,18 @@ class SourceSearchRetryStrategy(RetryStrategy):
         if decision and isinstance(exception, SourceSearchRetry):
             return RetryDecision(retry_in={"seconds": exception.retry_after})
         return decision
+
+
+class ShelfRetry(CatalogRetry):
+    def __init__(self, seconds):
+        RuntimeError.__init__(self, "Shelf observation is waiting for source access")
+        self.retry_after = min(max(int(seconds), 1), 7 * 86400)
+
+
+class ShelfRetryStrategy(RetryStrategy):
+    def get_retry_decision(self, *, exception, job):
+        # Budget/lease contention is not an HTTP failure. Authority is checked on
+        # every attempt; the domain expires an individual operation after seven days.
+        if isinstance(exception, ShelfRetry):
+            return RetryDecision(retry_in={"seconds": exception.retry_after})
+        return super().get_retry_decision(exception=exception, job=job)

@@ -6,7 +6,7 @@ from sqlalchemy import delete, func, or_, select
 
 from app.api.catalog import WorkView, work_view
 from app.api.dependencies import CurrentUser, Database, Member
-from app.db.models import BookList, ListEntry, Work
+from app.db.models import BookList, ListEntry, ListObservation, ListSubscription, Work
 from app.domain.acquisition import withdraw_list_reasons
 from app.domain.availability import availability_for
 from app.domain.visibility import visible_work
@@ -151,12 +151,15 @@ async def add_entry(list_id: UUID, body: EntryInput, user: Member, db: Database)
     work = await canonical_work(db, body.work_id)
     if not await db.scalar(select(Work.id).where(Work.id == work.id, visible_work(user))):
         raise HTTPException(404, "Book not found")
-    if not await db.scalar(
-        select(ListEntry.id).where(
+    existing = await db.scalar(
+        select(ListEntry).where(
             ListEntry.list_id == list_id,
             ListEntry.work_id.in_(family_ids(work.id)),
         )
-    ):
+    )
+    if existing:
+        existing.locally_added = True
+    else:
         position = await db.scalar(
             select(func.max(ListEntry.position)).where(ListEntry.list_id == list_id)
         )
@@ -168,6 +171,15 @@ async def add_entry(list_id: UUID, body: EntryInput, user: Member, db: Database)
 async def remove_entry(list_id: UUID, work_id: UUID, user: Member, db: Database):
     await visible_list(list_id, user, db, edit=True)
     await graph_lock(db)
+    for observation in await db.scalars(
+        select(ListObservation)
+        .join(ListSubscription)
+        .where(
+            ListSubscription.list_id == list_id,
+            ListObservation.work_id.in_(family_ids(work_id)),
+        )
+    ):
+        observation.excluded = True
     await db.execute(
         delete(ListEntry).where(
             ListEntry.list_id == list_id, ListEntry.work_id.in_(family_ids(work_id))

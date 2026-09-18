@@ -298,6 +298,76 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/lists/{list_id}/subscription": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Detail */
+    get: operations["detail_api_lists__list_id__subscription_get"];
+    /** Configure */
+    put: operations["configure_api_lists__list_id__subscription_put"];
+    post?: never;
+    /** Detach */
+    delete: operations["detach_api_lists__list_id__subscription_delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/subscription/sync": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Refresh */
+    post: operations["refresh_api_lists__list_id__subscription_sync_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/subscription/observations": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Observations */
+    get: operations["observations_api_lists__list_id__subscription_observations_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/subscription/observations/{observation_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** Change Observation */
+    patch: operations["change_observation_api_lists__list_id__subscription_observations__observation_id__patch"];
+    trace?: never;
+  };
   "/api/integrations": {
     parameters: {
       query?: never;
@@ -3297,6 +3367,56 @@ export interface components {
        */
       ebook_filename: string;
     };
+    /** ObservationInput */
+    ObservationInput: {
+      /** Excluded */
+      excluded?: boolean | null;
+      /** Work Id */
+      work_id?: string | null;
+    };
+    /** ObservationPage */
+    ObservationPage: {
+      /** Items */
+      items: components["schemas"]["ObservationView"][];
+      /** Total */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+    };
+    /** ObservationView */
+    ObservationView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** External Id */
+      external_id: string;
+      /** Work Id */
+      work_id: string | null;
+      /** Title */
+      title: string;
+      /** Authors */
+      authors: string[];
+      /** Catalog Title */
+      catalog_title: string | null;
+      /** Excluded */
+      excluded: boolean;
+      /** Identity Changed */
+      identity_changed: boolean;
+      /**
+       * First Seen At
+       * Format: date-time
+       */
+      first_seen_at: string;
+      /**
+       * Last Seen At
+       * Format: date-time
+       */
+      last_seen_at: string;
+    };
     /** OperationView */
     OperationView: {
       /**
@@ -4274,6 +4394,71 @@ export interface components {
       request: components["schemas"]["RequestView"];
       operation: components["schemas"]["OperationView"];
     };
+    /** SubscriptionInput */
+    SubscriptionInput: {
+      /** Feed Url */
+      feed_url?: string | null;
+      /**
+       * Enabled
+       * @default true
+       */
+      enabled: boolean;
+      /**
+       * Interval Minutes
+       * @default 30
+       */
+      interval_minutes: number;
+      /**
+       * Expected Generation
+       * @default 0
+       */
+      expected_generation: number;
+    };
+    /** SubscriptionView */
+    SubscriptionView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Generation */
+      generation: number;
+      /** Enabled */
+      enabled: boolean;
+      /** Interval Minutes */
+      interval_minutes: number;
+      /** State */
+      state: string;
+      /** Message */
+      message: string;
+      /** Shelf */
+      shelf: string;
+      /**
+       * Feed Configured
+       * @default true
+       */
+      feed_configured: boolean;
+      /** Last Success At */
+      last_success_at: string | null;
+      /** Baseline At */
+      baseline_at: string | null;
+      /** Next Sync At */
+      next_sync_at: string | null;
+      /** Observed Count */
+      observed_count: number;
+      /** Excluded Count */
+      excluded_count: number;
+      /**
+       * Completeness
+       * @default partial-feed
+       */
+      completeness: string;
+      /**
+       * Acquisition Mode
+       * @default browse
+       */
+      acquisition_mode: string;
+    };
     /** TargetView */
     TargetView: {
       /** Slot */
@@ -5088,6 +5273,202 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["OrderInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  detail_api_lists__list_id__subscription_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SubscriptionView"] | null;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  configure_api_lists__list_id__subscription_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SubscriptionInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SubscriptionView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  detach_api_lists__list_id__subscription_delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  refresh_api_lists__list_id__subscription_sync_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OperationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  observations_api_lists__list_id__subscription_observations_get: {
+    parameters: {
+      query?: {
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ObservationPage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  change_observation_api_lists__list_id__subscription_observations__observation_id__patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        list_id: string;
+        observation_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ObservationInput"];
       };
     };
     responses: {

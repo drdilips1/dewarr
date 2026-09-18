@@ -1,8 +1,11 @@
+import { lazy, Suspense } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, ArrowDown, ArrowUp, Lock, Users, X } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import { BookCard, Empty, Loading, Notice } from "../components";
+
+const ListSubscription = lazy(() => import("./ListSubscription"));
 
 export default function Lists({ canEdit }: { canEdit: boolean }) {
   const { id } = useParams();
@@ -177,6 +180,11 @@ function ListDetail({ id, canEdit }: { id: string; canEdit: boolean }) {
         ) : null}
       </div>
       <Notice error={remove.error || share.error || reorder.error} />
+      {editable && (
+        <Suspense fallback={<Loading />}>
+          <ListSubscription listId={id} />
+        </Suspense>
+      )}
       {list.data.items.length ? (
         <div className="book-grid">
           {list.data.items.map((work, index) => (

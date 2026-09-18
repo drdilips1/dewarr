@@ -1503,3 +1503,106 @@ test("book sources aggregate durable results and apply saved release preferences
   });
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });
+
+test("Goodreads shelf observation persists additions, omissions, exclusions and pause settings", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(180_000);
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.getByRole("link", { name: "Lists", exact: true }).click();
+  await page
+    .getByLabel("Create a private list")
+    .fill("Followed Goodreads Shelf");
+  await page.getByRole("button", { name: "Create list", exact: true }).click();
+  await page.getByRole("link", { name: /Followed Goodreads Shelf/ }).click();
+  const panel = page.getByRole("region", {
+    name: "Goodreads shelf subscription",
+  });
+  await panel
+    .getByLabel("Goodreads RSS URL")
+    .fill(
+      "https://www.goodreads.com/review/list_rss/123?key=private-browser-feed-key&shelf=to-read",
+    );
+  await panel
+    .getByRole("button", { name: "Follow shelf", exact: true })
+    .click();
+  await expect(panel.getByRole("status")).toContainText("Observed 2 books", {
+    timeout: 20_000,
+  });
+  await expect(
+    page.getByRole("link", { name: /Goodreads Shelf Arrival/ }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Remove Goodreads Shelf Arrival from list" })
+    .click();
+  await expect(
+    page.getByRole("link", { name: /Goodreads Shelf Arrival/ }),
+  ).toHaveCount(0);
+  await page.request.post("http://127.0.0.1:13379/goodreads/control", {
+    data: { mode: "omission", version: 2 },
+  });
+  await panel
+    .getByRole("button", { name: "Refresh Goodreads shelf", exact: true })
+    .click();
+  await expect(panel.getByRole("status")).toContainText("Observed 1 books", {
+    timeout: 80_000,
+  });
+  await page.reload();
+  await expect(panel).toContainText("2 observed · 1 excluded");
+  await panel
+    .getByText("Observed entries and exclusions", { exact: true })
+    .click();
+  const entry = panel.getByRole("article", {
+    name: "Shelf entry: Goodreads Shelf Arrival",
+  });
+  await expect(entry).toBeVisible();
+  await entry.getByRole("button", { name: "Restore to this list" }).click();
+  await expect(panel).toContainText("2 observed · 0 excluded");
+  await panel
+    .getByText("Observed entries and exclusions", { exact: true })
+    .click();
+  await expect(
+    page.getByRole("link", { name: /Goodreads Shelf Arrival/ }),
+  ).toBeVisible();
+  await page.request.post("http://127.0.0.1:13379/goodreads/control", {
+    data: { mode: "addition", version: 3 },
+  });
+  await panel
+    .getByRole("button", { name: "Refresh Goodreads shelf", exact: true })
+    .click();
+  await expect(panel.getByRole("status")).toContainText(
+    "Observed 3 books; 1 new",
+    { timeout: 80_000 },
+  );
+  await expect(
+    page.getByRole("link", { name: /Goodreads Later Addition/ }),
+  ).toBeVisible();
+  await panel.getByText("Shelf connection settings", { exact: true }).click();
+  await expect(panel.getByLabel("Goodreads RSS URL")).toHaveValue("");
+  await panel.getByLabel("Observe shelf additions").uncheck();
+  await panel.getByRole("button", { name: "Save shelf settings" }).click();
+  await expect(panel.getByRole("status")).toContainText("Observation paused");
+  await page.reload();
+  await expect(
+    panel.getByRole("button", { name: "Refresh Goodreads shelf" }),
+  ).toBeDisabled();
+  await expect(page.locator("body")).not.toContainText(
+    "private-browser-feed-key",
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("goodreads-shelf-mobile.png"),
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+});

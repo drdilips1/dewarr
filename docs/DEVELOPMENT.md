@@ -110,3 +110,7 @@ Automatic imports can now enqueue `metadata.resolve-import` for a missing catalo
 ## Combined source search checkpoint
 
 [Book Sources](BOOK-SOURCES.md) uses two durable source jobs, private saved preferences and the existing inspected-artifact/selection path. Apply migration `0024_book_sources` before starting the new API and worker; populated profile/search history requires a pre-upgrade backup for rollback. Source jobs participate in stalled-job recovery. API and worker must run the same revision. Default download dispatch remains disabled.
+
+## Goodreads observation checkpoint
+
+Apply `0025_list_subscriptions` before restarting the API and worker. The `lists.schedule` job runs every minute to queue due subscriptions; the default observation interval is 30 minutes plus jitter. Both `lists.schedule` and `lists.sync` participate in stalled-job recovery. [Goodreads subscriptions](GOODREADS-SUBSCRIPTIONS.md) documents privacy, provenance, exclusions and remaining automation requirements. The browser harness uses a fixture-only Goodreads transport and rejects non-browser databases; the production worker retains HTTPS/public-DNS checks.

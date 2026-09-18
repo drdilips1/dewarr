@@ -72,6 +72,7 @@ class Work(Identity, Base):
     redirect_to: Mapped[UUID | None] = mapped_column(ForeignKey("works.id"), index=True)
     metadata_fields: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
     catalog_public: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
+    catalog_owner_id: Mapped[UUID | None] = mapped_column(ForeignKey("users.id"), index=True)
     match_key: Mapped[str | None] = mapped_column(String(64), index=True)
 
 
@@ -248,6 +249,40 @@ class ListEntry(Identity, Base):
     list_id: Mapped[UUID] = mapped_column(ForeignKey("book_lists.id", ondelete="CASCADE"))
     work_id: Mapped[UUID] = mapped_column(ForeignKey("works.id"))
     position: Mapped[int] = mapped_column(Integer, default=0)
+    locally_added: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
+
+
+class ListSubscription(Identity, Base):
+    __tablename__ = "list_subscriptions"
+    list_id: Mapped[UUID] = mapped_column(
+        ForeignKey("book_lists.id", ondelete="CASCADE"), unique=True
+    )
+    generation: Mapped[int] = mapped_column(Integer, default=1)
+    encrypted_config: Mapped[str] = mapped_column(Text)
+    enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    interval_minutes: Mapped[int] = mapped_column(Integer, default=30)
+    state: Mapped[str] = mapped_column(String(20), default="idle")
+    message: Mapped[str] = mapped_column(Text, default="Ready to observe Goodreads shelf additions")
+    last_success_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    baseline_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    next_sync_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), index=True)
+    operation_id: Mapped[UUID | None] = mapped_column(ForeignKey("operations.id"))
+    failures: Mapped[int] = mapped_column(Integer, default=0)
+    run_token: Mapped[UUID | None] = mapped_column()
+    lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class ListObservation(Identity, Base):
+    __tablename__ = "list_observations"
+    __table_args__ = (UniqueConstraint("subscription_id", "external_id"),)
+    subscription_id: Mapped[UUID] = mapped_column(
+        ForeignKey("list_subscriptions.id", ondelete="CASCADE"), index=True
+    )
+    external_id: Mapped[str] = mapped_column(String(80))
+    snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    work_id: Mapped[UUID] = mapped_column(ForeignKey("works.id"), index=True)
+    excluded: Mapped[bool] = mapped_column(Boolean, default=False)
+    last_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
 class Operation(Identity, Base):

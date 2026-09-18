@@ -8,7 +8,7 @@ from app.config import get_settings
 from app.db.models import AuditEvent, Integration, Operation, User
 from app.db.session import session_factory
 from app.jobs.queue import tasks
-from app.jobs.retry import CatalogRetryStrategy, SourceSearchRetryStrategy
+from app.jobs.retry import CatalogRetryStrategy, ShelfRetryStrategy, SourceSearchRetryStrategy
 
 
 @tasks.task(
@@ -261,3 +261,18 @@ async def search_book_sources(operation_id: str, source: str) -> None:
     from app.domain.book_sources import run
 
     await run(UUID(operation_id), source)
+
+
+@tasks.task(name="lists.sync", queue="lists", retry=ShelfRetryStrategy(max_attempts=5, wait=60))
+async def observe_shelf(operation_id: str) -> None:
+    from app.domain.list_subscriptions import run
+
+    await run(UUID(operation_id))
+
+
+@tasks.periodic(cron="* * * * *")
+@tasks.task(name="lists.schedule", queue="lists", retry=3)
+async def schedule_shelves(timestamp: int) -> None:
+    from app.domain.list_subscriptions import schedule
+
+    await schedule()

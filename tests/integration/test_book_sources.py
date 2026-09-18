@@ -321,10 +321,10 @@ async def test_result_expiry_and_other_owner_cannot_inspect(
 async def test_source_search_migration_guards_saved_profile_history(client, admin, database):
     from tests.integration.test_correction_migration import migrate
 
+    async with database() as db:
+        before = await db.scalar(text("SELECT version_num FROM alembic_version"))
     await client.post("/api/acquisition/profiles", json={"name": "Retain me"})
     downgraded = await migrate("downgrade", "0023_source_results")
     assert downgraded.returncode != 0 and "pre-upgrade backup" in downgraded.stderr
     async with database() as db:
-        assert (
-            await db.scalar(text("SELECT version_num FROM alembic_version")) == "0024_book_sources"
-        )
+        assert await db.scalar(text("SELECT version_num FROM alembic_version")) == before
