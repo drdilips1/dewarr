@@ -3,6 +3,7 @@
 import re
 from pathlib import PurePosixPath
 
+from app.domain import pack_coverage
 from app.domain.acquisition import language_accepts
 from app.domain.release_profiles import assess_release, normalized
 from app.domain.request_constraints import constrained_preferences
@@ -18,17 +19,51 @@ PACK = re.compile(
 DEFAULT_MAXIMUM = {"ebook": 1024**3, "audio": 10 * 1024**3}
 
 
-def limit_bytes(preferences, medium):
-    return min(preferences.maximum_bytes or DEFAULT_MAXIMUM[medium], DEFAULT_MAXIMUM[medium])
+def limit_bytes(preferences, medium, *, pack=False):
+    ceiling = pack_coverage.MAX_PACK_BYTES if pack else DEFAULT_MAXIMUM[medium]
+    return min(preferences.maximum_bytes or ceiling, ceiling)
+
+
+def collection_candidate(release, work, catalog=None):
+    text = " ".join(
+        [release.raw_title, getattr(release, "title", ""), *getattr(release, "tags", [])]
+    )
+    return bool(
+        PACK.search(text)
+        or len(release.coverage) > 1
+        or any(
+            re.search(r"\d\s*[-–,/]\s*\d", s.position or "") for s in getattr(release, "series", [])
+        )
+        or (
+            pack_coverage.source_series(release, work, catalog)
+            and normalized(getattr(release, "title", release.raw_title))
+            != normalized(work["title"])
+        )
+    )
 
 
 def eligibility(
-    release, work, rule, preferences, *, version=None, descriptor=None, unattended=False
+    release,
+    work,
+    rule,
+    preferences,
+    *,
+    version=None,
+    descriptor=None,
+    unattended=False,
+    catalog=None,
 ):
     preferences = constrained_preferences(preferences, rule)
     assessment = assess_release(release, work, preferences, rule["medium"])
     reasons = list(assessment.blocked)
-    if assessment.identity != "corroborated":
+    is_pack = collection_candidate(release, work, catalog)
+    pack_sources = pack_coverage.source_series(release, work, catalog) if is_pack else []
+    proof = (
+        pack_coverage.manifest(release, work, catalog, descriptor, rule["medium"])
+        if descriptor and pack_sources
+        else None
+    )
+    if assessment.identity != "corroborated" and not pack_sources:
         reasons.append("The source must corroborate the catalog title and author")
     if release.medium != rule["medium"]:
         reasons.append("The source must identify the requested medium")
@@ -42,15 +77,20 @@ def eligibility(
     )
     if PARTIAL.search(text):
         reasons.append("The source labels this release as partial content")
-    if (
-        PACK.search(text)
-        or len(release.coverage) > 1
-        or any(
-            re.search(r"\d\s*[-–,/]\s*\d", series.position or "")
-            for series in getattr(release, "series", [])
-        )
-    ):
-        reasons.append("Collection coverage needs review before automatic selection")
+    if is_pack:
+        if not preferences.prefer_series_packs:
+            reasons.append("Collection downloads are disabled by this request's preferences")
+        if not pack_sources:
+            reasons.append("Collection coverage needs review before automatic selection")
+        elif descriptor and not proof:
+            reasons.append(
+                "Collection files do not uniquely establish the requested published series books"
+            )
+        if version or rule.get("required_narrators") or rule["abridged"] is not None:
+            reasons.append(
+                "Collection children need separate evidence for required edition, "
+                "narrator or abridgment"
+            )
     if rule["abridged"] is not None:
         # Exact source tags are claims; narration duration or prose is not an abridgment flag.
         tags = {normalized(tag) for tag in getattr(release, "tags", [])}
@@ -75,7 +115,7 @@ def eligibility(
             observed = isbn_forms(getattr(release, "isbn", None) or "")
             if not expected or not expected.intersection(observed):
                 reasons.append("The source does not corroborate the selected edition's ISBN")
-    ceiling = limit_bytes(preferences, rule["medium"])
+    ceiling = limit_bytes(preferences, rule["medium"], pack=is_pack and bool(pack_sources))
     if release.size_bytes is not None and release.size_bytes > ceiling:
         reasons.append("Reported transfer size exceeds the automatic selection limit")
     if descriptor:
@@ -103,9 +143,9 @@ def eligibility(
             reasons.append(
                 "This media format requires reviewed importing rather than automatic acquisition"
             )
-        elif rule["medium"] == "ebook" and len(primary) != 1:
+        elif not proof and rule["medium"] == "ebook" and len(primary) != 1:
             reasons.append("Multiple ebook files need edition or collection review")
-        elif rule["medium"] == "audio":
+        elif not proof and rule["medium"] == "audio":
             if len(primary) > 500 or len({str(PurePosixPath(f.path).parent) for f in primary}) != 1:
                 reasons.append(
                     "Audio files span multiple book folders or exceed the automatic track limit"
@@ -123,14 +163,17 @@ def eligibility(
                     for stem in stems
                 ):
                     reasons.append("Audio filenames do not establish one numbered track sequence")
-        if PACK.search(descriptor.name) or any(PACK.search(f.path) for f in primary):
+        if not proof and (
+            PACK.search(descriptor.name) or any(PACK.search(f.path) for f in primary)
+        ):
             reasons.append("The file manifest indicates a collection requiring coverage review")
         if any(PARTIAL.search(f.path) for f in primary):
             reasons.append("The file manifest indicates partial content")
         preferred = (
             preferences.ebook_formats if rule["medium"] == "ebook" else preferences.audio_formats
         )
-        if not formats.intersection(preferred):
+        requested_formats = set(pack_coverage.target_formats(proof)) if proof else formats
+        if not requested_formats.intersection(preferred):
             reasons.append("No preferred media format is present in the torrent")
         if not (
             (len(descriptor.files) == 1 and "/" not in descriptor.files[0].path)

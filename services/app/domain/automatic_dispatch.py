@@ -123,5 +123,11 @@ async def require_selection(db, selection):
         raise HTTPException(
             409, "Catalog identity changed after automatic acquisition was authorized"
         )
+    if proof.get("coverage"):
+        from app.domain import pack_coverage
+
+        user = await db.get(User, selection.owner_id, populate_existing=True)
+        if proof.get("pack_catalog") != await pack_coverage.catalog(db, user, work):
+            raise HTTPException(409, "Series coverage changed before download; review this request")
     if selection.frozen["descriptor"]["torrent_bytes"] > proof["maximum_bytes"]:
         raise HTTPException(409, "The whole torrent exceeds this automatic acquisition limit")

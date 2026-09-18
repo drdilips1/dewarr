@@ -13,6 +13,26 @@ from app.domain.automatic_selection import AutomaticSelectionInput
 router = APIRouter(prefix="/acquisition/automatic-selections", tags=["automatic-selection"])
 
 
+class CoveredWork(BaseModel):
+    id: UUID
+    title: str
+    authors: list[str]
+
+
+class CoveredMember(BaseModel):
+    work: CoveredWork
+    files: list[str]
+
+
+class PackCoverage(BaseModel):
+    series_id: UUID
+    series_generation: int
+    series_name: str
+    target_id: UUID
+    evidence: str
+    members: list[CoveredMember]
+
+
 class CandidateDecision(BaseModel):
     result_id: UUID
     source: str
@@ -20,6 +40,7 @@ class CandidateDecision(BaseModel):
     reasons: list[str]
     inspected: bool = False
     selected: bool = False
+    coverage: PackCoverage | None = None
 
 
 class AutomaticSelectionView(BaseModel):
@@ -27,6 +48,7 @@ class AutomaticSelectionView(BaseModel):
     status: str
     message: str
     maximum_bytes: int
+    maximum_pack_bytes: int | None = None
     maximum_inspections: int = automatic.MAX_INSPECTIONS
     inspections: int
     decisions: list[CandidateDecision]
@@ -50,6 +72,7 @@ async def view(db, user, operation):
         status=operation.status,
         message=operation.message,
         maximum_bytes=operation.payload["maximum_bytes"],
+        maximum_pack_bytes=operation.payload.get("maximum_pack_bytes"),
         inspections=len(operation.payload["inspected"]),
         decisions=[
             {

@@ -31,10 +31,16 @@ from app.db.models import (
     WorkMetadataSource,
 )
 from app.db.session import session_factory
-from app.domain import automatic_dispatch
+from app.domain import automatic_dispatch, pack_coverage
 from app.domain.acquisition import evaluate
 from app.domain.acquisition_selection import SelectionInput, prepare
-from app.domain.automatic_eligibility import AUDIO, EBOOKS, eligibility, limit_bytes
+from app.domain.automatic_eligibility import (
+    AUDIO,
+    EBOOKS,
+    collection_candidate,
+    eligibility,
+    limit_bytes,
+)
 from app.domain.book_sources import checked
 from app.domain.operations import transaction_lock
 from app.domain.prowlarr_network import prowlarr_call
@@ -240,9 +246,17 @@ async def begin(db, user, body, key, *, list_authority=None):
             "work": deepcopy(search.payload["work"]),
             "profile": profile.model_dump(mode="json"),
             "requirements": rule,
+            "pack_catalog": await pack_coverage.catalog(db, user, work)
+            if profile.preferences.prefer_series_packs
+            else None,
             "maximum_bytes": limit_bytes(
                 constrained_preferences(profile.preferences, rule), rule["medium"]
             ),
+            "maximum_pack_bytes": limit_bytes(
+                constrained_preferences(profile.preferences, rule), rule["medium"], pack=True
+            )
+            if profile.preferences.prefer_series_packs
+            else None,
             "inspected": [],
             "verified": {},
             "decisions": [],
@@ -305,6 +319,7 @@ async def candidates(db, operation, work, profile, rule, version):
             profile.preferences,
             version=version,
             unattended=operation.payload["command"].get("download_when_ready", False),
+            catalog=operation.payload.get("pack_catalog"),
         )
         source = sources.get(row.source_key)
         if (
@@ -315,13 +330,31 @@ async def candidates(db, operation, work, profile, rule, version):
         ):
             problems.append("Source connection changed or this observation expired")
         ranked_release = (
-            release.model_copy(update={"formats": verified["formats"]}) if verified else release
+            release.model_copy(
+                update={
+                    "formats": verified.get("target_formats", verified["formats"]),
+                    **({"narrators": []} if verified.get("coverage") else {}),
+                }
+            )
+            if verified
+            else release
         )
         assessment = assess_release(
             ranked_release, operation.payload["work"], profile.preferences, rule["medium"]
         )
+        is_pack = collection_candidate(
+            release, operation.payload["work"], operation.payload.get("pack_catalog")
+        )
+        if is_pack and not problems:
+            assessment = assessment.model_copy(update={"identity": "corroborated"})
+        rank = ranking_key(ranked_release, assessment, profile.preferences)
         ranked.append(
-            (ranking_key(ranked_release, assessment, profile.preferences), row, release, problems)
+            (
+                (0 if is_pack and profile.preferences.prefer_series_packs else 1, *rank),
+                row,
+                release,
+                problems,
+            )
         )
     ranked.sort(key=lambda value: value[0])
     return ranked
@@ -429,6 +462,11 @@ async def run(identifier):
                     body.destination_revision,
                     expected=operation.payload["dispatch_approval"],
                 )
+            frozen_catalog = operation.payload.get("pack_catalog")
+            if frozen_catalog is not None and frozen_catalog != await pack_coverage.catalog(
+                db, user, work
+            ):
+                raise HTTPException(409, "Series coverage changed; refresh the automatic selection")
             if (
                 rule != operation.payload["requirements"]
                 or search.payload["work"] != operation.payload["work"]
@@ -459,6 +497,7 @@ async def run(identifier):
                     )
                 ),
                 "inspected": str(row.id) in inspected,
+                "coverage": payload.get("verified", {}).get(str(row.id), {}).get("coverage"),
             }
             for _, row, release, issues in ranked
         ]
@@ -553,6 +592,11 @@ async def run(identifier):
                 db, owner_id, operation.payload.get("list_authority"), intent_id=body.intent_id
             )
             user, work, search, profile, rule, version = await context(db, owner_id, body)
+            frozen_catalog = operation.payload.get("pack_catalog")
+            if frozen_catalog is not None and frozen_catalog != await pack_coverage.catalog(
+                db, user, work
+            ):
+                raise HTTPException(409, "Series coverage changed; refresh the automatic selection")
             if (
                 rule != operation.payload["requirements"]
                 or search.payload["work"] != operation.payload["work"]
@@ -593,6 +637,7 @@ async def run(identifier):
                 version=version,
                 descriptor=descriptor,
                 unattended=body.download_when_ready,
+                catalog=operation.payload.get("pack_catalog"),
             )
             # Existing artifact snapshots are immutable. Metadata changes require
             # review; fluctuating counts/timestamps cannot change book identity.
@@ -614,6 +659,19 @@ async def run(identifier):
             if reasons:
                 await reject_candidate(db, operation, row.id, reasons)
                 return
+            coverage = (
+                pack_coverage.manifest(
+                    fresh,
+                    operation.payload["work"],
+                    operation.payload.get("pack_catalog"),
+                    descriptor,
+                    rule["medium"],
+                )
+                if collection_candidate(
+                    fresh, operation.payload["work"], operation.payload.get("pack_catalog")
+                )
+                else None
+            )
             payload = deepcopy(operation.payload)
             if str(row.id) not in payload["inspected"]:
                 payload["inspected"].append(str(row.id))
@@ -621,6 +679,8 @@ async def run(identifier):
             primary_formats = EBOOKS if rule["medium"] == "ebook" else AUDIO
             payload.setdefault("verified", {})[str(row.id)] = {
                 "artifact_id": str(artifact.id),
+                "coverage": coverage,
+                **({"target_formats": pack_coverage.target_formats(coverage)} if coverage else {}),
                 "release": fresh.model_dump(mode="json"),
                 "formats": sorted(
                     {PurePosixPath(f.path).suffix.lower().lstrip(".") for f in descriptor.files}
@@ -631,6 +691,7 @@ async def run(identifier):
                 if decision["result_id"] == str(row.id):
                     decision["reasons"] = []
                     decision["inspected"] = True
+                    decision["coverage"] = coverage
             operation.payload = payload
             remaining = eligible_candidates(
                 await candidates(db, operation, work, profile, rule, version), payload
@@ -642,6 +703,12 @@ async def run(identifier):
                 )
                 operation.job_id = await enqueue(db, KIND, operation_id=str(identifier))
                 return
+            maximum = limit_bytes(
+                constrained_preferences(profile.preferences, rule),
+                rule["medium"],
+                pack=bool(coverage),
+            )
+            operation.payload = {**operation.payload, "maximum_bytes": maximum}
             async with db.begin_nested():
                 selected = await prepare(
                     db,
@@ -671,8 +738,17 @@ async def run(identifier):
                         "reported_seeders": fresh.seeders,
                         "source_observed_at": fresh.observed_at.isoformat(),
                         "inspected_formats": payload["verified"][str(row.id)]["formats"],
-                        "scope": "Fetched source page; single-book manifest; "
-                        "actual file identity checked after downloading",
+                        "coverage": coverage,
+                        "pack_catalog": operation.payload.get("pack_catalog") if coverage else None,
+                        "scope": (
+                            "Catalog and manifest corroborate a bounded series pack; "
+                            "only requested books are authorized for import"
+                        )
+                        if coverage
+                        else (
+                            "Fetched source page; single-book manifest; "
+                            "actual file identity checked after downloading"
+                        ),
                         "dispatch_approval": operation.payload.get("dispatch_approval"),
                         "list_authority": operation.payload.get("list_authority"),
                     },

@@ -149,6 +149,12 @@ export default function AutomaticSelection({
       defaultLimit,
     defaultLimit,
   );
+  const packLimit = Math.min(
+    search.profile.preferences.maximum_bytes ?? 50 * 1024 ** 3,
+    request.data?.specification.download_constraints?.maximum_bytes ??
+      50 * 1024 ** 3,
+    50 * 1024 ** 3,
+  );
   const unavailable =
     active ||
     prepare.isPending ||
@@ -174,13 +180,17 @@ export default function AutomaticSelection({
       <p>
         Use this page’s results and saved profile to inspect up to five
         candidates for your wanted {medium === "ebook" ? "ebook" : "audiobook"}.
-        Eligible single-book torrents only; series packs and uncertain versions
-        need review.
+        {search.profile.preferences.prefer_series_packs
+          ? " Eligible series packs are preferred when catalog and filenames establish coverage. Only this requested book is authorized for import."
+          : " Single-book torrents only."}
+        Uncertain coverage and exact versions need review.
       </p>
       <p className="muted">
-        Maximum transfer size: {transferSize(limit)}. Shared requests may impose
-        stricter limits, which are checked before selection. Preparing a release
-        does not start a download.
+        Single-book transfer limit: {transferSize(limit)}.
+        {search.profile.preferences.prefer_series_packs &&
+          ` Series pack limit: ${transferSize(packLimit)}, with at most 20 additional known published books.`}{" "}
+        Shared requests may impose stricter limits, which are checked before
+        selection. Preparing a release does not start a download.
       </p>
       <DownloadConstraints
         value={request.data?.specification.download_constraints}
@@ -266,8 +276,13 @@ export default function AutomaticSelection({
             candidates inspected · {receipt.data.status}
           </p>
           <p className="muted">
-            Transfer limit for this selection:{" "}
+            {receipt.data.selection_id
+              ? "Transfer limit for this selection: "
+              : "Single-book transfer limit: "}
             {transferSize(receipt.data.maximum_bytes)}
+            {!receipt.data.selection_id &&
+              receipt.data.maximum_pack_bytes &&
+              ` · Eligible series pack limit: ${transferSize(receipt.data.maximum_pack_bytes)}`}
           </p>
           {active && (
             <button disabled={cancel.isPending} onClick={() => cancel.mutate()}>
@@ -302,6 +317,28 @@ export default function AutomaticSelection({
                           ? "Eligible torrent prepared"
                           : "Eligible inspected candidate"
                         : "Not inspected"}
+                    {d.coverage && (
+                      <details>
+                        <summary>
+                          {d.coverage.series_name} · {d.coverage.members.length}{" "}
+                          catalog-matched books
+                        </summary>
+                        <p>
+                          Filenames corroborate coverage. Actual contents and
+                          library availability are checked after download.
+                        </p>
+                        <ul>
+                          {d.coverage.members.map((member) => (
+                            <li key={member.work.id}>
+                              {member.work.title}
+                              {member.work.id === d.coverage?.target_id
+                                ? " · Requested"
+                                : " · Not requested"}
+                            </li>
+                          ))}
+                        </ul>
+                      </details>
+                    )}
                   </li>
                 ))}
               </ul>

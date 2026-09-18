@@ -12,6 +12,7 @@ export const preferenceLabels: Partial<Record<keyof Preferences, string>> = {
   maximum_bytes: "Maximum transfer size",
   preferred_narrators: "Preferred narrators",
   search_series: "Search known series names",
+  prefer_series_packs: "Prefer eligible series packs",
 };
 const formats = [
   "epub",
@@ -155,6 +156,26 @@ export default function PreferenceFields({
           Search known series names alongside the title
         </label>
         {origin("search_series")}
+        <label className="check-label">
+          <input
+            type="checkbox"
+            checked={effective.prefer_series_packs ?? true}
+            onChange={(event) =>
+              onChange({
+                ...overrides,
+                prefer_series_packs: event.target.checked,
+              })
+            }
+          />
+          Prefer eligible series packs
+        </label>
+        {origin("prefer_series_packs")}
+        <p className="muted">
+          Known published series books and torrent filenames must agree. Up to
+          20 additional books and 50 GiB per pack, subject to your lower size
+          limit. Only requested books are imported; this does not request an
+          entire series.
+        </p>
         <p className="muted">
           Searches up to three names from accessible catalog evidence. Finding a
           series release does not establish which books it contains.

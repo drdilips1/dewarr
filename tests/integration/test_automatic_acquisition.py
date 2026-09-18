@@ -54,18 +54,26 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     delayed_backend,
     request_limits,
     via_list=False,
+    series_pack=False,
+    counterfeit=False,
 ):
     route = ready_route
+    if series_pack:
+        monkeypatch.setattr(get_queue().periodic_registry, "periodic_tasks", {})
     work_id = route["plan"]["document"]["groups"][0]["work_id"]
     extension = "epub" if medium == "ebook" else "mp3"
     source = route["source"] / ("selected." + extension)
+    if series_pack:
+        source = route["source"] / "Coast" / ("First Harbor." + extension)
     if medium == "ebook":
         epub(source, isbn="9781234567897")
         await edition(database, work_id=UUID(work_id))
     else:
         audio(source, tags={"isbn": "9781234567897", "language": "en"})
         await prepare_audio_route(client, database, route, work_id, source)
-    epub(source.parent / "private-neighbor.epub", title="Unrelated private download")
+    epub(route["source"] / "private-neighbor.epub", title="Unrelated private download")
+    if counterfeit:
+        epub(source, title="Second Harbor", isbn="9780140328721")
     original = source.read_bytes()
     raw = lt.bencode(
         {
@@ -80,6 +88,32 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             }
         }
     )
+    if series_pack:
+        from tests.pack_fixture import catalog as pack_catalog
+
+        second = await edition(
+            database, title="Second Harbor", identifiers={"isbn_13": "9780140328721"}
+        )
+        await pack_catalog(database, admin["id"], [work_id, second["work"]])
+        epub(source.parent / "Second Harbor.epub", title="Second Harbor", isbn="9780140328721")
+        contents = {p.name: p.read_bytes() for p in sorted(source.parent.glob("*.epub"))}
+        payload = b"".join(contents.values())
+        raw = lt.bencode(
+            {
+                b"info": {
+                    b"name": b"Coast",
+                    b"piece length": 16384,
+                    b"files": [
+                        {b"length": len(data), b"path": [name.encode()]}
+                        for name, data in contents.items()
+                    ],
+                    b"pieces": b"".join(
+                        hashlib.sha1(payload[pos : pos + 16384]).digest()
+                        for pos in range(0, len(payload), 16384)
+                    ),
+                }
+            }
+        )
     descriptor = await inspect_torrent(raw)
     release = MAMRelease(
         source_id="502",
@@ -96,6 +130,14 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
         protocol="torrent",
         observed_at=datetime.now(UTC),
     )
+    if series_pack:
+        release = release.model_copy(
+            update={
+                "title": "Coast",
+                "raw_title": "Coast Books 1-2",
+                "size_bytes": descriptor.torrent_bytes,
+            }
+        )
     async with database() as db, db.begin():
         db.add(
             SourceConnection(
@@ -262,6 +304,20 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             await client.get(f"/api/acquisition/automatic-selections/{response.json()['id']}")
         ).json()
     assert result["status"] == "completed" and result["download_id"], result
+    if counterfeit:
+        from app.db.models import AutomaticImport
+
+        async with database() as db:
+            automatic_import = await db.scalar(select(AutomaticImport))
+            assert automatic_import and automatic_import.state == "held", automatic_import.message
+            assert not await db.scalar(select(ImportEntry.id))
+            assert not await db.scalar(select(DownloadFulfillment.id))
+        assert not (await client.get(f"/api/catalog/works/{work_id}")).json()["availability"][
+            "owned"
+        ]
+        assert qbit.calls.count("submit") == 1
+        assert source.read_bytes() == original
+        return
     async with database() as db:
         selection = await db.get(AcquisitionSelection, UUID(result["selection_id"]))
         if request_limits:
@@ -318,7 +374,16 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
         assert repeated.json()["download_id"] == result["download_id"]
     await automatic_selection.run(UUID(result["id"]))
     await downloads.run(UUID(result["download_id"]))
-    assert qbit.calls.count("submit") == 1 and source_calls == ["search", "resolve"]
+    assert qbit.calls.count("submit") == 1
+    assert source_calls == (
+        ["search", "search", "resolve"] if series_pack else ["search", "resolve"]
+    )
+    if series_pack:
+        assert len(result["decisions"][0]["coverage"]["members"]) == 2
+        assert not (await client.get(f"/api/catalog/works/{second['work']}")).json()[
+            "availability"
+        ]["owned"]
+        assert {p.name: p.read_bytes() for p in source.parent.glob("*.epub")} == contents
 
 
 @pytest.mark.parametrize("medium", ["ebook", "audio"])
@@ -337,4 +402,42 @@ async def test_list_addition_reaches_confirmed_library_without_per_title_command
         delayed_backend,
         request_limits=True,
         via_list=True,
+    )
+
+
+@pytest.mark.parametrize("via_list", [False, True])
+@pytest.mark.parametrize("delayed_backend", [False, True])
+async def test_known_pack_reaches_requested_library_without_importing_unrequested_sibling(
+    client, admin, database, ready_route, review_account, monkeypatch, via_list, delayed_backend
+):
+    await test_search_to_automatic_download_and_confirmed_member_library(
+        client,
+        admin,
+        database,
+        ready_route,
+        review_account,
+        monkeypatch,
+        "ebook",
+        delayed_backend,
+        request_limits=True,
+        via_list=via_list,
+        series_pack=True,
+    )
+
+
+async def test_pack_filename_cannot_override_wrong_downloaded_book_identity(
+    client, admin, database, ready_route, review_account, monkeypatch
+):
+    await test_search_to_automatic_download_and_confirmed_member_library(
+        client,
+        admin,
+        database,
+        ready_route,
+        review_account,
+        monkeypatch,
+        "ebook",
+        False,
+        request_limits=True,
+        series_pack=True,
+        counterfeit=True,
     )

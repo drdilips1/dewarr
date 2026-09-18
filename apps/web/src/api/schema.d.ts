@@ -2493,6 +2493,8 @@ export interface components {
       message: string;
       /** Maximum Bytes */
       maximum_bytes: number;
+      /** Maximum Pack Bytes */
+      maximum_pack_bytes?: number | null;
       /**
        * Maximum Inspections
        * @default 5
@@ -2758,6 +2760,7 @@ export interface components {
        * @default false
        */
       selected: boolean;
+      coverage?: components["schemas"]["PackCoverage"] | null;
     };
     /** CapacityView */
     CapacityView: {
@@ -2884,6 +2887,24 @@ export interface components {
        * @enum {string}
        */
       evidence: "claimed" | "corroborated" | "verified";
+    };
+    /** CoveredMember */
+    CoveredMember: {
+      work: components["schemas"]["CoveredWork"];
+      /** Files */
+      files: string[];
+    };
+    /** CoveredWork */
+    CoveredWork: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Title */
+      title: string;
+      /** Authors */
+      authors: string[];
     };
     /** Credentials */
     Credentials: {
@@ -4475,6 +4496,27 @@ export interface components {
       /** Work Ids */
       work_ids: string[];
     };
+    /** PackCoverage */
+    PackCoverage: {
+      /**
+       * Series Id
+       * Format: uuid
+       */
+      series_id: string;
+      /** Series Generation */
+      series_generation: number;
+      /** Series Name */
+      series_name: string;
+      /**
+       * Target Id
+       * Format: uuid
+       */
+      target_id: string;
+      /** Evidence */
+      evidence: string;
+      /** Members */
+      members: components["schemas"]["CoveredMember"][];
+    };
     /** PathPreviewInput */
     PathPreviewInput: {
       /** Path */
@@ -4642,6 +4684,8 @@ export interface components {
       audio_library_id?: string | null;
       /** Search Series */
       search_series?: boolean;
+      /** Prefer Series Packs */
+      prefer_series_packs?: boolean;
       /** Ebook Formats */
       ebook_formats?: string[];
       /** Audio Formats */
@@ -5011,6 +5055,11 @@ export interface components {
        * @default true
        */
       search_series: boolean;
+      /**
+       * Prefer Series Packs
+       * @default true
+       */
+      prefer_series_packs: boolean;
       /**
        * Ebook Formats
        * @default [

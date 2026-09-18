@@ -1536,6 +1536,13 @@ test("list and request preferences survive previews, saving and source reload", 
   await policy.getByLabel("Acquisition mode").selectOption("manual");
   await policy.getByLabel("Desired media").selectOption("ebook");
   await policy.getByText("List download overrides", { exact: true }).click();
+  await policy.getByText("Series search", { exact: true }).click();
+  const packs = policy.getByRole("checkbox", {
+    name: "Prefer eligible series packs",
+    exact: true,
+  });
+  await expect(packs).toBeChecked();
+  await packs.uncheck();
   await policy
     .getByRole("button", {
       name: "Move seeders up in Ranking priorities",
@@ -1615,6 +1622,10 @@ test("list and request preferences survive previews, saving and source reload", 
   expect(wanted.release_policy.preferences.ebook_formats[0]).toBe("epub");
   expect(wanted.release_policy.origins.ebook_formats).toBe("Request override");
   expect(wanted.release_policy.origins.criteria).toBe("List override");
+  expect(wanted.release_policy.preferences.prefer_series_packs).toBe(false);
+  expect(wanted.release_policy.origins.prefer_series_packs).toBe(
+    "List override",
+  );
   await page.goto(`/books/${work.id}`);
   await page
     .getByRole("region", { name: "Wanted media", exact: true })

@@ -7929,6 +7929,17 @@
             "type": "integer",
             "title": "Maximum Bytes"
           },
+          "maximum_pack_bytes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maximum Pack Bytes"
+          },
           "maximum_inspections": {
             "type": "integer",
             "title": "Maximum Inspections",
@@ -8593,6 +8604,16 @@
             "type": "boolean",
             "title": "Selected",
             "default": false
+          },
+          "coverage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PackCoverage"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -8975,6 +8996,53 @@
           "title"
         ],
         "title": "CoverageClaim"
+      },
+      "CoveredMember": {
+        "properties": {
+          "work": {
+            "$ref": "#/components/schemas/CoveredWork"
+          },
+          "files": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Files"
+          }
+        },
+        "type": "object",
+        "required": [
+          "work",
+          "files"
+        ],
+        "title": "CoveredMember"
+      },
+      "CoveredWork": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Authors"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "authors"
+        ],
+        "title": "CoveredWork"
       },
       "Credentials": {
         "properties": {
@@ -13233,6 +13301,49 @@
         ],
         "title": "OrderInput"
       },
+      "PackCoverage": {
+        "properties": {
+          "series_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Series Id"
+          },
+          "series_generation": {
+            "type": "integer",
+            "title": "Series Generation"
+          },
+          "series_name": {
+            "type": "string",
+            "title": "Series Name"
+          },
+          "target_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Target Id"
+          },
+          "evidence": {
+            "type": "string",
+            "title": "Evidence"
+          },
+          "members": {
+            "items": {
+              "$ref": "#/components/schemas/CoveredMember"
+            },
+            "type": "array",
+            "title": "Members"
+          }
+        },
+        "type": "object",
+        "required": [
+          "series_id",
+          "series_generation",
+          "series_name",
+          "target_id",
+          "evidence",
+          "members"
+        ],
+        "title": "PackCoverage"
+      },
       "PathPreviewInput": {
         "properties": {
           "path": {
@@ -13735,6 +13846,10 @@
           "search_series": {
             "type": "boolean",
             "title": "Search Series"
+          },
+          "prefer_series_packs": {
+            "type": "boolean",
+            "title": "Prefer Series Packs"
           },
           "ebook_formats": {
             "items": {
@@ -14806,6 +14921,11 @@
           "search_series": {
             "type": "boolean",
             "title": "Search Series",
+            "default": true
+          },
+          "prefer_series_packs": {
+            "type": "boolean",
+            "title": "Prefer Series Packs",
             "default": true
           },
           "ebook_formats": {
