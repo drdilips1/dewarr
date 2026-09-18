@@ -1,6 +1,6 @@
 # Product requirements: book discovery and acquisition
 
-Version 1.5 planning baseline · September 18, 2026 · Working product name: Book discovery app.
+Version 1.6 planning baseline · September 18, 2026 · Working product name: Book discovery app.
 
 Status: product specification for staged development; implementation is in progress and recorded separately. User requirements from the conversation take precedence. This PRD defines product behavior; [Implementation Decisions](IMPLEMENTATION-DECISIONS.md) defines the researched engineering baseline; [Development Plan](IMPLEMENTATION-PLAN.md) defines delivery; [Acceptance Plan](ACCEPTANCE-PLAN.md) defines verification. Earlier research remains rationale, not an alternative product direction.
 
@@ -438,3 +438,41 @@ Overall book ownership remains independent of this table: a work with an ebook k
 **Cancellation is scoped.** Withdrawing one list reason leaves other active reasons intact. Before submission, unused work can release its reservations. After submission may have occurred, preserve the external association and source files; cancellation is neither evidence that the torrent is absent nor permission to start it again. Deleting library files or managing tracker seeding is outside the ordinary request-cancellation action.
 
 The implementation handoff for these contracts is the plan's [next development slices](IMPLEMENTATION-PLAN.md#13-next-development-slices-from-the-current-checkpoint); their failure cases extend existing acceptance scenarios in [acquisition closure and repair](ACCEPTANCE-PLAN.md#10-acquisition-closure-and-repair-assertions).
+
+## 18. Unattended operation and exception review
+
+This section makes the automation promised by FR-22, FR-25, FR-28–FR-30 and FR-33 explicit. A successful automatic list acquisition must reach confirmed library availability without an administrator approving every book. Manual review is an exception path and an optional acquisition mode, not a permanent dependency hidden behind an Automatic toggle.
+
+### Authority and activation
+
+An administrator enables an import route for a particular downloader mapping, destination library, supported media/layout and publication policy after its probes and compatibility checks pass. This is standing permission for the worker to execute qualifying acquisitions; it does not give requesting members filesystem administration rights. Each acquisition retains its original requester, active reasons, policy revision and destination. Worker execution and any administrator review are recorded as separate actors.
+
+A member may activate automation only for a list they control, using a destination they are currently permitted to request. Before dispatch and publication, recheck the requester, at least one surviving authorized reason, destination access, current integration capabilities and relevant suppressions. An administrator claiming an exception does not substitute their broader library access for the requester's access. A revoked or withdrawn request holds unpublished work; its existing transfer and published children retain their history.
+
+The automatic-list activation preview shows current entries versus future additions, requested media, profile, series scope, destination, import behavior and finite resource limits. A user can choose review-before-download instead. Installation restrictions remain binding in either mode. A clean supported path must not ask users to edit internal IDs, map routine files manually or repeatedly approve unchanged folder templates.
+
+### Automatic continuation versus review
+
+| Decision point | Continue automatically when | Hold the affected work when |
+|---|---|---|
+| Resolve a list title | Identity is supported by validated provider/identifier evidence with no unresolved conflict | Title-only or contradictory evidence could select another work/version |
+| Select a release | Work/media/version eligibility passes; ranking is deterministic; coverage and resource use are within policy | Required facts are unknown, a pack expands outside permitted scope, or no release is eligible |
+| Inspect completed files | Association and completion are verified; actual files map unambiguously to supported complete book/version groups | Narrator/edition conflicts, incomplete tracks, uncertain pack children or unsupported containers remain |
+| Freeze the import | Current route, permission, naming, collision and filesystem checks pass | Destination changed, a competing import conflicts, or the configured publication mode cannot succeed |
+| Publish and confirm | Current authority still holds; source-preserving publication and ABS confirmation succeed | Authority changes, publication is uncertain, or the expected backend item boundaries cannot be confirmed |
+
+An unavailable eligible release remains wanted with bounded scheduled retries. A provider outage has backoff and a visible retry time. Neither should repeatedly generate review tasks. Identity uncertainty needs a specific decision and must not be hidden by retrying the same input indefinitely.
+
+Resolved pack children can continue while ambiguous siblings wait. Review identifies exactly which work, version, grouping or destination decision is needed, displays the evidence, and previews its effect. Resolving one child resumes that child's existing workflow without fetching the pack again. File-to-version mappings do not fabricate missing recording metadata.
+
+### Administrator exception queue
+
+Activity exposes a restricted import-review queue to authorized administrators. Members see a safe progress message for their own requests. Claiming a review grants only the operational evidence needed to resolve that import; it does not reveal another user's private lists, account tokens or unrelated source searches.
+
+Persist reviewer assignment, assignment revision, original request linkage, decisions and audit history. Repeated claim commands are idempotent; concurrent claims cannot both win. Reassignment invalidates the previous review authority and unstarted plans. It must not interrupt a reserved, publishing or already published child; reconcile or finish those entries before any transfer of responsibility. Every publication still checks the original requester's current authority.
+
+The normal book page continues to show ownership and alternative versions independently of review status. A held audiobook does not remove an existing ebook's green check. A reviewed plan is not proof of ownership until the intended ABS item is confirmed.
+
+### Completion criterion
+
+The S07 beta must demonstrate an authorized external-list addition reaching an ABS-confirmed item with **zero per-title approval steps** for a supported, unambiguous acquisition. In the same run, introduce an ambiguous pack child and show that only that child needs review. Repeat the observations and restart the worker: no second transfer, no repeated completed import and no lost review decision. S09 repeats this journey on the supported release deployment and after restore.

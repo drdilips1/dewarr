@@ -181,3 +181,19 @@ These refine existing scenarios for [PRD acquisition closure](PRD.md#17-closing-
 | AT-13, AT-22, AT-24 | A member's import can reach authorized administrator review. Withdrawing one reason preserves others; post-submission withdrawal does not delete source files, abandon uncertain identity evidence or imply permission to resubmit | S05; list reasons S07 |
 
 Inspect durable lineage and external call counts as well as UI states. Closing a request and retiring a torrent identity are different assertions; a test that only checks `progress = 100%` cannot satisfy either.
+
+## 11. Unattended acquisition and review assertions
+
+These assertions complete the [automation contract](PRD.md#18-unattended-operation-and-exception-review) under existing AT IDs. They are required behavior, not passing evidence.
+
+| Scenario | Required assertion | Gate |
+|---|---|---|
+| AT-13, AT-19, AT-27 | Administrator review preserves the original requester and authorized destination; a member sees only their own progress; claiming a review exposes no private list/token or unrelated artifact | S05 |
+| AT-24, AT-27, AT-30 | Concurrent review claims produce one active assignment; repeated command keys create no second inspection; reassignment invalidates prior unstarted authority and cannot race a reserved/published child | S05 |
+| AT-13, AT-17, AT-27, AT-30 | Revocation or withdrawal after planning but before publication holds unpublished work; a reviewer cannot substitute their own broader permissions; existing files and transfer evidence are preserved | S04 baseline, S05 handoff |
+| AT-14, AT-19, AT-24 | A clean supported acquisition uses the automatic route without per-title approval; an ambiguous sibling alone waits; resolving it continues the same transfer/import lineage | S05 baseline, S06 packs |
+| AT-20–AT-22, AT-30 | After a valid future-only baseline, one Hardcover or Goodreads addition reaches ABS confirmation with zero per-title approvals; repeated observations and restarts add no extra transfer/import | S07 |
+| AT-12, AT-22, AT-26 | Backlog, pack, concurrency and storage limits are finite and server-enforced; unknown size/coverage is not zero; quota failures back off without creating an endless stream of review tasks | S06–S07; S09 capacity qualification |
+| AT-25, AT-29–AT-30 | The same unattended journey works on the shipped deployment and resumes correctly after restore reconciliation; historical list entries do not launch an unintended backlog | S09 |
+
+Measure approval steps and inspect the resulting ABS items, persisted reasons, source hashes and external submission counts. A list entry merely appearing in Wanted or a completed torrent waiting indefinitely for routine manual import does not pass the S07 defining journey.

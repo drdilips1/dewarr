@@ -1,6 +1,6 @@
 # End-to-end development plan
 
-Planning baseline v1.5 · September 18, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
+Planning baseline v1.6 · September 18, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
 
 This plan implements [the PRD](PRD.md) using [the researched decisions](IMPLEMENTATION-DECISIONS.md). [Acceptance Plan](ACCEPTANCE-PLAN.md) specifies the evidence required at each gate. A stage is complete only when its exit gate passes; this document does not report completed engineering or tested compatibility.
 
@@ -616,3 +616,34 @@ Expose a derived public status and valid next action through the API; the fronte
 5. Update the implementation status and existing package records; do not mark an entire stage complete because one slice passed.
 
 Estimate each slice after splitting it into reviewable changes with a named owner. Calendar forecasts must include external certification access and the remaining foundation gates. UI or adapter work can proceed against stable contracts while certification is pending, but its dependent acquisition capability stays gated.
+
+## 14. Executing the complete automation path
+
+These subdivisions implement the [unattended-operation contract](PRD.md#18-unattended-operation-and-exception-review) inside existing work packages. They do not add a new stage, change the 61-package count or mark current work complete. They are ordered to make the manual path and the eventual automatic path share the same authority, matching, publication and recovery services.
+
+| Order / parent packages | Development unit and owner | Required demonstration |
+|---|---|---|
+| 1 · S01-02, S05-05–S05-06 | Backend + frontend: persist original requester separately from reviewer; restricted review queue, claim/reassignment receipts and safe member status | Member-owned completed files reach an administrator; another administrator cannot act on a stale assignment; private list/account data remain private |
+| 2 · S04-02–S04-03, S05-05 | Importer/backend: carry original request and assignment lineage through inspection, frozen plans, reservations and the final publication guard | Grant revocation, withdrawal, wrong destination or exact-version mismatch blocks unpublished work even after review; ordinary administrator imports still work |
+| 3 · S02-01–S02-02, S04-01, S05-04 | Catalog/importer: qualify deterministic source-to-catalog and actual-file matching; preserve conflicting and unknown evidence | A clean single book and clean pack child resolve without manual mapping; wrong-author, alternate-narrator and incomplete-file cases enter review |
+| 4 · S04-02–S04-06, S05-05 | Importer/worker: persist administrator-approved automatic routes and reuse the same planner/publisher for qualifying jobs | A supported manual acquisition continues from completion to ABS confirmation without per-file approvals; ambiguous siblings remain independently held |
+| 5 · S06-01–S06-06 | Sources/domain + frontend: complete independent adapters, eligibility, ordered ranking, bounded packs and shared-file reuse | Candidate explanation matches the persisted choice; an eligible complete pack wins according to policy; wrong identity never wins on seed count |
+| 6 · S07-01–S07-06 | Lists/domain + frontend: ship observation first, then activation preview, reasons, capacity controls and scheduled acquisition | Future-only baseline performs no historical downloads; a later entry automatically reaches the already qualified acquisition/import path once |
+| 7 · S08–S09 | Frontend + QA/platform: complete curation, exception UX and deployment/recovery qualification | Browse → follow → automatic acquisition → Open in ABS works with defaults; failures show specific recovery actions; restore does not replay downloads |
+
+### Implementation contracts
+
+- **One planner and publisher:** review and automation call the same typed planning and publication services. Their difference is the recorded authorization and matching evidence, not duplicate filesystem code.
+- **Frozen decisions, current authority:** persist the selected release, request constraints and import destinations, but recheck permission before side effects. A settings revision cannot retroactively grant access or silently redirect an existing job.
+- **Durable exception state:** a held child stores its reason, evidence revision and allowable resolution. Resolving it creates an idempotent continuation of the original workflow. Refreshing the page or reobserving a list cannot dismiss the hold.
+- **Server-enforced activation:** automatic dispatch/import requires certified adapter capabilities, valid route probes, finite backlog/pack/transfer limits and capacity checks. Previewing policy is read-only. Applying it is an explicit versioned command.
+- **Bounded work:** limit active transfers per downloader, source-search concurrency, backfill batch size, pack expansion and disk requirements. Publish finite tested defaults before S07 activation; provider Retry-After/quota behavior takes precedence over polling preferences. Unknown size or coverage follows the profile's review rule rather than being interpreted as zero.
+- **Reconciliation owns recovery:** observation workers repair missed events; the queue is not the only record of work. Replaying a job never bypasses reservations, submission ambiguity, source preservation or backend confirmation.
+
+### Staffing, estimation and release accounting
+
+Responsibility labels are roles, not required headcount. A single developer can deliver each unit sequentially. With additional developers, catalog/UI, source adapters and list observation can advance independently after their contracts stabilize; integration acceptance still follows the stage dependency graph. Keep domain migrations and acquisition invariants under one designated technical owner during each development batch.
+
+For each unit record separate estimates for implementation, browser/domain verification, external-service certification and contingency for unresolved integration facts. Establish a date forecast only after estimating the actual remaining code and identifying who supplies certification access. Do not derive a delivery date by multiplying 61 packages by an arbitrary sprint length. Reforecast at manual alpha, automated-list beta and the production release candidate.
+
+Release review must answer four questions: can the user complete the promised journey; do its relevant failure cases recover correctly; was it demonstrated on the claimed deployment/integrations; and are any P0/P1 findings still open? A happy-path demonstration, a large test count or a complete settings page alone cannot accept a stage.

@@ -1,6 +1,6 @@
 # Product and development handoff
 
-September 18, 2026 · v1.5 planning guide, not a claim of implemented functionality.
+September 18, 2026 · v1.6 planning guide, not a claim of implemented functionality.
 
 Build a self-hosted book discovery, curation and acquisition app above Audiobookshelf. The experience should feel familiar to a Seerr user: browse attractive shelves, open one book page, see what is already owned, inspect available versions and sources, and request missing media. The app also owns organizing its newly downloaded files so that Audiobookshelf can serve them correctly.
 
@@ -9,6 +9,8 @@ This guide is the short entry point. The complete specification is in [PRD](PRD.
 For issue-tracker import, use the [61-package backlog export](DEVELOPMENT-BACKLOG.csv). The plan's [execution batches](IMPLEMENTATION-PLAN.md#12-development-backlog-and-execution-batches) sequence the remaining development from the existing code through manual alpha, automation beta, production v1 and separate extensions.
 
 For the current implementation, start with [the next eight development slices](IMPLEMENTATION-PLAN.md#13-next-development-slices-from-the-current-checkpoint). First close requests using confirmed library evidence and provide recovery for existing attempts; then complete and qualify the manual path before enabling multi-source selection and external-list automation. The [acquisition closure contract](PRD.md#17-closing-the-acquisition-loop) keeps request satisfaction separate from transfer deduplication and makes partial-pack behavior explicit.
+
+The v1.6 baseline defines [unattended operation and exception review](PRD.md#18-unattended-operation-and-exception-review): a clean, authorized list acquisition reaches ABS without per-title approvals; ambiguous children receive scoped review. The [execution sequence](IMPLEMENTATION-PLAN.md#14-executing-the-complete-automation-path) assigns this work to existing packages, and the [acceptance assertions](ACCEPTANCE-PLAN.md#11-unattended-acquisition-and-review-assertions) prove authority, restart recovery and the actual list-to-library result.
 
 ## 1. Product boundary
 
