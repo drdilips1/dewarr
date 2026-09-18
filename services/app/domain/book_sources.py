@@ -14,6 +14,7 @@ from app.adapters.prowlarr import ProwlarrSearch
 from app.config import get_settings
 from app.db.models import Operation, SourceConnection, SourceResult, User, Work
 from app.db.session import session_factory
+from app.domain import source_queries
 from app.domain.operations import transaction_lock
 from app.domain.prowlarr_network import prowlarr_call
 from app.domain.release_profiles import PreferenceOverrides
@@ -73,6 +74,7 @@ async def start(db, user, work_id, body, key):
     query = (body.q if body.q is not None else work.title[:300]).strip()
     if not query:
         raise HTTPException(422, "Enter a source-search query")
+    query_plan = await source_queries.plan(db, user, work, query, profile.preferences.search_series)
     connections = {
         s.key: s
         for s in await db.scalars(
@@ -90,6 +92,14 @@ async def start(db, user, work_id, body, key):
         for key, row in connections.items()
         if key in {"mam", "prowlarr"}
     }
+    if "mam" in sources:
+        sources["mam"].update(query_key="book", query=query)
+        for term in query_plan["queries"][1:]:
+            sources["mam:" + term["key"]] = {
+                **sources["mam"],
+                "query_key": term["key"],
+                "query": term["query"],
+            }
     operation = Operation(
         owner_id=user.id,
         kind="sources.search",
@@ -98,6 +108,7 @@ async def start(db, user, work_id, body, key):
             "command": command,
             "work": identity(work),
             "query": query,
+            "query_plan": query_plan,
             "medium": body.medium,
             "offset": body.offset,
             "profile": profile.model_dump(mode="json"),
@@ -113,7 +124,7 @@ async def start(db, user, work_id, body, key):
     db.add(operation)
     await db.flush()
     payload = deepcopy(operation.payload)
-    for source in sources:
+    for source in sorted(connections.keys() & {"mam", "prowlarr"}):
         job = await enqueue(db, "sources.search", operation_id=str(operation.id), source=source)
         payload["workers"][source] = {"job_id": job, "attempts": 0}
         if operation.job_id is None:
@@ -134,7 +145,17 @@ async def checked(db, identifier, user_id=None):
     if not user or not user.active:
         raise HTTPException(401, "This search account is no longer active")
     work = await accessible_work(db, user, UUID(operation.payload["work"]["id"]))
-    return operation, identity(work) != operation.payload["work"]
+    changed = identity(work) != operation.payload["work"]
+    if "query_plan" in operation.payload:
+        current = await source_queries.plan(
+            db,
+            user,
+            work,
+            operation.payload["query"],
+            operation.payload["profile"]["preferences"].get("search_series", True),
+        )
+        changed = changed or not source_queries.same_scope(current, operation.payload["query_plan"])
+    return operation, changed
 
 
 def refresh_status(operation, payload):
@@ -177,7 +198,23 @@ async def update_unit(identifier, source, token, unit, changes, hits=None, gener
                 }.values()
             )
             changes = {**changes, "count": len(hits)}
+            existing = {
+                (
+                    r.release_snapshot["source"],
+                    r.release_snapshot.get("indexer_id"),
+                    r.release_snapshot["source_id"],
+                ): r
+                for r in await db.scalars(
+                    select(SourceResult).where(SourceResult.operation_id == operation.id)
+                )
+            }
+            query_key = payload["sources"].get(unit, {}).get("query_key", "book")
             for release, reference in hits:
+                key = (release.source, release.indexer_id, release.source_id)
+                if key in existing:
+                    row = existing[key]
+                    row.query_keys = sorted(set(row.query_keys) | {query_key})
+                    continue
                 db.add(
                     SourceResult(
                         owner_id=operation.owner_id,
@@ -187,6 +224,7 @@ async def update_unit(identifier, source, token, unit, changes, hits=None, gener
                         expires_at=datetime.fromisoformat(payload["expires_at"]),
                         encrypted_reference=encrypt_secrets({"link": reference}),
                         release_snapshot=release.model_dump(mode="json"),
+                        query_keys=[query_key],
                     )
                 )
         payload["sources"][unit] = {**payload["sources"].get(unit, {}), **changes}
@@ -263,37 +301,56 @@ async def run(identifier, source):
             raise HTTPException(409, "Search expired. Start a new search.")
         generation = payload["sources"][source]["generation"]
         if source == "mam":
-            await update_unit(
-                identifier, source, token, source, {"state": "running", "message": "Searching MAM"}
-            )
-            page, generation = await source_call(
-                owner_id,
-                "search",
-                MAMSearch(
-                    q=payload["query"],
-                    medium=payload["medium"],
-                    language_ids=[],
-                    offset=payload["offset"],
-                    limit=50,
-                ),
-                with_generation=True,
-                expected_generation=generation,
-            )
-            await update_unit(
-                identifier,
-                source,
-                token,
-                source,
-                {
-                    "state": "completed",
-                    "message": "Results received",
-                    "count": len(page.items),
-                    "has_more": page.has_more,
-                    "observed_at": datetime.now(UTC).isoformat(),
-                },
-                [(release, None) for release in page.items],
-                generation,
-            )
+            for unit, state in payload["sources"].items():
+                if not (unit == source or unit.startswith(source + ":")) or state["state"] in {
+                    "completed",
+                    "failed",
+                }:
+                    continue
+                try:
+                    if not await update_unit(
+                        identifier,
+                        source,
+                        token,
+                        unit,
+                        {"state": "running", "message": "Searching MAM"},
+                    ):
+                        return
+                    page, generation = await source_call(
+                        owner_id,
+                        "search",
+                        MAMSearch(
+                            q=state.get("query", payload["query"]),
+                            medium=payload["medium"],
+                            language_ids=[],
+                            offset=payload["offset"],
+                            limit=50,
+                        ),
+                        with_generation=True,
+                        expected_generation=generation,
+                    )
+                    if not await update_unit(
+                        identifier,
+                        source,
+                        token,
+                        unit,
+                        {
+                            "state": "completed",
+                            "message": "Results received",
+                            "has_more": page.has_more,
+                            "observed_at": datetime.now(UTC).isoformat(),
+                        },
+                        [(release, None) for release in page.items],
+                        generation,
+                    ):
+                        return
+                except AdapterError as error:
+                    if error.kind == FailureKind.RATE_LIMIT:
+                        raise
+                    if not await update_unit(
+                        identifier, source, token, unit, {"state": "failed", "message": str(error)}
+                    ):
+                        return
         else:
             if payload["sources"][source]["state"] != "completed":
                 indexers, generation = await prowlarr_call(
@@ -315,16 +372,23 @@ async def run(identifier, source):
                         return
                     if changed:
                         raise HTTPException(409, "Catalog identity changed. Start a new search.")
+                    queries = current.get("query_plan", {}).get("queries") or [
+                        {"key": "book", "query": current["query"]}
+                    ]
                     for indexer in eligible[:MAX_INDEXERS]:
-                        current["sources"][f"prowlarr:{indexer.id}"] = {
-                            "state": "queued",
-                            "name": indexer.name,
-                            "generation": generation,
-                            "indexer_id": indexer.id,
-                            "paging": indexer.supports_pagination,
-                            "count": 0,
-                            "message": "Waiting to search",
-                        }
+                        for term in queries:
+                            suffix = "" if term["key"] == "book" else ":" + term["key"]
+                            current["sources"][f"prowlarr:{indexer.id}{suffix}"] = {
+                                "state": "queued",
+                                "name": indexer.name,
+                                "generation": generation,
+                                "indexer_id": indexer.id,
+                                "paging": indexer.supports_pagination,
+                                "count": 0,
+                                "message": "Waiting to search",
+                                "query_key": term["key"],
+                                "query": term["query"],
+                            }
                     current["sources"][source].update(
                         state="completed",
                         message="Indexer discovery complete"
@@ -344,18 +408,19 @@ async def run(identifier, source):
                         raise AdapterError(
                             FailureKind.UNSUPPORTED, "This indexer does not support further pages"
                         )
-                    await update_unit(
+                    if not await update_unit(
                         identifier,
                         source,
                         token,
                         unit,
                         {"state": "running", "message": "Searching this indexer"},
-                    )
+                    ):
+                        return
                     batch, generation = await prowlarr_call(
                         owner_id,
                         "search",
                         ProwlarrSearch(
-                            q=payload["query"],
+                            q=state.get("query", payload["query"]),
                             medium=payload["medium"],
                             indexer_id=state["indexer_id"],
                             offset=payload["offset"],

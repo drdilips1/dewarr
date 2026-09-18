@@ -338,13 +338,20 @@ async def test_changed_policy_does_not_hide_a_held_previous_generation_transfer(
     f = policy_fixture
     await add(client, f)
     saved = await activate(client, f, await preview(client, f, include_work_ids=[f["work"]]))
-    await tick(database, saved)
+    # Stop before dispatch deliberately. An unrestricted queue drain can cross a
+    # cron minute and legitimately submit before this test changes the policy.
+    await tick(database, saved, worker=False)
+    async with database() as db:
+        book = await db.scalar(select(ListAcquisitionBook))
+        search_id = UUID(book.progress["audio"]["search_id"])
+    await book_sources.run(search_id, "mam")
     await tick(database, saved, worker=False, force_books=True)
     async with database() as db:
         auto = await db.scalar(select(Operation).where(Operation.kind == automatic_selection.KIND))
     await automatic_selection.run(auto.id)
     async with database() as db:
         attempt = await db.scalar(select(DownloadAttempt))
+        assert attempt and not attempt.external_may_exist and attempt.state == "queued"
     profile = (
         await client.post(
             "/api/acquisition/profiles", json={"name": "Changed list choice", "preferences": {}}

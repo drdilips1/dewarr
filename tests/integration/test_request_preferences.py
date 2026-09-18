@@ -431,3 +431,46 @@ async def test_saved_request_policy_blocks_lossy_migration_downgrade(
     result = await migrate("downgrade", "0031_acquisition_defaults")
     assert result.returncode != 0
     assert "request preferences require a pre-upgrade backup" in result.stderr
+
+
+async def test_list_series_search_override_reaches_request_bound_source_queries(
+    client, database, policy_fixture
+):
+    from app.db.models import WorkMetadataSource
+
+    f = policy_fixture
+    async with database() as db, db.begin():
+        metadata = await db.scalar(
+            select(WorkMetadataSource).where(WorkMetadataSource.work_id == UUID(f["work"]))
+        )
+        metadata.snapshot = {
+            **metadata.snapshot,
+            "series": [
+                {"external_id": "series-search", "name": "Harbor Cycle", "compilation": False}
+            ],
+        }
+    await defaults(client, {"search_series": False})
+    await add(client, f)
+    await activate(
+        client,
+        f,
+        await preview(client, f, mode="manual", preference_overrides={"search_series": True}),
+    )
+    item = await request(client, f)
+    assert item["release_policy"]["origins"]["search_series"] == "List override"
+    searched = await client.post(
+        f"/api/catalog/works/{f['work']}/source-searches",
+        json={"request_id": item["id"]},
+        headers={"Idempotency-Key": str(uuid4())},
+    )
+    assert searched.status_code == 202, searched.text
+    assert len(searched.json()["query_plan"]["queries"]) == 2
+    title_only = await request(client, f, overrides={"search_series": False})
+    searched = await client.post(
+        f"/api/catalog/works/{f['work']}/source-searches",
+        json={"request_id": title_only["id"]},
+        headers={"Idempotency-Key": str(uuid4())},
+    )
+    assert searched.status_code == 202, searched.text
+    assert len(searched.json()["query_plan"]["queries"]) == 1
+    assert searched.json()["profile"]["origins"]["search_series"] == "Request override"

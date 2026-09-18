@@ -8447,6 +8447,16 @@
             "type": "string",
             "title": "Query"
           },
+          "query_plan": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SearchQueryPlan"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "medium": {
             "type": "string",
             "title": "Medium"
@@ -13658,6 +13668,10 @@
             ],
             "title": "Audio Library Id"
           },
+          "search_series": {
+            "type": "boolean",
+            "title": "Search Series"
+          },
           "ebook_formats": {
             "items": {
               "type": "string"
@@ -14452,6 +14466,13 @@
           "current_connection": {
             "type": "boolean",
             "title": "Current Connection"
+          },
+          "query_keys": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Query Keys"
           }
         },
         "type": "object",
@@ -14717,6 +14738,11 @@
               }
             ],
             "title": "Audio Library Id"
+          },
+          "search_series": {
+            "type": "boolean",
+            "title": "Search Series",
+            "default": true
           },
           "ebook_formats": {
             "items": {
@@ -15747,6 +15773,107 @@
         ],
         "title": "SearchPage"
       },
+      "SearchQueryEvidence": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "provider": {
+            "type": "string",
+            "title": "Provider"
+          },
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          },
+          "record_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Record Id"
+          },
+          "member_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Member Id"
+          },
+          "observed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Observed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "provider",
+          "external_id",
+          "record_id",
+          "observed_at"
+        ],
+        "title": "SearchQueryEvidence"
+      },
+      "SearchQueryPlan": {
+        "properties": {
+          "queries": {
+            "items": {
+              "$ref": "#/components/schemas/SearchQueryView"
+            },
+            "type": "array",
+            "title": "Queries"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "queries",
+          "warnings"
+        ],
+        "title": "SearchQueryPlan"
+      },
+      "SearchQueryView": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "query": {
+            "type": "string",
+            "title": "Query"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/SearchQueryEvidence"
+            },
+            "type": "array",
+            "title": "Evidence"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "kind",
+          "query",
+          "evidence"
+        ],
+        "title": "SearchQueryView"
+      },
       "SearchSourceView": {
         "properties": {
           "key": {
@@ -15786,6 +15913,17 @@
               }
             ],
             "title": "Observed At"
+          },
+          "query": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Query"
           }
         },
         "type": "object",

@@ -207,6 +207,7 @@ class SourceResult(Identity, Base):
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
     encrypted_reference: Mapped[str] = mapped_column(Text)
     release_snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    query_keys: Mapped[list[str]] = mapped_column(JSONB, default=list, server_default="[]")
 
 
 class SourceArtifact(Identity, Base):

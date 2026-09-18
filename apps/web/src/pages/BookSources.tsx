@@ -23,6 +23,7 @@ export default function BookSources({
   const [params] = useSearchParams();
   const [q, setQ] = useState(work.title.slice(0, 300));
   const [medium, setMedium] = useState("all");
+  const [seriesSearch, setSeriesSearch] = useState("inherit");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const initial = useRef(false);
   const key = useRef(crypto.randomUUID());
@@ -83,6 +84,10 @@ export default function BookSources({
             profile_id: chosen?.id,
             profile_generation: chosen?.generation,
             profile_effective_revision: chosen?.effective_revision,
+            preference_overrides:
+              seriesSearch === "inherit"
+                ? undefined
+                : { search_series: seriesSearch === "include" },
           },
         }),
       ),
@@ -234,6 +239,20 @@ export default function BookSources({
         >
           Refresh source results
         </button>
+        <details>
+          <summary>Search options</summary>
+          <label>
+            Series search
+            <select
+              value={seriesSearch}
+              onChange={(event) => setSeriesSearch(event.target.value)}
+            >
+              <option value="inherit">Use inherited search preferences</option>
+              <option value="include">Title and known series names</option>
+              <option value="exclude">Entered query only</option>
+            </select>
+          </label>
+        </details>
       </form>
       {chosen && canAcquire && (
         <ReleaseProfiles
@@ -245,6 +264,7 @@ export default function BookSources({
       )}
       {data && (
         <Results
+          key={data.id}
           data={data}
           inspecting={inspect.isPending}
           canAcquire={canAcquire}
@@ -290,6 +310,13 @@ function Results({
   canAcquire: boolean;
   onInspect: (id: string) => void;
 }) {
+  const [pageIndex, setPageIndex] = useState(0);
+  const resultsHeading = useRef<HTMLParagraphElement>(null);
+  const page = Math.min(
+    pageIndex,
+    Math.max(0, Math.ceil(data.items.length / 50) - 1),
+  );
+  const offset = page * 50;
   return (
     <>
       <p role="status">{data.message}</p>
@@ -300,24 +327,63 @@ function Results({
       </p>
       {data.stale_identity && (
         <p className="notice error">
-          The catalog identity changed. Refresh the search before inspecting a
-          result.
+          The catalog identity or series evidence changed. Refresh the search
+          before inspecting a result.
         </p>
       )}
-      <ul aria-label="Source search progress">
-        {data.sources.map((source) => (
-          <li key={source.key}>
-            <strong>{source.name}</strong> · {source.state} · {source.count}{" "}
-            results
-            <p className="muted">
-              {source.message}
-              {source.observed_at
-                ? ` · ${new Date(source.observed_at).toLocaleString()}`
-                : ""}
+      {data.query_plan && (
+        <details>
+          <summary>Search queries ({data.query_plan.queries.length})</summary>
+          <p className="muted">
+            Series names broaden discovery. They do not confirm pack contents or
+            authorize additional downloads.
+          </p>
+          {data.query_plan.queries.map((query) => (
+            <div key={query.key}>
+              <p>
+                {query.kind === "series" ? "Series" : "Entered query"}:{" "}
+                {query.query}
+              </p>
+              {query.evidence.map((evidence, index) => (
+                <p className="muted" key={index}>
+                  {evidence.provider} · {evidence.external_id} · observed{" "}
+                  {new Date(evidence.observed_at).toLocaleString()}
+                </p>
+              ))}
+            </div>
+          ))}
+          {data.query_plan.warnings.map((message) => (
+            <p key={message} className="notice">
+              {message}
             </p>
-          </li>
-        ))}
-      </ul>
+          ))}
+        </details>
+      )}
+      <details>
+        <summary>
+          Source progress ·{" "}
+          {data.sources.filter((source) => source.state === "completed").length}
+          /{data.sources.length} complete
+          {data.sources.some((source) => source.state === "failed")
+            ? " · Some queries failed"
+            : ""}
+        </summary>
+        <ul aria-label="Source search progress">
+          {data.sources.map((source) => (
+            <li key={source.key}>
+              <strong>{source.name}</strong> · {source.state} · {source.count}{" "}
+              results
+              <p className="muted">
+                {source.message}
+                {source.query ? ` · “${source.query}”` : ""}
+                {source.observed_at
+                  ? ` · ${new Date(source.observed_at).toLocaleString()}`
+                  : ""}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </details>
       {!data.sources.length && (
         <p className="notice">
           Connect MAM or Prowlarr to search for releases.
@@ -329,7 +395,13 @@ function Results({
         fetched page, not every release on the trackers. Source claims require
         file inspection; no automatic download starts here.
       </p>
-      {data.items.map((item) => (
+      <p tabIndex={-1} ref={resultsHeading}>
+        {data.items.length} distinct releases
+        {data.items.length > 0
+          ? ` · showing ${offset + 1}–${Math.min(offset + 50, data.items.length)}`
+          : ""}
+      </p>
+      {data.items.slice(offset, offset + 50).map((item) => (
         <article
           className="panel editor source-release"
           key={item.id}
@@ -342,6 +414,20 @@ function Results({
                 : item.release.indexer_name}
             </p>
             <h3>{item.release.title}</h3>
+            {!!item.query_keys?.length && data.query_plan && (
+              <p className="muted">
+                Found by:{" "}
+                {(item.query_keys || [])
+                  .map(
+                    (key) =>
+                      data.query_plan?.queries.find(
+                        (query) => query.key === key,
+                      )?.query,
+                  )
+                  .filter(Boolean)
+                  .join(" · ")}
+              </p>
+            )}
             <p>
               {(item.release.authors || []).join(", ") || "Author not supplied"}
             </p>
@@ -419,6 +505,30 @@ function Results({
           )}
         </article>
       ))}
+      {data.items.length > 50 && (
+        <nav className="button-row" aria-label="Ranked release pages">
+          <button
+            disabled={page === 0 || inspecting}
+            onClick={() => {
+              setPageIndex(page - 1);
+              resultsHeading.current?.focus();
+              resultsHeading.current?.scrollIntoView({ block: "start" });
+            }}
+          >
+            Previous releases
+          </button>
+          <button
+            disabled={offset + 50 >= data.items.length || inspecting}
+            onClick={() => {
+              setPageIndex(page + 1);
+              resultsHeading.current?.focus();
+              resultsHeading.current?.scrollIntoView({ block: "start" });
+            }}
+          >
+            Next releases
+          </button>
+        </nav>
+      )}
     </>
   );
 }

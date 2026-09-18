@@ -11,6 +11,7 @@ export const preferenceLabels: Partial<Record<keyof Preferences, string>> = {
   blocked_formats: "Blocked formats",
   maximum_bytes: "Maximum transfer size",
   preferred_narrators: "Preferred narrators",
+  search_series: "Search known series names",
 };
 const formats = [
   "epub",
@@ -141,6 +142,24 @@ export default function PreferenceFields({
         includeMedia={includeMedia}
       />
       {order("criteria")}
+      <details>
+        <summary>Series search</summary>
+        <label className="check-label">
+          <input
+            type="checkbox"
+            checked={effective.search_series ?? true}
+            onChange={(event) =>
+              onChange({ ...overrides, search_series: event.target.checked })
+            }
+          />
+          Search known series names alongside the title
+        </label>
+        {origin("search_series")}
+        <p className="muted">
+          Searches up to three names from accessible catalog evidence. Finding a
+          series release does not establish which books it contains.
+        </p>
+      </details>
       <details>
         <summary>Narrator preferences</summary>
         <NarratorNamesField
@@ -273,9 +292,13 @@ export function EffectivePreferences({
             <dd>
               {Array.isArray(preferences[key])
                 ? (preferences[key] as string[]).join(" → ") || "None"
-                : preferences[key] == null
-                  ? "No profile limit"
-                  : `${preferences[key]} bytes`}
+                : typeof preferences[key] === "boolean"
+                  ? preferences[key]
+                    ? "Yes"
+                    : "No"
+                  : preferences[key] == null
+                    ? "No profile limit"
+                    : `${preferences[key]} bytes`}
               <small> · {origins[key] || "Saved profile"}</small>
             </dd>
           </div>

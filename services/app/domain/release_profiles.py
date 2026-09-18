@@ -35,6 +35,7 @@ FORMATS = {
 
 class ReleasePreferences(ScopePreferences):
     model_config = ConfigDict(extra="forbid")
+    search_series: bool = True
     ebook_formats: list[str] = Field(
         default=["epub", "pdf", "azw3", "mobi", "azw", "cbz", "cbr"], min_length=1, max_length=20
     )

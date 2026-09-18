@@ -3119,6 +3119,73 @@ test("series catalog preserves uncertainty and curates selected books", async ({
   await expect(
     page.getByRole("heading", { name: "Hardcover List Arrival", exact: true }),
   ).toBeVisible();
+  await page.goto("/");
+  await page.getByRole("link", { name: /My protected catalog title/ }).click();
+  await page
+    .getByRole("link", { name: "Search download sources", exact: true })
+    .click();
+  const sources = page.getByRole("region", { name: "Book download sources" });
+  await expect(sources.getByRole("status")).toContainText(
+    "Source search completed",
+    { timeout: 30_000 },
+  );
+  await sources.getByText("Search queries (2)", { exact: true }).click();
+  await expect(
+    sources.getByText("Series: The Journey Series", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    sources.getByText(/Found by:.*The Journey Series/),
+  ).toBeVisible();
+  await expect(sources.getByRole("article")).toHaveCount(1);
+  await page.reload();
+  await sources.getByText("Search queries (2)", { exact: true }).click();
+  await expect(
+    sources.getByText("Series: The Journey Series", { exact: true }),
+  ).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("series-search-mobile.png"),
+    fullPage: true,
+  });
+  await sources
+    .getByRole("textbox", { name: "Release search query", exact: true })
+    .fill("Many source matches");
+  await sources
+    .getByRole("button", { name: "Refresh source results", exact: true })
+    .click();
+  await expect(
+    sources.getByText("51 distinct releases · showing 1–50", { exact: true }),
+  ).toBeVisible({ timeout: 30_000 });
+  await expect(sources.getByRole("article")).toHaveCount(50);
+  await sources
+    .getByRole("button", { name: "Next releases", exact: true })
+    .click();
+  await expect(sources.getByRole("article")).toHaveCount(1);
+  await expect(
+    sources.getByText("51 distinct releases · showing 51–51", { exact: true }),
+  ).toBeFocused();
+  await sources
+    .getByRole("button", { name: "Previous releases", exact: true })
+    .click();
+  await expect(sources.getByRole("article")).toHaveCount(50);
+  await sources.getByText("Search options", { exact: true }).click();
+  await sources
+    .getByRole("combobox", { name: "Series search", exact: true })
+    .selectOption("exclude");
+  await sources
+    .getByRole("button", { name: "Refresh source results", exact: true })
+    .click();
+  await expect(
+    sources.getByText("Search queries (1)", { exact: true }),
+  ).toBeVisible();
+  await expect(sources.getByRole("status")).toContainText(
+    "Source search completed",
+    { timeout: 30_000 },
+  );
   expect(errors).toEqual([]);
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });

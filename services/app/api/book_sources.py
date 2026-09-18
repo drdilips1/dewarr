@@ -37,6 +37,28 @@ class SearchSourceView(BaseModel):
     message: str
     has_more: bool = False
     observed_at: datetime | None = None
+    query: str | None = None
+
+
+class SearchQueryEvidence(BaseModel):
+    kind: str
+    provider: str
+    external_id: str
+    record_id: UUID
+    member_id: str | None = None
+    observed_at: datetime
+
+
+class SearchQueryView(BaseModel):
+    key: str
+    kind: str
+    query: str
+    evidence: list[SearchQueryEvidence]
+
+
+class SearchQueryPlan(BaseModel):
+    queries: list[SearchQueryView]
+    warnings: list[str]
 
 
 class RankedReleaseView(BaseModel):
@@ -45,6 +67,7 @@ class RankedReleaseView(BaseModel):
     assessment: ReleaseAssessment
     expires_at: datetime
     current_connection: bool
+    query_keys: list[str] = Field(default_factory=list)
 
 
 class BookSearchView(BaseModel):
@@ -52,6 +75,7 @@ class BookSearchView(BaseModel):
     work_id: UUID
     request_id: UUID | None = None
     query: str
+    query_plan: SearchQueryPlan | None = None
     medium: str
     offset: int
     status: str
@@ -113,6 +137,7 @@ async def view(db, user, operation_id):
                 release=release,
                 assessment=assess_release(release, payload["work"], preferences, payload["medium"]),
                 expires_at=row.expires_at,
+                query_keys=row.query_keys if not changed else [],
                 current_connection=bool(
                     not changed
                     and connection
@@ -128,13 +153,17 @@ async def view(db, user, operation_id):
         work_id=payload["work"]["id"],
         request_id=payload.get("command", {}).get("request_id"),
         query=payload["query"],
+        query_plan=payload.get("query_plan") if not changed else None,
         medium=payload["medium"],
         offset=payload["offset"],
         status=operation.status,
         message=operation.message,
         stale_identity=changed,
         profile=profile,
-        sources=[SearchSourceView(key=k, **v) for k, v in payload["sources"].items()],
+        sources=[
+            SearchSourceView(key=k, **{**v, **({"query": None} if changed else {})})
+            for k, v in payload["sources"].items()
+        ],
         items=ranked,
         expires_at=payload["expires_at"],
     )

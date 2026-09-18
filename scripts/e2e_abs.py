@@ -154,6 +154,13 @@ async def mam_fixture(path: str, request: Request):
             if query["tor"].get("text") == "No source matches"
             else search_response()
         )
+        if query["tor"].get("text") == "Many source matches":
+            body = search_response(
+                data=[
+                    release_row(id=700 + i, title=f"Paged fixture release {i:02}")
+                    for i in range(50)
+                ]
+            )
         if query["tor"].get("id") == 502 or query["tor"].get("text") == "The Next Harbor":
             body = search_response(
                 data=[

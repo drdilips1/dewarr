@@ -2700,6 +2700,7 @@ export interface components {
       request_id?: string | null;
       /** Query */
       query: string;
+      query_plan?: components["schemas"]["SearchQueryPlan"] | null;
       /** Medium */
       medium: string;
       /** Offset */
@@ -4613,6 +4614,8 @@ export interface components {
       ebook_library_id?: string | null;
       /** Audio Library Id */
       audio_library_id?: string | null;
+      /** Search Series */
+      search_series?: boolean;
       /** Ebook Formats */
       ebook_formats?: string[];
       /** Audio Formats */
@@ -4893,6 +4896,8 @@ export interface components {
       expires_at: string;
       /** Current Connection */
       current_connection: boolean;
+      /** Query Keys */
+      query_keys?: string[];
     };
     /** ReasonView */
     ReasonView: {
@@ -4975,6 +4980,11 @@ export interface components {
       ebook_library_id?: string | null;
       /** Audio Library Id */
       audio_library_id?: string | null;
+      /**
+       * Search Series
+       * @default true
+       */
+      search_series: boolean;
       /**
        * Ebook Formats
        * @default [
@@ -5321,6 +5331,45 @@ export interface components {
       /** Warning */
       warning?: string | null;
     };
+    /** SearchQueryEvidence */
+    SearchQueryEvidence: {
+      /** Kind */
+      kind: string;
+      /** Provider */
+      provider: string;
+      /** External Id */
+      external_id: string;
+      /**
+       * Record Id
+       * Format: uuid
+       */
+      record_id: string;
+      /** Member Id */
+      member_id?: string | null;
+      /**
+       * Observed At
+       * Format: date-time
+       */
+      observed_at: string;
+    };
+    /** SearchQueryPlan */
+    SearchQueryPlan: {
+      /** Queries */
+      queries: components["schemas"]["SearchQueryView"][];
+      /** Warnings */
+      warnings: string[];
+    };
+    /** SearchQueryView */
+    SearchQueryView: {
+      /** Key */
+      key: string;
+      /** Kind */
+      kind: string;
+      /** Query */
+      query: string;
+      /** Evidence */
+      evidence: components["schemas"]["SearchQueryEvidence"][];
+    };
     /** SearchSourceView */
     SearchSourceView: {
       /** Key */
@@ -5343,6 +5392,8 @@ export interface components {
       has_more: boolean;
       /** Observed At */
       observed_at?: string | null;
+      /** Query */
+      query?: string | null;
     };
     /** SelectionInput */
     SelectionInput: {

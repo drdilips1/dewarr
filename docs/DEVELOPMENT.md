@@ -2,7 +2,7 @@
 
 This is an early development build. The full [PRD](../PRD.md) remains the target; [Implementation Status](IMPLEMENTATION-STATUS.md) records actual coverage. Do not connect production acquisition automation until the relevant import and recovery gates pass.
 
-Current request contract: back up the database and apply migrations through `0034_series_requests` before restarting API and worker together. [Request restrictions](ACQUISITION-FOUNDATION.md#request-download-restrictions) preserve independent format and whole-transfer size limits across shared acquisitions. Populated new restrictions block lossy downgrade. Default dispatch remains disabled; this migration does not activate list automation.
+Current request contract: back up the database and apply migrations through `0035_source_queries` before restarting API and worker together. [Request restrictions](ACQUISITION-FOUNDATION.md#request-download-restrictions) preserve independent format and whole-transfer size limits across shared acquisitions. Populated new restrictions block lossy downgrade. Default dispatch remains disabled; this migration does not activate list automation.
 
 ## Native development
 
@@ -148,3 +148,5 @@ Migration `0032_request_release_policy` records effective release preferences on
 List policies and manual request forms expose sparse release overrides. Request-bound source searches retain those layers through selection; polling is scoped to the request. See [Download preferences](DOWNLOAD-PREFERENCES.md) for precedence, stale-preview behavior and the remaining media/language/scope inheritance work. This migration does not enable dispatch or change existing files.
 
 [Reviewed series requests](SERIES-REQUESTS.md) add the `series.requests` task and independent series reasons. Apply `0034_series_requests` before restarting API and worker together. Populated series history requires backup-based rollback. Saving a series request creates ordinary wanted requests; it does not dispatch a pack or expand future membership.
+
+[Series source search](SERIES-SOURCE-SEARCH.md) requires `0035_source_queries`. API and worker must be restarted together after backing up and migrating. Existing searches retain their original query plans; new searches can include bounded known series names under the inherited search preference. Automatic pack selection is not enabled by this change.
