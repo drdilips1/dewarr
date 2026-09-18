@@ -8476,6 +8476,16 @@
               }
             ]
           },
+          "catalog_preparation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CatalogPreparationView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "medium": {
             "type": "string",
             "title": "Medium"
@@ -8651,6 +8661,68 @@
           "reserved_bytes"
         ],
         "title": "CapacityView"
+      },
+      "CatalogPreparationItem": {
+        "properties": {
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "external_id",
+          "name",
+          "state",
+          "message"
+        ],
+        "title": "CatalogPreparationItem"
+      },
+      "CatalogPreparationView": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/CatalogPreparationItem"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "state",
+          "message",
+          "items",
+          "warnings"
+        ],
+        "title": "CatalogPreparationView"
       },
       "ChangePage": {
         "properties": {

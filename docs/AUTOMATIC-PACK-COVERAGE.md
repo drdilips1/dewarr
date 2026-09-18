@@ -10,9 +10,11 @@ A qualifying pack precedes single-book candidates. Among eligible packs, the exi
 
 The normal single-book ceilings remain 1 GiB for ebooks and 10 GiB for audio. A catalog-qualified pack has a 50 GiB whole-transfer ceiling and at most 20 additional identified published books. Profile and independent request limits may lower the size ceiling. Padding and extras count toward transfer bytes. The existing five-manifest inspection budget, slots, automatic-transfer budget and destination storage checks still apply. Administrative customization of all pack-specific limits remains part of the full policy workstream.
 
+[Automatic series preparation](SERIES-PREPARATION.md) now loads missing or stale supported catalogs before source queries begin. Unavailable metadata leaves ordinary source search available with a warning.
+
 ## Coverage evidence
 
-Each new automatic-selection operation freezes a bounded context from the requester's own observed series catalogs, using only currently accessible canonical works. It examines at most three series and 200 members per series. A series beyond that member limit is not used. Unknown publication, future publication, compilations, partial records, canonical aliases and ambiguous/unknown positions cannot contribute automatic child coverage. The target itself must qualify.
+Each new automatic-selection operation freezes a bounded context from the requester's own series catalogs fetched within 24 hours, using only currently accessible canonical works. It examines at most three series and 200 members per series. A series beyond that member limit is not used. Unknown publication, future publication, compilations, partial records, canonical aliases and ambiguous/unknown positions cannot contribute automatic child coverage. The target itself must qualify.
 
 A matching catalog series name plus corroborating source author makes a collection eligible for torrent inspection. Neither that name nor tracker `coverage` claims prove the contents. The actual manifest must map each primary file to exactly one catalog book using an exact normalized book-title filename or parent folder, optionally preceded by an explicit position. Substring matches, numbers without titles, unknown siblings and ambiguous alternatives fail closed.
 

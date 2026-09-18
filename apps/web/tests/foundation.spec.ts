@@ -3083,10 +3083,33 @@ test("series catalog preserves uncertainty and curates selected books", async ({
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await page.getByRole("link", { name: /My protected catalog title/ }).click();
   await page
-    .getByRole("link", { name: "The Journey Series", exact: true })
+    .getByRole("link", { name: "Search download sources", exact: true })
     .click();
+  const preparedSources = page.getByRole("region", {
+    name: "Book download sources",
+  });
+  await expect(preparedSources.getByRole("status")).toContainText(
+    "Source search completed",
+    { timeout: 45_000 },
+  );
+  await preparedSources
+    .getByText("Series metadata · completed", { exact: true })
+    .click();
+  await expect(preparedSources).toContainText("Verified 4 series entries");
+  await page.reload();
+  await preparedSources
+    .getByText("Series metadata · completed", { exact: true })
+    .click();
+  await expect(preparedSources).toContainText("Verified 4 series entries");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.screenshot({
+    path: testInfo.outputPath("series-preparation-mobile.png"),
+    fullPage: true,
+  });
+  await page.goto("/");
+  await page.getByRole("link", { name: /My protected catalog title/ }).click();
   await page
-    .getByRole("button", { name: "Load series from Hardcover" })
+    .getByRole("link", { name: "The Journey Series", exact: true })
     .click();
   await expect(
     page.getByRole("heading", { name: "The Journey Series", exact: true }),

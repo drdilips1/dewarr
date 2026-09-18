@@ -14,7 +14,7 @@ from app.adapters.prowlarr import ProwlarrSearch
 from app.config import get_settings
 from app.db.models import Operation, SourceConnection, SourceResult, User, Work
 from app.db.session import session_factory
-from app.domain import source_queries
+from app.domain import series_preparation, source_queries
 from app.domain.operations import transaction_lock
 from app.domain.prowlarr_network import prowlarr_call
 from app.domain.release_profiles import PreferenceOverrides
@@ -121,16 +121,56 @@ async def start(db, user, work_id, body, key):
         else "Connect MAM or Prowlarr to search releases",
         status="queued" if sources else "completed",
     )
+    preparation = (
+        await series_preparation.plan(db, user, work, profile.preferences.prefer_series_packs)
+        if sources
+        else None
+    )
+    if preparation:
+        operation.payload = {**operation.payload, "catalog_preparation": preparation}
     db.add(operation)
     await db.flush()
+    if preparation and preparation["state"] in series_preparation.ACTIVE:
+        operation.message = preparation["message"]
+        operation.job_id = await enqueue(db, series_preparation.KIND, search_id=str(operation.id))
+    else:
+        await enqueue_sources(db, operation)
+    return operation
+
+
+async def enqueue_sources(db, operation):
     payload = deepcopy(operation.payload)
-    for source in sorted(connections.keys() & {"mam", "prowlarr"}):
+    for source in sorted(payload["sources"].keys() & {"mam", "prowlarr"}):
         job = await enqueue(db, "sources.search", operation_id=str(operation.id), source=source)
         payload["workers"][source] = {"job_id": job, "attempts": 0}
         if operation.job_id is None:
             operation.job_id = job
     operation.payload = payload
-    return operation
+
+
+async def launch(db, operation, user, work):
+    """Freeze the final query evidence only after prerequisite catalog observation."""
+    payload = deepcopy(operation.payload)
+    profile = payload["profile"]["preferences"]
+    plan = await source_queries.plan(
+        db, user, work, payload["query"], profile.get("search_series", True)
+    )
+    payload["query_plan"] = plan
+    roots = {key: value for key, value in payload["sources"].items() if key in {"mam", "prowlarr"}}
+    payload["sources"] = roots
+    if "mam" in roots:
+        roots["mam"].update(query_key="book", query=payload["query"])
+        for term in plan["queries"][1:]:
+            roots["mam:" + term["key"]] = {
+                **roots["mam"],
+                "query_key": term["key"],
+                "query": term["query"],
+            }
+    payload["expires_at"] = (datetime.now(UTC) + timedelta(minutes=25)).isoformat()
+    operation.payload = payload
+    operation.job_id = None
+    await enqueue_sources(db, operation)
+    refresh_status(operation, operation.payload)
 
 
 async def checked(db, identifier, user_id=None):
@@ -146,7 +186,10 @@ async def checked(db, identifier, user_id=None):
         raise HTTPException(401, "This search account is no longer active")
     work = await accessible_work(db, user, UUID(operation.payload["work"]["id"]))
     changed = identity(work) != operation.payload["work"]
-    if "query_plan" in operation.payload:
+    preparation = operation.payload.get("catalog_preparation")
+    if "query_plan" in operation.payload and not (
+        preparation and preparation["state"] in series_preparation.ACTIVE
+    ):
         current = await source_queries.plan(
             db,
             user,
@@ -159,6 +202,11 @@ async def checked(db, identifier, user_id=None):
 
 
 def refresh_status(operation, payload):
+    preparation = payload.get("catalog_preparation")
+    if preparation and preparation["state"] in series_preparation.ACTIVE:
+        operation.status, operation.message = "running", preparation["message"]
+        operation.payload = payload
+        return
     states = [s["state"] for s in payload["sources"].values()]
     operation.status = (
         "completed" if all(s in {"completed", "failed"} for s in states) else "running"

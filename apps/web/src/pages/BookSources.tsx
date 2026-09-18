@@ -331,6 +331,24 @@ function Results({
           before inspecting a result.
         </p>
       )}
+      {data.catalog_preparation && (
+        <details>
+          <summary>Series metadata · {data.catalog_preparation.state}</summary>
+          <p>{data.catalog_preparation.message}</p>
+          <ul>
+            {data.catalog_preparation.items.map((item) => (
+              <li key={item.external_id}>
+                {item.name}: {item.message}
+              </li>
+            ))}
+          </ul>
+          {data.catalog_preparation.warnings.map((warning) => (
+            <p className="notice" key={warning}>
+              {warning}
+            </p>
+          ))}
+        </details>
+      )}
       {data.query_plan && (
         <details>
           <summary>Search queries ({data.query_plan.queries.length})</summary>

@@ -36,6 +36,8 @@ Latest request checkpoint: [request download restrictions](docs/ACQUISITION-FOUN
 
 Latest downloader checkpoint: [qBittorrent integration](docs/QBITTORRENT-INTEGRATION.md) includes encrypted administrator settings, read-only connection tests, path mappings and preview, plus submission acknowledgements, transfer/file observations and strict attempt association. Settings and adapter behavior have fixture/browser coverage. [Durable download attempts](docs/DOWNLOAD-ATTEMPTS.md) now add persisted submission, recovery, identity claims and Activity controls. Dispatch is disabled by default pending the remaining integration gates; repair and full source-to-library certification remain unfinished.
 
+Series preparation checkpoint: [Automatic metadata preparation](docs/SERIES-PREPARATION.md) loads missing or stale Hardcover series catalogs before source queries, shares active observations, exposes fallback reasons and excludes stale catalogs from automatic pack eligibility. Automatic multi-target grouping and pack reuse remain pending.
+
 Series checkpoint: [Series catalog and curation](docs/SERIES-CATALOG.md) adds durable Hardcover series observations, book-linked browsing, distinct ownership counts and selected additions to existing lists. [Reviewed series requests](docs/SERIES-REQUESTS.md) now add finite previews, frozen scope, independent request reasons, cancellation and durable receipts. Automatic series policy inheritance and pack fulfillment remain pending.
 
 Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md) for the product boundary, end-to-end journey, P0/P1 decisions, stage summary and release milestones.

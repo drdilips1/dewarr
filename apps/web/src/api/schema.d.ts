@@ -2705,6 +2705,8 @@ export interface components {
       /** Query */
       query: string;
       query_plan?: components["schemas"]["SearchQueryPlan"] | null;
+      catalog_preparation?:
+        components["schemas"]["CatalogPreparationView"] | null;
       /** Medium */
       medium: string;
       /** Offset */
@@ -2771,6 +2773,28 @@ export interface components {
       occupied_slots: number;
       /** Reserved Bytes */
       reserved_bytes: number;
+    };
+    /** CatalogPreparationItem */
+    CatalogPreparationItem: {
+      /** External Id */
+      external_id: string;
+      /** Name */
+      name: string;
+      /** State */
+      state: string;
+      /** Message */
+      message: string;
+    };
+    /** CatalogPreparationView */
+    CatalogPreparationView: {
+      /** State */
+      state: string;
+      /** Message */
+      message: string;
+      /** Items */
+      items: components["schemas"]["CatalogPreparationItem"][];
+      /** Warnings */
+      warnings: string[];
     };
     /** ChangePage */
     ChangePage: {

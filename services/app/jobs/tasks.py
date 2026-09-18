@@ -8,7 +8,12 @@ from app.config import get_settings
 from app.db.models import AuditEvent, Integration, Operation, User
 from app.db.session import session_factory
 from app.jobs.queue import tasks
-from app.jobs.retry import CatalogRetryStrategy, ShelfRetryStrategy, SourceSearchRetryStrategy
+from app.jobs.retry import (
+    CatalogRetryStrategy,
+    DependencyRetryStrategy,
+    ShelfRetryStrategy,
+    SourceSearchRetryStrategy,
+)
 
 
 @tasks.task(
@@ -334,3 +339,12 @@ async def request_series(operation_id: str) -> None:
     from app.domain.series_requests import run
 
     await run(UUID(operation_id))
+
+
+@tasks.task(
+    name="sources.prepare", queue="metadata", retry=DependencyRetryStrategy(max_attempts=3, wait=10)
+)
+async def prepare_search_catalog(search_id: str) -> None:
+    from app.domain.series_preparation import run
+
+    await run(UUID(search_id))

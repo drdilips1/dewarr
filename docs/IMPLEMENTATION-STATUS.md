@@ -4,6 +4,8 @@ Updated September 18, 2026. Objective remains **implement the full PRD end to en
 
 ## Current code
 
+- [Automatic series preparation](SERIES-PREPARATION.md) now loads missing or stale Hardcover catalogs before source queries, shares active observations and records bounded fallback reasons. Fresh catalog/manifest evidence supports the existing single-target automatic pack selector. Automatic multi-target grouping, reuse and broader series/version policies remain pending.
+
 - [Reviewed shared downloads](SHARED-DOWNLOADS.md) now connect up to 100 compatible selections owned by one requester to one physical transfer. Group dispatch is atomic; each child retains its reasons, requirements and fulfillment. Qualified children import independently, satisfied children are skipped, and ambiguous alternatives can be reviewed beside completed siblings. Automatic series/coverage selection, later/cross-owner reuse and omnibus handling remain pending.
 
 - [Series catalog and curation](SERIES-CATALOG.md) now provides durable account-scoped Hardcover series observations, book-linked navigation, uncertainty labels, grant-scoped distinct ownership counts and selected additions to editable lists. Catalog refresh has no acquisition side effect; the selected list's existing authorized policy applies to additions. Reviewed finite target sets and same-owner grouped transfers have separate checkpoints; inherited automatic series policy, coverage selection and full version/omnibus fulfillment remain pending gates.
@@ -336,3 +338,22 @@ Two browser journeys passed in 1.6 minutes: the setup/acquisition journey and li
 Backend lint/format, frontend format/build, reproducible OpenAPI/client generation, package build/module equality, documentation links and diff checks passed. No schema migration or new service is required. The local API/worker were restarted together on the final code; readiness and fresh heartbeat checks passed with dispatch disabled. Exact revision and local evidence are recorded in `.local/evidence/pack-coverage-checkpoint.json`.
 
 This is the pack-eligibility dependency of S06/S07, not full automatic series acquisition. Automatic missing-series catalog loading, multi-target automatic authorization/reservation, overlapping-list pack reuse, full series/destination inheritance, additional-version/omnibus coverage, native ABB, live integrations, discovery, production qualification and S10 remain part of the active full PRD.
+
+
+## Automatic series-preparation checkpoint · September 18, 2026
+
+Source searches now enqueue a durable metadata prerequisite before executing MAM/Prowlarr queries. Missing/stale Hardcover series catalogs share existing observations, including manual refreshes. Catalog publication uses the existing two-pass verification and provider budget. The source query plan freezes only after preparation, and source generations remain fixed. The inherited pack preference controls this behavior; no new configuration is needed.
+
+Preparation waits at most ten minutes and exposes failures, changed connections and excessive cooldowns before falling back to ordinary search. Identity/reference changes stop the command. Freshness is enforced separately: series catalogs older than 24 hours remain browsable but cannot establish automatic pack eligibility. Loading a catalog never authorizes its additional books. See [Series preparation](SERIES-PREPARATION.md).
+
+All **16 new integration tests passed in 5.18 seconds** after the final test-harness adjustment. They cover the real PostgreSQL queue/dependency/catalog/source path, replay, coalescing two searches with each other or a manual refresh, stale catalogs, opt-out, account changes, deadlines, identity/reference changes, failed/cancelled/long-cooldown dependencies, stopped jobs and frozen source generations. Earlier focused regressions passed 62 cases with one new harness failure; the latter was corrected to drain follow-on jobs explicitly.
+
+The setup and expanded series browser journeys passed: **2 tests in 2.1 minutes**. The series journey now starts from Book Sources without manually refreshing the series, observes the metadata receipt, reloads it, and uses the resulting catalog for curation and source searches. The mobile screenshot was reviewed. The complete browser suite was not run.
+
+The first full backend run was interrupted after 660 completed tests when the new finite worker test stopped making progress. Diagnostics showed completed catalog jobs, no blocked database transaction, idle sessions and continuing periodic deferral during shutdown. SIGINT exited the run. The test now isolates periodic tasks and uses polling without installing signal handlers, matching the existing finite shared-pack workflow tests. The interrupted result is retained in `.local/evidence/series-preparation-full-interrupted.log`; diagnostics are in `.local/evidence/series-preparation-stall.json`. This is test isolation, not a certified production worker-shutdown fix; S09 retains that obligation.
+
+The final full backend run passed **1,304 tests in 339.10 seconds**, with no failures or skips. This run includes the final isolated worker test. Its complete output is in `.local/evidence/series-preparation-full-final.log`.
+
+Frontend build/format, backend lint/format, reproducible OpenAPI/client generation, package build, equality of all eight changed packaged backend modules, documentation links and diff checks passed. No schema migration was required. Development API and worker restarted together with schema `0036_download_memberships`; readiness and a fresh heartbeat passed with dispatch disabled.
+
+This completes the bounded missing-catalog prerequisite for existing single-target pack acquisition. Automatic multi-target authorization/grouping/reuse, full series/destination inheritance, broader versions/omnibuses, native ABB, live integration qualification, discovery, production gates and S10 remain active. The full PRD is not complete.

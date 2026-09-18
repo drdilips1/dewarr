@@ -14,6 +14,7 @@ from app.api.metadata import adapter_http_error
 from app.api.prowlarr import resolve as resolve_prowlarr
 from app.api.source_artifacts import SourceArtifactView, artifact_view
 from app.db.models import AcquisitionIntent, Operation, SourceConnection, SourceResult
+from app.domain import series_preparation
 from app.domain.book_sources import SearchInput, accessible_work, checked, refresh_status, start
 from app.domain.operations import transaction_lock
 from app.domain.release_profiles import (
@@ -70,12 +71,27 @@ class RankedReleaseView(BaseModel):
     query_keys: list[str] = Field(default_factory=list)
 
 
+class CatalogPreparationItem(BaseModel):
+    external_id: str
+    name: str
+    state: str
+    message: str
+
+
+class CatalogPreparationView(BaseModel):
+    state: str
+    message: str
+    items: list[CatalogPreparationItem]
+    warnings: list[str]
+
+
 class BookSearchView(BaseModel):
     id: UUID
     work_id: UUID
     request_id: UUID | None = None
     query: str
     query_plan: SearchQueryPlan | None = None
+    catalog_preparation: CatalogPreparationView | None = None
     medium: str
     offset: int
     status: str
@@ -90,7 +106,9 @@ class BookSearchView(BaseModel):
 async def view(db, user, operation_id):
     await transaction_lock(db, f"source-search:{operation_id}")
     operation, changed = await checked(db, operation_id, user.id)
+    await series_preparation.repair(db, operation)
     payload = deepcopy(operation.payload)
+    preparation = payload.get("catalog_preparation")
     # Queue truth repairs exhausted workers; do not infer failure from slow polling.
     for source, worker in payload["workers"].items():
         status = await db.scalar(
@@ -153,7 +171,35 @@ async def view(db, user, operation_id):
         work_id=payload["work"]["id"],
         request_id=payload.get("command", {}).get("request_id"),
         query=payload["query"],
-        query_plan=payload.get("query_plan") if not changed else None,
+        query_plan=payload.get("query_plan")
+        if not changed and not (preparation and preparation["state"] in series_preparation.ACTIVE)
+        else None,
+        catalog_preparation=CatalogPreparationView(
+            state=preparation["state"],
+            message=preparation["message"],
+            warnings=preparation["warnings"],
+            items=[
+                CatalogPreparationItem(
+                    external_id=item["external_id"],
+                    name=item["name"],
+                    state=item.get(
+                        "state",
+                        "pending"
+                        if preparation["state"] in series_preparation.ACTIVE
+                        else "unavailable",
+                    ),
+                    message=item.get(
+                        "message",
+                        "Waiting to load series metadata"
+                        if preparation["state"] in series_preparation.ACTIVE
+                        else "Series metadata was not loaded",
+                    ),
+                )
+                for item in (preparation["dependencies"] or preparation["references"])
+            ],
+        )
+        if preparation and not changed
+        else None,
         medium=payload["medium"],
         offset=payload["offset"],
         status=operation.status,

@@ -17,6 +17,8 @@ async def recover_stalled_jobs() -> None:
             for task_name in (
                 "system.probe",
                 "sources.search",
+                "sources.prepare",
+                "catalog.series.refresh",
                 "acquisition.auto-select",
                 "lists.sync",
                 "lists.csv",

@@ -42,3 +42,14 @@ class ShelfRetryStrategy(RetryStrategy):
         if isinstance(exception, ShelfRetry):
             return RetryDecision(retry_in={"seconds": exception.retry_after})
         return super().get_retry_decision(exception=exception, job=job)
+
+
+class DependencyRetry(SourceSearchRetry):
+    """Wait for a durable prerequisite without consuming a network retry budget."""
+
+
+class DependencyRetryStrategy(SourceSearchRetryStrategy):
+    def get_retry_decision(self, *, exception, job):
+        if isinstance(exception, DependencyRetry):
+            return RetryDecision(retry_in={"seconds": exception.retry_after})
+        return super().get_retry_decision(exception=exception, job=job)

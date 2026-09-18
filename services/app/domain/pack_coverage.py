@@ -1,7 +1,7 @@
 """Catalog and torrent-manifest corroboration, never proof of owned book contents."""
 
 import re
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import PurePosixPath
 
 from sqlalchemy import select
@@ -11,6 +11,7 @@ from app.domain.release_profiles import normalized
 from app.domain.visibility import visible_work
 from app.domain.work_graph import canonical_map, family_ids
 
+CATALOG_FRESH_FOR = timedelta(hours=24)
 MAX_ADDITIONAL_BOOKS = 20
 MAX_PACK_BYTES = 50 * 1024**3
 MAX_CATALOG_MEMBERS = 200
@@ -27,7 +28,7 @@ async def catalog(db, user, work):
             select(CatalogSeries)
             .where(
                 CatalogSeries.owner_id == user.id,
-                CatalogSeries.fetched_at.is_not(None),
+                CatalogSeries.fetched_at >= datetime.now(UTC) - CATALOG_FRESH_FOR,
                 CatalogSeries.id.in_(
                     select(SeriesMembership.series_id).where(
                         SeriesMembership.present.is_(True),

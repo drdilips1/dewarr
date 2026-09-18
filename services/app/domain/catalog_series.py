@@ -24,7 +24,7 @@ from app.security import decrypt_secrets
 KIND = "catalog.series.refresh"
 
 
-async def start(db, user, external_id, key):
+async def start(db, user, external_id, key, *, reuse_active=False):
     identifier("hardcover", external_id)
     if get_settings().recovery_mode:
         raise HTTPException(409, "Series refresh is paused for recovery")
@@ -42,11 +42,13 @@ async def start(db, user, external_id, key):
         raise HTTPException(409, "Connect your Hardcover account in Metadata settings first")
     await transaction_lock(db, f"series-catalog:{user.id}:{external_id}")
     row = await db.scalar(
-        select(CatalogSeries).where(
+        select(CatalogSeries)
+        .where(
             CatalogSeries.owner_id == user.id,
             CatalogSeries.provider == "hardcover",
             CatalogSeries.external_id == external_id,
         )
+        .execution_options(populate_existing=True)
     )
     if not row:
         row = CatalogSeries(
@@ -61,6 +63,14 @@ async def start(db, user, external_id, key):
     if row.operation_id:
         previous = await db.get(Operation, row.operation_id)
         if previous and previous.status in {"queued", "running", "retrying"}:
+            if (
+                reuse_active
+                and previous.payload.get("account_generation") == account.generation
+                and previous.payload.get("endpoint") == get_settings().hardcover_url
+                and previous.created_at >= datetime.now(UTC) - timedelta(minutes=30)
+                and (await operation_status(db, previous))[0] != "interrupted"
+            ):
+                return previous
             previous.status, previous.message = "cancelled", "Superseded by a new series refresh"
     operation = Operation(
         owner_id=user.id,
@@ -174,7 +184,16 @@ async def run(operation_id):
             operation = ctx[0]
             failures = operation.payload.get("failures", 0) + 1
             retry = retry and failures < 5
-            operation.payload = {**operation.payload, "lease_until": None, "failures": failures}
+            operation.payload = {
+                **operation.payload,
+                "lease_until": None,
+                "failures": failures,
+                "retry_at": (
+                    datetime.now(UTC) + timedelta(seconds=max(error.retry_after or 60, 60))
+                ).isoformat()
+                if retry
+                else None,
+            }
             operation.status, operation.message = ("retrying" if retry else "failed"), str(error)
         if retry:
             raise CatalogRetry(error.retry_after) from None
