@@ -1606,3 +1606,113 @@ test("Goodreads shelf observation persists additions, omissions, exclusions and 
   });
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });
+
+test("CSV snapshots preview mapped columns, import selected shelves and retain receipts", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(90_000);
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.getByRole("link", { name: "Lists", exact: true }).click();
+  await page.getByLabel("Create a private list").fill("CSV curated shelf");
+  await page.getByRole("button", { name: "Create list", exact: true }).click();
+  await page.getByRole("link", { name: /CSV curated shelf/ }).click();
+  await page.getByRole("button", { name: "Import a CSV", exact: true }).click();
+  const panel = page.getByRole("region", { name: "CSV list import" });
+  const content =
+    "Name,Creator,Book Id,Bookshelves,Private Notes\r\nCSV Café,Fixture Author,901,favorites,private-browser-note\r\nCSV Other Book,Fixture Author,902,later,another-private-note\r\nCSV Café,Fixture Author,901,favorites,duplicate-private-note\r\n";
+  const file = {
+    name: "shelf.csv",
+    mimeType: "text/csv",
+    buffer: Buffer.concat([
+      Buffer.from([0xff, 0xfe]),
+      Buffer.from(content, "utf16le"),
+    ]),
+  };
+  await panel.getByLabel("CSV file", { exact: true }).setInputFiles(file);
+  await panel.getByRole("button", { name: "Preview CSV", exact: true }).click();
+  await expect(panel.getByRole("status")).toContainText(
+    "Choose the title column",
+  );
+  await panel.getByText("File format and columns", { exact: true }).click();
+  await panel
+    .getByRole("combobox", { name: "Title column", exact: true })
+    .selectOption("Name");
+  await panel
+    .getByRole("combobox", { name: "Author column", exact: true })
+    .selectOption("Creator");
+  await panel.getByRole("button", { name: "Preview CSV", exact: true }).click();
+  await expect(
+    panel.getByText(/2 unique rows · 1 duplicate rows combined/),
+  ).toBeVisible();
+  await panel.getByLabel("Filter CSV shelf").selectOption("favorites");
+  await panel
+    .getByRole("button", { name: "Select this shelf only", exact: true })
+    .click();
+  await expect(
+    panel.getByText("1 books selected across all shelves."),
+  ).toBeVisible();
+  await panel
+    .getByRole("button", { name: "Import 1 selected books", exact: true })
+    .click();
+  await expect(panel.getByRole("status")).toContainText(
+    "CSV imported: 1 added",
+    { timeout: 20_000 },
+  );
+  await expect(
+    page.getByRole("heading", { name: "CSV Café", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "CSV Other Book", exact: true }),
+  ).toHaveCount(0);
+  await expect(page.locator("body")).not.toContainText("private-browser-note");
+  await page.reload();
+  await page.getByRole("button", { name: "Import a CSV", exact: true }).click();
+  await panel
+    .getByText("Recent CSV previews and imports", { exact: true })
+    .click();
+  await panel
+    .getByRole("button", {
+      name: /CSV imported: 1 added, 0 already listed · completed/,
+    })
+    .click();
+  await expect(panel.getByRole("status")).toContainText(
+    "CSV imported: 1 added",
+  );
+  await panel.getByLabel("CSV file", { exact: true }).setInputFiles({
+    name: "repeat.csv",
+    mimeType: "text/csv",
+    buffer: Buffer.from("Book Id,Title,Author\n901,CSV Café,Fixture Author\n"),
+  });
+  await panel.getByRole("button", { name: "Preview CSV", exact: true }).click();
+  await expect(
+    panel.getByRole("link", { name: "Matched catalog book", exact: true }),
+  ).toBeVisible();
+  await panel
+    .getByRole("button", { name: "Import 1 selected books", exact: true })
+    .click();
+  await expect(panel.getByRole("status")).toContainText(
+    "CSV imported: 0 added, 1 already listed",
+    { timeout: 20_000 },
+  );
+  await expect(
+    page.getByRole("heading", { name: "CSV Café", exact: true }),
+  ).toHaveCount(1);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
+    )
+    .toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("csv-list-mobile.png"),
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+});

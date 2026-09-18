@@ -368,6 +368,74 @@ export interface paths {
     patch: operations["change_observation_api_lists__list_id__subscription_observations__observation_id__patch"];
     trace?: never;
   };
+  "/api/lists/{list_id}/csv/preview": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Preview */
+    post: operations["preview_api_lists__list_id__csv_preview_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/csv": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Recent */
+    get: operations["recent_api_lists__list_id__csv_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/csv/{import_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Detail */
+    get: operations["detail_api_lists__list_id__csv__import_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/csv/{import_id}/commit": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Commit */
+    post: operations["commit_api_lists__list_id__csv__import_id__commit_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/integrations": {
     parameters: {
       query?: never;
@@ -2125,6 +2193,73 @@ export interface components {
       username: string;
       /** Password */
       password: string;
+    };
+    /** CsvPreview */
+    CsvPreview: {
+      /** Id */
+      id: string | null;
+      /** Headers */
+      headers: string[];
+      /** Mapping */
+      mapping: {
+        [key: string]: string;
+      };
+      /** Records */
+      records: components["schemas"]["CsvRow"][];
+      /** Duplicates */
+      duplicates: number;
+      /** Shelves */
+      shelves: string[];
+      /**
+       * Needs Mapping
+       * @default false
+       */
+      needs_mapping: boolean;
+      /** Expires At */
+      expires_at?: string | null;
+      /**
+       * State
+       * @default preview
+       */
+      state: string;
+      /**
+       * Message
+       * @default Review these additions. This snapshot never removes books or starts downloads.
+       */
+      message: string;
+      /** Receipt */
+      receipt?: {
+        [key: string]: number;
+      } | null;
+      /** Selected Rows */
+      selected_rows?: number[] | null;
+    };
+    /** CsvRow */
+    CsvRow: {
+      /** Row Number */
+      row_number: number;
+      /** Title */
+      title: string;
+      /** Authors */
+      authors: string[];
+      /** Isbn */
+      isbn: string | null;
+      /** Isbn13 */
+      isbn13: string | null;
+      /** External Id */
+      external_id: string | null;
+      /** Shelves */
+      shelves: string[];
+      /** Work Id */
+      work_id?: string | null;
+      /** Issue */
+      issue?: string | null;
+      availability?: components["schemas"]["Availability"];
+    };
+    /** CsvSelection */
+    CsvSelection: {
+      /** Rows */
+      rows: number[];
     };
     /** DestinationChoice */
     "DestinationChoice-Input": {
@@ -5478,6 +5613,144 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  preview_api_lists__list_id__csv_preview_post: {
+    parameters: {
+      query?: {
+        mapping?: string | null;
+        encoding?: "auto" | "utf-8-sig" | "cp1252";
+        delimiter?: "," | ";" | "\t";
+      };
+      header?: never;
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "text/csv": string;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CsvPreview"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  recent_api_lists__list_id__csv_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CsvPreview"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  detail_api_lists__list_id__csv__import_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        list_id: string;
+        import_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CsvPreview"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  commit_api_lists__list_id__csv__import_id__commit_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        list_id: string;
+        import_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CsvSelection"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OperationView"];
+        };
       };
       /** @description Validation Error */
       422: {

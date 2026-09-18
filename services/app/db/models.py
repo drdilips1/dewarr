@@ -252,6 +252,29 @@ class ListEntry(Identity, Base):
     locally_added: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
 
 
+class ListCsvImport(Identity, Base):
+    __tablename__ = "list_csv_imports"
+    owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
+    list_id: Mapped[UUID] = mapped_column(
+        ForeignKey("book_lists.id", ondelete="CASCADE"), index=True
+    )
+    snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    selected_rows: Mapped[list[int] | None] = mapped_column(JSONB)
+    operation_id: Mapped[UUID | None] = mapped_column(ForeignKey("operations.id"))
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    committed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    receipt: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
+
+
+class ListCatalogBinding(Identity, Base):
+    __tablename__ = "list_catalog_bindings"
+    __table_args__ = (UniqueConstraint("owner_id", "identity_key"),)
+    owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
+    identity_key: Mapped[str] = mapped_column(String(90))
+    work_id: Mapped[UUID] = mapped_column(ForeignKey("works.id"), index=True)
+    assertion: Mapped[dict[str, Any]] = mapped_column(JSONB)
+
+
 class ListSubscription(Identity, Base):
     __tablename__ = "list_subscriptions"
     list_id: Mapped[UUID] = mapped_column(

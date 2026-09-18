@@ -6,7 +6,7 @@ A self-hosted ebook/audiobook discovery, curation and acquisition application ab
 
 ## Development handoff
 
-Latest list checkpoint: [Goodreads shelf subscriptions](docs/GOODREADS-SUBSCRIPTIONS.md) bring RSS additions into private local lists through scheduled workers, retain omitted books, remember exclusions and reuse corroborated catalog identities with existing library availability. CSV import, Hardcover lists, backfill/catch-up policy and automatic list acquisition remain pending.
+Latest list checkpoint: [Goodreads shelf subscriptions](docs/GOODREADS-SUBSCRIPTIONS.md) bring RSS additions into private local lists through scheduled workers, retain omitted books, remember exclusions and reuse corroborated catalog identities with existing library availability. [Reviewed CSV snapshots](docs/CSV-LIST-IMPORT.md) now add column mapping, shelf/subset selection, private identity dedupe and durable import receipts. Hardcover lists, backfill/catch-up policy and automatic list acquisition remain pending.
 
 Latest import checkpoint: [single-file imports](docs/SINGLE-FILE-IMPORTS.md) handle standalone downloads without scanning neighboring files, preserve existing directory receipts, and pass real ABS ebook/audio workflows. [Catalog matching](docs/IMPORT-MATCHING.md) resolves embedded edition identifiers against the local catalog, exposes conflicts for review and saves revalidated evidence without asserting file completeness or ownership.
 

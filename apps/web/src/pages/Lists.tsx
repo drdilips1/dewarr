@@ -1,9 +1,11 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, ArrowDown, ArrowUp, Lock, Users, X } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import { BookCard, Empty, Loading, Notice } from "../components";
+
+const ListCsv = lazy(() => import("./ListCsv"));
 
 const ListSubscription = lazy(() => import("./ListSubscription"));
 
@@ -99,6 +101,7 @@ function ListIndex({ canEdit }: { canEdit: boolean }) {
 function ListDetail({ id, canEdit }: { id: string; canEdit: boolean }) {
   const client = useQueryClient();
   const path = { list_id: id };
+  const [csvOpen, setCsvOpen] = useState(false);
   const list = useQuery({
     queryKey: ["list", id],
     queryFn: async () =>
@@ -185,6 +188,18 @@ function ListDetail({ id, canEdit }: { id: string; canEdit: boolean }) {
           <ListSubscription listId={id} />
         </Suspense>
       )}
+      {editable ? (
+        <>
+          <button onClick={() => setCsvOpen(!csvOpen)} aria-expanded={csvOpen}>
+            {csvOpen ? "Close CSV import" : "Import a CSV"}
+          </button>
+          {csvOpen ? (
+            <Suspense fallback={<Loading />}>
+              <ListCsv listId={id} />
+            </Suspense>
+          ) : null}
+        </>
+      ) : null}
       {list.data.items.length ? (
         <div className="book-grid">
           {list.data.items.map((work, index) => (

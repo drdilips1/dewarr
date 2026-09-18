@@ -26,6 +26,7 @@ from app.api import (
     inspection_matches,
     integrations,
     library,
+    list_csv,
     list_subscriptions,
     lists,
     metadata,
@@ -104,6 +105,7 @@ def create_app() -> FastAPI:
     app.include_router(catalog.router, prefix="/api")
     app.include_router(lists.router, prefix="/api")
     app.include_router(list_subscriptions.router, prefix="/api")
+    app.include_router(list_csv.router, prefix="/api")
     app.include_router(integrations.router, prefix="/api")
     app.include_router(library.router, prefix="/api")
     app.include_router(metadata.router, prefix="/api")

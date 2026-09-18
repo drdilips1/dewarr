@@ -114,3 +114,5 @@ Automatic imports can now enqueue `metadata.resolve-import` for a missing catalo
 ## Goodreads observation checkpoint
 
 Apply `0025_list_subscriptions` before restarting the API and worker. The `lists.schedule` job runs every minute to queue due subscriptions; the default observation interval is 30 minutes plus jitter. Both `lists.schedule` and `lists.sync` participate in stalled-job recovery. [Goodreads subscriptions](GOODREADS-SUBSCRIPTIONS.md) documents privacy, provenance, exclusions and remaining automation requirements. The browser harness uses a fixture-only Goodreads transport and rejects non-browser databases; the production worker retains HTTPS/public-DNS checks.
+
+[CSV snapshots](CSV-LIST-IMPORT.md) use migration `0026_list_csv` and the durable `lists.csv` worker. Apply the migration before starting API and worker at the same revision. Uploads use bounded raw CSV request bodies; only normalized mapped assertions are persisted. No extra parser service or multipart dependency is required.

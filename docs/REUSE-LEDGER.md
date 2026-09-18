@@ -30,3 +30,5 @@ The two MAM adapter reference notices are explicitly included under `app/notices
 The libtorrent wheel inspected on macOS arm64 does not include distribution license files, so libtorrent/Boost/OpenSSL notices are explicitly retained in both locations too. Notices were obtained from libtorrent v2.1.1 `COPYING`, Boost 1.88.0 `LICENSE_1_0.txt` and OpenSSL 3.6.3 `LICENSE.txt`. The observed native wheel links bundled OpenSSL 3.6.3. Linux runtime dependency/notices verification remains part of container certification.
 
 This ledger records actual reuse, not permission to copy every file in a referenced repository. Package licenses, fonts/images and metadata-provider usage conditions remain separate reviews.
+
+- CSV snapshots: original parser/orchestration/UI using Python standard-library `csv`; synthetic Goodreads-shaped export fixtures and explicit mapping. No Goodreads/third-party app implementation or private exports bundled. Interface reference: https://docs.python.org/3.13/library/csv.html.

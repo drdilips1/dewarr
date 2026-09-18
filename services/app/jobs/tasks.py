@@ -276,3 +276,10 @@ async def schedule_shelves(timestamp: int) -> None:
     from app.domain.list_subscriptions import schedule
 
     await schedule()
+
+
+@tasks.task(name="lists.csv", queue="lists", retry=RetryStrategy(max_attempts=3, wait=10))
+async def import_csv(operation_id: str) -> None:
+    from app.domain.list_csv import run
+
+    await run(UUID(operation_id))

@@ -18,6 +18,7 @@ async def recover_stalled_jobs() -> None:
                 "system.probe",
                 "sources.search",
                 "lists.sync",
+                "lists.csv",
                 "lists.schedule",
                 "library.sync",
                 "library.schedule",

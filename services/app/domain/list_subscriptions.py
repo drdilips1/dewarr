@@ -11,6 +11,7 @@ from app.adapters.goodreads import fetch_feed
 from app.config import get_settings
 from app.db.models import (
     BookList,
+    ListCatalogBinding,
     ListEntry,
     ListObservation,
     ListSubscription,
@@ -161,14 +162,38 @@ async def budget(db, *, block=0):
     return 0
 
 
-async def catalog_match(db, owner, record):
-    previous = await db.scalar(
-        select(ListObservation)
-        .join(ListSubscription)
-        .join(BookList)
-        .where(BookList.owner_id == owner.id, ListObservation.external_id == record["external_id"])
-        .order_by(ListObservation.created_at)
-        .limit(1)
+async def catalog_match(db, owner, record, *, previous=True, create=True):
+    binding = (
+        await db.scalar(
+            select(ListCatalogBinding).where(
+                ListCatalogBinding.owner_id == owner.id,
+                ListCatalogBinding.identity_key == f"goodreads:{record.get('external_id')}",
+            )
+        )
+        if previous and record.get("external_id")
+        else None
+    )
+    if (
+        binding
+        and normalized(binding.assertion["title"]) == normalized(record["title"])
+        and (binding.assertion["authors"] == record["authors"])
+    ):
+        work = await canonical_work(db, binding.work_id)
+        if await db.scalar(select(Work.id).where(Work.id == work.id, visible_work(owner))):
+            return work
+    previous = (
+        await db.scalar(
+            select(ListObservation)
+            .join(ListSubscription)
+            .join(BookList)
+            .where(
+                BookList.owner_id == owner.id, ListObservation.external_id == record["external_id"]
+            )
+            .order_by(ListObservation.created_at)
+            .limit(1)
+        )
+        if previous and record.get("external_id")
+        else None
     )
     if previous:
         work = await canonical_work(db, previous.work_id)
@@ -201,8 +226,34 @@ async def catalog_match(db, owner, record):
             ):
                 root = await canonical_work(db, work.id)
                 matches[root.id] = root
-        if len(matches) == 1 and len(candidates) < 101:
+        references = (
+            await db.scalars(
+                select(ListCatalogBinding)
+                .where(
+                    ListCatalogBinding.owner_id == owner.id,
+                    or_(
+                        *(
+                            ListCatalogBinding.assertion[key].astext.in_(values)
+                            for key in ("isbn", "isbn13")
+                        )
+                    ),
+                )
+                .limit(101)
+            )
+        ).all()
+        for reference in references:
+            assertion = reference.assertion
+            if normalized(assertion["title"]) == normalized(record["title"]) and (
+                {normalized(a) for a in assertion["authors"]}
+                & {normalized(a) for a in record["authors"]}
+            ):
+                root = await canonical_work(db, reference.work_id)
+                if await db.scalar(select(Work.id).where(Work.id == root.id, visible_work(owner))):
+                    matches[root.id] = root
+        if len(matches) == 1 and len(candidates) < 101 and len(references) < 101:
             return next(iter(matches.values()))
+    if not create:
+        return None
     work = Work(
         title=record["title"],
         authors=record["authors"],
