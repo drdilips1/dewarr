@@ -1,6 +1,6 @@
 # Product requirements: book discovery and acquisition
 
-Version 1.4 planning baseline · September 17, 2026 · Working product name: Book discovery app.
+Version 1.5 planning baseline · September 18, 2026 · Working product name: Book discovery app.
 
 Status: product specification for staged development; implementation is in progress and recorded separately. User requirements from the conversation take precedence. This PRD defines product behavior; [Implementation Decisions](IMPLEMENTATION-DECISIONS.md) defines the researched engineering baseline; [Development Plan](IMPLEMENTATION-PLAN.md) defines delivery; [Acceptance Plan](ACCEPTANCE-PLAN.md) defines verification. Earlier research remains rationale, not an alternative product direction.
 
@@ -412,3 +412,29 @@ Product completion is evaluated at three distinct boundaries:
 | Extended roadmap, S10 | Independently qualified additional backends, recommendation providers, clients, upgrades, reorganization and SSO | Permission to move unfinished v1 behavior into a later release |
 
 The [release-blocker policy](IMPLEMENTATION-PLAN.md#11-release-blockers-and-stage-review) defines how P0/P1 findings affect these boundaries. Defaults and architecture are sufficiently decided to proceed; integration capability checks and implementation evidence remain required. Actual compatibility restrictions must be visible in setup and the release notes, rather than appearing only in developer documentation.
+
+## 17. Closing the acquisition loop
+
+These are refinements of FR-14, FR-21–FR-23, FR-25, FR-30 and FR-35, not additional scope. They govern the transition from a completed download to a satisfied request, including series packs and repairs.
+
+| Product state | Meaning | Available next action |
+|---|---|---|
+| Wanted / searching | An authorized request is missing qualifying media | Search, change the unsubmitted request, or withdraw its reason |
+| Downloading | The app has verified its association with the transfer | Inspect progress; withdrawal stops future work where safe but never implies deleting the torrent |
+| Download outcome unknown | Submission may have occurred; the response or association is inconclusive | Reconcile the existing attempt; never present a generic retry that silently submits again |
+| Downloaded, needs review | Files are complete, but identity, collection grouping or import authority needs attention | Review the affected children; an authorized administrator can resolve a member's import without exposing source credentials |
+| Organizing / awaiting library | Files are being published or ABS has not yet confirmed them | Resume the import or reconcile ABS; do not repeat the download |
+| Available | An accessible ABS asset satisfies the specific request's medium/version requirements | Open in ABS; inspect other versions; retain acquisition history |
+| Partially available | Some targets or pack children are confirmed and others remain unresolved | Keep confirmed ownership and resume only missing or held targets |
+
+Overall book ownership remains independent of this table: a work with an ebook keeps its green check while an audiobook request is downloading or held. A torrent reaching 100%, an inspection finishing, a destination file existing or a scan request succeeding is not sufficient evidence of a newly available book.
+
+**Fulfillment and deduplication have separate lifetimes.** After accessible library evidence satisfies a target, close its active fulfillment reservation while retaining request reasons, selected release, import evidence and history. This must eventually permit ordinary catalog corrections without an obsolete acquisition blocking them forever. Retiring a reservation does not authorize adding the same torrent again, deleting it or releasing evidence that an uncertain transfer may exist. Shared-transfer identity remains tracked separately. Another request for a book in the same pack may reuse verified files through its own authorized import; it must not assume that the other user's library is accessible.
+
+**Partial packs close per target.** An audio pack cannot satisfy an ebook target. A successfully imported child closes only compatible requirements backed by confirmed coverage. Missing, ambiguous or wrong-version children remain wanted or held. A request already satisfied by another qualifying accessible asset may close without importing a duplicate, but Activity must explain that it was already available rather than claim this attempt imported it.
+
+**Repair preserves intent.** Updating a password or proxy must have a reviewed recovery path for existing work. Revalidate the connection, transfer identity, destination and current permissions; record the repair separately from the original selection. If the physical downloader or transfer cannot be identified confidently, leave it held. Credential repair must not silently change narrator, edition, source selection, import destinations or create a second submission. A naming change affects future plans; partially published plans retain their recorded paths.
+
+**Cancellation is scoped.** Withdrawing one list reason leaves other active reasons intact. Before submission, unused work can release its reservations. After submission may have occurred, preserve the external association and source files; cancellation is neither evidence that the torrent is absent nor permission to start it again. Deleting library files or managing tracker seeding is outside the ordinary request-cancellation action.
+
+The implementation handoff for these contracts is the plan's [next development slices](IMPLEMENTATION-PLAN.md#13-next-development-slices-from-the-current-checkpoint); their failure cases extend existing acceptance scenarios in [acquisition closure and repair](ACCEPTANCE-PLAN.md#10-acquisition-closure-and-repair-assertions).

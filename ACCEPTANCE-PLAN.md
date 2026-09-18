@@ -1,6 +1,6 @@
 # Acceptance, compatibility and release verification
 
-Planning baseline v1.4 · September 17, 2026.
+Planning baseline v1.5 · September 18, 2026.
 
 **Status: acceptance definitions; implementation evidence is tracked in [Implementation Status](docs/IMPLEMENTATION-STATUS.md).** Some foundation subsets have now been tested; no full scenario is yet certified complete. This document maps [PRD requirements](PRD.md) to the gates in [Development Plan](IMPLEMENTATION-PLAN.md). Research/source inspection is evidence for a design choice, not a passing runtime test.
 
@@ -164,3 +164,20 @@ Preserve the distinction between proposed behavior and implementation evidence w
 Apply the [release-blocker policy and stage review record](IMPLEMENTATION-PLAN.md#11-release-blockers-and-stage-review) when evaluating these scenarios. Every failure records the affected requirement, actual result, severity, reproduction evidence and owner. Mark missing credentials or unavailable test infrastructure as not run; do not convert them into passing evidence.
 
 Acceptance requires both the positive journey and its relevant failure assertions. For example, a successful list download does not close AT-22 if a truncated feed launches the backlog, and a correct folder tree does not close AT-19 if ABS combines different recordings into one item. A release restriction must be explicitly allowed by the PRD and enforced in the application; documenting a broken mandatory journey is not acceptance.
+
+## 10. Acquisition closure and repair assertions
+
+These refine existing scenarios for [PRD acquisition closure](PRD.md#17-closing-the-acquisition-loop). They add no new AT identifiers and are not claims of passing tests.
+
+| Scenario | Required assertion | Gate |
+|---|---|---|
+| AT-06, AT-12, AT-19 | A completed download or successful scan does not close a request. A confirmed accessible ebook establishes work ownership but leaves a Both request's audio target missing; the wrong narrator cannot satisfy an exact-recording target | S05 |
+| AT-13, AT-19, AT-30 | Confirmation followed by a crash before request reconciliation converges on one satisfied target and a retired fulfillment reservation; transfer identity/history persists and repeating the event never submits again | S05 |
+| AT-13, AT-19, AT-27 | A qualifying existing accessible asset can satisfy the request and skip duplicate import. An inaccessible asset cannot; neither outcome leaks another user's library or private request reason | S05 |
+| AT-14, AT-19, AT-24 | In a three-child pack, confirmed children remain available while one ambiguous child stays held. Resolving that child resumes its import without redownloading or republishing completed siblings | S04–S06 |
+| AT-13, AT-14, AT-27 | Two works requested from the same known pack share an authorized transfer or reuse verified files through separate import plans; identity conflicts neither launch duplicate transfers nor expose private holdings | S06 |
+| AT-08, AT-13, AT-24, AT-30 | Credential rotation has a reviewed repair path that observes the same associated transfer. Missing transfer, changed client identity, altered destination and uncertain prior add remain explicit; no blind add retry | S05 |
+| AT-02, AT-13 | Fulfilled historical acquisitions do not permanently block canonical correction; active or uncertain transfers retain their protected associations, immutable origin and audit history through any permitted correction | S01 foundation; S05 full lifecycle |
+| AT-13, AT-22, AT-24 | A member's import can reach authorized administrator review. Withdrawing one reason preserves others; post-submission withdrawal does not delete source files, abandon uncertain identity evidence or imply permission to resubmit | S05; list reasons S07 |
+
+Inspect durable lineage and external call counts as well as UI states. Closing a request and retiring a torrent identity are different assertions; a test that only checks `progress = 100%` cannot satisfy either.

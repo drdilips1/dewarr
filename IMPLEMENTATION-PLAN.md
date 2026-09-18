@@ -1,6 +1,6 @@
 # End-to-end development plan
 
-Planning baseline v1.4 · September 17, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
+Planning baseline v1.5 · September 18, 2026 · Implementation has started; see [current status and evidence](docs/IMPLEMENTATION-STATUS.md). No full stage gate is yet complete.
 
 This plan implements [the PRD](PRD.md) using [the researched decisions](IMPLEMENTATION-DECISIONS.md). [Acceptance Plan](ACCEPTANCE-PLAN.md) specifies the evidence required at each gate. A stage is complete only when its exit gate passes; this document does not report completed engineering or tested compatibility.
 
@@ -581,3 +581,38 @@ Forecast dates after estimating the split tickets and observing delivery through
 - Existing implementation status is distinct from planned scope and release acceptance.
 
 The next development action is to review and close the earliest incomplete dependency for batches A/B using the current implementation, then proceed through the manual acquisition slice. Do not restart the project scaffold or enable list-driven downloading merely because its settings screen exists.
+
+## 13. Next development slices from the current checkpoint
+
+This is the execution order within the existing 61 packages, not a second backlog or an assertion that earlier stages have passed. The September 18 checkpoint includes reviewed single-file and directory imports, synthetic durable downloader attempts and partial native ABS certification. It does not yet provide a fully qualified manual acquisition release. Review [actual evidence](docs/IMPLEMENTATION-STATUS.md) before each slice; preserve working components and close their missing contracts.
+
+| Order | Existing packages | Concrete implementation outcome | Exit evidence |
+|---|---|---|---|
+| 1. Close fulfillment correctly | S01-04, S03-04, S05-05–S05-06 | Link attempts, inspections, import children and confirmed assets; reconcile each target; retire satisfied reservations separately from transfer identity claims; show partial/available/held outcomes in Activity | Confirmed ebook, wrong narrator, inaccessible asset, already-owned skip, partial pack, repeated reconciliation and crash-after-confirmation cases pass; no false ownership or second add |
+| 2. Repair existing attempts | S01-04, S05-03, S05-05–S05-06 | Reviewed credential/configuration repair with immutable selection history; persistent unknown-outcome handling; authorized administrator import handoff for member requests | Credential rotation resumes observation of the same transfer; changed endpoint or destination requires reconciliation; revoked users cannot resume; uncertain submissions are never automatically resubmitted |
+| 3. Complete the manual path | S02-01–S02-04, S04-01, S04-05–S04-06, S05-04–S05-06 | Finish source-to-catalog/version resolution, straightforward profiles, provisional titles, per-child import and automatic continuation of unambiguous supported files | One UI journey from MAM selection through qBittorrent to ABS, without manual database changes; ambiguous files alone need review; single-file, multi-track and series fixtures retain source integrity |
+| 4. Qualify manual alpha | Remaining S00–S05 gates | Close outstanding foundation permissions/corrections, real client/source/proxy and deployment certification; record supported versions/layouts and recovery instructions | Required stage assertions and manual alpha demo pass; unavailable live access remains explicitly unverified and prevents a compatibility claim |
+| 5. Aggregate and choose | S06-01–S06-06 | ABB/Prowlarr adapters; incremental release aggregation; ordered source/format/availability profiles; bounded pack expansion; reuse verified pack files for additional authorized targets | Correct identity outranks seeds; native/Prowlarr duplicates preserve origin; one failed source does not block others; overlapping pack requests avoid a duplicate transfer |
+| 6. Observe lists, then automate | S07-01–S07-06 | First deliver inbound observations and policy preview; then authorize missing-media acquisition through the same request engine | Read-only list sync passes before activation; baseline, backfill, truncation, pause/resume, exclusions and overlapping reasons pass before automated-list beta |
+| 7. Finish the browsing product | S08-01–S08-05 | Attributed shelves, useful related titles, series navigation, community/local list curation, sharing and capability-gated write-back | Core tasks work with defaults on desktop/mobile/keyboard; unsupported upstream capabilities have useful truthful fallbacks |
+| 8. Release and extend | S09; then S10 | Packaging, migrations, restore reconciliation, complete security/performance/accessibility evidence and operator guides; extensions released independently | Full v1 requirement coverage and release rehearsal pass before v1; each extension gets its own affected regressions |
+
+### Slice 1 engineering handoff
+
+Keep logical request fulfillment, observed transfer state and serving-library availability separate. Persist enough lineage to answer which request was satisfied by which asset and which import produced it. An existing qualifying asset can satisfy a request without being attributed to the current import. Do not force these distinct facts into one `complete` flag.
+
+Reconciliation should run after relevant inventory/import changes and periodically repair missed events. Use short, idempotent transactions with the existing canonical-work lock order; do not acquire domain locks in reverse order from an importer transaction. Recheck actual asset presence, medium/version constraints and requester library grants before closing a target. Record the asset/evidence association durably so repeated events and restarts produce the same outcome.
+
+Retire only the satisfied fulfillment reservation. Retain the transfer ledger while external state may exist, including uncertain and still-seeding transfers. Future pack reuse requires fresh file/identity/permission validation and a new import plan where needed; an active identity claim must neither cause an unreviewed second add nor permanently prevent legitimate reuse. Shared request reasons retain independent satisfaction and privacy.
+
+Expose a derived public status and valid next action through the API; the frontend must not infer availability from downloader progress. Include the ordinary already-owned case, partial packs and administrator review handoff. Migrate existing committed records conservatively: backfill lineage from durable evidence where possible, otherwise leave them pending reconciliation, never assume they are fulfilled.
+
+### Definition of done for each slice
+
+1. Required schema, domain/API contracts, worker recovery and user-facing actions are delivered together for the stated outcome.
+2. Relevant acceptance assertions include authorization, concurrency and interrupted side effects, not only a successful screen.
+3. Migration and restore implications are documented; secrets and private source details remain excluded from diagnostics.
+4. Capability activation is limited to demonstrated combinations. Fixture, actual-service and release evidence are recorded separately.
+5. Update the implementation status and existing package records; do not mark an entire stage complete because one slice passed.
+
+Estimate each slice after splitting it into reviewable changes with a named owner. Calendar forecasts must include external certification access and the remaining foundation gates. UI or adapter work can proceed against stable contracts while certification is pending, but its dependent acquisition capability stays gated.

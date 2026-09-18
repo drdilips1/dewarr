@@ -20,8 +20,8 @@ Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md) for the
 
 The roadmap's [requirements-to-delivery checklist](DEVELOPMENT-ROADMAP.md#7-your-requirements-mapped-to-delivery) maps the requested user experience to PRD requirements, development stages and acceptance scenarios.
 
-1. [Product Requirements](PRD.md): v1.4 purpose, scope, user journeys, UX, 36 v1 functional requirements, six post-v1 requirements and 12 nonfunctional requirements. Includes ownership decision tables, list lifecycle, ranking/series rules, settings precedence, in-flight changes, resolved P0/P1 decisions and an integrated list-to-library walkthrough.
-2. [End-to-End Development Plan](IMPLEMENTATION-PLAN.md): S00–S10 stages, 61 work packages, dependencies, engineering boundaries, ownership and exit gates. Includes module handoffs, API delivery map and milestone demonstrations.
+1. [Product Requirements](PRD.md): v1.5 purpose, scope, user journeys, UX, 36 v1 functional requirements, six post-v1 requirements and 12 nonfunctional requirements. Includes ownership decision tables, list lifecycle, ranking/series rules, settings precedence, in-flight changes, resolved P0/P1 decisions, an integrated list-to-library walkthrough and acquisition closure/repair behavior.
+2. [End-to-End Development Plan](IMPLEMENTATION-PLAN.md): S00–S10 stages, 61 work packages, dependencies, engineering boundaries, ownership and exit gates. Includes module handoffs, API delivery map, milestone demonstrations and eight concrete next slices from the current checkpoint.
 3. [Acceptance Plan](ACCEPTANCE-PLAN.md): requirement coverage, scenario matrix, fixtures, crash recovery, compatibility, stage-specific evidence scopes and full release evidence.
 4. [Implementation Decisions](IMPLEMENTATION-DECISIONS.md): researched technical choices D01–D13 and primary-source evidence.
 5. [Product Architecture](PRODUCT-ARCHITECTURE.md): system overview, integration responsibilities and code-reuse direction.
