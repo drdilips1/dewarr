@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import { Loading, Notice } from "../components";
+import ReleaseSelection from "./ReleaseSelection";
 
 export default function SourceArtifact() {
   const { id = "" } = useParams();
@@ -103,6 +104,7 @@ export default function SourceArtifact() {
           </dl>
         </details>
       </section>
+      <ReleaseSelection key={id} artifact={artifact.data} />
     </>
   );
 }

@@ -1,0 +1,57 @@
+# Reviewed source selection
+
+A wanted request can now be connected to a saved MAM torrent manifest and a verified download-to-library route. On a book page, choose **Choose a source release**, inspect a result, confirm which wanted book it contains, and save the selection. The matching request travels through search into the manifest page. A single tested downloader and matching verified destination are selected by default; more choices remain explicit.
+
+This is a preparation record. It neither submits a torrent nor establishes that a tracker posting really contains the requested book or exact version. The entire artifact is selected, including collection files. Actual child coverage, standalone status, abridgment and edition/recording identity still require file inspection and review. Only ABS-confirmed complete assets establish ownership.
+
+## Frozen handoff
+
+`AcquisitionSelection` stores the actor, initiating request/target, shared reservation, source artifact, downloader and destination. Its immutable document includes:
+
+- Canonical and original work IDs, requested medium, language, version, abridgment and standalone requirements.
+- Exact catalog-version evidence when a version was requested.
+- Artifact checksum, native descriptor, sanitized source snapshot and source generation.
+- Downloader generation, category/save path, worker mapping and destination configuration.
+- The user's candidate-to-book confirmation, explicitly distinct from verified content coverage.
+
+Preparation rechecks active request reasons, current inventory, actor authority, artifact ownership/integrity, source generation, downloader diagnostics/path mappings, library grants and the actual destination probe contract. A required library cannot be replaced with a different destination. The probe must cover the downloader's worker source root, no-replace publication, selected hardlink/copy mode and ABS root mapping. No credentials or absolute filesystem paths are returned in the selection/options responses.
+
+Known medium/language/narrator conflicts are rejected. Unknown or incomplete content claims are not converted into verified coverage. Basic format profiles and automatic eligibility/ranking are still pending. A saved selection is not proof that an automatic acquisition is eligible.
+
+## Reservation behavior
+
+| State | Behavior |
+|---|---|
+| `planned` | Compatible wanted requirements may be combined and recomputed |
+| `selected` | Requirements are frozen by a prepared selection; compatible broader requests may join without changing them |
+| `released` | No active planned use remains |
+
+Selected reservations are considered before planned reservations across either-medium alternatives. A stricter or incompatible later request receives a separate planned reservation; it cannot modify a prepared choice. A deliberate manual choice can use the other medium for an Either request. Reconciliation preserves that selected medium.
+
+A prepared selection has states `prepared` and `cancelled`. Cancelling it returns still-needed requirements to planning. If the initiating target becomes satisfied, loses authority or loses its last active reason, reconciliation cancels preparation. Remaining compatible requests retain their own reasons and are replanned. Canonical merge/undo cancels affected preparation before rebuilding reservations; historical documents remain unchanged.
+
+These cancellation rules are safe because preparation performs no external mutation. **They must not be reused for a submitted or uncertain download.** The later dispatch ledger needs a distinct irreversible boundary, attempt identity, leases and observation-based recovery. Neither a cancelled selection nor a released planned reservation authorizes deleting a torrent or media.
+
+## Commands, history and privacy
+
+Preparation uses the shared actor/idempotency-key operation lock. Every accepted key receives a durable completed `acquisition.select` receipt, including a new key that resolves to an identical existing selection. Reusing a key with different input conflicts. Replaying an old command returns its historical selection, including cancellation; it cannot reactivate it. No worker job is enqueued by preparation.
+
+One partial unique index permits one prepared selection per reservation. Request reconciliation, selection and cancellation share canonical work locks. Owner-only read/list/cancel endpoints hide another account's selection even from a different administrator. Shared reservations disclose only a generic selected status to other request owners, without source-artifact IDs or another user's history.
+
+A later source/downloader/destination/mount/version change makes the saved configuration stale. The manifest page shows this explicitly. This read projection is not dispatch authorization: a dispatcher must recheck inventory, active reasons, permissions, requirements and current settings immediately before its side-effect boundary.
+
+## API
+
+- `GET /api/acquisition/selections/options`: member-visible, credential-free downloader choices and granted destinations.
+- `POST /api/acquisition/selections`: prepare with an `Idempotency-Key`; origin and CSRF protections apply.
+- `GET /api/acquisition/selections`: owner-scoped, paginated history, optionally filtered by artifact.
+- `GET /api/acquisition/selections/{id}`: owned immutable choice with current-configuration status.
+- `DELETE /api/acquisition/selections/{id}`: cancel preparation without changing external files/transfers.
+
+Request views include their book title and, only for the selection owner, a link to the saved source artifact. Activity identifies completed preparation separately from download activity. Migration `0017_selections` guards populated history against lossy downgrade; retain a pre-upgrade backup.
+
+## Evidence and next dependency
+
+Twenty-one API/database cases cover concurrent/replayed commands, receipt binding, cancellation, no downloader jobs, fixed requirements, broader/stricter sharing, Either-medium selection, inventory satisfaction, actor/library/artifact ownership, settings and recording changes, canonical merging, pagination and downgrade protection. The browser journey follows a new ebook request through MAM detail, native artifact inspection, a previously verified library route, saved selection, reload and cancellation. Source/downloader responses are synthetic; the existing import journey performs the filesystem and synthetic ABS route probe.
+
+Persisted dispatch/uncertain-add recovery, cross-work pack sharing, format profiles, live MAM/qBittorrent certification and transfer-to-import orchestration remain required for S05/S06. List automation must use that eventual acquisition workflow rather than bypassing preparation or import verification.

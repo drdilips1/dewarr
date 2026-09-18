@@ -12,6 +12,8 @@ Latest source checkpoint: [native MAM search](docs/MAM-INTEGRATION.md) adds rich
 
 Latest acquisition preparation: [saved torrent manifests](docs/SOURCE-ARTIFACTS.md) resolve MAM artifacts, validate native v1/v2/hybrid identity and safe file layouts, encrypt original bytes and provide owner-only manifest views. Inspecting a manifest does not start a download or establish ownership.
 
+Latest request checkpoint: [reviewed release selection](docs/RELEASE-SELECTION.md) connects a wanted title to its saved torrent and verified library route. Requirements remain fixed, compatible requests share the preparation, and cancellation retains history. Download dispatch remains pending.
+
 Latest downloader checkpoint: [qBittorrent integration](docs/QBITTORRENT-INTEGRATION.md) includes encrypted administrator settings, read-only connection tests, path mappings and preview, plus submission acknowledgements, transfer/file observations and strict attempt association. Settings and adapter behavior have fixture/browser coverage. Persisted dispatch and the complete source-to-library flow remain pending.
 
 Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md) for the product boundary, end-to-end journey, P0/P1 decisions, stage summary and release milestones.

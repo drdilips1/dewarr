@@ -88,9 +88,11 @@ export default function Activity({ admin }: { admin: boolean }) {
                       ? "Audiobookshelf inventory sync"
                       : item.kind === "acquisition.evaluate"
                         ? "Wanted media check"
-                        : item.kind === "metadata.enrich"
-                          ? "Automatic metadata lookup"
-                          : item.kind}
+                        : item.kind === "acquisition.select"
+                          ? "Release selection"
+                          : item.kind === "metadata.enrich"
+                            ? "Automatic metadata lookup"
+                            : item.kind}
                 </h2>
                 <p>{item.message}</p>
               </div>

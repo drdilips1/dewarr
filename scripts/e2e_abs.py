@@ -12,7 +12,7 @@ from app.config import get_settings
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from tests.abs_import_fixture import ScanningBackend  # noqa: E402
-from tests.mam_fixture import search_response  # noqa: E402
+from tests.mam_fixture import release_row, search_response  # noqa: E402
 from tests.torrent_fixture import torrent_bytes  # noqa: E402
 
 app = FastAPI()
@@ -54,9 +54,14 @@ async def mam_fixture(path: str, request: Request):
     mam_state["requests"] += 1
     mam_state["cookie"] = f"browser-mam-rotated-{mam_state['requests']}"
     if path == "tor/download.php/fixture-private-download-token":
-        if dict(request.query_params) != {"tid": "501"}:
+        if dict(request.query_params) not in ({"tid": "501"}, {"tid": "502"}):
             raise HTTPException(400)
-        response = Response(torrent_bytes(), media_type="application/x-bittorrent")
+        content = (
+            torrent_bytes(name=b"The Next Harbor", files=[{b"length": 24, b"path": [b"book.epub"]}])
+            if request.query_params["tid"] == "502"
+            else torrent_bytes()
+        )
+        response = Response(content, media_type="application/x-bittorrent")
         response.set_cookie("mam_id", mam_state["cookie"], httponly=True)
         return response
     if path == "jsonLoad.php":
@@ -68,6 +73,19 @@ async def mam_fixture(path: str, request: Request):
             if query["tor"].get("text") == "No source matches"
             else search_response()
         )
+        if query["tor"].get("id") == 502 or query["tor"].get("text") == "The Next Harbor":
+            body = search_response(
+                data=[
+                    release_row(
+                        id=502,
+                        title="The Next Harbor",
+                        main_cat=14,
+                        filetype="EPUB",
+                        narrator_info="{}",
+                        catname="Ebooks - Fiction",
+                    )
+                ]
+            )
     else:
         raise HTTPException(404)
     response = JSONResponse(body)

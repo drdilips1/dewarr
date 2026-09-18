@@ -16,6 +16,7 @@ from app.db.models import (
     AcquisitionIntent,
     AcquisitionReason,
     AcquisitionReservation,
+    AcquisitionSelection,
     AcquisitionTarget,
     AssetContains,
     AuditEvent,
@@ -340,11 +341,26 @@ async def release_unused(db, work_id):
         await db.scalars(
             select(AcquisitionReservation).where(
                 AcquisitionReservation.work_id.in_(family_ids(work_id)),
-                AcquisitionReservation.state == "planned",
+                AcquisitionReservation.state.in_(["planned", "selected"]),
             )
         )
     ).all()
     for reservation in reservations:
+        if reservation.state == "selected":
+            selection = await db.scalar(
+                select(AcquisitionSelection).where(
+                    AcquisitionSelection.reservation_id == reservation.id,
+                    AcquisitionSelection.state == "prepared",
+                )
+            )
+            target = await db.get(AcquisitionTarget, selection.target_id) if selection else None
+            if not target or target.state != "wanted" or target.reservation_id != reservation.id:
+                if selection:
+                    selection.state = "cancelled"
+                    selection.message = (
+                        "Request changed; release selection cancelled before downloading"
+                    )
+                reservation.state = "planned"
         specifications = (
             await db.scalars(
                 select(AcquisitionIntent.specification)
@@ -357,7 +373,7 @@ async def release_unused(db, work_id):
         ).all()
         if not specifications:
             reservation.state = "released"
-        else:
+        elif reservation.state == "planned":
             rules = [
                 RequestSpec.model_validate(spec).rule(reservation.requirements["medium"])
                 for spec in specifications
@@ -370,44 +386,54 @@ async def release_unused(db, work_id):
             reservation.requirements = merged
 
 
-async def reserve(db, user, intent, spec, slot):
-    for medium in spec.media(slot):
-        destination = getattr(spec, medium + "_library_id")
-        scope = str(destination) if destination else "unconfigured:" + str(user.id)
-        rule = spec.rule(medium)
-        candidates = (
-            await db.scalars(
-                select(AcquisitionReservation)
-                .where(
-                    AcquisitionReservation.work_id.in_(family_ids(intent.work_id)),
-                    AcquisitionReservation.scope == scope,
-                    AcquisitionReservation.state == "planned",
+async def reserve(db, user, intent, spec, slot, *, only_medium=None):
+    media = [only_medium] if only_medium else spec.media(slot)
+    for state in ("selected", "planned"):
+        for medium in media:
+            destination = getattr(spec, medium + "_library_id")
+            scope = str(destination) if destination else "unconfigured:" + str(user.id)
+            rule = spec.rule(medium)
+            candidates = (
+                await db.scalars(
+                    select(AcquisitionReservation)
+                    .where(
+                        AcquisitionReservation.work_id.in_(family_ids(intent.work_id)),
+                        AcquisitionReservation.scope == scope,
+                        AcquisitionReservation.state == state,
+                    )
+                    .order_by(
+                        (AcquisitionReservation.state == "selected").desc(),
+                        AcquisitionReservation.created_at,
+                        AcquisitionReservation.id,
+                    )
                 )
-                .order_by(AcquisitionReservation.created_at, AcquisitionReservation.id)
-            )
-        ).all()
-        for candidate in candidates:
-            compatible = intersect_rules(candidate.requirements, rule)
-            if not compatible:
-                continue
-            if compatible["version_id"]:
-                version = await db.get(Version, UUID(compatible["version_id"]))
-                if (
-                    not version
-                    or (
-                        version.language
-                        and not language_accepts(compatible["language"], version.language)
-                    )
-                    or (
-                        compatible["abridged"] is not None
-                        and version.abridged is not None
-                        and version.abridged != compatible["abridged"]
-                    )
-                ):
+            ).all()
+            for candidate in candidates:
+                compatible = intersect_rules(candidate.requirements, rule)
+                if not compatible:
                     continue
-            candidate.requirements = compatible
-            return candidate
-    medium = spec.media(slot)[0]
+                if candidate.state == "selected":
+                    if compatible == candidate.requirements:
+                        return candidate
+                    continue
+                if compatible["version_id"]:
+                    version = await db.get(Version, UUID(compatible["version_id"]))
+                    if (
+                        not version
+                        or (
+                            version.language
+                            and not language_accepts(compatible["language"], version.language)
+                        )
+                        or (
+                            compatible["abridged"] is not None
+                            and version.abridged is not None
+                            and version.abridged != compatible["abridged"]
+                        )
+                    ):
+                        continue
+                candidate.requirements = compatible
+                return candidate
+    medium = media[0]
     destination = getattr(spec, medium + "_library_id")
     reservation = AcquisitionReservation(
         work_id=(await canonical_work(db, intent.work_id)).id,
@@ -479,7 +505,11 @@ async def evaluate(db, user, intent):
             continue
         reservation = await reserve(db, user, intent, spec, slot)
         target.reservation_id = reservation.id
-        target.message = "Saved to wanted; automatic downloading is not available yet"
+        target.message = (
+            "Release selected; download has not started"
+            if reservation.state == "selected"
+            else "Saved to wanted; automatic downloading is not available yet"
+        )
     await release_unused(db, intent.work_id)
 
 

@@ -1,13 +1,13 @@
 # Acquisition requests and inventory satisfaction
 
-This implements part of S01 and the request contracts needed by S05–S07. It saves wanted media and evaluates fulfillment against the current library. Source search, transfer dispatch, quality profiles, external-list automation and file importing remain unimplemented. A saved request is not a torrent submission.
+This implements part of S01 and the request contracts needed by S05–S07. It saves wanted media and evaluates fulfillment against the current library. Native MAM browsing/artifacts, reviewed release selection and manual importing now have separate implementations. Transfer dispatch, quality profiles and external-list automation remain unfinished. A saved request is not a torrent submission.
 
 ## Persisted model
 
 - `AcquisitionIntent`: an owner's normalized work/media/version/destination requirements. Equivalent specifications reuse one intent.
 - `AcquisitionReason`: an independent manual or owned-local-list reason. Removing a membership or deleting a list withdraws only that list's reason; history remains available.
 - `AcquisitionTarget`: ebook, audio, or either. Both creates two independently satisfied targets. Each target records state and any confirmed satisfying asset.
-- `AcquisitionReservation`: a planned, compatible fulfillment shared by targets with the same destination scope. Unconfigured destinations are isolated by owner. No reservation represents a submitted download yet.
+- `AcquisitionReservation`: a planned, compatible fulfillment shared by targets with the same destination scope. Unconfigured destinations are isolated by owner. Selected reservations now have a frozen candidate/route handoff; no reservation represents a submitted download yet. See [Release selection](RELEASE-SELECTION.md).
 
 Exact edition/recording IDs require accepted catalog or accessible inventory evidence. An arbitrary UUID is insufficient. Required language, known abridgment and standalone-copy constraints are checked independently. An unknown language cannot satisfy an explicit required language. An inseparable multi-work asset cannot satisfy a standalone-copy request.
 
@@ -41,7 +41,7 @@ Shared destination reservations do not share request API access. Users receive o
 
 Canonical work grouping uses a shared graph lock followed by the canonical work lock for reservation mutations. Grouping/undo takes the exclusive graph lock and rebuilds affected planned reservations. Historical intents retain origin IDs; new intents bind to the chosen canonical record, so undo preserves their meaning. Fulfillment checks include accessible assets across the canonical group. See [Identity corrections](IDENTITY-CORRECTIONS.md).
 
-Before S05 dispatch, extend reservations with a frozen selection/attempt lifecycle. A reservation that already caused a client mutation must never be tightened or relaxed as though it were still merely planned. The current two-state `planned`/`released` model deliberately has no downloader semantics.
+Reviewed selection now adds a `selected` state and immutable requirements/route handoff. Broader compatible targets may share it; stricter targets cannot tighten it. Before S05 dispatch, add the attempt lifecycle and a distinct external-side-effect boundary. A reservation that already caused a client mutation must never use preparation cancellation or planned-rule recomputation.
 
 ## API and UI
 

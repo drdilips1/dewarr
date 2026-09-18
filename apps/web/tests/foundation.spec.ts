@@ -45,7 +45,9 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     .getByLabel("Reading list")
     .selectOption({ label: "Weekend reads" });
   await page.getByRole("button", { name: "Add to list" }).click();
-  await expect(page.getByRole("status")).toHaveText("Added to your list.");
+  await expect(
+    page.getByRole("status").filter({ hasText: "Added to your list." }),
+  ).toBeVisible();
   await page.getByRole("link", { name: "Lists", exact: true }).click();
   await page.getByRole("link", { name: /Weekend reads/ }).click();
   await expect(
@@ -940,6 +942,86 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     path: testInfo.outputPath("downloaders-mobile.png"),
     fullPage: true,
   });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.getByRole("link", { name: "Catalog", exact: true }).click();
+  await page.getByRole("button", { name: "Add a title", exact: true }).click();
+  await page.getByLabel("Title", { exact: true }).fill("The Next Harbor");
+  await page.getByLabel("Author", { exact: true }).fill("Alex Morgan");
+  await page.getByRole("button", { name: "Save title", exact: true }).click();
+  await page.getByRole("link", { name: /^The Next Harbor/ }).click();
+  const nextWanted = page.getByRole("region", {
+    name: "Wanted media",
+    exact: true,
+  });
+  await nextWanted
+    .getByRole("combobox", { name: "Media to request", exact: true })
+    .selectOption("ebook");
+  await nextWanted
+    .getByRole("button", { name: "Save to wanted", exact: true })
+    .click();
+  await nextWanted
+    .getByRole("link", { name: "Choose a source release", exact: true })
+    .click();
+  await expect(
+    page.getByLabel("Search title, author or series", { exact: true }),
+  ).toHaveValue("The Next Harbor");
+  await page
+    .getByRole("button", { name: "Search source", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "View source details", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Inspect torrent manifest", exact: true })
+    .click();
+  await page
+    .getByRole("link", { name: "View saved manifest", exact: true })
+    .click();
+  const selectionForm = page.getByRole("region", {
+    name: "Release selection",
+    exact: true,
+  });
+  await expect(
+    selectionForm.getByRole("combobox", { name: "Wanted book", exact: true }),
+  ).not.toHaveValue("");
+  await selectionForm
+    .getByRole("checkbox", {
+      name: "I checked the release details and it contains The Next Harbor.",
+      exact: true,
+    })
+    .check();
+  await selectionForm
+    .getByRole("button", { name: "Save release selection", exact: true })
+    .click();
+  await expect(selectionForm.getByRole("status")).toHaveText(
+    "Release selection saved. No download has been started.",
+  );
+  await page.reload();
+  await expect(selectionForm).toContainText(
+    "Release selected; download not started",
+  );
+  await page.screenshot({
+    path: testInfo.outputPath("release-selection-desktop.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("release-selection-mobile.png"),
+    fullPage: true,
+  });
+  await selectionForm
+    .getByRole("button", { name: "Cancel selection", exact: true })
+    .click();
+  await expect(selectionForm).toContainText(
+    "Release selection cancelled; no download was started",
+  );
+  await page.getByRole("link", { name: "Connections", exact: true }).click();
+  await page.getByRole("link", { name: "Downloaders", exact: true }).click();
   await page.reload();
   await downloaderCard
     .getByRole("button", { name: "Edit downloader", exact: true })

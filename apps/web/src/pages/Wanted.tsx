@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
+import { Link } from "react-router-dom";
 
 type Spec = components["schemas"]["RequestSpec"];
 export type WantedVersion = components["schemas"]["VersionView"];
@@ -247,6 +248,22 @@ export default function Wanted({
                   </strong>
                   <br />
                   <span className="muted">{target.message}</span>
+                  {target.state === "wanted" && (
+                    <>
+                      <br />
+                      <Link
+                        to={
+                          target.source_artifact_id
+                            ? `/sources/artifacts/${target.source_artifact_id}`
+                            : `/sources?q=${encodeURIComponent(intent.work_title)}&request=${intent.id}&slot=${target.slot}`
+                        }
+                      >
+                        {target.source_artifact_id
+                          ? "View selected release"
+                          : "Choose a source release"}
+                      </Link>
+                    </>
+                  )}
                 </p>
               ))}
               {intent.reasons.map((reason) => (

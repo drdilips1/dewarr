@@ -6,7 +6,15 @@ from sqlalchemy import func, select
 
 from app.api.dependencies import CurrentUser, Database, Member
 from app.api.operations import OperationView
-from app.db.models import AcquisitionIntent, AcquisitionReason, AuditEvent, BookList, Version
+from app.db.models import (
+    AcquisitionIntent,
+    AcquisitionReason,
+    AcquisitionSelection,
+    AcquisitionTarget,
+    AuditEvent,
+    BookList,
+    Version,
+)
 from app.domain.acquisition import (
     RequestReason,
     RequestSpec,
@@ -31,6 +39,7 @@ class TargetView(BaseModel):
     slot: str
     state: str
     message: str
+    source_artifact_id: UUID | None = None
 
 
 class ReasonView(BaseModel):
@@ -44,6 +53,7 @@ class ReasonView(BaseModel):
 class RequestView(BaseModel):
     id: UUID
     work_id: UUID
+    work_title: str
     specification: RequestSpec
     targets: list[TargetView]
     reasons: list[ReasonView]
@@ -93,10 +103,11 @@ async def view(db, user, intent):
     ).all()
     active = any(reason.active for reason in reasons)
     descriptions = []
+    work_title = "Unavailable book"
     try:
         if user.role == "viewer":
             raise HTTPException(403, "Read-only account")
-        await validate_request(db, user, intent.work_id, spec)
+        work_title = (await validate_request(db, user, intent.work_id, spec)).title
         for medium in ("ebook", "audio"):
             version_id = getattr(spec, medium + "_version_id")
             if version_id:
@@ -115,6 +126,22 @@ async def view(db, user, intent):
                 target.state, target.message = "cancelled", "No active request reasons"
             elif target.state == "wanted":
                 target.message = "Saved to wanted; automatic downloading is not available yet"
+                selection = await db.scalar(
+                    select(AcquisitionSelection)
+                    .join(
+                        AcquisitionTarget,
+                        AcquisitionTarget.reservation_id == AcquisitionSelection.reservation_id,
+                    )
+                    .where(
+                        AcquisitionTarget.intent_id == intent.id,
+                        AcquisitionTarget.slot == target.slot,
+                        AcquisitionSelection.state == "prepared",
+                    )
+                )
+                if selection:
+                    target.message = "Release selected; download has not started"
+                    if selection.owner_id == user.id:
+                        target.source_artifact_id = selection.artifact_id
     except HTTPException:
         targets = [
             TargetView(slot=slot, state="paused", message="Request access needs attention")
@@ -123,6 +150,7 @@ async def view(db, user, intent):
     return RequestView(
         id=intent.id,
         work_id=(await canonical_work(db, intent.work_id)).id,
+        work_title=work_title,
         specification=spec,
         description="; ".join(
             descriptions

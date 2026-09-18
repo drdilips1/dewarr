@@ -1278,6 +1278,59 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/acquisition/selections/options": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Options */
+    get: operations["options_api_acquisition_selections_options_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/acquisition/selections": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Listing */
+    get: operations["listing_api_acquisition_selections_get"];
+    put?: never;
+    /** Create */
+    post: operations["create_api_acquisition_selections_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/acquisition/selections/{selection_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Detail */
+    get: operations["detail_api_acquisition_selections__selection_id__get"];
+    put?: never;
+    post?: never;
+    /** Cancel */
+    delete: operations["cancel_api_acquisition_selections__selection_id__delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1580,7 +1633,7 @@ export interface components {
       password: string;
     };
     /** DestinationChoice */
-    DestinationChoice: {
+    "DestinationChoice-Input": {
       /**
        * Id
        * Format: uuid
@@ -1588,6 +1641,29 @@ export interface components {
       id: string;
       /** Revision */
       revision: string;
+    };
+    /** DestinationChoice */
+    "DestinationChoice-Output": {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Library Id
+       * Format: uuid
+       */
+      library_id: string;
+      /** Name */
+      name: string;
+      /** Medium */
+      medium: string;
+      /** Revision */
+      revision: string;
+      /** Source Key */
+      source_key: string | null;
+      /** Ready */
+      ready: boolean;
     };
     /** DestinationInput */
     DestinationInput: {
@@ -1659,6 +1735,22 @@ export interface components {
       download_root: string;
       /** Source Key */
       source_key: string;
+    };
+    /** DownloaderChoice */
+    DownloaderChoice: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Name */
+      name: string;
+      /** Generation */
+      generation: number;
+      /** Source Key */
+      source_key: string | null;
+      /** Ready */
+      ready: boolean;
     };
     /** DownloaderInput */
     DownloaderInput: {
@@ -2075,7 +2167,7 @@ export interface components {
       plan_revision: string;
       /** Destinations */
       destinations: {
-        [key: string]: components["schemas"]["DestinationChoice"];
+        [key: string]: components["schemas"]["DestinationChoice-Input"];
       };
     };
     /** ImportPlan */
@@ -2996,6 +3088,8 @@ export interface components {
        * Format: uuid
        */
       work_id: string;
+      /** Work Title */
+      work_title: string;
       specification: components["schemas"]["RequestSpec"];
       /** Targets */
       targets: components["schemas"]["TargetView"][];
@@ -3090,6 +3184,106 @@ export interface components {
       stale: boolean;
       /** Warning */
       warning?: string | null;
+    };
+    /** SelectionInput */
+    SelectionInput: {
+      /**
+       * Intent Id
+       * Format: uuid
+       */
+      intent_id: string;
+      /**
+       * Slot
+       * @enum {string}
+       */
+      slot: "ebook" | "audio" | "either";
+      /**
+       * Artifact Id
+       * Format: uuid
+       */
+      artifact_id: string;
+      /**
+       * Downloader Id
+       * Format: uuid
+       */
+      downloader_id: string;
+      /** Downloader Generation */
+      downloader_generation: number;
+      /**
+       * Destination Id
+       * Format: uuid
+       */
+      destination_id: string;
+      /** Destination Revision */
+      destination_revision: string;
+      /**
+       * Confirmed Work Id
+       * Format: uuid
+       */
+      confirmed_work_id: string;
+    };
+    /** SelectionOptions */
+    SelectionOptions: {
+      /** Downloaders */
+      downloaders: components["schemas"]["DownloaderChoice"][];
+      /** Destinations */
+      destinations: components["schemas"]["DestinationChoice-Output"][];
+    };
+    /** SelectionPage */
+    SelectionPage: {
+      /** Items */
+      items: components["schemas"]["SelectionView"][];
+      /** Total */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+    };
+    /** SelectionView */
+    SelectionView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /**
+       * Intent Id
+       * Format: uuid
+       */
+      intent_id: string;
+      /**
+       * Artifact Id
+       * Format: uuid
+       */
+      artifact_id: string;
+      /** State */
+      state: string;
+      /** Message */
+      message: string;
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /** Work Title */
+      work_title: string;
+      /** Medium */
+      medium: string;
+      /** Release Title */
+      release_title: string;
+      /** Configuration Current */
+      configuration_current: boolean;
+      /**
+       * Dispatch Available
+       * @default false
+       */
+      dispatch_available: boolean;
     };
     /** SeriesData */
     SeriesData: {
@@ -3205,6 +3399,8 @@ export interface components {
       state: string;
       /** Message */
       message: string;
+      /** Source Artifact Id */
+      source_artifact_id?: string | null;
     };
     /** TorrentDescriptor */
     TorrentDescriptor: {
@@ -6089,6 +6285,156 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["SourceArtifactView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  options_api_acquisition_selections_options_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SelectionOptions"];
+        };
+      };
+    };
+  };
+  listing_api_acquisition_selections_get: {
+    parameters: {
+      query?: {
+        artifact_id?: string | null;
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SelectionPage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_api_acquisition_selections_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SelectionInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SelectionView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  detail_api_acquisition_selections__selection_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        selection_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SelectionView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  cancel_api_acquisition_selections__selection_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        selection_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SelectionView"];
         };
       };
       /** @description Validation Error */

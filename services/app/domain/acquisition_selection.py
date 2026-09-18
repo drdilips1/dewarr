@@ -1,0 +1,337 @@
+"""Reviewed, immutable source selection. Preparation performs no downloader calls."""
+
+from typing import Literal
+from uuid import UUID
+
+from fastapi import HTTPException
+from pydantic import BaseModel, ConfigDict, Field
+from sqlalchemy import select
+
+from app.adapters.mam import MAMRelease
+from app.adapters.torrent_descriptor import TorrentDescriptor
+from app.config import get_settings
+from app.db.models import (
+    AcquisitionIntent,
+    AcquisitionReservation,
+    AcquisitionSelection,
+    AcquisitionTarget,
+    AuditEvent,
+    ImportDestination,
+    Integration,
+    Operation,
+    SourceArtifact,
+    SourceConnection,
+    Version,
+)
+from app.domain.acquisition import (
+    RequestSpec,
+    evaluate,
+    language_accepts,
+    release_unused,
+    reserve,
+    validate_request,
+)
+from app.domain.downloaders import SETTINGS_LOCK, connection_or_404, mapped_path
+from app.domain.operations import transaction_lock
+from app.domain.source_artifacts import artifact_bytes, member
+from app.domain.work_graph import acquisition_lock, canonical_work
+from app.importing.destinations import destination_configuration
+from app.importing.naming import fingerprint
+
+
+class SelectionInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    intent_id: UUID
+    slot: Literal["ebook", "audio", "either"]
+    artifact_id: UUID
+    downloader_id: UUID
+    downloader_generation: int = Field(ge=1)
+    destination_id: UUID
+    destination_revision: str = Field(pattern=r"^[0-9a-f]{64}$")
+    confirmed_work_id: UUID
+
+
+async def owned_selection(db, user, identifier):
+    row = await db.get(AcquisitionSelection, identifier, populate_existing=True)
+    if not row or row.owner_id != user.id:
+        raise HTTPException(404, "Release selection not found")
+    return row
+
+
+def verified_probe(destination, configuration, mapping):
+    probe = destination.probe or {}
+    return bool(
+        destination.enabled
+        and probe.get("status") == "verified"
+        and probe.get("configuration_revision") == fingerprint(configuration)
+        and probe.get("source_key") == mapping["source_key"]
+        and probe.get("source_path")
+        == str(get_settings().import_sources.get(mapping["source_key"]))
+        and probe.get("no_replace")
+        and probe.get(destination.mode)
+        and probe.get("backend", {}).get("root_mapping")
+    )
+
+
+def release_compatible(release, rule, version):
+    if release.medium != rule["medium"]:
+        raise HTTPException(422, "The source does not confirm the requested medium")
+    required_language = rule["language"] or (version.language if version else None)
+    if not language_accepts(required_language, release.language):
+        raise HTTPException(422, "The source does not confirm the required language")
+    if version and version.medium == "audio" and version.narrators:
+
+        def normalize(value):
+            return " ".join(value.casefold().split())
+
+        if not {normalize(value) for value in version.narrators}.issubset(
+            {normalize(value) for value in release.narrators}
+        ):
+            raise HTTPException(
+                422, "The source does not confirm the selected recording's narrators"
+            )
+    # Tracker labels remain claims. Exact version, completeness, abridgment and
+    # standalone coverage must be verified against downloaded bytes before import.
+
+
+def version_evidence(version):
+    return (
+        {
+            "id": str(version.id),
+            "work_id": str(version.work_id),
+            "medium": version.medium,
+            "language": version.language,
+            "abridged": version.abridged,
+            "narrators": version.narrators,
+        }
+        if version
+        else None
+    )
+
+
+async def prepare(db, user, body, key):
+    if get_settings().recovery_mode:
+        raise HTTPException(409, "Acquisition preparation is paused for recovery")
+    command = body.model_dump(mode="json")
+    await transaction_lock(db, f"operation:{user.id}:{key}")
+    await member(db, user.id)
+    receipt = await db.scalar(
+        select(Operation).where(
+            Operation.owner_id == user.id,
+            Operation.idempotency_key == key,
+        )
+    )
+    if receipt:
+        if receipt.kind != "acquisition.select" or receipt.payload.get("command") != command:
+            raise HTTPException(409, "This selection key was already used for another command")
+        return await owned_selection(db, user, UUID(receipt.payload["selection_id"]))
+    intent = await db.get(AcquisitionIntent, body.intent_id)
+    if not intent or intent.owner_id != user.id:
+        raise HTTPException(404, "Request not found")
+    work = await acquisition_lock(db, intent.work_id)
+    await member(db, user.id)
+    if body.confirmed_work_id != work.id:
+        raise HTTPException(409, "Confirm the current book record before selecting a release")
+    await evaluate(db, user, intent)
+    await db.flush()
+    target = await db.scalar(
+        select(AcquisitionTarget).where(
+            AcquisitionTarget.intent_id == intent.id,
+            AcquisitionTarget.slot == body.slot,
+        )
+    )
+    if not target or target.state != "wanted" or not target.reservation_id:
+        raise HTTPException(409, "This target is no longer wanted; refresh its library status")
+    reservation = await db.get(AcquisitionReservation, target.reservation_id)
+    if reservation.state == "selected":
+        existing = await db.scalar(
+            select(AcquisitionSelection).where(
+                AcquisitionSelection.reservation_id == reservation.id,
+                AcquisitionSelection.state == "prepared",
+            )
+        )
+        if existing and existing.owner_id == user.id and existing.command == command:
+            await selection_receipt(db, user, key, command, existing)
+            return existing
+        raise HTTPException(409, "A compatible request already has a selected release")
+    if reservation.state != "planned":
+        raise HTTPException(409, "This request needs reconciliation before selection")
+    await transaction_lock(db, "source:mam")
+    artifact = await db.get(SourceArtifact, body.artifact_id)
+    if not artifact or artifact.owner_id != user.id:
+        raise HTTPException(404, "Source artifact not found")
+    source = await db.get(SourceConnection, artifact.source_key, populate_existing=True)
+    if not source or not source.enabled or source.generation != artifact.source_generation:
+        raise HTTPException(409, "The source connection changed; inspect the release again")
+    descriptor = TorrentDescriptor.model_validate(artifact.descriptor)
+    artifact_bytes(artifact)
+    if descriptor.artifact_sha256 != artifact.sha256:
+        raise HTTPException(409, "The saved torrent descriptor needs inspection again")
+    release = MAMRelease.model_validate(artifact.release_snapshot)
+    spec = RequestSpec.model_validate(intent.specification)
+    if (
+        body.slot == "either"
+        and release.medium in {"audio", "ebook"}
+        and release.medium != reservation.requirements["medium"]
+    ):
+        reservation = await reserve(db, user, intent, spec, "either", only_medium=release.medium)
+        if reservation.state == "selected":
+            raise HTTPException(409, "A compatible request already has a selected release")
+        target.reservation_id = reservation.id
+        await db.flush()
+        await release_unused(db, intent.work_id)
+    rule = reservation.requirements
+    version = await db.get(Version, UUID(rule["version_id"])) if rule["version_id"] else None
+    release_compatible(release, rule, version)
+    await transaction_lock(db, SETTINGS_LOCK)
+    downloader = await connection_or_404(db, body.downloader_id)
+    if not downloader.enabled or downloader.credential_generation != body.downloader_generation:
+        raise HTTPException(409, "Downloader settings changed; refresh before selecting")
+    if downloader.status != "connected":
+        raise HTTPException(409, "An administrator must test the saved downloader first")
+    mapping = mapped_path(downloader, downloader.config["save_path"])
+    destination = await db.scalar(
+        select(ImportDestination)
+        .where(
+            ImportDestination.id == body.destination_id,
+        )
+        .with_for_update()
+    )
+    if not destination:
+        raise HTTPException(404, "Import destination not found")
+    configured_library = getattr(spec, rule["medium"] + "_library_id")
+    if configured_library and destination.library_id != configured_library:
+        raise HTTPException(422, "Use the library required by this request")
+    await validate_request(
+        db,
+        user,
+        intent.work_id,
+        spec.model_copy(
+            update={
+                rule["medium"] + "_library_id": destination.library_id,
+            }
+        ),
+    )
+    configuration = await destination_configuration(db, destination)
+    if destination.medium != rule["medium"]:
+        raise HTTPException(422, "Choose an import destination for the requested medium")
+    if fingerprint(configuration) != body.destination_revision or not verified_probe(
+        destination, configuration, mapping
+    ):
+        raise HTTPException(409, "The download-to-library route needs a current verified probe")
+    # This record is the frozen handoff for a future dispatch ledger. It cannot
+    # be updated to silently change the source, target rules, route or client.
+    selection = AcquisitionSelection(
+        owner_id=user.id,
+        intent_id=intent.id,
+        target_id=target.id,
+        reservation_id=reservation.id,
+        artifact_id=artifact.id,
+        downloader_id=downloader.id,
+        destination_id=destination.id,
+        command_key=key,
+        command=command,
+        frozen={
+            "schema": 1,
+            "work_id": str(work.id),
+            "origin_work_id": str(intent.work_id),
+            "work_title": work.title,
+            "requirements": dict(rule),
+            "version": version_evidence(version),
+            "slot": target.slot,
+            "source_generation": artifact.source_generation,
+            "artifact_sha256": artifact.sha256,
+            "descriptor": descriptor.model_dump(mode="json"),
+            "release": release.model_dump(mode="json"),
+            "downloader": {
+                "id": str(downloader.id),
+                "generation": downloader.credential_generation,
+                "save_path": downloader.config["save_path"],
+                "category": downloader.config["category"],
+            },
+            "mapping": mapping,
+            "destination": configuration,
+            "verification": (
+                "User-confirmed candidate; actual content and versions require inspection"
+            ),
+        },
+    )
+    db.add(selection)
+    reservation.state = "selected"
+    target.message = "Release selected; download has not started"
+    await db.flush()
+    await selection_receipt(db, user, key, command, selection)
+    db.add(
+        AuditEvent(actor_id=user.id, action="acquisition.release.selected", entity_id=selection.id)
+    )
+    return selection
+
+
+async def selection_receipt(db, user, key, command, selection):
+    db.add(
+        Operation(
+            owner_id=user.id,
+            kind="acquisition.select",
+            idempotency_key=key,
+            status="completed",
+            message="Release selection saved; download has not started",
+            payload={"command": command, "selection_id": str(selection.id)},
+        )
+    )
+    await db.flush()
+
+
+async def cancel(db, user, selection):
+    intent = await db.get(AcquisitionIntent, selection.intent_id)
+    await acquisition_lock(db, intent.work_id)
+    await member(db, user.id)
+    await db.refresh(selection)
+    if selection.state == "cancelled":
+        return selection
+    selection.state, selection.message = (
+        "cancelled",
+        "Release selection cancelled; no download was started",
+    )
+    reservation = await db.get(AcquisitionReservation, selection.reservation_id)
+    reservation.state = "planned"
+    await db.flush()
+    await release_unused(db, intent.work_id)
+    await evaluate(db, user, intent)
+    db.add(
+        AuditEvent(
+            actor_id=user.id, action="acquisition.selection.cancelled", entity_id=selection.id
+        )
+    )
+    return selection
+
+
+async def configuration_current(db, selection):
+    if selection.state != "prepared" or get_settings().recovery_mode:
+        return False
+    frozen = selection.frozen
+    artifact = await db.get(SourceArtifact, selection.artifact_id)
+    source = await db.get(SourceConnection, artifact.source_key)
+    downloader = await db.get(Integration, selection.downloader_id)
+    destination = await db.get(ImportDestination, selection.destination_id)
+    version_id = frozen["requirements"]["version_id"]
+    version = (
+        await db.get(Version, UUID(version_id), populate_existing=True) if version_id else None
+    )
+    try:
+        return bool(
+            source
+            and source.enabled
+            and source.generation == frozen["source_generation"]
+            and downloader
+            and downloader.enabled
+            and downloader.credential_generation == frozen["downloader"]["generation"]
+            and destination
+            and version_evidence(version) == frozen["version"]
+            and (await canonical_work(db, UUID(frozen["origin_work_id"]))).id
+            == UUID(frozen["work_id"])
+            and await destination_configuration(db, destination) == frozen["destination"]
+            and mapped_path(downloader, downloader.config["save_path"]) == frozen["mapping"]
+            and verified_probe(destination, frozen["destination"], frozen["mapping"])
+        )
+    except HTTPException:
+        return False

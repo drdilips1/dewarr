@@ -58,7 +58,7 @@ The next integration slice must supply:
 
 1. Actual configured-client certification and enforcement of saved connection generation, enablement and path bindings by the dispatch worker.
 2. Integration with saved, owner-scoped source artifacts and validated v1/v2/hybrid descriptors, enforcing artifact integrity and current source generation. Native MAM resolution is implemented; other sources remain pending.
-3. Persisted release selection, attempt identity, client configuration revision and reservations before network side effects.
+3. Consume [frozen release selections](RELEASE-SELECTION.md) and add persisted attempt identity/dispatch state before network side effects. Preparation now retains client revisions and selected reservation requirements.
 4. A preflight existing-transfer check, dispatch journaling and recovery that reconciles before any retry; no adoption of unrelated torrents.
 5. Monitoring linked to the current inspection/import pipeline, with current permission and configuration checks.
 6. API/UI selection and Activity states, fixture-driven crash tests and actual supported-client certification.

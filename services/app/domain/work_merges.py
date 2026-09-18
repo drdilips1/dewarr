@@ -90,7 +90,22 @@ async def reconcile_groups(db, work_ids):
     # Existing reservations cannot bridge newly separated groups during an undo.
     from sqlalchemy import update
 
-    from app.db.models import AcquisitionReservation, AcquisitionTarget
+    from app.db.models import AcquisitionReservation, AcquisitionSelection, AcquisitionTarget
+
+    await db.execute(
+        update(AcquisitionSelection)
+        .where(
+            AcquisitionSelection.reservation_id.in_(
+                select(AcquisitionReservation.id).where(
+                    AcquisitionReservation.work_id.in_(work_ids),
+                )
+            ),
+            AcquisitionSelection.state == "prepared",
+        )
+        .values(
+            state="cancelled", message="Book identity changed; review the release selection again"
+        )
+    )
 
     await db.execute(
         update(AcquisitionTarget)
@@ -100,7 +115,8 @@ async def reconcile_groups(db, work_ids):
     await db.execute(
         update(AcquisitionReservation)
         .where(
-            AcquisitionReservation.work_id.in_(work_ids), AcquisitionReservation.state == "planned"
+            AcquisitionReservation.work_id.in_(work_ids),
+            AcquisitionReservation.state.in_(["planned", "selected"]),
         )
         .values(state="released")
     )

@@ -372,7 +372,7 @@ class AcquisitionReason(Identity, Base):
 
 class AcquisitionReservation(Identity, Base):
     __tablename__ = "acquisition_reservations"
-    __table_args__ = (CheckConstraint("state IN ('planned', 'released')"),)
+    __table_args__ = (CheckConstraint("state IN ('planned', 'selected', 'released')"),)
     work_id: Mapped[UUID] = mapped_column(ForeignKey("works.id"), index=True)
     destination_id: Mapped[UUID | None] = mapped_column(ForeignKey("libraries.id"))
     scope: Mapped[str] = mapped_column(String(80))
@@ -397,6 +397,34 @@ class AcquisitionTarget(Identity, Base):
         ForeignKey("acquisition_reservations.id"), index=True
     )
     satisfied_asset_id: Mapped[UUID | None] = mapped_column(ForeignKey("library_assets.id"))
+
+
+class AcquisitionSelection(Identity, Base):
+    __tablename__ = "acquisition_selections"
+    __table_args__ = (
+        UniqueConstraint("owner_id", "command_key"),
+        CheckConstraint("state IN ('prepared', 'cancelled')"),
+        Index(
+            "uq_acquisition_selected_reservation",
+            "reservation_id",
+            unique=True,
+            postgresql_where=text("state = 'prepared'"),
+        ),
+    )
+    owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
+    intent_id: Mapped[UUID] = mapped_column(ForeignKey("acquisition_intents.id"), index=True)
+    target_id: Mapped[UUID] = mapped_column(ForeignKey("acquisition_targets.id"))
+    reservation_id: Mapped[UUID] = mapped_column(ForeignKey("acquisition_reservations.id"))
+    artifact_id: Mapped[UUID] = mapped_column(ForeignKey("source_artifacts.id"), index=True)
+    downloader_id: Mapped[UUID] = mapped_column(ForeignKey("integrations.id"))
+    destination_id: Mapped[UUID] = mapped_column(ForeignKey("import_destinations.id"))
+    command_key: Mapped[str] = mapped_column(String(200))
+    command: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    frozen: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    state: Mapped[str] = mapped_column(String(20), default="prepared")
+    message: Mapped[str] = mapped_column(
+        String(300), default="Release selected; download not started"
+    )
 
 
 class OrganizationSettings(Base):

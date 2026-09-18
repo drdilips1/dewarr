@@ -340,6 +340,10 @@ function ReleaseDetail({
 
 function TorrentInspection({ sourceId }: { sourceId: string }) {
   const cache = useQueryClient();
+  const [params] = useSearchParams();
+  const context = new URLSearchParams();
+  if (params.get("request")) context.set("request", params.get("request")!);
+  if (params.get("slot")) context.set("slot", params.get("slot")!);
   const inspect = useMutation({
     mutationFn: async () =>
       result(
@@ -360,7 +364,7 @@ function TorrentInspection({ sourceId }: { sourceId: string }) {
       {inspect.data && (
         <p role="status">
           {inspect.data.descriptor.files.length} file entries inspected.{" "}
-          <Link to={`/sources/artifacts/${inspect.data.id}`}>
+          <Link to={`/sources/artifacts/${inspect.data.id}?${context}`}>
             View saved manifest
           </Link>
         </p>

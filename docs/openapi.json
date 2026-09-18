@@ -3863,6 +3863,236 @@
           }
         }
       }
+    },
+    "/api/acquisition/selections/options": {
+      "get": {
+        "tags": [
+          "acquisition-selections"
+        ],
+        "summary": "Options",
+        "operationId": "options_api_acquisition_selections_options_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectionOptions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/acquisition/selections": {
+      "post": {
+        "tags": [
+          "acquisition-selections"
+        ],
+        "summary": "Create",
+        "operationId": "create_api_acquisition_selections_post",
+        "parameters": [
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SelectionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "acquisition-selections"
+        ],
+        "summary": "Listing",
+        "operationId": "listing_api_acquisition_selections_get",
+        "parameters": [
+          {
+            "name": "artifact_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Artifact Id"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectionPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/acquisition/selections/{selection_id}": {
+      "get": {
+        "tags": [
+          "acquisition-selections"
+        ],
+        "summary": "Detail",
+        "operationId": "detail_api_acquisition_selections__selection_id__get",
+        "parameters": [
+          {
+            "name": "selection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Selection Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "acquisition-selections"
+        ],
+        "summary": "Cancel",
+        "operationId": "cancel_api_acquisition_selections__selection_id__delete",
+        "parameters": [
+          {
+            "name": "selection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Selection Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -4706,7 +4936,7 @@
         ],
         "title": "Credentials"
       },
-      "DestinationChoice": {
+      "DestinationChoice-Input": {
         "properties": {
           "id": {
             "type": "string",
@@ -4724,6 +4954,58 @@
         "required": [
           "id",
           "revision"
+        ],
+        "title": "DestinationChoice"
+      },
+      "DestinationChoice-Output": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "library_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Library Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "medium": {
+            "type": "string",
+            "title": "Medium"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          },
+          "source_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Key"
+          },
+          "ready": {
+            "type": "boolean",
+            "title": "Ready"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "library_id",
+          "name",
+          "medium",
+          "revision",
+          "source_key",
+          "ready"
         ],
         "title": "DestinationChoice"
       },
@@ -4878,6 +5160,47 @@
           "source_key"
         ],
         "title": "DownloadMapping"
+      },
+      "DownloaderChoice": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "generation": {
+            "type": "integer",
+            "title": "Generation"
+          },
+          "source_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Key"
+          },
+          "ready": {
+            "type": "boolean",
+            "title": "Ready"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "generation",
+          "source_key",
+          "ready"
+        ],
+        "title": "DownloaderChoice"
       },
       "DownloaderInput": {
         "properties": {
@@ -6025,7 +6348,7 @@
           },
           "destinations": {
             "additionalProperties": {
-              "$ref": "#/components/schemas/DestinationChoice"
+              "$ref": "#/components/schemas/DestinationChoice-Input"
             },
             "propertyNames": {
               "enum": [
@@ -8515,6 +8838,10 @@
             "format": "uuid",
             "title": "Work Id"
           },
+          "work_title": {
+            "type": "string",
+            "title": "Work Title"
+          },
           "specification": {
             "$ref": "#/components/schemas/RequestSpec"
           },
@@ -8541,6 +8868,7 @@
         "required": [
           "id",
           "work_id",
+          "work_title",
           "specification",
           "targets",
           "reasons",
@@ -8763,6 +9091,195 @@
           "has_more"
         ],
         "title": "SearchPage"
+      },
+      "SelectionInput": {
+        "properties": {
+          "intent_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Intent Id"
+          },
+          "slot": {
+            "type": "string",
+            "enum": [
+              "ebook",
+              "audio",
+              "either"
+            ],
+            "title": "Slot"
+          },
+          "artifact_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Artifact Id"
+          },
+          "downloader_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Downloader Id"
+          },
+          "downloader_generation": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Downloader Generation"
+          },
+          "destination_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Destination Id"
+          },
+          "destination_revision": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Destination Revision"
+          },
+          "confirmed_work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Confirmed Work Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "intent_id",
+          "slot",
+          "artifact_id",
+          "downloader_id",
+          "downloader_generation",
+          "destination_id",
+          "destination_revision",
+          "confirmed_work_id"
+        ],
+        "title": "SelectionInput"
+      },
+      "SelectionOptions": {
+        "properties": {
+          "downloaders": {
+            "items": {
+              "$ref": "#/components/schemas/DownloaderChoice"
+            },
+            "type": "array",
+            "title": "Downloaders"
+          },
+          "destinations": {
+            "items": {
+              "$ref": "#/components/schemas/DestinationChoice-Output"
+            },
+            "type": "array",
+            "title": "Destinations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "downloaders",
+          "destinations"
+        ],
+        "title": "SelectionOptions"
+      },
+      "SelectionPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SelectionView"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "offset",
+          "limit"
+        ],
+        "title": "SelectionPage"
+      },
+      "SelectionView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "intent_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Intent Id"
+          },
+          "artifact_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Artifact Id"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "work_title": {
+            "type": "string",
+            "title": "Work Title"
+          },
+          "medium": {
+            "type": "string",
+            "title": "Medium"
+          },
+          "release_title": {
+            "type": "string",
+            "title": "Release Title"
+          },
+          "configuration_current": {
+            "type": "boolean",
+            "title": "Configuration Current"
+          },
+          "dispatch_available": {
+            "type": "boolean",
+            "title": "Dispatch Available",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "intent_id",
+          "artifact_id",
+          "state",
+          "message",
+          "work_id",
+          "work_title",
+          "medium",
+          "release_title",
+          "configuration_current"
+        ],
+        "title": "SelectionView"
       },
       "SeriesData": {
         "properties": {
@@ -9028,6 +9545,18 @@
           "message": {
             "type": "string",
             "title": "Message"
+          },
+          "source_artifact_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Artifact Id"
           }
         },
         "type": "object",
