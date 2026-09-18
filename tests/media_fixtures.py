@@ -46,6 +46,37 @@ def epub(path, title="First Harbor", author="Alex Morgan", *, chapter=True, meta
             )
 
 
+def pdf(path, title="First Harbor", author="Alex Morgan", *, pages=2, password=None):
+    from pypdf import PdfWriter
+    from pypdf.generic import DecodedStreamObject, NameObject
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    writer = PdfWriter()
+    writer.add_metadata({"/Title": title, "/Author": author})
+    for _ in range(pages):
+        page = writer.add_blank_page(width=360, height=540)
+        contents = DecodedStreamObject()
+        # Original vector page content, independent of system fonts and external images.
+        contents.set_data(b"0.1 0.2 0.5 rg 30 30 280 440 re f\n")
+        page[NameObject("/Contents")] = contents
+    if password is not None:
+        writer.encrypt(password)
+    writer.write(path)
+
+
+def cbz(path, title="First Harbor", author="Alex Morgan", *, pages=2):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as book:
+        for number in range(pages):
+            book.writestr(f"pages/{number + 1:03}.png", cover_bytes(color="navy"))
+        book.writestr(
+            "ComicInfo.xml",
+            f"<ComicInfo><Title>{escape(title)}</Title><Writer>{escape(author)}</Writer>"
+            "<LanguageISO>en</LanguageISO><Series>Harbor Stories</Series>"
+            "<Number>1</Number></ComicInfo>",
+        )
+
+
 def audio(path, title="First Harbor", author="Alex Morgan", narrator="Jordan Lee", track=1):
     if not shutil.which("ffmpeg") or not shutil.which("ffprobe"):
         pytest.skip("Actual audio inspection requires ffmpeg/ffprobe")

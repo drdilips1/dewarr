@@ -1822,6 +1822,11 @@ export interface components {
       identity: string;
       /** Full Content */
       full_content: string;
+      /**
+       * Same Edition
+       * @default false
+       */
+      same_edition: boolean;
     };
     /** InspectionSnapshot */
     InspectionSnapshot: {
@@ -2379,6 +2384,12 @@ export interface components {
     ReviewedFile: {
       /** Path */
       path: string;
+      /**
+       * Role
+       * @default media
+       * @enum {string}
+       */
+      role: "media" | "supplement";
       /** Disc */
       disc?: number | null;
       /** Track */
@@ -2388,6 +2399,11 @@ export interface components {
     ReviewedGroup: {
       /** Files */
       files: components["schemas"]["ReviewedFile"][];
+      /**
+       * Same Edition
+       * @default false
+       */
+      same_edition: boolean;
     };
     /** RevisionInput */
     RevisionInput: {

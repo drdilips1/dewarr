@@ -92,6 +92,7 @@ class ScanningBackend(ImportBackendFixture):
                         "path": f"{self.backend_path}/{relative}/{path.name}",
                         "ext": path.suffix,
                         "size": path.stat().st_size,
+                        "mtimeMs": path.stat().st_mtime * 1000,
                     },
                 }
                 for path in sorted(folder.iterdir())
@@ -110,11 +111,13 @@ class ScanningBackend(ImportBackendFixture):
                 },
                 "audioFiles": [],
             }
-            media["ebookFile"] = next(
-                {**file, "ebookFormat": "epub"}
-                for file in files
-                if file["metadata"]["ext"] == ".epub"
+            ebooks = sorted(
+                (file for file in files if file["metadata"]["ext"] in {".epub", ".pdf", ".cbz"}),
+                key=lambda file: (file["metadata"]["ext"] != ".epub", file["metadata"]["path"]),
             )
+            media["ebookFile"] = {**ebooks[0], "ebookFormat": ebooks[0]["metadata"]["ext"][1:]}
+            for file in ebooks:
+                file["isSupplementary"] = file is not ebooks[0]
             item_id = f"import-{index}"
             self.items[item_id] = {
                 "id": item_id,

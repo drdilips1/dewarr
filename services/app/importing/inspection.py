@@ -4,9 +4,8 @@ import json
 import math
 import os
 import re
-import selectors
-import struct
 import subprocess
+import sys
 import time
 import zipfile
 from pathlib import Path, PurePosixPath
@@ -15,6 +14,7 @@ from urllib.parse import unquote, urlsplit
 from defusedxml import ElementTree
 from pydantic import Field
 
+from app.importing.book_containers import check_zip_directory
 from app.importing.filesystem import (
     InspectionError,
     beneath,
@@ -25,6 +25,7 @@ from app.importing.filesystem import (
     relative_parts,
 )
 from app.importing.naming import PlannedSourceFile, StrictModel, fingerprint
+from app.importing.probe import probe_output
 
 
 class InspectedFile(StrictModel):
@@ -48,6 +49,7 @@ class InspectedGroup(StrictModel):
     files: list[PlannedSourceFile]
     identity: str
     full_content: str
+    same_edition: bool = False
 
 
 class InspectionSnapshot(StrictModel):
@@ -109,35 +111,7 @@ def probe_audio(fd, extension, deadline, executable="ffprobe"):
         "json",
         input_path,
     ]
-    expires = min(deadline, time.monotonic() + 20)
-    output = bytearray()
-    with subprocess.Popen(
-        command,
-        stdin=subprocess.DEVNULL,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
-        pass_fds=(fd,),
-    ) as process:
-        try:
-            with selectors.DefaultSelector() as selector:
-                selector.register(process.stdout, selectors.EVENT_READ)
-                while True:
-                    remaining = expires - time.monotonic()
-                    if remaining <= 0 or not selector.select(remaining):
-                        raise InspectionError("Audio metadata probe timed out")
-                    block = os.read(process.stdout.fileno(), 65536)
-                    if not block:
-                        break
-                    output.extend(block)
-                    if len(output) > 1024 * 1024:
-                        raise InspectionError("Audio metadata exceeds the supported size")
-            code = process.wait(timeout=max(0.01, expires - time.monotonic()))
-            if code:
-                raise InspectionError("File is not readable as its declared audio format")
-        finally:
-            if process.poll() is None:
-                process.kill()
-                process.wait()
+    output = probe_output(command, fd, deadline, label="Audio")
     data = json.loads(output)
     streams = [stream for stream in data.get("streams", []) if stream.get("codec_type") == "audio"]
     if len(streams) != 1 or not streams[0].get("codec_name"):
@@ -154,24 +128,7 @@ def probe_audio(fd, extension, deadline, executable="ffprobe"):
 
 
 def inspect_epub(fd):
-    # Bound central-directory allocation before ZipFile parses attacker-controlled entries.
-    size = os.fstat(fd).st_size
-    tail = os.pread(fd, min(size, 65557), max(0, size - 65557))
-    end = tail.rfind(b"PK\x05\x06")
-    if end < 0 or len(tail) - end < 22:
-        raise InspectionError("EPUB has no complete ZIP directory")
-    _, disk, start_disk, count, total, directory_size, _, comment = struct.unpack(
-        "<4s4H2LH", tail[end : end + 22]
-    )
-    if (
-        disk
-        or start_disk
-        or count != total
-        or total > 10000
-        or directory_size > 8 * 1024 * 1024
-        or end + 22 + comment != len(tail)
-    ):
-        raise InspectionError("EPUB directory exceeds supported limits or uses multipart ZIP")
+    check_zip_directory(fd, "EPUB")
     with os.fdopen(os.dup(fd), "rb") as source, zipfile.ZipFile(source) as archive:
         entries = archive.infolist()
         names = {entry.filename for entry in entries}
@@ -240,6 +197,17 @@ def inspect_file(fd, path, deadline):
             result.update(medium="audio", technical=probe_audio(fd, extension, deadline))
         elif extension == "epub":
             result.update(medium="ebook", metadata=inspect_epub(fd))
+        elif extension in {"pdf", "cbz"}:
+            output = probe_output(
+                [sys.executable, "-m", "app.importing.ebook_probe", str(fd), extension],
+                fd,
+                deadline,
+                label=extension.upper(),
+            )
+            data = json.loads(output)
+            if "error" in data:
+                raise InspectionError(data["error"])
+            result.update(medium="ebook", metadata=data["metadata"])
         else:
             result["reason"] = (
                 "Archive extraction is not enabled"

@@ -262,7 +262,17 @@ async def start_import(
             "version_revision": version_revision(version),
             "cover_source": document.get("cover_sources", {}).get(item["group_id"]),
         }
-        if item["medium"] == "audio" and len(specification.files) > 1:
+        if item["medium"] == "ebook":
+            main = {file["path"] for file in group["files"] if file.get("role", "media") == "media"}
+            entry.expected_metadata["ebook_media_paths"] = [
+                str(PurePosixPath(configuration["backend_path"]) / specification.folder / file.name)
+                for file in specification.files
+                if file.source in main
+            ]
+        if (
+            item["medium"] == "audio"
+            and sum(file.get("role", "media") == "media" for file in group["files"]) > 1
+        ):
             names = {file.source: file.name for file in specification.files}
             entry.expected_metadata["audio_order"] = [
                 str(

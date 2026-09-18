@@ -6,7 +6,7 @@ from unittest.mock import patch
 from uuid import UUID
 
 import httpx
-from sqlalchemy import text
+from sqlalchemy import select, text
 
 from app.config import get_settings
 from app.db.models import Base, Version, Work
@@ -15,11 +15,12 @@ from app.importing.execution import execute
 from app.jobs.queue import get_queue
 from app.main import create_app
 from tests.cover_fixture import COVER_URL, CoverServiceFixture
-from tests.media_fixtures import audio, epub
+from tests.media_fixtures import audio, cbz, epub, pdf
 
 
-async def certify_workflow(base, token, root, backend_client, medium="ebook"):
-    target = root / f"workflow-library-{medium}"
+async def certify_workflow(base, token, root, backend_client, medium="ebook", *, case=None):
+    case = case or medium
+    target = root / f"workflow-library-{case}"
     target.mkdir()
     settings = get_settings()
     settings.import_sources = {"native": root / "downloads"}
@@ -38,7 +39,7 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook"):
     response = await backend_client.post(
         "api/libraries",
         json={
-            "name": f"Workflow certification {medium}",
+            "name": f"Workflow certification {case}",
             "mediaType": "book",
             "folders": [{"fullPath": str(target)}],
             "settings": {"disableWatcher": True, "audiobooksOnly": False},
@@ -46,14 +47,24 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook"):
     )
     response.raise_for_status()
     external_library = response.json()["id"]
-    title = "Workflow Harbor" if medium == "ebook" else "Workflow Audio Harbor"
-    source = root / "downloads" / f"workflow-{medium}"
+    title = f"Workflow Harbor {case}"
+    source = root / "downloads" / f"workflow-{case}"
     if medium == "ebook":
-        epub(source / "book.epub", title=title, author="Fixture Author")
+        if case in {"pdf", "cbz"}:
+            {"pdf": pdf, "cbz": cbz}[case](
+                source / f"book.{case}", title=title, author="Fixture Author"
+            )
+        else:
+            epub(source / "book.epub", title=title, author="Fixture Author")
+            if case == "ebook-formats":
+                pdf(source / "book.pdf", title=title, author="Fixture Author")
     else:
         # Separate folders deliberately require a reviewed merge before import.
         audio(source / "part-a/01.mp3", title=title, author="Fixture Author", track=1)
-        audio(source / "part-b/02.mp3", title=title, author="Fixture Author", track=2)
+        if case == "audio-companion":
+            pdf(source / "companion.pdf", title="Supporting notes", author="Fixture Author")
+        else:
+            audio(source / "part-b/02.mp3", title=title, author="Fixture Author", track=2)
     source_bytes = {path: path.read_bytes() for path in source.rglob("*") if path.is_file()}
     queue = get_queue()
     cover_service = CoverServiceFixture()
@@ -106,7 +117,7 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook"):
             await drain()
             libraries = await request("GET", "/api/library/libraries")
             library = next(
-                row for row in libraries if row["name"] == f"Workflow certification {medium}"
+                row for row in libraries if row["name"] == f"Workflow certification {case}"
             )
             assert library["accessible"]
             work = await request(
@@ -143,7 +154,7 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook"):
             grouping = await request(
                 "GET", f"/api/organization/inspections/{inspection['id']}/grouping"
             )
-            if medium == "audio":
+            if medium == "audio" or case == "ebook-formats":
                 assert len(grouping["content"]["groups"]) == 2
                 grouping = await request(
                     "PUT",
@@ -153,11 +164,18 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook"):
                         "expected_revision": grouping["revision"],
                         "groups": [
                             {
+                                "same_edition": case == "ebook-formats",
                                 "files": [
-                                    {key: file.get(key) for key in ("path", "disc", "track")}
+                                    {
+                                        **{key: file.get(key) for key in ("path", "disc", "track")},
+                                        "role": "supplement"
+                                        if case == "audio-companion"
+                                        and file["path"].endswith(".pdf")
+                                        else "media",
+                                    }
                                     for group in grouping["content"]["groups"]
                                     for file in group["files"]
-                                ]
+                                ],
                             }
                         ],
                         "excluded": [],
@@ -219,7 +237,7 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook"):
             await drain()
             stopped = await request("GET", f"/api/organization/imports/{stopped['id']}")
             assert stopped["entries"][0]["state"] == "cancelled", stopped
-            assert not list(target.rglob("*.epub")) and not list(target.rglob("*.mp3"))
+            assert not [path for path in target.rglob("*") if path.is_file()]
             assert all(path.read_bytes() == data for path, data in source_bytes.items())
             run = await request(
                 "POST",
@@ -250,7 +268,11 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook"):
             owned = await request("GET", f"/api/catalog/works/{work['id']}")
             assert owned["availability"]["owned"] and owned["availability"][medium]
             assert not owned["availability"]["audio" if medium == "ebook" else "ebook"]
-            published = list(target.rglob("*.epub" if medium == "ebook" else "*.mp3"))
+            published = [
+                path
+                for path in target.rglob("*")
+                if path.suffix in {".epub", ".pdf", ".cbz", ".mp3"}
+            ]
             assert len(published) == len(source_bytes)
             for original, content in source_bytes.items():
                 matches = [
@@ -259,6 +281,41 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook"):
                 assert (
                     len(matches) == 1
                     and matches[0].read_bytes() == original.read_bytes() == content
+                )
+            copies = (await request("GET", "/api/library/assets", params={"work_id": work["id"]}))[
+                "items"
+            ]
+            expected_formats = sorted(
+                {
+                    path.suffix[1:]
+                    for path in source_bytes
+                    if medium == "ebook" or path.suffix != ".pdf"
+                }
+            )
+            owned_copy = next(copy for copy in copies if copy["medium"] == medium)
+            assert owned_copy["formats"] == expected_formats, copies
+            await request(
+                "POST",
+                f"/api/integrations/{connection['id']}/sync",
+                202,
+                headers={"Idempotency-Key": "native-post-import-inventory"},
+            )
+            await drain()
+            copies = (await request("GET", "/api/library/assets", params={"work_id": work["id"]}))[
+                "items"
+            ]
+            assert (
+                next(copy for copy in copies if copy["medium"] == medium)["formats"]
+                == expected_formats
+            ), (case, expected_formats, copies)
+            owned = await request("GET", f"/api/catalog/works/{work['id']}")
+            assert not owned["availability"]["audio" if medium == "ebook" else "ebook"]
+            async with session_factory()() as db:
+                versions = (
+                    await db.scalars(select(Version).where(Version.work_id == UUID(work["id"])))
+                ).all()
+                assert len(versions) == 1, (
+                    "Formats and companion PDFs must not invent catalog editions"
                 )
             # A later operator edit is never replaced by a repeat import.
             from app.importing.cover_image import normalize
@@ -285,8 +342,13 @@ async def certify_workflow(base, token, root, backend_client, medium="ebook"):
                 "later_cover_edit_preserved": True,
                 "cover_http": "synthetic fixture; real decoder and ABS scanner",
                 "medium": medium,
-                "reviewed_group_merge": medium == "audio",
-                "playback_order_confirmed": medium == "audio",
+                "case": case,
+                "formats": expected_formats,
+                "formats_survive_inventory_refresh": True,
+                "single_catalog_version": True,
+                "reviewed_group_merge": medium == "audio" or case == "ebook-formats",
+                "playback_order_confirmed": case == "audio",
+                "companion_not_owned_as_ebook": case == "audio-companion",
                 "catalog_version_seeded": True,
                 "server_library_id": external_library,
             }

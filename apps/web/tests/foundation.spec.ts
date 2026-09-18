@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("setup, catalog, private list and durable worker are usable together", async ({
   page,
 }, testInfo) => {
-  test.setTimeout(60_000);
+  test.setTimeout(90_000);
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
@@ -588,6 +588,106 @@ test("setup, catalog, private list and durable worker are usable together", asyn
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBe(true);
+  await page.getByLabel("Download folder", { exact: true }).fill("formats");
+  await page
+    .getByLabel(
+      "The download has finished and its files are no longer changing",
+    )
+    .check();
+  await page
+    .getByRole("button", { name: "Inspect files", exact: true })
+    .click();
+  await expect(inspected).toContainText("2 files inspected · 2 book groups");
+  await inspected
+    .getByRole("button", { name: "Review file groups", exact: true })
+    .click();
+  const editionGroup = await groupEditor
+    .getByRole("combobox", { name: "Book group for book.epub", exact: true })
+    .inputValue();
+  await groupEditor
+    .getByRole("combobox", { name: "Book group for book.pdf", exact: true })
+    .selectOption(editionGroup);
+  const editionConfirmation = groupEditor.getByRole("checkbox", {
+    name: /different formats of the same complete ebook edition/,
+  });
+  await expect(editionConfirmation).not.toBeChecked();
+  await groupEditor
+    .getByRole("button", { name: "Save file groups", exact: true })
+    .click();
+  await expect(groupEditor).toContainText(
+    "Confirm that these ebook formats contain the same complete edition",
+  );
+  await editionConfirmation.check();
+  await groupEditor
+    .getByRole("button", { name: "Save file groups", exact: true })
+    .click();
+  await expect(inspected).toContainText("2 files inspected · 1 book groups");
+  await expect(inspected).toContainText(
+    "Reviewed as multiple formats of one complete edition",
+  );
+  await page.reload();
+  await inspected
+    .getByRole("button", { name: "Review file groups", exact: true })
+    .click();
+  await expect(editionConfirmation).toBeChecked();
+  const reviewedEditionGroup = await groupEditor
+    .getByRole("combobox", { name: "Book group for book.epub", exact: true })
+    .inputValue();
+  await groupEditor
+    .getByRole("combobox", { name: "Book group for book.pdf", exact: true })
+    .selectOption("__new__");
+  await groupEditor
+    .getByRole("combobox", { name: "Book group for book.pdf", exact: true })
+    .selectOption(reviewedEditionGroup);
+  await expect(editionConfirmation).not.toBeChecked();
+  await groupEditor
+    .getByRole("button", { name: "Cancel group changes" })
+    .click();
+  await page.getByLabel("Download folder", { exact: true }).fill("companion");
+  await page
+    .getByLabel(
+      "The download has finished and its files are no longer changing",
+    )
+    .check();
+  await page
+    .getByRole("button", { name: "Inspect files", exact: true })
+    .click();
+  await expect(inspected).toContainText("2 files inspected · 2 book groups");
+  await inspected
+    .getByRole("button", { name: "Review file groups", exact: true })
+    .click();
+  const audioGroup = await groupEditor
+    .getByRole("combobox", { name: "Book group for book.mp3", exact: true })
+    .inputValue();
+  await groupEditor
+    .getByRole("combobox", { name: "Book group for notes.pdf", exact: true })
+    .selectOption(audioGroup);
+  await groupEditor
+    .getByRole("combobox", { name: /File role for notes.pdf/ })
+    .selectOption("supplement");
+  await page.screenshot({
+    path: testInfo.outputPath("companion-review-mobile.png"),
+    fullPage: true,
+  });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await groupEditor
+    .getByRole("button", { name: "Save file groups", exact: true })
+    .click();
+  await expect(inspected).toContainText("2 files inspected · 1 book groups");
+  await page.reload();
+  await inspected
+    .getByRole("button", { name: "Review file groups", exact: true })
+    .click();
+  await expect(
+    groupEditor.getByRole("combobox", { name: /File role for notes.pdf/ }),
+  ).toHaveValue("supplement");
+  await groupEditor
+    .getByRole("button", { name: "Cancel group changes" })
+    .click();
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.getByRole("link", { name: "Accounts", exact: true }).click();
   await page.getByLabel("Name", { exact: true }).fill("Guest reader");

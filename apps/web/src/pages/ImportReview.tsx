@@ -490,11 +490,17 @@ function GroupMatch({
           ? ` · ${group.narrators.join(", ")}`
           : ""} · {group.files.length} files
       </p>
+      {group.same_edition && (
+        <p className="muted">
+          Reviewed as multiple formats of one complete edition.
+        </p>
+      )}
       <details>
         <summary>Original file paths</summary>
         {group.files.map((file) => (
           <div className="import-path" key={file.path}>
             {file.path}
+            {file.role === "supplement" && " · Companion document"}
           </div>
         ))}
       </details>

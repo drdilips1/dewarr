@@ -5312,6 +5312,11 @@
           "full_content": {
             "type": "string",
             "title": "Full Content"
+          },
+          "same_edition": {
+            "type": "boolean",
+            "title": "Same Edition",
+            "default": false
           }
         },
         "additionalProperties": false,
@@ -6761,6 +6766,15 @@
             "minLength": 1,
             "title": "Path"
           },
+          "role": {
+            "type": "string",
+            "enum": [
+              "media",
+              "supplement"
+            ],
+            "title": "Role",
+            "default": "media"
+          },
           "disc": {
             "anyOf": [
               {
@@ -6805,6 +6819,11 @@
             "maxItems": 5000,
             "minItems": 1,
             "title": "Files"
+          },
+          "same_edition": {
+            "type": "boolean",
+            "title": "Same Edition",
+            "default": false
           }
         },
         "additionalProperties": false,

@@ -224,8 +224,15 @@ async def exercise(base, root, process, workflow=False):
                 from certify_import_workflow import certify_workflow
 
                 workflow_report = {
-                    medium: await certify_workflow(base, token, root, client, medium)
-                    for medium in ("ebook", "audio")
+                    case: await certify_workflow(
+                        base,
+                        token,
+                        root,
+                        client,
+                        "audio" if case.startswith("audio") else "ebook",
+                        case=case,
+                    )
+                    for case in ("ebook", "audio", "pdf", "cbz", "ebook-formats", "audio-companion")
                 }
             return {
                 "server_version": status["serverVersion"],

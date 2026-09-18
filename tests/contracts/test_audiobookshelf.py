@@ -151,6 +151,7 @@ async def sync(client, connection, fixture, key):
 def test_media_evidence_and_invalid_payloads():
     assert parse_item(book(ebook="epub")).full_ebook
     assert not parse_item(book(ebook="pdf")).full_ebook
+    assert parse_item(book(ebook="pdf")).ebook_supplementary
     assert parse_item(book(audio=False, ebook="pdf")).full_ebook
     broken = book()
     broken["libraryFiles"] = []
@@ -206,10 +207,14 @@ async def test_inventory_repeated_sync_versions_and_companions(client, admin, da
     )
     audio_versions = {item["version_id"] for item in assets["items"] if item["medium"] == "audio"}
     assert len(audio_versions) == 3  # Same narrator alone cannot establish the same recording.
+    companion = next(
+        a for a in assets["items"] if a["open_url"].endswith("/two") and a["medium"] == "ebook"
+    )
+    assert companion["version_id"] is None and not companion["full_content"]
     await sync(client, connection, fixture, "second-inventory")
     async with database() as db:
         assert await db.scalar(select(func.count()).select_from(Work)) == 1
-        assert await db.scalar(select(func.count()).select_from(Version)) == 5
+        assert await db.scalar(select(func.count()).select_from(Version)) == 4
     fixture.items["one"]["media"]["metadata"]["narrators"] = ["Changed narrator"]
     await sync(client, connection, fixture, "changed-recording")
     assets = (await client.get("/api/library/assets")).json()["items"]

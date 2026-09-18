@@ -163,14 +163,39 @@ async def apply_item(db, library, item, generation, integration_id, seen):
             db.add(asset)
             await db.flush()
         asset.title, asset.metadata_snapshot = item.title, item.model_dump(mode="json")
-        asset.files = [file.model_dump() for file in files]
+        previous_files = asset.files or []
+        observed_files = [file.model_dump() for file in files]
         asset.last_seen_at, asset.seen_generation = now, generation
         asset.match_status = link.match_status if work else "needs-review"
         asset.full_content = bool(work and getattr(item, f"full_{medium}"))
         asset.state = "missing-suspected" if item.missing or item.invalid else "present"
         asset.missing_since = (asset.missing_since or now) if item.missing or item.invalid else None
-        if work:
+        supplementary = medium == "ebook" and item.ebook_supplementary
+        if work and not supplementary:
             version = await resolve_abs_version(db, work, item, medium, link)
+            if medium == "ebook" and asset.version_id == version.id and item.full_ebook:
+                # ABS selects one primary ebook. Additional complete formats are
+                # known only from our reviewed import, never from nearby files.
+                observed = {file.path: file.model_dump() for file in item.library_files}
+                primary_paths = {file["path"] for file in observed_files}
+                for previous in previous_files:
+                    current = observed.get(previous["path"])
+                    if (
+                        previous.get("import_verified")
+                        and current
+                        and previous.get("inode") is not None
+                        and previous.get("modified") is not None
+                        and all(
+                            previous.get(key) == current.get(key)
+                            for key in ("path", "size", "format", "inode", "modified")
+                        )
+                    ):
+                        if previous["path"] in primary_paths:
+                            for file in observed_files:
+                                if file["path"] == previous["path"]:
+                                    file["import_verified"] = True
+                        else:
+                            observed_files.append({**current, "import_verified": True})
             asset.version_id = version.id
             coverage = await db.get(AssetContains, (asset.id, work.id))
             if not coverage:
@@ -179,11 +204,20 @@ async def apply_item(db, library, item, generation, integration_id, seen):
                 coverage.verified = True
             link.snapshot = item.model_dump(mode="json")
         else:
+            if supplementary:
+                # Retain the supporting-file observation, but do not manufacture
+                # an ebook edition or verified work coverage from it.
+                asset.version_id = None
+                asset.full_content = False
+                link.snapshot = item.model_dump(mode="json")
             await db.execute(
                 update(AssetContains)
                 .where(AssetContains.asset_id == asset.id)
                 .values(verified=False)
             )
+        # Assign after awaited queries: autoflush must not persist only the primary
+        # before additional verified formats are appended to an ordinary JSON list.
+        asset.files = observed_files
 
 
 async def publish_library(

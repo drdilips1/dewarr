@@ -45,6 +45,7 @@ class ABSItem(BaseModel):
     invalid: bool = False
     full_audio: bool = False
     full_ebook: bool = False
+    ebook_supplementary: bool = False
     path: str | None = None
     library_files: list[ABSFile] = Field(default_factory=list)
     series: list[dict] = Field(default_factory=list)
@@ -109,12 +110,10 @@ def parse_item(value: dict) -> ABSItem:
             "isSupplementary", False
         )
         # A PDF next to an audiobook is conservatively treated as supporting material.
-        full_ebook = bool(
-            ebook
-            and ebook[0].size > 0
-            and not primary_supplementary
-            and not (audio and ebook[0].format == "pdf")
+        ebook_supplementary = bool(
+            primary_supplementary or (audio and ebook and ebook[0].format == "pdf")
         )
+        full_ebook = bool(ebook and ebook[0].size > 0 and not ebook_supplementary)
         full_audio = bool(
             audio
             and all(file.size > 0 for file in audio)
@@ -157,6 +156,7 @@ def parse_item(value: dict) -> ABSItem:
             invalid=bool(value.get("isInvalid")),
             full_audio=full_audio,
             full_ebook=full_ebook,
+            ebook_supplementary=ebook_supplementary,
         )
     except (KeyError, TypeError, ValueError, ValidationError) as error:
         raise AdapterError(

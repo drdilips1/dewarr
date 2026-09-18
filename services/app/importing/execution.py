@@ -444,6 +444,19 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                     raise PublicationError(
                         "ABS observation did not produce the intended full library asset"
                     )
+                if version.medium == "ebook":
+                    # A reviewed ebook group may contain several complete formats.
+                    # The exact file set was checked by matches; ABS exposes only
+                    # one of those as its primary ebookFile.
+                    selected_paths = set(
+                        current.expected_metadata.get("ebook_media_paths")
+                        or [file.path for file in item.ebook]
+                    )
+                    asset.files = [
+                        {**file.model_dump(), "import_verified": True}
+                        for file in item.library_files
+                        if file.path in selected_paths and file.format in EBOOK
+                    ]
                 current.asset_id, current.confirmed_at = asset.id, datetime.now(UTC)
                 if current.cover_export and current.cover_export["state"] == "prepared":
                     selected = item.cover_path == str(

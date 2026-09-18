@@ -8,6 +8,7 @@ type Inspection = components["schemas"]["InspectionView"];
 type Grouping = components["schemas"]["GroupingView"];
 type Assignment = {
   group: string;
+  role: "media" | "supplement";
   disc: number | null;
   track: number | null;
   reason: string;
@@ -32,6 +33,7 @@ export default function GroupingEditor({
         for (const file of group.files)
           rows[file.path] = {
             group: group.key,
+            role: file.role ?? "media",
             disc: file.disc ?? null,
             track: file.track ?? null,
             reason: "",
@@ -39,12 +41,20 @@ export default function GroupingEditor({
       for (const file of grouping.content.excluded)
         rows[file.path] = {
           group: "",
+          role: "media",
           disc: null,
           track: null,
           reason: file.reason,
         };
       return rows;
     },
+  );
+  const [confirmedEditions, setConfirmedEditions] = useState<
+    Record<string, boolean>
+  >(() =>
+    Object.fromEntries(
+      grouping.content.groups.map((group) => [group.key, !!group.same_edition]),
+    ),
   );
   const groupIds = [
     ...new Set(
@@ -59,12 +69,25 @@ export default function GroupingEditor({
       group.title || "Unidentified book",
     ]),
   );
+  const ebookCounts = new Map<string, number>();
+  for (const file of inspection.snapshot!.files) {
+    const row = assignments[file.path];
+    if (row.group && row.role === "media" && file.medium === "ebook")
+      ebookCounts.set(row.group, (ebookCounts.get(row.group) ?? 0) + 1);
+  }
   const save = useMutation({
     mutationFn: async (reset: boolean) => {
       const groups = groupIds.map((group) => ({
+        same_edition:
+          (ebookCounts.get(group) ?? 0) > 1 && !!confirmedEditions[group],
         files: Object.entries(assignments)
           .filter(([, row]) => row.group === group)
-          .map(([path, row]) => ({ path, disc: row.disc, track: row.track })),
+          .map(([path, row]) => ({
+            path,
+            role: row.role,
+            disc: row.disc,
+            track: row.track,
+          })),
       }));
       const excluded = Object.entries(assignments)
         .filter(([, row]) => !row.group)
@@ -87,11 +110,20 @@ export default function GroupingEditor({
     },
     onSuccess: onSave,
   });
-  const change = (path: string, update: Partial<Assignment>) =>
+  const change = (path: string, update: Partial<Assignment>) => {
+    if (update.group !== undefined || update.role !== undefined) {
+      const previousGroup = assignments[path].group;
+      setConfirmedEditions((current) => ({
+        ...current,
+        [previousGroup]: false,
+        [update.group ?? previousGroup]: false,
+      }));
+    }
     setAssignments((current) => ({
       ...current,
       [path]: { ...current[path], ...update },
     }));
+  };
   return (
     <section
       className="panel editor group-editor"
@@ -108,6 +140,26 @@ export default function GroupingEditor({
         {Object.values(assignments).filter((row) => !row.group).length} excluded
         files
       </p>
+      {groupIds.map(
+        (id, index) =>
+          (ebookCounts.get(id) ?? 0) > 1 && (
+            <label className="check-label" key={id}>
+              <input
+                type="checkbox"
+                checked={!!confirmedEditions[id]}
+                disabled={save.isPending}
+                onChange={(event) =>
+                  setConfirmedEditions((current) => ({
+                    ...current,
+                    [id]: event.target.checked,
+                  }))
+                }
+              />
+              Group {index + 1}: these files are different formats of the same
+              complete ebook edition.
+            </label>
+          ),
+      )}
       {inspection.snapshot!.files.slice(offset, offset + 25).map((file) => {
         const row = assignments[file.path];
         return (
@@ -145,6 +197,30 @@ export default function GroupingEditor({
                 <option value="__new__">New group</option>
               </select>
             </label>
+            {row.group &&
+              file.extension === "pdf" &&
+              file.state === "inspected" && (
+                <label>
+                  File role for {file.path}
+                  <select
+                    value={row.role}
+                    onChange={(event) =>
+                      change(file.path, {
+                        role: event.target.value as Assignment["role"],
+                      })
+                    }
+                  >
+                    <option value="media">Complete ebook</option>
+                    <option value="supplement">
+                      Audiobook companion document
+                    </option>
+                  </select>
+                  <span className="muted">
+                    A companion must share an audiobook group and does not count
+                    as an owned ebook.
+                  </span>
+                </label>
+              )}
             {!row.group ? (
               <label>
                 Exclusion reason for {file.path}
