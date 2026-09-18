@@ -290,3 +290,14 @@ async def request_list_books(operation_id: str) -> None:
     from app.domain.list_requests import run
 
     await run(UUID(operation_id))
+
+
+@tasks.task(
+    name="acquisition.auto-select",
+    queue="sources",
+    retry=SourceSearchRetryStrategy(max_attempts=5, wait=30),
+)
+async def select_best_release(operation_id: str) -> None:
+    from app.domain.automatic_selection import run
+
+    await run(UUID(operation_id))

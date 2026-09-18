@@ -1,0 +1,266 @@
+import { useRef, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
+import { api, result } from "../api/client";
+import type { components } from "../api/schema";
+import { Notice } from "../components";
+
+type Search = components["schemas"]["BookSearchView"];
+type Receipt = components["schemas"]["AutomaticSelectionView"];
+
+export default function AutomaticSelection({
+  search,
+  requestId,
+  slot,
+}: {
+  search: Search;
+  requestId: string;
+  slot: string;
+}) {
+  const cache = useQueryClient();
+  const [downloaderId, setDownloaderId] = useState("");
+  const [destinationId, setDestinationId] = useState("");
+  const command = useRef({ body: "", key: crypto.randomUUID() });
+  const queryKey = ["automatic-selection", requestId, slot];
+  const request = useQuery({
+    queryKey: ["requests", "selection-linked", requestId],
+    queryFn: async () =>
+      result(
+        await api.GET("/api/requests/{intent_id}", {
+          params: { path: { intent_id: requestId } },
+        }),
+      ),
+  });
+  const options = useQuery({
+    queryKey: ["selection-options"],
+    queryFn: async () =>
+      result(await api.GET("/api/acquisition/selections/options")),
+  });
+  const receipt = useQuery({
+    queryKey,
+    queryFn: async () =>
+      result(
+        await api.GET(
+          "/api/acquisition/automatic-selections/latest/{intent_id}/{slot}",
+          {
+            params: { path: { intent_id: requestId, slot } },
+          },
+        ),
+      ),
+    refetchInterval: (query) =>
+      query.state.data &&
+      ["queued", "running"].includes(query.state.data.status)
+        ? 1500
+        : false,
+  });
+  const medium =
+    slot === "either" ? request.data?.specification.preferred_medium : slot;
+  const library =
+    request.data?.specification[
+      medium === "audio" ? "audio_library_id" : "ebook_library_id"
+    ];
+  const downloaders = options.data?.downloaders.filter((d) => d.ready) || [];
+  const downloader =
+    downloaders.find((d) => d.id === downloaderId) ||
+    (downloaders.length === 1 ? downloaders[0] : undefined);
+  const destinations =
+    options.data?.destinations.filter(
+      (d) =>
+        d.ready &&
+        d.medium === medium &&
+        d.source_key === downloader?.source_key &&
+        (!library || d.library_id === library),
+    ) || [];
+  const destination =
+    destinations.find((d) => d.id === destinationId) ||
+    (destinations.length === 1 ? destinations[0] : undefined);
+  const saveReceipt = (value: Receipt) => {
+    cache.setQueryData(queryKey, value);
+    for (const name of ["activity", "requests", "release-selections"])
+      void cache.invalidateQueries({ queryKey: [name] });
+  };
+  const prepare = useMutation({
+    mutationFn: async () => {
+      const body = {
+        intent_id: requestId,
+        slot,
+        search_id: search.id,
+        downloader_id: downloader!.id,
+        downloader_generation: downloader!.generation,
+        destination_id: destination!.id,
+        destination_revision: destination!.revision,
+      };
+      const serialized = JSON.stringify(body);
+      if (command.current.body !== serialized)
+        command.current = { body: serialized, key: crypto.randomUUID() };
+      return result(
+        await api.POST("/api/acquisition/automatic-selections", {
+          params: { header: { "idempotency-key": command.current.key } },
+          body,
+        }),
+      );
+    },
+    onSuccess: (value) => {
+      command.current = { body: "", key: crypto.randomUUID() };
+      saveReceipt(value);
+    },
+  });
+  const cancel = useMutation({
+    mutationFn: async () =>
+      result(
+        await api.POST(
+          "/api/acquisition/automatic-selections/{operation_id}/cancel",
+          {
+            params: { path: { operation_id: receipt.data!.id } },
+          },
+        ),
+      ),
+    onSuccess: saveReceipt,
+  });
+  const active =
+    !!receipt.data && ["queued", "running"].includes(receipt.data.status);
+  const target = request.data?.targets.find((t) => t.slot === slot);
+  const fresh =
+    search.status === "completed" &&
+    !search.stale_identity &&
+    Date.parse(search.expires_at) > Date.now();
+  const limit =
+    search.profile.preferences.maximum_bytes ??
+    (medium === "ebook" ? 1024 ** 3 : 10 * 1024 ** 3);
+  const context = new URLSearchParams({
+    work: search.work_id,
+    request: requestId,
+    slot,
+  });
+  return (
+    <section
+      className="panel editor"
+      aria-label="Automatic release preparation"
+    >
+      <h3>Prepare the best release</h3>
+      <p>
+        Use this page’s results and saved profile to inspect up to five
+        candidates for your wanted {medium === "ebook" ? "ebook" : "audiobook"}.
+        Eligible single-book torrents only; series packs and uncertain versions
+        need review.
+      </p>
+      <p className="muted">
+        Maximum transfer size:{" "}
+        {(limit / 1024 ** 3).toLocaleString(undefined, {
+          maximumFractionDigits: 2,
+        })}{" "}
+        GiB. Preparing a release does not start a download.
+      </p>
+      <Notice
+        error={
+          request.error ||
+          options.error ||
+          receipt.error ||
+          prepare.error ||
+          cancel.error
+        }
+      />
+      <label>
+        Preparation downloader
+        <select
+          value={downloader?.id || ""}
+          disabled={active || prepare.isPending}
+          onChange={(e) => {
+            setDownloaderId(e.target.value);
+            setDestinationId("");
+          }}
+        >
+          <option value="">Choose a verified downloader</option>
+          {downloaders.map((d) => (
+            <option key={d.id} value={d.id}>
+              {d.name}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label>
+        Preparation library destination
+        <select
+          value={destination?.id || ""}
+          disabled={active || prepare.isPending}
+          onChange={(e) => setDestinationId(e.target.value)}
+        >
+          <option value="">Choose a verified destination</option>
+          {destinations.map((d) => (
+            <option key={d.id} value={d.id}>
+              {d.name}
+            </option>
+          ))}
+        </select>
+      </label>
+      {!options.isPending && (!downloaders.length || !destinations.length) && (
+        <p>
+          Verify a matching downloader and library destination in Settings and
+          Organization first.
+        </p>
+      )}
+      {!fresh && <p>Refresh source results before preparing a release.</p>}
+      <button
+        className="primary"
+        disabled={
+          active ||
+          prepare.isPending ||
+          receipt.isPending ||
+          !!receipt.error ||
+          !fresh ||
+          !downloader ||
+          !destination ||
+          target?.state !== "wanted" ||
+          request.data?.work_id !== search.work_id
+        }
+        onClick={() => prepare.mutate()}
+      >
+        {prepare.isPending || active
+          ? "Preparing eligible release…"
+          : "Prepare best eligible release"}
+      </button>
+      {receipt.data && (
+        <div aria-live="polite">
+          <p role="status">{receipt.data.message}</p>
+          <p>
+            {receipt.data.inspections} of {receipt.data.maximum_inspections}{" "}
+            candidates inspected · {receipt.data.status}
+          </p>
+          {active && (
+            <button disabled={cancel.isPending} onClick={() => cancel.mutate()}>
+              Cancel release preparation
+            </button>
+          )}
+          {receipt.data.artifact_id && (
+            <Link
+              to={`/sources/artifacts/${receipt.data.artifact_id}?${context}`}
+            >
+              Open prepared release
+            </Link>
+          )}
+          {!!receipt.data.decisions.length && (
+            <details>
+              <summary>
+                Candidate decisions ({receipt.data.decisions.length})
+              </summary>
+              <ul>
+                {receipt.data.decisions.map((d) => (
+                  <li key={d.result_id}>
+                    <strong>{d.title}</strong> · {d.source}:{" "}
+                    {d.reasons.length
+                      ? d.reasons.join("; ")
+                      : d.inspected
+                        ? d.selected
+                          ? "Eligible torrent prepared"
+                          : "Eligible inspected candidate"
+                        : "Not inspected"}
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )}
+        </div>
+      )}
+    </section>
+  );
+}

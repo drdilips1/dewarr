@@ -113,7 +113,7 @@ def version_evidence(version):
     )
 
 
-async def prepare(db, user, body, key):
+async def prepare(db, user, body, key, *, automatic_evidence=None):
     if get_settings().recovery_mode:
         raise HTTPException(409, "Acquisition preparation is paused for recovery")
     command = body.model_dump(mode="json")
@@ -178,6 +178,17 @@ async def prepare(db, user, body, key):
         artifact.release_snapshot
     )
     profile = await profile_snapshot(db, user.id, body.profile_id, body.profile_generation)
+    if automatic_evidence:
+        maximum = automatic_evidence["maximum_bytes"]
+        profile = profile.model_copy(
+            update={
+                "preferences": profile.preferences.model_copy(
+                    update={
+                        "maximum_bytes": min(profile.preferences.maximum_bytes or maximum, maximum),
+                    }
+                )
+            }
+        )
     enforce_profile(release, descriptor, profile)
     spec = RequestSpec.model_validate(intent.specification)
     if (
@@ -244,6 +255,7 @@ async def prepare(db, user, body, key):
         command=command,
         frozen={
             "schema": 1,
+            **({"automatic_selection": automatic_evidence} if automatic_evidence else {}),
             "work_id": str(work.id),
             "origin_work_id": str(intent.work_id),
             "work_title": work.title,
@@ -264,7 +276,9 @@ async def prepare(db, user, body, key):
             "mapping": mapping,
             "destination": configuration,
             "verification": (
-                "User-confirmed candidate; actual content and versions require inspection"
+                "Automatically eligible candidate; actual content and versions require inspection"
+                if automatic_evidence
+                else "User-confirmed candidate; actual content and versions require inspection"
             ),
         },
     )

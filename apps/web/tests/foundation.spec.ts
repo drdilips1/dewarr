@@ -1922,3 +1922,111 @@ test("list batches preview media, cancel before saving, and persist wanted recei
   });
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });
+
+test("wanted list title prepares an eligible release and reloads its saved selection", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(90_000);
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.getByRole("link", { name: "Connections", exact: true }).click();
+  await page.getByRole("link", { name: "Downloaders", exact: true }).click();
+  const downloader = page.getByRole("article", {
+    name: "qBittorrent",
+    exact: true,
+  });
+  await downloader
+    .getByRole("button", { name: "Edit downloader", exact: true })
+    .click();
+  const settings = page.getByRole("form", {
+    name: "qBittorrent connection settings",
+  });
+  await settings.getByLabel("Enable connection", { exact: true }).check();
+  await settings
+    .getByRole("button", { name: "Save downloader", exact: true })
+    .click();
+  await downloader
+    .getByRole("button", { name: "Test saved connection", exact: true })
+    .click();
+  await expect(downloader).toContainText("connected");
+  await page.getByRole("link", { name: "Lists", exact: true }).click();
+  await page.getByRole("link", { name: /Hardcover curated shelf/ }).click();
+  await page.getByRole("link", { name: /Hardcover Later Arrival/ }).click();
+  const wanted = page.getByRole("region", {
+    name: "Wanted media",
+    exact: true,
+  });
+  await wanted
+    .getByRole("combobox", { name: "Media to request", exact: true })
+    .selectOption("ebook");
+  await wanted
+    .getByRole("button", { name: "Save to wanted", exact: true })
+    .click();
+  await wanted
+    .getByRole("link", { name: "Choose a source release", exact: true })
+    .click();
+  const preparation = page.getByRole("region", {
+    name: "Automatic release preparation",
+    exact: true,
+  });
+  await expect(preparation).toBeVisible();
+  await expect(
+    preparation.getByRole("button", {
+      name: "Prepare best eligible release",
+      exact: true,
+    }),
+  ).toBeEnabled();
+  await preparation
+    .getByRole("button", { name: "Prepare best eligible release", exact: true })
+    .click();
+  await expect(preparation.getByRole("status")).toContainText(
+    "Best eligible release prepared",
+    { timeout: 25_000 },
+  );
+  await expect(preparation).toContainText("download has not started");
+  await page.reload();
+  await expect(preparation.getByRole("status")).toContainText(
+    "Best eligible release prepared",
+  );
+  await preparation.getByText(/Candidate decisions/).click();
+  await expect(preparation).toContainText("Eligible torrent prepared");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("automatic-selection-mobile.png"),
+    fullPage: true,
+  });
+  await preparation
+    .getByRole("link", { name: "Open prepared release", exact: true })
+    .click();
+  const saved = page.getByRole("region", {
+    name: "Release selection",
+    exact: true,
+  });
+  await expect(saved).toContainText("Hardcover Later Arrival");
+  await expect(
+    saved.getByRole("button", { name: "Start download", exact: true }),
+  ).toBeEnabled();
+  await saved
+    .getByRole("button", { name: "Start download", exact: true })
+    .click();
+  await expect(
+    saved.getByRole("link", { name: "View download", exact: true }),
+  ).toBeVisible();
+  await page.reload();
+  await expect(
+    saved.getByRole("link", { name: "View download", exact: true }),
+  ).toBeVisible();
+  await expect(page.locator("body")).not.toContainText(
+    "fixture-private-download-token",
+  );
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+});

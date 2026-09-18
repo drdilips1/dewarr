@@ -1485,6 +1485,74 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/acquisition/automatic-selections": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Create */
+    post: operations["create_api_acquisition_automatic_selections_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/acquisition/automatic-selections/latest/{intent_id}/{slot}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Latest */
+    get: operations["latest_api_acquisition_automatic_selections_latest__intent_id___slot__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/acquisition/automatic-selections/{operation_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Detail */
+    get: operations["detail_api_acquisition_automatic_selections__operation_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/acquisition/automatic-selections/{operation_id}/cancel": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Cancel */
+    post: operations["cancel_api_acquisition_automatic_selections__operation_id__cancel_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/sources/mam/connection": {
     parameters: {
       query?: never;
@@ -2060,6 +2128,62 @@ export interface components {
       /** Csrf Token */
       csrf_token: string;
     };
+    /** AutomaticSelectionInput */
+    AutomaticSelectionInput: {
+      /**
+       * Intent Id
+       * Format: uuid
+       */
+      intent_id: string;
+      /** Slot */
+      slot: string;
+      /**
+       * Search Id
+       * Format: uuid
+       */
+      search_id: string;
+      /**
+       * Downloader Id
+       * Format: uuid
+       */
+      downloader_id: string;
+      /** Downloader Generation */
+      downloader_generation: number;
+      /**
+       * Destination Id
+       * Format: uuid
+       */
+      destination_id: string;
+      /** Destination Revision */
+      destination_revision: string;
+    };
+    /** AutomaticSelectionView */
+    AutomaticSelectionView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Status */
+      status: string;
+      /** Message */
+      message: string;
+      /** Maximum Bytes */
+      maximum_bytes: number;
+      /**
+       * Maximum Inspections
+       * @default 5
+       */
+      maximum_inspections: number;
+      /** Inspections */
+      inspections: number;
+      /** Decisions */
+      decisions: components["schemas"]["CandidateDecision"][];
+      /** Selection Id */
+      selection_id?: string | null;
+      /** Artifact Id */
+      artifact_id?: string | null;
+    };
     /** Availability */
     Availability: {
       /**
@@ -2268,6 +2392,30 @@ export interface components {
       bootstrap_token: string;
       /** Display Name */
       display_name: string;
+    };
+    /** CandidateDecision */
+    CandidateDecision: {
+      /**
+       * Result Id
+       * Format: uuid
+       */
+      result_id: string;
+      /** Source */
+      source: string;
+      /** Title */
+      title: string;
+      /** Reasons */
+      reasons: string[];
+      /**
+       * Inspected
+       * @default false
+       */
+      inspected: boolean;
+      /**
+       * Selected
+       * @default false
+       */
+      selected: boolean;
     };
     /** ChangePage */
     ChangePage: {
@@ -8258,6 +8406,136 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["PolicyView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_api_acquisition_automatic_selections_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AutomaticSelectionInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AutomaticSelectionView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  latest_api_acquisition_automatic_selections_latest__intent_id___slot__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        intent_id: string;
+        slot: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json":
+            components["schemas"]["AutomaticSelectionView"] | null;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  detail_api_acquisition_automatic_selections__operation_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        operation_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AutomaticSelectionView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  cancel_api_acquisition_automatic_selections__operation_id__cancel_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        operation_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AutomaticSelectionView"];
         };
       };
       /** @description Validation Error */

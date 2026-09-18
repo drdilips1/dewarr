@@ -35,3 +35,8 @@ Migration `0024_book_sources` adds private profiles and links cached results to 
 ## Remaining S06 work
 
 Native AudiobookBay, cross-source release equivalence, full language/exact-version eligibility, verified series coverage and bounded pack expansion, source-local popularity, profile inheritance/default management, search cancellation, shared-transfer reuse and unattended source selection remain pending. This foundation does not claim automatic ranking is safe to dispatch without review. Live MAM/Prowlarr/qBittorrent certification, external Hardcover/Goodreads list automation and the remaining PRD stages remain unimplemented or uncertified as recorded in the status document.
+
+
+## Automatic release preparation
+
+Wanted-target source pages now offer [automatic release preparation](AUTOMATIC-SELECTION.md). It inspects bounded candidates, retains rejection reasons, ranks actual media formats and saves the best verified single-book candidate through the shared selector. The saved selection opens the existing explicit download action; no download is started by preparation. Series/recording coverage, ABB, capacity scheduling and automatic list activation remain required for full S06/S07.

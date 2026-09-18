@@ -13,6 +13,7 @@ from app.api import (
     acquisition_selections,
     auth,
     automatic_imports,
+    automatic_selection,
     book_sources,
     catalog,
     destinations,
@@ -122,6 +123,7 @@ def create_app() -> FastAPI:
     app.include_router(import_runs.router, prefix="/api")
     app.include_router(destinations.router, prefix="/api")
     app.include_router(automatic_imports.router, prefix="/api")
+    app.include_router(automatic_selection.router, prefix="/api")
     app.include_router(sources.router, prefix="/api")
     app.include_router(book_sources.router, prefix="/api")
     app.include_router(release_profiles.router, prefix="/api")

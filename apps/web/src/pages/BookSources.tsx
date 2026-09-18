@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
 import ReleaseProfiles from "./ReleaseProfiles";
+
+const AutomaticSelection = lazy(() => import("./AutomaticSelection"));
 
 type Work = components["schemas"]["WorkView"];
 type Search = components["schemas"]["BookSearchView"];
@@ -192,6 +194,19 @@ export default function BookSources({
           onInspect={(id) => inspect.mutate(id)}
         />
       )}
+      {data &&
+        canAcquire &&
+        params.get("request") &&
+        ["ebook", "audio", "either"].includes(params.get("slot") || "") && (
+          <Suspense fallback={<p>Loading release preparation…</p>}>
+            <AutomaticSelection
+              key={`${params.get("request")}:${params.get("slot")}`}
+              search={data}
+              requestId={params.get("request")!}
+              slot={params.get("slot")!}
+            />
+          </Suspense>
+        )}
       {data?.sources.some((source) => source.has_more) && (
         <button
           disabled={!!busy || data.offset >= 10000}

@@ -118,10 +118,17 @@ async def mam_fixture(path: str, request: Request):
     mam_state["requests"] += 1
     mam_state["cookie"] = f"browser-mam-rotated-{mam_state['requests']}"
     if path == "tor/download.php/fixture-private-download-token":
-        if dict(request.query_params) not in ({"tid": "501"}, {"tid": "502"}):
+        if dict(request.query_params) not in ({"tid": "501"}, {"tid": "502"}, {"tid": "503"}):
             raise HTTPException(400)
         content = (
-            torrent_bytes(name=b"The Next Harbor", files=[{b"length": 24, b"path": [b"book.epub"]}])
+            torrent_bytes(
+                name=b"Hardcover Later Arrival",
+                files=[{b"length": 24, b"path": [b"book.epub"]}],
+            )
+            if request.query_params["tid"] == "503"
+            else torrent_bytes(
+                name=b"The Next Harbor", files=[{b"length": 24, b"path": [b"book.epub"]}]
+            )
             if request.query_params["tid"] == "502"
             else torrent_bytes()
         )
@@ -147,6 +154,23 @@ async def mam_fixture(path: str, request: Request):
                         filetype="EPUB",
                         narrator_info="{}",
                         catname="Ebooks - Fiction",
+                    )
+                ]
+            )
+        if query["tor"].get("id") == 503 or query["tor"].get("text") == "Hardcover Later Arrival":
+            body = search_response(
+                data=[
+                    release_row(
+                        id=503,
+                        title="Hardcover Later Arrival",
+                        main_cat=14,
+                        filetype="EPUB",
+                        narrator_info="{}",
+                        series_info="{}",
+                        author_info='{"1":"Catalog Author"}',
+                        size="24 B",
+                        catname="Ebooks - Fiction",
+                        description="A synthetic standalone ebook.",
                     )
                 ]
             )

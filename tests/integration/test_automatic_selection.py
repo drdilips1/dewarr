@@ -1,0 +1,466 @@
+# ruff: noqa: F811
+import base64
+from datetime import UTC, datetime, timedelta
+from uuid import UUID
+
+import pytest
+from sqlalchemy import func, select
+
+from app.adapters.contracts import AdapterError, FailureKind
+from app.adapters.mam import MAMRelease
+from app.adapters.torrent_descriptor import inspect_torrent
+from app.db.models import (
+    AcquisitionReservation,
+    AcquisitionSelection,
+    DownloadAttempt,
+    Operation,
+    SourceArtifact,
+    SourceConnection,
+    SourceResult,
+    User,
+    Work,
+)
+from app.domain import automatic_selection as automatic
+from app.domain.release_profiles import ProfileSnapshot, ReleasePreferences
+from app.jobs.retry import SourceSearchRetry
+from app.security import encrypt_secrets
+from tests.integration.test_acquisition import catalog  # noqa: F401
+from tests.integration.test_acquisition_selections import selection_route  # noqa: F401
+from tests.torrent_fixture import torrent_bytes
+
+pytestmark = pytest.mark.integration
+
+
+@pytest.fixture
+async def source(client, database, admin, catalog, selection_route, monkeypatch):
+    raw = torrent_bytes(name=b"Harbor", files=[{b"length": 12, b"path": [b"Harbor.m4b"]}])
+    descriptor = await inspect_torrent(raw)
+    release = MAMRelease(
+        source_id="501",
+        title="Harbor",
+        raw_title="Harbor",
+        authors=["Writer"],
+        medium="audio",
+        language="en",
+        formats=["m4b"],
+        size_bytes=12,
+        seeders=9,
+        protocol="torrent",
+        observed_at=datetime.now(UTC),
+    )
+    async with database() as db, db.begin():
+        artifact = await db.get(SourceArtifact, UUID(selection_route["artifact_id"]))
+        artifact.sha256 = descriptor.artifact_sha256
+        artifact.descriptor = descriptor.model_dump(mode="json")
+        artifact.encrypted_content = encrypt_secrets({"torrent": base64.b64encode(raw).decode()})
+        artifact.release_snapshot = release.model_dump(mode="json")
+        search = Operation(
+            owner_id=UUID(admin["id"]),
+            kind="sources.search",
+            idempotency_key="auto-search-fixture",
+            status="completed",
+            payload={
+                "work": {"id": str(catalog["work"]), "title": "Harbor", "authors": ["Writer"]},
+                "profile": ProfileSnapshot(preferences=ReleasePreferences()).model_dump(
+                    mode="json"
+                ),
+                "expires_at": (datetime.now(UTC) + timedelta(minutes=25)).isoformat(),
+            },
+        )
+        db.add(search)
+        await db.flush()
+        result = SourceResult(
+            owner_id=UUID(admin["id"]),
+            operation_id=search.id,
+            source_key="mam",
+            source_generation=1,
+            expires_at=datetime.now(UTC) + timedelta(minutes=25),
+            encrypted_reference=encrypt_secrets({"link": None}),
+            release_snapshot=release.model_dump(mode="json"),
+        )
+        db.add(result)
+        await db.flush()
+        body = {
+            k: v
+            for k, v in selection_route.items()
+            if k not in {"artifact_id", "confirmed_work_id"}
+        }
+        body["search_id"] = str(search.id)
+        values = {
+            "body": body,
+            "artifact": artifact.id,
+            "result": result.id,
+            "search": search.id,
+            "release": release,
+            "descriptor": descriptor,
+        }
+
+    class Resolver:
+        calls = []
+        callback = None
+        failure = None
+
+        async def __call__(self, owner, row):
+            self.calls.append(row.id)
+            if self.callback:
+                await self.callback()
+            if self.failure:
+                raise self.failure
+            return values["artifact"], values["release"]
+
+    resolver = Resolver()
+    values["resolver"] = resolver
+    monkeypatch.setattr(automatic, "resolve_candidate", resolver)
+    return values
+
+
+async def start(client, source, key="auto-select-fixture"):
+    result = await client.post(
+        "/api/acquisition/automatic-selections",
+        json=source["body"],
+        headers={"Idempotency-Key": key},
+    )
+    assert result.status_code == 202, result.text
+    return result.json()
+
+
+async def detail(client, identifier):
+    result = await client.get(f"/api/acquisition/automatic-selections/{identifier}")
+    assert result.status_code == 200, result.text
+    return result.json()
+
+
+async def test_best_eligible_candidate_is_prepared_once_with_frozen_limits_and_provenance(
+    client, database, source
+):
+    operation = await start(client, source)
+    assert (await start(client, source))["id"] == operation["id"]
+    await automatic.run(UUID(operation["id"]))
+    value = await detail(client, operation["id"])
+    assert value["status"] == "completed" and value["selection_id"]
+    assert value["inspections"] == 1
+    await automatic.run(UUID(operation["id"]))
+    async with database() as db:
+        assert await db.scalar(select(func.count()).select_from(AcquisitionSelection)) == 1
+        assert await db.scalar(select(func.count()).select_from(DownloadAttempt)) == 0
+        selected = await db.get(AcquisitionSelection, UUID(value["selection_id"]))
+        assert "Automatically eligible" in selected.frozen["verification"]
+        assert selected.frozen["profile"]["preferences"]["maximum_bytes"] == 10 * 1024**3
+        assert selected.frozen["automatic_selection"]["result_id"] == str(source["result"])
+    assert len(source["resolver"].calls) == 1
+
+
+@pytest.mark.parametrize("change", ["author", "unknown-seeds", "language", "pack", "recording"])
+async def test_ineligible_candidates_remain_reviewable_without_fetching_torrents(
+    client, database, source, catalog, change
+):
+    from app.db.models import AcquisitionIntent
+    from app.domain.acquisition import RequestSpec
+    from app.domain.corrections import revision
+
+    async with database() as db, db.begin():
+        row = await db.get(SourceResult, source["result"])
+        fields = {
+            "author": {"authors": ["Other Writer"]},
+            "unknown-seeds": {"seeders": None},
+            "language": {"language": "fr"},
+            "pack": {"raw_title": "Harbor Books 1-3"},
+        }
+        if change == "recording":
+            intent = await db.get(AcquisitionIntent, UUID(source["body"]["intent_id"]))
+            spec = RequestSpec.model_validate(intent.specification).model_copy(
+                update={"audio_version_id": catalog["versions"][1]}
+            )
+            intent.specification = spec.model_dump(mode="json")
+            intent.fingerprint = revision(intent.specification)
+        else:
+            row.release_snapshot = {**row.release_snapshot, **fields[change]}
+        if change == "language":
+            intent = await db.get(AcquisitionIntent, UUID(source["body"]["intent_id"]))
+            intent.specification = {**intent.specification, "language": "en"}
+            intent.fingerprint = revision(intent.specification)
+    operation = await start(client, source)
+    await automatic.run(UUID(operation["id"]))
+    value = await detail(client, operation["id"])
+    assert value["status"] == "held" and value["decisions"][0]["reasons"]
+    assert source["resolver"].calls == []
+
+
+async def test_manifest_pack_evidence_is_retained_when_no_candidate_qualifies(
+    client, database, source
+):
+    async with database() as db, db.begin():
+        artifact = await db.get(SourceArtifact, source["artifact"])
+        desc = dict(artifact.descriptor)
+        desc["files"] = [*desc["files"], {"index": 1, "path": "Harbor/Roads.m4b", "size_bytes": 12}]
+        desc["content_bytes"] = 24
+        artifact.descriptor = desc
+    operation = await start(client, source)
+    await automatic.run(UUID(operation["id"]))
+    await automatic.run(UUID(operation["id"]))
+    value = await detail(client, operation["id"])
+    assert value["status"] == "held" and value["inspections"] == 1
+    assert any("track sequence" in r for r in value["decisions"][0]["reasons"])
+    assert len(source["resolver"].calls) == 1
+
+
+@pytest.mark.parametrize("change", ["cancel", "source", "actor", "catalog", "expired", "withdrawn"])
+async def test_changes_during_inspection_cannot_prepare_stale_selection(
+    client, database, source, admin, catalog, change
+):
+    from app.db.models import AcquisitionReason
+
+    operation = await start(client, source)
+
+    async def callback():
+        if change == "cancel":
+            result = await client.post(
+                f"/api/acquisition/automatic-selections/{operation['id']}/cancel"
+            )
+            assert result.status_code == 200
+            return
+        async with database() as db, db.begin():
+            if change == "source":
+                (await db.get(SourceConnection, "mam")).generation += 1
+            elif change == "actor":
+                (await db.get(User, UUID(admin["id"]))).role = "viewer"
+            elif change == "catalog":
+                (await db.get(Work, catalog["work"])).title = "A changed title"
+            elif change == "expired":
+                (await db.get(SourceResult, source["result"])).expires_at = datetime.now(
+                    UTC
+                ) - timedelta(seconds=1)
+            else:
+                (await db.scalar(select(AcquisitionReason))).active = False
+
+    source["resolver"].callback = callback
+    await automatic.run(UUID(operation["id"]))
+    async with database() as db:
+        assert (await db.get(Operation, UUID(operation["id"]))).status in {"held", "cancelled"}
+        assert await db.scalar(select(func.count()).select_from(AcquisitionSelection)) == 0
+
+
+async def test_source_cooldown_retains_command_and_can_resume(client, database, source):
+    operation = await start(client, source)
+    source["resolver"].failure = AdapterError(
+        FailureKind.RATE_LIMIT, "Cooling down", retry_after=123
+    )
+    with pytest.raises(SourceSearchRetry) as wait:
+        await automatic.run(UUID(operation["id"]))
+    assert wait.value.retry_after == 123
+    source["resolver"].failure = None
+    await automatic.run(UUID(operation["id"]))
+    assert (await detail(client, operation["id"]))["status"] == "completed"
+
+
+async def test_route_failure_rolls_back_selection_mutations(client, database, source):
+    source["body"]["destination_revision"] = "0" * 64
+    operation = await start(client, source)
+    await automatic.run(UUID(operation["id"]))
+    assert (await detail(client, operation["id"]))["status"] == "held"
+    async with database() as db:
+        assert await db.scalar(select(func.count()).select_from(AcquisitionSelection)) == 0
+        assert (await db.scalar(select(AcquisitionReservation))).state == "planned"
+
+
+async def additional_candidate(database, source, *, source_id, seeders=10, format="m4b"):
+    release = source["release"].model_copy(
+        update={"source_id": source_id, "seeders": seeders, "formats": [format]}
+    )
+    raw = torrent_bytes(
+        name=b"Harbor", files=[{b"length": 12, b"path": [f"Harbor.{format}".encode()]}]
+    )
+    descriptor = await inspect_torrent(raw)
+    async with database() as db, db.begin():
+        original = await db.get(SourceResult, source["result"])
+        row = SourceResult(
+            owner_id=original.owner_id,
+            operation_id=original.operation_id,
+            source_key="mam",
+            source_generation=1,
+            expires_at=original.expires_at,
+            encrypted_reference=encrypt_secrets({"link": None}),
+            release_snapshot=release.model_dump(mode="json"),
+        )
+        artifact = SourceArtifact(
+            owner_id=original.owner_id,
+            source_key="mam",
+            source_id=source_id,
+            source_generation=1,
+            sha256=descriptor.artifact_sha256,
+            descriptor=descriptor.model_dump(mode="json"),
+            encrypted_content=encrypt_secrets({"torrent": base64.b64encode(raw).decode()}),
+            release_snapshot=release.model_dump(mode="json"),
+        )
+        db.add_all([row, artifact])
+        await db.flush()
+        return row.id, artifact.id, release
+
+
+@pytest.mark.parametrize("failure", ["collection", "parser", "unsupported"])
+async def test_rejected_first_candidate_falls_back_to_next_and_retains_decisions(
+    client, database, source, monkeypatch, failure
+):
+    second, artifact_id, release = await additional_candidate(
+        database, source, source_id="502", seeders=2
+    )
+    calls = []
+
+    async def resolve(owner, row):
+        calls.append(row.id)
+        if row.id == second:
+            return artifact_id, release
+        if failure != "collection":
+            raise AdapterError(FailureKind(failure), "Fixture artifact unavailable")
+        async with database() as db, db.begin():
+            artifact = await db.get(SourceArtifact, source["artifact"])
+            artifact.descriptor = {
+                **artifact.descriptor,
+                "files": [{"index": 0, "path": "Harbor/books 1-3.m4b", "size_bytes": 12}],
+            }
+        return source["artifact"], source["release"]
+
+    monkeypatch.setattr(automatic, "resolve_candidate", resolve)
+    operation = await start(client, source)
+    await automatic.run(UUID(operation["id"]))
+    assert (await detail(client, operation["id"]))["status"] == "queued"
+    await automatic.run(UUID(operation["id"]))
+    result = await detail(client, operation["id"])
+    assert result["status"] == "completed" and result["artifact_id"] == str(artifact_id)
+    assert result["inspections"] == 2
+    assert result["decisions"][0]["reasons"]
+    assert calls == [source["result"], second]
+
+
+@pytest.mark.parametrize("format", ["mp3", "m4b"])
+async def test_format_preference_precedes_seed_count_then_seed_count_breaks_format_tie(
+    client, database, source, monkeypatch, format
+):
+    second, artifact_id, release = await additional_candidate(
+        database, source, source_id="502", seeders=99, format=format
+    )
+    calls = []
+
+    async def resolve(owner, row):
+        calls.append(row.id)
+        return (
+            (artifact_id, release) if row.id == second else (source["artifact"], source["release"])
+        )
+
+    monkeypatch.setattr(automatic, "resolve_candidate", resolve)
+    operation = await start(client, source)
+    await automatic.run(UUID(operation["id"]))
+    result = await detail(client, operation["id"])
+    assert result["status"] == "completed"
+    assert calls == [second if format == "m4b" else source["result"]]
+
+
+async def test_failed_inspection_budget_survives_redelivery_and_stops_before_sixth_candidate(
+    client, database, source, monkeypatch
+):
+    for n in range(5):
+        await additional_candidate(database, source, source_id=str(502 + n), seeders=8 - n)
+    calls = []
+
+    async def reject(owner, row):
+        calls.append(row.id)
+        raise AdapterError(FailureKind.PARSER, "Fixture parse failure")
+
+    monkeypatch.setattr(automatic, "resolve_candidate", reject)
+    operation = await start(client, source)
+    for _ in range(7):
+        await automatic.run(UUID(operation["id"]))
+    result = await detail(client, operation["id"])
+    assert result["status"] == "held" and result["inspections"] == 5
+    assert len(calls) == len(set(calls)) == 5
+    assert sum(d["inspected"] for d in result["decisions"]) == 5
+    async with database() as db:
+        assert await db.scalar(select(func.count()).select_from(AcquisitionSelection)) == 0
+
+
+async def test_resolved_release_from_another_source_result_cannot_be_selected(
+    client, database, source
+):
+    source["release"] = source["release"].model_copy(update={"source_id": "999"})
+    operation = await start(client, source)
+    await automatic.run(UUID(operation["id"]))
+    result = await detail(client, operation["id"])
+    assert result["status"] == "held" and "does not match" in result["message"]
+    async with database() as db:
+        assert await db.scalar(select(func.count()).select_from(AcquisitionSelection)) == 0
+
+
+@pytest.mark.parametrize("second_actual_format", ["m4b", "flac"])
+async def test_actual_formats_rerank_candidates_and_reuse_already_inspected_torrents(
+    client, database, source, monkeypatch, second_actual_format
+):
+    second, artifact_id, release = await additional_candidate(
+        database, source, source_id="502", seeders=2
+    )
+    async with database() as db, db.begin():
+        for identifier, actual in [
+            (source["artifact"], "mp3"),
+            (artifact_id, second_actual_format),
+        ]:
+            artifact = await db.get(SourceArtifact, identifier)
+            artifact.descriptor = {
+                **artifact.descriptor,
+                "files": [{"index": 0, "path": f"Harbor/Harbor.{actual}", "size_bytes": 12}],
+            }
+    calls = []
+
+    async def resolve(owner, row):
+        calls.append(row.id)
+        return (
+            (artifact_id, release) if row.id == second else (source["artifact"], source["release"])
+        )
+
+    monkeypatch.setattr(automatic, "resolve_candidate", resolve)
+    operation = await start(client, source)
+    await automatic.run(UUID(operation["id"]))
+    assert (await detail(client, operation["id"]))["status"] == "queued"
+    await automatic.run(UUID(operation["id"]))
+    await automatic.run(UUID(operation["id"]))
+    value = await detail(client, operation["id"])
+    assert value["status"] == "completed" and value["inspections"] == 2
+    assert calls == [source["result"], second]
+    expected = artifact_id if second_actual_format == "m4b" else source["artifact"]
+    assert value["artifact_id"] == str(expected)
+    assert sum(d["selected"] for d in value["decisions"]) == 1
+    async with database() as db:
+        selection = await db.get(AcquisitionSelection, UUID(value["selection_id"]))
+        assert selection.frozen["automatic_selection"]["inspected_formats"] == [
+            "m4b" if second_actual_format == "m4b" else "mp3"
+        ]
+
+
+async def test_inspection_limit_still_selects_best_verified_candidate_without_sixth_fetch(
+    client, database, source, monkeypatch
+):
+    resolved = {source["result"]: (source["artifact"], source["release"])}
+    for n in range(5):
+        row, artifact, release = await additional_candidate(
+            database, source, source_id=str(502 + n), seeders=8 - n
+        )
+        resolved[row] = artifact, release
+    async with database() as db, db.begin():
+        for artifact_id, _ in resolved.values():
+            artifact = await db.get(SourceArtifact, artifact_id)
+            artifact.descriptor = {
+                **artifact.descriptor,
+                "files": [{"index": 0, "path": "Harbor/Harbor.flac", "size_bytes": 12}],
+            }
+    calls = []
+
+    async def resolve(owner, row):
+        calls.append(row.id)
+        return resolved[row.id]
+
+    monkeypatch.setattr(automatic, "resolve_candidate", resolve)
+    operation = await start(client, source)
+    for _ in range(7):
+        await automatic.run(UUID(operation["id"]))
+    value = await detail(client, operation["id"])
+    assert value["status"] == "completed" and value["inspections"] == 5
+    assert len(calls) == len(set(calls)) == 5
+    assert value["artifact_id"] == str(source["artifact"])

@@ -120,3 +120,6 @@ Apply `0025_list_subscriptions` before restarting the API and worker. The `lists
 [Hardcover subscriptions](HARDCOVER-LISTS.md) use migration `0027_hardcover_lists` and the existing `lists.sync` queue. They reuse each owner's Metadata account. Apply migrations before restarting the API and worker together. No extra environment secret or service is needed. Membership reads deliberately bypass cached metadata; disabled accounts fail only their own due observations. Populated Hardcover history requires backup-based rollback.
 
 [Reviewed list requests](LIST-REQUESTS.md) add the `lists.requests` task to the existing queue and operation ledger without a schema change. API and worker must run the same revision. Stalled jobs are recoverable; accepted request batches retain receipts, and only unsubmitted previews are bounded by retention. This worker saves wanted media through the ordinary request engine and does not dispatch downloads.
+
+
+[Automatic release preparation](AUTOMATIC-SELECTION.md) adds `acquisition.auto-select` in the sources queue with bounded retries and stalled-job recovery. It reuses schema `0027_hardcover_lists`; restart API and worker together so both know the new task and routes. The worker saves a selection through the existing acquisition service. Download dispatch remains disabled by default and is not enabled by this feature.

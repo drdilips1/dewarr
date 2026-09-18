@@ -4895,6 +4895,206 @@
         }
       }
     },
+    "/api/acquisition/automatic-selections": {
+      "post": {
+        "tags": [
+          "automatic-selection"
+        ],
+        "summary": "Create",
+        "operationId": "create_api_acquisition_automatic_selections_post",
+        "parameters": [
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AutomaticSelectionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutomaticSelectionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/acquisition/automatic-selections/latest/{intent_id}/{slot}": {
+      "get": {
+        "tags": [
+          "automatic-selection"
+        ],
+        "summary": "Latest",
+        "operationId": "latest_api_acquisition_automatic_selections_latest__intent_id___slot__get",
+        "parameters": [
+          {
+            "name": "intent_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Intent Id"
+            }
+          },
+          {
+            "name": "slot",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Slot"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/AutomaticSelectionView"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Latest Api Acquisition Automatic Selections Latest  Intent Id   Slot  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/acquisition/automatic-selections/{operation_id}": {
+      "get": {
+        "tags": [
+          "automatic-selection"
+        ],
+        "summary": "Detail",
+        "operationId": "detail_api_acquisition_automatic_selections__operation_id__get",
+        "parameters": [
+          {
+            "name": "operation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Operation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutomaticSelectionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/acquisition/automatic-selections/{operation_id}/cancel": {
+      "post": {
+        "tags": [
+          "automatic-selection"
+        ],
+        "summary": "Cancel",
+        "operationId": "cancel_api_acquisition_automatic_selections__operation_id__cancel_post",
+        "parameters": [
+          {
+            "name": "operation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Operation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutomaticSelectionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/sources/mam/connection": {
       "get": {
         "tags": [
@@ -6557,6 +6757,128 @@
         ],
         "title": "AuthView"
       },
+      "AutomaticSelectionInput": {
+        "properties": {
+          "intent_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Intent Id"
+          },
+          "slot": {
+            "type": "string",
+            "pattern": "^(ebook|audio|either)$",
+            "title": "Slot"
+          },
+          "search_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Search Id"
+          },
+          "downloader_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Downloader Id"
+          },
+          "downloader_generation": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Downloader Generation"
+          },
+          "destination_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Destination Id"
+          },
+          "destination_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Destination Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "intent_id",
+          "slot",
+          "search_id",
+          "downloader_id",
+          "downloader_generation",
+          "destination_id",
+          "destination_revision"
+        ],
+        "title": "AutomaticSelectionInput"
+      },
+      "AutomaticSelectionView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "maximum_bytes": {
+            "type": "integer",
+            "title": "Maximum Bytes"
+          },
+          "maximum_inspections": {
+            "type": "integer",
+            "title": "Maximum Inspections",
+            "default": 5
+          },
+          "inspections": {
+            "type": "integer",
+            "title": "Inspections"
+          },
+          "decisions": {
+            "items": {
+              "$ref": "#/components/schemas/CandidateDecision"
+            },
+            "type": "array",
+            "title": "Decisions"
+          },
+          "selection_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Selection Id"
+          },
+          "artifact_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Artifact Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "message",
+          "maximum_bytes",
+          "inspections",
+          "decisions"
+        ],
+        "title": "AutomaticSelectionView"
+      },
       "Availability": {
         "properties": {
           "owned": {
@@ -7060,6 +7382,48 @@
           "display_name"
         ],
         "title": "BootstrapInput"
+      },
+      "CandidateDecision": {
+        "properties": {
+          "result_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Result Id"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "reasons": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Reasons"
+          },
+          "inspected": {
+            "type": "boolean",
+            "title": "Inspected",
+            "default": false
+          },
+          "selected": {
+            "type": "boolean",
+            "title": "Selected",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "result_id",
+          "source",
+          "title",
+          "reasons"
+        ],
+        "title": "CandidateDecision"
       },
       "ChangePage": {
         "properties": {

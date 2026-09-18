@@ -653,7 +653,7 @@ Release review must answer four questions: can the user complete the promised jo
 
 ## 15. Refreshed implementation starting point and delivery order
 
-This is the current execution handoff for the v1.7 planning baseline. It supplements the stable S00–S10 packages rather than adding new scope or restarting the scaffold. The committed status records inbound Goodreads/CSV/Hardcover observations, reviewed list batches, MAM/Prowlarr aggregation, durable attempts, scoped fulfillment and selected automatic-import cases. These are partial proofs, not accepted whole stages. Automatic-selection files currently in the working tree are work in progress; their presence is not release evidence.
+This is the current execution handoff for the v1.7 planning baseline. It supplements the stable S00–S10 packages rather than adding new scope or restarting the scaffold. The committed status records inbound Goodreads/CSV/Hardcover observations, reviewed list batches, MAM/Prowlarr aggregation, durable attempts, scoped fulfillment and selected automatic-import cases. These are partial proofs, not accepted whole stages. Bounded single-book automatic preparation now has targeted and full-backend evidence recorded in current status. Complete S06 selection, capacity scheduling and list automation remain open; no whole stage is accepted by that checkpoint.
 
 | Sequence | Deliverable within existing packages | Acceptance before activation |
 |---|---|---|
