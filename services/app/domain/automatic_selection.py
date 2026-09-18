@@ -240,6 +240,15 @@ async def begin(db, user, body, key, *, list_authority=None, series_authority=No
             raise HTTPException(
                 409, "A selection is already running for this target; open its current status"
             )
+    pack_scope = None
+    if (
+        body.download_when_ready
+        and not series_authority
+        and profile.preferences.effective_series_scope == "prefer_packs"
+    ):
+        from app.domain.list_series import plan
+
+        pack_scope = await plan(db, user, work.id)
     operation = Operation(
         owner_id=user.id,
         kind=KIND,
@@ -270,6 +279,7 @@ async def begin(db, user, body, key, *, list_authority=None, series_authority=No
             "download_id": None,
             "list_authority": list_authority,
             "series_authority": series_authority,
+            **({"pack_scope": pack_scope} if pack_scope else {}),
         },
     )
     db.add(operation)
@@ -319,6 +329,8 @@ async def candidates(db, operation, work, profile, rule, version):
         verified = operation.payload.get("verified", {}).get(str(row.id))
         if verified:
             release = type(release).model_validate(verified["release"])
+        from app.domain.pack_expansion import matches_source, pinned_source
+
         problems = eligibility(
             release,
             operation.payload["work"],
@@ -328,6 +340,10 @@ async def candidates(db, operation, work, profile, rule, version):
             unattended=operation.payload["command"].get("download_when_ready", False),
             catalog=operation.payload.get("pack_catalog"),
         )
+        if not matches_source(
+            pinned_source(operation.payload.get("series_authority")), row, release
+        ):
+            problems.append("Additional pack books must use their originally selected torrent")
         source = sources.get(row.source_key)
         if (
             not source
@@ -538,8 +554,14 @@ async def run(identifier):
             "Inspecting the highest ranked eligible torrent",
         )
         owner_id = operation.owner_id
+        from app.domain.pack_expansion import pinned_source
+
+        pinned = pinned_source(operation.payload.get("series_authority"))
     try:
-        if cached:
+        if pinned:
+            artifact_id = UUID(pinned["artifact_id"])
+            fresh = release_value(row)
+        elif cached:
             artifact_id = UUID(cached["artifact_id"])
             fresh = type(release_value(row)).model_validate(cached["release"])
         else:
@@ -649,6 +671,23 @@ async def run(identifier):
                 raise HTTPException(
                     409, "Resolved torrent does not match the selected source result"
                 )
+            from app.domain.pack_expansion import pinned_source
+
+            pinned = pinned_source(operation.payload.get("series_authority"))
+            if pinned and (
+                str(artifact.id) != pinned["artifact_id"]
+                or artifact.sha256 != pinned["artifact_sha256"]
+            ):
+                await reject_candidate(
+                    db,
+                    operation,
+                    row.id,
+                    [
+                        "The resolved torrent differs from the pack authorized "
+                        "for these additional books"
+                    ],
+                )
+                return
             descriptor = TorrentDescriptor.model_validate(artifact.descriptor)
             reasons = eligibility(
                 fresh,
@@ -778,7 +817,9 @@ async def run(identifier):
                 operation.payload = {**operation.payload, "selection_id": str(selected.id)}
                 if body.download_when_ready and coverage:
                     from app.domain.automatic_packs import defer
+                    from app.domain.pack_expansion import create
 
+                    await create(db, user, operation, selected, coverage)
                     await defer(db, operation, selected)
                 elif body.download_when_ready:
                     from app.domain.download_attempts import start as start_download

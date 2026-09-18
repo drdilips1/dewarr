@@ -68,6 +68,11 @@ def scope_revision(parent):
             "configuration": parent.payload["automatic_configuration"],
             "specification": parent.payload["effective_specification"],
             **(
+                {"pack_origin": parent.payload["pack_origin"]}
+                if parent.payload.get("pack_origin")
+                else {}
+            ),
+            **(
                 {"list_origin": parent.payload["list_origin"]}
                 if parent.payload.get("list_origin")
                 else {}
@@ -81,6 +86,11 @@ def proof(controller):
         "operation_id": controller.payload["parent_id"],
         "acquisition_id": str(controller.id),
         "scope_revision": controller.payload["scope_revision"],
+        **(
+            {"pack_origin": controller.payload["pack_origin"]}
+            if controller.payload.get("pack_origin")
+            else {}
+        ),
         **(
             {"list_origin": controller.payload["list_origin"]}
             if controller.payload.get("list_origin")
@@ -139,6 +149,9 @@ async def require_authority(db, owner_id, authority, *, intent_id):
     from app.domain.list_series import require_origin
 
     await require_origin(db, owner_id, parent.payload.get("list_origin"))
+    from app.domain.pack_expansion import require_origin as require_pack
+
+    await require_pack(db, owner_id, parent.payload.get("pack_origin"))
     intent = await db.get(AcquisitionIntent, intent_id)
     work = await canonical_work(db, intent.work_id)
     receipt = next(r for r in parent.payload["receipt"] if r["request_id"] == str(intent_id))
@@ -162,6 +175,11 @@ async def initialize(db, parent):
         message="Waiting to acquire the reviewed series books",
         payload={
             "parent_id": str(parent.id),
+            **(
+                {"pack_origin": deepcopy(parent.payload["pack_origin"])}
+                if parent.payload.get("pack_origin")
+                else {}
+            ),
             **(
                 {"list_origin": deepcopy(parent.payload["list_origin"])}
                 if parent.payload.get("list_origin")
@@ -207,6 +225,9 @@ async def retry(db, user, parent):
     from app.domain.list_series import require_origin
 
     await require_origin(db, user.id, parent.payload.get("list_origin"))
+    from app.domain.pack_expansion import require_origin as require_pack
+
+    await require_pack(db, user.id, parent.payload.get("pack_origin"))
     row = await db.get(Operation, UUID(parent.payload["acquisition_id"]), with_for_update=True)
     if not row.payload["enabled"]:
         raise HTTPException(409, "This series acquisition has finished or was cancelled")
@@ -279,6 +300,10 @@ async def run(identifier):
         from app.domain.list_series import lock_origin, require_origin
 
         await lock_origin(db, row.payload.get("list_origin"))
+        from app.domain.pack_expansion import (
+            require_origin as require_pack,
+        )
+
         parent = await db.get(
             Operation, UUID(row.payload["parent_id"]), with_for_update={"read": True}
         )
@@ -289,6 +314,7 @@ async def run(identifier):
         user = await db.get(User, row.owner_id)
         try:
             await require_origin(db, row.owner_id, parent.payload.get("list_origin"))
+            await require_pack(db, row.owner_id, parent.payload.get("pack_origin"))
         except HTTPException as error:
             row.payload = {**payload, "upstream_hold": True}
             row.status, row.message = "held", str(error.detail)

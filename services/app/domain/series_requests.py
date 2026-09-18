@@ -269,6 +269,9 @@ async def start(db, user, operation):
     from app.domain.list_series import origin, require_origin
 
     await require_origin(db, user.id, origin(operation))
+    from app.domain.pack_expansion import require_origin as require_pack
+
+    await require_pack(db, user.id, operation.payload.get("pack_origin"))
     if operation.status in {"queued", "running", "completed"}:
         return
     if operation.status == "cancelled":
@@ -320,6 +323,10 @@ async def run(operation_id):
         from app.domain.list_series import lock_origin, origin, require_origin
 
         await lock_origin(db, origin(operation))
+        from app.domain.pack_expansion import (
+            require_origin as require_pack,
+        )
+
         # Reserve child command locks before parent/identity/work locks, matching submit.
         for work_id in operation.payload["command"]["work_ids"]:
             await transaction_lock(
@@ -342,6 +349,7 @@ async def run(operation_id):
             return
         try:
             await require_origin(db, operation.owner_id, origin(operation))
+            await require_pack(db, operation.owner_id, operation.payload.get("pack_origin"))
         except HTTPException as error:
             operation.payload = {**operation.payload, "upstream_hold": True}
             operation.status, operation.message = "failed", str(error.detail)

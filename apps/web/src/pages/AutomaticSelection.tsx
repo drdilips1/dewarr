@@ -189,8 +189,10 @@ export default function AutomaticSelection({
         Use this page’s results and saved profile to inspect up to five
         candidates for your wanted {medium === "ebook" ? "ebook" : "audiobook"}.
         {effectiveSeriesScope(search.profile.preferences) !== "just_book"
-          ? " Eligible series packs are preferred when catalog and filenames establish coverage. Only this requested book is authorized for import."
+          ? " Eligible series packs are preferred when catalog and filenames establish coverage."
           : " Single-book torrents only."}
+        {effectiveSeriesScope(search.profile.preferences) === "prefer_packs" &&
+          " Automatic acquisition also imports additional qualifying books from your saved main-book review, using that same pack and medium. Preparation alone covers this requested book."}
         Uncertain coverage and exact versions need review.
       </p>
       <p className="muted">
@@ -279,6 +281,20 @@ export default function AutomaticSelection({
       {receipt.data && (
         <div aria-live="polite">
           <p role="status">{receipt.data.message}</p>
+          {receipt.data.pack_expansion && (
+            <div>
+              <p>{receipt.data.pack_expansion.message}</p>
+              {receipt.data.pack_expansion.external_id && (
+                <Link
+                  to={`/series/hardcover/${encodeURIComponent(receipt.data.pack_expansion.external_id)}${receipt.data.pack_expansion.request_id ? `?request=${receipt.data.pack_expansion.request_id}` : ""}`}
+                >
+                  {receipt.data.pack_expansion.request_id
+                    ? "View additional pack books"
+                    : "Review main-series books"}
+                </Link>
+              )}
+            </div>
+          )}
           <p>
             {receipt.data.inspections} of {receipt.data.maximum_inspections}{" "}
             candidates inspected · {receipt.data.status}

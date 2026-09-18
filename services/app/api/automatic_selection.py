@@ -1,3 +1,4 @@
+from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Header, HTTPException
@@ -43,6 +44,14 @@ class CandidateDecision(BaseModel):
     coverage: PackCoverage | None = None
 
 
+class PackExpansionView(BaseModel):
+    state: Literal["review", "empty", "accepted"]
+    message: str
+    external_id: str | None = None
+    request_id: UUID | None = None
+    work_ids: list[UUID] = []
+
+
 class AutomaticSelectionView(BaseModel):
     id: UUID
     status: str
@@ -56,6 +65,7 @@ class AutomaticSelectionView(BaseModel):
     artifact_id: UUID | None = None
     download_when_ready: bool = False
     download_id: UUID | None = None
+    pack_expansion: PackExpansionView | None = None
 
 
 async def view(db, user, operation):
@@ -89,6 +99,7 @@ async def view(db, user, operation):
         artifact_id=selection.artifact_id if selection else None,
         download_when_ready=operation.payload["command"].get("download_when_ready", False),
         download_id=operation.payload.get("download_id"),
+        pack_expansion=operation.payload.get("pack_expansion"),
     )
 
 

@@ -12,7 +12,7 @@ from app.adapters.contracts import AdapterError, FailureKind
 from app.adapters.mam import MAMSearch
 from app.adapters.prowlarr import ProwlarrSearch
 from app.config import get_settings
-from app.db.models import Operation, SourceConnection, SourceResult, User, Work
+from app.db.models import Operation, SourceArtifact, SourceConnection, SourceResult, User, Work
 from app.db.session import session_factory
 from app.domain import series_preparation, source_queries
 from app.domain.operations import transaction_lock
@@ -56,11 +56,13 @@ def identity(work):
     return {"id": str(work.id), "title": work.title, "authors": work.authors}
 
 
-async def start(db, user, work_id, body, key):
+async def start(db, user, work_id, body, key, *, pack_origin=None):
     if get_settings().recovery_mode:
         raise HTTPException(409, "Source searches are paused for recovery")
     work = await accessible_work(db, user, work_id)
     command = {"work_id": str(work.id), **body.model_dump(mode="json")}
+    if pack_origin:
+        command["pack_origin"] = pack_origin
     await transaction_lock(db, f"operation:{user.id}:{key}")
     existing = await db.scalar(
         select(Operation).where(Operation.owner_id == user.id, Operation.idempotency_key == key)
@@ -75,6 +77,63 @@ async def start(db, user, work_id, body, key):
     if not query:
         raise HTTPException(422, "Enter a source-search query")
     query_plan = await source_queries.plan(db, user, work, query, profile.preferences.search_series)
+    if pack_origin:
+        # Accepted children inspect the already selected artifact. A tracker
+        # outage or disappearance of its listing must not force another search
+        # or torrent fetch for bytes we already have permission to use.
+        from app.domain.pack_expansion import require_origin
+
+        await require_origin(db, user.id, pack_origin)
+        artifact = await db.get(SourceArtifact, UUID(pack_origin["artifact_id"]))
+        if (
+            not artifact
+            or artifact.owner_id != user.id
+            or artifact.sha256 != pack_origin["artifact_sha256"]
+        ):
+            raise HTTPException(409, "The selected pack artifact is no longer available")
+        expiry = datetime.now(UTC) + timedelta(minutes=25)
+        operation = Operation(
+            owner_id=user.id,
+            kind="sources.search",
+            idempotency_key=key,
+            status="completed",
+            message="Using the original selected pack; no new source query",
+            payload={
+                "command": command,
+                "work": identity(work),
+                "query": query,
+                "query_plan": query_plan,
+                "medium": body.medium,
+                "offset": 0,
+                "profile": profile.model_dump(mode="json"),
+                "sources": {
+                    artifact.source_key: {
+                        "state": "completed",
+                        "name": "Selected pack",
+                        "count": 1,
+                        "message": "Saved source evidence; not a refreshed tracker observation",
+                        "generation": artifact.source_generation,
+                    }
+                },
+                "workers": {},
+                "expires_at": expiry.isoformat(),
+            },
+        )
+        db.add(operation)
+        await db.flush()
+        db.add(
+            SourceResult(
+                owner_id=user.id,
+                operation_id=operation.id,
+                source_key=artifact.source_key,
+                source_generation=artifact.source_generation,
+                release_snapshot=artifact.release_snapshot,
+                encrypted_reference=encrypt_secrets({}),
+                expires_at=expiry,
+            )
+        )
+        await db.flush()
+        return operation
     connections = {
         s.key: s
         for s in await db.scalars(

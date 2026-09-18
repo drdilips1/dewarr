@@ -301,10 +301,17 @@ async def advance_target(db, user, policy, book, target, progress, now, *, serie
             or config["profile"].get("effective_revision"),
         ),
         f"list-search:{cycle}:{progress['round']}",
+        pack_origin=(series_authority or {}).get("pack_origin"),
     )
     progress["search_id"] = str(search.id)
     progress.pop("next_at", None)
-    return "searching", "Searching connected sources for missing media", next_tick(now)
+    return (
+        "searching",
+        search.message
+        if (series_authority or {}).get("pack_origin")
+        else "Searching connected sources for missing media",
+        next_tick(now),
+    )
 
 
 async def advance_book(db, user, policy, book, now):

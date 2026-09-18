@@ -572,7 +572,11 @@ async def evaluate(db, user, intent):
             from app.domain.list_series import origin, removed
 
             parent = await db.get(Operation, UUID(reason.reference))
-            if await removed(db, origin(parent)):
+            from app.domain.pack_expansion import removed as pack_removed
+
+            if await removed(db, origin(parent)) or await pack_removed(
+                db, parent.payload.get("pack_origin") if parent else None
+            ):
                 reason.active = False
         if reason.kind == "list" and not await db.scalar(
             select(BookList.id)

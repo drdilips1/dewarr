@@ -334,6 +334,14 @@ export default function SeriesRequests({
       ) : value ? (
         <>
           <p role="status">{value.message}</p>
+          {value.selected_pack_only && (
+            <p>
+              These additional reviewed books use the original selected pack and
+              medium. Already available books are skipped. Missing or uncertain
+              contents need review; this request does not start separate
+              downloads for them.
+            </p>
+          )}
           {value.originating_list_id && (
             <p>
               Automatically requested by a list policy.{" "}

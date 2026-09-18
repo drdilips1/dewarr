@@ -5,7 +5,12 @@ from uuid import UUID
 from fastapi import HTTPException
 from sqlalchemy import select
 
-from app.db.models import AcquisitionSelection, DownloadAttempt, DownloadMembership
+from app.db.models import (
+    AcquisitionIntent,
+    AcquisitionSelection,
+    DownloadAttempt,
+    DownloadMembership,
+)
 from app.domain import automatic_dispatch
 from app.domain.operations import transaction_lock
 from app.domain.work_graph import canonical_work, graph_lock
@@ -38,6 +43,15 @@ async def lock(db, selections):
     roots = {
         (await canonical_work(db, UUID(item.frozen["origin_work_id"]))).id for item in selections
     }
+    # Incidental children retain their root's authority even when joining after
+    # its import. Fence cancellation under the same sorted work locks; locking
+    # the root selection before these locks would invert fulfillment's order.
+    for item in selections:
+        authority = (item.frozen.get("automatic_selection") or {}).get("series_authority") or {}
+        if origin := authority.get("pack_origin"):
+            intent = await db.get(AcquisitionIntent, UUID(origin["root_intent_id"]))
+            if intent:
+                roots.add((await canonical_work(db, intent.work_id)).id)
     for work_id in sorted(roots):
         await transaction_lock(db, "acquisition:" + str(work_id))
     for selection in selections:

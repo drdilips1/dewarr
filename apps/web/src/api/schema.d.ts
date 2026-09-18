@@ -2581,6 +2581,7 @@ export interface components {
       download_when_ready: boolean;
       /** Download Id */
       download_id?: string | null;
+      pack_expansion?: components["schemas"]["PackExpansionView"] | null;
     };
     /** AutomationPermissionInput */
     AutomationPermissionInput: {
@@ -4628,6 +4629,25 @@ export interface components {
       /** Members */
       members: components["schemas"]["CoveredMember"][];
     };
+    /** PackExpansionView */
+    PackExpansionView: {
+      /**
+       * State
+       * @enum {string}
+       */
+      state: "review" | "empty" | "accepted";
+      /** Message */
+      message: string;
+      /** External Id */
+      external_id?: string | null;
+      /** Request Id */
+      request_id?: string | null;
+      /**
+       * Work Ids
+       * @default []
+       */
+      work_ids: string[];
+    };
     /** PathPreviewInput */
     PathPreviewInput: {
       /** Path */
@@ -5947,6 +5967,11 @@ export interface components {
       can_retry_acquisition: boolean;
       /** Originating List Id */
       originating_list_id?: string | null;
+      /**
+       * Selected Pack Only
+       * @default false
+       */
+      selected_pack_only: boolean;
     };
     /** SeriesView */
     SeriesView: {

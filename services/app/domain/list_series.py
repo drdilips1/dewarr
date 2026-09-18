@@ -109,6 +109,8 @@ async def lock_import_reasons(db, selections):
         authority = (selection.frozen.get("automatic_selection") or {}).get("series_authority")
         if authority and (saved := authority.get("list_origin")):
             intent_ids.update((selection.intent_id, UUID(saved["root_intent_id"])))
+        if authority and (saved := authority.get("pack_origin")):
+            intent_ids.update((selection.intent_id, UUID(saved["root_intent_id"])))
     if intent_ids:
         await db.scalars(
             select(AcquisitionReason)
@@ -125,7 +127,7 @@ async def require_import_authority(db, selection):
     late locks here, and never substitute a different generic request reason.
     """
     authority = (selection.frozen.get("automatic_selection") or {}).get("series_authority")
-    if not authority or not authority.get("list_origin"):
+    if not authority or not (authority.get("list_origin") or authority.get("pack_origin")):
         return
     parent = await db.get(Operation, UUID(authority["operation_id"]), populate_existing=True)
     if (
@@ -133,9 +135,10 @@ async def require_import_authority(db, selection):
         or parent.owner_id != selection.owner_id
         or parent.kind != "series.requests"
         or parent.status != "completed"
-        or origin(parent) != authority["list_origin"]
+        or origin(parent) != authority.get("list_origin")
+        or parent.payload.get("pack_origin") != authority.get("pack_origin")
         or series_acquisition.scope_revision(parent) != authority["scope_revision"]
-        or await removed(db, authority["list_origin"])
+        or await removed(db, authority.get("list_origin"))
         or not await db.scalar(
             select(AcquisitionReason.id).where(
                 AcquisitionReason.intent_id == selection.intent_id,
@@ -148,6 +151,12 @@ async def require_import_authority(db, selection):
         raise HTTPException(
             409, "The originating series/list authority was withdrawn before import"
         )
+    from app.domain.pack_expansion import require_origin as require_pack
+
+    await require_pack(db, selection.owner_id, authority.get("pack_origin"), publication=True)
+    if saved := authority.get("pack_origin"):
+        if str(selection.artifact_id) != saved["artifact_id"]:
+            raise HTTPException(409, "Additional pack books cannot import a different transfer")
 
 
 async def plan(db, user, work_id):

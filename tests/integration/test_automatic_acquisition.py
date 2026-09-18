@@ -101,6 +101,10 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     via_scope_review=False,
     via_series_list=False,
     list_import_change=None,
+    expand_pack=False,
+    pack_import_change=None,
+    required_narrators=None,
+    expect_pack_review=False,
 ):
     route = ready_route
     if series_pack:
@@ -137,11 +141,37 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
         from tests.pack_fixture import catalog as pack_catalog
 
         second = await edition(
-            database, title="Second Harbor", identifiers={"isbn_13": "9780140328721"}
+            database, title="Second Harbor", identifiers={"isbn_13": "9780140328721"}, medium=medium
         )
+        if medium == "audio":
+            from app.db.models import Version
+
+            async with database() as db, db.begin():
+                version = await db.get(Version, second["version"])
+                version.narrators = ["Jordan Lee"]
+                version.abridged = False
         await pack_catalog(database, admin["id"], [work_id, second["work"]])
-        epub(source.parent / "Second Harbor.epub", title="Second Harbor", isbn="9780140328721")
-        contents = {p.name: p.read_bytes() for p in sorted(source.parent.glob("*.epub"))}
+        if expand_pack:
+            response = await client.post(
+                "/api/catalog/series/hardcover/pack-series/main-books",
+                headers={"Idempotency-Key": "incidental-pack-main-books"},
+                json={
+                    "work_ids": [work_id, str(second["work"])],
+                    "expected_generation": 1,
+                    "expected_review_id": None,
+                    "confirm_main_membership": True,
+                },
+            )
+            assert response.status_code == 201, response.text
+        if medium == "ebook":
+            epub(source.parent / "Second Harbor.epub", title="Second Harbor", isbn="9780140328721")
+        else:
+            audio(
+                source.parent / "Second Harbor.mp3",
+                title="Second Harbor",
+                tags={"isbn": "9780140328721", "language": "en"},
+            )
+        contents = {p.name: p.read_bytes() for p in sorted(source.parent.glob("*." + extension))}
         payload = b"".join(contents.values())
         raw = lt.bencode(
             {
@@ -231,6 +261,10 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
 
     async def source_call(owner, action, value, **kwargs):
         assert owner == UUID(admin["id"])
+        if expand_pack:
+            assert "resolve" not in source_calls, (
+                "Pack children must reuse the saved source artifact"
+            )
         source_calls.append(action)
         if action == "search":
             return ReleasePage(items=[release], offset=0, limit=50, total=1, has_more=False), 1
@@ -242,6 +276,66 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     qbit = Client(database, descriptor.model_dump(mode="json"))
     qbit.complete = True
     monkeypatch.setattr(downloads, "QbitClient", lambda *args: qbit)
+
+    if pack_import_change:
+        original_context = execution.context
+        changed = False
+
+        async def change_pack_before_publication(db, entry, token, **options):
+            nonlocal changed
+            if (
+                not changed
+                and not options.get("lock")
+                and not entry.published_at
+                and entry.version_id == second["version"]
+            ):
+                changed = True
+                from app.db.models import AcquisitionReason, Operation
+
+                async with database() as read:
+                    parent = await read.scalar(
+                        select(Operation).where(
+                            Operation.kind == "series.requests",
+                            Operation.payload["pack_origin"].is_not(None),
+                        )
+                    )
+                assert parent is not None
+                if pack_import_change == "withdraw_review":
+                    response = await client.delete(
+                        "/api/catalog/series/hardcover/pack-series/main-books/"
+                        + parent.payload["scope_review"]["id"]
+                    )
+                    assert response.status_code == 200, response.text
+                elif pack_import_change == "remove":
+                    # Independent wanted reasons cannot lend permission to this
+                    # continuation after its root's authority is withdrawn.
+                    async with database() as write, write.begin():
+                        write.add(
+                            AcquisitionReason(
+                                intent_id=UUID(parent.payload["receipt"][0]["request_id"]),
+                                kind="manual",
+                                reference="manual",
+                            )
+                        )
+                    if via_list:
+                        response = await client.delete(f"/api/lists/{shelf}/entries/{work_id}")
+                        assert response.status_code == 204, response.text
+                    else:
+                        root_request = wanted["request"]
+                        for reason in root_request["reasons"]:
+                            response = await client.delete(
+                                f"/api/requests/{root_request['id']}/reasons/{reason['id']}"
+                            )
+                            assert response.status_code == 200, response.text
+                else:
+                    response = await client.post(
+                        f"/api/lists/{shelf}/acquisition/pause",
+                        json={"expected_revision": policy["revision"]},
+                    )
+                    assert response.status_code == 200, response.text
+            return await original_context(db, entry, token, **options)
+
+        monkeypatch.setattr(execution, "context", change_pack_before_publication)
 
     async def remember_first():
         from app.db.models import AutomaticImport, Operation
@@ -530,7 +624,15 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
                 {"work": work_id},
                 medium,
                 **{medium + "_library_id": route["library_id"]},
-                **({"required_narrators": ["Jordan Lee"]} if medium == "audio" else {}),
+                **(
+                    {
+                        "required_narrators": ["Jordan Lee"]
+                        if required_narrators is None
+                        else required_narrators
+                    }
+                    if medium == "audio"
+                    else {}
+                ),
                 **(
                     {
                         "download_constraints": {
@@ -607,8 +709,45 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
         result = (
             await client.get(f"/api/acquisition/automatic-selections/{response.json()['id']}")
         ).json()
+    if expect_pack_review:
+        assert result["status"] == "held" and not result["download_id"], result
+        assert any(
+            "Collection children need separate evidence" in reason
+            for decision in result["decisions"]
+            for reason in decision["reasons"]
+        )
+        async with database() as db:
+            assert not await db.scalar(select(DownloadAttempt.id))
+            assert not await db.scalar(select(AcquisitionSelection.id))
+        assert not qbit.calls and "resolve" not in source_calls
+        return
     assert result["status"] == "completed" and result["download_id"], result
-    if automatic_group or late_join or via_series:
+    if expand_pack:
+        from app.db.models import Operation
+        from app.domain import series_acquisition
+
+        async with database() as db:
+            root = await db.get(Operation, UUID(result["id"]))
+            assert root.payload["pack_expansion"]["state"] == "accepted", root.payload
+            parent_id = UUID(root.payload["pack_expansion"]["request_id"])
+            assert result["pack_expansion"]["request_id"] == str(parent_id)
+        for _ in range(3):
+            async with database() as db, db.begin():
+                parent = await db.get(Operation, parent_id)
+                assert len(parent.payload["records"]) == 1
+                assert parent.payload["records"][0]["work_id"] == str(second["work"])
+                assert parent.payload["effective_specification"]["mode"] == medium
+                controller = await db.get(Operation, UUID(parent.payload["acquisition_id"]))
+                payload = deepcopy(controller.payload)
+                for child in payload["books"].values():
+                    if child["next_at"]:
+                        child["next_at"] = datetime.now(UTC).isoformat()
+                controller.payload = payload
+            await series_acquisition.run(controller.id)
+            await get_queue().run_worker_async(
+                wait=False, concurrency=1, listen_notify=False, install_signal_handlers=False
+            )
+    if automatic_group or late_join or via_series or expand_pack:
         from app.db.models import DownloadMembership, Operation
         from app.domain import automatic_packs
 
@@ -651,6 +790,19 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
                 ).created_at == created
 
         assert second_result["download_id"] == result["download_id"], second_result
+        if pack_import_change == "remove":
+            async with database() as db:
+                entries = list(await db.scalars(select(ImportEntry)))
+                assert len(entries) == 2
+                child = next(e for e in entries if e.version_id == second["version"])
+                assert child.state == "held", child.message
+                assert "withdrawn" in child.message, child.message
+                assert not child.published_at
+                assert await db.scalar(select(func.count()).select_from(DownloadFulfillment)) == 1
+            assert len(list(route["target"].rglob("*.epub"))) == 1
+            assert {p.name: p.read_bytes() for p in source.parent.glob("*.epub")} == contents
+            assert qbit.calls.count("submit") == 1
+            return
         if list_import_change == "remove":
             async with database() as db:
                 entries = list(await db.scalars(select(ImportEntry)))
@@ -706,7 +858,7 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
                     from pathlib import Path
 
                     assert (await asyncio.to_thread(Path(path).stat)).st_ino == inode
-            if via_list:
+            if via_list and not expand_pack:
                 proofs = [
                     item.frozen["automatic_selection"]["list_authority"]
                     for item in await db.scalars(select(AcquisitionSelection))
@@ -737,6 +889,33 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             assert (await client.get(f"/api/catalog/works/{identifier}")).json()["availability"][
                 "owned"
             ]
+        if expand_pack:
+            assert source_calls.count("resolve") == 1
+            async with database() as db:
+                extras = list(
+                    await db.scalars(
+                        select(AcquisitionSelection).where(
+                            AcquisitionSelection.id != UUID(result["selection_id"])
+                        )
+                    )
+                )
+                assert len(extras) == 1
+                assert (
+                    extras[0].frozen["automatic_selection"]["series_authority"]["pack_origin"][
+                        "selection_id"
+                    ]
+                    == result["selection_id"]
+                )
+            view = await client.get(
+                f"/api/catalog/series/hardcover/pack-series/requests/{parent_id}"
+            )
+            assert view.status_code == 200, view.text
+            assert view.json()["selected_pack_only"]
+            assert view.json()["counts"]["satisfied"] == 1
+            if not via_list and not delayed_backend and not pack_import_change:
+                from tests.integration.test_pack_expansion import verify_pack_locks
+
+                await verify_pack_locks(database, UUID(wanted["request"]["id"]), extras[0].id)
         if via_series:
             await series_tick()
             final = (await client.get(f"{series_base}/{series_request}")).json()
@@ -775,10 +954,10 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
                     assert monitored.state == "available", monitored.message
                 await tick(database, {"id": str(policy_id)}, force_books=True)
                 assert qbit.calls.count("submit") == 1
-        assert {p.name: p.read_bytes() for p in source.parent.glob("*.epub")} == contents
-        imported = list(route["target"].rglob("*.epub"))
+        assert {p.name: p.read_bytes() for p in source.parent.glob("*." + extension)} == contents
+        imported = list(route["target"].rglob("*." + extension))
         assert len(imported) == 2
-        for path in source.parent.glob("*.epub"):
+        for path in source.parent.glob("*." + extension):
             assert any(dest.stat().st_ino == path.stat().st_ino for dest in imported)
         return
     if counterfeit:
@@ -1084,4 +1263,68 @@ async def test_list_series_rechecks_publication_authority_after_download(
         inherited_routes=True,
         via_series_list=True,
         list_import_change=change,
+    )
+
+
+@pytest.mark.parametrize("delayed_backend", [False, True])
+@pytest.mark.parametrize("medium", ["ebook", "audio"])
+async def test_prefer_pack_imports_unrequested_reviewed_child_from_the_same_transfer(
+    client, admin, database, ready_route, review_account, monkeypatch, delayed_backend, medium
+):
+    await test_search_to_automatic_download_and_confirmed_member_library(
+        client,
+        admin,
+        database,
+        ready_route,
+        review_account,
+        monkeypatch,
+        medium,
+        delayed_backend,
+        request_limits=True,
+        series_pack=True,
+        expand_pack=True,
+        required_narrators=[],
+    )
+
+
+@pytest.mark.parametrize(
+    ("via_list", "change"),
+    [(False, "remove"), (True, "remove"), (True, "pause"), (False, "withdraw_review")],
+)
+async def test_incidental_pack_import_preserves_specific_origin_authority(
+    client, admin, database, ready_route, review_account, monkeypatch, via_list, change
+):
+    await test_search_to_automatic_download_and_confirmed_member_library(
+        client,
+        admin,
+        database,
+        ready_route,
+        review_account,
+        monkeypatch,
+        "ebook",
+        False,
+        request_limits=True,
+        series_pack=True,
+        expand_pack=True,
+        via_list=via_list,
+        pack_import_change=change,
+    )
+
+
+async def test_narrator_constrained_pack_waits_for_per_book_evidence(
+    client, admin, database, ready_route, review_account, monkeypatch
+):
+    await test_search_to_automatic_download_and_confirmed_member_library(
+        client,
+        admin,
+        database,
+        ready_route,
+        review_account,
+        monkeypatch,
+        "audio",
+        False,
+        request_limits=True,
+        series_pack=True,
+        expand_pack=True,
+        expect_pack_review=True,
     )

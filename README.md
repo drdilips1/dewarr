@@ -12,7 +12,9 @@ Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md), then u
 
 Delivery milestones are manual acquisition at S05, list automation at S07, complete discovery and curation at S08, and production v1 at S09. S10 contains separately scoped extensions. The documents describe required outcomes; [implementation status](docs/IMPLEMENTATION-STATUS.md) records what has actually been verified.
 
-Latest list/series checkpoint: [Inherited series scope and automatic lists](docs/LIST-SERIES.md) lets an automatic list acquire a finite reviewed main-book set, with previews, per-child progress and originating-list links. Membership episodes fence old authority after removal/re-addition; import publication rechecks that origin. Prefer-pack incidental expansion, broader version/omnibus behavior and full stage qualification remain open.
+Latest Prefer-pack increment: [Additional books from a preferred pack](docs/PACK-EXPANSION.md) connects a selected automatic torrent to additional covered, reviewed books in the same medium. It reuses the saved artifact and shared transfer, checks each child independently, and exposes per-book progress. Manual-surface, broader version/omnibus and actual-service qualification remain open.
+
+Latest list/series checkpoint: [Inherited series scope and automatic lists](docs/LIST-SERIES.md) lets an automatic list acquire a finite reviewed main-book set, with previews, per-child progress and originating-list links. Membership episodes fence old authority after removal/re-addition; import publication rechecks that origin. The subsequent Prefer-pack increment is described above; broader version/omnibus behavior and full stage qualification remain open.
 
 Latest defaults checkpoint: [Inherited downloader and destinations](docs/ROUTE-DEFAULTS.md) apply the same preference hierarchy to manual selection and list/series automation. Defaults retain explicit clearing, access checks and frozen approval. Full inherited series expansion and remaining PRD stages are still open.
 

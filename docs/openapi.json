@@ -8264,6 +8264,16 @@
               }
             ],
             "title": "Download Id"
+          },
+          "pack_expansion": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PackExpansionView"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -13762,6 +13772,61 @@
         ],
         "title": "PackCoverage"
       },
+      "PackExpansionView": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "review",
+              "empty",
+              "accepted"
+            ],
+            "title": "State"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "external_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External Id"
+          },
+          "request_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Id"
+          },
+          "work_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Work Ids",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "state",
+          "message"
+        ],
+        "title": "PackExpansionView"
+      },
       "PathPreviewInput": {
         "properties": {
           "path": {
@@ -17598,6 +17663,11 @@
               }
             ],
             "title": "Originating List Id"
+          },
+          "selected_pack_only": {
+            "type": "boolean",
+            "title": "Selected Pack Only",
+            "default": false
           }
         },
         "type": "object",
