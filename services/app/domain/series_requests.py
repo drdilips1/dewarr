@@ -43,17 +43,29 @@ KIND = "series.requests"
 class SeriesRequestInput(BatchInput):
     scope: Literal["selected", "complete_series"] = "selected"
     confirm_main_membership: bool = False
+    scope_review_id: UUID | None = Field(default=None, exclude_if=lambda value: value is None)
     expected_generation: int = Field(ge=1)
     automatic: AutomaticRoutes | None = Field(default=None, exclude_if=lambda value: value is None)
 
     @model_validator(mode="after")
     def reviewed_scope(self):
-        if self.scope == "complete_series" and not self.confirm_main_membership:
+        if self.scope_review_id and self.scope != "complete_series":
+            raise ValueError("A saved main-book review applies to the complete reviewed set")
+        if self.scope == "complete_series" and not (
+            self.confirm_main_membership or self.scope_review_id
+        ):
             raise ValueError("Confirm the selected main books before requesting this series")
         return self
 
 
 async def context(db, user_id, external_id):
+    from app.domain.series_scopes import lock
+
+    await lock(db, user_id, external_id)
+    # Catalog publication takes this before graph/member writes. Join that order
+    # before retaining a catalog row lock, rather than deadlocking with a refresh
+    # and a queued exclusive identity correction.
+    await transaction_lock(db, f"series-catalog:{user_id}:{external_id}")
     # The source token is not needed to request books from an already observed catalog.
     user = await db.get(User, user_id, with_for_update={"read": True}, populate_existing=True)
     if not user or not user.active or user.role == "viewer":
@@ -168,6 +180,11 @@ async def preview(db, user, external_id, body, key):
             update={"scope_origins": automatic["profile"]["scope_origins"]}
         )
     records, omitted = await membership(db, user, series, body)
+    scope_review = None
+    if body.scope_review_id:
+        from app.domain.series_scopes import require_current
+
+        scope_review = await require_current(db, user, series, body.scope_review_id, body.work_ids)
     for record in records:
         await validate_request(db, user, UUID(record["work_id"]), spec)
     operation = Operation(
@@ -193,6 +210,7 @@ async def preview(db, user, external_id, body, key):
             "main_membership": "user-confirmed"
             if body.scope == "complete_series"
             else "not-asserted",
+            **({"scope_review": scope_review} if scope_review else {}),
             "expires_at": (datetime.now(UTC) + timedelta(hours=24)).isoformat(),
         },
     )
@@ -256,6 +274,12 @@ async def start(db, user, operation):
         body = SeriesRequestInput.model_validate(
             {k: v for k, v in operation.payload["command"].items() if k != "external_id"}
         )
+        if body.scope_review_id:
+            from app.domain.series_scopes import require_current
+
+            proof = await require_current(db, user, row, body.scope_review_id, body.work_ids)
+            if proof != operation.payload.get("scope_review"):
+                raise HTTPException(409, "Main-book review changed; create a new preview")
         await resolve(
             db,
             user,

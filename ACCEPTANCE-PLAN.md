@@ -224,6 +224,8 @@ Document-only planning updates require requirement/backlog cross-reference and l
 
 ## 14. Series catalog and acquisition boundary
 
+The current [series-scope execution packets](IMPLEMENTATION-PLAN.md#next-reviewable-packets-series-scope-and-list-expansion) refine existing assertions, without adding new AT scenario IDs. Their integrated proof must distinguish catalog facts, authorized targets, pack contents and confirmed inventory. If implementation adds reusable reviewed scope, test that a one-off series request cannot become standing permission, a changed catalog cannot enlarge an accepted set, and withdrawing upstream list authority prevents new child side effects while preserving independently authorized work. Test explicit policy precedence, list membership episodes and deterministic concurrent expansion/revocation in addition to the per-child publication assertions below.
+
 These assertions refine AT-02, AT-04–AT-06 and AT-14–AT-15, with automated fulfillment still covered by AT-20–AT-22 and AT-30. They introduce no new scenario IDs. Apply them to the S06-05 child tasks in the implementation plan.
 
 - Two provider series with the same name remain separate. Repeated positions, decimal positions, unknown positions, compilations, partial books and merged records retain their source evidence. Popularity never silently decides acquisition identity or main-series membership.

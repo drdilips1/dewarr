@@ -12,12 +12,41 @@ from app.api.dependencies import CurrentUser, Database, Member
 from app.api.metadata import adapter_http_error
 from app.api.operations import OperationView
 from app.db.models import CatalogSeries, Operation, SeriesMembership, Work
-from app.domain import catalog_series
+from app.domain import catalog_series, series_requests, series_scopes
 from app.domain.availability import availability_for
+from app.domain.series_scopes import ScopeReviewInput, ScopeReviewView
 from app.domain.visibility import visible_work
 from app.domain.work_graph import canonical_map
 
 router = APIRouter(prefix="/catalog/series", tags=["series"])
+
+
+@router.get("/hardcover/{external_id}/main-books", response_model=ScopeReviewView)
+async def main_books(external_id: str, user: Member, db: Database):
+    series, user = await series_requests.context(db, user.id, external_id)
+    return await series_scopes.view(db, user, series, await series_scopes.latest(db, user, series))
+
+
+@router.post("/hardcover/{external_id}/main-books", response_model=ScopeReviewView, status_code=201)
+async def review_main_books(
+    external_id: str,
+    body: ScopeReviewInput,
+    user: Member,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    series, user, review = await series_scopes.save(db, user, external_id, body, idempotency_key)
+    response = await series_scopes.view(db, user, series, review)
+    await db.commit()
+    return response
+
+
+@router.delete("/hardcover/{external_id}/main-books/{review_id}", response_model=ScopeReviewView)
+async def withdraw_main_books(external_id: str, review_id: UUID, user: Member, db: Database):
+    series, user, review = await series_scopes.withdraw(db, user, external_id, review_id)
+    response = await series_scopes.view(db, user, series, review)
+    await db.commit()
+    return response
 
 
 class SeriesEntryView(BaseModel):

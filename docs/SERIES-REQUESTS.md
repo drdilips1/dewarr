@@ -8,6 +8,8 @@ Select up to 100 books on the Hardcover series page. Selection survives page nav
 
 Selected books requests exactly those titles. Complete reviewed main-book set additionally requires the user to confirm that these are the main books they want to complete; each selected work must have published, non-partial, non-compilation, non-merged source evidence. This confirmation is recorded as user evidence, never as a claim that Hardcover supplied a definitive main-series classification. Duplicate positions stay visible with a warning. Unknown/future publication entries remain available for deliberate Selected books requests, not automatic main-set classification.
 
+A current [reusable main-book review](SERIES-SCOPE-REVIEW.md) can supply that confirmation when its exact saved set is selected. The preview records the review ID/revision and rechecks it at acceptance. An ordinary series request does not create reusable membership evidence. Review withdrawal/replacement invalidates unaccepted previews, while already accepted requests preserve their independent scope and reasons.
+
 The preview lists selected and omitted works, publication/identity warnings, effective preferences, and per-medium available/missing/pending states. It preserves series ordering. The overall book ownership indicator is unchanged: an ebook still makes the work owned while an audiobook request may be missing.
 
 Save series requests accepts this exact set and queues an atomic worker transaction. The worker uses the existing acquisition service, compatible reservations and frozen preferences. It creates independent series reasons, not a hidden local list and not a second downloader. The receipt identifies each resulting book request. Existing book pages provide source selection and the ordinary download/import lifecycle. Saving this batch alone does not start a download or implement Prefer packs.
@@ -20,7 +22,7 @@ Preview requires the currently displayed catalog generation. It stores the sourc
 
 Acceptance records a durable timestamp and queues work in the same transaction. After acceptance, catalog refresh and personal preference edits cannot reinterpret the saved set. The worker still checks current actor permissions, library access and work identities. Queue retries reuse child command keys. A failure after one child submission rolls back all requests and enqueues from that transaction; a later retry cannot duplicate committed work.
 
-Child command locks precede parent/graph/work locks. All work locks use canonical UUID order. Network activity is absent from this transaction. Operation, receipt and request reasons commit together. A terminal/missing queue job becomes an actionable failed state when the saved request is opened; retry preserves accepted evidence and validates current authority.
+Child command locks precede the owner/series scope and catalog-observation advisory locks, then user/catalog, parent and graph/work locks. All work locks use canonical UUID order. Network activity is absent from this transaction. Operation, receipt and request reasons commit together. A terminal/missing queue job becomes an actionable failed state when the saved request is opened; retry preserves accepted evidence and validates current authority.
 
 ## Reasons and cancellation
 
@@ -34,4 +36,4 @@ Routes are under `/api/catalog/series/hardcover/{external_id}/requests`: `POST /
 
 Migration `0034_series_requests` extends the acquisition-reason constraint. Back up before deploying the matching API and worker. Downgrade refuses to discard series operation/reason history; restore the pre-upgrade backup when rolling back to an older binary. Series request payloads and reasons require this binary even though no new table is added.
 
-Remaining work: inherited Just book / Prefer packs / Complete series policy across manual and standing-list flows; automatic destination inheritance; bounded pack coverage selection; one transfer serving compatible child requests; actual per-child and omnibus import accounting; broader live-provider and release qualification. This checkpoint does not close S06, S07 or the full PRD.
+Subsequent increments provide inherited routes, bounded automatic pack selection, shared transfers, later compatible reuse and independent child imports. Remaining work includes inherited Just book / Prefer packs / Complete series policy across manual and standing-list flows, list-derived expansion, broader route/version combinations, omnibus accounting and actual-service/release qualification. This checkpoint does not close S06, S07 or the full PRD.

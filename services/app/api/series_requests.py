@@ -47,6 +47,8 @@ class SeriesRequestView(BaseModel):
     catalog_generation: int
     scope: str
     main_membership: str
+    scope_review_id: UUID | None = None
+    scope_review_revision: int | None = None
     specification: RequestSpec
     release_policy: ProfileSnapshot
     expires_at: datetime
@@ -109,6 +111,8 @@ async def view(db, user, operation):
         catalog_generation=payload["series"]["generation"],
         scope=payload["command"]["scope"],
         main_membership=payload["main_membership"],
+        scope_review_id=payload.get("scope_review", {}).get("id"),
+        scope_review_revision=payload.get("scope_review", {}).get("revision"),
         specification=payload["effective_specification"],
         release_policy=payload["release_policy"],
         expires_at=payload["expires_at"],

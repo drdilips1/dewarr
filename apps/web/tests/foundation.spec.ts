@@ -3349,6 +3349,36 @@ test("series catalog preserves uncertainty and curates selected books", async ({
   await expect(
     page.getByLabel("Select Journey Without Date", { exact: true }),
   ).not.toBeChecked();
+  const mainBooks = page.getByRole("region", {
+    name: "Main-book review",
+    exact: true,
+  });
+  await mainBooks
+    .getByText("Reusable main-book selection", { exact: true })
+    .click();
+  await mainBooks
+    .getByLabel(
+      "I reviewed the selected books as a reusable main-series selection.",
+    )
+    .check();
+  await mainBooks
+    .getByRole("button", { name: "Save main-book review (2)", exact: true })
+    .click();
+  await expect(mainBooks.getByRole("status")).toContainText(
+    "Reviewed main books are unchanged",
+  );
+  await page.screenshot({
+    path: testInfo.outputPath("main-book-review-mobile.png"),
+    fullPage: true,
+  });
+  await page.reload();
+  await mainBooks
+    .getByText("Reusable main-book selection", { exact: true })
+    .click();
+  await expect(mainBooks).toContainText("Revision 1 · 2 reviewed books");
+  await mainBooks
+    .getByRole("button", { name: "Select reviewed main books", exact: true })
+    .click();
   const requests = page.getByRole("region", {
     name: "Series requests",
     exact: true,
@@ -3356,11 +3386,7 @@ test("series catalog preserves uncertainty and curates selected books", async ({
   await requests
     .getByLabel("Series request scope")
     .selectOption("complete_series");
-  await requests
-    .getByLabel(
-      "I reviewed the selection and it contains the main books I want to complete.",
-    )
-    .check();
+  await requests.getByLabel("Use saved main-book review (revision 1)").check();
   await requests.getByLabel("Series requested media").selectOption("both");
   await requests
     .getByRole("button", { name: "Preview series requests", exact: true })
@@ -3369,6 +3395,7 @@ test("series catalog preserves uncertainty and curates selected books", async ({
     requests.getByRole("button", { name: "Save series requests", exact: true }),
   ).toBeVisible();
   await expect(requests).toContainText("2 selected books");
+  await expect(requests).toContainText("Reused main-book review 1");
   await expect(requests).toContainText("Ebook: Available");
   await requests
     .getByRole("button", { name: "Save series requests", exact: true })
@@ -3376,6 +3403,15 @@ test("series catalog preserves uncertainty and curates selected books", async ({
   await expect(requests.getByRole("status")).toContainText(
     "Saved requests for 2 books",
     { timeout: 15_000 },
+  );
+  await mainBooks
+    .getByRole("button", { name: "Withdraw main-book review", exact: true })
+    .click();
+  await expect(mainBooks.getByRole("status")).toContainText(
+    "Main-book review withdrawn",
+  );
+  await expect(requests.getByRole("status")).toContainText(
+    "Saved requests for 2 books",
   );
   await page.reload();
   await requests

@@ -6,6 +6,8 @@ Current request contract: back up the database and apply migrations through `003
 
 [Automatic reviewed-series acquisition](SERIES-ACQUISITION.md) adds a durable `series.acquire` task without a new migration. Update API and worker together before accepting automatic series requests. Finite accepted sets retain their own scope and authority; this does not enable future-sequel monitoring or installation dispatch.
 
+[Reusable main-book reviews](SERIES-SCOPE-REVIEW.md) add finite owner-reviewed membership evidence and optional proof reuse in series requests. Deploy API and worker together before saving proof-backed requests; older binaries cannot interpret the new command field. No migration beyond `0037_download_joins` is needed, and saving a review creates no acquisition or job.
+
 [Route defaults](ROUTE-DEFAULTS.md) add inherited downloader and per-medium destination references to the existing JSON preferences. Deploy API and worker together before saving these fields; no new migration is required. Automatic acquisition still needs current route approval, and deployment does not enable dispatch.
 
 ## Native development

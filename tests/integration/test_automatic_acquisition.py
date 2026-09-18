@@ -63,6 +63,7 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     reuse_failure=None,
     via_series=False,
     inherited_routes=False,
+    via_scope_review=False,
 ):
     route = ready_route
     if series_pack:
@@ -239,13 +240,28 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             )
 
         series_base = "/api/catalog/series/hardcover/pack-series/requests"
+        scope_review = None
+        if via_scope_review:
+            response = await client.post(
+                "/api/catalog/series/hardcover/pack-series/main-books",
+                headers={"Idempotency-Key": "automatic-main-book-review"},
+                json={
+                    "work_ids": [work_id, str(second["work"])],
+                    "expected_generation": 1,
+                    "expected_review_id": None,
+                    "confirm_main_membership": True,
+                },
+            )
+            assert response.status_code == 201, response.text
+            scope_review = response.json()["id"]
         response = await client.post(
             series_base + "/preview",
             headers={"Idempotency-Key": "automatic-series-preview"},
             json={
                 "work_ids": [work_id, str(second["work"])],
                 "scope": "complete_series",
-                "confirm_main_membership": True,
+                "confirm_main_membership": not via_scope_review,
+                **({"scope_review_id": scope_review} if scope_review else {}),
                 "expected_generation": 1,
                 "specification": {"mode": medium},
                 "automatic": {}
@@ -266,6 +282,12 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
         series_request = response.json()["id"]
         assert response.json()["automatic"]
         assert (await client.post(f"{series_base}/{series_request}/submit")).status_code == 202
+        if scope_review:
+            assert response.json()["scope_review_id"] == scope_review
+            withdrawn = await client.delete(
+                f"/api/catalog/series/hardcover/pack-series/main-books/{scope_review}"
+            )
+            assert withdrawn.status_code == 200
         route["scan_backend"].detect = not delayed_backend
         await get_queue().run_worker_async(
             wait=False, concurrency=1, listen_notify=False, install_signal_handlers=False
@@ -880,4 +902,25 @@ async def test_inherited_routes_reach_confirmed_library_through_list_or_series(
         via_series=via_series,
         via_list=not via_series,
         inherited_routes=True,
+    )
+
+
+@pytest.mark.parametrize("delayed_backend", [False, True])
+async def test_saved_main_book_review_reaches_confirmed_library_after_review_withdrawal(
+    client, admin, database, ready_route, review_account, monkeypatch, delayed_backend
+):
+    await test_search_to_automatic_download_and_confirmed_member_library(
+        client,
+        admin,
+        database,
+        ready_route,
+        review_account,
+        monkeypatch,
+        "ebook",
+        delayed_backend,
+        request_limits=True,
+        series_pack=True,
+        via_series=True,
+        inherited_routes=True,
+        via_scope_review=True,
     )

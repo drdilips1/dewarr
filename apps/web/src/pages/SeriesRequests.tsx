@@ -7,6 +7,7 @@ import { Notice } from "../components";
 import RequestPreferences, { type Choice } from "./RequestPreferences";
 import { EffectiveScope } from "./ScopeFields";
 import { EffectivePreferences } from "./PreferenceFields";
+import type { MainBookReview } from "./SeriesScopeReview";
 import SeriesAutomaticRoutes, {
   useSeriesRoutes,
 } from "./SeriesAutomaticRoutes";
@@ -26,10 +27,12 @@ export default function SeriesRequests({
   externalId,
   generation,
   selected,
+  mainBookReview,
 }: {
   externalId: string;
   generation: number;
   selected: string[];
+  mainBookReview?: MainBookReview;
 }) {
   const cache = useQueryClient();
   const [id, setId] = useState<string | null>(null);
@@ -37,6 +40,15 @@ export default function SeriesRequests({
     "selected",
   );
   const [confirmed, setConfirmed] = useState(false);
+  const [useMainBookReview, setUseMainBookReview] = useState(false);
+  const matchingReview =
+    mainBookReview?.state === "current" &&
+    mainBookReview.books.length === selected.length &&
+    mainBookReview.books.every((book) => selected.includes(book.work_id));
+  const scopeReviewId =
+    scope === "complete_series" && useMainBookReview && matchingReview
+      ? mainBookReview?.id
+      : undefined;
   const [spec, setSpec] = useState<Spec>({});
   const [preferences, setPreferences] = useState<Choice>({});
   const [automatic, setAutomatic] = useState(false);
@@ -111,6 +123,7 @@ export default function SeriesRequests({
               release_preferences: preferences,
               scope,
               confirm_main_membership: confirmed,
+              scope_review_id: scopeReviewId,
               expected_generation: generation,
               automatic: automatic ? routes.input : undefined,
             },
@@ -156,6 +169,7 @@ export default function SeriesRequests({
     preferences,
     scope,
     confirmed,
+    scopeReviewId,
     generation,
     automatic: automatic ? routes.input : null,
   });
@@ -223,15 +237,33 @@ export default function SeriesRequests({
               </select>
             </label>
             {scope === "complete_series" && (
-              <label className="check-label">
-                <input
-                  type="checkbox"
-                  checked={confirmed}
-                  onChange={(e) => setConfirmed(e.target.checked)}
-                />
-                I reviewed the selection and it contains the main books I want
-                to complete.
-              </label>
+              <>
+                {matchingReview && (
+                  <label className="check-label">
+                    <input
+                      type="checkbox"
+                      checked={useMainBookReview}
+                      onChange={(event) => {
+                        setUseMainBookReview(event.target.checked);
+                        setConfirmed(false);
+                      }}
+                    />
+                    Use saved main-book review (revision{" "}
+                    {mainBookReview?.revision})
+                  </label>
+                )}
+                {!scopeReviewId && (
+                  <label className="check-label">
+                    <input
+                      type="checkbox"
+                      checked={confirmed}
+                      onChange={(e) => setConfirmed(e.target.checked)}
+                    />
+                    I reviewed the selection and it contains the main books I
+                    want to complete.
+                  </label>
+                )}
+              </>
             )}
             <label>
               Series requested media
@@ -291,7 +323,7 @@ export default function SeriesRequests({
                 !selected.length ||
                 selected.length > 100 ||
                 (automatic && !routes.input) ||
-                (scope === "complete_series" && !confirmed)
+                (scope === "complete_series" && !confirmed && !scopeReviewId)
               }
             >
               Preview series requests
@@ -318,6 +350,8 @@ export default function SeriesRequests({
             <p>
               These are your reviewed main books, saved from catalog revision{" "}
               {value.catalog_generation}.
+              {value.scope_review_revision &&
+                ` Reused main-book review ${value.scope_review_revision}.`}
             </p>
           )}
           <EffectiveScope

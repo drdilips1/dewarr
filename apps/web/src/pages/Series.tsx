@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import { Loading, Notice } from "../components";
 import SeriesRequests from "./SeriesRequests";
+import SeriesScopeReview from "./SeriesScopeReview";
 
 export default function Series({ canEdit }: { canEdit: boolean }) {
   const { externalId = "" } = useParams();
@@ -45,6 +46,17 @@ function SeriesContent({
     queryKey: ["lists"],
     queryFn: async () => result(await api.GET("/api/lists")),
     enabled: canEdit,
+  });
+  const mainBooks = useQuery({
+    queryKey: ["series-main-books", externalId, catalog.data?.generation],
+    queryFn: async () =>
+      result(
+        await api.GET(
+          "/api/catalog/series/hardcover/{external_id}/main-books",
+          { params: { path: { external_id: externalId } } },
+        ),
+      ),
+    enabled: canEdit && Boolean(catalog.data?.fetched_at),
   });
   const policy = useQuery({
     queryKey: ["list-policy", listId],
@@ -141,7 +153,8 @@ function SeriesContent({
           refresh.error ||
           add.error ||
           lists.error ||
-          policy.error
+          policy.error ||
+          mainBooks.error
         }
       />
       {canEdit && (
@@ -306,11 +319,23 @@ function SeriesContent({
         </button>
       </nav>
       {canEdit && data.fetched_at && (
-        <SeriesRequests
-          externalId={externalId}
-          generation={data.generation}
-          selected={selected}
-        />
+        <>
+          {mainBooks.data && !loading && (
+            <SeriesScopeReview
+              externalId={externalId}
+              generation={data.generation}
+              selected={selected}
+              review={mainBooks.data}
+              onSelect={setSelected}
+            />
+          )}
+          <SeriesRequests
+            externalId={externalId}
+            generation={data.generation}
+            selected={selected}
+            mainBookReview={mainBooks.data}
+          />
+        </>
       )}
     </>
   );

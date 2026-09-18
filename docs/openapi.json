@@ -522,6 +522,161 @@
         }
       }
     },
+    "/api/catalog/series/hardcover/{external_id}/main-books": {
+      "get": {
+        "tags": [
+          "series"
+        ],
+        "summary": "Main Books",
+        "operationId": "main_books_api_catalog_series_hardcover__external_id__main_books_get",
+        "parameters": [
+          {
+            "name": "external_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "External Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScopeReviewView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "series"
+        ],
+        "summary": "Review Main Books",
+        "operationId": "review_main_books_api_catalog_series_hardcover__external_id__main_books_post",
+        "parameters": [
+          {
+            "name": "external_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "External Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScopeReviewInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScopeReviewView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/catalog/series/hardcover/{external_id}/main-books/{review_id}": {
+      "delete": {
+        "tags": [
+          "series"
+        ],
+        "summary": "Withdraw Main Books",
+        "operationId": "withdraw_main_books_api_catalog_series_hardcover__external_id__main_books__review_id__delete",
+        "parameters": [
+          {
+            "name": "external_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "External Id"
+            }
+          },
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Review Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScopeReviewView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/catalog/series/hardcover/{external_id}/refresh": {
       "post": {
         "tags": [
@@ -16125,6 +16280,172 @@
         ],
         "title": "SaveSettings"
       },
+      "ScopeBook": {
+        "properties": {
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Authors"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "work_id",
+          "title",
+          "authors",
+          "position",
+          "warnings"
+        ],
+        "title": "ScopeBook"
+      },
+      "ScopeReviewInput": {
+        "properties": {
+          "work_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Work Ids"
+          },
+          "expected_generation": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Generation"
+          },
+          "expected_review_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Review Id"
+          },
+          "confirm_main_membership": {
+            "type": "boolean",
+            "const": true,
+            "title": "Confirm Main Membership"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "work_ids",
+          "expected_generation",
+          "expected_review_id",
+          "confirm_main_membership"
+        ],
+        "title": "ScopeReviewInput"
+      },
+      "ScopeReviewView": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision",
+            "default": 0
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "not-reviewed",
+              "current",
+              "changed",
+              "needs-refresh",
+              "withdrawn",
+              "superseded"
+            ],
+            "title": "State"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "catalog_generation": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Catalog Generation"
+          },
+          "reviewed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewed At"
+          },
+          "books": {
+            "items": {
+              "$ref": "#/components/schemas/ScopeBook"
+            },
+            "type": "array",
+            "title": "Books",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "state",
+          "message"
+        ],
+        "title": "ScopeReviewView"
+      },
       "SearchInput": {
         "properties": {
           "q": {
@@ -16846,6 +17167,18 @@
             "title": "Confirm Main Membership",
             "default": false
           },
+          "scope_review_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope Review Id"
+          },
           "expected_generation": {
             "type": "integer",
             "minimum": 1.0,
@@ -17001,6 +17334,29 @@
           "main_membership": {
             "type": "string",
             "title": "Main Membership"
+          },
+          "scope_review_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope Review Id"
+          },
+          "scope_review_revision": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope Review Revision"
           },
           "specification": {
             "$ref": "#/components/schemas/RequestSpec"

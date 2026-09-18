@@ -25,6 +25,13 @@ async def catalog(database, owner_id, work_ids, name="Coast"):
                     external_id=str(index),
                     work_id=work.id,
                     snapshot={
+                        "entry_id": str(index),
+                        "book": {
+                            "provider": "hardcover",
+                            "external_id": str(index),
+                            "title": work.title,
+                            "authors": work.authors,
+                        },
                         "position": str(index),
                         "release_date": "2020-01-01",
                         "compilation": False,

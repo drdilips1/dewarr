@@ -62,6 +62,8 @@ Series checkpoint: [Series catalog and curation](docs/SERIES-CATALOG.md) adds du
 
 Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md) for the product boundary, end-to-end journey, P0/P1 decisions, stage summary and release milestones.
 
+Series-scope checkpoint: [Reusable main-book reviews](docs/SERIES-SCOPE-REVIEW.md) save explicit finite membership evidence without acquiring anything. Reviewed series requests can reuse the current proof; replacement/withdrawal invalidates unaccepted previews while accepted requests retain their independent authority. Inherited series policies and list-derived expansion remain next work.
+
 The [release delivery contract](IMPLEMENTATION-PLAN.md#16-release-delivery-contract) defines milestone owners, demonstrations and the next bounded increment. The PRD includes [eight launch journeys](PRD.md#20-launch-journey-checklist) spanning connected inventory, discovery, acquisition, lists, packs and restore.
 
 The [stage closure plan](IMPLEMENTATION-PLAN.md#17-stage-closure-and-implementation-packets) provides the current end-to-end execution handoff: remaining S00–S10 gates, shared-pack implementation packets, automation and discovery dependencies, and production acceptance. It is a plan, not a claim that those features have shipped.

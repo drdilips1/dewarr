@@ -1,5 +1,7 @@
 # Implementation status and evidence
 
+Latest checkpoint: [Reusable main-book reviews](SERIES-SCOPE-REVIEW.md) supplies finite owner-reviewed membership evidence and proof reuse in accepted series requests. See the final checkpoint below for exact verification. Inherited series scope and list-derived expansion remain incomplete.
+
 Updated September 18, 2026. Objective remains **implement the full PRD end to end**, including the planned later capabilities. This is an implementation checkpoint, not a completion declaration.
 
 ## Current code
@@ -429,3 +431,19 @@ The first browser run passed setup but could not locate the new route select by 
 The development database/key backup was saved privately and its archive catalog checked. API and worker stopped with no running development jobs, retained schema `0037_download_joins`, and restarted together. Readiness, a fresh worker heartbeat and disabled installation download dispatch were verified. Logs, commands, runtime and commit references are recorded in `.local/evidence/route-defaults-checkpoint.json`.
 
 The contract is [Route defaults](ROUTE-DEFAULTS.md). This supersedes earlier pending statements about basic route-default inheritance. The next acquisition-policy work remains inherited Just book / Prefer packs / Complete series scope, list-derived finite expansion and reviewed changes to accepted requests. Full versions/recordings/omnibus coverage, native ABB, discovery, live-service certification, production gates and S10 remain required; the full PRD is not complete.
+
+## Reusable main-book review checkpoint · September 18, 2026
+
+Series pages now save a finite, owner-reviewed main-book selection separately from acquisition. The review records source/canonical identity, publication and membership facts, omitted works, revision and a fingerprint. Positions and featured flags do not establish main membership. Saving creates no requests or jobs. New catalog entries never enlarge the selection; relevant selected evidence changes require review, and stale observations require refresh. Withdrawal never revives an older revision.
+
+Complete reviewed-series requests may explicitly reuse the current review for the exact selected set. Request acceptance serializes with review replacement/withdrawal and checks its frozen proof. Accepted requests retain independent reasons and scope after later withdrawal. API/browser views expose the reused revision, selected books, state and appropriate actions. Catalog publication is serialized before retaining review/request catalog row locks. The contract is [Reusable main-book reviews](SERIES-SCOPE-REVIEW.md); no schema migration beyond `0037_download_joins` is needed.
+
+The initial focused series suite passed **56 tests in 16.25 seconds**. The review and real-file acquisition suite passed **58 tests in 55.69 seconds**, including two new saved-review workflows using inherited destinations, one shared pack, source-preserving hardlinks and immediate/delayed ABS confirmation. Withdrawal after request acceptance does not stop those independently authorized requests. These use real PostgreSQL/workers/files and synthetic external services.
+
+The full backend regression passed **1,388 tests in 371.39 seconds** before the final catalog-publication lock guard and its new test. The affected series/catalog/real-file run after that guard passed **114 cases**, with one new concurrency test failing because its transaction-cached `pg_stat_activity` observation did not see the waiting connection. The test now reads live `pg_locks` records; it passed individually, then the entire **30-test review suite passed in 6.86 seconds**. The failed run is retained as `series-scope-final-first.log`. The full backend suite was not repeated after the final lock change; its affected paths have the focused results above.
+
+Both selected browser runs passed **two journeys in 2.2 minutes**. The final run covers setup/shared-download regression, review save/reload/reselection, proof-backed request acceptance, review withdrawal without cancelling that request, existing automatic-series behavior and mobile layout. The expanded main-book review screenshot and request screenshot were visually inspected. The full browser suite and actual external-provider compatibility were not certified by this increment.
+
+Backend lint/format, frontend build/format, generated API/client reproducibility, model alignment, wheel equality for the four changed backend modules, documentation links and diff checks pass. The development database/key backup was saved privately and the dump catalog verified. The matching API and worker restarted with no active development jobs; readiness, one fresh worker heartbeat, schema `0037_download_joins`, the new API route and disabled installation dispatch were verified. Logs, backup location reference, runtime and commit evidence are recorded in `.local/evidence/series-scope-checkpoint.json`.
+
+This implements the explicit reviewed-evidence foundation of SC-01 and connects it to the existing finite-series workflow. Continue SC-02/SC-03 with inherited series scope and upstream list authority, then bounded Prefer packs/Complete series expansion and lifecycle qualification. It does not implement standing-list expansion, authorize downloads merely from catalog facts, close S06/S07, or complete the full PRD. All remaining source, version/omnibus, discovery, compatibility, production and S10 gates remain required.

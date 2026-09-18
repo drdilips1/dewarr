@@ -227,6 +227,41 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/catalog/series/hardcover/{external_id}/main-books": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Main Books */
+    get: operations["main_books_api_catalog_series_hardcover__external_id__main_books_get"];
+    put?: never;
+    /** Review Main Books */
+    post: operations["review_main_books_api_catalog_series_hardcover__external_id__main_books_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/catalog/series/hardcover/{external_id}/main-books/{review_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** Withdraw Main Books */
+    delete: operations["withdraw_main_books_api_catalog_series_hardcover__external_id__main_books__review_id__delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/catalog/series/hardcover/{external_id}/refresh": {
     parameters: {
       query?: never;
@@ -5444,6 +5479,68 @@ export interface components {
       /** Expected Revision */
       expected_revision: string;
     };
+    /** ScopeBook */
+    ScopeBook: {
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /** Title */
+      title: string;
+      /** Authors */
+      authors: string[];
+      /** Position */
+      position: string | null;
+      /** Warnings */
+      warnings: string[];
+    };
+    /** ScopeReviewInput */
+    ScopeReviewInput: {
+      /** Work Ids */
+      work_ids: string[];
+      /** Expected Generation */
+      expected_generation: number;
+      /** Expected Review Id */
+      expected_review_id: string | null;
+      /**
+       * Confirm Main Membership
+       * @constant
+       */
+      confirm_main_membership: true;
+    };
+    /** ScopeReviewView */
+    ScopeReviewView: {
+      /** Id */
+      id?: string | null;
+      /**
+       * Revision
+       * @default 0
+       */
+      revision: number;
+      /**
+       * State
+       * @enum {string}
+       */
+      state:
+        | "not-reviewed"
+        | "current"
+        | "changed"
+        | "needs-refresh"
+        | "withdrawn"
+        | "superseded";
+      /** Message */
+      message: string;
+      /** Catalog Generation */
+      catalog_generation?: number | null;
+      /** Reviewed At */
+      reviewed_at?: string | null;
+      /**
+       * Books
+       * @default []
+       */
+      books: components["schemas"]["ScopeBook"][];
+    };
     /** SearchInput */
     SearchInput: {
       /** Q */
@@ -5730,6 +5827,8 @@ export interface components {
        * @default false
        */
       confirm_main_membership: boolean;
+      /** Scope Review Id */
+      scope_review_id?: string | null;
       /** Expected Generation */
       expected_generation: number;
       automatic?: components["schemas"]["AutomaticRoutes"] | null;
@@ -5779,6 +5878,10 @@ export interface components {
       scope: string;
       /** Main Membership */
       main_membership: string;
+      /** Scope Review Id */
+      scope_review_id?: string | null;
+      /** Scope Review Revision */
+      scope_review_revision?: number | null;
       specification: components["schemas"]["RequestSpec"];
       release_policy: components["schemas"]["ProfileSnapshot"];
       /**
@@ -6680,6 +6783,106 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["WorkView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  main_books_api_catalog_series_hardcover__external_id__main_books_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        external_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ScopeReviewView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  review_main_books_api_catalog_series_hardcover__external_id__main_books_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        external_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ScopeReviewInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ScopeReviewView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  withdraw_main_books_api_catalog_series_hardcover__external_id__main_books__review_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        external_id: string;
+        review_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ScopeReviewView"];
         };
       };
       /** @description Validation Error */
