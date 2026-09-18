@@ -61,6 +61,7 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     automatic_group=False,
     late_join=False,
     reuse_failure=None,
+    via_series=False,
 ):
     route = ready_route
     if series_pack:
@@ -222,7 +223,71 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             }
 
     policy = None
-    if via_list:
+    if via_series:
+        from app.db.models import Operation
+        from app.domain import series_acquisition
+
+        series_base = "/api/catalog/series/hardcover/pack-series/requests"
+        response = await client.post(
+            series_base + "/preview",
+            headers={"Idempotency-Key": "automatic-series-preview"},
+            json={
+                "work_ids": [work_id, str(second["work"])],
+                "scope": "complete_series",
+                "confirm_main_membership": True,
+                "expected_generation": 1,
+                "specification": {"mode": medium},
+                "automatic": {
+                    "downloader_id": downloader_id,
+                    "downloader_generation": 1,
+                    "routes": {
+                        medium: {
+                            "destination_id": route["destination"]["id"],
+                            "destination_revision": route["destination"]["revision"],
+                        }
+                    },
+                },
+            },
+        )
+        assert response.status_code == 201, response.text
+        series_request = response.json()["id"]
+        assert response.json()["automatic"]
+        assert (await client.post(f"{series_base}/{series_request}/submit")).status_code == 202
+        route["scan_backend"].detect = not delayed_backend
+        await get_queue().run_worker_async(
+            wait=False, concurrency=1, listen_notify=False, install_signal_handlers=False
+        )
+
+        async def series_tick():
+            from copy import deepcopy
+
+            async with database() as db, db.begin():
+                parent = await db.get(Operation, UUID(series_request))
+                row = await db.get(Operation, UUID(parent.payload["acquisition_id"]))
+                payload = deepcopy(row.payload)
+                for book in payload["books"].values():
+                    if book["next_at"]:
+                        book["next_at"] = datetime.now(UTC).isoformat()
+                row.payload = payload
+                identifier = row.id
+            await series_acquisition.run(identifier)
+            await get_queue().run_worker_async(
+                wait=False, concurrency=1, listen_notify=False, install_signal_handlers=False
+            )
+
+        await series_tick()
+        async with database() as db:
+            operation = await db.scalar(
+                select(Operation).where(
+                    Operation.kind == automatic_selection.KIND,
+                    Operation.payload["work"]["id"].astext == work_id,
+                )
+            )
+            assert operation is not None
+            result = (
+                await client.get(f"/api/acquisition/automatic-selections/{operation.id}")
+            ).json()
+    elif via_list:
         from tests.integration.test_acquisition_defaults import save as save_defaults
         from tests.integration.test_list_policies import tick
 
@@ -416,7 +481,7 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             await client.get(f"/api/acquisition/automatic-selections/{response.json()['id']}")
         ).json()
     assert result["status"] == "completed" and result["download_id"], result
-    if automatic_group or late_join:
+    if automatic_group or late_join or via_series:
         from app.db.models import DownloadMembership, Operation
         from app.domain import automatic_packs
 
@@ -534,6 +599,19 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             assert (await client.get(f"/api/catalog/works/{identifier}")).json()["availability"][
                 "owned"
             ]
+        if via_series:
+            await series_tick()
+            final = (await client.get(f"{series_base}/{series_request}")).json()
+            assert final["acquisition_status"] == "completed", final
+            assert {r["acquisition_state"] for r in final["records"]} == {"available"}, final
+            assert final["counts"]["satisfied"] == 2
+            async with database() as db:
+                selections = list(await db.scalars(select(AcquisitionSelection)))
+                assert all(
+                    s.frozen["automatic_selection"]["series_authority"]["operation_id"]
+                    == series_request
+                    for s in selections
+                )
         assert {p.name: p.read_bytes() for p in source.parent.glob("*.epub")} == contents
         imported = list(route["target"].rglob("*.epub"))
         assert len(imported) == 2
@@ -738,4 +816,23 @@ async def test_completed_pack_reuse_checks_saved_files_and_recovers_without_new_
         series_pack=True,
         late_join=True,
         reuse_failure=failure,
+    )
+
+
+@pytest.mark.parametrize("delayed_backend", [False, True])
+async def test_reviewed_complete_series_automatically_acquires_and_confirms_each_book(
+    client, admin, database, ready_route, review_account, monkeypatch, delayed_backend
+):
+    await test_search_to_automatic_download_and_confirmed_member_library(
+        client,
+        admin,
+        database,
+        ready_route,
+        review_account,
+        monkeypatch,
+        "ebook",
+        delayed_backend,
+        request_limits=True,
+        series_pack=True,
+        via_series=True,
     )

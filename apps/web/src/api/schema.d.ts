@@ -278,6 +278,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/catalog/series/hardcover/{external_id}/requests/{operation_id}/retry-acquisition": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Retry Acquisition */
+    post: operations["retry_acquisition_api_catalog_series_hardcover__external_id__requests__operation_id__retry_acquisition_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/catalog/series/hardcover/{external_id}/requests": {
     parameters: {
       query?: never;
@@ -2447,6 +2464,20 @@ export interface components {
       user: components["schemas"]["UserView"];
       /** Csrf Token */
       csrf_token: string;
+    };
+    /** AutomaticRoutes */
+    AutomaticRoutes: {
+      /**
+       * Downloader Id
+       * Format: uuid
+       */
+      downloader_id: string;
+      /** Downloader Generation */
+      downloader_generation: number;
+      /** Routes */
+      routes: {
+        [key: string]: components["schemas"]["PolicyRoute"];
+      };
     };
     /** AutomaticSelectionInput */
     AutomaticSelectionInput: {
@@ -5691,6 +5722,7 @@ export interface components {
       confirm_main_membership: boolean;
       /** Expected Generation */
       expected_generation: number;
+      automatic?: components["schemas"]["AutomaticRoutes"] | null;
     };
     /** SeriesRequestRecord */
     SeriesRequestRecord: {
@@ -5711,6 +5743,12 @@ export interface components {
       targets: components["schemas"]["TargetView"][];
       /** Issue */
       issue: string | null;
+      /** Acquisition State */
+      acquisition_state?: string | null;
+      /** Acquisition Message */
+      acquisition_message?: string | null;
+      /** Next Check At */
+      next_check_at?: string | null;
     };
     /** SeriesRequestView */
     SeriesRequestView: {
@@ -5750,6 +5788,20 @@ export interface components {
       };
       /** Receipt */
       receipt: components["schemas"]["BatchReceipt"][] | null;
+      /**
+       * Automatic
+       * @default false
+       */
+      automatic: boolean;
+      /** Acquisition Status */
+      acquisition_status?: string | null;
+      /** Acquisition Message */
+      acquisition_message?: string | null;
+      /**
+       * Can Retry Acquisition
+       * @default false
+       */
+      can_retry_acquisition: boolean;
     };
     /** SeriesView */
     SeriesView: {
@@ -6717,6 +6769,38 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SeriesRequestView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  retry_acquisition_api_catalog_series_hardcover__external_id__requests__operation_id__retry_acquisition_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        external_id: string;
+        operation_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      202: {
         headers: {
           [name: string]: unknown;
         };

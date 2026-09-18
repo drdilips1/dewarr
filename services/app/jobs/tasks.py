@@ -277,6 +277,9 @@ async def schedule_downloads(timestamp: int) -> None:
         )
         for continuation in continuations:
             await recover_reuse(db, continuation.id)
+    from app.domain.series_acquisition import schedule as schedule_series
+
+    await schedule_series()
 
 
 @tasks.task(
@@ -346,6 +349,15 @@ async def acquire_list_books(operation_id: str) -> None:
 @tasks.task(name="series.requests", queue="metadata", retry=RetryStrategy(max_attempts=5, wait=60))
 async def request_series(operation_id: str) -> None:
     from app.domain.series_requests import run
+
+    await run(UUID(operation_id))
+
+
+@tasks.task(
+    name="series.acquire", queue="acquisition", retry=RetryStrategy(max_attempts=3, wait=30)
+)
+async def acquire_series(operation_id: str) -> None:
+    from app.domain.series_acquisition import run
 
     await run(UUID(operation_id))
 

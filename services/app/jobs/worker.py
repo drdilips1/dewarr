@@ -19,6 +19,8 @@ async def recover_stalled_jobs() -> None:
                 "sources.search",
                 "sources.prepare",
                 "catalog.series.refresh",
+                "series.requests",
+                "series.acquire",
                 "acquisition.auto-select",
                 "acquisition.pack-dispatch",
                 "lists.sync",

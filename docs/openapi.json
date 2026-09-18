@@ -703,6 +703,58 @@
         }
       }
     },
+    "/api/catalog/series/hardcover/{external_id}/requests/{operation_id}/retry-acquisition": {
+      "post": {
+        "tags": [
+          "series-requests"
+        ],
+        "summary": "Retry Acquisition",
+        "operationId": "retry_acquisition_api_catalog_series_hardcover__external_id__requests__operation_id__retry_acquisition_post",
+        "parameters": [
+          {
+            "name": "external_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "External Id"
+            }
+          },
+          {
+            "name": "operation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Operation Id"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeriesRequestView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/catalog/series/hardcover/{external_id}/requests": {
       "get": {
         "tags": [
@@ -7860,6 +7912,41 @@
           "csrf_token"
         ],
         "title": "AuthView"
+      },
+      "AutomaticRoutes": {
+        "properties": {
+          "downloader_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Downloader Id"
+          },
+          "downloader_generation": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Downloader Generation"
+          },
+          "routes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PolicyRoute"
+            },
+            "propertyNames": {
+              "enum": [
+                "ebook",
+                "audio"
+              ]
+            },
+            "type": "object",
+            "title": "Routes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "downloader_id",
+          "downloader_generation",
+          "routes"
+        ],
+        "title": "AutomaticRoutes"
       },
       "AutomaticSelectionInput": {
         "properties": {
@@ -16672,6 +16759,16 @@
             "type": "integer",
             "minimum": 1.0,
             "title": "Expected Generation"
+          },
+          "automatic": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AutomaticRoutes"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -16736,6 +16833,40 @@
               }
             ],
             "title": "Issue"
+          },
+          "acquisition_state": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acquisition State"
+          },
+          "acquisition_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acquisition Message"
+          },
+          "next_check_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Check At"
           }
         },
         "type": "object",
@@ -16837,6 +16968,38 @@
               }
             ],
             "title": "Receipt"
+          },
+          "automatic": {
+            "type": "boolean",
+            "title": "Automatic",
+            "default": false
+          },
+          "acquisition_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acquisition Status"
+          },
+          "acquisition_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acquisition Message"
+          },
+          "can_retry_acquisition": {
+            "type": "boolean",
+            "title": "Can Retry Acquisition",
+            "default": false
           }
         },
         "type": "object",

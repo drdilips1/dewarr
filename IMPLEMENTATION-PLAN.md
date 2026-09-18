@@ -8,7 +8,7 @@ The [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md) provides a concise
 
 For the existing workspace, use its [remaining development batches](DEVELOPMENT-ROADMAP.md#9-remaining-development-batches-from-the-current-checkpoint) alongside section 16. These batches map outstanding work to the stable packages below; they do not add scope or supersede stage acceptance gates.
 
-The [stage closure plan](#17-stage-closure-and-implementation-packets) defines the remaining execution order. Its original packet breakdown starts at `3e6fc70`; the [current handoff](#18-current-development-handoff) accounts for subsequent verified work through `b6db47c`. Use both with the complete S00–S10 backlog; neither marks partially implemented stages complete.
+The [stage closure plan](#17-stage-closure-and-implementation-packets) defines the remaining execution order. Its original packet breakdown starts at `3e6fc70`; the [current handoff](#18-current-development-handoff) accounts for subsequent committed work through `8150f1e`. Use both with the complete S00–S10 backlog; neither marks partially implemented stages complete.
 
 ## 1. Delivery strategy
 
@@ -848,7 +848,9 @@ Continue with compatible later/submitted-transfer reuse and its import-continuat
 
 This handoff began September 18, 2026 at committed revision `b6db47c`. It supersedes earlier statements about which packet comes next without changing the PRD, package counts or release gates. The subsequent [saved-transfer reuse increment](docs/DOWNLOAD-REUSE.md) implements same-owner, identical-artifact, compatible-route joins and independent import continuation under migration `0037_download_joins`. Targeted domain and real-file verification now exists; exact integrated and deployment results belong in [Implementation Status](docs/IMPLEMENTATION-STATUS.md). Broader reuse combinations and stage acceptance remain open.
 
-The verified baseline includes reviewed shared transfers, catalog-qualified automatic pack selection, automatic series-metadata preparation and grouping of independently authorized selections before dispatch. The last recorded checkpoint reports 1,318 passing backend tests, followed by 40 focused tests after a recovery adjustment, four real-file automatic pack workflows and three selected browser journeys. These are historical results documented in [Implementation Status](docs/IMPLEMENTATION-STATUS.md), not tests rerun for this plan or full-stage acceptance.
+The committed baseline at `8150f1e` includes reviewed shared transfers, catalog-qualified automatic pack selection, automatic series-metadata preparation, grouping of independently authorized selections before dispatch, and saved-transfer reuse. Exact test scope and results belong in [Implementation Status](docs/IMPLEMENTATION-STATUS.md) and [Download reuse](docs/DOWNLOAD-REUSE.md); historical test results do not certify later edits or complete stage acceptance.
+
+The subsequent [reviewed-series acquisition increment](docs/SERIES-ACQUISITION.md) connects a finite accepted set to the existing selection, shared-transfer and importer pipeline, with independent child progress and retry. Its exact verification/deployment checkpoint is recorded in implementation status. It does not establish inherited Complete series policy, list-driven scope expansion, broader version/omnibus support or production qualification. Continue from the current code and evidence rather than rebuilding the committed foundations.
 
 ### Transfer-reuse packet and remaining qualification
 
@@ -866,6 +868,8 @@ Parent scope: S01 durability, S04 imports, S05 download lifecycle, S06-05 shared
 Start with same-owner, identical-artifact, compatible-route reuse as a reviewable increment. Broader source equivalence, route/media differences, cross-owner privacy and version/omnibus behavior remain explicit subsequent work, not implicitly supported by that increment. Do not weaken the existing source-integrity or authorization checks to make a fixture pass.
 
 ### Delivery order after that packet
+
+The reviewed finite-set controller is now the execution foundation for series work. The next series packet must resolve Just book / Prefer packs / Complete series through the existing settings precedence, derive bounded targets from current catalog evidence, show the same effective scope in manual and list previews, and carry independently valid reasons/routes into this controller. Automatic list expansion must not require a new routine approval for each unambiguous supported series; ambiguous scope enters review without blocking unrelated books. Reuse the current controller and acquisition services rather than creating another transfer path. Prove the whole list-to-series-to-ABS journey before closing S06-05f.
 
 1. **Finish series and version semantics:** inherited scope, bounded Complete series targets, coverage evidence, alternate recordings/editions, omnibus containment and independently recoverable children. Apply the same contracts to reviewed and automatic requests.
 2. **Finish effective policy and routes:** consistent per-field inheritance, approved destinations, previewed revisions to unsatisfied requests and immutable submitted evidence.

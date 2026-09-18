@@ -1,5 +1,19 @@
 # Book discovery app — planning workspace
 
+Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md), then use these development deliverables:
+
+| Deliverable | Purpose |
+|---|---|
+| [Full PRD](PRD.md) | Product boundary, UX, defaults, ownership/version rules and 54 tracked requirements |
+| [Staged implementation plan](IMPLEMENTATION-PLAN.md) | S00–S10 sequence, dependencies, 61 work packages and stage exit gates |
+| [Acceptance plan](ACCEPTANCE-PLAN.md) | 35 scenarios covering user journeys, integrations, failure recovery and release qualification |
+| [P0/P1 implementation decisions](IMPLEMENTATION-DECISIONS.md) | Researched architecture, integration contracts, reuse boundaries and remaining compatibility checks |
+| [Development backlog](DEVELOPMENT-BACKLOG.csv) and [requirement traceability](REQUIREMENTS-TRACEABILITY.csv) | Portable tickets and requirement-to-acceptance mappings |
+
+Delivery milestones are manual acquisition at S05, list automation at S07, complete discovery and curation at S08, and production v1 at S09. S10 contains separately scoped extensions. The documents describe required outcomes; [implementation status](docs/IMPLEMENTATION-STATUS.md) records what has actually been verified.
+
+Latest series checkpoint: [Automatic reviewed-series acquisition](docs/SERIES-ACQUISITION.md) connects a finite accepted set to source search, shared transfers and confirmed imports, with per-book progress, cancellation and retry. Inherited Complete series/list expansion, destination defaults and broader version/omnibus behavior remain pending.
+
 Latest pack-eligibility checkpoint: [Automatic series-pack coverage](docs/AUTOMATIC-PACK-COVERAGE.md) replaces blanket collection rejection with bounded catalog/manifest matching, inherited pack preference and target-specific format ranking. Manual automatic requests and list automation can acquire the requested book from a qualifying pack. Multi-target automatic grouping/expansion and full series fulfillment remain required.
 
 A self-hosted ebook/audiobook discovery, curation and acquisition application above Audiobookshelf, with native MAM/AudiobookBay, optional Prowlarr, direct qBittorrent, and Hardcover/Goodreads list automation.

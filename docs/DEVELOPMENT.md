@@ -4,6 +4,8 @@ This is an early development build. The full [PRD](../PRD.md) remains the target
 
 Current request contract: back up the database and apply migrations through `0037_download_joins` before restarting API and worker together. [Saved-transfer reuse](DOWNLOAD-REUSE.md) adds independent join receipts and later import continuations. [Request restrictions](ACQUISITION-FOUNDATION.md#request-download-restrictions) preserve independent format and whole-transfer size limits across shared acquisitions. Populated history blocks lossy downgrade. Default dispatch remains disabled; this migration does not activate list automation.
 
+[Automatic reviewed-series acquisition](SERIES-ACQUISITION.md) adds a durable `series.acquire` task without a new migration. Update API and worker together before accepting automatic series requests. Finite accepted sets retain their own scope and authority; this does not enable future-sequel monitoring or installation dispatch.
+
 ## Native development
 
 Requires Python 3.13, uv, Node 24+ and PostgreSQL. The current workspace uses a dedicated PostgreSQL 16.14 cluster on loopback port 55438; PostgreSQL 18 container certification is pending.

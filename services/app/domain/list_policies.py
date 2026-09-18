@@ -14,7 +14,6 @@ from app.db.models import (
     AcquisitionIntent,
     AcquisitionReason,
     BookList,
-    ImportDestination,
     ListAcquisitionBook,
     ListAcquisitionPolicy,
     ListEntry,
@@ -25,24 +24,16 @@ from app.db.models import (
 )
 from app.domain import request_scope
 from app.domain.acquisition import RequestOptions, RequestSpec, assess, evaluate, validate_request
-from app.domain.acquisition_selection import verified_probe
-from app.domain.automatic_dispatch import approve_route
-from app.domain.downloaders import connection_or_404, mapped_path
+from app.domain.automatic_routes import PolicyRoute, permitted
+from app.domain.automatic_routes import resolve as resolve_routes
 from app.domain.list_requests import owner_context, pending_targets
 from app.domain.operations import transaction_lock
 from app.domain.release_profiles import PreferenceOverrides, overlay_profile, profile_snapshot
 from app.domain.request_constraints import combine
 from app.domain.visibility import visible_work
 from app.domain.work_graph import acquisition_lock, canonical_map, family_ids, graph_lock
-from app.importing.destinations import destination_configuration
 
 KIND = "lists.policy-preview"
-
-
-class PolicyRoute(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-    destination_id: UUID
-    destination_revision: str = Field(pattern=r"^[a-f0-9]{64}$")
 
 
 class ListPolicyInput(BaseModel):
@@ -70,16 +61,6 @@ class ListPolicyInput(BaseModel):
         if self.mode != "automatic" and self.include_work_ids:
             raise ValueError("Use reviewed list requests for manual backlog selection")
         return self
-
-
-def permitted(user):
-    if (
-        not user
-        or not user.active
-        or user.role == "viewer"
-        or (user.role != "admin" and not user.can_automate)
-    ):
-        raise HTTPException(403, "An administrator must grant list automation permission")
 
 
 async def current_policy(db, list_id):
@@ -160,34 +141,11 @@ async def configuration(db, user, list_id, body):
         permitted(user)
         if subscription and not subscription.baseline_at:
             raise HTTPException(409, "Complete a successful list sync before activating automation")
-        if not body.downloader_id or body.downloader_generation is None:
-            raise HTTPException(422, "Choose a tested downloader")
-        downloader = await connection_or_404(db, body.downloader_id)
-        if (
-            not downloader.enabled
-            or downloader.status != "connected"
-            or (downloader.credential_generation != body.downloader_generation)
-        ):
-            raise HTTPException(409, "Downloader settings changed; test and preview again")
-        mapping = mapped_path(downloader, downloader.config["save_path"])
-        media = {spec.mode} if spec.mode in {"ebook", "audio"} else {"ebook", "audio"}
-        if set(body.routes) != media:
-            raise HTTPException(422, "Choose an import destination for each requested medium")
-        for medium in sorted(media):
-            route = body.routes[medium]
-            approval = await approve_route(
-                db, user.id, route.destination_id, route.destination_revision
-            )
-            destination = await db.get(ImportDestination, route.destination_id)
-            config = await destination_configuration(db, destination)
-            if destination.medium != medium or not verified_probe(destination, config, mapping):
-                raise HTTPException(409, "Verify each download-to-library route before activation")
-            expected_library = getattr(spec, medium + "_library_id")
-            if expected_library and expected_library != destination.library_id:
-                raise HTTPException(422, "Destination conflicts with the requested library")
-            values[medium + "_library_id"] = str(destination.library_id)
-            profile.scope_origins[medium + "_library_id"] = "List import route"
-            approvals[medium] = approval
+        libraries, approvals = await resolve_routes(
+            db, user, spec, body.downloader_id, body.downloader_generation, body.routes
+        )
+        values.update(libraries)
+        profile.scope_origins.update(dict.fromkeys(libraries, "List import route"))
     return {
         "mode": body.mode,
         "scope_options": body.specification.model_dump(mode="json"),

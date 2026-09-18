@@ -1,6 +1,6 @@
 # Reviewed series requests
 
-A series catalog can now produce a finite group of ordinary book requests. This implements the reviewed target-set boundary of S06-05c; automatic pack selection and shared-pack fulfillment remain separate work.
+A series catalog can produce a finite group of ordinary book requests. This implements the reviewed target-set boundary of S06-05c. [Automatic reviewed-series acquisition](SERIES-ACQUISITION.md) now optionally continues that exact set through the shared acquisition pipeline; the manual behavior below remains available.
 
 ## User journey
 

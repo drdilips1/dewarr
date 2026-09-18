@@ -7,6 +7,9 @@ import { Notice } from "../components";
 import RequestPreferences, { type Choice } from "./RequestPreferences";
 import { EffectiveScope } from "./ScopeFields";
 import { EffectivePreferences } from "./PreferenceFields";
+import SeriesAutomaticRoutes, {
+  useSeriesRoutes,
+} from "./SeriesAutomaticRoutes";
 
 type Spec = components["schemas"]["RequestOptions"];
 type Preview = components["schemas"]["SeriesRequestView"];
@@ -36,6 +39,8 @@ export default function SeriesRequests({
   const [confirmed, setConfirmed] = useState(false);
   const [spec, setSpec] = useState<Spec>({});
   const [preferences, setPreferences] = useState<Choice>({});
+  const [automatic, setAutomatic] = useState(false);
+  const routes = useSeriesRoutes(automatic, spec.mode, preferences);
   const [offset, setOffset] = useState(0);
   const key = useRef(crypto.randomUUID());
   const panel = useRef<HTMLElement>(null);
@@ -62,12 +67,16 @@ export default function SeriesRequests({
     refetchInterval: (q) =>
       ["queued", "running"].includes(q.state.data?.status || "")
         ? 1000
-        : q.state.data?.status === "completed" &&
-            q.state.data.records.some((book) =>
-              book.targets.some(
-                (target) => !["satisfied", "cancelled"].includes(target.state),
-              ),
-            )
+        : ["queued", "running"].includes(
+              q.state.data?.acquisition_status || "",
+            ) ||
+            (q.state.data?.status === "completed" &&
+              q.state.data.records.some((book) =>
+                book.targets.some(
+                  (target) =>
+                    !["satisfied", "cancelled"].includes(target.state),
+                ),
+              ))
           ? 10000
           : false,
   });
@@ -103,6 +112,7 @@ export default function SeriesRequests({
               scope,
               confirm_main_membership: confirmed,
               expected_generation: generation,
+              automatic: automatic ? routes.input : undefined,
             },
           },
         ),
@@ -129,6 +139,16 @@ export default function SeriesRequests({
       ),
     onSuccess: updated,
   });
+  const retryAcquisition = useMutation({
+    mutationFn: async () =>
+      result(
+        await api.POST(
+          "/api/catalog/series/hardcover/{external_id}/requests/{operation_id}/retry-acquisition",
+          { params: { path: { ...path, operation_id: id! } } },
+        ),
+      ),
+    onSuccess: updated,
+  });
   // A changed draft gets a new key; retries of the same draft retain their key.
   const draft = JSON.stringify({
     selected,
@@ -137,6 +157,7 @@ export default function SeriesRequests({
     scope,
     confirmed,
     generation,
+    automatic: automatic ? routes.input : null,
   });
   const lastDraft = useRef(draft);
   useEffect(() => {
@@ -151,6 +172,7 @@ export default function SeriesRequests({
     preview.isPending ||
     submit.isPending ||
     cancel.isPending ||
+    retryAcquisition.isPending ||
     ["queued", "running"].includes(value?.status || "");
   return (
     <section
@@ -162,8 +184,9 @@ export default function SeriesRequests({
       <h2>Request books from this series</h2>
       <p>
         Choose books above, review what is missing, then save your requests.
-        Future additions to the series are not included. Release selection
-        remains a separate step.
+        Future additions to the series are not included. You can choose releases
+        yourself or automatically acquire the missing media in this reviewed
+        set.
       </p>
       <Notice
         error={
@@ -171,7 +194,8 @@ export default function SeriesRequests({
           saved.error ||
           submit.error ||
           cancel.error ||
-          history.error
+          history.error ||
+          retryAcquisition.error
         }
       />
       {!id ? (
@@ -253,10 +277,20 @@ export default function SeriesRequests({
               </label>
             )}
             <RequestPreferences value={preferences} onChange={setPreferences} />
+            <label className="check-label">
+              <input
+                type="checkbox"
+                checked={automatic}
+                onChange={(event) => setAutomatic(event.target.checked)}
+              />
+              Automatically acquire missing books after review
+            </label>
+            {automatic && <SeriesAutomaticRoutes selection={routes} />}
             <button
               disabled={
                 !selected.length ||
                 selected.length > 100 ||
+                (automatic && !routes.input) ||
                 (scope === "complete_series" && !confirmed)
               }
             >
@@ -267,6 +301,12 @@ export default function SeriesRequests({
       ) : value ? (
         <>
           <p role="status">{value.message}</p>
+          {value.automatic && (
+            <p>
+              {value.acquisition_message ||
+                "After you accept, missing requested media will be acquired through the approved routes."}
+            </p>
+          )}
           <p>
             {value.records.length} selected books · {value.counts.satisfied}{" "}
             available media targets · {value.counts.wanted} missing ·{" "}
@@ -298,6 +338,12 @@ export default function SeriesRequests({
                   </Link>
                 </h3>
                 {book.issue && <p>{book.issue}</p>}
+                {book.acquisition_message && <p>{book.acquisition_message}</p>}
+                {book.next_check_at && (
+                  <small>
+                    Next check: {new Date(book.next_check_at).toLocaleString()}
+                  </small>
+                )}
                 {book.warnings.map((warning) => (
                   <p className="muted" key={warning}>
                     {warning}
@@ -340,7 +386,14 @@ export default function SeriesRequests({
               <button disabled={busy} onClick={() => submit.mutate()}>
                 {value.accepted_at
                   ? "Retry saved series request"
-                  : "Save series requests"}
+                  : value.automatic
+                    ? "Start automatic series acquisition"
+                    : "Save series requests"}
+              </button>
+            )}
+            {value.can_retry_acquisition && (
+              <button disabled={busy} onClick={() => retryAcquisition.mutate()}>
+                Retry series acquisition
               </button>
             )}
             {value.status !== "cancelled" && (
@@ -359,6 +412,7 @@ export default function SeriesRequests({
                 preview.reset();
                 submit.reset();
                 cancel.reset();
+                retryAcquisition.reset();
                 panel.current?.focus();
               }}
             >

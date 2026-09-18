@@ -26,10 +26,13 @@ def consent(selection):
     return (selection.frozen.get("automatic_selection") or {}).get("dispatch_approval")
 
 
-async def lock_principals(db, owner_id, approval, list_authority=None):
+async def lock_principals(db, owner_id, approval, list_authority=None, series_authority=None):
     from app.domain.list_policies import lock_authority
 
     await lock_authority(db, list_authority)
+    from app.domain.series_acquisition import lock_authority as lock_series
+
+    await lock_series(db, series_authority)
     if approval:
         await db.scalars(
             select(User)
@@ -53,6 +56,15 @@ async def lock_group_principals(db, selections):
     lists = {proof["list_id"]: proof for _, _, proof in proofs if proof}
     for key in sorted(lists):
         await lock_authority(db, lists[key])
+    from app.domain.series_acquisition import lock_authority as lock_series
+
+    series = {
+        proof["operation_id"]: proof
+        for item in selections
+        if (proof := (item.frozen.get("automatic_selection") or {}).get("series_authority"))
+    }
+    for key in sorted(series):
+        await lock_series(db, series[key])
     principals = {owner for owner, _, _ in proofs}
     principals.update(UUID(approval["approved_by"]) for _, approval, _ in proofs if approval)
     if principals:
@@ -116,6 +128,11 @@ async def require_selection(db, selection):
     await require_authority(
         db, selection.owner_id, proof.get("list_authority"), intent_id=selection.intent_id
     )
+    from app.domain.series_acquisition import require_authority as require_series
+
+    await require_series(
+        db, selection.owner_id, proof.get("series_authority"), intent_id=selection.intent_id
+    )
     operation = await db.get(Operation, UUID(proof["operation_id"]), populate_existing=True)
     if (
         not operation
@@ -126,6 +143,7 @@ async def require_selection(db, selection):
         or operation.payload.get("dispatch_approval") != approval
         or operation.payload.get("selection_id") != str(selection.id)
         or operation.payload.get("list_authority") != proof.get("list_authority")
+        or operation.payload.get("series_authority") != proof.get("series_authority")
     ):
         raise HTTPException(409, "Automatic acquisition authorization is no longer current")
     await approve_route(

@@ -3192,6 +3192,44 @@ test("series catalog preserves uncertainty and curates selected books", async ({
     .getByLabel("Password", { exact: true })
     .fill("browser test password");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  // This journey owns its downloader and route readiness prerequisites.
+  await expect(
+    page.getByRole("button", { name: "Sign out", exact: true }),
+  ).toBeVisible();
+  await page.goto("/downloaders");
+  const downloader = page.getByRole("article", {
+    name: "qBittorrent",
+    exact: true,
+  });
+  await downloader
+    .getByRole("button", { name: "Edit downloader", exact: true })
+    .click();
+  const downloaderSettings = page.getByRole("form", {
+    name: "qBittorrent connection settings",
+  });
+  await downloaderSettings
+    .getByLabel("Enable connection", { exact: true })
+    .check();
+  await downloaderSettings
+    .getByRole("button", { name: "Save downloader", exact: true })
+    .click();
+  await downloader
+    .getByRole("button", { name: "Test saved connection", exact: true })
+    .click();
+  await expect(downloader).toContainText("connected");
+  await page.goto("/organization/destinations");
+  const importPolicy = page.getByRole("region", {
+    name: "Automatic import policy",
+  });
+  await expect(importPolicy.getByRole("status")).toBeVisible();
+  const enableImports = importPolicy.getByRole("button", {
+    name: /^(Enable automatic import|Approve the verified route again)$/,
+  });
+  if (await enableImports.isVisible()) await enableImports.click();
+  await expect(importPolicy).toContainText(
+    "New completed downloads with clear catalog and file evidence can import automatically",
+  );
+  await page.goto("/");
   await page.getByRole("link", { name: /My protected catalog title/ }).click();
   await page
     .getByRole("link", { name: "Search download sources", exact: true })
@@ -3301,6 +3339,63 @@ test("series catalog preserves uncertainty and curates selected books", async ({
     path: testInfo.outputPath("series-request-mobile.png"),
     fullPage: true,
   });
+  await requests
+    .getByRole("button", { name: "New selection", exact: true })
+    .click();
+  await curation
+    .getByLabel("Destination list")
+    .selectOption({ label: "Weekend reads" });
+  await curation
+    .getByRole("button", { name: "Select published books on this page" })
+    .click();
+  await requests.getByLabel("Series requested media").selectOption("ebook");
+  await requests
+    .getByLabel("Automatically acquire missing books after review")
+    .check();
+  await expect(requests.getByLabel("Series downloader")).not.toHaveValue("");
+  await expect(requests.getByLabel("Ebook series destination")).not.toHaveValue(
+    "",
+  );
+  await requests
+    .getByRole("button", { name: "Preview series requests", exact: true })
+    .click();
+  await expect(requests).toContainText("2 selected books");
+  await expect(requests).toContainText("Ebook: Available");
+  await requests
+    .getByRole("button", {
+      name: "Start automatic series acquisition",
+      exact: true,
+    })
+    .click();
+  await expect(requests.getByRole("status")).toContainText(
+    "Saved 2 reviewed books for automatic acquisition",
+    { timeout: 20_000 },
+  );
+  await expect(requests).toContainText("Acquiring the reviewed series books", {
+    timeout: 20_000,
+  });
+  await page.reload();
+  await requests
+    .getByText("Series request history (2)", { exact: true })
+    .click();
+  await requests
+    .getByRole("button", { name: /Open 2-book request/ })
+    .first()
+    .click();
+  await expect(requests).toContainText(
+    "Saved 2 reviewed books for automatic acquisition",
+  );
+  await expect(requests).toContainText("Ebook: Available");
+  await page.screenshot({
+    path: testInfo.outputPath("automatic-series-mobile.png"),
+    fullPage: true,
+  });
+  await requests
+    .getByRole("button", { name: "Cancel this series request", exact: true })
+    .click();
+  await expect(requests).toContainText(
+    "Series acquisition cancelled; existing files are preserved",
+  );
   await requests
     .getByRole("button", { name: "New selection", exact: true })
     .click();

@@ -140,8 +140,12 @@ async def backoff_or_alternate(db, user, spec, book, target, progress, medium, n
         progress.update(search_id=None, selection_id=None, tried=[], next_at=next_at.isoformat())
 
 
-async def advance_target(db, user, policy, book, target, progress, now):
+async def advance_target(db, user, policy, book, target, progress, now, *, series_authority=None):
     cycle = f"{book.id}:{policy.generation}:{book.progress.get('activation', 1)}:{target.slot}"
+    authority = series_authority or proof(policy, book)
+    authority_key = "series_authority" if series_authority else "list_authority"
+    if series_authority:
+        cycle = f"series:{policy.id}:{cycle}"
     if target.state == "satisfied":
         return "available", target.message, now + timedelta(hours=24)
     if target.state != "wanted":
@@ -167,8 +171,8 @@ async def advance_target(db, user, policy, book, target, progress, now):
                 attempt
                 and attempt.state == "held"
                 and not attempt.external_may_exist
-                and (selected.frozen.get("automatic_selection") or {}).get("list_authority")
-                == proof(policy, book)
+                and (selected.frozen.get("automatic_selection") or {}).get(authority_key)
+                == authority
                 and (
                     progress.get("resume_attempt")
                     or policy.revision > progress.get("policy_revision", policy.revision)
@@ -176,7 +180,7 @@ async def advance_target(db, user, policy, book, target, progress, now):
             ):
                 attempt.state, attempt.message = (
                     "queued",
-                    "List resumed; rechecking the existing download attempt",
+                    "Acquisition resumed; rechecking the existing download attempt",
                 )
                 attempt.next_check_at = now
                 op = await db.get(Operation, attempt.operation_id)
@@ -262,7 +266,7 @@ async def advance_target(db, user, policy, book, target, progress, now):
                 user,
                 command,
                 f"list-select:{cycle}:{progress['round']}",
-                list_authority=proof(policy, book),
+                **{authority_key: authority},
             )
         except HTTPException as error:
             if error.status_code == 409 and (
@@ -277,7 +281,11 @@ async def advance_target(db, user, policy, book, target, progress, now):
             raise
         progress["selection_id"] = str(operation.id)
         progress["policy_revision"] = policy.revision
-        return "selecting", "Selecting a release under this list policy", next_tick(now)
+        return (
+            "selecting",
+            "Selecting a release using saved acquisition preferences",
+            next_tick(now),
+        )
     progress["round"] = progress.get("round", 0) + 1
     search = await book_sources.start(
         db,

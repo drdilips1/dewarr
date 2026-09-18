@@ -29,6 +29,7 @@ from app.domain.acquisition import (
     submit,
     validate_request,
 )
+from app.domain.automatic_routes import AutomaticRoutes
 from app.domain.list_requests import BatchInput, identity, pending_targets
 from app.domain.operations import transaction_lock
 from app.domain.request_preferences import resolve
@@ -43,6 +44,7 @@ class SeriesRequestInput(BatchInput):
     scope: Literal["selected", "complete_series"] = "selected"
     confirm_main_membership: bool = False
     expected_generation: int = Field(ge=1)
+    automatic: AutomaticRoutes | None = Field(default=None, exclude_if=lambda value: value is None)
 
     @model_validator(mode="after")
     def reviewed_scope(self):
@@ -156,6 +158,15 @@ async def preview(db, user, external_id, body, key):
     spec, profile = await resolve(
         db, user, body.specification, RequestReason(), body.release_preferences
     )
+    automatic = None
+    if body.automatic:
+        from app.domain.series_acquisition import configuration
+
+        automatic = await configuration(db, user, spec, profile, body.automatic)
+        spec = RequestSpec.model_validate(automatic["specification"])
+        profile = profile.model_copy(
+            update={"scope_origins": automatic["profile"]["scope_origins"]}
+        )
     records, omitted = await membership(db, user, series, body)
     for record in records:
         await validate_request(db, user, UUID(record["work_id"]), spec)
@@ -178,6 +189,7 @@ async def preview(db, user, external_id, body, key):
             },
             "effective_specification": spec.model_dump(mode="json"),
             "release_policy": profile.model_dump(mode="json"),
+            "automatic_configuration": automatic,
             "main_membership": "user-confirmed"
             if body.scope == "complete_series"
             else "not-asserted",
@@ -253,6 +265,10 @@ async def start(db, user, operation):
             expected=operation.payload["release_policy"]["effective_revision"],
         )
     await validate_identities(db, user, operation)
+    if operation.payload.get("automatic_configuration"):
+        from app.domain.series_acquisition import validate_configuration
+
+        await validate_configuration(db, user, operation.payload["automatic_configuration"])
     operation.payload = {
         **operation.payload,
         "accepted_at": operation.payload.get("accepted_at") or datetime.now(UTC).isoformat(),
@@ -313,6 +329,11 @@ async def run(operation_id):
             "completed",
             f"Saved requests for {len(receipts)} books; choose releases to continue",
         )
+        if operation.payload.get("automatic_configuration"):
+            from app.domain.series_acquisition import initialize
+
+            await initialize(db, operation)
+            operation.message = f"Saved {len(receipts)} reviewed books for automatic acquisition"
         db.add(
             AuditEvent(actor_id=user.id, action="series.requests.completed", entity_id=operation.id)
         )
@@ -321,6 +342,9 @@ async def run(operation_id):
 async def cancel(db, user, operation):
     if operation.status == "cancelled":
         return
+    from app.domain.series_acquisition import cancel as cancel_acquisition
+
+    await cancel_acquisition(db, operation)
     await graph_lock(db)
     intents = list(
         await db.scalars(
@@ -390,6 +414,7 @@ async def status_records(db, user, operation):
             records.append(
                 {
                     **record,
+                    "_origin_work_id": record["work_id"],
                     "work_id": str(work.id),
                     "title": work.title,
                     "targets": outcomes,
@@ -400,6 +425,7 @@ async def status_records(db, user, operation):
             records.append(
                 {
                     **record,
+                    "_origin_work_id": record["work_id"],
                     "title": "Book needs review",
                     "authors": [],
                     "warnings": [],

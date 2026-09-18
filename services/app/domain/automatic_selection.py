@@ -187,12 +187,15 @@ async def context(db, user_id, body):
     return user, work, search, profile, rule, version
 
 
-async def begin(db, user, body, key, *, list_authority=None):
+async def begin(db, user, body, key, *, list_authority=None, series_authority=None):
     if get_settings().recovery_mode:
         raise HTTPException(409, "Automatic selection is paused for recovery")
     from app.domain.list_policies import require_authority
 
     await require_authority(db, user.id, list_authority, intent_id=body.intent_id)
+    from app.domain.series_acquisition import require_authority as require_series
+
+    await require_series(db, user.id, series_authority, intent_id=body.intent_id)
     await transaction_lock(db, f"operation:{user.id}:{key}")
     command = body.model_dump(mode="json")
     if not body.download_when_ready:
@@ -205,6 +208,7 @@ async def begin(db, user, body, key, *, list_authority=None):
             previous.kind != KIND
             or previous.payload["command"] != command
             or (previous.payload.get("list_authority") != list_authority)
+            or (previous.payload.get("series_authority") != series_authority)
         ):
             raise HTTPException(409, "This command key was already used for another selection")
         return previous
@@ -265,6 +269,7 @@ async def begin(db, user, body, key, *, list_authority=None):
             "dispatch_approval": approval,
             "download_id": None,
             "list_authority": list_authority,
+            "series_authority": series_authority,
         },
     )
     db.add(operation)
@@ -457,6 +462,14 @@ async def run(identifier):
                 operation.payload.get("list_authority"),
                 intent_id=body.intent_id,
             )
+            from app.domain.series_acquisition import require_authority as require_series
+
+            await require_series(
+                db,
+                operation.owner_id,
+                operation.payload.get("series_authority"),
+                intent_id=body.intent_id,
+            )
             user, work, search, profile, rule, version = await context(db, operation.owner_id, body)
             if body.download_when_ready:
                 await automatic_dispatch.approve_route(
@@ -590,10 +603,14 @@ async def run(identifier):
             owner_id,
             operation.payload.get("dispatch_approval"),
             operation.payload.get("list_authority"),
+            operation.payload.get("series_authority"),
         )
         try:
             await require_authority(
                 db, owner_id, operation.payload.get("list_authority"), intent_id=body.intent_id
+            )
+            await require_series(
+                db, owner_id, operation.payload.get("series_authority"), intent_id=body.intent_id
             )
             user, work, search, profile, rule, version = await context(db, owner_id, body)
             frozen_catalog = operation.payload.get("pack_catalog")
@@ -755,6 +772,7 @@ async def run(identifier):
                         ),
                         "dispatch_approval": operation.payload.get("dispatch_approval"),
                         "list_authority": operation.payload.get("list_authority"),
+                        "series_authority": operation.payload.get("series_authority"),
                     },
                 )
                 operation.payload = {**operation.payload, "selection_id": str(selected.id)}

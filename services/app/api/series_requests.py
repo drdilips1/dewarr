@@ -9,7 +9,7 @@ from app.api.dependencies import Database, Member
 from app.api.list_requests import BatchReceipt, BatchSummary
 from app.api.requests import TargetView
 from app.db.models import Operation
-from app.domain import series_requests
+from app.domain import series_acquisition, series_requests
 from app.domain.acquisition import RequestSpec
 from app.domain.release_profiles import ProfileSnapshot
 from app.domain.series_requests import SeriesRequestInput
@@ -27,6 +27,9 @@ class SeriesRequestRecord(BaseModel):
     position: str | None = None
     targets: list[TargetView]
     issue: str | None
+    acquisition_state: str | None = None
+    acquisition_message: str | None = None
+    next_check_at: datetime | None = None
 
 
 class OmittedSeriesBook(BaseModel):
@@ -52,6 +55,10 @@ class SeriesRequestView(BaseModel):
     omitted: list[OmittedSeriesBook]
     counts: dict[str, int]
     receipt: list[BatchReceipt] | None
+    automatic: bool = False
+    acquisition_status: str | None = None
+    acquisition_message: str | None = None
+    can_retry_acquisition: bool = False
 
 
 class SeriesRequestHistory(BaseModel):
@@ -63,6 +70,19 @@ class SeriesRequestHistory(BaseModel):
 
 async def view(db, user, operation):
     records = await series_requests.status_records(db, user, operation)
+    controller = (
+        await db.get(Operation, UUID(operation.payload["acquisition_id"]))
+        if operation.payload.get("acquisition_id")
+        else None
+    )
+    if controller:
+        for record in records:
+            progress = controller.payload["books"].get(record["_origin_work_id"], {})
+            record.update(
+                acquisition_state=progress.get("state"),
+                acquisition_message=progress.get("message"),
+                next_check_at=progress.get("next_at"),
+            )
     counts = {
         key: 0
         for key in (
@@ -97,6 +117,19 @@ async def view(db, user, operation):
         omitted=payload["omitted"],
         counts=counts,
         receipt=payload.get("receipt"),
+        automatic=bool(payload.get("automatic_configuration")),
+        acquisition_status=controller.status if controller else None,
+        acquisition_message=controller.message if controller else None,
+        can_retry_acquisition=bool(
+            controller
+            and (
+                controller.status == "held"
+                or any(book["state"] == "held" for book in controller.payload["books"].values())
+            )
+            and controller.payload["enabled"]
+            and operation.status == "completed"
+            and await series_acquisition.job_status(db, controller) not in {"todo", "doing"}
+        ),
     )
 
 
@@ -109,6 +142,15 @@ async def preview(
     idempotency_key: str = Header(min_length=8, max_length=200),
 ):
     operation = await series_requests.preview(db, user, external_id, body, idempotency_key)
+    response = await view(db, user, operation)
+    await db.commit()
+    return response
+
+
+@router.post("/{operation_id}/retry-acquisition", response_model=SeriesRequestView, status_code=202)
+async def retry_acquisition(external_id: str, operation_id: UUID, user: Member, db: Database):
+    operation = await series_requests.owned(db, user, external_id, operation_id)
+    await series_acquisition.retry(db, user, operation)
     response = await view(db, user, operation)
     await db.commit()
     return response
