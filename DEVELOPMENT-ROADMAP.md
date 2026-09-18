@@ -6,6 +6,8 @@ Build a self-hosted book discovery, curation and acquisition app above Audiobook
 
 This guide is the short entry point. The complete specification is in [PRD](PRD.md), the engineering backlog in [Implementation Plan](IMPLEMENTATION-PLAN.md), researched choices in [Implementation Decisions](IMPLEMENTATION-DECISIONS.md), and verification in [Acceptance Plan](ACCEPTANCE-PLAN.md). [Implementation Status](docs/IMPLEMENTATION-STATUS.md) records what has actually been built and tested.
 
+For issue-tracker import, use the [61-package backlog export](DEVELOPMENT-BACKLOG.csv). The plan's [execution batches](IMPLEMENTATION-PLAN.md#12-development-backlog-and-execution-batches) sequence the remaining development from the existing code through manual alpha, automation beta, production v1 and separate extensions.
+
 ## 1. Product boundary
 
 | Concern | Owner |
@@ -110,7 +112,7 @@ The plan defines **42 functional requirements**: 36 for v1 and six later capabil
 
 Code existence, fixture success, live compatibility and stage acceptance are separate statuses. Missing service credentials or container/runtime certification must remain visible as unverified gates. No P0/P1 integrity, privacy, wrong-book acquisition, false-ownership or mandatory-workflow failure is acceptable for production v1.
 
-For the existing workspace, use the verified [status](docs/IMPLEMENTATION-STATUS.md) instead of rebuilding the scaffold. Close the remaining S01 contracts, finish S02 metadata/catalog and S03 inventory compatibility, and complete S04 from its existing reviewed-import implementation. S04 still needs broader format/collection handling, automatic matching, file-alias reconciliation and the full recovery/compatibility matrix. Keep unverified integration work distinct from tested checkpoints. Partial import evidence does not establish the complete source-to-library workflow; source acquisition and external-list automation remain pending.
+For the existing workspace, use the verified [status](docs/IMPLEMENTATION-STATUS.md) instead of rebuilding the scaffold. Close the remaining S01 contracts, finish S02 metadata/catalog and S03 inventory compatibility, and complete S04 from its existing reviewed-import implementation. Local identifier matching is implemented; S04 still needs broader format/collection handling and source resolution, file-alias reconciliation and the full recovery/compatibility matrix. Keep unverified integration work distinct from tested checkpoints. Partial import evidence does not establish the complete source-to-library workflow; source acquisition and external-list automation remain pending.
 
 At each stage start, split its packages into reviewable tickets with an owner, affected FR/AT IDs, input/output contract, success/failure fixtures and demo. Estimate after inspecting the existing implementation and measuring throughput; revise estimates for provider and filesystem uncertainty. At stage end, attach the revision and actual results, update coverage, and resolve blockers before enabling the dependent capability.
 

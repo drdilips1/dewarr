@@ -544,3 +544,40 @@ Next dependent packages:
 An accepted review is specific to its tested revision and capabilities. Changes to identity, source selection, dispatch, publication or inventory confirmation require rerunning the affected contracts before release. Presentation-only changes use appropriate UI checks; they do not require repeating unrelated provider certification. Product direction changes update the PRD and dependent acceptance criteria before they silently alter implementation behavior.
 
 The planning deliverable is complete when requirements, defaults, dependencies and evidence obligations are reviewable. The application is complete only when its applicable stage gates pass. These are separate outcomes.
+
+## 12. Development backlog and execution batches
+
+[Development Backlog](DEVELOPMENT-BACKLOG.csv) is a portable export of all 61 work packages in section 3. Each row carries its stable ticket ID, deliverable, stage requirement scope, responsible role, stage dependencies, release milestone and gate. It can seed an issue tracker without requiring one particular project-management service. The Markdown plan remains authoritative; regenerate the export when package scope changes.
+
+The export deliberately has no inferred completion percentages, assignees or dates. Requirement and exit fields describe the **stage scope**, not proof that an individual ticket satisfies the entire stage. Split packages into reviewable implementation tickets using section 10, assign the applicable assertions, and attach actual evidence before marking them complete. Existing progress is recorded in [Implementation Status](docs/IMPLEMENTATION-STATUS.md); an exported row is neither a claim that the work is finished nor a request to rebuild existing code.
+
+Use the following execution batches to reach the requested product from the current partial implementation. These organize the existing packages; they add no new release scope and do not bypass earlier gates.
+
+| Batch | Work to finish | Product demonstration | Required decision before proceeding |
+|---|---|---|---|
+| A — Close foundation contracts | Remaining S00–S03 contracts, identity correction, catalog/version resolution, library reconciliation and permissions; review existing evidence before writing replacement code | One title presents correct ebook/audio holdings, distinct recordings and protected metadata; failed inventory cannot erase ownership | Record which foundation assertions pass and which still block import/acquisition; source authentication is not required for catalog-only work |
+| B — Finish import certification | Remaining S04 metadata/source resolution beyond local identifier matching, collection coverage, omnibus handling, file-alias reconciliation and recovery/layout cases | A completed synthetic pack is mapped, previewed, hardlinked and confirmed as the correct ABS items; uncertain children remain reviewable | No source-byte changes, wrong-book publication or unsupported item boundaries; only certified formats/layouts can publish |
+| C — Deliver manual acquisition | S05 native MAM, mam_id/proxy lifecycle, qBittorrent association, dispatch reconciliation and connected Activity UI | A manual request travels from rich MAM search to an ABS-confirmed book, including a lost submission response | Complete the private-alpha gate; fixture success and live account compatibility stay separately recorded |
+| D — Expand selection | S06 AudiobookBay/Prowlarr, origin-aware aggregation, profiles, release explanations and bounded series selection | One title shows alternatives across sources; the selected release obeys format/version rules and a partially owned pack imports only qualifying missing children | Wrong identity cannot win on seeds; failed sources cannot block healthy results; pack limits are enforced |
+| E — Enable the defining automation | S07 Hardcover and Goodreads observations, baselines/backfill, exclusions, per-list policy and durable acquisition reasons | An external list addition acquires missing requested media once; overlapping lists, pauses and restarts remain predictable | The manual acquisition engine is reused; no second downloader path; no automatic backfill without the configured activation choice |
+| F — Complete discovery and release | S08 shelves, recommendations, community/local list curation and optional supported write-back; S09 recovery, deployment and qualification | A bookstore-like browse → follow → acquire → open-in-ABS journey works from both a clean installation and restored state | All v1 requirements have passing evidence, operator documentation and supported compatibility; no unresolved applicable P0/P1 defect |
+| G — Deliver extensions individually | S10 packages selected as separate releases after v1 | Additional backends, clients or policies demonstrate their own complete workflows | Each extension passes its additional gate and affected v1 regressions |
+
+### Development cadence
+
+At the start of each batch, identify the next demonstrable user outcome, review current code and evidence, and split only the packages needed for that outcome. Keep the ticket's API/UI changes, domain transitions and failure recovery together where practical. Pure adapter or UI work may proceed against fixtures once its contracts are stable, but activation waits for the dependent gates.
+
+At each review, demonstrate the outcome through the UI and persisted state, record its revision and relevant test evidence, and update the implementation status. Review uncertainty separately: unavailable account access is a certification dependency; a parser failure is an implementation defect; a supported capability absent from the product is remaining scope. None is a passing result.
+
+Forecast dates after estimating the split tickets and observing delivery throughput. Track engineering effort, integration-access waits and release-certification effort separately. Reforecast after the manual alpha and automation beta, when source and list behavior have been measured. This avoids assigning a misleading equal duration to a visual component and a crash-recoverable importer.
+
+### Planning completion checklist
+
+- Product boundary, ownership semantics and work/version/release identity are defined in the PRD.
+- Normal UX, meaningful advanced settings and the end-to-end list/pack walkthrough have observable outcomes.
+- Every v1 requirement has a delivery stage and acceptance obligations; later extensions are explicitly separated.
+- Each integration has an adapter boundary, capability check and failure behavior.
+- All stages have dependencies, responsible roles, deliverables and release gates; all packages are available in the backlog export.
+- Existing implementation status is distinct from planned scope and release acceptance.
+
+The next development action is to review and close the earliest incomplete dependency for batches A/B using the current implementation, then proceed through the manual acquisition slice. Do not restart the project scaffold or enable list-driven downloading merely because its settings screen exists.

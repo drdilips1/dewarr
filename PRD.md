@@ -397,6 +397,8 @@ Run the equivalent list-observation scenario with Goodreads RSS. A new observed 
 
 The implementation plan contains 61 work packages across S00–S10, with entry dependencies, responsible roles, deliverables, demonstrations and exit evidence. S05 delivers the first manual acquisition alpha, S07 the list-automation beta, S08 the full discovery/curation experience, and S09 production v1. S10 contains separately scoped extensions.
 
+The [portable development backlog](DEVELOPMENT-BACKLOG.csv) exports those packages for development tracking. The [execution batches](IMPLEMENTATION-PLAN.md#12-development-backlog-and-execution-batches) explain how to proceed from the current partial implementation through each release without treating planned functionality as delivered.
+
 Use [stage evidence scopes](ACCEPTANCE-PLAN.md#7-stage-evidence-scopes) to avoid requiring later functionality at an earlier gate. Partial evidence stays partial until the complete scenario runs. The walkthrough above becomes executable fixtures incrementally, then a complete release rehearsal in S09.
 
 The visual implementation should preserve the familiarity of Seerr's navigation, cover shelves, book-detail hierarchy and request dialogs. Component reuse is optional where adapting its framework dependencies would cost more than implementing the same presentation against this app's contracts. The success criterion is the requested familiar experience, not a percentage of reused Seerr code.

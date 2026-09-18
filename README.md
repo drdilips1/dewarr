@@ -6,6 +6,8 @@ A self-hosted ebook/audiobook discovery, curation and acquisition application ab
 
 ## Development handoff
 
+Latest import checkpoint: [catalog matching](docs/IMPORT-MATCHING.md) resolves embedded edition identifiers against the local catalog, exposes conflicts for review and saves revalidated evidence without asserting file completeness or ownership.
+
 Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md) for the product boundary, end-to-end journey, P0/P1 decisions, stage summary and release milestones.
 
 The roadmap's [requirements-to-delivery checklist](DEVELOPMENT-ROADMAP.md#7-your-requirements-mapped-to-delivery) maps the requested user experience to PRD requirements, development stages and acceptance scenarios.
@@ -15,6 +17,7 @@ The roadmap's [requirements-to-delivery checklist](DEVELOPMENT-ROADMAP.md#7-your
 3. [Acceptance Plan](ACCEPTANCE-PLAN.md): requirement coverage, scenario matrix, fixtures, crash recovery, compatibility, stage-specific evidence scopes and full release evidence.
 4. [Implementation Decisions](IMPLEMENTATION-DECISIONS.md): researched technical choices D01–D13 and primary-source evidence.
 5. [Product Architecture](PRODUCT-ARCHITECTURE.md): system overview, integration responsibilities and code-reuse direction.
+6. [Development Backlog](DEVELOPMENT-BACKLOG.csv): 61 portable work-package records with stage dependencies, responsible roles, deliverables and exit criteria. Progress remains in Implementation Status; the export does not imply completion.
 
 The PRD controls product behavior; the implementation decisions control the researched technical baseline; the development plan controls sequencing; the acceptance plan controls verification. User instructions take precedence over all documents. Update dependent documents together when a decision changes.
 
