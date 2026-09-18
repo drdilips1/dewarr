@@ -640,6 +640,290 @@
         }
       }
     },
+    "/api/catalog/series/hardcover/{external_id}/requests/preview": {
+      "post": {
+        "tags": [
+          "series-requests"
+        ],
+        "summary": "Preview",
+        "operationId": "preview_api_catalog_series_hardcover__external_id__requests_preview_post",
+        "parameters": [
+          {
+            "name": "external_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "External Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeriesRequestInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeriesRequestView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/catalog/series/hardcover/{external_id}/requests": {
+      "get": {
+        "tags": [
+          "series-requests"
+        ],
+        "summary": "History",
+        "operationId": "history_api_catalog_series_hardcover__external_id__requests_get",
+        "parameters": [
+          {
+            "name": "external_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "External Id"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 10,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeriesRequestHistory"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/catalog/series/hardcover/{external_id}/requests/{operation_id}": {
+      "get": {
+        "tags": [
+          "series-requests"
+        ],
+        "summary": "Detail",
+        "operationId": "detail_api_catalog_series_hardcover__external_id__requests__operation_id__get",
+        "parameters": [
+          {
+            "name": "external_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "External Id"
+            }
+          },
+          {
+            "name": "operation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Operation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeriesRequestView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/catalog/series/hardcover/{external_id}/requests/{operation_id}/submit": {
+      "post": {
+        "tags": [
+          "series-requests"
+        ],
+        "summary": "Submit",
+        "operationId": "submit_api_catalog_series_hardcover__external_id__requests__operation_id__submit_post",
+        "parameters": [
+          {
+            "name": "external_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "External Id"
+            }
+          },
+          {
+            "name": "operation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Operation Id"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeriesRequestView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/catalog/series/hardcover/{external_id}/requests/{operation_id}/cancel": {
+      "post": {
+        "tags": [
+          "series-requests"
+        ],
+        "summary": "Cancel",
+        "operationId": "cancel_api_catalog_series_hardcover__external_id__requests__operation_id__cancel_post",
+        "parameters": [
+          {
+            "name": "external_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "External Id"
+            }
+          },
+          {
+            "name": "operation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Operation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeriesRequestView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/lists": {
       "get": {
         "tags": [
@@ -12784,6 +13068,38 @@
         ],
         "title": "ObservationView"
       },
+      "OmittedSeriesBook": {
+        "properties": {
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "work_id",
+          "title",
+          "warnings",
+          "reason"
+        ],
+        "title": "OmittedSeriesBook"
+      },
       "OperationView": {
         "properties": {
           "id": {
@@ -15835,6 +16151,267 @@
           "work"
         ],
         "title": "SeriesEntryView"
+      },
+      "SeriesRequestHistory": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/BatchSummary"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "offset",
+          "limit"
+        ],
+        "title": "SeriesRequestHistory"
+      },
+      "SeriesRequestInput": {
+        "properties": {
+          "work_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Work Ids"
+          },
+          "specification": {
+            "$ref": "#/components/schemas/RequestOptions"
+          },
+          "release_preferences": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PreferenceChoice"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "scope": {
+            "type": "string",
+            "enum": [
+              "selected",
+              "complete_series"
+            ],
+            "title": "Scope",
+            "default": "selected"
+          },
+          "confirm_main_membership": {
+            "type": "boolean",
+            "title": "Confirm Main Membership",
+            "default": false
+          },
+          "expected_generation": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Generation"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "work_ids",
+          "specification",
+          "expected_generation"
+        ],
+        "title": "SeriesRequestInput"
+      },
+      "SeriesRequestRecord": {
+        "properties": {
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Authors"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "targets": {
+            "items": {
+              "$ref": "#/components/schemas/TargetView"
+            },
+            "type": "array",
+            "title": "Targets"
+          },
+          "issue": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Issue"
+          }
+        },
+        "type": "object",
+        "required": [
+          "work_id",
+          "title",
+          "authors",
+          "warnings",
+          "targets",
+          "issue"
+        ],
+        "title": "SeriesRequestRecord"
+      },
+      "SeriesRequestView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "series_name": {
+            "type": "string",
+            "title": "Series Name"
+          },
+          "catalog_generation": {
+            "type": "integer",
+            "title": "Catalog Generation"
+          },
+          "scope": {
+            "type": "string",
+            "title": "Scope"
+          },
+          "main_membership": {
+            "type": "string",
+            "title": "Main Membership"
+          },
+          "specification": {
+            "$ref": "#/components/schemas/RequestSpec"
+          },
+          "release_policy": {
+            "$ref": "#/components/schemas/ProfileSnapshot"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "accepted_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accepted At"
+          },
+          "records": {
+            "items": {
+              "$ref": "#/components/schemas/SeriesRequestRecord"
+            },
+            "type": "array",
+            "title": "Records"
+          },
+          "omitted": {
+            "items": {
+              "$ref": "#/components/schemas/OmittedSeriesBook"
+            },
+            "type": "array",
+            "title": "Omitted"
+          },
+          "counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Counts"
+          },
+          "receipt": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/BatchReceipt"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Receipt"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "message",
+          "series_name",
+          "catalog_generation",
+          "scope",
+          "main_membership",
+          "specification",
+          "release_policy",
+          "expires_at",
+          "accepted_at",
+          "records",
+          "omitted",
+          "counts",
+          "receipt"
+        ],
+        "title": "SeriesRequestView"
       },
       "SeriesView": {
         "properties": {

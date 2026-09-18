@@ -1,6 +1,6 @@
 # Series catalog and curation
 
-The Hardcover series browser is the catalog foundation for S06-05. It lets a connected member follow a series link from a book's metadata, load its catalog, inspect individual books and add selected books to an existing editable list. It does not implement Complete series acquisition or pack selection.
+The Hardcover series browser is the catalog foundation for S06-05. It lets a connected member follow a series link from a book's metadata, load its catalog, inspect individual books and add selected books to an existing editable list. The companion [Reviewed series requests](SERIES-REQUESTS.md) flow saves finite, reviewed book requests. Automatic pack selection and complete-series fulfillment remain pending.
 
 ## Observations and identities
 
@@ -16,7 +16,7 @@ Provider series data can contain duplicate positions, compilations, partial book
 
 The page shows the last verified timestamp, refresh status, raw entry count and distinct book count. Book totals exclude compilation, partial and merged-provider entries; they are not a claim of main-series completion. Ownership counts use distinct canonical works and the current user's accessible ABS inventory. An ebook establishes overall ownership independently of an audiobook requirement.
 
-Individual rows retain warnings and separate ebook/audio availability. The Select published books action excludes ambiguous positions, compilations, partial/merged entries and unknown/future publication dates. Individual selection remains available for deliberate curation. Selection on one page is bounded to 50 entries.
+Individual rows retain warnings and separate ebook/audio availability. The Select published books action excludes ambiguous positions, compilations, partial/merged entries and unknown/future publication dates. Individual selection remains available for deliberate curation. Pages show up to 50 entries. Selection survives navigation and is bounded to 100 books across pages.
 
 Before adding, the page shows whether the chosen list has active automatic acquisition. Additions use the existing idempotent list commands, in batches of at most five concurrent calls. Successful additions remain committed if another fails; failed selections remain for retry. The destination cannot be changed while that command is pending. A list's existing authorized acquisition policy applies to new memberships; no separate series downloader is created.
 
@@ -24,4 +24,4 @@ Before adding, the page shows whether the chosen list has active automatic acqui
 
 Migration `0033_catalog_series` adds account-scoped `catalog_series` and `series_memberships`. Back up application state before upgrading and deploy the matching API and worker together. Downgrade refuses to discard populated series history; rollback requires a pre-upgrade backup. A refresh whose queue job has stopped is reported as interrupted; a new refresh supersedes it while retaining the previous complete catalog.
 
-This feature does not alter download dispatch activation, rename existing files, reorganize imports, or claim ownership from a source result. Its next dependency is a finite, reviewed target set for Just book / Prefer packs / Complete series, followed by shared-transfer selection and verified per-child fulfillment. Those gates remain in the implementation plan.
+This feature does not alter download dispatch activation, rename existing files, reorganize imports, or claim ownership from a source result. Finite reviewed target sets now have bounded implementation evidence. Shared policy inheritance for Just book / Prefer packs / Complete series, shared-transfer selection and verified per-child fulfillment remain pending. Those gates remain in the implementation plan.

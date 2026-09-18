@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import { Loading, Notice } from "../components";
+import SeriesRequests from "./SeriesRequests";
 
 export default function Series({ canEdit }: { canEdit: boolean }) {
   const { externalId = "" } = useParams();
@@ -106,9 +107,18 @@ function SeriesContent({
   if (!catalog.data) return <Notice error={catalog.error} />;
   const data = catalog.data;
   const loading = ["queued", "running", "retrying"].includes(data.status);
+  const published = data.items
+    .filter(
+      (e) =>
+        !e.compilation &&
+        !e.partial &&
+        !e.merged_record &&
+        !e.ambiguous_position &&
+        e.publication === "published",
+    )
+    .map((e) => e.work.id);
   const changePage = (value: number) => {
     setOffset(value);
-    setSelected([]);
     setAdded(0);
   };
   return (
@@ -187,21 +197,14 @@ function SeriesContent({
             </p>
           )}
           <button
-            disabled={add.isPending || loading}
+            disabled={
+              add.isPending ||
+              loading ||
+              new Set([...selected, ...published]).size > 100
+            }
             onClick={() =>
-              setSelected([
-                ...new Set(
-                  data.items
-                    .filter(
-                      (e) =>
-                        !e.compilation &&
-                        !e.partial &&
-                        !e.merged_record &&
-                        !e.ambiguous_position &&
-                        e.publication === "published",
-                    )
-                    .map((e) => e.work.id),
-                ),
+              setSelected((previous) => [
+                ...new Set([...previous, ...published]),
               ])
             }
           >
@@ -230,7 +233,12 @@ function SeriesContent({
                 <input
                   type="checkbox"
                   checked={selected.includes(entry.work.id)}
-                  disabled={add.isPending || loading}
+                  disabled={
+                    add.isPending ||
+                    loading ||
+                    (!selected.includes(entry.work.id) &&
+                      selected.length >= 100)
+                  }
                   onChange={(e) =>
                     setSelected((previous) =>
                       e.target.checked
@@ -277,7 +285,7 @@ function SeriesContent({
       {data.fetched_at && !data.total && (
         <p>No accessible books were returned for this series.</p>
       )}
-      <nav aria-label="Series pages">
+      <nav className="button-row" aria-label="Series pages">
         <button
           disabled={offset === 0 || add.isPending}
           onClick={() => changePage(Math.max(0, offset - 50))}
@@ -297,6 +305,13 @@ function SeriesContent({
           Next
         </button>
       </nav>
+      {canEdit && data.fetched_at && (
+        <SeriesRequests
+          externalId={externalId}
+          generation={data.generation}
+          selected={selected}
+        />
+      )}
     </>
   );
 }

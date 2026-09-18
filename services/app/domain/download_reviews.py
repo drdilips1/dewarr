@@ -96,7 +96,7 @@ async def requester_authority(db, selection, *, lock=False):
         query = query.with_for_update(read=True)
     reasons = list(await db.scalars(query))
     for reason in reasons:
-        if reason.kind == "manual" or await db.scalar(
+        if reason.kind in {"manual", "series"} or await db.scalar(
             select(BookList.id)
             .join(ListEntry)
             .where(

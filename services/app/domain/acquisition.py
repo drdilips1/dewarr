@@ -640,6 +640,7 @@ async def submit(
     preference_choice=None,
     frozen_preferences=None,
     expected_preference_revision=None,
+    series_reference=None,
 ):
     if get_settings().recovery_mode:
         raise HTTPException(409, "Request evaluation is paused for recovery")
@@ -659,6 +660,10 @@ async def submit(
         if not reason.list_id:
             raise ValueError("Policy requests require a list")
         payload["policy_reference"] = policy_reference
+    if series_reference is not None:
+        if reason.list_id or policy_reference:
+            raise ValueError("Series reasons are independent of list reasons")
+        payload["series_reference"] = str(series_reference)
     await transaction_lock(db, f"operation:{user.id}:{key}")
     await db.refresh(user)
     if not user.active or user.role == "viewer":
@@ -701,6 +706,19 @@ async def submit(
         expected=expected_preference_revision,
     )
     await validate_request(db, user, work_id, spec, reason)
+    if series_reference is not None:
+        parent = await db.get(Operation, series_reference)
+        if (
+            not parent
+            or parent.owner_id != user.id
+            or parent.kind != "series.requests"
+            or parent.status not in {"queued", "running"}
+            or not parent.payload.get("accepted_at")
+            or str(work_id) not in parent.payload["command"]["work_ids"]
+            or spec.model_dump(mode="json") != parent.payload["effective_specification"]
+            or profile.model_dump(mode="json") != parent.payload["release_policy"]
+        ):
+            raise HTTPException(409, "Series request scope no longer authorizes this book")
     policy_key = policy_identity(profile)
     fingerprint = revision(
         {**spec.model_dump(mode="json"), **({"release_policy": policy_key} if policy_key else {})}
@@ -727,6 +745,8 @@ async def submit(
         await db.flush()
     kind, reference = ("list", str(reason.list_id)) if reason.list_id else ("manual", "manual")
     reference = policy_reference or reference
+    if series_reference is not None:
+        kind, reference = "series", str(series_reference)
     record = await db.scalar(
         select(AcquisitionReason).where(
             AcquisitionReason.intent_id == intent.id,

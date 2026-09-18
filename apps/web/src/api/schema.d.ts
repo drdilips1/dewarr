@@ -261,6 +261,91 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/catalog/series/hardcover/{external_id}/requests/preview": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Preview */
+    post: operations["preview_api_catalog_series_hardcover__external_id__requests_preview_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/catalog/series/hardcover/{external_id}/requests": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** History */
+    get: operations["history_api_catalog_series_hardcover__external_id__requests_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/catalog/series/hardcover/{external_id}/requests/{operation_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Detail */
+    get: operations["detail_api_catalog_series_hardcover__external_id__requests__operation_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/catalog/series/hardcover/{external_id}/requests/{operation_id}/submit": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Submit */
+    post: operations["submit_api_catalog_series_hardcover__external_id__requests__operation_id__submit_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/catalog/series/hardcover/{external_id}/requests/{operation_id}/cancel": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Cancel */
+    post: operations["cancel_api_catalog_series_hardcover__external_id__requests__operation_id__cancel_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/lists": {
     parameters: {
       query?: never;
@@ -4320,6 +4405,20 @@ export interface components {
        */
       last_seen_at: string;
     };
+    /** OmittedSeriesBook */
+    OmittedSeriesBook: {
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /** Title */
+      title: string;
+      /** Warnings */
+      warnings: string[];
+      /** Reason */
+      reason: string;
+    };
     /** OperationView */
     OperationView: {
       /**
@@ -5394,6 +5493,96 @@ export interface components {
       publication: string;
       work: components["schemas"]["WorkView"];
     };
+    /** SeriesRequestHistory */
+    SeriesRequestHistory: {
+      /** Items */
+      items: components["schemas"]["BatchSummary"][];
+      /** Total */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+    };
+    /** SeriesRequestInput */
+    SeriesRequestInput: {
+      /** Work Ids */
+      work_ids: string[];
+      specification: components["schemas"]["RequestOptions"];
+      release_preferences?: components["schemas"]["PreferenceChoice"] | null;
+      /**
+       * Scope
+       * @default selected
+       * @enum {string}
+       */
+      scope: "selected" | "complete_series";
+      /**
+       * Confirm Main Membership
+       * @default false
+       */
+      confirm_main_membership: boolean;
+      /** Expected Generation */
+      expected_generation: number;
+    };
+    /** SeriesRequestRecord */
+    SeriesRequestRecord: {
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /** Title */
+      title: string;
+      /** Authors */
+      authors: string[];
+      /** Warnings */
+      warnings: string[];
+      /** Position */
+      position?: string | null;
+      /** Targets */
+      targets: components["schemas"]["TargetView"][];
+      /** Issue */
+      issue: string | null;
+    };
+    /** SeriesRequestView */
+    SeriesRequestView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Status */
+      status: string;
+      /** Message */
+      message: string;
+      /** Series Name */
+      series_name: string;
+      /** Catalog Generation */
+      catalog_generation: number;
+      /** Scope */
+      scope: string;
+      /** Main Membership */
+      main_membership: string;
+      specification: components["schemas"]["RequestSpec"];
+      release_policy: components["schemas"]["ProfileSnapshot"];
+      /**
+       * Expires At
+       * Format: date-time
+       */
+      expires_at: string;
+      /** Accepted At */
+      accepted_at: string | null;
+      /** Records */
+      records: components["schemas"]["SeriesRequestRecord"][];
+      /** Omitted */
+      omitted: components["schemas"]["OmittedSeriesBook"][];
+      /** Counts */
+      counts: {
+        [key: string]: number;
+      };
+      /** Receipt */
+      receipt: components["schemas"]["BatchReceipt"][] | null;
+    };
     /** SeriesView */
     SeriesView: {
       /** Id */
@@ -6326,6 +6515,173 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["SeriesView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  preview_api_catalog_series_hardcover__external_id__requests_preview_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        external_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SeriesRequestInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SeriesRequestView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  history_api_catalog_series_hardcover__external_id__requests_get: {
+    parameters: {
+      query?: {
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        external_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SeriesRequestHistory"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  detail_api_catalog_series_hardcover__external_id__requests__operation_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        external_id: string;
+        operation_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SeriesRequestView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  submit_api_catalog_series_hardcover__external_id__requests__operation_id__submit_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        external_id: string;
+        operation_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SeriesRequestView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  cancel_api_catalog_series_hardcover__external_id__requests__operation_id__cancel_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        external_id: string;
+        operation_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SeriesRequestView"];
         };
       };
       /** @description Validation Error */

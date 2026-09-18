@@ -516,7 +516,7 @@ class AcquisitionReason(Identity, Base):
     __tablename__ = "acquisition_reasons"
     __table_args__ = (
         UniqueConstraint("intent_id", "kind", "reference"),
-        CheckConstraint("kind IN ('manual', 'list')"),
+        CheckConstraint("kind IN ('manual', 'list', 'series')", name="acquisition_reason_kind"),
     )
     intent_id: Mapped[UUID] = mapped_column(ForeignKey("acquisition_intents.id"), index=True)
     kind: Mapped[str] = mapped_column(String(20))

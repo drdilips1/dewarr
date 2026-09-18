@@ -3038,6 +3038,60 @@ test("series catalog preserves uncertainty and curates selected books", async ({
   await expect(
     page.getByLabel("Select Journey Without Date", { exact: true }),
   ).not.toBeChecked();
+  const requests = page.getByRole("region", {
+    name: "Series requests",
+    exact: true,
+  });
+  await requests
+    .getByLabel("Series request scope")
+    .selectOption("complete_series");
+  await requests
+    .getByLabel(
+      "I reviewed the selection and it contains the main books I want to complete.",
+    )
+    .check();
+  await requests.getByLabel("Series requested media").selectOption("both");
+  await requests
+    .getByRole("button", { name: "Preview series requests", exact: true })
+    .click();
+  await expect(
+    requests.getByRole("button", { name: "Save series requests", exact: true }),
+  ).toBeVisible();
+  await expect(requests).toContainText("2 selected books");
+  await expect(requests).toContainText("Ebook: Available");
+  await requests
+    .getByRole("button", { name: "Save series requests", exact: true })
+    .click();
+  await expect(requests.getByRole("status")).toContainText(
+    "Saved requests for 2 books",
+    { timeout: 15_000 },
+  );
+  await page.reload();
+  await requests
+    .getByText("Series request history (1)", { exact: true })
+    .click();
+  await requests.getByRole("button", { name: /Open 2-book request/ }).click();
+  await expect(requests).toContainText("2 selected books");
+  await requests
+    .getByRole("button", { name: "Cancel this series request", exact: true })
+    .click();
+  await expect(requests.getByRole("status")).toContainText(
+    "Series request cancelled",
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.screenshot({
+    path: testInfo.outputPath("series-request-mobile.png"),
+    fullPage: true,
+  });
+  await requests
+    .getByRole("button", { name: "New selection", exact: true })
+    .click();
+  await curation
+    .getByLabel("Destination list")
+    .selectOption({ label: "Weekend reads" });
+  await curation
+    .getByRole("button", { name: "Select published books on this page" })
+    .click();
   await curation
     .getByRole("button", { name: "Add selected books to list (2)" })
     .click();

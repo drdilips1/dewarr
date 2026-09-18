@@ -2,7 +2,7 @@
 
 This is an early development build. The full [PRD](../PRD.md) remains the target; [Implementation Status](IMPLEMENTATION-STATUS.md) records actual coverage. Do not connect production acquisition automation until the relevant import and recovery gates pass.
 
-Current request contract: back up the database and apply migrations through `0032_request_release_policy` before restarting API and worker together. [Request restrictions](ACQUISITION-FOUNDATION.md#request-download-restrictions) preserve independent format and whole-transfer size limits across shared acquisitions. Populated new restrictions block lossy downgrade. Default dispatch remains disabled; this migration does not activate list automation.
+Current request contract: back up the database and apply migrations through `0034_series_requests` before restarting API and worker together. [Request restrictions](ACQUISITION-FOUNDATION.md#request-download-restrictions) preserve independent format and whole-transfer size limits across shared acquisitions. Populated new restrictions block lossy downgrade. Default dispatch remains disabled; this migration does not activate list automation.
 
 ## Native development
 
@@ -146,3 +146,5 @@ Apply `0031_acquisition_defaults` after backing up, then restart API and worker 
 Migration `0032_request_release_policy` records effective release preferences on acquisition intents and individual reasons. Back up before upgrade and restart API and worker at the same revision. Existing requests retain null historical snapshots; no guessed backfill is performed. Once a snapshot is stored, downgrade is refused to prevent loss of acquisition evidence.
 
 List policies and manual request forms expose sparse release overrides. Request-bound source searches retain those layers through selection; polling is scoped to the request. See [Download preferences](DOWNLOAD-PREFERENCES.md) for precedence, stale-preview behavior and the remaining media/language/scope inheritance work. This migration does not enable dispatch or change existing files.
+
+[Reviewed series requests](SERIES-REQUESTS.md) add the `series.requests` task and independent series reasons. Apply `0034_series_requests` before restarting API and worker together. Populated series history requires backup-based rollback. Saving a series request creates ordinary wanted requests; it does not dispatch a pack or expand future membership.

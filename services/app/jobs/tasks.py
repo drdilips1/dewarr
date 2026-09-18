@@ -327,3 +327,10 @@ async def acquire_list_books(operation_id: str) -> None:
     from app.domain.list_automation import run
 
     await run(UUID(operation_id))
+
+
+@tasks.task(name="series.requests", queue="metadata", retry=RetryStrategy(max_attempts=5, wait=60))
+async def request_series(operation_id: str) -> None:
+    from app.domain.series_requests import run
+
+    await run(UUID(operation_id))

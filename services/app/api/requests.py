@@ -13,6 +13,7 @@ from app.db.models import (
     AcquisitionTarget,
     AuditEvent,
     BookList,
+    Operation,
     Version,
 )
 from app.domain.acquisition import (
@@ -180,7 +181,10 @@ async def view(db, user, intent):
                 active=reason.active,
                 list_id=reason.list_id,
                 release_policy=reason.release_policy,
-                label="Your request"
+                label="Series: "
+                + ((await db.get(Operation, UUID(reason.reference))).payload["series"]["name"])
+                if reason.kind == "series"
+                else "Your request"
                 if reason.kind == "manual"
                 else (
                     await db.scalar(select(BookList.name).where(BookList.id == reason.list_id))
