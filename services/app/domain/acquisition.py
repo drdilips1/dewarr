@@ -38,7 +38,9 @@ from app.db.models import (
     Work,
     WorkMetadataSource,
 )
+from app.domain import narrators
 from app.domain.corrections import revision
+from app.domain.narrators import NarratorNames
 from app.domain.operations import transaction_lock
 from app.domain.request_constraints import DownloadConstraints, combine, formats_possible
 from app.domain.request_scope import language, same_command, sparse_schema
@@ -68,6 +70,9 @@ class RequestSpec(BaseModel):
     ebook_library_id: UUID | None = None
     audio_library_id: UUID | None = None
     abridged: bool | None = None
+    required_narrators: NarratorNames = Field(
+        default_factory=list, exclude_if=lambda value: not value
+    )
     standalone: bool = False
     download_constraints: DownloadConstraints | None = Field(
         default=None, exclude_if=lambda value: value is None
@@ -97,7 +102,10 @@ class RequestSpec(BaseModel):
         if self.mode != "either" and self.preferred_medium:
             raise ValueError("A first-medium preference only applies to Either")
         if self.mode == "ebook" and (
-            self.audio_version_id or self.audio_library_id or self.abridged is not None
+            self.audio_version_id
+            or self.audio_library_id
+            or self.abridged is not None
+            or self.required_narrators
         ):
             raise ValueError("Audiobook constraints do not apply to an ebook-only request")
         if self.mode == "audio" and (self.ebook_version_id or self.ebook_library_id):
@@ -120,6 +128,11 @@ class RequestSpec(BaseModel):
             "abridged": self.abridged if medium == "audio" else None,
             "standalone": self.standalone,
             **(
+                {"required_narrators": self.required_narrators}
+                if medium == "audio" and self.required_narrators
+                else {}
+            ),
+            **(
                 {"download_constraints": self.download_constraints.model_dump()}
                 if self.download_constraints
                 else {}
@@ -132,6 +145,7 @@ class RequestOptions(RequestSpec):
 
     model_config = ConfigDict(extra="forbid", json_schema_extra=sparse_schema)
     mode: Literal["ebook", "audio", "both", "either"] | None = None
+    required_narrators: NarratorNames = Field(default_factory=list)
 
     @model_validator(mode="after")
     def applicable_constraints(self):
@@ -165,6 +179,11 @@ def intersect_rules(left, right):
     else:
         return None
     result["standalone"] = left["standalone"] or right["standalone"]
+    required = narrators.combined(
+        left.get("required_narrators", []), right.get("required_narrators", [])
+    )
+    if required:
+        result["required_narrators"] = required
     constraints = combine(left.get("download_constraints"), right.get("download_constraints"))
     if constraints:
         if not formats_possible(constraints, left["medium"]):
@@ -180,8 +199,9 @@ async def compatible_reservation(db, candidate, rule):
         return None
     if candidate.state == "planned" or compatible == candidate.requirements:
         return compatible
-    if {k: v for k, v in compatible.items() if k != "download_constraints"} != {
-        k: v for k, v in candidate.requirements.items() if k != "download_constraints"
+    inspected_fields = {"download_constraints", "required_narrators"}
+    if {k: v for k, v in compatible.items() if k not in inspected_fields} != {
+        k: v for k, v in candidate.requirements.items() if k not in inspected_fields
     }:
         return None
     selection = await db.scalar(
@@ -192,6 +212,17 @@ async def compatible_reservation(db, candidate, rule):
     )
     if not selection:
         return None
+    if not narrators.accepts(
+        compatible.get("required_narrators", []),
+        candidate.requirements.get("required_narrators", []),
+    ):
+        # A frozen exact recording can establish a stricter reason without changing
+        # the selected import contract. A tracker narrator claim alone cannot.
+        version = selection.frozen.get("version")
+        if not version or not narrators.accepts(
+            compatible["required_narrators"], version["narrators"]
+        ):
+            return None
     from app.adapters.mam import MAMRelease
     from app.adapters.prowlarr import ProwlarrRelease
     from app.adapters.torrent_descriptor import TorrentDescriptor
@@ -286,6 +317,10 @@ async def validate_request(db, user, work_id, spec, reason=None):
             raise HTTPException(
                 422, "The selected recording conflicts with the abridgment requirement"
             )
+        if medium == "audio" and not narrators.accepts(spec.required_narrators, version.narrators):
+            raise HTTPException(
+                422, "The selected recording does not confirm every required narrator"
+            )
     if reason and reason.list_id:
         owned = await db.scalar(
             select(BookList.id)
@@ -339,6 +374,10 @@ def asset_satisfies(asset, version, count, rule):
     if not language_accepts(rule["language"], version.language if version else None):
         return False
     if rule["abridged"] is not None and (not version or version.abridged != rule["abridged"]):
+        return False
+    if not narrators.accepts(
+        rule.get("required_narrators", []), version.narrators if version else []
+    ):
         return False
     return not rule["standalone"] or count == 1
 
@@ -486,6 +525,9 @@ async def reserve(db, user, intent, spec, slot, *, only_medium=None):
                     version = await db.get(Version, UUID(compatible["version_id"]))
                     if (
                         not version
+                        or not narrators.accepts(
+                            compatible.get("required_narrators", []), version.narrators
+                        )
                         or (
                             version.language
                             and not language_accepts(compatible["language"], version.language)

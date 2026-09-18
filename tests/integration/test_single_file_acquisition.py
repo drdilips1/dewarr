@@ -202,7 +202,14 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
         downloader_id, artifact_id = str(downloader.id), str(artifact.id)
     wanted = await request(
         client,
-        body({"work": old["work_id"]}, medium, **{medium + "_library_id": route["library_id"]}),
+        body(
+            {"work": old["work_id"]},
+            medium,
+            **{
+                medium + "_library_id": route["library_id"],
+                **({"required_narrators": ["Jordan Lee"]} if medium == "audio" else {}),
+            },
+        ),
     )
     selected_response = await prepare(
         client,
@@ -319,7 +326,7 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
     if handoff in success:
         async with database() as db:
             auto = await db.scalar(select(AutomaticImport))
-            assert auto.state == "importing", auto.message
+            assert auto.state == "importing", (auto.message, auto.evidence)
             plan = await db.get(
                 FrozenImportPlan, (await db.get(ImportRun, auto.import_run_id)).plan_id
             )

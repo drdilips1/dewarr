@@ -4472,6 +4472,8 @@ export interface components {
       language?: string | null;
       /** Abridged */
       abridged?: boolean | null;
+      /** Required Narrators */
+      required_narrators?: string[];
       /** Standalone */
       standalone?: boolean;
       /** Ebook Library Id */
@@ -4485,7 +4487,9 @@ export interface components {
       /** Source Order */
       source_order?: string[];
       /** Criteria */
-      criteria?: ("format" | "source" | "seeders")[];
+      criteria?: ("format" | "source" | "seeders" | "narrator")[];
+      /** Preferred Narrators */
+      preferred_narrators?: string[];
       /** Blocked Formats */
       blocked_formats?: string[];
       /** Maximum Bytes */
@@ -4827,6 +4831,8 @@ export interface components {
       language?: string | null;
       /** Abridged */
       abridged?: boolean | null;
+      /** Required Narrators */
+      required_narrators?: string[];
       /**
        * Standalone
        * @default false
@@ -4877,7 +4883,9 @@ export interface components {
        *       "seeders"
        *     ]
        */
-      criteria: ("format" | "source" | "seeders")[];
+      criteria: ("format" | "source" | "seeders" | "narrator")[];
+      /** Preferred Narrators */
+      preferred_narrators?: string[];
       /** Blocked Formats */
       blocked_formats?: string[];
       /** Maximum Bytes */
@@ -4950,6 +4958,8 @@ export interface components {
       audio_library_id?: string | null;
       /** Abridged */
       abridged?: boolean | null;
+      /** Required Narrators */
+      required_narrators?: string[];
       /** Standalone */
       standalone?: boolean;
       download_constraints?:
@@ -4992,6 +5002,8 @@ export interface components {
       audio_library_id?: string | null;
       /** Abridged */
       abridged?: boolean | null;
+      /** Required Narrators */
+      required_narrators?: string[];
       /**
        * Standalone
        * @default false

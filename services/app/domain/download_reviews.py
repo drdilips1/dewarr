@@ -26,6 +26,7 @@ from app.db.models import (
     Operation,
     User,
 )
+from app.domain import narrators
 from app.domain.acquisition import RequestSpec, evaluate, language_accepts, validate_request
 from app.domain.downloaders import mapped_path
 from app.domain.operations import transaction_lock
@@ -123,14 +124,29 @@ async def lock_principals(db, inspection_id):
         )
 
 
-async def validate_inspection(db, inspection_id, *, destination_id=None, version=None, lock=False):
+async def validate_inspection(
+    db, inspection_id, *, destination_id=None, version=None, group=None, lock=False
+):
     """No work locks: safe under the importer's existing publication lock order."""
     attempt = await db.scalar(
         select(DownloadAttempt).where(DownloadAttempt.inspection_id == inspection_id)
     )
     if attempt:
         selection = await db.get(AcquisitionSelection, attempt.selection_id)
+        if version and not narrators.accepts(
+            selection.frozen["requirements"].get("required_narrators", []), version.narrators
+        ):
+            raise HTTPException(422, "This recording does not confirm every required narrator")
         inspection = await db.get(DownloadInspection, inspection_id)
+        required = selection.frozen["requirements"].get("required_narrators", [])
+        if required and group is not None:
+            from app.importing.match_evidence import group_evidence
+
+            facts = group_evidence(inspection.snapshot, group)
+            if not facts.narrators or any(
+                not narrators.accepts(required, names) for names in facts.narrators
+            ):
+                raise HTTPException(422, "Inspected audio does not confirm every required narrator")
         if inspection.snapshot and selection.frozen.get("profile"):
             enforce_inspected_profile(
                 inspection.snapshot["files"],

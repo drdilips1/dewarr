@@ -6,6 +6,8 @@ from uuid import UUID
 from fastapi import HTTPException
 from pydantic import BaseModel, Field, ValidationError, field_validator
 
+from app.domain.narrators import NarratorNames
+
 
 def language(value):
     if not value:
@@ -32,6 +34,7 @@ class ScopePreferences(BaseModel):
         default=None, pattern=r"^[a-zA-Z]{2,3}([-_][a-zA-Z0-9]{2,8})*$", max_length=20
     )
     abridged: bool | None = None
+    required_narrators: NarratorNames = Field(default_factory=list)
     standalone: bool = False
     ebook_library_id: UUID | None = None
     audio_library_id: UUID | None = None
@@ -47,6 +50,7 @@ SCOPE_FIELDS = {
     "preferred_medium": "preferred_medium",
     "language": "language",
     "abridged": "abridged",
+    "required_narrators": "required_narrators",
     "standalone": "standalone",
     "ebook_library_id": "ebook_library_id",
     "audio_library_id": "audio_library_id",
@@ -77,12 +81,12 @@ def specification(options, profile):
     # not become contradictory constraints when this request chooses one medium.
     inactive = ["preferred_medium"] if values["mode"] != "either" else []
     if values["mode"] == "ebook":
-        inactive.extend(["audio_library_id", "abridged"])
+        inactive.extend(["audio_library_id", "abridged", "required_narrators"])
     if values["mode"] == "audio":
         inactive.append("ebook_library_id")
     for field in inactive:
         if field not in explicit:
-            values[field] = None
+            values[field] = [] if field == "required_narrators" else None
             origins[field] = "Not applicable"
     try:
         result = RequestSpec.model_validate(values)

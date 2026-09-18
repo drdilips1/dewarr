@@ -5,6 +5,7 @@ import re
 from pydantic import Field
 
 from app.domain.identity import normalized
+from app.domain.narrators import embedded_names
 from app.importing.metadata import valid_isbn
 from app.importing.naming import StrictModel
 
@@ -118,7 +119,9 @@ def group_evidence(snapshot, group):
             language = [tags.get("language")]
             narrator = tags.get("narrator") or tags.get("composer")
             if narrator:
-                narrators.add((normalized(narrator),))
+                credits = embedded_names(narrator)
+                if credits:
+                    narrators.add(tuple(credits))
             if (year := str(tags.get("year") or tags.get("date") or "")) and re.fullmatch(
                 r"\d{4}(?:-\d{2}(?:-\d{2})?)?", year
             ):

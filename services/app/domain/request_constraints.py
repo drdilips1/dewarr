@@ -44,7 +44,12 @@ def constrained_preferences(preferences, rule):
         preferences.model_dump(include={"blocked_formats", "maximum_bytes"}),
         rule.get("download_constraints"),
     )
-    return preferences.model_copy(update=constraints) if constraints else preferences
+    return preferences.model_copy(
+        update={
+            **(constraints or {}),
+            "required_narrators": rule.get("required_narrators", []),
+        }
+    )
 
 
 def formats_possible(constraints, medium):

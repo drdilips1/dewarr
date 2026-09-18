@@ -1,4 +1,5 @@
 import ScopeFields from "./ScopeFields";
+import NarratorNamesField from "./NarratorNamesField";
 import type { components } from "../api/schema";
 type Preferences = components["schemas"]["ReleasePreferences"];
 export type Overrides = components["schemas"]["PreferenceOverrides"];
@@ -9,6 +10,7 @@ export const preferenceLabels: Partial<Record<keyof Preferences, string>> = {
   audio_formats: "Audiobook format preference",
   blocked_formats: "Blocked formats",
   maximum_bytes: "Maximum transfer size",
+  preferred_narrators: "Preferred narrators",
 };
 const formats = [
   "epub",
@@ -139,6 +141,60 @@ export default function PreferenceFields({
         includeMedia={includeMedia}
       />
       {order("criteria")}
+      <details>
+        <summary>Narrator preferences</summary>
+        <NarratorNamesField
+          label="Preferred narrators"
+          ordered
+          values={effective.preferred_narrators || []}
+          onChange={(preferred_narrators) =>
+            onChange({ ...overrides, preferred_narrators })
+          }
+        />
+        {origin("preferred_narrators")}
+        {!effective.criteria?.includes("narrator") ? (
+          <>
+            <p className="muted">
+              Narrator preference breaks ties after the ranking priorities
+              above.
+            </p>
+            <button
+              type="button"
+              onClick={() =>
+                onChange({
+                  ...overrides,
+                  criteria: [
+                    "narrator",
+                    ...(effective.criteria || ["format", "source", "seeders"]),
+                  ],
+                })
+              }
+            >
+              Rank narrator preference first
+            </button>
+          </>
+        ) : (
+          <>
+            <p className="muted">
+              Move narrator in Ranking priorities to choose when this preference
+              applies.
+            </p>
+            <button
+              type="button"
+              onClick={() =>
+                onChange({
+                  ...overrides,
+                  criteria: effective.criteria?.filter(
+                    (criterion) => criterion !== "narrator",
+                  ),
+                })
+              }
+            >
+              Use narrator preference only to break ties
+            </button>
+          </>
+        )}
+      </details>
       {order("source_order")}
       <details>
         <summary>Formats and transfer limits</summary>

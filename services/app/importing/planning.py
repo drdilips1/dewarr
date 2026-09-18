@@ -133,13 +133,11 @@ async def freeze_plan(db, admin, inspection_id: UUID, body: FreezeInput):
         version = await db.get(Version, selection.version_id)
         if not version or (await canonical_work(db, version.work_id)).id != work.id:
             raise HTTPException(422, "Choose a catalog version belonging to the selected book")
-        await validate_inspection(db, row.id, version=version)
+        reviewed_group = next(item for item in grouping.groups if item.key == selection.group_key)
+        await validate_inspection(db, row.id, version=version, group=reviewed_group)
         if version.medium != group["medium"]:
             raise HTTPException(422, "Catalog version and inspected medium differ")
         if selection.match_revision:
-            reviewed_group = next(
-                item for item in grouping.groups if item.key == selection.group_key
-            )
             match = await match_group(db, row.snapshot, grouping_revision, reviewed_group)
             if (
                 match.revision != selection.match_revision

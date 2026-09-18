@@ -13186,6 +13186,16 @@
             ],
             "title": "Abridged"
           },
+          "required_narrators": {
+            "items": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 32,
+            "title": "Required Narrators"
+          },
           "standalone": {
             "type": "boolean",
             "title": "Standalone"
@@ -13247,13 +13257,24 @@
               "enum": [
                 "format",
                 "source",
-                "seeders"
+                "seeders",
+                "narrator"
               ]
             },
             "type": "array",
-            "maxItems": 3,
+            "maxItems": 4,
             "minItems": 3,
             "title": "Criteria"
+          },
+          "preferred_narrators": {
+            "items": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 32,
+            "title": "Preferred Narrators"
           },
           "blocked_formats": {
             "items": {
@@ -14224,6 +14245,16 @@
             ],
             "title": "Abridged"
           },
+          "required_narrators": {
+            "items": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 32,
+            "title": "Required Narrators"
+          },
           "standalone": {
             "type": "boolean",
             "title": "Standalone",
@@ -14307,11 +14338,12 @@
               "enum": [
                 "format",
                 "source",
-                "seeders"
+                "seeders",
+                "narrator"
               ]
             },
             "type": "array",
-            "maxItems": 3,
+            "maxItems": 4,
             "minItems": 3,
             "title": "Criteria",
             "default": [
@@ -14319,6 +14351,16 @@
               "source",
               "seeders"
             ]
+          },
+          "preferred_narrators": {
+            "items": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 32,
+            "title": "Preferred Narrators"
           },
           "blocked_formats": {
             "items": {
@@ -14583,6 +14625,16 @@
             ],
             "title": "Abridged"
           },
+          "required_narrators": {
+            "items": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 32,
+            "title": "Required Narrators"
+          },
           "standalone": {
             "type": "boolean",
             "title": "Standalone"
@@ -14751,6 +14803,16 @@
               }
             ],
             "title": "Abridged"
+          },
+          "required_narrators": {
+            "items": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 32,
+            "title": "Required Narrators"
           },
           "standalone": {
             "type": "boolean",

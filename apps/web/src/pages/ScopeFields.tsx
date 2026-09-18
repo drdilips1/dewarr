@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
+import NarratorNamesField from "./NarratorNamesField";
 type Preferences = components["schemas"]["ReleasePreferences"];
 type Overrides = components["schemas"]["PreferenceOverrides"];
 type Spec = components["schemas"]["RequestSpec"];
@@ -10,6 +11,7 @@ export const scopeLabels = {
   preferred_medium: "Default first medium for Either",
   language: "Required language",
   abridged: "Audiobook abridgment",
+  required_narrators: "Required narrators",
   standalone: "Standalone copies",
   ebook_library_id: "Ebook library",
   audio_library_id: "Audiobook library",
@@ -141,6 +143,14 @@ export default function ScopeFields({
         </select>
       </label>
       {origin("abridged")}
+      <NarratorNamesField
+        label={scopeLabels.required_narrators}
+        values={values.required_narrators || []}
+        onChange={(required_narrators) =>
+          onChange({ ...overrides, required_narrators })
+        }
+      />
+      {origin("required_narrators")}
       <label className="check-label">
         <input
           type="checkbox"
@@ -238,6 +248,11 @@ export function EffectiveScope({
               : specification.abridged
                 ? "Abridged"
                 : "Unabridged",
+          ],
+          [
+            "required_narrators",
+            "Required narrators",
+            specification.required_narrators?.join("; ") || "Any narrator",
           ],
         ]
       : []),

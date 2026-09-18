@@ -2,7 +2,7 @@
 
 Release preferences resolve per field: request overrides → list overrides → selected profile → personal defaults → installation defaults → built-in Balanced values. Leaving a field unset inherits it. Editing one field in the UI records only that override; “Use inherited …” removes it again. Existing profiles with complete stored preferences remain explicit and keep their previous values.
 
-This applies to ebook/audio format order, source order, ranking criteria, blocked formats and maximum transfer bytes, plus the supported [request scope](REQUEST-SCOPE.md): desired media, Either's first medium, language, abridgment, standalone copies and library choices. Empty format/source preference lists are invalid. An explicit empty blocked-format list clears an inherited preference; an explicit null maximum removes an inherited profile limit. These are ordinary preferences. Independent request restrictions, administrator-approved destinations, permissions and installation capacity limits remain enforced and cannot be relaxed here. Ownership is unchanged.
+This applies to ebook/audio format order, source order, ranking criteria, preferred narrators, blocked formats and maximum transfer bytes, plus the supported [request scope](REQUEST-SCOPE.md): desired media, Either's first medium, language, abridgment, required narrators, standalone copies and library choices. Empty format/source preference lists are invalid. An explicit empty blocked-format list clears an inherited preference; an explicit null maximum removes an inherited profile limit. These are ordinary preferences. Independent request restrictions, administrator-approved destinations, permissions and installation capacity limits remain enforced and cannot be relaxed here. Ownership is unchanged.
 
 Open **Personal and installation download defaults** from a book's Sources preferences, or `/download-preferences`. Members edit their own defaults. Administrators additionally edit installation defaults. Saved profiles are still private. The editor keeps inherited values visible, and the effective-preferences view shows the source of each value. Changing defaults does not rewrite files or replace running torrents.
 
@@ -22,7 +22,13 @@ Automatic dispatch has a narrower fence: immediately before the final authority 
 
 Keep ordinary profile reads free of transaction-scoped configuration locks. The final dispatch transaction already owns its list/principal/book/attempt locks before taking the configuration fence; configuration writers must not start acquiring those workflow locks while holding it. Changing these boundaries requires cross-workflow concurrency tests. PostgreSQL documents statement snapshots under [Read Committed](https://www.postgresql.org/docs/16/transaction-iso.html#XACT-READ-COMMITTED) and transaction lock lifetimes in [Explicit Locking](https://www.postgresql.org/docs/16/explicit-locking.html).
 
-The current slice does **not** claim the entire FR-20 inheritance contract. Supported request scope now uses the same precedence model, while inherited narrator and series preferences, automatic destination-route defaults, and reviewed scope changes for already-unsatisfied requests remain follow-ups. Exact recording requests and required library choices do not substitute for those capabilities. Full S06/S07 acceptance remains open.
+The current slice does **not** claim the entire FR-20 inheritance contract. Supported request scope and narrator preferences use the same precedence model, while series preferences, automatic destination-route defaults, and reviewed scope changes for already-unsatisfied requests remain follow-ups. Exact recording requests and required library choices do not substitute for those capabilities. Full S06/S07 acceptance remains open.
+
+## Narrator ranking
+
+Preferred narrators are ordered names, not a filter. The earliest matching name receives the best narrator rank. Unknown and unlisted narrators remain eligible but do not receive a preference. This criterion has no effect on ebook ranking. Empty `preferred_narrators` explicitly clears inheritance.
+
+Existing profiles keep their three-criterion ranking order. Narrator preference breaks remaining ties before stable source identifiers. **Rank narrator preference first** adds `narrator` to the movable ranking priorities; it can then be placed before or after format, source and seeders. **Use narrator preference only to break ties** restores the three-criterion form. Required narrators filter candidates before any soft preference or seed count can affect selection.
 
 ## Request and list overrides
 

@@ -1285,6 +1285,25 @@ test("request scope inherits defaults, supports explicit clearing and remains fr
     .getByRole("combobox", { name: "Audiobook abridgment", exact: true })
     .selectOption("false");
   await settings
+    .getByRole("textbox", { name: "Required narrators name", exact: true })
+    .fill("Jordan Lee");
+  await settings
+    .getByRole("button", { name: "Add to required narrators", exact: true })
+    .click();
+  await settings.getByText("Narrator preferences", { exact: true }).click();
+  await settings
+    .getByRole("textbox", { name: "Preferred narrators name", exact: true })
+    .fill("Jordan Lee");
+  await settings
+    .getByRole("button", { name: "Add to preferred narrators", exact: true })
+    .click();
+  await settings
+    .getByRole("button", {
+      name: "Rank narrator preference first",
+      exact: true,
+    })
+    .click();
+  await settings
     .getByRole("button", { name: "Save download defaults", exact: true })
     .click();
   await expect(settings.getByRole("status")).toContainText(
@@ -1305,12 +1324,27 @@ test("request scope inherits defaults, supports explicit clearing and remains fr
   await expect(scope).toContainText("Both");
   await expect(scope).toContainText("Personal default");
   await expect(scope).toContainText("Unabridged");
+  await expect(scope).toContainText("Jordan Lee");
   await wanted
     .getByText("Download preferences for this request", { exact: true })
     .click();
   await wanted
     .getByText("Media, language and library defaults", { exact: true })
     .click();
+  await wanted
+    .getByRole("button", {
+      name: "Remove Jordan Lee from Required narrators",
+      exact: true,
+    })
+    .click();
+  await expect(scope).toContainText("Any narrator");
+  await wanted
+    .getByRole("button", {
+      name: "Use inherited Required narrators",
+      exact: true,
+    })
+    .click();
+  await expect(scope).toContainText("Jordan Lee");
   await wanted
     .getByRole("textbox", { name: "Required language", exact: true })
     .fill("");
@@ -1342,6 +1376,11 @@ test("request scope inherits defaults, supports explicit clearing and remains fr
   expect(saved.specification.mode).toBe("both");
   expect(saved.specification.language).toBe("en");
   expect(saved.specification.abridged).toBe(false);
+  expect(saved.specification.required_narrators).toEqual(["Jordan Lee"]);
+  expect(saved.release_policy.preferences.preferred_narrators).toEqual([
+    "Jordan Lee",
+  ]);
+  expect(saved.release_policy.preferences.criteria[0]).toBe("narrator");
   await page.reload();
   await expect(wanted).toContainText("Language: en");
   await wanted

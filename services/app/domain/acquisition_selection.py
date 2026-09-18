@@ -24,6 +24,7 @@ from app.db.models import (
     SourceConnection,
     Version,
 )
+from app.domain import narrators
 from app.domain.acquisition import (
     RequestSpec,
     evaluate,
@@ -89,14 +90,10 @@ def release_compatible(release, rule, version):
     required_language = rule["language"] or (version.language if version else None)
     if not language_accepts(required_language, release.language):
         raise HTTPException(422, "The source does not confirm the required language")
+    if not narrators.accepts(rule.get("required_narrators", []), release.narrators):
+        raise HTTPException(422, "The source does not confirm every required narrator")
     if version and version.medium == "audio" and version.narrators:
-
-        def normalize(value):
-            return " ".join(value.casefold().split())
-
-        if not {normalize(value) for value in version.narrators}.issubset(
-            {normalize(value) for value in release.narrators}
-        ):
+        if not narrators.accepts(version.narrators, release.narrators):
             raise HTTPException(
                 422, "The source does not confirm the selected recording's narrators"
             )

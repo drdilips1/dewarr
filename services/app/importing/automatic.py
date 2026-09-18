@@ -252,10 +252,13 @@ async def plan_ready(db, row, selection, inspection, approver, destination, curr
         else:
             try:
                 await download_reviews.validate_inspection(
-                    db, inspection.id, version=await db.get(Version, candidate.version_id)
+                    db,
+                    inspection.id,
+                    version=await db.get(Version, candidate.version_id),
+                    group=group,
                 )
-            except HTTPException:
-                reason = "This version does not satisfy the requested media, language or edition"
+            except HTTPException as error:
+                reason = str(error.detail)
         if reason:
             held.append({"group_key": group.key, "reason": reason})
             continue

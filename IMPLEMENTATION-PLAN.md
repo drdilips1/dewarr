@@ -6,6 +6,8 @@ This plan implements [the PRD](PRD.md) using [the researched decisions](IMPLEMEN
 
 The [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md) provides a concise handoff across these documents, including the product boundary, P0/P1 decisions and milestone demonstrations.
 
+For the existing workspace, use its [remaining development batches](DEVELOPMENT-ROADMAP.md#9-remaining-development-batches-from-the-current-checkpoint) alongside section 16. These batches map outstanding work to the stable packages below; they do not add scope or supersede stage acceptance gates.
+
 ## 1. Delivery strategy
 
 Deliver a working vertical slice early, then expand source coverage and automation. Build durable domain state, identity and inventory before dispatch; certify importing before connecting automatic acquisition. Hardening, accessibility, authorization and migration testing start with their first affected feature rather than waiting for the final stage.
@@ -712,7 +714,7 @@ Owner labels describe responsibilities, not assumed staffing. One developer may 
 
 The bounded single-book list-to-library path, membership re-addition/merge lifecycle and release-profile defaults have implementation evidence in [Implementation Status](docs/IMPLEMENTATION-STATUS.md). Those subsets do not close S06/S07. Continue **complete policy inheritance and acquisition scope**, within S06-04 and S07-04–S07-06, using the existing shared resolver and acquisition/import services.
 
-1. Complete field-level precedence for narrator/recording preferences, series scope and automatic destination routes, retaining independent administrator restrictions. The release-preference fields and supported [request scope](docs/REQUEST-SCOPE.md)—desired media, first medium, language, abridgment, standalone copies and required libraries—now have resolver, snapshot and UI evidence. Exact recording requests and library choices do not complete narrator preference, pack expansion or route-default inheritance; finish those semantics through the shared acquisition path.
+1. Complete field-level precedence for series scope and automatic destination routes, retaining independent administrator restrictions. Narrator preference and requirement now have bounded implementation evidence in [Request scope](docs/REQUEST-SCOPE.md): preferred names rank eligible audio, required names constrain satisfaction, and exact recording identity remains separate. Continue full series/recording behavior without treating that narrator increment as complete S06. The release-preference fields and supported request scope—desired media, first medium, language, abridgment, narrator requirements, standalone copies and required libraries—use the shared resolver, snapshots and UI. Library choices do not complete destination-route inheritance.
 2. Show effective values and origins before manual and automatic actions. Preserve omitted versus explicit values; reject stale previews and avoid silently changing unrelated fields when one preference is edited.
 3. Reuse list future-only/backfill/catch-up semantics and shared request reasons. Verify overlapping lists and incompatible version requirements, with no second transfer when current frozen evidence can satisfy both requests.
 4. Keep submitted transfers/import manifests immutable. Preview changes to unsatisfied requests, invalidate obsolete selections before dispatch and retain original policy evidence for existing transfers.

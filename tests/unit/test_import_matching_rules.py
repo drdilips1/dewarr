@@ -88,6 +88,16 @@ def test_group_conflicts_and_companion_identifiers_are_distinct(tmp_path):
     assert not facts.issues
 
 
+def test_multiple_narrator_credits_use_explicit_separator_not_person_name_commas(tmp_path):
+    root = tmp_path.resolve()
+    audio(root / "pack/book.mp3", narrator="Smith, Jane; Jordan Lee; JORDAN LEE")
+    snapshot = inspect_download(root, "pack")
+    facts = group_evidence(snapshot, InspectedGroup.model_validate(snapshot["groups"][0]))
+    assert facts.narrators == [["jordan lee", "smith, jane"]]
+    assert facts.authors == [["alex morgan"]]
+    assert not facts.issues
+
+
 def test_contradictory_ebook_formats_cannot_be_silently_matched(tmp_path):
     root = tmp_path.resolve()
     epub(root / "pack/book.epub", isbn="urn:isbn:123456789X")

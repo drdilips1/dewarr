@@ -165,6 +165,7 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             {
                 "desired_media": medium,
                 "language": "en",
+                "required_narrators": ["Jordan Lee"],
                 medium + "_library_id": route["library_id"],
             },
         )
@@ -219,6 +220,7 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
                 {"work": work_id},
                 medium,
                 **{medium + "_library_id": route["library_id"]},
+                **({"required_narrators": ["Jordan Lee"]} if medium == "audio" else {}),
                 **(
                     {
                         "download_constraints": {
@@ -295,6 +297,14 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     if via_list:
         assert policy["configuration"]["specification"]["mode"] == medium
         assert policy["configuration"]["specification"]["language"] == "en"
+        if medium == "audio":
+            assert policy["configuration"]["specification"]["required_narrators"] == ["Jordan Lee"]
+            assert (
+                policy["configuration"]["profile"]["scope_origins"]["required_narrators"]
+                == "Personal default"
+            )
+        else:
+            assert not policy["configuration"]["specification"].get("required_narrators")
         assert policy["configuration"]["profile"]["scope_origins"]["mode"] == "Personal default"
         assert policy["configuration"]["profile"]["scope_origins"]["language"] == "Personal default"
         assert (await client.post(activation_url)).json()["id"] == policy["id"]

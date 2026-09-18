@@ -11,6 +11,8 @@ from sqlalchemy import and_, literal, select
 from sqlalchemy.orm import aliased
 
 from app.db.models import AcquisitionDefaults, AcquisitionProfile
+from app.domain import narrators
+from app.domain.narrators import NarratorNames
 from app.domain.request_scope import ScopePreferences
 from app.importing.naming import fingerprint
 
@@ -40,9 +42,10 @@ class ReleasePreferences(ScopePreferences):
         default=["m4b", "mp3", "flac", "aac", "ogg", "opus"], min_length=1, max_length=20
     )
     source_order: list[str] = Field(default=["mam", "prowlarr"], min_length=1, max_length=100)
-    criteria: list[Literal["format", "source", "seeders"]] = Field(
-        default=["format", "source", "seeders"], min_length=3, max_length=3
+    criteria: list[Literal["format", "source", "seeders", "narrator"]] = Field(
+        default=["format", "source", "seeders"], min_length=3, max_length=4
     )
+    preferred_narrators: NarratorNames = Field(default_factory=list)
     blocked_formats: list[str] = Field(default_factory=list, max_length=20)
     maximum_bytes: int | None = Field(default=None, gt=0, le=2**53 - 1)
 
@@ -61,8 +64,12 @@ class ReleasePreferences(ScopePreferences):
     @field_validator("criteria")
     @classmethod
     def order(cls, values):
-        if set(values) != {"format", "source", "seeders"}:
-            raise ValueError("Include format, source and seeders once each")
+        if len(set(values)) != len(values) or set(values) - {"narrator"} != {
+            "format",
+            "source",
+            "seeders",
+        }:
+            raise ValueError("Include format, source and seeders once each; narrator is optional")
         return values
 
     @field_validator("source_order")
@@ -297,6 +304,16 @@ def assess_release(release, work, preferences, medium="all"):
         blocked.append("The release is for a different medium")
     if release.medium is None:
         review.append("The source does not identify the medium")
+    if release.medium == "audio" or medium == "audio":
+        if not narrators.accepts(preferences.required_narrators, release.narrators):
+            blocked.append("The source does not confirm every required narrator")
+        if preferences.preferred_narrators:
+            rank = narrators.preference_rank(preferences.preferred_narrators, release.narrators)
+            explanation.append(
+                "Preferred narrator: " + preferences.preferred_narrators[rank]
+                if rank < len(preferences.preferred_narrators)
+                else "Preferred narrator not established"
+            )
     formats = sorted({f.lower() for f in release.formats})
     forbidden = set(formats) & set(preferences.blocked_formats)
     if forbidden:
@@ -346,6 +363,11 @@ def ranking_key(release, assessment, preferences):
         else len(preferences.source_order)
     )
     scores = {
+        "narrator": (
+            narrators.preference_rank(preferences.preferred_narrators, release.narrators)
+            if release.medium == "audio"
+            else 0,
+        ),
         "format": (format_rank,),
         "source": (source_rank,),
         "seeders": (release.seeders is None, -(release.seeders or 0)),
@@ -355,6 +377,9 @@ def ranking_key(release, assessment, preferences):
         bool(assessment.blocked),
         {"corroborated": 0, "possible": 1, "unmatched": 2}[assessment.identity],
         *(scores[c] for c in preferences.criteria),
+        # Existing three-criterion profiles keep their order; narrator preference
+        # breaks remaining ties until the user explicitly moves it earlier.
+        scores["narrator"] if "narrator" not in preferences.criteria else (),
         origin,
         release.source_id,
     )

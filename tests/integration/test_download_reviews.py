@@ -261,6 +261,68 @@ async def test_frozen_format_limits_apply_to_inspected_downloads(
             await reviews.validate_inspection(db, inspection_id)
 
 
+@pytest.mark.parametrize("with_handoff", [True, False])
+async def test_required_narrators_are_checked_before_import_even_without_handoff(
+    database, selected, reviewer, with_handoff
+):
+    review, _ = reviewer
+    assigned = (await claim(review, await proposal(review))).json()
+    inspection_id = UUID(assigned["inspection_id"])
+    async with database() as db, db.begin():
+        selection = await db.get(AcquisitionSelection, UUID(selected["id"]))
+        selection.frozen = {
+            **selection.frozen,
+            "requirements": {
+                **selection.frozen["requirements"],
+                "required_narrators": ["Reader A", "Reader B"],
+            },
+        }
+        version = await db.scalar(
+            select(Version).where(
+                Version.work_id == UUID(selection.frozen["origin_work_id"]),
+                Version.medium == "audio",
+            )
+        )
+        if not with_handoff:
+            await db.execute(delete(DownloadHandoff))
+        for observed in ([], ["Reader A"], ["Unknown"]):
+            version.narrators = observed
+            with pytest.raises(HTTPException, match="required narrator"):
+                await reviews.validate_inspection(db, inspection_id, version=version)
+        version.narrators = ["reader a", "Reader B"]
+        await reviews.validate_inspection(db, inspection_id, version=version)
+
+
+@pytest.mark.parametrize("observed", ["", "Reader A", "Reader A; Reader B"])
+async def test_narrator_requirement_needs_inspected_file_evidence(
+    database, selected, reviewer, tmp_path, observed
+):
+    from app.importing.inspection import InspectedGroup, inspect_download
+    from tests.media_fixtures import audio
+
+    review, _ = reviewer
+    assigned = (await claim(review, await proposal(review))).json()
+    inspection_id = UUID(assigned["inspection_id"])
+    audio(tmp_path / "pack/book.mp3", narrator=observed)
+    snapshot = inspect_download(tmp_path.resolve(), "pack")
+    group = InspectedGroup.model_validate(snapshot["groups"][0])
+    async with database() as db, db.begin():
+        selection = await db.get(AcquisitionSelection, UUID(selected["id"]))
+        selection.frozen = {
+            **selection.frozen,
+            "requirements": {
+                **selection.frozen["requirements"],
+                "required_narrators": ["Reader A", "Reader B"],
+            },
+        }
+        (await db.get(DownloadInspection, inspection_id)).snapshot = snapshot
+        if observed == "Reader A; Reader B":
+            await reviews.validate_inspection(db, inspection_id, group=group)
+        else:
+            with pytest.raises(HTTPException, match="Inspected audio"):
+                await reviews.validate_inspection(db, inspection_id, group=group)
+
+
 @pytest.mark.parametrize("during", [False, True])
 async def test_inspection_rechecks_requester_before_read_and_snapshot(
     database, reviewer, monkeypatch, during
