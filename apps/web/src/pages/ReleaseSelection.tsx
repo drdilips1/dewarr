@@ -1,13 +1,14 @@
 import { EffectivePreferences } from "./PreferenceFields";
-import { useRef, useState } from "react";
+import { lazy, Suspense, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
-import { Notice } from "../components";
+import { Loading, Notice } from "../components";
 import { chooseRoute, destinationPreference } from "./RouteFields";
 
 type Artifact = components["schemas"]["SourceArtifactView"];
+const ManualPack = lazy(() => import("./ManualPack"));
 
 export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
   const [params] = useSearchParams();
@@ -23,6 +24,10 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
   const [destinationId, setDestinationId] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const [group, setGroup] = useState<Array<{ id: string; title: string }>>([]);
+  const [packId, setPackId] = useState<string | null>(null);
+  const [packReceipt, setPackReceipt] = useState<
+    components["schemas"]["ManualPackPrepared"] | null
+  >(null);
   const key = useRef(crypto.randomUUID());
   const downloadKeys = useRef(new Map<string, string>());
   const options = useQuery({
@@ -206,6 +211,8 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
     },
     onSuccess: async () => {
       setGroup([]);
+      setPackReceipt(null);
+      setPackId(null);
       await refresh();
     },
   });
@@ -371,11 +378,43 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
         <>
           <h3>Saved selections</h3>
           <p className="muted">
-            For a collection, save a selection for each wanted book, then select
-            those books below to download them together. They must use the same
-            downloader and library route. File inspection confirms each book
-            separately.
+            For a series pack, review its additional books to prepare their
+            selections together. You can also include existing selections below.
+            They must use the same downloader and library route. File inspection
+            confirms each book separately.
           </p>
+          {packReceipt && (
+            <div aria-live="polite">
+              <p role="status">{packReceipt.message}</p>
+              {packReceipt.records
+                .filter((book) => !book.selection_id)
+                .map((book) => (
+                  <p key={book.work_id}>
+                    {book.title}: {book.message}
+                  </p>
+                ))}
+              <Link
+                to={`/series/hardcover/${encodeURIComponent(packReceipt.external_id)}?request=${packReceipt.request_id}`}
+              >
+                View reviewed pack requests
+              </Link>
+            </div>
+          )}
+          {packId && (
+            <Suspense fallback={<Loading />}>
+              <ManualPack
+                key={packId}
+                selectionId={packId}
+                onClose={() => setPackId(null)}
+                onPrepared={async (value) => {
+                  setPackReceipt(value);
+                  setGroup(value.selections);
+                  setPackId(null);
+                  await refresh();
+                }}
+              />
+            </Suspense>
+          )}
           {group.length > 0 && (
             <section className="panel" aria-label="Shared download scope">
               <h4>{group.length} selected books · one transfer</h4>
@@ -423,6 +462,17 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
                   />
                   Include {item.work_title} in shared download
                 </label>
+              )}
+              {item.pack_review_available && (
+                <button
+                  disabled={startDownload.isPending || cancel.isPending}
+                  onClick={() => {
+                    setPackId(item.id);
+                    setPackReceipt(null);
+                  }}
+                >
+                  Review additional pack books
+                </button>
               )}
               <span>
                 <strong>{item.work_title}</strong>

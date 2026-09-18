@@ -7279,6 +7279,113 @@
         }
       }
     },
+    "/api/acquisition/selections/{selection_id}/pack-preview": {
+      "get": {
+        "tags": [
+          "acquisition-selections"
+        ],
+        "summary": "Pack Preview",
+        "operationId": "pack_preview_api_acquisition_selections__selection_id__pack_preview_get",
+        "parameters": [
+          {
+            "name": "selection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Selection Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManualPackPreview"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/acquisition/selections/{selection_id}/pack-selections": {
+      "post": {
+        "tags": [
+          "acquisition-selections"
+        ],
+        "summary": "Prepare Pack",
+        "operationId": "prepare_pack_api_acquisition_selections__selection_id__pack_selections_post",
+        "parameters": [
+          {
+            "name": "selection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Selection Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManualPackInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManualPackPrepared"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/acquisition/selections/options": {
       "get": {
         "tags": [
@@ -12607,6 +12714,131 @@
         ],
         "title": "MAMSearch"
       },
+      "ManualPackInput": {
+        "properties": {
+          "revision": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Revision"
+          },
+          "work_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "minItems": 1,
+            "title": "Work Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "revision",
+          "work_ids"
+        ],
+        "title": "ManualPackInput"
+      },
+      "ManualPackPrepared": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "selections": {
+            "items": {
+              "$ref": "#/components/schemas/PackSelection"
+            },
+            "type": "array",
+            "title": "Selections"
+          },
+          "records": {
+            "items": {
+              "$ref": "#/components/schemas/PackBook"
+            },
+            "type": "array",
+            "title": "Records"
+          },
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message",
+          "selections",
+          "records",
+          "request_id",
+          "external_id"
+        ],
+        "title": "ManualPackPrepared"
+      },
+      "ManualPackPreview": {
+        "properties": {
+          "selection_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Selection Id"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "medium": {
+            "type": "string",
+            "title": "Medium"
+          },
+          "external_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External Id"
+          },
+          "revision": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Revision"
+          },
+          "records": {
+            "items": {
+              "$ref": "#/components/schemas/PackBook"
+            },
+            "type": "array",
+            "title": "Records"
+          }
+        },
+        "type": "object",
+        "required": [
+          "selection_id",
+          "state",
+          "message",
+          "medium",
+          "records"
+        ],
+        "title": "ManualPackPreview"
+      },
       "MatchCandidate": {
         "properties": {
           "work_id": {
@@ -13729,6 +13961,55 @@
         ],
         "title": "OrderInput"
       },
+      "PackBook": {
+        "properties": {
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Authors"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "selection_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Selection Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "work_id",
+          "title",
+          "authors",
+          "state",
+          "message"
+        ],
+        "title": "PackBook"
+      },
       "PackCoverage": {
         "properties": {
           "series_id": {
@@ -13826,6 +14107,25 @@
           "message"
         ],
         "title": "PackExpansionView"
+      },
+      "PackSelection": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "PackSelection"
       },
       "PathPreviewInput": {
         "properties": {
@@ -17110,6 +17410,11 @@
           "dispatch_available": {
             "type": "boolean",
             "title": "Dispatch Available",
+            "default": false
+          },
+          "pack_review_available": {
+            "type": "boolean",
+            "title": "Pack Review Available",
             "default": false
           }
         },

@@ -51,7 +51,15 @@ pytestmark = pytest.mark.integration
     ],
 )
 async def test_reviewed_pack_imports_books_independently_and_preserves_seeded_files(
-    client, admin, database, ready_route, monkeypatch, already_owned, delayed_scan, ambiguous_first
+    client,
+    admin,
+    database,
+    ready_route,
+    monkeypatch,
+    already_owned,
+    delayed_scan,
+    ambiguous_first,
+    manual_prepare=False,
 ):
     route = ready_route
     # Exercise the finite acquisition/import graph, not wall-clock cron ticks.
@@ -64,12 +72,46 @@ async def test_reviewed_pack_imports_books_independently_and_preserves_seeded_fi
         database, title="Second Harbor", identifiers={"isbn_13": "9780140328721"}
     )
     pack = route["source"] / "pack"
-    epub(pack / "book.epub", isbn="9781234567897")
-    epub(pack / "second.epub", title="Second Harbor", isbn="9780140328721")
+    if manual_prepare:
+        # Replace the setup probe's generic filename with the catalog title.
+        # Leaving both creates an unidentifiable extra primary file in the torrent.
+        (pack / "book.epub").rename(pack / "First Harbor.epub")
+    epub(pack / ("First Harbor.epub" if manual_prepare else "book.epub"), isbn="9781234567897")
+    epub(
+        pack / ("Second Harbor.epub" if manual_prepare else "second.epub"),
+        title="Second Harbor",
+        isbn="9780140328721",
+    )
     if ambiguous_first:
         epub(pack / "alternative.epub", isbn="9781234567897")
     # This extra file is not covered by either reviewed book request.
-    epub(pack / "unrequested.epub", title="Unrequested extra")
+    epub(
+        pack / ("Unrequested extra.epub" if manual_prepare else "unrequested.epub"),
+        title="Unrequested extra",
+    )
+    if manual_prepare:
+        from tests.pack_fixture import catalog as pack_catalog
+
+        third = await edition(
+            database, title="Unrequested extra", identifiers={"isbn_13": "9780000000002"}
+        )
+        await pack_catalog(
+            database,
+            admin["id"],
+            [first["work"], second["work"], third["work"]],
+            name="Harbor collection",
+        )
+        reviewed = await client.post(
+            "/api/catalog/series/hardcover/pack-series/main-books",
+            headers={"Idempotency-Key": "manual-import-main-books"},
+            json={
+                "work_ids": [str(first["work"]), str(second["work"])],
+                "expected_generation": 1,
+                "expected_review_id": None,
+                "confirm_main_membership": True,
+            },
+        )
+        assert reviewed.status_code == 201, reviewed.text
     originals = {path.name: path.read_bytes() for path in sorted(pack.glob("*.epub"))}
     payload = b"".join(originals.values())
     raw = lt.bencode(
@@ -143,7 +185,7 @@ async def test_reviewed_pack_imports_books_independently_and_preserves_seeded_fi
         await db.flush()
         artifact_id, downloader_id = str(artifact.id), str(downloader.id)
     selections = []
-    for index, book in enumerate([first, second]):
+    for index, book in enumerate([first] if manual_prepare else [first, second]):
         wanted = await request(
             client, body({"work": book["work"]}, "ebook", ebook_library_id=route["library_id"])
         )
@@ -163,6 +205,23 @@ async def test_reviewed_pack_imports_books_independently_and_preserves_seeded_fi
         )
         assert response.status_code == 201, response.text
         selections.append(response.json())
+    if manual_prepare:
+        url = f"/api/acquisition/selections/{selections[0]['id']}"
+        response = await client.get(url + "/pack-preview")
+        assert response.status_code == 200, response.text
+        preview = response.json()
+        assert [r["work_id"] for r in preview["records"]] == [str(second["work"])], preview
+        accepted = await client.post(
+            url + "/pack-selections",
+            headers={"Idempotency-Key": "manual-import-prepare"},
+            json={"revision": preview["revision"], "work_ids": [str(second["work"])]},
+        )
+        assert accepted.status_code == 201, accepted.text
+        selections.append(
+            next(s for s in accepted.json()["selections"] if s["id"] != selections[0]["id"])
+        )
+        async with database() as db:
+            assert not await db.scalar(select(DownloadAttempt.id))
     approval = await client.put(
         f"/api/organization/destinations/{route['destination']['id']}/automatic-import",
         json={
@@ -307,4 +366,21 @@ async def test_reviewed_pack_imports_books_independently_and_preserves_seeded_fi
     )
     assert qbit.calls.count("submit") == 1 and len(list(route["target"].rglob("*.epub"))) == len(
         imported
+    )
+
+
+@pytest.mark.parametrize("delayed_scan", [False, True])
+async def test_manual_pack_preview_creates_missing_requests_and_confirms_shared_import(
+    client, admin, database, ready_route, monkeypatch, delayed_scan
+):
+    await test_reviewed_pack_imports_books_independently_and_preserves_seeded_files(
+        client,
+        admin,
+        database,
+        ready_route,
+        monkeypatch,
+        already_owned=False,
+        delayed_scan=delayed_scan,
+        ambiguous_first=False,
+        manual_prepare=True,
     )

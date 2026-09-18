@@ -2240,6 +2240,40 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/acquisition/selections/{selection_id}/pack-preview": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Pack Preview */
+    get: operations["pack_preview_api_acquisition_selections__selection_id__pack_preview_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/acquisition/selections/{selection_id}/pack-selections": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Prepare Pack */
+    post: operations["prepare_pack_api_acquisition_selections__selection_id__pack_selections_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/acquisition/selections/options": {
     parameters: {
       query?: never;
@@ -4194,6 +4228,49 @@ export interface components {
        */
       limit: number;
     };
+    /** ManualPackInput */
+    ManualPackInput: {
+      /** Revision */
+      revision: string;
+      /** Work Ids */
+      work_ids: string[];
+    };
+    /** ManualPackPrepared */
+    ManualPackPrepared: {
+      /** Message */
+      message: string;
+      /** Selections */
+      selections: components["schemas"]["PackSelection"][];
+      /** Records */
+      records: components["schemas"]["PackBook"][];
+      /**
+       * Request Id
+       * Format: uuid
+       */
+      request_id: string;
+      /** External Id */
+      external_id: string;
+    };
+    /** ManualPackPreview */
+    ManualPackPreview: {
+      /**
+       * Selection Id
+       * Format: uuid
+       */
+      selection_id: string;
+      /** State */
+      state: string;
+      /** Message */
+      message: string;
+      /** Medium */
+      medium: string;
+      /** External Id */
+      external_id?: string | null;
+      /** Revision */
+      revision?: string | null;
+      /** Records */
+      records: components["schemas"]["PackBook"][];
+    };
     /** MatchCandidate */
     MatchCandidate: {
       /**
@@ -4608,6 +4685,24 @@ export interface components {
       /** Work Ids */
       work_ids: string[];
     };
+    /** PackBook */
+    PackBook: {
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /** Title */
+      title: string;
+      /** Authors */
+      authors: string[];
+      /** State */
+      state: string;
+      /** Message */
+      message: string;
+      /** Selection Id */
+      selection_id?: string | null;
+    };
     /** PackCoverage */
     PackCoverage: {
       /**
@@ -4647,6 +4742,16 @@ export interface components {
        * @default []
        */
       work_ids: string[];
+    };
+    /** PackSelection */
+    PackSelection: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Title */
+      title: string;
     };
     /** PathPreviewInput */
     PathPreviewInput: {
@@ -5788,6 +5893,11 @@ export interface components {
        * @default false
        */
       dispatch_available: boolean;
+      /**
+       * Pack Review Available
+       * @default false
+       */
+      pack_review_available: boolean;
     };
     /** SeriesData */
     SeriesData: {
@@ -11250,6 +11360,74 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["DefaultsView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  pack_preview_api_acquisition_selections__selection_id__pack_preview_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        selection_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ManualPackPreview"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  prepare_pack_api_acquisition_selections__selection_id__pack_selections_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        selection_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ManualPackInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ManualPackPrepared"];
         };
       };
       /** @description Validation Error */

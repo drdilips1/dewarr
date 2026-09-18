@@ -34,4 +34,6 @@ Retries reuse the durable parent, target memberships and source artifact. Failed
 
 ## Remaining qualification
 
+The explicit manual path now has a separate [pack preparation contract](MANUAL-PACKS.md): review covered children, prepare their independent requests and selections, then use the existing shared-download action. Its evidence does not expand the automatic authority described above.
+
 This automatic-path increment does not establish all manual release-selection surfaces, mixed-route/media or cross-owner transfer reuse, full recording/edition equivalence, inseparable omnibus fulfillment, or actual tracker/account/filesystem compatibility. Those remain in the existing S04–S09 acceptance gates. Production support must use recorded service and filesystem evidence; synthetic integration results alone do not establish it.

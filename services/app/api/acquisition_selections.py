@@ -2,7 +2,7 @@ from datetime import datetime
 from uuid import UUID
 
 from fastapi import APIRouter, Header, HTTPException, Query
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import func, select
 
 from app.adapters.contracts import AdapterError
@@ -11,7 +11,7 @@ from app.api.metadata import adapter_http_error
 from app.config import get_settings
 from app.db.models import AcquisitionSelection, ImportDestination, Integration, Library
 from app.domain import acquisition_selection as selections
-from app.domain import automatic_dispatch
+from app.domain import automatic_dispatch, manual_pack
 from app.domain.acquisition_selection import SelectionInput
 from app.domain.downloaders import mapped_path, mappings_current
 from app.domain.visibility import visible_library
@@ -34,6 +34,45 @@ class SelectionView(BaseModel):
     release_title: str
     configuration_current: bool
     dispatch_available: bool = False
+    pack_review_available: bool = False
+
+
+class PackBook(BaseModel):
+    work_id: UUID
+    title: str
+    authors: list[str]
+    state: str
+    message: str
+    selection_id: UUID | None = None
+
+
+class ManualPackPreview(BaseModel):
+    selection_id: UUID
+    state: str
+    message: str
+    medium: str
+    external_id: str | None = None
+    revision: str | None = None
+    records: list[PackBook]
+
+
+class ManualPackInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    revision: str = Field(pattern=r"^[0-9a-f]{64}$")
+    work_ids: list[UUID] = Field(min_length=1, max_length=20)
+
+
+class PackSelection(BaseModel):
+    id: UUID
+    title: str
+
+
+class ManualPackPrepared(BaseModel):
+    message: str
+    selections: list[PackSelection]
+    records: list[PackBook]
+    request_id: UUID
+    external_id: str
 
 
 class SelectionPage(BaseModel):
@@ -82,7 +121,38 @@ async def view(db, row):
         release_title=row.frozen["release"]["title"],
         configuration_current=current,
         dispatch_available=current and get_settings().download_dispatch_enabled,
+        pack_review_available=(
+            row.state == "prepared"
+            and not row.frozen.get("automatic_selection")
+            and len(row.frozen["descriptor"]["files"]) > 1
+        ),
     )
+
+
+@router.get("/{selection_id}/pack-preview", response_model=ManualPackPreview)
+async def pack_preview(selection_id: UUID, user: Member, db: Database):
+    try:
+        return ManualPackPreview.model_validate(await manual_pack.preview(db, user, selection_id))
+    except AdapterError as error:
+        raise adapter_http_error(error) from error
+
+
+@router.post("/{selection_id}/pack-selections", response_model=ManualPackPrepared, status_code=201)
+async def prepare_pack(
+    selection_id: UUID,
+    body: ManualPackInput,
+    user: Member,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    try:
+        result = await manual_pack.prepare(
+            db, user, selection_id, body.revision, body.work_ids, idempotency_key
+        )
+    except AdapterError as error:
+        raise adapter_http_error(error) from error
+    await db.commit()
+    return result
 
 
 @router.get("/options", response_model=SelectionOptions)

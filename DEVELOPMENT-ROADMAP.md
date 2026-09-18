@@ -1,6 +1,6 @@
 # Product and development handoff
 
-September 18, 2026 · v1.9 product baseline · Execution handoff refreshed against committed revision `e1a462a`; the subsequent automatic Prefer-pack increment has a separate contract and verification record. This guide is a plan, not a claim of completed functionality.
+September 18, 2026 · v1.9 product baseline · Execution handoff refreshed against committed revision `7d506a5`, including the automatic Prefer-pack increment and its separate verification record. This guide is a plan, not a claim of completed functionality.
 
 Build a self-hosted book discovery, curation and acquisition app above Audiobookshelf. The experience should feel familiar to a Seerr user: browse attractive shelves, open one book page, see what is already owned, inspect available versions and sources, and request missing media. The app also owns organizing its newly downloaded files so that Audiobookshelf can serve them correctly.
 
@@ -212,6 +212,6 @@ For full series-stage acceptance, demonstrate all of these distinct cases; the b
 | List root removed and later re-added | Old authority cannot revive accidentally; the new membership episode rechecks inventory, surviving reasons and compatible pending work. |
 | Proxy, source or ABS outage | No route bypass, fabricated empty library or repeat transfer; useful partial results and the next recovery action stay visible. |
 
-Build on the [automatic Prefer-pack increment](docs/PACK-EXPANSION.md) to finish remaining SC-04 manual-surface and series/version qualification first, then execute batches 3–7 above and close any earlier unmet stage gates. S08 is essential to the requested product: bookstore browsing, recommendations, list curation and simple settings are release requirements, not polish deferred beyond v1. S09 accepts the combined product only after the documented source/backend/filesystem matrix and operational rehearsals pass.
+Build on the [automatic Prefer-pack increment](docs/PACK-EXPANSION.md) and [manual pack preparation](docs/MANUAL-PACKS.md) to finish remaining SC-04 source-surface and series/version qualification first, then execute batches 3–7 above and close any earlier unmet stage gates. Manual preparation handles a finite reviewed set on one saved artifact and route; it does not establish full recording/edition or omnibus support. S08 is essential to the requested product: bookstore browsing, recommendations, list curation and simple settings are release requirements, not polish deferred beyond v1. S09 accepts the combined product only after the documented source/backend/filesystem matrix and operational rehearsals pass.
 
 For every milestone, deliver a runnable build, migrations and rollback/repair guidance where relevant, API/client contracts, a default-path browser demonstration, failure evidence, operator documentation and a list of remaining limitations. Record an accountable implementation owner and acceptance reviewer; one person may fill both roles with separate review steps. Estimate from the remaining work and available integration access, then reforecast at each milestone rather than assigning unsupported calendar dates.

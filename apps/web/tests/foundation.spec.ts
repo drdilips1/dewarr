@@ -1134,6 +1134,137 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await expect(
     selectionForm.getByRole("region", { name: "Shared download scope" }),
   ).toContainText("2 selected books · one transfer");
+  // Exercise the pack-review UI with deterministic responses over real saved
+  // selections. Real manifest eligibility and per-book imports are covered by
+  // test_manual_pack.py and test_shared_pack_import.py, not this UI fixture.
+  const savedSelections = await (
+    await page.request.get("/api/acquisition/selections")
+  ).json();
+  const packRoot = savedSelections.items.find(
+    (item: { state: string; work_title: string }) =>
+      item.state === "prepared" && item.work_title === "The Next Harbor",
+  );
+  const packChild = savedSelections.items.find(
+    (item: { state: string; work_title: string }) =>
+      item.state === "prepared" &&
+      item.work_title === "Shared Harbor Companion",
+  );
+  expect(packRoot).toBeTruthy();
+  expect(packChild).toBeTruthy();
+  await page.route(/\/api\/acquisition\/selections\?/, async (route) => {
+    const response = await route.fetch();
+    const body = await response.json();
+    for (const item of body.items)
+      item.pack_review_available =
+        item.id === packRoot.id && item.state === "prepared";
+    await route.fulfill({ response, json: body });
+  });
+  const packPreviewUrl = `/api/acquisition/selections/${packRoot.id}/pack-preview`;
+  const packPrepareUrl = `/api/acquisition/selections/${packRoot.id}/pack-selections`;
+  await page.route(`**${packPreviewUrl}`, async (route) => {
+    await route.fulfill({
+      json: {
+        selection_id: packRoot.id,
+        state: "ready",
+        message:
+          "Review additional covered books before preparing their selections",
+        medium: "ebook",
+        external_id: "browser-pack-ui",
+        revision: "a".repeat(64),
+        records: [
+          {
+            work_id: packChild.work_id,
+            title: packChild.work_title,
+            authors: ["Example Author"],
+            state: "pending",
+            message: "A compatible request is already pending",
+          },
+        ],
+      },
+    });
+  });
+  let preparationCalls = 0;
+  let preparationKey = "";
+  await page.route(`**${packPrepareUrl}`, async (route) => {
+    const request = route.request();
+    expect(request.postDataJSON()).toEqual({
+      revision: "a".repeat(64),
+      work_ids: [packChild.work_id],
+    });
+    const key = request.headers()["idempotency-key"];
+    if (preparationCalls++ === 0) {
+      preparationKey = key;
+      await route.fulfill({
+        status: 503,
+        json: { detail: "Temporary preparation outage" },
+      });
+      return;
+    }
+    expect(key).toBe(preparationKey);
+    await route.fulfill({
+      status: 201,
+      json: {
+        message:
+          "Pack selections prepared; review the group before starting its download",
+        selections: [packRoot, packChild].map((item) => ({
+          id: item.id,
+          title: item.work_title,
+        })),
+        records: [
+          {
+            work_id: packChild.work_id,
+            title: packChild.work_title,
+            authors: ["Example Author"],
+            state: "prepared",
+            message: "Prepared for this pack",
+            selection_id: packChild.id,
+          },
+        ],
+        request_id: packRoot.intent_id,
+        external_id: "browser-pack-ui",
+      },
+    });
+  });
+  await page.reload();
+  await selectionForm
+    .getByRole("button", { name: "Review additional pack books", exact: true })
+    .click();
+  const packReview = selectionForm.getByRole("region", {
+    name: "Additional pack books",
+    exact: true,
+  });
+  const packCheckbox = packReview.getByRole("checkbox", {
+    name: /Shared Harbor Companion/,
+  });
+  await expect(packCheckbox).toBeChecked();
+  await packCheckbox.uncheck();
+  await expect(
+    packReview.getByRole("button", {
+      name: "Prepare selected pack books (0)",
+      exact: true,
+    }),
+  ).toBeDisabled();
+  await packCheckbox.check();
+  const preparePack = packReview.getByRole("button", {
+    name: "Prepare selected pack books (1)",
+    exact: true,
+  });
+  await preparePack.click();
+  await expect(packReview).toContainText("Temporary preparation outage");
+  await page.screenshot({
+    path: testInfo.outputPath("manual-pack-review-mobile.png"),
+    fullPage: true,
+  });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await preparePack.click();
+  await expect(packReview).toHaveCount(0);
+  await expect(
+    selectionForm.getByRole("region", { name: "Shared download scope" }),
+  ).toContainText("2 selected books · one transfer");
   await selectionForm
     .getByRole("button", {
       name: "Download selected books together",
