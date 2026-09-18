@@ -34,6 +34,7 @@ from app.domain.acquisition import RequestSpec, evaluate, validate_request
 from app.domain.acquisition_selection import configuration_current, owned_selection
 from app.domain.downloaders import SETTINGS_LOCK
 from app.domain.operations import transaction_lock
+from app.domain.release_profiles import DEFAULTS_LOCK
 from app.domain.source_artifacts import artifact_bytes, member
 from app.domain.work_graph import acquisition_lock
 from app.importing.naming import fingerprint
@@ -520,6 +521,12 @@ async def run(identifier):
                         or attempt.lease_until <= datetime.now(UTC)
                     ):
                         return
+                    # Fence preference edits only at the final submission boundary.
+                    # Earlier snapshots stay lock-free so list/work locks cannot
+                    # invert with this configuration lock. Commit the submission
+                    # marker before releasing the fence and performing client I/O.
+                    if automatic_dispatch.consent(current):
+                        await transaction_lock(db, DEFAULTS_LOCK)
                     await authority(db, current, wanted=True)
                     await capacity.admit(db, attempt, current, storage)
                     await capacity.submitted(db, attempt)

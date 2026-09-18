@@ -14,6 +14,14 @@ Automatic selection and pre-dispatch authorization compare current effective pre
 
 A fully explicit profile masks changes to lower-level defaults. Sparse profiles inherit changes only for fields they omit. Older receipts without field origins remain readable; matching compares their actual saved values and profile identity/generation rather than requiring newly added presentation fields.
 
+## Concurrent requests and settings changes
+
+The resolver reads installation defaults, personal defaults and the selected profile in one database statement. It observes a consistent committed snapshot without retaining configuration locks while callers acquire list or book locks. It does not promise one snapshot across a whole multi-statement transaction. Frozen request/search receipts and revision checks retain their existing behavior. Settings writes still serialize and reject stale revisions.
+
+Automatic dispatch has a narrower fence: immediately before the final authority check and durable submission marker, the download worker takes the same configuration lock used by settings writers. It holds that lock until the marker commits, then releases the transaction before qBittorrent I/O. A settings edit that commits first is visible to the final check and can hold the unsubmitted acquisition. An edit that obtains the lock afterwards cannot retroactively cancel a submission already recorded as possibly external. Subsequent runs observe that transfer without adding it again. This is a database decision boundary, not an atomic transaction spanning PostgreSQL and qBittorrent.
+
+Keep ordinary profile reads free of transaction-scoped configuration locks. The final dispatch transaction already owns its list/principal/book/attempt locks before taking the configuration fence; configuration writers must not start acquiring those workflow locks while holding it. Changing these boundaries requires cross-workflow concurrency tests. PostgreSQL documents statement snapshots under [Read Committed](https://www.postgresql.org/docs/16/transaction-iso.html#XACT-READ-COMMITTED) and transaction lock lifetimes in [Explicit Locking](https://www.postgresql.org/docs/16/explicit-locking.html).
+
 The current slice does **not** claim the entire FR-20 inheritance contract. Independent request restrictions and list media/routes already have their own policy behavior, but inheritance of language, desired media, narrator, series scope and destination preferences remains unfinished. Previewing policy changes for already-unsatisfied requests also remains a separate follow-up. Those settings must join the same explicit precedence model before S06/S07 acceptance.
 
 ## Request and list overrides
@@ -49,3 +57,5 @@ Migration `0032_request_release_policy` adds nullable policy snapshots to intent
 ## Evidence boundaries
 
 Integration coverage exercises precedence, explicit clearing and restoration, sparse profile persistence, invalid values, concurrent/stale edits, private scopes, administrator/member/viewer authorization, frozen search replay, old snapshot compatibility, list authority changes, unsubmitted versus already-running automatic transfers, and the populated downgrade guard. Browser coverage is recorded separately in [Implementation Status](IMPLEMENTATION-STATUS.md). Fixture qBittorrent/source traffic is not live account certification. Full policy inheritance, collection/recording automation and remaining production qualification remain in scope.
+
+Deterministic PostgreSQL tests reproduce the former manual-request/list-batch deadlock and verify the corrected interleaving for request creation, reviewed selection and automatic preparation. Additional cases cover committed/rolled-back multi-layer settings, one winning profile edit, edits during network preflight, and a real settings-writer lock wait through the final submission marker. These prove the specified workflows; they are not a blanket concurrency certification of every acquisition/import path.

@@ -7,10 +7,10 @@ from uuid import UUID
 
 from fastapi import HTTPException
 from pydantic import BaseModel, ConfigDict, Field, ValidationInfo, field_validator, model_serializer
-from sqlalchemy import select
+from sqlalchemy import and_, literal, select
+from sqlalchemy.orm import aliased
 
 from app.db.models import AcquisitionDefaults, AcquisitionProfile
-from app.domain.operations import transaction_lock
 from app.importing.naming import fingerprint
 
 FORMATS = {
@@ -116,7 +116,6 @@ def resolve_preferences(layers):
 
 
 async def default_layers(db, user_id=None):
-    await transaction_lock(db, DEFAULTS_LOCK)
     keys = ["installation", f"user:{user_id}"] if user_id else ["installation"]
     rows = {
         row.key: row
@@ -137,19 +136,43 @@ async def default_layers(db, user_id=None):
 
 
 async def profile_snapshot(db, user_id, identifier=None, generation=None, expected_revision=None):
-    layers = await default_layers(db, user_id)
-    row = None
+    # Read all layers in one MVCC statement. Read-side advisory locks would be
+    # held across caller transactions and invert list/work/configuration locks.
+    # Settings writers retain their own serialization and revision checks; each
+    # acquisition freezes this observed policy and revalidates before dispatch.
+    installation = aliased(AcquisitionDefaults)
+    personal = aliased(AcquisitionDefaults)
+    saved = aliased(AcquisitionProfile)
+    anchor = select(literal(1).label("anchor")).subquery()
+    row = (
+        await db.execute(
+            select(
+                installation.preferences.label("installation"),
+                personal.preferences.label("personal"),
+                saved.id,
+                saved.generation,
+                saved.name,
+                saved.preferences,
+            )
+            .select_from(anchor)
+            .outerjoin(installation, installation.key == "installation")
+            .outerjoin(personal, personal.key == f"user:{user_id}")
+            .outerjoin(saved, and_(saved.id == identifier, saved.owner_id == user_id))
+        )
+    ).one()
+    layers = [
+        (label, values)
+        for label, values in [
+            ("Installation default", row.installation),
+            ("Personal default", row.personal),
+        ]
+        if values is not None
+    ]
     if identifier is None:
         if generation not in (None, 0):
             raise HTTPException(422, "Choose a saved profile before specifying its revision")
     else:
-        await transaction_lock(db, f"profile:{identifier}")
-        row = await db.scalar(
-            select(AcquisitionProfile)
-            .where(AcquisitionProfile.id == identifier, AcquisitionProfile.owner_id == user_id)
-            .execution_options(populate_existing=True)
-        )
-        if not row:
+        if row.id is None:
             raise HTTPException(404, "Acquisition profile not found")
         if generation is not None and row.generation != generation:
             raise HTTPException(409, "This acquisition profile changed. Refresh the preferences.")
@@ -158,7 +181,7 @@ async def profile_snapshot(db, user_id, identifier=None, generation=None, expect
     revision = fingerprint(
         {
             "id": str(identifier) if identifier else None,
-            "generation": row.generation if row else 0,
+            "generation": row.generation if row.id else 0,
             "preferences": preferences.model_dump(),
             "origins": origins,
         }
@@ -166,11 +189,11 @@ async def profile_snapshot(db, user_id, identifier=None, generation=None, expect
     if expected_revision is not None and expected_revision != revision:
         raise HTTPException(409, "Effective download preferences changed. Refresh the preferences.")
     return ProfileSnapshot(
-        id=row.id if row else None,
-        generation=row.generation if row else 0,
-        name=row.name if row else "Balanced",
+        id=row.id,
+        generation=row.generation if row.id else 0,
+        name=row.name if row.id else "Balanced",
         preferences=preferences,
-        overrides=PreferenceOverrides.model_validate(row.preferences if row else {}),
+        overrides=PreferenceOverrides.model_validate(row.preferences if row.id else {}),
         origins=origins,
         effective_revision=revision,
         base_effective_revision=revision,
