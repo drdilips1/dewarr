@@ -1815,3 +1815,110 @@ test("Hardcover lists verify pages before syncing and retain exclusions after so
   });
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });
+
+test("list batches preview media, cancel before saving, and persist wanted receipts", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(90_000);
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.getByRole("link", { name: "Lists", exact: true }).click();
+  await page.getByLabel("Create a private list").fill("Batch wanted reading");
+  await page.getByRole("button", { name: "Create list", exact: true }).click();
+  for (const title of ["Batch Harbor", "Batch Mountain"]) {
+    await page.getByRole("link", { name: "Catalog", exact: true }).click();
+    await page
+      .getByRole("button", { name: "Add a title", exact: true })
+      .click();
+    await page.getByLabel("Title", { exact: true }).fill(title);
+    await page.getByLabel("Author", { exact: true }).fill("Batch Author");
+    await page.getByRole("button", { name: "Save title", exact: true }).click();
+    await page.getByRole("link", { name: new RegExp(title) }).click();
+    await page
+      .getByLabel("Reading list")
+      .selectOption({ label: "Batch wanted reading" });
+    await page
+      .getByRole("button", { name: "Add to list", exact: true })
+      .click();
+    await expect(
+      page.getByRole("status").filter({ hasText: "Added to your list." }),
+    ).toBeVisible();
+  }
+  await page.getByRole("link", { name: "Lists", exact: true }).click();
+  await page.getByRole("link", { name: /Batch wanted reading/ }).click();
+  await page
+    .getByRole("button", { name: "Request books", exact: true })
+    .click();
+  const panel = page.getByRole("region", { name: "List wanted media" });
+  await panel
+    .getByRole("button", { name: "Select this page", exact: true })
+    .click();
+  await panel
+    .getByRole("combobox", { name: "Media to request", exact: true })
+    .selectOption("both");
+  await panel
+    .getByRole("button", { name: "Preview wanted media", exact: true })
+    .click();
+  await expect(
+    panel.getByRole("heading", { name: /Both · 2 selected books/ }),
+  ).toBeVisible();
+  await expect(panel).toContainText("4 missing");
+  await panel
+    .getByRole("button", { name: "Cancel this batch", exact: true })
+    .click();
+  await expect(panel.getByRole("status")).toContainText(
+    "no wanted requests were saved",
+  );
+  await panel
+    .getByRole("button", { name: "New selection", exact: true })
+    .click();
+  await panel
+    .getByRole("checkbox", { name: "Batch Mountain", exact: true })
+    .uncheck();
+  await panel
+    .getByRole("button", { name: "Preview wanted media", exact: true })
+    .click();
+  await expect(
+    panel.getByRole("heading", {
+      name: "Both · 1 selected book",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await panel
+    .getByRole("button", { name: "Save wanted media", exact: true })
+    .click();
+  await expect(panel.getByRole("status")).toContainText(
+    "Saved wanted media for 1 book",
+    { timeout: 20_000 },
+  );
+  await expect(panel).toContainText("2 already requested");
+  await page.reload();
+  await page
+    .getByRole("button", { name: "Request books", exact: true })
+    .click();
+  await panel
+    .getByText("Saved previews and request receipts", { exact: true })
+    .click();
+  await panel.getByRole("button", { name: /1 book · completed/ }).click();
+  await expect(panel.getByRole("status")).toContainText(
+    "downloads have not been started",
+  );
+  await expect(
+    panel.getByRole("button", { name: "Save wanted media", exact: true }),
+  ).toHaveCount(0);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("list-requests-mobile.png"),
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+});

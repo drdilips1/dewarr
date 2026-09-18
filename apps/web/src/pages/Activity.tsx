@@ -92,33 +92,35 @@ export default function Activity({
               </div>
               <div className="grow">
                 <h2>
-                  {item.kind === "lists.csv"
-                    ? "CSV list import"
-                    : item.kind === "lists.sync"
-                      ? "External list observation"
-                      : item.kind === "sources.search"
-                        ? "Book source search"
-                        : item.kind === "system.probe"
-                          ? "Background worker check"
-                          : item.kind === "organization.automatic"
-                            ? "Automatic library import"
-                            : item.kind === "library.sync"
-                              ? "Audiobookshelf inventory sync"
-                              : item.kind === "acquisition.evaluate"
-                                ? "Wanted media check"
-                                : item.kind === "acquisition.download"
-                                  ? "Book download"
-                                  : item.kind === "acquisition.repair"
-                                    ? "Download connection repair"
-                                    : item.kind === "acquisition.review"
-                                      ? "Download import review"
-                                      : item.kind === "acquisition.select"
-                                        ? "Release selection"
-                                        : item.kind === "metadata.enrich" ||
-                                            item.kind ===
-                                              "metadata.resolve-import"
-                                          ? "Automatic metadata lookup"
-                                          : item.kind}
+                  {item.kind === "lists.requests"
+                    ? "List wanted media"
+                    : item.kind === "lists.csv"
+                      ? "CSV list import"
+                      : item.kind === "lists.sync"
+                        ? "External list observation"
+                        : item.kind === "sources.search"
+                          ? "Book source search"
+                          : item.kind === "system.probe"
+                            ? "Background worker check"
+                            : item.kind === "organization.automatic"
+                              ? "Automatic library import"
+                              : item.kind === "library.sync"
+                                ? "Audiobookshelf inventory sync"
+                                : item.kind === "acquisition.evaluate"
+                                  ? "Wanted media check"
+                                  : item.kind === "acquisition.download"
+                                    ? "Book download"
+                                    : item.kind === "acquisition.repair"
+                                      ? "Download connection repair"
+                                      : item.kind === "acquisition.review"
+                                        ? "Download import review"
+                                        : item.kind === "acquisition.select"
+                                          ? "Release selection"
+                                          : item.kind === "metadata.enrich" ||
+                                              item.kind ===
+                                                "metadata.resolve-import"
+                                            ? "Automatic metadata lookup"
+                                            : item.kind}
                 </h2>
                 <p>{item.message}</p>
               </div>

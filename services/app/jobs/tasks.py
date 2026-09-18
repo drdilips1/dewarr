@@ -283,3 +283,10 @@ async def import_csv(operation_id: str) -> None:
     from app.domain.list_csv import run
 
     await run(UUID(operation_id))
+
+
+@tasks.task(name="lists.requests", queue="lists", retry=RetryStrategy(max_attempts=3, wait=10))
+async def request_list_books(operation_id: str) -> None:
+    from app.domain.list_requests import run
+
+    await run(UUID(operation_id))

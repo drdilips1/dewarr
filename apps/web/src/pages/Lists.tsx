@@ -5,6 +5,8 @@ import { Link, useParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import { BookCard, Empty, Loading, Notice } from "../components";
 
+const ListRequests = lazy(() => import("./ListRequests"));
+
 const ListCsv = lazy(() => import("./ListCsv"));
 
 const ListSubscription = lazy(() => import("./ListSubscription"));
@@ -102,6 +104,7 @@ function ListDetail({ id, canEdit }: { id: string; canEdit: boolean }) {
   const client = useQueryClient();
   const path = { list_id: id };
   const [csvOpen, setCsvOpen] = useState(false);
+  const [requestsOpen, setRequestsOpen] = useState(false);
   const list = useQuery({
     queryKey: ["list", id],
     queryFn: async () =>
@@ -190,6 +193,17 @@ function ListDetail({ id, canEdit }: { id: string; canEdit: boolean }) {
       )}
       {editable ? (
         <>
+          <button
+            onClick={() => setRequestsOpen(!requestsOpen)}
+            aria-expanded={requestsOpen}
+          >
+            {requestsOpen ? "Close list requests" : "Request books"}
+          </button>
+          {requestsOpen && (
+            <Suspense fallback={<Loading />}>
+              <ListRequests key={id} listId={id} works={list.data.items} />
+            </Suspense>
+          )}
           <button onClick={() => setCsvOpen(!csvOpen)} aria-expanded={csvOpen}>
             {csvOpen ? "Close CSV import" : "Import a CSV"}
           </button>
