@@ -18,10 +18,12 @@ DEFAULT_MAXIMUM = {"ebook": 1024**3, "audio": 10 * 1024**3}
 
 
 def limit_bytes(preferences, medium):
-    return preferences.maximum_bytes or DEFAULT_MAXIMUM[medium]
+    return min(preferences.maximum_bytes or DEFAULT_MAXIMUM[medium], DEFAULT_MAXIMUM[medium])
 
 
-def eligibility(release, work, rule, preferences, *, version=None, descriptor=None):
+def eligibility(
+    release, work, rule, preferences, *, version=None, descriptor=None, unattended=False
+):
     assessment = assess_release(release, work, preferences, rule["medium"])
     reasons = list(assessment.blocked)
     if assessment.identity != "corroborated":
@@ -75,7 +77,7 @@ def eligibility(release, work, rule, preferences, *, version=None, descriptor=No
     if release.size_bytes is not None and release.size_bytes > ceiling:
         reasons.append("Reported transfer size exceeds the automatic selection limit")
     if descriptor:
-        if descriptor.content_bytes > ceiling:
+        if descriptor.torrent_bytes > ceiling:
             reasons.append("Inspected transfer size exceeds the automatic selection limit")
         formats = {PurePosixPath(f.path).suffix.lower().lstrip(".") for f in descriptor.files}
         if formats & set(preferences.blocked_formats):
@@ -91,6 +93,14 @@ def eligibility(release, work, rule, preferences, *, version=None, descriptor=No
             reasons.append("The torrent contains unsupported or ambiguous file types")
         if not primary:
             reasons.append("No supported primary media files were found")
+        elif unattended and any(
+            PurePosixPath(f.path).suffix.lower().lstrip(".")
+            not in ({"epub"} if rule["medium"] == "ebook" else {"m4b", "mp3"})
+            for f in primary
+        ):
+            reasons.append(
+                "This media format requires reviewed importing rather than automatic acquisition"
+            )
         elif rule["medium"] == "ebook" and len(primary) != 1:
             reasons.append("Multiple ebook files need edition or collection review")
         elif rule["medium"] == "audio":

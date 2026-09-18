@@ -668,7 +668,7 @@ This is the current execution handoff for the v1.7 planning baseline. It supplem
 
 C and D may be developed against qualified single-book fixtures while E progresses, but **automated-list beta is not accepted until its required S06 dependencies pass**. Shipping an internal single-book slice does not waive native ABB, packs or version handling from the promised beta/v1 scope. Actual account/service and Compose certification remain separate from synthetic HTTP or native-process evidence.
 
-The current C checkpoint supplies endpoint slots, rolling automatic-transfer accounting, byte reservations and periodic capacity waits; see [Capacity](docs/CAPACITY.md). Continue C/D with versioned list activation, baseline/backfill/catch-up, independent reasons and the automatic request-to-preparation-to-dispatch continuation. Reuse the existing trusted `automatic=True` attempt boundary and shared importer. Do not count saving a policy, preparing a candidate or passing capacity tests as an unattended list-to-library demonstration.
+The current C checkpoint supplies endpoint slots, rolling automatic-transfer accounting, byte reservations and periodic capacity waits; see [Capacity](docs/CAPACITY.md). Explicit per-title automatic selection now hands off atomically to a trusted `automatic=True` attempt under a current administrator-approved import route; see [Automatic selection and download](docs/AUTOMATIC-SELECTION.md). Continue C/D with versioned list activation, baseline/backfill/catch-up, independent reasons and scheduled source searches feeding that shared handoff and importer. Do not count a per-title automatic action, saving a policy or passing capacity tests as an unattended list-to-library demonstration.
 
 ### Reviewable development units
 

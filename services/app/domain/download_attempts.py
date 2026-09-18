@@ -29,7 +29,7 @@ from app.db.models import (
     User,
 )
 from app.db.session import session_factory
-from app.domain import capacity
+from app.domain import automatic_dispatch, capacity
 from app.domain.acquisition import RequestSpec, evaluate, validate_request
 from app.domain.acquisition_selection import configuration_current, owned_selection
 from app.domain.downloaders import SETTINGS_LOCK
@@ -78,6 +78,9 @@ async def locked(db, identifier):
     if not attempt:
         return None, None
     selection = await db.get(AcquisitionSelection, attempt.selection_id)
+    await automatic_dispatch.lock_principals(
+        db, selection.owner_id, automatic_dispatch.consent(selection)
+    )
     await acquisition_lock(db, UUID(selection.frozen["origin_work_id"]))
     await db.refresh(attempt, with_for_update=True)
     await db.refresh(selection)
@@ -91,11 +94,11 @@ async def owned_attempt(db, user, identifier):
     return row
 
 
-async def authority(db, selection, *, wanted, configuration=None):
+async def authority(db, selection, *, wanted, configuration=None, dispatch_consent=True):
     """Recheck current grants and frozen configuration at the side-effect boundary."""
     if get_settings().recovery_mode:
         raise HTTPException(409, "Downloads are paused for recovery")
-    if wanted and not get_settings().download_dispatch_enabled:
+    if wanted and dispatch_consent and not get_settings().download_dispatch_enabled:
         raise HTTPException(409, "New download dispatch is disabled")
     await member(db, selection.owner_id)
     user = await db.get(User, selection.owner_id)
@@ -137,6 +140,8 @@ async def authority(db, selection, *, wanted, configuration=None):
         raise HTTPException(409, "Saved torrent identity changed; inspect the release again")
     if wanted:
         inspection_path(selection)
+        if dispatch_consent:
+            await automatic_dispatch.require_selection(db, selection)
     return await db.get(Integration, selection.downloader_id), content
 
 
@@ -160,6 +165,7 @@ async def start(db, user, selection_id, key, *, automatic=False):
     if not get_settings().download_dispatch_enabled:
         raise HTTPException(409, "Download dispatch is not enabled for this installation")
     selection = await owned_selection(db, user, selection_id)
+    await automatic_dispatch.lock_principals(db, user.id, automatic_dispatch.consent(selection))
     await acquisition_lock(db, UUID(selection.frozen["origin_work_id"]))
     await db.refresh(selection)
     existing = await db.scalar(
@@ -395,7 +401,7 @@ async def finish_observation(db, attempt, selection, state):
         )
         (await db.get(Operation, attempt.operation_id)).message = attempt.message
         return True
-    await authority(db, selection, wanted=True)
+    await authority(db, selection, wanted=True, dispatch_consent=False)
     await create_inspection(db, attempt, selection, user)
     return True
 

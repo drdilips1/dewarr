@@ -2090,3 +2090,115 @@ test("installation capacity limits persist and remain usable on mobile", async (
   await expect(page.getByRole("status")).toContainText("Capacity limits saved");
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });
+
+test("approved automatic selection queues one download and preserves its receipt", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(90_000);
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Sign out", exact: true }),
+  ).toBeVisible();
+  await page.goto("/organization/destinations");
+  const policy = page.getByRole("region", { name: "Automatic import policy" });
+  await policy
+    .getByRole("button", { name: "Enable automatic import", exact: true })
+    .click();
+  await expect(policy).toContainText(
+    "New completed downloads with clear catalog and file evidence can import automatically",
+  );
+  await page.getByRole("link", { name: "Lists", exact: true }).click();
+  await page.getByRole("link", { name: /Hardcover curated shelf/ }).click();
+  await page
+    .getByText("Observed entries and exclusions", { exact: true })
+    .click();
+  const entry = page.getByRole("article", {
+    name: "Shelf entry: Hardcover List Arrival",
+    exact: true,
+  });
+  await entry
+    .getByRole("button", { name: "Restore to this list", exact: true })
+    .click();
+  await entry
+    .getByRole("link", {
+      name: "Catalog book: Hardcover List Arrival",
+      exact: true,
+    })
+    .click();
+  const wanted = page.getByRole("region", {
+    name: "Wanted media",
+    exact: true,
+  });
+  await wanted
+    .getByRole("combobox", { name: "Media to request", exact: true })
+    .selectOption("ebook");
+  await wanted
+    .getByRole("button", { name: "Save to wanted", exact: true })
+    .click();
+  await wanted
+    .getByRole("link", { name: "Choose a source release", exact: true })
+    .click();
+  const selection = page.getByRole("region", {
+    name: "Automatic release preparation",
+    exact: true,
+  });
+  const automatic = selection.getByRole("button", {
+    name: "Select and download automatically",
+    exact: true,
+  });
+  await expect(
+    page.getByRole("status").filter({ hasText: "Search finished" }),
+  ).toBeVisible({ timeout: 20_000 });
+  await expect(automatic).toBeEnabled();
+  await automatic.click();
+  await expect(selection.getByRole("status")).toContainText(
+    "Eligible release selected; automatic download queued",
+    { timeout: 25_000 },
+  );
+  await expect(
+    selection.getByRole("link", {
+      name: "View automatic download",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page.reload();
+  await expect(
+    selection.getByRole("link", {
+      name: "View automatic download",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(automatic).toBeDisabled();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("automatic-dispatch-mobile.png"),
+    fullPage: true,
+  });
+  await selection
+    .getByRole("link", { name: "View automatic download", exact: true })
+    .click();
+  const activity = page
+    .getByRole("region", { name: "Downloads", exact: true })
+    .getByRole("article")
+    .filter({
+      has: page.getByRole("heading", {
+        name: "Hardcover List Arrival",
+        exact: true,
+      }),
+    });
+  await expect(activity).toContainText("downloading", { timeout: 20_000 });
+  await expect(page.locator("body")).not.toContainText(
+    "fixture-private-download-token",
+  );
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+});

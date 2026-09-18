@@ -117,8 +117,8 @@ export default function Wanted({
         Wanted media
       </h2>
       <p className="muted">
-        Track the media you want and skip copies already in your library.
-        Automatic downloading is not available yet.
+        Track the media you want and skip copies already in your library. Save a
+        request, then choose a source to acquire missing media.
       </p>
       {version ? (
         <div className="source-attribution">

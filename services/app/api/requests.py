@@ -125,7 +125,7 @@ async def view(db, user, intent):
             if not active:
                 target.state, target.message = "cancelled", "No active request reasons"
             elif target.state == "wanted":
-                target.message = "Saved to wanted; automatic downloading is not available yet"
+                target.message = "Saved to wanted; choose a source release to continue"
                 selection = await db.scalar(
                     select(AcquisitionSelection)
                     .join(

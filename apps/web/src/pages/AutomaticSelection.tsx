@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
@@ -53,6 +53,22 @@ export default function AutomaticSelection({
         ? 1500
         : false,
   });
+  useEffect(() => {
+    if (receipt.data?.status === "completed" && receipt.data.selection_id) {
+      for (const key of [
+        "requests",
+        "downloads",
+        "activity",
+        "release-selections",
+      ])
+        void cache.invalidateQueries({ queryKey: [key] });
+    }
+  }, [
+    cache,
+    receipt.data?.id,
+    receipt.data?.status,
+    receipt.data?.selection_id,
+  ]);
   const medium =
     slot === "either" ? request.data?.specification.preferred_medium : slot;
   const library =
@@ -80,7 +96,7 @@ export default function AutomaticSelection({
       void cache.invalidateQueries({ queryKey: [name] });
   };
   const prepare = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (downloadWhenReady: boolean) => {
       const body = {
         intent_id: requestId,
         slot,
@@ -89,6 +105,7 @@ export default function AutomaticSelection({
         downloader_generation: downloader!.generation,
         destination_id: destination!.id,
         destination_revision: destination!.revision,
+        download_when_ready: downloadWhenReady,
       };
       const serialized = JSON.stringify(body);
       if (command.current.body !== serialized)
@@ -124,9 +141,22 @@ export default function AutomaticSelection({
     search.status === "completed" &&
     !search.stale_identity &&
     Date.parse(search.expires_at) > Date.now();
-  const limit =
-    search.profile.preferences.maximum_bytes ??
-    (medium === "ebook" ? 1024 ** 3 : 10 * 1024 ** 3);
+  const defaultLimit = medium === "ebook" ? 1024 ** 3 : 10 * 1024 ** 3;
+  const limit = Math.min(
+    search.profile.preferences.maximum_bytes ?? defaultLimit,
+    defaultLimit,
+  );
+  const unavailable =
+    active ||
+    prepare.isPending ||
+    receipt.isPending ||
+    !!receipt.error ||
+    !fresh ||
+    !downloader ||
+    !destination ||
+    !!target?.source_artifact_id ||
+    target?.state !== "wanted" ||
+    request.data?.work_id !== search.work_id;
   const context = new URLSearchParams({
     work: search.work_id,
     request: requestId,
@@ -202,23 +232,28 @@ export default function AutomaticSelection({
       {!fresh && <p>Refresh source results before preparing a release.</p>}
       <button
         className="primary"
-        disabled={
-          active ||
-          prepare.isPending ||
-          receipt.isPending ||
-          !!receipt.error ||
-          !fresh ||
-          !downloader ||
-          !destination ||
-          target?.state !== "wanted" ||
-          request.data?.work_id !== search.work_id
-        }
-        onClick={() => prepare.mutate()}
+        disabled={unavailable}
+        onClick={() => prepare.mutate(false)}
       >
         {prepare.isPending || active
           ? "Preparing eligible release…"
           : "Prepare best eligible release"}
       </button>
+      <button
+        className="secondary"
+        disabled={unavailable || !destination?.automatic_import_ready}
+        onClick={() => prepare.mutate(true)}
+      >
+        Select and download automatically
+      </button>
+      <p className="muted">
+        Automatic acquisition starts one eligible download after selection and
+        continues through the approved import route. It uses the shared transfer
+        and storage limits. EPUB, M4B and MP3 can continue without file review
+        when their downloaded contents match the catalog.
+        {!destination?.automatic_import_ready &&
+          " An administrator must enable dispatch and approve automatic importing for this destination first."}
+      </p>
       {receipt.data && (
         <div aria-live="polite">
           <p role="status">{receipt.data.message}</p>
@@ -231,13 +266,18 @@ export default function AutomaticSelection({
               Cancel release preparation
             </button>
           )}
-          {receipt.data.artifact_id && (
-            <Link
-              to={`/sources/artifacts/${receipt.data.artifact_id}?${context}`}
-            >
-              Open prepared release
-            </Link>
-          )}
+          <div className="button-row">
+            {receipt.data.artifact_id && (
+              <Link
+                to={`/sources/artifacts/${receipt.data.artifact_id}?${context}`}
+              >
+                Open prepared release
+              </Link>
+            )}
+            {receipt.data.download_id && (
+              <Link to="/activity">View automatic download</Link>
+            )}
+          </div>
           {!!receipt.data.decisions.length && (
             <details>
               <summary>

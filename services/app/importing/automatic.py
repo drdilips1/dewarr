@@ -81,6 +81,15 @@ async def schedule(db, attempt, selection):
     )
     if not policy:
         return False
+    approval = (selection.frozen.get("automatic_selection") or {}).get("dispatch_approval")
+    if approval and (
+        approval["policy_id"] != str(policy.id)
+        or approval["policy_generation"] != policy.generation
+        or approval["approved_by"] != str(policy.approved_by)
+    ):
+        # A new approval cannot silently replace the one frozen before download.
+        # Completed files still reach the ordinary, permission-scoped review path.
+        return False
     if await db.scalar(select(AutomaticImport.id).where(AutomaticImport.attempt_id == attempt.id)):
         return True
     operation = Operation(

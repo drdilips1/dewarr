@@ -31,6 +31,7 @@ from app.db.models import (
     WorkMetadataSource,
 )
 from app.db.session import session_factory
+from app.domain import automatic_dispatch
 from app.domain.acquisition import evaluate
 from app.domain.acquisition_selection import SelectionInput, prepare
 from app.domain.automatic_eligibility import AUDIO, EBOOKS, eligibility, limit_bytes
@@ -73,6 +74,7 @@ class AutomaticSelectionInput(BaseModel):
     downloader_generation: int = Field(ge=1)
     destination_id: UUID
     destination_revision: str = Field(pattern=r"^[a-f0-9]{64}$")
+    download_when_ready: bool = False
 
 
 def release_value(row):
@@ -158,6 +160,8 @@ async def begin(db, user, body, key):
         raise HTTPException(409, "Automatic selection is paused for recovery")
     await transaction_lock(db, f"operation:{user.id}:{key}")
     command = body.model_dump(mode="json")
+    if not body.download_when_ready:
+        command.pop("download_when_ready")  # Preserve earlier preparation-only command receipts.
     previous = await db.scalar(
         select(Operation).where(Operation.owner_id == user.id, Operation.idempotency_key == key)
     )
@@ -166,6 +170,13 @@ async def begin(db, user, body, key):
             raise HTTPException(409, "This command key was already used for another selection")
         return previous
     _, work, search, profile, rule, _ = await context(db, user.id, body)
+    approval = (
+        await automatic_dispatch.approve_route(
+            db, user.id, body.destination_id, body.destination_revision
+        )
+        if body.download_when_ready
+        else None
+    )
     active = await db.scalar(
         select(Operation)
         .where(
@@ -202,6 +213,8 @@ async def begin(db, user, body, key):
             "decisions": [],
             "selection_id": None,
             "token": None,
+            "dispatch_approval": approval,
+            "download_id": None,
         },
     )
     db.add(operation)
@@ -250,7 +263,12 @@ async def candidates(db, operation, work, profile, rule, version):
         if verified:
             release = type(release).model_validate(verified["release"])
         problems = eligibility(
-            release, operation.payload["work"], rule, profile.preferences, version=version
+            release,
+            operation.payload["work"],
+            rule,
+            profile.preferences,
+            version=version,
+            unattended=operation.payload["command"].get("download_when_ready", False),
         )
         source = sources.get(row.source_key)
         if (
@@ -359,6 +377,14 @@ async def run(identifier):
         body = AutomaticSelectionInput.model_validate(operation.payload["command"])
         try:
             user, work, search, profile, rule, version = await context(db, operation.owner_id, body)
+            if body.download_when_ready:
+                await automatic_dispatch.approve_route(
+                    db,
+                    user.id,
+                    body.destination_id,
+                    body.destination_revision,
+                    expected=operation.payload["dispatch_approval"],
+                )
             if (
                 rule != operation.payload["requirements"]
                 or search.payload["work"] != operation.payload["work"]
@@ -464,11 +490,17 @@ async def run(identifier):
         # Selection commands take their key before the acquisition lock. Match
         # that order even when a user races the internally generated command.
         child_key = f"auto-selected:{identifier}"
+        dispatch_key = f"auto-download:{identifier}"
+        if body.download_when_ready:
+            await transaction_lock(db, f"operation:{owner_id}:{dispatch_key}")
         await transaction_lock(db, f"operation:{owner_id}:{child_key}")
         await transaction_lock(db, f"auto-select:{identifier}")
         operation = await db.get(Operation, identifier, populate_existing=True)
         if operation.status in TERMINAL or operation.payload.get("token") != token:
             return
+        await automatic_dispatch.lock_principals(
+            db, owner_id, operation.payload.get("dispatch_approval")
+        )
         try:
             user, work, search, profile, rule, version = await context(db, owner_id, body)
             if (
@@ -510,6 +542,7 @@ async def run(identifier):
                 profile.preferences,
                 version=version,
                 descriptor=descriptor,
+                unattended=body.download_when_ready,
             )
             # Existing artifact snapshots are immutable. Metadata changes require
             # review; fluctuating counts/timestamps cannot change book identity.
@@ -587,13 +620,28 @@ async def run(identifier):
                         "inspected_formats": payload["verified"][str(row.id)]["formats"],
                         "scope": "Fetched source page; single-book manifest; "
                         "actual file identity checked after downloading",
+                        "dispatch_approval": operation.payload.get("dispatch_approval"),
                     },
                 )
-            operation.payload = {**operation.payload, "selection_id": str(selected.id)}
+                operation.payload = {**operation.payload, "selection_id": str(selected.id)}
+                if body.download_when_ready:
+                    from app.domain.download_attempts import start as start_download
+
+                    attempt = await start_download(
+                        db, user, selected.id, dispatch_key, automatic=True
+                    )
+                    operation.payload = {**operation.payload, "download_id": str(attempt.id)}
             finish(
-                operation, "completed", "Best eligible release prepared; download has not started"
+                operation,
+                "completed",
+                "Eligible release selected; automatic download queued"
+                if body.download_when_ready
+                else "Best eligible release prepared; download has not started",
             )
         except (HTTPException, AdapterError) as error:
+            # A failed dispatch rolls the nested selection/attempt transaction
+            # back together, including any in-memory operation payload changes.
+            await db.refresh(operation)
             finish(
                 operation,
                 "completed" if isinstance(error, AlreadyAvailable) else "held",

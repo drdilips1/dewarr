@@ -32,6 +32,8 @@ class AutomaticSelectionView(BaseModel):
     decisions: list[CandidateDecision]
     selection_id: UUID | None = None
     artifact_id: UUID | None = None
+    download_when_ready: bool = False
+    download_id: UUID | None = None
 
 
 async def view(db, user, operation):
@@ -62,6 +64,8 @@ async def view(db, user, operation):
         ],
         selection_id=selection_id,
         artifact_id=selection.artifact_id if selection else None,
+        download_when_ready=operation.payload["command"].get("download_when_ready", False),
+        download_id=operation.payload.get("download_id"),
     )
 
 

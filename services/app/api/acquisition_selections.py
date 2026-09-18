@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import UUID
 
-from fastapi import APIRouter, Header, Query
+from fastapi import APIRouter, Header, HTTPException, Query
 from pydantic import BaseModel
 from sqlalchemy import func, select
 
@@ -11,6 +11,7 @@ from app.api.metadata import adapter_http_error
 from app.config import get_settings
 from app.db.models import AcquisitionSelection, ImportDestination, Integration, Library
 from app.domain import acquisition_selection as selections
+from app.domain import automatic_dispatch
 from app.domain.acquisition_selection import SelectionInput
 from app.domain.downloaders import mapped_path, mappings_current
 from app.domain.visibility import visible_library
@@ -58,6 +59,7 @@ class DestinationChoice(BaseModel):
     revision: str
     source_key: str | None
     ready: bool
+    automatic_import_ready: bool = False
 
 
 class SelectionOptions(BaseModel):
@@ -123,6 +125,15 @@ async def options(user: Member, db: Database):
     for row, name in rows:
         configuration = await destination_configuration(db, row)
         source_key = (row.probe or {}).get("source_key")
+        automatic_ready = False
+        if get_settings().download_dispatch_enabled:
+            try:
+                await automatic_dispatch.approve_route(
+                    db, user.id, row.id, fingerprint(configuration)
+                )
+                automatic_ready = True
+            except HTTPException:
+                pass
         destinations.append(
             DestinationChoice(
                 id=row.id,
@@ -132,6 +143,7 @@ async def options(user: Member, db: Database):
                 revision=fingerprint(configuration),
                 source_key=source_key,
                 ready=selections.verified_probe(row, configuration, {"source_key": source_key}),
+                automatic_import_ready=automatic_ready,
             )
         )
     return SelectionOptions(downloaders=downloaders, destinations=destinations)

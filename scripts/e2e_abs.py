@@ -118,14 +118,21 @@ async def mam_fixture(path: str, request: Request):
     mam_state["requests"] += 1
     mam_state["cookie"] = f"browser-mam-rotated-{mam_state['requests']}"
     if path == "tor/download.php/fixture-private-download-token":
-        if dict(request.query_params) not in ({"tid": "501"}, {"tid": "502"}, {"tid": "503"}):
+        if dict(request.query_params) not in (
+            {"tid": "501"},
+            {"tid": "502"},
+            {"tid": "503"},
+            {"tid": "504"},
+        ):
             raise HTTPException(400)
         content = (
             torrent_bytes(
-                name=b"Hardcover Later Arrival",
+                name=b"Hardcover Later Arrival"
+                if request.query_params["tid"] == "503"
+                else b"Hardcover List Arrival",
                 files=[{b"length": 24, b"path": [b"book.epub"]}],
             )
-            if request.query_params["tid"] == "503"
+            if request.query_params["tid"] in {"503", "504"}
             else torrent_bytes(
                 name=b"The Next Harbor", files=[{b"length": 24, b"path": [b"book.epub"]}]
             )
@@ -157,12 +164,21 @@ async def mam_fixture(path: str, request: Request):
                     )
                 ]
             )
-        if query["tor"].get("id") == 503 or query["tor"].get("text") == "Hardcover Later Arrival":
+        titles = {503: "Hardcover Later Arrival", 504: "Hardcover List Arrival"}
+        identifier = next(
+            (
+                key
+                for key, title in titles.items()
+                if query["tor"].get("id") == key or query["tor"].get("text") == title
+            ),
+            None,
+        )
+        if identifier:
             body = search_response(
                 data=[
                     release_row(
-                        id=503,
-                        title="Hardcover Later Arrival",
+                        id=identifier,
+                        title=titles[identifier],
                         main_cat=14,
                         filetype="EPUB",
                         narrator_info="{}",

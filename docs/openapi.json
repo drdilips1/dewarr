@@ -6853,6 +6853,11 @@
             "type": "string",
             "pattern": "^[a-f0-9]{64}$",
             "title": "Destination Revision"
+          },
+          "download_when_ready": {
+            "type": "boolean",
+            "title": "Download When Ready",
+            "default": false
           }
         },
         "additionalProperties": false,
@@ -6926,6 +6931,23 @@
               }
             ],
             "title": "Artifact Id"
+          },
+          "download_when_ready": {
+            "type": "boolean",
+            "title": "Download When Ready",
+            "default": false
+          },
+          "download_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Download Id"
           }
         },
         "type": "object",
@@ -8166,6 +8188,11 @@
           "ready": {
             "type": "boolean",
             "title": "Ready"
+          },
+          "automatic_import_ready": {
+            "type": "boolean",
+            "title": "Automatic Import Ready",
+            "default": false
           }
         },
         "type": "object",

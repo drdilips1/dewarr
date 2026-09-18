@@ -514,7 +514,7 @@ async def evaluate(db, user, intent):
             if reservation.state == "committed"
             else "Release selected; download has not started"
             if reservation.state == "selected"
-            else "Saved to wanted; automatic downloading is not available yet"
+            else "Saved to wanted; choose a source release to continue"
         )
     await release_unused(db, intent.work_id)
     await retire_satisfied(db, intent.work_id)

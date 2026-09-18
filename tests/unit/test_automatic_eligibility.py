@@ -5,7 +5,7 @@ import pytest
 
 from app.adapters.mam import MAMRelease
 from app.adapters.torrent_descriptor import TorrentDescriptor
-from app.domain.automatic_eligibility import eligibility
+from app.domain.automatic_eligibility import eligibility, limit_bytes
 from app.domain.release_profiles import ReleasePreferences
 
 WORK = {"title": "Harbor", "authors": ["Writer"]}
@@ -108,6 +108,7 @@ def test_exact_ebook_requires_corroborated_isbn_and_actual_formats_obey_profile(
     value = release().model_copy(
         update={"medium": "ebook", "formats": ["epub"], "isbn": "9780306406157"}
     )
+
     version = SimpleNamespace(
         medium="ebook", language="en", identifiers={"isbn13": ["9780306406157"]}
     )
@@ -132,5 +133,27 @@ def test_exact_ebook_requires_corroborated_isbn_and_actual_formats_obey_profile(
             rule,
             ReleasePreferences(blocked_formats=["pdf"]),
             descriptor=descriptor(["Harbor.epub", "Harbor.pdf"]),
+        )
+    )
+
+
+def test_automatic_limit_counts_padding_and_profiles_cannot_raise_installation_ceiling():
+    assert limit_bytes(ReleasePreferences(maximum_bytes=50 * 1024**3), "ebook") == 1024**3
+    assert limit_bytes(ReleasePreferences(maximum_bytes=1024), "audio") == 1024
+    manifest = descriptor(["Harbor.m4b"]).model_copy(update={"torrent_bytes": 10 * 1024**3 + 1})
+    assert any(
+        "transfer size" in reason
+        for reason in eligibility(release(), WORK, RULE, ReleasePreferences(), descriptor=manifest)
+    )
+
+
+def test_reviewed_preparation_can_retain_formats_that_cannot_yet_import_unattended():
+    value = release().model_copy(update={"formats": ["flac"]})
+    manifest = descriptor(["Harbor.flac"])
+    assert not eligibility(value, WORK, RULE, ReleasePreferences(), descriptor=manifest)
+    assert any(
+        "reviewed importing" in reason
+        for reason in eligibility(
+            value, WORK, RULE, ReleasePreferences(), descriptor=manifest, unattended=True
         )
     )

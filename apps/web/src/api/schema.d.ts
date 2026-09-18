@@ -2174,6 +2174,11 @@ export interface components {
       destination_id: string;
       /** Destination Revision */
       destination_revision: string;
+      /**
+       * Download When Ready
+       * @default false
+       */
+      download_when_ready: boolean;
     };
     /** AutomaticSelectionView */
     AutomaticSelectionView: {
@@ -2201,6 +2206,13 @@ export interface components {
       selection_id?: string | null;
       /** Artifact Id */
       artifact_id?: string | null;
+      /**
+       * Download When Ready
+       * @default false
+       */
+      download_when_ready: boolean;
+      /** Download Id */
+      download_id?: string | null;
     };
     /** Availability */
     Availability: {
@@ -2667,6 +2679,11 @@ export interface components {
       source_key: string | null;
       /** Ready */
       ready: boolean;
+      /**
+       * Automatic Import Ready
+       * @default false
+       */
+      automatic_import_ready: boolean;
     };
     /** DestinationInput */
     DestinationInput: {

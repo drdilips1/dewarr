@@ -217,7 +217,7 @@ def enforce_profile(release, descriptor, snapshot):
         )
     if (
         preferences.maximum_bytes is not None
-        and descriptor.content_bytes > preferences.maximum_bytes
+        and descriptor.torrent_bytes > preferences.maximum_bytes
     ):
         raise HTTPException(422, "The inspected torrent exceeds the profile size limit")
 
