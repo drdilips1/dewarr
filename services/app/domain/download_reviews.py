@@ -29,6 +29,7 @@ from app.db.models import (
 from app.domain.acquisition import RequestSpec, evaluate, language_accepts, validate_request
 from app.domain.downloaders import mapped_path
 from app.domain.operations import transaction_lock
+from app.domain.release_profiles import ProfileSnapshot, enforce_inspected_profile
 from app.domain.work_graph import canonical_work, family_ids
 from app.importing.naming import fingerprint
 
@@ -124,6 +125,17 @@ async def lock_principals(db, inspection_id):
 
 async def validate_inspection(db, inspection_id, *, destination_id=None, version=None, lock=False):
     """No work locks: safe under the importer's existing publication lock order."""
+    attempt = await db.scalar(
+        select(DownloadAttempt).where(DownloadAttempt.inspection_id == inspection_id)
+    )
+    if attempt:
+        selection = await db.get(AcquisitionSelection, attempt.selection_id)
+        inspection = await db.get(DownloadInspection, inspection_id)
+        if inspection.snapshot and selection.frozen.get("profile"):
+            enforce_inspected_profile(
+                inspection.snapshot["files"],
+                ProfileSnapshot.model_validate(selection.frozen["profile"]),
+            )
     handoff = await for_inspection(db, inspection_id)
     if not handoff:
         return

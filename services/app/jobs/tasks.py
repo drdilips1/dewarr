@@ -8,7 +8,7 @@ from app.config import get_settings
 from app.db.models import AuditEvent, Integration, Operation, User
 from app.db.session import session_factory
 from app.jobs.queue import tasks
-from app.jobs.retry import CatalogRetryStrategy
+from app.jobs.retry import CatalogRetryStrategy, SourceSearchRetryStrategy
 
 
 @tasks.task(
@@ -252,3 +252,12 @@ async def schedule_downloads(timestamp: int) -> None:
         )
         for automatic in automatic_rows:
             await recover(db, automatic.id)
+
+
+@tasks.task(
+    name="sources.search", queue="sources", retry=SourceSearchRetryStrategy(max_attempts=5, wait=10)
+)
+async def search_book_sources(operation_id: str, source: str) -> None:
+    from app.domain.book_sources import run
+
+    await run(UUID(operation_id), source)

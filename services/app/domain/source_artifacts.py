@@ -21,10 +21,12 @@ async def member(db, user_id):
         raise HTTPException(403, "This account has read-only access")
 
 
-async def resolve_mam(user_id, source_id):
+async def resolve_mam(user_id, source_id, *, expected_generation=None):
     async with session_factory()() as db:
         await member(db, user_id)
-    artifact, generation = await source_call(user_id, "resolve", source_id, with_generation=True)
+    artifact, generation = await source_call(
+        user_id, "resolve", source_id, with_generation=True, expected_generation=expected_generation
+    )
     return await persist_artifact(user_id, source_id, artifact, generation, "mam")
 
 

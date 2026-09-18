@@ -1065,3 +1065,22 @@ img.detail-cover {
 .source-facts dd {
   margin: 0;
 }
+
+.preference-order {
+  list-style: none;
+  padding: 0;
+}
+.preference-order li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-block: 6px;
+}
+.preference-order li > div {
+  display: flex;
+  gap: 6px;
+}
+.preference-order button {
+  padding: 4px 12px;
+}

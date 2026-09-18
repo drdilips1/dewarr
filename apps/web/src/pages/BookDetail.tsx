@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ArrowLeft, BookOpen, Check, Headphones } from "lucide-react";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import { LibraryAssets } from "./MyLibrary";
 import { Loading, Notice } from "../components";
 import BookMetadata from "./BookMetadata";
 import WorkMerge from "./WorkMerge";
 import Wanted, { type WantedVersion } from "./Wanted";
+
+const BookSources = lazy(() => import("./BookSources"));
 
 export default function BookDetail({
   canEdit,
@@ -29,6 +31,8 @@ function BookDetailContent({
   canEdit: boolean;
   admin: boolean;
 }) {
+  const [params] = useSearchParams();
+  const showSources = params.get("tab") === "sources";
   const [listId, setListId] = useState("");
   const [saved, setSaved] = useState(false);
   const [wantedVersion, setWantedVersion] = useState<WantedVersion | null>(
@@ -91,7 +95,7 @@ function BookDetailContent({
           <p className="author-line">
             {work.authors.join(", ") || "Author unknown"}
           </p>
-          <Link to={`/sources?q=${encodeURIComponent(work.title)}`}>
+          <Link to={`/books/${work.id}?tab=sources`}>
             Search download sources
           </Link>
           <div className="status-row">
@@ -187,14 +191,36 @@ function BookDetailContent({
           clearVersion={() => setWantedVersion(null)}
         />
       )}
-      <BookMetadata
-        work={work}
-        admin={admin}
-        onWantVersion={canEdit ? setWantedVersion : undefined}
-      />
-      {admin && <WorkMerge work={work} />}
-      <h2 className="library-access">Your library copies</h2>
-      <LibraryAssets workId={id} admin={admin} />
+      <nav className="button-row" aria-label="Book sections">
+        <Link
+          to={`/books/${id}`}
+          aria-current={!showSources ? "page" : undefined}
+        >
+          Overview and editions
+        </Link>
+        <Link
+          to={`/books/${id}?tab=sources`}
+          aria-current={showSources ? "page" : undefined}
+        >
+          Sources
+        </Link>
+      </nav>
+      {showSources ? (
+        <Suspense fallback={<Loading />}>
+          <BookSources work={work} canAcquire={canEdit} />
+        </Suspense>
+      ) : (
+        <>
+          <BookMetadata
+            work={work}
+            admin={admin}
+            onWantVersion={canEdit ? setWantedVersion : undefined}
+          />
+          {admin && <WorkMerge work={work} />}
+          <h2 className="library-access">Your library copies</h2>
+          <LibraryAssets workId={id} admin={admin} />
+        </>
+      )}
     </>
   );
 }

@@ -1,6 +1,6 @@
 # Prowlarr source integration
 
-September 18, 2026 checkpoint. This implements a Prowlarr search and torrent-file path into the existing acquisition engine. It does not complete S06: native AudiobookBay, combined native/Prowlarr book-level aggregation, full ranking profiles and series acquisition remain pending.
+September 18, 2026 checkpoint. This implements a Prowlarr search and torrent-file path into the existing acquisition engine. It does not complete S06: native AudiobookBay, complete automatic eligibility/ranking and series acquisition remain pending. The subsequent [Book Sources layer](BOOK-SOURCES.md) adds initial combined search and saved profiles.
 
 ## Connection and search
 
@@ -10,7 +10,7 @@ Administrators save the Prowlarr server URL, write-only API key, enabled state a
 
 `POST /api/sources/prowlarr/search` queries one explicitly selected indexer, using ebook category 7020 and audiobook category 3030, with bounded offset/limit. The UI searches selected indexers sequentially under the shared connection budget, shows each source as it completes and retains successful results beside failed sources. Paging is offered only when the indexer supports it. The response does not claim a complete catalog or a reliable global result count.
 
-Prowlarr's search controller can turn some upstream failures into an empty array. The page therefore exposes a warning and does not treat zero results as evidence that a book is unavailable. Cross-source identity/ranking and automated search retries are later work.
+Prowlarr's search controller can turn some upstream failures into an empty array. The page therefore exposes a warning and does not treat zero results as evidence that a book is unavailable. The direct source page keeps this warning. The combined Book Sources layer adds initial identity-aware ranking and durable rate-limit retries; full automatic eligibility remains pending.
 
 ## Results, identity and private references
 
@@ -54,3 +54,7 @@ The adapter is an original client of these interfaces; no Prowlarr implementatio
 - [Download proxy reference](https://github.com/Prowlarr/Prowlarr/blob/develop/src/NzbDrone.Core/Download/DownloadMappingService.cs) and [download HTTP endpoint](https://github.com/Prowlarr/Prowlarr/blob/develop/src/Prowlarr.Api.V1/Indexers/NewznabController.cs): authenticated proxy shape, binary content and redirect behavior.
 
 References were inspected on the checkpoint date; `develop` is mutable. Live version certification must record the installed version and exercised indexer capabilities.
+
+## Combined book search
+
+The [Book Sources layer](BOOK-SOURCES.md) now combines this adapter with native MAM in a durable owner-scoped search, with private saved ranking profiles and shared artifact inspection. Its current coverage and remaining automatic-selection/series limitations are recorded separately.

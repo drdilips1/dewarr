@@ -34,6 +34,7 @@ from app.domain.acquisition import (
 )
 from app.domain.downloaders import SETTINGS_LOCK, connection_or_404, mapped_path
 from app.domain.operations import transaction_lock
+from app.domain.release_profiles import enforce_profile, profile_snapshot
 from app.domain.source_artifacts import artifact_bytes, member
 from app.domain.work_graph import acquisition_lock, canonical_work
 from app.importing.destinations import destination_configuration
@@ -50,6 +51,8 @@ class SelectionInput(BaseModel):
     destination_id: UUID
     destination_revision: str = Field(pattern=r"^[0-9a-f]{64}$")
     confirmed_work_id: UUID
+    profile_id: UUID | None = None
+    profile_generation: int | None = Field(default=None, ge=0)
 
 
 async def owned_selection(db, user, identifier):
@@ -114,6 +117,9 @@ async def prepare(db, user, body, key):
     if get_settings().recovery_mode:
         raise HTTPException(409, "Acquisition preparation is paused for recovery")
     command = body.model_dump(mode="json")
+    if body.profile_id is None and body.profile_generation is None:
+        command.pop("profile_id", None)
+        command.pop("profile_generation", None)
     await transaction_lock(db, f"operation:{user.id}:{key}")
     await member(db, user.id)
     receipt = await db.scalar(
@@ -171,6 +177,8 @@ async def prepare(db, user, body, key):
     release = (MAMRelease if artifact.source_key == "mam" else ProwlarrRelease).model_validate(
         artifact.release_snapshot
     )
+    profile = await profile_snapshot(db, user.id, body.profile_id, body.profile_generation)
+    enforce_profile(release, descriptor, profile)
     spec = RequestSpec.model_validate(intent.specification)
     if (
         body.slot == "either"
@@ -246,6 +254,7 @@ async def prepare(db, user, body, key):
             "artifact_sha256": artifact.sha256,
             "descriptor": descriptor.model_dump(mode="json"),
             "release": release.model_dump(mode="json"),
+            "profile": profile.model_dump(mode="json"),
             "downloader": {
                 "id": str(downloader.id),
                 "generation": downloader.credential_generation,

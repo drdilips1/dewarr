@@ -150,8 +150,17 @@ class SourceConnection(Base):
     lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
+class AcquisitionProfile(Identity, Base):
+    __tablename__ = "acquisition_profiles"
+    owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
+    name: Mapped[str] = mapped_column(String(100))
+    generation: Mapped[int] = mapped_column(Integer, default=1)
+    preferences: Mapped[dict[str, Any]] = mapped_column(JSONB)
+
+
 class SourceResult(Identity, Base):
     __tablename__ = "source_results"
+    operation_id: Mapped[UUID | None] = mapped_column(ForeignKey("operations.id"), index=True)
     owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
     source_key: Mapped[str] = mapped_column(String(40), ForeignKey("source_connections.key"))
     source_generation: Mapped[int] = mapped_column(Integer)

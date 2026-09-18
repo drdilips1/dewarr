@@ -255,7 +255,7 @@ export default function Wanted({
                         to={
                           target.source_artifact_id
                             ? `/sources/artifacts/${target.source_artifact_id}`
-                            : `/sources?q=${encodeURIComponent(intent.work_title)}&request=${intent.id}&slot=${target.slot}`
+                            : `/books/${workId}?tab=sources&request=${intent.id}&slot=${target.slot}`
                         }
                       >
                         {target.source_artifact_id

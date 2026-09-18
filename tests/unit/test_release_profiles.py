@@ -1,0 +1,128 @@
+from datetime import UTC, datetime
+
+import pytest
+from fastapi import HTTPException
+from pydantic import ValidationError
+
+from app.adapters.mam import release
+from app.adapters.torrent_descriptor import inspect_torrent
+from app.domain.release_profiles import (
+    ProfileSnapshot,
+    ReleasePreferences,
+    assess_release,
+    enforce_inspected_profile,
+    enforce_profile,
+    ranking_key,
+)
+from tests.mam_fixture import release_row
+from tests.torrent_fixture import torrent_bytes
+
+WORK = {"title": "Harbor", "authors": ["Writer"]}
+
+
+def candidate(**changes):
+    return release(
+        release_row(title="Harbor", author_info='{"1":"Writer"}', **changes), datetime.now(UTC)
+    )
+
+
+def ordered(candidates, preferences):
+    return sorted(
+        candidates, key=lambda r: ranking_key(r, assess_release(r, WORK, preferences), preferences)
+    )
+
+
+def test_identity_and_blocked_formats_precede_seeds():
+    right = candidate(id=1, seeders=0, filetype="M4B")
+    wrong = candidate(id=2, seeders=100000).model_copy(update={"title": "Different book"})
+    blocked = candidate(id=3, seeders=90000, filetype="MP3")
+    preferences = ReleasePreferences(
+        criteria=["seeders", "format", "source"], blocked_formats=["mp3"]
+    )
+    assert ordered([wrong, blocked, right], preferences)[0].source_id == "1"
+    assert assess_release(blocked, WORK, preferences).blocked
+    assert assess_release(wrong, WORK, preferences).identity == "unmatched"
+
+
+def test_format_priority_source_priority_and_known_zero_seeds():
+    m4b = candidate(id=1, seeders=None, filetype="M4B")
+    mp3 = candidate(id=2, seeders=100, filetype="MP3")
+    assert ordered([mp3, m4b], ReleasePreferences())[0].source_id == "1"
+    assert (
+        ordered([mp3, m4b], ReleasePreferences(criteria=["seeders", "format", "source"]))[
+            0
+        ].source_id
+        == "2"
+    )
+    known = candidate(id=3, seeders=0, filetype="M4B")
+    assert ordered([m4b, known], ReleasePreferences())[0].source_id == "3"
+    remote = known.model_copy(update={"source": "prowlarr", "indexer_id": "7"})
+    preferences = ReleasePreferences(
+        source_order=["prowlarr:7", "mam", "prowlarr"], criteria=["source", "format", "seeders"]
+    )
+    assert ordered([known, remote], preferences)[0].source == "prowlarr"
+
+
+def test_unknowns_are_not_ownership_or_automatic_eligibility():
+    assessment = assess_release(
+        candidate(filetype=None, size=None, seeders=None),
+        WORK,
+        ReleasePreferences(maximum_bytes=1000),
+    )
+    assert assessment.formats == [] and len(assessment.review) == 2
+    assert "Seed count unknown" in assessment.explanation
+    assert not hasattr(assessment, "owned")
+
+
+@pytest.mark.parametrize(
+    "options",
+    [
+        {"criteria": ["format"]},
+        {"criteria": ["format", "format", "source"]},
+        {"ebook_formats": []},
+        {"ebook_formats": ["mp3"]},
+        {"audio_formats": ["epub"]},
+        {"blocked_formats": ["exe"]},
+        {"source_order": ["http://unsafe"]},
+        {"source_order": ["mam", "mam"]},
+        {"maximum_bytes": 0},
+    ],
+)
+def test_invalid_profile_preferences(options):
+    with pytest.raises(ValidationError):
+        ReleasePreferences(**options)
+
+
+async def test_actual_manifest_formats_and_size_override_incomplete_source_claims():
+    descriptor = await inspect_torrent(torrent_bytes())
+    source = candidate(filetype=None, size=None)
+    extensions = {f.path.rsplit(".", 1)[-1].lower() for f in descriptor.files}
+    blocked = next(iter(extensions & {"m4b", "mp3", "epub", "pdf"}))
+    with pytest.raises(HTTPException, match="blocked format"):
+        enforce_profile(
+            source,
+            descriptor,
+            ProfileSnapshot(preferences=ReleasePreferences(blocked_formats=[blocked])),
+        )
+    with pytest.raises(HTTPException, match="size limit"):
+        enforce_profile(
+            source, descriptor, ProfileSnapshot(preferences=ReleasePreferences(maximum_bytes=1))
+        )
+
+
+def test_observed_companion_formats_and_total_transfer_size_are_enforced():
+    files = [
+        {"extension": "m4b", "identity": {"size": 100}},
+        {"extension": "pdf", "identity": {"size": 10}},
+    ]
+    with pytest.raises(HTTPException, match="blocked format: pdf"):
+        enforce_inspected_profile(
+            files, ProfileSnapshot(preferences=ReleasePreferences(blocked_formats=["pdf"]))
+        )
+    with pytest.raises(HTTPException, match="size limit"):
+        enforce_inspected_profile(
+            files, ProfileSnapshot(preferences=ReleasePreferences(maximum_bytes=105))
+        )
+    enforce_inspected_profile(
+        files, ProfileSnapshot(preferences=ReleasePreferences(maximum_bytes=110))
+    )

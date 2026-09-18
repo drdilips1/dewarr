@@ -264,7 +264,7 @@ class ProwlarrClient:
         if not isinstance(values, list) or len(values) > 2000:
             raise AdapterError(FailureKind.PARSER, "Prowlarr returned an invalid search result.")
         result, seen = [], set()
-        for row in values:
+        for row in values[: body.limit]:
             if not isinstance(row, dict) or row.get("indexerId") != body.indexer_id:
                 raise AdapterError(
                     FailureKind.PARSER, "Prowlarr returned results for an unexpected indexer."

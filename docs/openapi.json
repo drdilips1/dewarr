@@ -4138,6 +4138,334 @@
         }
       }
     },
+    "/api/catalog/works/{work_id}/source-searches": {
+      "post": {
+        "tags": [
+          "book-sources"
+        ],
+        "summary": "Begin",
+        "operationId": "begin_api_catalog_works__work_id__source_searches_post",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookSearchView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/catalog/works/{work_id}/source-searches/latest": {
+      "get": {
+        "tags": [
+          "book-sources"
+        ],
+        "summary": "Latest",
+        "operationId": "latest_api_catalog_works__work_id__source_searches_latest_get",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BookSearchView"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Latest Api Catalog Works  Work Id  Source Searches Latest Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/source-searches/{search_id}": {
+      "get": {
+        "tags": [
+          "book-sources"
+        ],
+        "summary": "Search Detail",
+        "operationId": "search_detail_api_source_searches__search_id__get",
+        "parameters": [
+          {
+            "name": "search_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Search Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookSearchView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/source-searches/{search_id}/results/{result_id}/artifact": {
+      "post": {
+        "tags": [
+          "book-sources"
+        ],
+        "summary": "Inspect",
+        "operationId": "inspect_api_source_searches__search_id__results__result_id__artifact_post",
+        "parameters": [
+          {
+            "name": "search_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Search Id"
+            }
+          },
+          {
+            "name": "result_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Result Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceArtifactView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/acquisition/profiles": {
+      "get": {
+        "tags": [
+          "acquisition-profiles"
+        ],
+        "summary": "Profiles",
+        "operationId": "profiles_api_acquisition_profiles_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ProfileSnapshot"
+                  },
+                  "type": "array",
+                  "title": "Response Profiles Api Acquisition Profiles Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "acquisition-profiles"
+        ],
+        "summary": "Create",
+        "operationId": "create_api_acquisition_profiles_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfileInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileSnapshot"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/acquisition/profiles/{profile_id}": {
+      "put": {
+        "tags": [
+          "acquisition-profiles"
+        ],
+        "summary": "Update",
+        "operationId": "update_api_acquisition_profiles__profile_id__put",
+        "parameters": [
+          {
+            "name": "profile_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Profile Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfileInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileSnapshot"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/sources/prowlarr/connection": {
       "get": {
         "tags": [
@@ -5485,6 +5813,82 @@
           "book"
         ],
         "title": "BookPreview"
+      },
+      "BookSearchView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "query": {
+            "type": "string",
+            "title": "Query"
+          },
+          "medium": {
+            "type": "string",
+            "title": "Medium"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "stale_identity": {
+            "type": "boolean",
+            "title": "Stale Identity"
+          },
+          "profile": {
+            "$ref": "#/components/schemas/ProfileSnapshot"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SearchSourceView"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/RankedReleaseView"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "work_id",
+          "query",
+          "medium",
+          "offset",
+          "status",
+          "message",
+          "stale_identity",
+          "profile",
+          "sources",
+          "items",
+          "expires_at"
+        ],
+        "title": "BookSearchView"
       },
       "BootstrapInput": {
         "properties": {
@@ -9570,6 +9974,64 @@
         ],
         "title": "ProbeInput"
       },
+      "ProfileInput": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "preferences": {
+            "$ref": "#/components/schemas/ReleasePreferences"
+          },
+          "expected_generation": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Expected Generation",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "ProfileInput"
+      },
+      "ProfileSnapshot": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "generation": {
+            "type": "integer",
+            "title": "Generation",
+            "default": 0
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "default": "Balanced"
+          },
+          "preferences": {
+            "$ref": "#/components/schemas/ReleasePreferences"
+          }
+        },
+        "type": "object",
+        "required": [
+          "preferences"
+        ],
+        "title": "ProfileSnapshot"
+      },
       "ProwlarrConnectionInput": {
         "properties": {
           "base_url": {
@@ -10043,6 +10505,54 @@
         ],
         "title": "ProwlarrSearch"
       },
+      "RankedReleaseView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "release": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/MAMRelease"
+              },
+              {
+                "$ref": "#/components/schemas/ProwlarrRelease"
+              }
+            ],
+            "title": "Release",
+            "discriminator": {
+              "propertyName": "source",
+              "mapping": {
+                "mam": "#/components/schemas/MAMRelease",
+                "prowlarr": "#/components/schemas/ProwlarrRelease"
+              }
+            }
+          },
+          "assessment": {
+            "$ref": "#/components/schemas/ReleaseAssessment"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "current_connection": {
+            "type": "boolean",
+            "title": "Current Connection"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "release",
+          "assessment",
+          "expires_at",
+          "current_connection"
+        ],
+        "title": "RankedReleaseView"
+      },
       "ReasonView": {
         "properties": {
           "label": {
@@ -10084,6 +10594,61 @@
           "list_id"
         ],
         "title": "ReasonView"
+      },
+      "ReleaseAssessment": {
+        "properties": {
+          "identity": {
+            "type": "string",
+            "enum": [
+              "corroborated",
+              "possible",
+              "unmatched"
+            ],
+            "title": "Identity"
+          },
+          "blocked": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Blocked"
+          },
+          "review": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Review"
+          },
+          "explanation": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Explanation"
+          },
+          "formats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Formats"
+          },
+          "source_origin": {
+            "type": "string",
+            "title": "Source Origin"
+          }
+        },
+        "type": "object",
+        "required": [
+          "identity",
+          "blocked",
+          "review",
+          "explanation",
+          "formats",
+          "source_origin"
+        ],
+        "title": "ReleaseAssessment"
       },
       "ReleasePage": {
         "properties": {
@@ -10140,6 +10705,101 @@
           "has_more"
         ],
         "title": "ReleasePage"
+      },
+      "ReleasePreferences": {
+        "properties": {
+          "ebook_formats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "minItems": 1,
+            "title": "Ebook Formats",
+            "default": [
+              "epub",
+              "pdf",
+              "azw3",
+              "mobi",
+              "azw",
+              "cbz",
+              "cbr"
+            ]
+          },
+          "audio_formats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "minItems": 1,
+            "title": "Audio Formats",
+            "default": [
+              "m4b",
+              "mp3",
+              "flac",
+              "aac",
+              "ogg",
+              "opus"
+            ]
+          },
+          "source_order": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Source Order",
+            "default": [
+              "mam",
+              "prowlarr"
+            ]
+          },
+          "criteria": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "format",
+                "source",
+                "seeders"
+              ]
+            },
+            "type": "array",
+            "maxItems": 3,
+            "minItems": 3,
+            "title": "Criteria",
+            "default": [
+              "format",
+              "source",
+              "seeders"
+            ]
+          },
+          "blocked_formats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Blocked Formats"
+          },
+          "maximum_bytes": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 9007199254740991.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maximum Bytes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ReleasePreferences"
       },
       "RepairInput": {
         "properties": {
@@ -10720,6 +11380,62 @@
         ],
         "title": "SaveSettings"
       },
+      "SearchInput": {
+        "properties": {
+          "q": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Q"
+          },
+          "medium": {
+            "type": "string",
+            "pattern": "^(all|ebook|audio)$",
+            "title": "Medium",
+            "default": "all"
+          },
+          "profile_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile Id"
+          },
+          "profile_generation": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile Generation"
+          },
+          "offset": {
+            "type": "integer",
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Offset",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "title": "SearchInput"
+      },
       "SearchPage": {
         "properties": {
           "provider": {
@@ -10771,6 +11487,56 @@
         ],
         "title": "SearchPage"
       },
+      "SearchSourceView": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count",
+            "default": 0
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More",
+            "default": false
+          },
+          "observed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Observed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "name",
+          "state",
+          "message"
+        ],
+        "title": "SearchSourceView"
+      },
       "SelectionInput": {
         "properties": {
           "intent_id": {
@@ -10816,6 +11582,30 @@
             "type": "string",
             "format": "uuid",
             "title": "Confirmed Work Id"
+          },
+          "profile_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile Id"
+          },
+          "profile_generation": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile Generation"
           }
         },
         "additionalProperties": false,

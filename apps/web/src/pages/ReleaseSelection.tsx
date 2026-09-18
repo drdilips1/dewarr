@@ -46,6 +46,13 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
       ),
     enabled: !!params.get("request"),
   });
+  const profiles = useQuery({
+    queryKey: ["release-profiles"],
+    queryFn: async () => result(await api.GET("/api/acquisition/profiles")),
+  });
+  const selectedProfile = profiles.data?.find(
+    (p) => (p.id || "") === (params.get("profile") || ""),
+  );
   const history = useQuery({
     queryKey: ["release-selections", artifact.id, historyOffset],
     queryFn: async () =>
@@ -81,7 +88,11 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
         value: `${intent.id}:${target.slot}`,
       })),
   );
-  const selected = choices.find((item) => item.value === choice);
+  const selected =
+    choices.find((item) => item.value === choice) ||
+    (!choice && params.get("work")
+      ? choices.find((item) => item.intent.work_id === params.get("work"))
+      : undefined);
   const downloaders =
     options.data?.downloaders.filter((item) => item.ready) || [];
   const downloader =
@@ -129,6 +140,10 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
             destination_id: destination!.id,
             destination_revision: destination!.revision,
             confirmed_work_id: selected!.intent.work_id,
+            profile_id: params.get("profile") || undefined,
+            profile_generation: params.get("profile_generation")
+              ? Number(params.get("profile_generation"))
+              : undefined,
           },
         }),
       ),
@@ -173,6 +188,11 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
       aria-label="Release selection"
     >
       <h2>Select for a book request</h2>
+      <p>
+        Download profile:{" "}
+        {selectedProfile?.name ||
+          (params.get("profile") ? "Saved profile unavailable" : "Balanced")}
+      </p>
       <p className="muted">
         Choose the book this release contains and its library destination. The
         whole torrent is selected; each book and version will need file
@@ -180,6 +200,7 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
       </p>
       <Notice
         error={
+          profiles.error ||
           options.error ||
           requests.error ||
           linkedRequest.error ||
@@ -192,7 +213,7 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
       <label>
         Wanted book
         <select
-          value={choice}
+          value={selected?.value || choice}
           onChange={(event) => {
             changed();
             setChoice(event.target.value);

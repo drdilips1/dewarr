@@ -25,6 +25,7 @@ from app.db.models import (
 )
 from app.domain import download_attempts as downloads
 from app.domain import download_reviews as reviews
+from app.domain.release_profiles import ProfileSnapshot, ReleasePreferences
 from app.importing.workflow import run_inspection
 from app.main import create_app
 from app.security import hash_password
@@ -234,6 +235,30 @@ async def test_handoff_rejects_destination_and_exact_version_drift(database, sel
         with pytest.raises(HTTPException) as wrong_version:
             await reviews.validate_inspection(db, UUID(assigned["inspection_id"]), version=version)
         assert wrong_version.value.status_code == 422
+
+
+@pytest.mark.parametrize("with_handoff", [True, False])
+async def test_frozen_format_limits_apply_to_inspected_downloads(
+    database, selected, reviewer, with_handoff
+):
+    review, _ = reviewer
+    assigned = (await claim(review, await proposal(review))).json()
+    inspection_id = UUID(assigned["inspection_id"])
+    async with database() as db, db.begin():
+        selection = await db.get(AcquisitionSelection, UUID(selected["id"]))
+        selection.frozen = {
+            **selection.frozen,
+            "profile": ProfileSnapshot(
+                preferences=ReleasePreferences(blocked_formats=["pdf"])
+            ).model_dump(mode="json"),
+        }
+        inspection = await db.get(DownloadInspection, inspection_id)
+        inspection.snapshot = {"files": [{"extension": "pdf", "identity": {"size": 100}}]}
+        if not with_handoff:
+            await db.execute(delete(DownloadHandoff))
+    async with database() as db:
+        with pytest.raises(HTTPException, match="blocked format: pdf"):
+            await reviews.validate_inspection(db, inspection_id)
 
 
 @pytest.mark.parametrize("during", [False, True])

@@ -26,7 +26,9 @@ async def check_actor(db, user_id, *, admin=False):
         raise HTTPException(403, "Administrator access is required")
 
 
-async def source_call(user_id, operation, argument=None, *, with_generation=False):
+async def source_call(
+    user_id, operation, argument=None, *, with_generation=False, expected_generation=None
+):
     token = uuid4()
     async with session_factory()() as db, db.begin():
         await check_actor(db, user_id, admin=operation == "test")
@@ -34,6 +36,8 @@ async def source_call(user_id, operation, argument=None, *, with_generation=Fals
         row = await db.get(SourceConnection, "mam")
         if not row or not row.enabled:
             raise HTTPException(409, "An administrator must connect and enable MAM first")
+        if expected_generation is not None and row.generation != expected_generation:
+            raise HTTPException(409, "MAM settings changed. Search again.")
         now = datetime.now(UTC)
         if row.lease_token:
             if row.lease_until and row.lease_until > now:

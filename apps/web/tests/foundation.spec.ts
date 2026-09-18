@@ -1006,19 +1006,11 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     .getByRole("link", { name: "Choose a source release", exact: true })
     .click();
   await expect(
-    page.getByLabel("Search title, author or series", { exact: true }),
+    page.getByLabel("Release search query", { exact: true }),
   ).toHaveValue("The Next Harbor");
   await page
-    .getByRole("button", { name: "Search source", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "View source details", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Inspect torrent manifest", exact: true })
-    .click();
-  await page
-    .getByRole("link", { name: "View saved manifest", exact: true })
+    .getByRole("region", { name: "Book download sources", exact: true })
+    .getByRole("button", { name: "Inspect this release", exact: true })
     .click();
   const selectionForm = page.getByRole("region", {
     name: "Release selection",
@@ -1403,5 +1395,111 @@ test("Prowlarr sources retain successful results beside an outage and inspect th
     page.getByRole("link", { name: "Return to source search" }),
   ).toHaveAttribute("href", /sources\/prowlarr/);
   await expect(page.locator("body")).not.toContainText("private_fixture");
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+});
+
+test("book sources aggregate durable results and apply saved release preferences", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(75_000);
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.getByRole("button", { name: "Add a title" }).click();
+  await page
+    .getByLabel("Title", { exact: true })
+    .fill("Harbor & Roads — Complete Stories");
+  await page.getByLabel("Author", { exact: true }).fill("Alex Morgan");
+  await page.getByRole("button", { name: "Save title" }).click();
+  await page
+    .getByRole("link", { name: /Harbor & Roads — Complete Stories/ })
+    .click();
+  await page
+    .getByRole("link", { name: "Search download sources", exact: true })
+    .click();
+  const sources = page.getByRole("region", { name: "Book download sources" });
+  const mam = sources.getByRole("article", {
+    name: "Harbor & Roads — Complete Stories",
+    exact: true,
+  });
+  await expect(mam).toBeVisible();
+  await expect(
+    sources.getByRole("article", {
+      name: "Prowlarr browser audiobook",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(sources.getByRole("status")).toContainText(
+    "Search finished with source errors",
+    { timeout: 25_000 },
+  );
+  await mam.getByText("Why this ranking?", { exact: true }).click();
+  await expect(mam).toContainText(
+    "Source title and author agree with the catalog",
+  );
+  await expect(mam).toContainText("Jordan Lee");
+  await page.reload();
+  await expect(mam).toBeVisible();
+  await sources
+    .getByText("Customize download preferences", { exact: true })
+    .click();
+  await sources
+    .getByLabel("Profile name", { exact: true })
+    .fill("Most seeded audio");
+  await sources
+    .getByRole("button", {
+      name: "Move seeders up in Ranking priorities",
+      exact: true,
+    })
+    .click();
+  await sources
+    .getByRole("button", {
+      name: "Move seeders up in Ranking priorities",
+      exact: true,
+    })
+    .click();
+  await sources
+    .getByText("Formats and transfer limits", { exact: true })
+    .click();
+  await sources.getByLabel("M4B", { exact: true }).check();
+  await sources
+    .getByRole("button", { name: "Create profile", exact: true })
+    .click();
+  await expect(
+    sources.getByRole("combobox", { name: "Download profile", exact: true }),
+  ).toHaveValue(/.+/);
+  await sources
+    .getByRole("button", { name: "Refresh source results", exact: true })
+    .click();
+  await expect(
+    mam.getByText("Blocked format: m4b", { exact: true }),
+  ).toBeVisible({ timeout: 25_000 });
+  await expect(
+    mam.getByRole("button", { name: "Inspect this release" }),
+  ).toBeDisabled();
+  await expect(sources.getByRole("status")).toContainText(
+    "Search finished with source errors",
+    { timeout: 25_000 },
+  );
+  await page.reload();
+  await expect(
+    sources.getByRole("combobox", { name: "Download profile", exact: true }),
+  ).toHaveValue(/.+/);
+  await expect(
+    mam.getByText("Blocked format: m4b", { exact: true }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("book-sources-mobile.png"),
+    fullPage: true,
+  });
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });

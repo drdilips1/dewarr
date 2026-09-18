@@ -13,6 +13,7 @@ from app.api import (
     acquisition_selections,
     auth,
     automatic_imports,
+    book_sources,
     catalog,
     destinations,
     download_attempts,
@@ -30,6 +31,7 @@ from app.api import (
     operations,
     organization,
     prowlarr,
+    release_profiles,
     requests,
     source_artifacts,
     sources,
@@ -115,6 +117,8 @@ def create_app() -> FastAPI:
     app.include_router(destinations.router, prefix="/api")
     app.include_router(automatic_imports.router, prefix="/api")
     app.include_router(sources.router, prefix="/api")
+    app.include_router(book_sources.router, prefix="/api")
+    app.include_router(release_profiles.router, prefix="/api")
     app.include_router(prowlarr.router, prefix="/api")
     app.include_router(downloaders.router, prefix="/api")
     app.include_router(source_artifacts.router, prefix="/api")
