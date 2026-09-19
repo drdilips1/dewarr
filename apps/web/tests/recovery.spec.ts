@@ -109,7 +109,7 @@ test("restored-state operator review replaces navigation and blocks catalog acce
         exact: true,
       }),
     ).toBeVisible();
-    const evidence = root + "/.local/evidence/recovery-approvals-ui";
+    const evidence = root + "/.local/evidence/recovery-automation-ui";
     mkdirSync(evidence, { recursive: true });
     await page.screenshot({ path: evidence + "/review.png", fullPage: true });
     await page
@@ -371,7 +371,7 @@ test("restored-state operator review replaces navigation and blocks catalog acce
     await expect(
       page
         .getByRole("status")
-        .filter({ hasText: "Historical commands retired" }),
+        .filter({ hasText: "Selected commands retired or automation paused" }),
     ).toBeVisible({ timeout: 30_000 });
     expect(
       await (
@@ -384,6 +384,60 @@ test("restored-state operator review replaces navigation and blocks catalog acce
       ).json(),
     ).toEqual(before);
 
+    const commandScan = (await (await page.request.get("/api/recovery")).json())
+      .latest_scan.id;
+    await page
+      .getByRole("button", { name: "Run read-only checks", exact: true })
+      .click();
+    await expect
+      .poll(
+        async () =>
+          (await (await page.request.get("/api/recovery")).json()).latest_scan
+            .id,
+      )
+      .not.toBe(commandScan);
+    await expect(
+      page.getByRole("status").filter({ hasText: "Observation finished" }),
+    ).toBeVisible({ timeout: 60_000 });
+    await page.getByLabel("Filter observations").selectOption("review");
+    await page
+      .getByRole("button", {
+        name: "Review automation for List synchronization · Recovery RSS baseline",
+        exact: true,
+      })
+      .click();
+    await expect(
+      page.getByRole("heading", {
+        name: "Review saved commands and automation",
+        exact: true,
+      }),
+    ).toBeFocused();
+    await expect(
+      page.getByText("Stop scheduled list synchronization", { exact: false }),
+    ).toBeVisible();
+    await page.screenshot({
+      path: evidence + "/automation-review.png",
+      fullPage: true,
+    });
+    await page
+      .getByRole("button", { name: "Pause selected automation", exact: true })
+      .click();
+    await expect
+      .poll(async () => {
+        const state = await (await page.request.get("/api/recovery")).json();
+        return state.latest_command_reconciliation?.results?.[0]?.state;
+      })
+      .toBe("paused");
+    expect(
+      await (
+        await page.request.get("http://127.0.0.1:13379/fixture/writeback")
+      ).json(),
+    ).toEqual(outboundBefore);
+    expect(
+      await (
+        await page.request.get("http://127.0.0.1:13379/fixture/recovery-stats")
+      ).json(),
+    ).toEqual(before);
     await page.screenshot({ path: evidence + "/desktop.png", fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/lists");
@@ -419,7 +473,7 @@ test("restored-state operator review replaces navigation and blocks catalog acce
     await expect(
       page
         .getByRole("status")
-        .filter({ hasText: "Historical commands retired" }),
+        .filter({ hasText: "Selected commands retired or automation paused" }),
     ).toBeVisible();
     await page.getByLabel("Filter observations").selectOption("files");
     await expect(

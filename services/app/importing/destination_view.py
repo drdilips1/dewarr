@@ -1,7 +1,11 @@
 from typing import Any
 from uuid import UUID
 
+from sqlalchemy import select
+
 from app.config import get_settings
+from app.db.models import RestoreCheckpoint
+from app.domain.recovery_approvals import denial
 from app.importing.destinations import destination_configuration
 from app.importing.naming import StrictModel, fingerprint
 
@@ -28,6 +32,15 @@ async def view(db, row):
         "source_path"
     ):
         probe = None
+    if probe:
+        historical = (
+            await denial(db, "operation", row.probe_operation_id)
+            if row.probe_operation_id
+            else await db.scalar(select(RestoreCheckpoint.id).limit(1))
+        )
+        if historical:
+            # Preserve the receipt on disk/in the ledger, but require a new route test.
+            probe = None
     return DestinationView(
         id=row.id,
         root_key=row.root_key,

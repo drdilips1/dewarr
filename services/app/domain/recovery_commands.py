@@ -13,6 +13,7 @@ from app.db.models import (
     Operation,
     RecoveryFinding,
 )
+from app.domain import recovery_automation as automation
 from app.domain import recovery_reconciliation as reviews
 
 KIND = reviews.COMMAND_KIND
@@ -42,6 +43,7 @@ def command_summary(row):
 
 
 async def observe(inputs, writer):
+    await automation.observe(inputs, writer)
     lists = {str(row["id"]): row for row in inputs["book_lists"]}
     labels = {
         "lists.requests": "List request batch",
@@ -97,10 +99,10 @@ async def prepare(db, checkpoint, owner_id, scan_id, finding_ids, key):
             not finding
             or finding.scan_id != scan.id
             or finding.domain != "review"
-            or finding.state != "command-ready"
+            or finding.state not in {"command-ready", "automation-ready"}
             or finding.evidence.get("command_schema") != 1
             or not finding.entity_id
-            or finding.entity_id in seen
+            or (finding.evidence.get("entity_type"), finding.entity_id) in seen
         ):
             raise HTTPException(409, "Choose each eligible historical command or policy once")
         category = finding.evidence.get("entity_type")
@@ -114,9 +116,14 @@ async def prepare(db, checkpoint, owner_id, scan_id, finding_ids, key):
             row = await db.get(ListAcquisitionPolicy, finding.entity_id)
             if not row or not row.active:
                 raise HTTPException(409, "The acquisition policy changed; observe again")
+        elif category in automation.MODELS:
+            await automation.current(db, category, finding.entity_id)
+            kind, action, _ = automation.DESCRIPTIONS[category]
+            if finding.evidence.get("kind") != kind or finding.evidence.get("action") != action:
+                raise HTTPException(409, "The automation review changed; observe again")
         else:
             raise HTTPException(409, "Unsupported command recovery target")
-        seen.add(finding.entity_id)
+        seen.add((category, finding.entity_id))
         items.append(
             {
                 "finding_id": str(finding.id),
@@ -137,7 +144,8 @@ async def prepare(db, checkpoint, owner_id, scan_id, finding_ids, key):
         items,
         key,
         kind=KIND,
-        message="Review retiring historical commands; wanted books and reservations are preserved",
+        message="Review pausing saved automation or retiring commands; "
+        "books and reservations are preserved",
     )
 
 
@@ -149,6 +157,8 @@ async def read_current(identifier, token, payload):
 
 
 async def record_retirement(db, review, item, unused):
+    if item["entity_type"] in automation.MODELS:
+        return await automation.pause(db, review, item)
     now = datetime.now(UTC)
     if item["entity_type"] == "policy":
         row = await db.get(ListAcquisitionPolicy, UUID(item["entity_id"]), with_for_update=True)
@@ -222,6 +232,7 @@ async def run(identifier):
         kind=KIND,
         read=read_current,
         apply=record_retirement,
-        message="Historical commands retired. Existing wanted books and reservations remain; "
+        message="Selected commands retired or automation paused. "
+        "Existing wanted books and reservations remain; "
         "automation stays paused.",
     )

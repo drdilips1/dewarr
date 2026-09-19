@@ -317,3 +317,38 @@ async def test_destination_downgrade_guard(client, admin, database, route):
     finally:
         assert (await migrate("upgrade", "head")).returncode == 0
         await get_engine().dispose()
+
+
+@pytest.mark.parametrize("legacy_reference", [False, True])
+async def test_restored_route_requires_fresh_probe_before_automatic_import_approval(
+    client, admin, database, route, legacy_reference
+):
+    from tests.integration.test_recovery_approvals import seal_history
+
+    await start_probe(client, route)
+    await get_queue().run_worker_async(wait=False, concurrency=1)
+    identifier = UUID(route["destination"]["id"])
+    async with database() as db, db.begin():
+        row = await db.get(ImportDestination, identifier)
+        saved_probe, saved_operation = row.probe, row.probe_operation_id
+        if legacy_reference:
+            row.probe_operation_id = None
+    assert saved_probe["status"] == "verified"
+    await seal_history(database, admin)
+    current = (await client.get("/api/organization/destinations")).json()[0]
+    assert current["probe"] is None and not current["publication_available"]
+    body = {"enabled": True, "expected_generation": 0, "destination_revision": current["revision"]}
+    endpoint = f"/api/organization/destinations/{identifier}/automatic-import"
+    rejected = await client.put(endpoint, json=body)
+    assert rejected.status_code == 409, rejected.text
+    async with database() as db:
+        assert (await db.get(ImportDestination, identifier)).probe == saved_probe
+    fresh = await start_probe(client, route, key="fresh-route-after-recovery")
+    assert fresh.status_code == 202, fresh.text
+    await get_queue().run_worker_async(wait=False, concurrency=1)
+    current = (await client.get("/api/organization/destinations")).json()[0]
+    assert current["publication_available"]
+    approved = await client.put(endpoint, json=body)
+    assert approved.status_code == 200 and approved.json()["ready"], approved.text
+    async with database() as db:
+        assert (await db.get(ImportDestination, identifier)).probe_operation_id != saved_operation

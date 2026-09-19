@@ -386,10 +386,13 @@ function RecoveryChecks({
                     />
                   )}
                 {state === "completed" &&
-                  finding.state === "command-ready" &&
+                  ["command-ready", "automation-ready"].includes(
+                    finding.state,
+                  ) &&
                   finding.domain === "review" &&
                   !applied && (
                     <PrepareCommandReview
+                      automation={finding.state === "automation-ready"}
                       scanId={scanId!}
                       findingId={finding.id}
                       title={finding.title}

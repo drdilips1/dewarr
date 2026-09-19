@@ -4,6 +4,8 @@ This implements the request-batch and acquisition-controller part of S09-02 / FR
 
 Subsequent [queue protection](RECOVERY-QUEUE.md) and [saved-approval protection](RECOVERY-APPROVALS.md) prevent historical execution and approval reuse on schema 0044. The schema-0042 deployment and remaining-work notes below describe this earlier increment; current-authority activation and controlled resume remain open.
 
+The same review engine now supports [selective automation pause](RECOVERY-AUTOMATION.md) for automatic imports, inbound subscriptions and Hardcover write-back. These actions preserve external-effect evidence and do not resume automation.
+
 ## Operator workflow
 
 1. Run read-only checks and filter to Recovery status. Eligible historical batches, activation previews, acquisition checks and active list policies appear as separate findings.

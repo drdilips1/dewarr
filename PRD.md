@@ -12,7 +12,7 @@ For a compact development handoff, see the [Product and Development Roadmap](DEV
 
 The [launch journey checklist](#20-launch-journey-checklist) makes the combined product behavior reviewable. It adds no scope beyond the existing requirements. Use the implementation plan's [release delivery contract](IMPLEMENTATION-PLAN.md#16-release-delivery-contract) to sequence and accept development.
 
-Planning handoff reviewed September 19, 2026 against `6777581`: the roadmap identifies the committed starting point, selected stack, reuse boundaries, stage dependency path and next reviewable increment. The requirement baseline remains unchanged: 36 v1 functional requirements, six expansion requirements and 12 nonfunctional requirements. The 61-package backlog and 35 acceptance scenarios define delivery and verification; implementation checkpoints do not reduce that scope.
+Planning handoff reviewed September 19, 2026 against committed revision `54de572`: the roadmap identifies the committed starting point, selected stack, reuse boundaries, stage dependency path and next reviewable increment. The requirement baseline remains unchanged: 36 v1 functional requirements, six expansion requirements and 12 nonfunctional requirements. The 61-package backlog and 35 acceptance scenarios define delivery and verification; implementation checkpoints do not reduce that scope.
 
 ## 1. Product purpose
 
@@ -437,7 +437,7 @@ The [portable development backlog](DEVELOPMENT-BACKLOG.csv) exports those packag
 
 Use [stage evidence scopes](ACCEPTANCE-PLAN.md#7-stage-evidence-scopes) to avoid requiring later functionality at an earlier gate. Partial evidence stays partial until the complete scenario runs. The walkthrough above becomes executable fixtures incrementally, then a complete release rehearsal in S09.
 
-The [stage closure plan](IMPLEMENTATION-PLAN.md#17-stage-closure-and-implementation-packets) decomposes the remaining implementation. Use the [current development handoff](IMPLEMENTATION-PLAN.md#18-current-development-handoff), refreshed against committed revision `0cb4649`, to distinguish the implemented foundations from remaining work. Its next series-scope packets are engineering subdivisions of existing requirements, not a reduction to a manual-only product. Completion still requires automatic source selection, independent child fulfillment, external-list automation, discovery and production qualification.
+The [stage closure plan](IMPLEMENTATION-PLAN.md#17-stage-closure-and-implementation-packets) decomposes the remaining implementation. Use the [consolidated current handoff](DEVELOPMENT-ROADMAP.md#10-development-start-and-release-handoff) to distinguish implemented subsets from remaining work. The detailed plan retains historical checkpoints and source/collection packets as subdivisions of existing requirements, not a reduction to a manual-only product. Completion still requires automatic source selection, independent child fulfillment, external-list automation, discovery and production qualification.
 
 The visual implementation should preserve the familiarity of Seerr's navigation, cover shelves, book-detail hierarchy and request dialogs. Component reuse is optional where adapting its framework dependencies would cost more than implementing the same presentation against this app's contracts. The success criterion is the requested familiar experience, not a percentage of reused Seerr code.
 

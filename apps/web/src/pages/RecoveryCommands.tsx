@@ -11,11 +11,13 @@ export function PrepareCommandReview({
   findingId,
   title,
   disabled,
+  automation = false,
 }: {
   scanId: string;
   findingId: string;
   title: string;
   disabled: boolean;
+  automation?: boolean;
 }) {
   const client = useQueryClient();
   const [key] = useState(() => crypto.randomUUID());
@@ -37,7 +39,9 @@ export function PrepareCommandReview({
       >
         {prepare.isPending
           ? "Preparing command review…"
-          : `Review historical command for ${title}`}
+          : automation
+            ? `Review automation for ${title}`
+            : `Review historical command for ${title}`}
       </button>
       <Notice error={prepare.error} />
     </>
@@ -57,6 +61,16 @@ export function CommandRecoveryReview({
   const [key] = useState(() => crypto.randomUUID());
   const heading = useRef<HTMLHeadingElement>(null);
   const prepared = review.status === "prepared";
+  const hasAutomation = review.items.some((item) =>
+    ["pause-imports", "pause-subscription", "pause-writeback"].includes(
+      item.action,
+    ),
+  );
+  const onlyAutomation = review.items.every((item) =>
+    ["pause-imports", "pause-subscription", "pause-writeback"].includes(
+      item.action,
+    ),
+  );
   useEffect(() => {
     if (prepared) heading.current?.focus();
   }, [review.id, prepared]);
@@ -82,13 +96,15 @@ export function CommandRecoveryReview({
       aria-labelledby="command-review-title"
     >
       <h3 id="command-review-title" ref={heading} tabIndex={-1}>
-        Review historical commands
+        {hasAutomation
+          ? "Review saved commands and automation"
+          : "Review historical commands"}
       </h3>
       <p>
-        Stop these saved approvals and acquisition controllers from running
-        again. Keep wanted books already recorded, independent request reasons,
-        download reservations and files unchanged. Completed batch receipts are
-        preserved.
+        Pause selected settings or stop these saved approvals and acquisition
+        controllers from running again. Keep wanted books already recorded,
+        independent request reasons, download reservations and files unchanged.
+        Completed batch receipts are preserved.
       </p>
       <p>
         This does not confirm external effects or resume automation. To request
@@ -97,15 +113,21 @@ export function CommandRecoveryReview({
       </p>
       <ul>
         {review.items.map((item) => (
-          <li key={item.entity_id}>
+          <li key={`${item.entity_type}:${item.entity_id}`}>
             <strong>{item.title}</strong>
             <p>Saved state: {item.saved_state}.</p>
             <p>
-              {item.action === "pause-policy"
-                ? "Pause this list policy and stop scheduled book checks. Keep monitored books and their request history."
-                : item.action === "pause-controller"
-                  ? "Disable this series controller and invalidate its earlier authorization. Keep its accepted batch and acquisition progress."
-                  : "Retire this command. Its old preview and worker cannot run again; any existing wanted books stay intact."}
+              {item.action === "pause-imports"
+                ? "Turn off automatic imports for this destination and invalidate its prior approval. Keep current imports, files and reservations unchanged; verify the route before enabling it again."
+                : item.action === "pause-subscription"
+                  ? "Stop scheduled list synchronization and invalidate its old worker lease. Keep membership, exclusions and history. Related acquisition and write-back policies require their own review."
+                  : item.action === "pause-writeback"
+                    ? "Turn off future Hardcover writes and invalidate the saved policy approval. Preserve pending writes and uncertainty about their results for separate reconciliation."
+                    : item.action === "pause-policy"
+                      ? "Pause this list policy and stop scheduled book checks. Keep monitored books and their request history."
+                      : item.action === "pause-controller"
+                        ? "Disable this series controller and invalidate its earlier authorization. Keep its accepted batch and acquisition progress."
+                        : "Retire this command. Its old preview and worker cannot run again; any existing wanted books stay intact."}
             </p>
           </li>
         ))}
@@ -126,8 +148,12 @@ export function CommandRecoveryReview({
             onClick={() => accept.mutate()}
           >
             {accept.isPending
-              ? "Retiring historical commands…"
-              : "Retire selected commands"}
+              ? "Applying recovery changes…"
+              : onlyAutomation
+                ? "Pause selected automation"
+                : hasAutomation
+                  ? "Apply selected recovery changes"
+                  : "Retire selected commands"}
           </button>
         </>
       )}
