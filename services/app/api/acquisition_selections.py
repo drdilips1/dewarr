@@ -108,21 +108,25 @@ class SelectionOptions(BaseModel):
 
 async def view(db, row):
     current = await selections.configuration_current(db, row)
+    from app.domain.recovery_approvals import denial
+
+    hold = await denial(db, "selection", row.id)
     return SelectionView(
         id=row.id,
         created_at=row.created_at,
         intent_id=row.intent_id,
         artifact_id=row.artifact_id,
         state=row.state,
-        message=row.message,
+        message=hold if hold and row.state == "prepared" else row.message,
         work_id=row.frozen["work_id"],
         work_title=row.frozen["work_title"],
         medium=row.frozen["requirements"]["medium"],
         release_title=row.frozen["release"]["title"],
         configuration_current=current,
-        dispatch_available=current and get_settings().download_dispatch_enabled,
+        dispatch_available=not hold and current and get_settings().download_dispatch_enabled,
         pack_review_available=(
             row.state == "prepared"
+            and not hold
             and not row.frozen.get("automatic_selection")
             and len(row.frozen["descriptor"]["files"]) > 1
         ),

@@ -363,3 +363,24 @@ async def test_catalog_publication_serializes_before_review_row_and_graph_locks(
         if task and not task.done():
             task.cancel()
             await asyncio.gather(task, return_exceptions=True)
+
+
+async def test_restored_scope_requires_fresh_review_and_preserves_old_evidence(
+    client, admin, database, observed
+):
+    from tests.integration.test_recovery_approvals import seal_history
+
+    review = await save(client, observed)
+    await seal_history(database, admin)
+    historical = (await client.get(BASE)).json()
+    assert historical["state"] == "changed" and historical["id"] == review["id"]
+    assert "predates restore" in historical["message"]
+    rejected = await client.post(
+        REQUESTS + "/preview",
+        json=request_body(observed, scope="complete_series", scope_review_id=review["id"]),
+        headers={"Idempotency-Key": str(uuid4())},
+    )
+    assert rejected.status_code == 409 and "predates restore" in rejected.text
+    fresh = await save(client, observed, expected_review_id=review["id"])
+    assert fresh["state"] == "current" and fresh["id"] != review["id"]
+    assert (await preview(client, observed, fresh))["id"]

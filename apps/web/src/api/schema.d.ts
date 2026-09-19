@@ -6887,6 +6887,8 @@ export interface components {
       subjects: {
         [key: string]: number;
       };
+      /** Approvals Protected */
+      approvals_protected: boolean;
     };
     /** RankedReleaseView */
     RankedReleaseView: {

@@ -376,3 +376,27 @@ async def test_largest_supported_snapshot_commits_without_truncation(client, dat
         row = await db.get(ListCsvImport, UUID(value["id"]))
         assert row.receipt["added"] == MAX_ROWS
         assert (await db.get(Operation, operation)).status == "completed"
+
+
+async def test_restored_preview_cannot_create_new_import_but_completed_receipt_survives(
+    client, admin, database, shelf
+):
+    from tests.integration.test_recovery_approvals import seal_history
+
+    saved = await preview(client, shelf)
+    operation = await commit(client, shelf, saved)
+    await list_csv.run(operation)
+    pending = await preview(client, shelf)
+    await seal_history(database, admin)
+    held = (await client.get(f"/api/lists/{shelf}/csv/{pending['id']}")).json()
+    assert held["state"] == "held" and "predates restore" in held["message"]
+    rejected = await client.post(
+        f"/api/lists/{shelf}/csv/{pending['id']}/commit", json={"rows": [2]}
+    )
+    assert rejected.status_code == 409 and "predates restore" in rejected.text
+    assert await commit(client, shelf, saved) == operation
+    fresh = await preview(client, shelf)
+    await list_csv.run(await commit(client, shelf, fresh))
+    assert (await client.get(f"/api/lists/{shelf}")).json()["count"] == 1
+    async with database() as db:
+        assert (await db.get(ListCsvImport, UUID(pending["id"]))).operation_id is None

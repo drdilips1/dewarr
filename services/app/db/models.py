@@ -72,6 +72,7 @@ class RecoveryQueueFence(Base):
     job_id_through: Mapped[int] = mapped_column(BigInteger)
     job_count: Mapped[int] = mapped_column(BigInteger)
     subject_counts: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    approval_version: Mapped[int] = mapped_column(Integer, server_default="0")
 
 
 class RecoveryQueueSubject(Base):

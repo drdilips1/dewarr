@@ -124,6 +124,10 @@ async def state(db, user, series, review):
         return "superseded", "A newer main-book review replaced this selection"
     if review.status == "cancelled":
         return "withdrawn", "Main-book review withdrawn; existing accepted requests are unchanged"
+    from app.domain.recovery_approvals import denial
+
+    if reason := await denial(db, "operation", review.id):
+        return "changed", reason
     try:
         records, _ = await selected(
             db, user, series, [UUID(r["work_id"]) for r in review.payload["records"]]

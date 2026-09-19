@@ -39,6 +39,9 @@ WITH checkpoint AS (
  UNION ALL SELECT 'automatic-import',id FROM automatic_imports
  UNION ALL SELECT 'import-continuation',id FROM automatic_import_continuations
  UNION ALL SELECT 'work',id FROM works
+ UNION ALL SELECT 'selection',id FROM acquisition_selections
+ UNION ALL SELECT 'import-plan',id FROM frozen_import_plans
+ UNION ALL SELECT 'csv-preview',id FROM list_csv_imports
 ), inserted AS (
  INSERT INTO recovery_queue_subjects(checkpoint_id,kind,subject_id)
  SELECT c.id,s.kind,s.subject_id FROM checkpoint c CROSS JOIN subjects s
@@ -47,10 +50,12 @@ WITH checkpoint AS (
 ), counts AS (
  SELECT kind,count(*) AS total FROM inserted GROUP BY kind
 )
-INSERT INTO recovery_queue_fences(checkpoint_id,job_id_through,job_count,subject_counts)
+INSERT INTO recovery_queue_fences(
+ checkpoint_id,job_id_through,job_count,subject_counts,approval_version
+)
 SELECT c.id,(SELECT coalesce(max(id),0) FROM book_queue.procrastinate_jobs),
  (SELECT count(*) FROM book_queue.procrastinate_jobs),
- coalesce((SELECT jsonb_object_agg(kind,total) FROM counts),'{}'::jsonb)
+ coalesce((SELECT jsonb_object_agg(kind,total) FROM counts),'{}'::jsonb),1
 FROM checkpoint c ON CONFLICT DO NOTHING
 """
 
@@ -79,6 +84,13 @@ async def denial(db, job):
     )
     if missing:
         return "Restore history has no sealed queue boundary; recovery review is required"
+    incomplete = await db.scalar(
+        select(RecoveryQueueFence.checkpoint_id)
+        .where(RecoveryQueueFence.approval_version != 1)
+        .limit(1)
+    )
+    if incomplete:
+        return "Restore history has no complete approval boundary; recovery review is required"
     ceiling = await db.scalar(select(func.max(RecoveryQueueFence.job_id_through)))
     if ceiling is None:
         return None

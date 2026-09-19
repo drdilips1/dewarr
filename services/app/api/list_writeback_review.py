@@ -175,6 +175,9 @@ async def resolve(
         or saved.payload["command"]["list_id"] != str(list_id)
     ):
         raise HTTPException(404, "Membership review not found")
+    from app.domain.recovery_approvals import require_current
+
+    await require_current(db, "operation", saved.id)
     ctx, work, current = await review_context(
         db, user.id, list_id, UUID(saved.payload["binding"]["work_id"])
     )

@@ -10,7 +10,7 @@ from sqlalchemy import delete, select
 from app.adapters.list_csv import MAX_BYTES, MAX_ROWS, parse_snapshot
 from app.api.dependencies import Database, Member
 from app.api.operations import OperationView
-from app.db.models import ListCsvImport, User, Work
+from app.db.models import ListCsvImport, Operation, User, Work
 from app.domain import list_csv
 from app.domain.availability import Availability, availability_for
 from app.domain.list_subscriptions import owned_list
@@ -79,7 +79,13 @@ async def imported_row(db, user, list_id, import_id):
 
 
 async def view(db, user, row):
-    operation = await list_csv.repair(db, row)
+    from app.domain.recovery_approvals import denial
+
+    hold = await denial(db, "csv-preview", row.id) if not row.committed_at else None
+    if hold:
+        operation = await db.get(Operation, row.operation_id) if row.operation_id else None
+    else:
+        operation = await list_csv.repair(db, row)
     records = []
     allowed = set(
         await db.scalars(
@@ -105,10 +111,13 @@ async def view(db, user, row):
         **{k: row.snapshot[k] for k in ("headers", "mapping", "duplicates", "shelves")},
         records=records,
         expires_at=row.expires_at,
-        state=operation.status if operation else "preview",
-        message=operation.message
-        if operation
-        else "Review these additions. This snapshot never removes books or starts downloads.",
+        state="held" if hold else operation.status if operation else "preview",
+        message=hold
+        or (
+            operation.message
+            if operation
+            else "Review these additions. This snapshot never removes books or starts downloads."
+        ),
         receipt=row.receipt,
         selected_rows=row.selected_rows,
     )

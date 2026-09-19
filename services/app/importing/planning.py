@@ -116,6 +116,9 @@ async def freeze_plan(db, admin, inspection_id: UUID, body: FreezeInput):
     await transaction_lock(db, f"inspection-plan:{inspection_id}")
     await assert_admin(db, admin.id)
     row = await owned_inspection(db, admin.id, inspection_id)
+    from app.domain.recovery_approvals import require_current
+
+    await require_current(db, "operation", row.operation_id)
     if row.state != "ready" or not row.snapshot or not source_matches(row):
         raise HTTPException(
             409, "A completed inspection of the configured download root is required"

@@ -264,7 +264,7 @@ async def validate_identities(db, user, operation):
 
 
 async def start(db, user, operation):
-    require_live_command(operation)
+    await require_live_command(db, operation)
     if get_settings().recovery_mode:
         raise HTTPException(409, "Series requests are paused for recovery")
     from app.domain.list_series import origin, require_origin

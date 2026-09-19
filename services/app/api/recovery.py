@@ -23,6 +23,7 @@ router = APIRouter(prefix="/recovery", tags=["recovery"])
 class QueueFenceView(BaseModel):
     historical_jobs: int
     subjects: dict[str, int]
+    approvals_protected: bool
 
 
 class RecoveryView(BaseModel):
@@ -162,7 +163,11 @@ async def review(admin: Admin, db: Database):
     )
     fence = await db.get(RecoveryQueueFence, checkpoint.id) if checkpoint else None
     return RecoveryView(
-        queue_fence=QueueFenceView(historical_jobs=fence.job_count, subjects=fence.subject_counts)
+        queue_fence=QueueFenceView(
+            historical_jobs=fence.job_count,
+            subjects=fence.subject_counts,
+            approvals_protected=fence.approval_version == 1,
+        )
         if fence
         else None,
         latest_command_reconciliation=command_reconciliation_view(command_review)

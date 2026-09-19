@@ -100,6 +100,9 @@ async def selection_authority(db, selection, *, wanted, configuration=None, disp
     if wanted and dispatch_consent and not get_settings().download_dispatch_enabled:
         raise HTTPException(409, "New download dispatch is disabled")
     await member(db, selection.owner_id)
+    from app.domain.recovery_approvals import require_current
+
+    await require_current(db, "selection", selection.id)
     user = await db.get(User, selection.owner_id)
     intent = await db.get(AcquisitionIntent, selection.intent_id)
     if wanted:

@@ -57,6 +57,9 @@ class RunView(BaseModel):
 
 
 async def view(db, run):
+    from app.domain.recovery_approvals import denial
+
+    hold = await denial(db, "import-plan", run.plan_id)
     entries = (
         await db.scalars(
             select(ImportEntry)
@@ -72,12 +75,15 @@ async def view(db, run):
             EntryView.model_validate(entry).model_copy(
                 update={
                     "can_retry": bool(
-                        entry.reserved
+                        not hold
+                        and entry.reserved
                         and entry.specification
                         and entry.state in {"held", "awaiting-library"}
                     ),
-                    "can_cancel": not entry.published_at
+                    "can_cancel": not hold
+                    and not entry.published_at
                     and entry.state in {"queued", "publishing", "held", "cancel-held"},
+                    **({"message": hold} if hold and not entry.confirmed_at else {}),
                 }
             )
             for entry in entries
@@ -111,6 +117,9 @@ async def cancel_entry(run_id: UUID, entry_id: UUID, admin: Admin, db: Database)
         raise HTTPException(404, "Import entry not found")
     if entry.state == "cancelled":
         return await view(db, run)
+    from app.domain.recovery_approvals import require_current
+
+    await require_current(db, "import-plan", run.plan_id)
     if entry.published_at or entry.state in {"confirmed", "skipped", "awaiting-library"}:
         raise HTTPException(
             409, "This book was already published or satisfied; its files are preserved"
@@ -185,6 +194,9 @@ async def retry_entry(run_id: UUID, entry_id: UUID, admin: Admin, db: Database):
     ):
         raise HTTPException(409, "This entry cannot be retried; review or create a fresh plan")
     operation = await db.get(Operation, entry.operation_id)
+    from app.domain.recovery_approvals import require_current
+
+    await require_current(db, "operation", operation.id)
     # Never restart a live job solely because its observation is delayed.
     from sqlalchemy import text
 

@@ -638,3 +638,32 @@ async def test_writeback_empty_schema_roundtrip(database):
     finally:
         result = await migrate("upgrade", "head")
         assert result.returncode == 0, result.stderr
+
+
+async def test_restored_membership_review_cannot_create_another_write(
+    client, admin, database, shelf, service, remote
+):
+    from tests.integration.test_recovery_approvals import seal_history
+
+    await finish(await start(client, shelf))
+    await enable(client, shelf)
+    records = (await client.get(f"/api/lists/{shelf}/subscription/observations")).json()["items"]
+    work = next(row["work_id"] for row in records if row["external_id"] == "42")
+    await edit(client, shelf, "remove", [work])
+    original = await latest(database)
+    service.items = [
+        {**r, "entry_id": 20} if r["external_id"] == "42" else r for r in service.items
+    ]
+    await drain(original.id)
+    saved = await review_change(client, shelf, work)
+    before = (await client.get(f"/api/lists/{shelf}")).json()["count"]
+    calls = list(remote.calls)
+    await seal_history(database, admin)
+    rejected = await client.post(
+        f"/api/lists/{shelf}/writeback/changes/resolve",
+        json={"preview_id": saved["id"], "action": "apply_local"},
+        headers={"Idempotency-Key": str(uuid4())},
+    )
+    assert rejected.status_code == 409 and "predates restore" in rejected.text
+    assert (await client.get(f"/api/lists/{shelf}")).json()["count"] == before
+    assert remote.calls == calls

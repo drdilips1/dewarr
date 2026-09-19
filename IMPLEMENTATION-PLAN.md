@@ -6,7 +6,7 @@ This plan implements [the PRD](PRD.md) using [the researched decisions](IMPLEMEN
 
 The [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md) provides a concise handoff across these documents, including the product boundary, P0/P1 decisions and milestone demonstrations.
 
-The latest S09-02 increment adds [durable restored-queue protection](docs/RECOVERY-QUEUE.md) on schema 0043. Preserve historical job and subject boundaries while implementing current-authority activation and controlled resume. This partial recovery result does not close S09 or replace any unmet S00–S10 gate; measured evidence belongs in implementation status.
+The latest S09-02 increment adds [saved-approval protection](docs/RECOVERY-APPROVALS.md) on schema 0044, extending [durable restored-queue protection](docs/RECOVERY-QUEUE.md). Preserve historical job, subject and approval boundaries while implementing current-authority activation and controlled resume. This partial recovery result does not close S09 or replace any unmet S00–S10 gate; measured evidence belongs in implementation status.
 
 For the existing workspace, use its [remaining development batches](DEVELOPMENT-ROADMAP.md#9-remaining-development-batches-from-the-current-checkpoint) alongside section 16. These batches map outstanding work to the stable packages below; they do not add scope or supersede stage acceptance gates.
 

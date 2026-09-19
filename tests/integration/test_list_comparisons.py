@@ -508,3 +508,37 @@ async def test_concurrent_comparison_worker_does_not_fetch_a_leased_page_twice(
         release.set()
         with pytest.raises(ShelfRetry):
             await worker
+
+
+async def test_restored_comparison_and_writeback_preview_cannot_be_applied(
+    client, admin, database, shelf, service, remote
+):
+    from tests.integration.test_recovery_approvals import seal_history
+
+    snapshot, rows, _, _ = await differences(client, database, admin, shelf)
+    await seal_history(database, admin)
+    response = await resolve(client, shelf, snapshot, rows, "keep_remote")
+    assert response.status_code == 409 and "predates restore" in response.text
+    response = await configure(client, shelf, snapshot)
+    assert response.status_code == 409 and "predates restore" in response.text
+    assert (await page(client, shelf, snapshot)).status_code == 200
+    async with database() as db:
+        operation = await db.get(Operation, UUID(snapshot["comparison_id"]))
+        assert not operation.payload.get("consumed_by")
+
+
+async def test_fresh_comparison_does_not_reuse_restored_queued_observation(
+    client, admin, database, shelf, service, remote
+):
+    from tests.integration.test_recovery_approvals import seal_history
+
+    await finish(await start(client, shelf))
+    saved = await preview(client, shelf)
+    await seal_history(database, admin)
+    fresh = await preview(client, shelf)
+    assert fresh["comparison_id"] != saved["comparison_id"]
+    await complete(fresh["comparison_id"])
+    assert (await configure(client, shelf, fresh)).status_code == 200
+    async with database() as db:
+        assert (await db.get(Operation, UUID(saved["comparison_id"]))).status == "queued"
+    assert not remote.calls

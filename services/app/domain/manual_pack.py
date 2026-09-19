@@ -47,6 +47,9 @@ def child_specification(intent, selection, destination):
 
 async def preview(db, user, selection_id):
     selection = await acquisition_selection.owned_selection(db, user, selection_id)
+    from app.domain.recovery_approvals import require_current
+
+    await require_current(db, "selection", selection.id)
     if selection.state != "prepared" or selection.frozen.get("automatic_selection"):
         raise HTTPException(409, "Use an uncommitted manual release selection for this review")
     if not await acquisition_selection.configuration_current(db, selection):

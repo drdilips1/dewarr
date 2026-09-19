@@ -2,6 +2,8 @@
 
 This implements the request-batch and acquisition-controller part of S09-02 / FR-36 / AT-25. It uses the [shared recovery review engine](RECOVERY-RECONCILIATION.md) while the persistent restore checkpoint remains active. It complements [external list baselines](RECOVERY-LISTS.md) and [outbound evidence recovery](RECOVERY-OUTBOUND.md).
 
+Subsequent [queue protection](RECOVERY-QUEUE.md) and [saved-approval protection](RECOVERY-APPROVALS.md) prevent historical execution and approval reuse on schema 0044. The schema-0042 deployment and remaining-work notes below describe this earlier increment; current-authority activation and controlled resume remain open.
+
 ## Operator workflow
 
 1. Run read-only checks and filter to Recovery status. Eligible historical batches, activation previews, acquisition checks and active list policies appear as separate findings.

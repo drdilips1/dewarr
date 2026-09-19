@@ -345,3 +345,30 @@ async def test_populated_import_history_blocks_destructive_downgrade(
     finally:
         assert (await migrate("upgrade", "head")).returncode == 0
         await get_engine().dispose()
+
+
+@pytest.mark.parametrize("prior_start", [False, True])
+async def test_restored_plan_cannot_publish_under_a_fresh_command(
+    client, admin, database, ready_route, prior_start
+):
+    from tests.integration.test_recovery_approvals import seal_history
+
+    original = ready_route["source"] / "pack/book.epub"
+    evidence = (original.read_bytes(), original.stat().st_ino, original.stat().st_mtime_ns)
+    receipt = (await start(client, ready_route)).json() if prior_start else None
+    await seal_history(database, admin)
+    if receipt:
+        replay = await start(client, ready_route)
+        assert replay.status_code == 202 and replay.json()["id"] == receipt["id"]
+        entry = replay.json()["entries"][0]
+        assert not entry["can_retry"] and not entry["can_cancel"]
+        cancelled = await client.post(
+            f"/api/organization/imports/{receipt['id']}/entries/{entry['id']}/cancel"
+        )
+        assert cancelled.status_code == 409 and "predates restore" in cancelled.text
+    rejected = await start(client, ready_route, key="new-command-after-restore")
+    assert rejected.status_code == 409 and "predates restore" in rejected.text
+    assert (original.read_bytes(), original.stat().st_ino, original.stat().st_mtime_ns) == evidence
+    assert not list(ready_route["target"].rglob("*.epub"))
+    async with database() as db:
+        assert await db.scalar(select(func.count()).select_from(ImportRun)) == int(prior_start)

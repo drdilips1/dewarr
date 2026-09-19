@@ -20475,12 +20475,17 @@
             },
             "type": "object",
             "title": "Subjects"
+          },
+          "approvals_protected": {
+            "type": "boolean",
+            "title": "Approvals Protected"
           }
         },
         "type": "object",
         "required": [
           "historical_jobs",
-          "subjects"
+          "subjects",
+          "approvals_protected"
         ],
         "title": "QueueFenceView"
       },

@@ -560,3 +560,30 @@ async def test_shared_reservation_never_exposes_another_owners_artifact(
                 )
             )
             assert shared.reservation_id == selection.reservation_id
+
+
+async def test_restored_selection_cannot_authorize_new_transfer(
+    client, admin, database, selection_route, monkeypatch
+):
+    from app.db.models import DownloadAttempt, DownloadIdentityClaim
+    from tests.integration.test_recovery_approvals import seal_history
+
+    selected = (await prepare(client, selection_route)).json()
+    await seal_history(database, admin)
+    monkeypatch.setattr(get_settings(), "download_dispatch_enabled", True)
+    held = (await prepare(client, selection_route)).json()
+    assert not held["dispatch_available"] and not held["pack_review_available"]
+    assert "predates restore" in held["message"]
+    result = await client.post(
+        "/api/acquisition/downloads",
+        json={"selection_id": selected["id"]},
+        headers={"Idempotency-Key": "restored-selection-must-not-run"},
+    )
+    assert result.status_code == 409 and "predates restore" in result.text
+    assert (await prepare(client, selection_route)).json()["id"] == selected["id"]
+    async with database() as db:
+        assert await db.scalar(select(func.count()).select_from(DownloadAttempt)) == 0
+        assert await db.scalar(select(func.count()).select_from(DownloadIdentityClaim)) == 0
+        row = await db.get(AcquisitionSelection, UUID(selected["id"]))
+        assert row.state == "prepared"
+        assert (await db.get(AcquisitionReservation, row.reservation_id)).state == "selected"

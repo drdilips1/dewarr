@@ -60,7 +60,10 @@ async def start(db, owner_id, ctx, remote_owner_id):
         .limit(1)
     )
     if old:
-        return old
+        from app.domain.recovery_approvals import denial
+
+        if not await denial(db, "operation", old.id):
+            return old
     operation = Operation(
         owner_id=owner_id,
         kind=KIND,

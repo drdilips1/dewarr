@@ -283,7 +283,7 @@ async def withdraw_generation(db, user, policy):
 
 
 async def activate(db, user, operation):
-    require_live_command(operation)
+    await require_live_command(db, operation)
     if get_settings().recovery_mode:
         raise HTTPException(409, "List activation is paused for recovery")
     if operation.status == "completed":

@@ -83,6 +83,12 @@ async def test_restore_preserves_evidence_invalidates_sessions_and_fences_effect
             ).fetchone()
             assert boundary and boundary[0] >= 1 and boundary[1] >= 1
             assert (
+                connection.execute("SELECT approval_version FROM recovery_queue_fences").fetchone()[
+                    0
+                ]
+                == 1
+            )
+            assert (
                 connection.execute(
                     "SELECT count(*) FROM recovery_queue_subjects "
                     "WHERE kind='operation' AND subject_id=%s",
@@ -182,7 +188,7 @@ async def test_restore_preserves_evidence_invalidates_sessions_and_fences_effect
             timeout=20,
         )
         assert downgrade.returncode != 0
-        assert b"Restored queue boundaries require a pre-upgrade backup" in downgrade.stderr
+        assert b"Restored approval boundaries require a pre-upgrade backup" in downgrade.stderr
         from sqlalchemy.engine import make_url
 
         target_engine = create_async_engine(

@@ -70,6 +70,10 @@ async def enqueue_sync(
     return operation
 
 
-def require_live_command(operation):
+async def require_live_command(db, operation):
     if operation.payload.get("recovery_retirement"):
         raise HTTPException(409, "Recovery retired this command; create a fresh preview")
+    if operation.status != "completed":
+        from app.domain.recovery_approvals import require_current
+
+        await require_current(db, "operation", operation.id)

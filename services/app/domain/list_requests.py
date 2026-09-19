@@ -221,7 +221,7 @@ async def validate_plan(db, user, operation):
 
 
 async def start(db, user, operation):
-    require_live_command(operation)
+    await require_live_command(db, operation)
     if get_settings().recovery_mode:
         raise HTTPException(409, "List requests are paused for recovery")
     if operation.status in {"completed", "queued", "running"}:

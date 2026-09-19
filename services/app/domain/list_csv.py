@@ -118,6 +118,11 @@ async def start(db, owner, list_id, row, selected):
         raise HTTPException(
             409, "This preview already has a saved selection; upload a new preview to change it"
         )
+    if row.committed_at:
+        return await db.get(Operation, row.operation_id)
+    from app.domain.recovery_approvals import require_current
+
+    await require_current(db, "csv-preview", row.id)
     operation = await repair(db, row)
     if row.committed_at or (operation and operation.status in {"queued", "running"}):
         return operation

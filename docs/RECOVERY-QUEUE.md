@@ -2,6 +2,8 @@
 
 This implements the historical queue boundary in S09-02 / FR-36 / AT-25. It complements [reviewed command retirement](RECOVERY-COMMANDS.md) and the [paused restore workflow](RECOVERY.md). It does not implement controlled resume or grant fresh authority to historical requests.
 
+The subsequent [saved-approval protection](RECOVERY-APPROVALS.md) adds exact selection, import-plan and CSV-preview IDs and guards ordinary approval actions on schema 0044. The schema-0043 description below records the original queue boundary; use matching current builds for deployment.
+
 ## What is protected
 
 An offline restore seals two kinds of evidence in the same transaction as the new checkpoint and session invalidation:

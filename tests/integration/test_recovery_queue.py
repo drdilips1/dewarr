@@ -224,11 +224,11 @@ async def test_upgrade_seals_existing_paused_restore_and_blocks_loss_of_boundary
         assert fence and fence.job_count == 1
         assert await db.get(RecoveryQueueSubject, (checkpoint, "operation", saved))
     rejected = await migrate("downgrade", "0042_recovery_scans")
-    assert rejected.returncode != 0 and b"Restored queue boundaries require" in rejected.stderr
+    assert rejected.returncode != 0 and b"Restored approval boundaries require" in rejected.stderr
     async with database() as db:
         assert (
             await db.scalar(text("SELECT version_num FROM alembic_version"))
-            == "0043_recovery_queue_fences"
+            == "0044_recovery_approvals"
         )
 
 

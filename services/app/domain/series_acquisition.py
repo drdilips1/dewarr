@@ -231,7 +231,10 @@ async def retry(db, user, parent):
     row = await db.get(Operation, UUID(parent.payload["acquisition_id"]), with_for_update=True)
     from app.domain.operations import require_live_command
 
-    require_live_command(row)
+    await require_live_command(db, row)
+    from app.domain.recovery_approvals import require_current
+
+    await require_current(db, "operation", row.id)
     if not row.payload["enabled"]:
         raise HTTPException(409, "This series acquisition has finished or was cancelled")
     await validate_configuration(db, user, row.payload["configuration"])

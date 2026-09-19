@@ -350,7 +350,12 @@ export default function ListCsv({ listId }: { listId: string }) {
                   <button
                     className="primary"
                     disabled={
-                      !id || !rows.length || dirty || busy || commit.isPending
+                      !id ||
+                      !rows.length ||
+                      dirty ||
+                      busy ||
+                      value?.state === "held" ||
+                      commit.isPending
                     }
                     onClick={() => commit.mutate()}
                   >

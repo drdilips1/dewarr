@@ -171,6 +171,9 @@ async def resolve(
     if old:
         return ListDifferenceReceipt(id=old.id, **old.payload["receipt"])
     comparison, ctx = await service.current(db, comparison_id, user.id, list_id)
+    from app.domain.recovery_approvals import require_current
+
+    await require_current(db, "operation", comparison.id)
     if comparison.status != "completed":
         raise HTTPException(409, "Wait for the complete verified comparison")
     policy = ctx[4]

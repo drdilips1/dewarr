@@ -115,6 +115,11 @@ export default function Recovery() {
                 requires a separate review; this screen does not enable
                 automation.
               </p>
+              <p>
+                {review.data.queue_fence?.approvals_protected
+                  ? "Saved approvals are protected. Old download selections, import plans, CSV previews and list or series approvals cannot authorize new work. Completed receipts remain available."
+                  : "Saved approval protection needs the supported offline upgrade before recovery can proceed."}
+              </p>
             </section>
             <RecoveryChecks
               key={review.data.latest_scan?.id ?? "none"}

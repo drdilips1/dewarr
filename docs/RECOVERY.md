@@ -2,6 +2,8 @@
 
 This is a partial implementation of **S09-02 / FR-36 / AT-25**. It provides a versioned offline backup, a restore into a new database with a persistent pause, and [read-only external observations](RECOVERY-OBSERVATIONS.md). It now supports [reviewed recording of matching existing transfers](RECOVERY-RECONCILIATION.md) and [fresh ABS inventory reconciliation](RECOVERY-INVENTORY.md), but does **not** yet provide complete external-state reconciliation or a supported resume command. Use it for a recovery rehearsal; do not switch your working installation to a restored database expecting automation to resume in this build.
 
+Current schema 0044 also seals [saved approvals](RECOVERY-APPROVALS.md), preventing restored previews from authorizing new downloads, imports or list changes. This extends the historical queue boundary without enabling resume.
+
 ## What the bundle preserves
 
 | File | Contents |

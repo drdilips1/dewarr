@@ -24,7 +24,7 @@ from app.config import Settings, get_settings
 from app.db.models import Base
 from app.recovery import MAINTENANCE_LOCK
 
-SCHEMA = "0043_recovery_queue_fences"
+SCHEMA = "0044_recovery_approvals"
 CONFIG_FIELDS = {
     "public_url",
     "cookie_secure",

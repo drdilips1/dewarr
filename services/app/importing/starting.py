@@ -65,6 +65,9 @@ async def start_import(db, admin, plan_id: UUID, body: ImportInput, idempotency_
     )
     if not plan:
         raise HTTPException(404, "Import plan not found")
+    from app.domain.recovery_approvals import require_current
+
+    await require_current(db, "import-plan", plan.id)
     await transaction_lock(db, f"inspection-plan:{plan.inspection_id}")
     await validate_inspection(db, plan.inspection_id)
     inspection = await db.get(DownloadInspection, plan.inspection_id)

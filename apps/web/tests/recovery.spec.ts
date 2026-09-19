@@ -70,6 +70,9 @@ test("restored-state operator review replaces navigation and blocks catalog acce
       page.getByText("saved jobs are fenced.", { exact: false }),
     ).toBeVisible();
     await expect(
+      page.getByText("Saved approvals are protected.", { exact: false }),
+    ).toBeVisible();
+    await expect(
       page.getByRole("navigation", { name: "Main navigation" }),
     ).toHaveCount(0);
     expect((await page.request.get("/api/lists")).status()).toBe(423);
@@ -106,7 +109,7 @@ test("restored-state operator review replaces navigation and blocks catalog acce
         exact: true,
       }),
     ).toBeVisible();
-    const evidence = root + "/.local/evidence/recovery-queue-ui";
+    const evidence = root + "/.local/evidence/recovery-approvals-ui";
     mkdirSync(evidence, { recursive: true });
     await page.screenshot({ path: evidence + "/review.png", fullPage: true });
     await page

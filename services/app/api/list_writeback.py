@@ -247,11 +247,15 @@ async def configure(
                 409, "Create a fresh ownership and membership preview before enabling write-back"
             )
         from app.domain import list_comparisons
+        from app.domain.recovery_approvals import require_current
+
+        await require_current(db, "operation", saved.id)
 
         comparison_id = saved.payload["view"].get("comparison_id")
         if not comparison_id:
             raise HTTPException(409, "Create a new preview to compare existing memberships")
         comparison, _ = await list_comparisons.current(db, UUID(comparison_id), user.id, list_id)
+        await require_current(db, "operation", comparison.id)
         if comparison.status != "completed":
             raise HTTPException(409, "Wait for the existing membership comparison before enabling")
         if not policy:
