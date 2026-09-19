@@ -177,6 +177,9 @@ export default function BookSources({
         <Link to={`/sources/prowlarr?q=${encodeURIComponent(work.title)}`}>
           Prowlarr search and settings
         </Link>
+        <Link to={`/sources/audiobookbay?q=${encodeURIComponent(work.title)}`}>
+          AudiobookBay search and settings
+        </Link>
       </div>
       <Notice
         error={
@@ -311,10 +314,68 @@ function Results({
   onInspect: (id: string) => void;
 }) {
   const [pageIndex, setPageIndex] = useState(0);
+  const [sort, setSort] = useState("profile");
+  const [text, setText] = useState("");
+  const [source, setSource] = useState("");
+  const [format, setFormat] = useState("");
+  const [hideBlocked, setHideBlocked] = useState(false);
   const resultsHeading = useRef<HTMLParagraphElement>(null);
+  const origins = new Map(
+    data.items.map(({ release }) => [sourceKey(release), sourceName(release)]),
+  );
+  const formats = [
+    ...new Set(
+      data.items.flatMap(({ release }) =>
+        (release.formats || []).map((value) => value.toLowerCase()),
+      ),
+    ),
+  ].sort();
+  const needle = text.trim().toLowerCase();
+  const filtered = data.items
+    .map((item, rank) => ({ item, rank }))
+    .filter(({ item }) => {
+      const release = item.release;
+      return (
+        (!source || sourceKey(release) === source) &&
+        (!format ||
+          (format === "unknown"
+            ? !release.formats?.length
+            : release.formats?.some(
+                (value) => value.toLowerCase() === format,
+              ))) &&
+        (!hideBlocked ||
+          (item.current_connection && !item.assessment.blocked.length)) &&
+        (!needle ||
+          [
+            release.title,
+            release.raw_title,
+            ...(release.authors || []),
+            ...(release.narrators || []),
+          ].some((value) => value.toLowerCase().includes(needle)))
+      );
+    });
+  filtered.sort((a, b) => {
+    let order = 0;
+    if (sort === "seeds")
+      order = compareKnown(
+        a.item.release.seeders,
+        b.item.release.seeders,
+        true,
+      );
+    else if (sort === "smallest" || sort === "largest")
+      order = compareKnown(
+        a.item.release.size_bytes,
+        b.item.release.size_bytes,
+        sort === "largest",
+      );
+    else if (sort === "title")
+      order = a.item.release.title.localeCompare(b.item.release.title);
+    return order || a.rank - b.rank;
+  });
+  const filteredView = !!(needle || source || format || hideBlocked);
   const page = Math.min(
     pageIndex,
-    Math.max(0, Math.ceil(data.items.length / 50) - 1),
+    Math.max(0, Math.ceil(filtered.length / 50) - 1),
   );
   const offset = page * 50;
   return (
@@ -404,7 +465,7 @@ function Results({
       </details>
       {!data.sources.length && (
         <p className="notice">
-          Connect MAM or Prowlarr to search for releases.
+          Connect MAM, AudiobookBay or Prowlarr to search for releases.
         </p>
       )}
       <p className="muted">
@@ -413,13 +474,126 @@ function Results({
         fetched page, not every release on the trackers. Source claims require
         file inspection; no automatic download starts here.
       </p>
-      <p tabIndex={-1} ref={resultsHeading}>
+      {data.items.length > 0 && (
+        <section
+          className="panel release-comparison"
+          aria-label="Compare loaded releases"
+        >
+          <div className="library-filters">
+            <label className="grow">
+              Filter title, author or narrator
+              <input
+                value={text}
+                maxLength={300}
+                onChange={(event) => {
+                  setText(event.target.value);
+                  setPageIndex(0);
+                }}
+              />
+            </label>
+            <label>
+              Sort this view
+              <select
+                value={sort}
+                onChange={(event) => {
+                  setSort(event.target.value);
+                  setPageIndex(0);
+                }}
+              >
+                <option value="profile">Profile ranking</option>
+                <option value="seeds">Most seeders</option>
+                <option value="smallest">Smallest download</option>
+                <option value="largest">Largest download</option>
+                <option value="title">Title A–Z</option>
+              </select>
+            </label>
+          </div>
+          <details>
+            <summary>Filter loaded releases</summary>
+            <div className="library-filters">
+              <label>
+                Result source
+                <select
+                  value={source}
+                  onChange={(event) => {
+                    setSource(event.target.value);
+                    setPageIndex(0);
+                  }}
+                >
+                  <option value="">All sources</option>
+                  {[...origins].map(([key, name]) => (
+                    <option key={key} value={key}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Reported format
+                <select
+                  value={format}
+                  onChange={(event) => {
+                    setFormat(event.target.value);
+                    setPageIndex(0);
+                  }}
+                >
+                  <option value="">All formats</option>
+                  {formats.map((value) => (
+                    <option key={value} value={value}>
+                      {value.toUpperCase()}
+                    </option>
+                  ))}
+                  <option value="unknown">Unknown format</option>
+                </select>
+              </label>
+              <label className="check-label">
+                <input
+                  type="checkbox"
+                  checked={hideBlocked}
+                  onChange={(event) => {
+                    setHideBlocked(event.target.checked);
+                    setPageIndex(0);
+                  }}
+                />
+                Hide blocked or expired results
+              </label>
+            </div>
+          </details>
+          <p className="muted">
+            Only loaded results are compared. Unknown seeds and sizes sort last.
+            View controls do not change your download profile or automatic
+            selection.
+          </p>
+          {(filteredView || sort !== "profile") && (
+            <button
+              onClick={() => {
+                setText("");
+                setSource("");
+                setFormat("");
+                setHideBlocked(false);
+                setSort("profile");
+                setPageIndex(0);
+              }}
+            >
+              Reset result view
+            </button>
+          )}
+        </section>
+      )}
+      <p tabIndex={-1} ref={resultsHeading} aria-live="polite">
         {data.items.length} distinct releases
-        {data.items.length > 0
-          ? ` · showing ${offset + 1}–${Math.min(offset + 50, data.items.length)}`
+        {filteredView ? ` · ${filtered.length} match your filters` : ""}
+        {filtered.length > 0
+          ? ` · showing ${offset + 1}–${Math.min(offset + 50, filtered.length)}`
           : ""}
       </p>
-      {data.items.slice(offset, offset + 50).map((item) => (
+      {filteredView && !filtered.length && (
+        <p className="notice">
+          No loaded releases match these filters. Clear the filters to see the
+          other results.
+        </p>
+      )}
+      {filtered.slice(offset, offset + 50).map(({ item, rank }) => (
         <article
           className="panel editor source-release"
           key={item.id}
@@ -427,11 +601,7 @@ function Results({
         >
           <div>
             <p className="eyebrow">
-              {item.release.source === "mam"
-                ? "MAM"
-                : item.release.source === "audiobookbay"
-                  ? "AudiobookBay"
-                  : item.release.indexer_name}
+              {sourceName(item.release)} · Profile rank {rank + 1}
             </p>
             <h3>{item.release.title}</h3>
             {!!item.query_keys?.length && data.query_plan && (
@@ -515,6 +685,7 @@ function Results({
             <button
               disabled={
                 inspecting ||
+                data.stale_identity ||
                 !item.current_connection ||
                 item.assessment.blocked.length > 0
               }
@@ -525,7 +696,7 @@ function Results({
           )}
         </article>
       ))}
-      {data.items.length > 50 && (
+      {filtered.length > 50 && (
         <nav className="button-row" aria-label="Ranked release pages">
           <button
             disabled={page === 0 || inspecting}
@@ -538,7 +709,7 @@ function Results({
             Previous releases
           </button>
           <button
-            disabled={offset + 50 >= data.items.length || inspecting}
+            disabled={offset + 50 >= filtered.length || inspecting}
             onClick={() => {
               setPageIndex(page + 1);
               resultsHeading.current?.focus();
@@ -551,4 +722,28 @@ function Results({
       )}
     </>
   );
+}
+
+function sourceKey(release: Search["items"][number]["release"]) {
+  return release.source === "prowlarr"
+    ? `prowlarr:${release.indexer_id}`
+    : release.source;
+}
+
+function sourceName(release: Search["items"][number]["release"]) {
+  return release.source === "mam"
+    ? "MAM"
+    : release.source === "audiobookbay"
+      ? "AudiobookBay"
+      : `${release.indexer_name || "Prowlarr"} (indexer ${release.indexer_id})`;
+}
+
+function compareKnown(
+  a: number | null | undefined,
+  b: number | null | undefined,
+  descending: boolean,
+) {
+  if (a == null) return b == null ? 0 : 1;
+  if (b == null) return -1;
+  return descending ? b - a : a - b;
 }

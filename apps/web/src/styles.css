@@ -1267,6 +1267,9 @@ nav a.active {
 }
 
 @media (max-width: 720px) {
+  .release-comparison .library-filters > label {
+    flex-basis: 100%;
+  }
   .catalog-search-form > label {
     flex-basis: 100%;
   }
@@ -1277,6 +1280,10 @@ nav a.active {
     margin-left: 0;
     width: 100%;
   }
+}
+
+.release-comparison details .library-filters {
+  margin-top: 16px;
 }
 
 .provider-results,
