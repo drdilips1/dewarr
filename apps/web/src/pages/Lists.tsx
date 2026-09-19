@@ -1,9 +1,11 @@
 import { lazy, Suspense, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, ArrowDown, ArrowUp, Lock, Users, X } from "lucide-react";
+import { ArrowLeft, Lock, Users } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { api, result } from "../api/client";
-import { BookCard, Empty, Loading, Notice } from "../components";
+import { Empty, Loading, Notice } from "../components";
+import ListCuration from "./ListCuration";
+import ListSettings from "./ListSettings";
 
 const ListRequests = lazy(() => import("./ListRequests"));
 const ListPolicy = lazy(() => import("./ListPolicy"));
@@ -15,7 +17,7 @@ const ListSubscription = lazy(() => import("./ListSubscription"));
 export default function Lists({ canEdit }: { canEdit: boolean }) {
   const { id } = useParams();
   return id ? (
-    <ListDetail id={id} canEdit={canEdit} />
+    <ListDetail key={id} id={id} canEdit={canEdit} />
   ) : (
     <ListIndex canEdit={canEdit} />
   );
@@ -26,6 +28,9 @@ function ListIndex({ canEdit }: { canEdit: boolean }) {
   const lists = useQuery({
     queryKey: ["lists"],
     queryFn: async () => result(await api.GET("/api/lists")),
+    staleTime: 0,
+    gcTime: 0,
+    refetchInterval: 15_000,
   });
   const create = useMutation({
     mutationFn: async (form: HTMLFormElement) => {
@@ -73,7 +78,7 @@ function ListIndex({ canEdit }: { canEdit: boolean }) {
       ) : null}
       <Notice error={lists.error || create.error} />
       {lists.isPending ? <Loading /> : null}
-      {lists.data?.length ? (
+      {!lists.error && lists.data?.length ? (
         <div className="list-grid">
           {lists.data.map((list) => (
             <Link
@@ -87,12 +92,16 @@ function ListIndex({ canEdit }: { canEdit: boolean }) {
               <h2>{list.name}</h2>
               <p>
                 {list.count} {list.count === 1 ? "book" : "books"} ·{" "}
-                {list.shared ? "Shared" : "Private"}
+                {list.shared
+                  ? list.editable
+                    ? "Shared by you"
+                    : "Shared with you"
+                  : "Private"}
               </p>
             </Link>
           ))}
         </div>
-      ) : !lists.isPending ? (
+      ) : !lists.isPending && !lists.error ? (
         <Empty title="Give your next reads a home">
           Create a list, then add books from their catalog pages.
         </Empty>
@@ -105,64 +114,32 @@ function ListDetail({ id, canEdit }: { id: string; canEdit: boolean }) {
   const client = useQueryClient();
   const path = { list_id: id };
   const [csvOpen, setCsvOpen] = useState(false);
+  const [editing, setEditing] = useState(false);
   const [requestsOpen, setRequestsOpen] = useState(false);
   const [policyOpen, setPolicyOpen] = useState(false);
   const list = useQuery({
     queryKey: ["list", id],
     queryFn: async () =>
       result(await api.GET("/api/lists/{list_id}", { params: { path } })),
+    staleTime: 0,
+    gcTime: 0,
+    refetchInterval: 15_000,
   });
-  const refresh = () => {
-    client.invalidateQueries({ queryKey: ["list", id] });
-    client.invalidateQueries({ queryKey: ["lists"] });
+  const refresh = async () => {
+    await Promise.all([
+      client.invalidateQueries({ queryKey: ["list", id] }),
+      client.invalidateQueries({ queryKey: ["lists"] }),
+      client.invalidateQueries({ queryKey: ["works"] }),
+    ]);
   };
-  const remove = useMutation({
-    mutationFn: async (workId: string) =>
-      result(
-        await api.DELETE("/api/lists/{list_id}/entries/{work_id}", {
-          params: { path: { ...path, work_id: workId } },
-        }),
-      ),
-    onSuccess: refresh,
-  });
-  const share = useMutation({
-    mutationFn: async () =>
-      result(
-        await api.PATCH("/api/lists/{list_id}", {
-          params: { path },
-          body: {
-            name: list.data!.name,
-            description: list.data!.description,
-            shared: !list.data!.shared,
-          },
-        }),
-      ),
-    onSuccess: refresh,
-  });
-  const reorder = useMutation({
-    mutationFn: async ({
-      index,
-      direction,
-    }: {
-      index: number;
-      direction: number;
-    }) => {
-      const ids = list.data!.items.map((work) => work.id);
-      [ids[index], ids[index + direction]] = [
-        ids[index + direction],
-        ids[index],
-      ];
-      return result(
-        await api.PUT("/api/lists/{list_id}/order", {
-          params: { path },
-          body: { work_ids: ids },
-        }),
-      );
-    },
-    onSuccess: refresh,
-  });
   if (list.isPending) return <Loading />;
-  if (!list.data) return <Notice error={list.error} />;
+  if (list.error || !list.data)
+    return (
+      <>
+        <Notice error={list.error} />
+        <button onClick={() => list.refetch()}>Reload list</button>
+      </>
+    );
   const editable = canEdit && list.data.editable;
   return (
     <>
@@ -181,20 +158,30 @@ function ListDetail({ id, canEdit }: { id: string; canEdit: boolean }) {
             Removing an entry keeps your library files.
           </p>
         </div>
-        {editable ? (
-          <button onClick={() => share.mutate()} disabled={share.isPending}>
-            {list.data.shared ? "Make private" : "Share with this household"}
+        {editable && !editing && (
+          <button onClick={() => setEditing(true)} aria-expanded={false}>
+            Edit list
           </button>
-        ) : null}
+        )}
       </div>
-      <Notice error={remove.error || share.error || reorder.error} />
-      {editable && (
-        <Suspense fallback={<Loading />}>
-          <ListSubscription listId={id} />
-        </Suspense>
+      {list.data.description && (
+        <p className="list-description">{list.data.description}</p>
+      )}
+      {!editable && (
+        <p className="muted">
+          You have read-only access to this list. Library badges reflect your
+          own access.
+        </p>
+      )}
+      {editable && editing && (
+        <ListSettings
+          list={list.data}
+          onChange={refresh}
+          onClose={() => setEditing(false)}
+        />
       )}
       {editable ? (
-        <>
+        <div className="list-tools">
           <button
             onClick={() => setRequestsOpen(!requestsOpen)}
             aria-expanded={requestsOpen}
@@ -225,50 +212,13 @@ function ListDetail({ id, canEdit }: { id: string; canEdit: boolean }) {
               <ListCsv listId={id} />
             </Suspense>
           ) : null}
-        </>
-      ) : null}
-      {list.data.items.length ? (
-        <div className="book-grid">
-          {list.data.items.map((work, index) => (
-            <div key={work.id}>
-              <BookCard work={work} />
-              {editable ? (
-                <div className="card-actions">
-                  <button
-                    className="icon-button"
-                    aria-label={`Move ${work.title} earlier`}
-                    disabled={index === 0 || reorder.isPending}
-                    onClick={() => reorder.mutate({ index, direction: -1 })}
-                  >
-                    <ArrowUp size={15} />
-                  </button>
-                  <button
-                    className="icon-button"
-                    aria-label={`Move ${work.title} later`}
-                    disabled={
-                      index === list.data!.items.length - 1 || reorder.isPending
-                    }
-                    onClick={() => reorder.mutate({ index, direction: 1 })}
-                  >
-                    <ArrowDown size={15} />
-                  </button>
-                  <button
-                    className="icon-button"
-                    aria-label={`Remove ${work.title} from list`}
-                    disabled={remove.isPending}
-                    onClick={() => remove.mutate(work.id)}
-                  >
-                    <X size={15} />
-                  </button>
-                </div>
-              ) : null}
-            </div>
-          ))}
         </div>
-      ) : (
-        <Empty title="This list is ready for a story">
-          Find a title in your catalog and choose Add to list.
-        </Empty>
+      ) : null}
+      <ListCuration list={list.data} editable={editable} onChange={refresh} />
+      {editable && (
+        <Suspense fallback={<Loading />}>
+          <ListSubscription listId={id} />
+        </Suspense>
       )}
     </>
   );

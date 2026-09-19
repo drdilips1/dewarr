@@ -680,6 +680,40 @@ nav a.active {
 .list-card:hover {
   border-color: #8b94df;
 }
+.list-tools > button {
+  margin-right: 12px;
+  margin-bottom: 12px;
+}
+.list-curation-toolbar {
+  margin-block: 24px 12px;
+}
+.list-book-selection {
+  margin-bottom: 12px;
+}
+.list-description {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin-bottom: 24px;
+  color: var(--muted);
+}
+.list-catalog-results {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.list-catalog-results li {
+  padding-block: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.list-catalog-results span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.list-catalog-results small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+}
 .list-icon {
   color: #b8baf7;
   margin-bottom: 22px;

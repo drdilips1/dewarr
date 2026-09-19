@@ -47,6 +47,9 @@ function BookDetailContent({
           params: { path: { work_id: id } },
         }),
       ),
+    staleTime: 0,
+    gcTime: 0,
+    refetchInterval: 15_000,
   });
   const lists = useQuery({
     queryKey: ["lists"],
@@ -64,7 +67,7 @@ function BookDetailContent({
     onSuccess: () => setSaved(true),
   });
   if (book.isPending) return <Loading />;
-  if (!book.data) return <Notice error={book.error} />;
+  if (book.error || !book.data) return <Notice error={book.error} />;
   const work = book.data;
   if (work.id !== id) return <Navigate to={`/books/${work.id}`} replace />;
   return (

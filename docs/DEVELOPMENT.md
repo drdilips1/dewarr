@@ -168,3 +168,5 @@ List policies and manual request forms expose sparse release overrides. Request-
 [Community lists](COMMUNITY-LISTS.md) adds `/discover/lists` and public Hardcover list browse/preview/follow APIs using existing schema `0038_asset_containment`. Rebuild the generated client/frontend and restart matching API/worker builds after backup. There is no new service, secret or migration. The first sync uses the existing `lists.sync` task; following leaves download automation off.
 
 [Series discovery](SERIES-DISCOVERY.md) adds a read-only local shelf to Discover using current scoped holdings and observed series catalogs. Rebuild the generated API client/frontend and deploy matching API/worker code. Schema remains `0038_asset_containment`; there is no new task, integration credential or migration.
+
+[Local list curation](LIST-CURATION.md) adds synchronous `lists.curate` receipts and revision-aware list editing. No migration or new queue is required. Deploy the generated frontend/client with matching API/worker code on `0038_asset_containment`; legacy single-entry and full-order routes remain supported.

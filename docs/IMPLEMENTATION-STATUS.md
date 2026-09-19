@@ -1,10 +1,12 @@
 # Implementation status and evidence
 
-Latest checkpoint: [Series continuation](SERIES-DISCOVERY.md) adds published gaps from loaded Hardcover series to Discover, with ebook/audio filters, current scoped ownership and links to existing curation/acquisition. Complete curation/sharing, supported write-back and full stage acceptance remain open. The final checkpoint records exact verification.
+Latest checkpoint: [Local list curation](LIST-CURATION.md) adds detail editing, atomic bulk catalog membership commands, conflict-aware ordering and explicit household sharing/revocation. Server pagination for large lists, supported write-back, usability and full stage acceptance remain open. The final checkpoint records the bounded verification.
 
 Updated September 18, 2026. Objective remains **implement the full PRD end to end**, including the planned later capabilities. This is an implementation checkpoint, not a completion declaration.
 
 ## Current code
+
+- [Local list curation](LIST-CURATION.md) supplies sparse detail edits, settings/content revisions, atomic bulk add/remove receipts, canonical membership and exclusion handling, reader-scoped sharing and revocation. Retried commands cannot replay over later membership episodes; removals preserve files and independent reasons. The list grid pages rendering only; full server pagination and large-list selector consistency remain open.
 
 - [Series continuation](SERIES-DISCOVERY.md) projects loaded catalog series against accessible verified holdings, groups canonical aliases, distinguishes media gaps from overall ownership and exposes ordering/date/staleness uncertainty. The shelf uses batched local reads and creates no requests or downloads. Whole-library series discovery and full S08 qualification remain open.
 
@@ -659,3 +661,25 @@ Verification at this checkpoint:
 Deployment: a private database/encryption-key/configuration backup and readable archive catalog were verified (`.local/evidence/series-discovery-backup-path.txt`). With zero active jobs, the identified development API and worker were restarted together. Readiness and Discover return **200**, unauthenticated series data returns **401**, one worker is fresh and dispatch remains **disabled** on `0038_asset_containment` (`series-discovery-runtime.json`). Documentation checks validate **297 local links**, 54 requirement rows and 61 backlog packages.
 
 This advances FR-11/S08-01 and the discovery portion of AT-05. Catalog refresh/provider responses in the connected browser journey are synthetic; actual-account qualification remains independent. Local sharing/curation, supported optional Hardcover writes, usability, broader recommendation coverage and full integration/performance/release gates remain open, as do all unmet S00–S10 requirements. No whole-library automatic series enrichment or completed PRD is claimed.
+
+
+## Local list curation and household sharing checkpoint · September 18, 2026
+
+This increment builds on `ed26c78`. [Local curation](LIST-CURATION.md) adds a name/description/sharing editor, catalog bulk selection, atomic add/remove commands and revision-aware ordering. A command validates the entire selection and commits memberships, external exclusions, withdrawn list reasons, its completed receipt and audit event together. Exact retries return the original outcome without resurrecting removed entries or deleting later re-additions. The same work shown through canonical aliases remains one list book.
+
+Shared readers receive only permitted book metadata and their own library availability. Owner-only provider connections, acquisition controls and history stay private. Active list and book views refresh on focus and periodically; access errors hide previously cached content. Sharing revocation is therefore observed on refresh, not claimed to be instantaneous push delivery. Visible-only reordering preserves hidden membership slots after source/library grants change.
+
+The interface puts books before external connection settings, keeps catalog and detail editors behind explicit actions, and uses ordinary checkbox/keyboard controls. An open metadata editor retains its captured revision and draft through polling; concurrent edits produce a reloadable conflict. No database migration, runtime dependency or new provider credential is introduced; completed `lists.curate` operations are synchronous receipts rather than worker jobs.
+
+Verification:
+
+- Affected curation/catalog/list-request/monitoring/policy/CSV/Hardcover/community/merge integration suite: **113 passed in 46.91 seconds** (`.local/evidence/list-curation-regression.log`). It includes atomic rollback, current owner/member authority, concurrent identical commands, changed-key rejection, canonical aliases, external exclusions, stale settings/order, membership episode fingerprints and consistent read/write snapshots.
+- Final focused suite after visible-only ordering was completed: **29 passed in 8.60 seconds** (`list-curation-final-regression.log`). Hidden membership IDs are neither exposed nor required for ordering. These are affected-suite results, not a full-backend-suite claim.
+- Separate ebook/audiobook acquisition cases: **2 passed in 4.40 seconds** (`list-curation-acquisition.log`). Bulk addition uses the existing automatic policy through dispatch, real-file hardlink import and delayed synthetic ABS confirmation. Removing the membership preserves the asset; replaying its original addition does not resurrect the membership or cause another transfer.
+
+- Final browser baseline plus local curation journey: **2 passed in 1.8 minutes** (`list-curation-browser-layout.log`). It covers bulk catalog addition, order, description edits, conflicting tabs, explicit sharing, separate viewer access, revocation, keyboard bulk removal and retained library ownership. Desktop/mobile screenshots were visually inspected and retained in `.local/evidence/list-curation-ui/`.
+- Python lint/format, frontend production build/format, generated OpenAPI/client and diff checks pass. The packaged wheel matches all **199 backend Python modules**. Documentation traceability remains 54 requirements and 61 packages.
+
+Deployment: the private database/key/configuration backup and readable archive catalog were verified (`list-curation-backup-path.txt`). With zero active development jobs, the identified API and worker were stopped and restarted together. Readiness and Lists return **200**, unauthenticated list data and curation return **401**, one worker is fresh and dispatch remains **disabled** on `0038_asset_containment` (`list-curation-runtime.json`). No actual provider account or native backend certification is inferred from synthetic service fixtures.
+
+Large-list server pagination, authoritative selectors, optional Hardcover writes, full task-based usability and actual-service qualification remain required. This advances FR-02/FR-12 within S08 and existing list lifecycle assertions; no full stage or full-PRD completion is claimed. All unmet S00–S10 obligations remain in scope.

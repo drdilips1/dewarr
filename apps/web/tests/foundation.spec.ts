@@ -4477,3 +4477,212 @@ test("series discovery shows library gaps and preserves owned formats through cu
   await expect(series).toContainText("1 missing ebook");
   expect(errors).toEqual([]);
 });
+
+test("local list curation shares read-only views and clears them after revocation", async ({
+  page,
+  browser,
+}, testInfo) => {
+  test.setTimeout(120_000);
+  page.setDefaultTimeout(15_000);
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.getByRole("link", { name: "Lists", exact: true }).click();
+  await page.getByLabel("Create a private list").fill("Curated journeys");
+  await page.getByRole("button", { name: "Create list", exact: true }).click();
+  await page.getByRole("link", { name: /Curated journeys/ }).click();
+  await expect(page).toHaveURL(/\/lists\/[0-9a-f-]{36}$/);
+  const url = page.url();
+  await page
+    .getByRole("button", { name: "Add books from catalog", exact: true })
+    .click();
+  const picker = page.getByRole("region", {
+    name: "Add catalog books",
+    exact: true,
+  });
+  await picker
+    .getByRole("checkbox", {
+      name: "Add My protected catalog title",
+      exact: true,
+    })
+    .check();
+  await picker
+    .getByRole("checkbox", { name: "Add The Next Harbor", exact: true })
+    .check();
+  await picker
+    .getByRole("button", {
+      name: "Add selected catalog books (2)",
+      exact: true,
+    })
+    .click();
+  await expect(picker.getByRole("status")).toHaveText(
+    "Added 2 books to this list.",
+  );
+  await page
+    .getByRole("button", { name: "Close catalog picker", exact: true })
+    .click();
+  const books = page.getByRole("region", { name: "List books", exact: true });
+  await books
+    .getByRole("button", { name: "Move The Next Harbor earlier", exact: true })
+    .click();
+  await expect(books.getByRole("status")).toHaveText("List order saved.");
+  await expect(books.getByRole("heading", { level: 3 }).first()).toHaveText(
+    "The Next Harbor",
+  );
+  await page.getByRole("button", { name: "Edit list", exact: true }).click();
+  const editor = page.getByRole("form", {
+    name: "Edit list details",
+    exact: true,
+  });
+  await editor.getByLabel("List name", { exact: true }).fill("Harbor reading");
+  await editor
+    .getByRole("textbox", { name: "Description", exact: true })
+    .fill("Two books for the coast.");
+  await editor
+    .getByRole("button", { name: "Save list details", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Harbor reading", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Two books for the coast.", { exact: true }),
+  ).toBeVisible();
+  // A second signed-in tab changes the description while the first editor is open.
+  await page.getByRole("button", { name: "Edit list", exact: true }).click();
+  const otherTab = await page.context().newPage();
+  await otherTab.goto(url);
+  await otherTab
+    .getByRole("button", { name: "Edit list", exact: true })
+    .click();
+  await otherTab
+    .getByRole("textbox", { name: "Description", exact: true })
+    .fill("Description from another tab.");
+  await otherTab
+    .getByRole("button", { name: "Save list details", exact: true })
+    .click();
+  await expect(
+    otherTab.getByText("Description from another tab.", { exact: true }),
+  ).toBeVisible();
+  await otherTab.close();
+  await editor
+    .getByRole("textbox", { name: "Description", exact: true })
+    .fill("My stale description.");
+  await editor
+    .getByRole("button", { name: "Save list details", exact: true })
+    .click();
+  await expect(editor.getByRole("alert")).toContainText("List details changed");
+  await editor
+    .getByRole("button", { name: "Reload list details", exact: true })
+    .click();
+  await expect(
+    page.getByText("Description from another tab.", { exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Edit list", exact: true }).click();
+  await editor.getByLabel("Share with this household", { exact: true }).check();
+  await editor
+    .getByRole("button", { name: "Save list details", exact: true })
+    .click();
+  await expect(page.getByText("SHARED LIST", { exact: true })).toBeVisible();
+  await page.screenshot({
+    path: testInfo.outputPath("list-curation-desktop.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("list-curation-mobile.png"),
+    fullPage: true,
+  });
+  await page.getByRole("link", { name: "Accounts", exact: true }).click();
+  await page.getByLabel("Name", { exact: true }).fill("Shared list guest");
+  await page.getByLabel("Username", { exact: true }).fill("listguest");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("list guest password");
+  await page
+    .getByRole("combobox", { name: "Access", exact: true })
+    .selectOption("viewer");
+  await page
+    .getByRole("button", { name: "Create account", exact: true })
+    .click();
+  await expect(
+    page.getByText("Shared list guest", { exact: true }),
+  ).toBeVisible();
+  const guestContext = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+  });
+  try {
+    const guest = await guestContext.newPage();
+    guest.on("pageerror", (error) => errors.push(error.message));
+    await guest.goto("http://127.0.0.1:8001/");
+    await guest.getByLabel("Username", { exact: true }).fill("listguest");
+    await guest
+      .getByLabel("Password", { exact: true })
+      .fill("list guest password");
+    await guest.getByRole("button", { name: "Sign in", exact: true }).click();
+    await guest.getByRole("link", { name: "Lists", exact: true }).click();
+    await guest.getByRole("link", { name: /Harbor reading/ }).click();
+    await expect(
+      guest.getByRole("heading", { name: "Harbor reading", exact: true }),
+    ).toBeVisible();
+    await expect(
+      guest.getByRole("button", { name: "Edit list", exact: true }),
+    ).toHaveCount(0);
+    await expect(
+      guest.getByRole("button", { name: "Acquisition policy", exact: true }),
+    ).toHaveCount(0);
+    await expect(
+      guest.getByRole("region", { name: "List books", exact: true }),
+    ).not.toContainText("In library");
+    await page.goto(url);
+    await page.getByRole("button", { name: "Edit list", exact: true }).click();
+    await editor
+      .getByLabel("Share with this household", { exact: true })
+      .uncheck();
+    await editor
+      .getByRole("button", { name: "Save list details", exact: true })
+      .click();
+    await expect(page.getByText("PRIVATE LIST", { exact: true })).toBeVisible();
+    await guest.bringToFront();
+    await expect(guest.getByRole("alert")).toHaveText("List not found", {
+      timeout: 20_000,
+    });
+    await expect(
+      guest.getByRole("heading", { name: "Harbor reading", exact: true }),
+    ).toHaveCount(0);
+    await expect(
+      guest.getByRole("region", { name: "List books", exact: true }),
+    ).toHaveCount(0);
+  } finally {
+    await guestContext.close();
+  }
+  await books
+    .getByRole("button", { name: "Select this page", exact: true })
+    .focus();
+  await page.keyboard.press("Enter");
+  await books
+    .getByRole("button", { name: "Remove selected (2)", exact: true })
+    .click();
+  await expect(books.getByRole("status")).toHaveText(
+    "2 books removed from this list. Library files were kept.",
+  );
+  await expect(
+    page.getByText("0 books · Removing an entry keeps your library files.", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Catalog", exact: true }).click();
+  await expect(
+    page.getByRole("link", { name: /My protected catalog title/ }),
+  ).toContainText("In library");
+  expect(errors).toEqual([]);
+});

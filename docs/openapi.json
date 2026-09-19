@@ -1627,7 +1627,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ListInput"
+                "$ref": "#/components/schemas/ListPatch"
               }
             }
           }
@@ -1814,6 +1814,70 @@
         "responses": {
           "204": {
             "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lists/{list_id}/curation": {
+      "post": {
+        "tags": [
+          "lists"
+        ],
+        "summary": "Curate",
+        "operationId": "curate_api_lists__list_id__curation_post",
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "List Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CurationInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurationReceipt"
+                }
+              }
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -11115,6 +11179,81 @@
         ],
         "title": "CsvSelection"
       },
+      "CurationInput": {
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "add",
+              "remove"
+            ],
+            "title": "Action"
+          },
+          "work_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Work Ids"
+          },
+          "expected_revision": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "action",
+          "work_ids"
+        ],
+        "title": "CurationInput"
+      },
+      "CurationReceipt": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "add",
+              "remove"
+            ],
+            "title": "Action"
+          },
+          "changed": {
+            "type": "integer",
+            "title": "Changed"
+          },
+          "selected": {
+            "type": "integer",
+            "title": "Selected"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "action",
+          "changed",
+          "selected"
+        ],
+        "title": "CurationReceipt"
+      },
       "DefaultsView": {
         "properties": {
           "overrides": {
@@ -13517,12 +13656,20 @@
             "type": "boolean",
             "title": "Editable"
           },
+          "settings_revision": {
+            "type": "string",
+            "title": "Settings Revision"
+          },
           "items": {
             "items": {
               "$ref": "#/components/schemas/WorkView"
             },
             "type": "array",
             "title": "Items"
+          },
+          "content_revision": {
+            "type": "string",
+            "title": "Content Revision"
           }
         },
         "type": "object",
@@ -13532,7 +13679,9 @@
           "owner_id",
           "count",
           "editable",
-          "items"
+          "settings_revision",
+          "items",
+          "content_revision"
         ],
         "title": "ListDetail"
       },
@@ -13568,6 +13717,63 @@
           "name"
         ],
         "title": "ListInput"
+      },
+      "ListPatch": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 3000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "shared": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Shared"
+          },
+          "expected_settings_revision": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Settings Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ListPatch"
       },
       "ListPolicyInput": {
         "properties": {
@@ -13778,6 +13984,10 @@
           "editable": {
             "type": "boolean",
             "title": "Editable"
+          },
+          "settings_revision": {
+            "type": "string",
+            "title": "Settings Revision"
           }
         },
         "type": "object",
@@ -13786,7 +13996,8 @@
           "id",
           "owner_id",
           "count",
-          "editable"
+          "editable",
+          "settings_revision"
         ],
         "title": "ListView"
       },
@@ -15567,6 +15778,19 @@
             "type": "array",
             "maxItems": 10000,
             "title": "Work Ids"
+          },
+          "expected_revision": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Revision"
           }
         },
         "type": "object",

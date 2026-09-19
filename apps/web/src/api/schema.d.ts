@@ -605,6 +605,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/lists/{list_id}/curation": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Curate */
+    post: operations["curate_api_lists__list_id__curation_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/lists/{list_id}/subscription": {
     parameters: {
       query?: never;
@@ -3591,6 +3608,35 @@ export interface components {
       /** Rows */
       rows: number[];
     };
+    /** CurationInput */
+    CurationInput: {
+      /**
+       * Action
+       * @enum {string}
+       */
+      action: "add" | "remove";
+      /** Work Ids */
+      work_ids: string[];
+      /** Expected Revision */
+      expected_revision?: string | null;
+    };
+    /** CurationReceipt */
+    CurationReceipt: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Action
+       * @enum {string}
+       */
+      action: "add" | "remove";
+      /** Changed */
+      changed: number;
+      /** Selected */
+      selected: number;
+    };
     /** DefaultsView */
     DefaultsView: {
       overrides: components["schemas"]["PreferenceOverrides"];
@@ -4530,8 +4576,12 @@ export interface components {
       count: number;
       /** Editable */
       editable: boolean;
+      /** Settings Revision */
+      settings_revision: string;
       /** Items */
       items: components["schemas"]["WorkView"][];
+      /** Content Revision */
+      content_revision: string;
     };
     /** ListInput */
     ListInput: {
@@ -4544,6 +4594,17 @@ export interface components {
        * @default false
        */
       shared: boolean;
+    };
+    /** ListPatch */
+    ListPatch: {
+      /** Name */
+      name?: string | null;
+      /** Description */
+      description?: string | null;
+      /** Shared */
+      shared?: boolean | null;
+      /** Expected Settings Revision */
+      expected_settings_revision?: string | null;
     };
     /** ListPolicyInput */
     ListPolicyInput: {
@@ -4628,6 +4689,8 @@ export interface components {
       count: number;
       /** Editable */
       editable: boolean;
+      /** Settings Revision */
+      settings_revision: string;
     };
     /** MAMConnectionInput */
     MAMConnectionInput: {
@@ -5267,6 +5330,8 @@ export interface components {
     OrderInput: {
       /** Work Ids */
       work_ids: string[];
+      /** Expected Revision */
+      expected_revision?: string | null;
     };
     /** PackBook */
     PackBook: {
@@ -8323,7 +8388,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["ListInput"];
+        "application/json": components["schemas"]["ListPatch"];
       };
     };
     responses: {
@@ -8431,6 +8496,43 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  curate_api_lists__list_id__curation_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CurationInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CurationReceipt"];
+        };
       };
       /** @description Validation Error */
       422: {
