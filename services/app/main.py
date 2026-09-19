@@ -44,6 +44,7 @@ from app.api import (
     operations,
     organization,
     prowlarr,
+    recovery,
     release_profiles,
     requests,
     series,
@@ -53,16 +54,28 @@ from app.api import (
     sources,
 )
 from app.config import get_settings
-from app.db.session import get_engine
+from app.db.session import get_engine, session_factory
 from app.jobs.queue import get_queue
+from app.recovery import active_restore, restore_pending, runtime_lease
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    get_settings().encryption_key()
-    async with get_queue().open_async():
-        yield
-    await get_engine().dispose()
+    settings = get_settings()
+    settings.encryption_key()
+    try:
+        async with runtime_lease():
+            async with session_factory()() as db:
+                if await restore_pending(db):
+                    if not await active_restore(db):
+                        raise RuntimeError(
+                            "Restore is incomplete; finish the offline restore procedure"
+                        )
+                    settings.recovery_mode = True
+            async with get_queue().open_async():
+                yield
+    finally:
+        await get_engine().dispose()
 
 
 def create_app() -> FastAPI:
@@ -115,6 +128,7 @@ def create_app() -> FastAPI:
         )
 
     app.include_router(auth.router, prefix="/api")
+    app.include_router(recovery.router, prefix="/api")
     app.include_router(operations.router, prefix="/api")
     app.include_router(catalog.router, prefix="/api")
     app.include_router(discovery.router, prefix="/api")

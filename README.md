@@ -2,6 +2,8 @@
 
 Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md), then use these development deliverables:
 
+The latest recovery increment adds a [versioned backup and paused restore review](docs/RECOVERY.md). It preserves application state in a new database and blocks automation until reconciliation; supported reconciliation/resume and full release qualification remain open.
+
 | Deliverable | Purpose |
 |---|---|
 | [Full PRD](PRD.md) | Product boundary, UX, defaults, ownership/version rules and 54 tracked requirements |

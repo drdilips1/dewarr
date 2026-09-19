@@ -2,8 +2,9 @@ import asyncio
 import logging
 
 from app.config import get_settings
-from app.db.session import get_engine
+from app.db.session import get_engine, session_factory
 from app.jobs.queue import get_queue
+from app.recovery import restore_pending, runtime_lease
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +65,19 @@ async def main() -> None:
     settings.encryption_key()
     if settings.recovery_mode:
         raise RuntimeError("Workers are disabled in recovery mode; reconcile before resuming")
+    try:
+        async with runtime_lease():
+            async with session_factory()() as db:
+                if await restore_pending(db):
+                    raise RuntimeError(
+                        "Restored state requires reconciliation before workers can resume"
+                    )
+            await run_worker()
+    finally:
+        await get_engine().dispose()
+
+
+async def run_worker() -> None:
     queue = get_queue()
     async with queue.open_async():
         recovery = asyncio.create_task(recover_stalled_jobs())
@@ -76,7 +90,6 @@ async def main() -> None:
         finally:
             recovery.cancel()
             await asyncio.gather(recovery, return_exceptions=True)
-            await get_engine().dispose()
 
 
 if __name__ == "__main__":

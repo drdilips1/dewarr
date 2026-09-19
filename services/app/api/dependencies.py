@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.config import get_settings
 from app.db.models import LoginSession, User
 from app.db.session import database
+from app.recovery import active_restore, restore_pending
 from app.security import csrf_token, token_hash
 
 Database = Annotated[AsyncSession, Depends(database)]
@@ -35,6 +36,17 @@ async def current_user(request: Request, db: Database) -> User:
     )
     if not user:
         raise HTTPException(401, "Your session has expired. Sign in again")
+    checkpoint = await active_restore(db)
+    if checkpoint and user.id != checkpoint.operator_id:
+        raise HTTPException(401, "Sign in as the designated recovery operator")
+    if await restore_pending(db):
+        allowed = {
+            ("GET", "/api/auth/me"),
+            ("POST", "/api/auth/logout"),
+            ("GET", "/api/recovery"),
+        }
+        if user.role != "admin" or (request.method, request.url.path) not in allowed:
+            raise HTTPException(423, "Recovery review is active; application actions are paused")
     if request.method not in {"GET", "HEAD", "OPTIONS"}:
         require_origin(request)
         if not hmac.compare_digest(request.headers.get("x-csrf-token", ""), csrf_token(raw)):

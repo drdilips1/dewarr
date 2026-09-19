@@ -50,6 +50,19 @@ class LoginSession(Base):
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
 
 
+class RestoreCheckpoint(Identity, Base):
+    __tablename__ = "restore_checkpoints"
+    __table_args__ = (
+        Index(
+            "uq_restore_checkpoint_active", "active", unique=True, postgresql_where=text("active")
+        ),
+    )
+    operator_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
+    backup_id: Mapped[UUID] = mapped_column()
+    active: Mapped[bool] = mapped_column(Boolean)
+    snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB)
+
+
 class RateLimit(Base):
     __tablename__ = "rate_limits"
     key: Mapped[str] = mapped_column(String(100), primary_key=True)

@@ -158,6 +158,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/recovery": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Review */
+    get: operations["review_api_recovery_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/activity": {
     parameters: {
       query?: never;
@@ -3127,6 +3144,11 @@ export interface components {
       user: components["schemas"]["UserView"];
       /** Csrf Token */
       csrf_token: string;
+      /**
+       * Recovery
+       * @default false
+       */
+      recovery: boolean;
     };
     /** AutomaticRoutes */
     AutomaticRoutes: {
@@ -6197,6 +6219,28 @@ export interface components {
       list_id: string | null;
       release_policy?: components["schemas"]["ProfileSnapshot"] | null;
     };
+    /** RecoveryView */
+    RecoveryView: {
+      /** Paused */
+      paused: boolean;
+      /** Backup Id */
+      backup_id: string | null;
+      /** Restored At */
+      restored_at: string | null;
+      /** Downloads */
+      downloads: {
+        [key: string]: number;
+      };
+      /** Imports */
+      imports: {
+        [key: string]: number;
+      };
+      /**
+       * Resume Available
+       * @default false
+       */
+      resume_available: boolean;
+    };
     /** ReleaseAssessment */
     ReleaseAssessment: {
       /**
@@ -7997,6 +8041,26 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  review_api_recovery_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RecoveryView"];
         };
       };
     };

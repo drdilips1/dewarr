@@ -85,6 +85,7 @@ Base image digests are pinned and were resolved from the Docker Hub registry. Lo
 ## State and recovery boundaries
 
 - Preserve PostgreSQL application/queue state and `.local/secrets/app_key` together. Without the key, encrypted provider credentials cannot be recovered from a database backup.
+- The [versioned state bundle and restore review](RECOVERY.md) now provide an offline command, new-database restore, session invalidation and a persistent operator-only fence. External reconciliation and supported resume remain pending; this is a rehearsal foundation, not AT-25 acceptance.
 - Schema migrations are explicit (`alembic upgrade head`), not performed implicitly by every API process. The frozen queue SQL is versioned independently of future Procrastinate upgrades.
 - `BOOK_RECOVERY_MODE=true` blocks diagnostic dispatch and worker startup. Full external-state restore reconciliation is still pending S09; this flag alone does not certify restore safety.
 - Stalled-job recovery includes diagnostics, fenced ABS inventory, fenced secondary metadata enrichment, idempotent acquisition evaluation/reconciliation, completed-download inspection, destination probes and journaled item publication. Wanted requests are reevaluated every five minutes without submitting downloads. Published items awaiting ABS detection and pending cancellation reconciliation are checked every minute. Other future external workflows require their own reconciliation before joining recovery.

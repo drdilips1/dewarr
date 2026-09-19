@@ -13,6 +13,7 @@ from sqlalchemy.dialects.postgresql import insert
 from app.api.dependencies import COOKIE, Admin, CurrentUser, Database, require_origin
 from app.config import get_settings
 from app.db.models import AuditEvent, LoginSession, RateLimit, User
+from app.recovery import active_restore, restore_pending
 from app.security import csrf_token, hash_password, token_hash, verify_password
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
@@ -50,6 +51,7 @@ class UserView(BaseModel):
 class AuthView(BaseModel):
     user: UserView
     csrf_token: str
+    recovery: bool = False
 
 
 class SetupView(BaseModel):
@@ -87,6 +89,12 @@ async def enforce_auth_budget(db: Database, key: str) -> None:
 
 async def establish_session(user: User, db: Database, response: Response) -> AuthView:
     settings = get_settings()
+    checkpoint = await active_restore(db)
+    recovering = await restore_pending(db)
+    if recovering and (user.role != "admin" or (checkpoint and checkpoint.operator_id != user.id)):
+        raise HTTPException(
+            423, "Only the designated recovery operator can sign in during restore review"
+        )
     token = secrets.token_urlsafe(48)
     db.add(
         LoginSession(
@@ -105,7 +113,7 @@ async def establish_session(user: User, db: Database, response: Response) -> Aut
         max_age=settings.session_hours * 3600,
         path="/",
     )
-    return AuthView(user=user_view(user), csrf_token=csrf_token(token))
+    return AuthView(user=user_view(user), csrf_token=csrf_token(token), recovery=recovering)
 
 
 @router.get("/setup", response_model=SetupView)
@@ -160,8 +168,12 @@ async def login(body: Credentials, request: Request, response: Response, db: Dat
 
 
 @router.get("/me", response_model=AuthView)
-async def me(request: Request, user: CurrentUser):
-    return AuthView(user=user_view(user), csrf_token=csrf_token(request.cookies[COOKIE]))
+async def me(request: Request, user: CurrentUser, db: Database):
+    return AuthView(
+        user=user_view(user),
+        csrf_token=csrf_token(request.cookies[COOKIE]),
+        recovery=await restore_pending(db),
+    )
 
 
 @router.post("/logout", status_code=204)

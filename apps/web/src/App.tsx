@@ -44,6 +44,7 @@ const Organization = lazy(() => import("./pages/Organization"));
 const ImportReview = lazy(() => import("./pages/ImportReview"));
 const Destinations = lazy(() => import("./pages/Destinations"));
 const MetadataSettings = lazy(() => import("./pages/MetadataSettings"));
+const Recovery = lazy(() => import("./pages/Recovery"));
 
 export default function App() {
   const client = useQueryClient();
@@ -85,6 +86,12 @@ export default function App() {
           client.setQueryData(["session"], auth);
         }}
       />
+    );
+  if (session.data.recovery)
+    return (
+      <Suspense fallback={<Loading />}>
+        <Recovery />
+      </Suspense>
     );
   return <Shell auth={session.data} />;
 }

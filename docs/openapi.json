@@ -304,6 +304,27 @@
         }
       }
     },
+    "/api/recovery": {
+      "get": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Review",
+        "operationId": "review_api_recovery_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecoveryView"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/activity": {
       "get": {
         "tags": [
@@ -10218,6 +10239,11 @@
           "csrf_token": {
             "type": "string",
             "title": "Csrf Token"
+          },
+          "recovery": {
+            "type": "boolean",
+            "title": "Recovery",
+            "default": false
           }
         },
         "type": "object",
@@ -18695,6 +18721,66 @@
           "list_id"
         ],
         "title": "ReasonView"
+      },
+      "RecoveryView": {
+        "properties": {
+          "paused": {
+            "type": "boolean",
+            "title": "Paused"
+          },
+          "backup_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Backup Id"
+          },
+          "restored_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Restored At"
+          },
+          "downloads": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Downloads"
+          },
+          "imports": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Imports"
+          },
+          "resume_available": {
+            "type": "boolean",
+            "title": "Resume Available",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "paused",
+          "backup_id",
+          "restored_at",
+          "downloads",
+          "imports"
+        ],
+        "title": "RecoveryView"
       },
       "ReleaseAssessment": {
         "properties": {
