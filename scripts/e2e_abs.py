@@ -130,6 +130,7 @@ async def qbit_fixture(path: str, request: Request):
 async def recovery_stats():
     return {
         "adds": qbit_state["adds"],
+        "library_items": [item, *scanner.items.values()],
         "transfers": {key: value["row"] for key, value in sorted(qbit_state["transfers"].items())},
     }
 

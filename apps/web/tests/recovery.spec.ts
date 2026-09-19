@@ -70,7 +70,7 @@ test("restored-state operator review replaces navigation and blocks catalog acce
         exact: true,
       }),
     ).toBeVisible();
-    const evidence = root + "/.local/evidence/recovery-reconcile-ui";
+    const evidence = root + "/.local/evidence/recovery-inventory-ui";
     mkdirSync(evidence, { recursive: true });
     await page.screenshot({ path: evidence + "/review.png", fullPage: true });
     await page
@@ -87,6 +87,50 @@ test("restored-state operator review replaces navigation and blocks catalog acce
       await page.request.get("http://127.0.0.1:13379/fixture/recovery-stats")
     ).json();
     expect(after).toEqual(before);
+    const previousScan = (
+      await (await page.request.get("/api/recovery")).json()
+    ).latest_scan.id;
+    await page
+      .getByRole("button", { name: "Run read-only checks", exact: true })
+      .click();
+    await expect
+      .poll(
+        async () =>
+          (await (await page.request.get("/api/recovery")).json()).latest_scan
+            .id,
+      )
+      .not.toBe(previousScan);
+    await expect(
+      page.getByRole("status").filter({ hasText: "Observation finished" }),
+    ).toBeVisible({ timeout: 60_000 });
+    await page.getByLabel("Filter observations").selectOption("library");
+    await page
+      .getByRole("button", { name: /^Review inventory for/ })
+      .first()
+      .click();
+    await expect(
+      page.getByRole("heading", {
+        name: "Review current library inventory",
+        exact: true,
+      }),
+    ).toBeVisible();
+    await page.screenshot({
+      path: evidence + "/inventory-review.png",
+      fullPage: true,
+    });
+    await page
+      .getByRole("button", { name: "Record current inventory", exact: true })
+      .click();
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: "Current inventory recorded" }),
+    ).toBeVisible({ timeout: 30_000 });
+    expect((await page.request.get("/api/lists")).status()).toBe(423);
+    const inventoryAfter = await (
+      await page.request.get("http://127.0.0.1:13379/fixture/recovery-stats")
+    ).json();
+    expect(inventoryAfter).toEqual(before);
     await page.screenshot({ path: evidence + "/desktop.png", fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/lists");
@@ -100,6 +144,11 @@ test("restored-state operator review replaces navigation and blocks catalog acce
       page
         .getByRole("status")
         .filter({ hasText: "Selected transfers recorded" }),
+    ).toBeVisible();
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: "Current inventory recorded" }),
     ).toBeVisible();
     await page.getByLabel("Filter observations").selectOption("files");
     await expect(

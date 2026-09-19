@@ -22,6 +22,7 @@ class RecoveryView(BaseModel):
     resume_available: bool = False
     latest_scan: "ScanView | None" = None
     latest_reconciliation: "ReconciliationView | None" = None
+    latest_inventory_reconciliation: "InventoryReconciliationView | None" = None
 
 
 class ScanView(BaseModel):
@@ -72,7 +73,24 @@ async def review(admin: Admin, db: Database):
         if checkpoint
         else None
     )
+    inventory_review = (
+        await db.scalar(
+            select(Operation)
+            .where(
+                Operation.kind == "recovery.inventory",
+                Operation.payload["checkpoint_id"].astext == str(checkpoint.id),
+                Operation.owner_id == admin.id,
+            )
+            .order_by(Operation.created_at.desc(), Operation.id.desc())
+            .limit(1)
+        )
+        if checkpoint
+        else None
+    )
     return RecoveryView(
+        latest_inventory_reconciliation=inventory_reconciliation_view(inventory_review)
+        if inventory_review
+        else None,
         latest_reconciliation=reconciliation_view(latest_review) if latest_review else None,
         paused=get_settings().recovery_mode or await restore_pending(db),
         backup_id=checkpoint.backup_id if checkpoint else None,
@@ -320,3 +338,94 @@ async def accept_reconciliation(
     )
     await db.commit()
     return reconciliation_view(operation)
+
+
+class InventoryReconciliationItemView(BaseModel):
+    finding_id: UUID
+    integration_id: UUID
+    title: str
+    summary: dict[str, int]
+
+
+class InventoryReconciliationView(ReconciliationView):
+    items: list[InventoryReconciliationItemView]
+
+
+def inventory_reconciliation_view(operation):
+    return InventoryReconciliationView(
+        id=operation.id,
+        scan_id=operation.payload["command"]["scan_id"],
+        status=operation.status,
+        message=operation.message,
+        created_at=operation.created_at,
+        revision=operation.payload["revision"],
+        expires_at=operation.payload["expires_at"],
+        items=[InventoryReconciliationItemView(**item) for item in operation.payload["items"]],
+        applied_at=operation.payload.get("applied_at"),
+        results=operation.payload.get("results", []),
+    )
+
+
+@router.post(
+    "/inventory-reconciliations", response_model=InventoryReconciliationView, status_code=201
+)
+async def prepare_inventory_reconciliation(
+    body: ReconciliationRequest,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_inventory import prepare
+
+    operation = await prepare(
+        db,
+        await checkpoint_for(db, admin),
+        admin.id,
+        body.scan_id,
+        body.finding_ids,
+        idempotency_key,
+    )
+    await db.commit()
+    return inventory_reconciliation_view(operation)
+
+
+@router.get("/inventory-reconciliations/{identifier}", response_model=InventoryReconciliationView)
+async def get_inventory_reconciliation(identifier: UUID, admin: Admin, db: Database):
+    from app.domain.recovery_reconciliation import INVENTORY_KIND, load
+
+    return inventory_reconciliation_view(
+        await load(
+            db,
+            identifier,
+            await checkpoint_for(db, admin),
+            admin.id,
+            kind=INVENTORY_KIND,
+        )
+    )
+
+
+@router.post(
+    "/inventory-reconciliations/{identifier}/accept",
+    response_model=InventoryReconciliationView,
+    status_code=202,
+)
+async def accept_inventory_reconciliation(
+    identifier: UUID,
+    body: ReconciliationAcceptance,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_reconciliation import INVENTORY_KIND, accept
+
+    operation = await accept(
+        db,
+        await checkpoint_for(db, admin),
+        admin.id,
+        identifier,
+        body.revision,
+        idempotency_key,
+        kind=INVENTORY_KIND,
+    )
+    await db.commit()
+    return inventory_reconciliation_view(operation)

@@ -185,3 +185,6 @@ List detail now defaults to 50 books and exposes count/matched/offset/limit; app
 
 
 [Reviewed transfer recovery](RECOVERY-RECONCILIATION.md) adds `recovery.reconcile` to the restricted recovery worker on existing schema `0042_recovery_scans`. Back up and restart matching API/worker/frontend builds. No migration or dispatch activation is needed. Re-run observations after this upgrade because their context now also includes transfer capacity, memberships and identity claims. The action records verified existing transfers only; the restored installation still has no supported resume command.
+
+
+[Reviewed inventory recovery](RECOVERY-INVENTORY.md) adds `recovery.inventory` to the isolated worker without a schema/dependency change. Fresh observation context includes catalog identities, grants and verified asset coverage. The worker re-reads the full reviewed ABS inventory before one atomic publication, leaves existing grants unchanged and fences prior inventory leases. Deploy matching API/worker/frontend after backup; recovery still has no supported resume command.

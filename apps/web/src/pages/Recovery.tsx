@@ -3,6 +3,11 @@ import { useEffect, useRef, useState } from "react";
 import { api, result, setCsrf } from "../api/client";
 import { Loading, Notice } from "../components";
 import type { components } from "../api/schema";
+import {
+  InventoryRecoveryReview,
+  PrepareInventoryReview,
+  type InventoryReview,
+} from "./RecoveryInventory";
 type RecoveryReview = components["schemas"]["ReconciliationView"];
 
 export default function Recovery() {
@@ -72,6 +77,9 @@ export default function Recovery() {
             <RecoveryChecks
               key={review.data.latest_scan?.id ?? "none"}
               review={review.data.latest_reconciliation ?? undefined}
+              inventoryReview={
+                review.data.latest_inventory_reconciliation ?? undefined
+              }
               scanId={review.data.latest_scan?.id}
               state={review.data.latest_scan?.state}
             />
@@ -102,10 +110,12 @@ function RecoveryChecks({
   scanId,
   state,
   review,
+  inventoryReview,
 }: {
   scanId?: string;
   state?: string;
   review?: RecoveryReview;
+  inventoryReview?: InventoryReview;
 }) {
   const client = useQueryClient();
   const [key, setKey] = useState(() => crypto.randomUUID());
@@ -113,8 +123,16 @@ function RecoveryChecks({
   const [offset, setOffset] = useState(0);
   const [selected, setSelected] = useState<string[]>([]);
   const [prepareKey, setPrepareKey] = useState(() => crypto.randomUUID());
-  const busy = review?.status === "queued" || review?.status === "running";
-  const applied = review?.scan_id === scanId && review?.status === "completed";
+  const transferBusy =
+    review?.status === "queued" || review?.status === "running";
+  const inventoryBusy =
+    inventoryReview?.status === "queued" ||
+    inventoryReview?.status === "running";
+  const busy = transferBusy || inventoryBusy;
+  const applied =
+    (review?.scan_id === scanId && review?.status === "completed") ||
+    (inventoryReview?.scan_id === scanId &&
+      inventoryReview?.status === "completed");
   const preview = useMutation({
     mutationFn: async () =>
       result(
@@ -254,29 +272,44 @@ function RecoveryChecks({
                       Select {finding.title} for recovery review
                     </label>
                   )}
+                {state === "completed" &&
+                  finding.state === "inventory-ready" &&
+                  finding.domain === "library" &&
+                  !applied && (
+                    <PrepareInventoryReview
+                      scanId={scanId!}
+                      findingId={finding.id}
+                      title={finding.title}
+                      disabled={busy}
+                    />
+                  )}
                 {finding.has_evidence && (
                   <FindingEvidence scanId={scanId!} findingId={finding.id} />
                 )}
               </li>
             ))}
           </ul>
-          {state === "completed" && !applied && (
-            <div className="recovery-selection">
-              <p>
-                {selected.length} matching transfers selected across pages
-                (maximum 100).
-              </p>
-              <button
-                disabled={!selected.length || busy || preview.isPending}
-                onClick={() => preview.mutate()}
-              >
-                {preview.isPending
-                  ? "Preparing review…"
-                  : "Review selected transfers"}
-              </button>
-              <Notice error={preview.error} />
-            </div>
-          )}
+          {state === "completed" &&
+            !applied &&
+            (domain === "" ||
+              domain === "downloads" ||
+              selected.length > 0) && (
+              <div className="recovery-selection">
+                <p>
+                  {selected.length} matching transfers selected across pages
+                  (maximum 100).
+                </p>
+                <button
+                  disabled={!selected.length || busy || preview.isPending}
+                  onClick={() => preview.mutate()}
+                >
+                  {preview.isPending
+                    ? "Preparing review…"
+                    : "Review selected transfers"}
+                </button>
+                <Notice error={preview.error} />
+              </div>
+            )}
           <div className="recovery-pagination">
             <button
               disabled={offset === 0}
@@ -298,6 +331,15 @@ function RecoveryChecks({
           key={review.id}
           review={review}
           currentScan={scanId}
+          otherBusy={inventoryBusy}
+        />
+      )}
+      {inventoryReview && (
+        <InventoryRecoveryReview
+          key={inventoryReview.id}
+          review={inventoryReview}
+          currentScan={scanId}
+          otherBusy={transferBusy}
         />
       )}
     </section>
@@ -307,9 +349,11 @@ function RecoveryChecks({
 function ReconciliationReview({
   review,
   currentScan,
+  otherBusy,
 }: {
   review: RecoveryReview;
   currentScan?: string;
+  otherBusy: boolean;
 }) {
   const client = useQueryClient();
   const [key] = useState(() => crypto.randomUUID());
@@ -368,7 +412,9 @@ function ReconciliationReview({
             <p>A newer observation exists. Prepare a new review from it.</p>
           )}
           <button
-            disabled={accept.isPending || review.scan_id !== currentScan}
+            disabled={
+              accept.isPending || otherBusy || review.scan_id !== currentScan
+            }
             onClick={() => accept.mutate()}
           >
             {accept.isPending

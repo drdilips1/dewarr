@@ -1,6 +1,6 @@
 # Application-state backup and restore review
 
-This is a partial implementation of **S09-02 / FR-36 / AT-25**. It provides a versioned offline backup, a restore into a new database with a persistent pause, and [read-only external observations](RECOVERY-OBSERVATIONS.md). It now supports [reviewed recording of matching existing transfers](RECOVERY-RECONCILIATION.md), but does **not** yet provide complete external-state reconciliation or a supported resume command. Use it for a recovery rehearsal; do not switch your working installation to a restored database expecting automation to resume in this build.
+This is a partial implementation of **S09-02 / FR-36 / AT-25**. It provides a versioned offline backup, a restore into a new database with a persistent pause, and [read-only external observations](RECOVERY-OBSERVATIONS.md). It now supports [reviewed recording of matching existing transfers](RECOVERY-RECONCILIATION.md) and [fresh ABS inventory reconciliation](RECOVERY-INVENTORY.md), but does **not** yet provide complete external-state reconciliation or a supported resume command. Use it for a recovery rehearsal; do not switch your working installation to a restored database expecting automation to resume in this build.
 
 ## What the bundle preserves
 
@@ -56,9 +56,9 @@ BOOK_PUBLIC_URL=http://localhost:8002 BOOK_COOKIE_SECURE=false \
 uv run uvicorn app.main:create_app --factory --host 127.0.0.1 --port 8002
 ```
 
-The localhost example uses HTTP; configure the correct HTTPS origin/cookie settings for a proxied deployment. `BOOK_*` environment variables override the generated file, so remove stale shell/container overrides, especially `BOOK_DATABASE_URL` and `BOOK_SECRET_KEY_FILE`. Let the app parse `restore.env`; **do not source it as shell code**. The generated configuration sets recovery mode and disables download dispatch. The active checkpoint and database pause independently block ordinary worker startup even if the environment flag is changed. The explicit recovery worker is restricted to observations and approved local transfer-record corrections.
+The localhost example uses HTTP; configure the correct HTTPS origin/cookie settings for a proxied deployment. `BOOK_*` environment variables override the generated file, so remove stale shell/container overrides, especially `BOOK_DATABASE_URL` and `BOOK_SECRET_KEY_FILE`. Let the app parse `restore.env`; **do not source it as shell code**. The generated configuration sets recovery mode and disables download dispatch. The active checkpoint and database pause independently block ordinary worker startup even if the environment flag is changed. The explicit recovery worker is restricted to observations and approved local transfer-record and inventory corrections.
 
-Sign in with the selected operator's existing credentials. The recovery screen replaces ordinary navigation, labels workflow counts as saved evidence, and explains why automation cannot resume. Other users cannot sign in; normal authenticated routes return `423`. The operator can read their session/recovery review, start read-only observations, inspect their findings, review matching-transfer corrections and sign out. To process observations, start `uv run python -m app.jobs.worker --recovery` with the same restored `BOOK_ENV_FILE`; see the [observation contract](RECOVERY-OBSERVATIONS.md). Existing temporary `BOOK_RECOVERY_MODE=true` diagnostic behavior on a database without a restore checkpoint is unchanged.
+Sign in with the selected operator's existing credentials. The recovery screen replaces ordinary navigation, labels workflow counts as saved evidence, and explains why automation cannot resume. Other users cannot sign in; normal authenticated routes return `423`. The operator can read their session/recovery review, start read-only observations, inspect their findings, review matching-transfer and inventory corrections and sign out. To process observations, start `uv run python -m app.jobs.worker --recovery` with the same restored `BOOK_ENV_FILE`; see the [observation contract](RECOVERY-OBSERVATIONS.md). Existing temporary `BOOK_RECOVERY_MODE=true` diagnostic behavior on a database without a restore checkpoint is unchanged.
 
 ## Interrupted or rejected restore
 
@@ -72,7 +72,7 @@ No supported resume control is available yet. Read-only observations now collect
 
 - Current downloader census by application tags, hashes, save path and category, including transfers created after the backup and therefore absent from the restored ledger.
 - Current source/staging/published-file evidence, with receipt/inode/path checks and independent outcomes for each child of a partially imported pack. A historical receipt alone cannot authorize a move, replacement or deletion.
-- Complete fresh ABS inventory and current library permissions; media deleted or moved after backup must not retain an automatic owned badge merely because it was present in the database snapshot.
+- Qualify the reviewed fresh ABS inventory and repair current library permissions; media deleted or moved after backup must not retain an automatic owned badge merely because it was present in the database snapshot.
 - Current external list memberships and uncertain outbound results, with no historic backlog or blind replay of sent writes. Expired comparisons and approvals require fresh evidence.
 - Explicit, durable resolution of every ambiguous or untracked effect; old queued work must not resume merely because its restored state says it had not yet been sent.
 

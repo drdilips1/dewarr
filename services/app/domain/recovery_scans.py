@@ -14,6 +14,7 @@ from sqlalchemy import delete, select, text
 from app.config import get_settings
 from app.db.models import (
     AcquisitionSelection,
+    AssetContains,
     BookList,
     CatalogAccount,
     DownloadAttempt,
@@ -24,14 +25,18 @@ from app.db.models import (
     Integration,
     Library,
     LibraryAsset,
+    LibraryGrant,
     ListObservation,
     ListSubscription,
     ListWritebackPolicy,
     Operation,
+    ProviderObject,
     RecoveryFinding,
     RecoveryScan,
     RestoreCheckpoint,
     User,
+    Version,
+    Work,
 )
 from app.db.session import session_factory
 from app.domain.operations import transaction_lock
@@ -77,6 +82,11 @@ async def context(db):
         CatalogAccount,
         Library,
         LibraryAsset,
+        LibraryGrant,
+        AssetContains,
+        Work,
+        Version,
+        ProviderObject,
         AcquisitionSelection,
         DownloadAttempt,
         DownloadCapacity,

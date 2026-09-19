@@ -160,6 +160,89 @@ async def abs_library(client, library_id, pulse):
     return items
 
 
+async def read_inventory(client, pulse):
+    """Complete, bounded read with unchanged library permissions and membership."""
+    await pulse()
+    capabilities, scope = await client.authorize()
+    libraries = await client.libraries()
+    if len(libraries) > 100:
+        raise ScanHeld("Recovery supports at most 100 libraries per backend")
+    collected, seen = {}, set()
+    for library in libraries:
+        items = await abs_library(client, library["id"], pulse)
+        ids = {item.id for item in items}
+        if seen & ids:
+            raise AdapterError(FailureKind.UNCERTAIN, "An item appeared in multiple libraries")
+        seen.update(ids)
+        collected[library["id"]] = items
+    await pulse()
+    _, final_scope = await client.authorize()
+    if scope != final_scope or sorted(libraries, key=lambda row: row["id"]) != sorted(
+        await client.libraries(), key=lambda row: row["id"]
+    ):
+        raise AdapterError(
+            FailureKind.UNCERTAIN, "Backend permissions or libraries changed during review"
+        )
+    return {
+        "scope": scope,
+        "libraries": libraries,
+        "items": collected,
+        "capabilities": capabilities,
+    }
+
+
+def inventory_signature(observation):
+    return digest(
+        {
+            "scope": observation["scope"],
+            "libraries": sorted(observation["libraries"], key=lambda row: row["id"]),
+            "items": {
+                library_id: [
+                    item.model_dump(mode="json") for item in sorted(items, key=lambda item: item.id)
+                ]
+                for library_id, items in observation["items"].items()
+            },
+        }
+    )
+
+
+def inventory_summary(inputs, integration_id, observation):
+    saved = {
+        row["external_id"]: row
+        for row in inputs["libraries"]
+        if row["integration_id"] == integration_id
+    }
+    assets = [
+        row
+        for row in inputs["library_assets"]
+        if row["library_id"] in {lib["id"] for lib in saved.values()}
+    ]
+    current = {
+        (library_id, item.id, medium)
+        for library_id, items in observation["items"].items()
+        for item in items
+        for medium in ("ebook", "audio")
+        if getattr(item, medium)
+    }
+    library_keys = {lib["id"]: external for external, lib in saved.items()}
+    visible = set(observation["items"])
+    return {
+        "libraries": len(visible),
+        "new_libraries": len(visible - saved.keys()),
+        "unavailable_libraries": len(saved.keys() - visible),
+        "current_items": sum(len(items) for items in observation["items"].values()),
+        "ebook_items": sum(key[2] == "ebook" for key in current),
+        "audio_items": sum(key[2] == "audio" for key in current),
+        "saved_assets": len(assets),
+        "missing_media": sum(
+            library_keys[asset["library_id"]] in visible
+            and (library_keys[asset["library_id"]], asset["external_id"], asset["medium"])
+            not in current
+            for asset in assets
+        ),
+    }
+
+
 async def inventory(inputs, writer, integration):
     saved_libraries = {
         row["external_id"]: row
@@ -168,20 +251,12 @@ async def inventory(inputs, writer, integration):
     }
     secret = decrypt_secrets(integration["encrypted_secrets"])["token"]
     async with Audiobookshelf(integration["base_url"], secret) as client:
-        await writer.pulse()
-        _, scope = await client.authorize()
-        libraries = await client.libraries()
-        if len(libraries) > 100:
-            raise ScanHeld("Recovery supports at most 100 libraries per backend")
-        collected = {}
-        for library in libraries:
-            collected[library["id"]] = await abs_library(client, library["id"], writer.pulse)
-        await writer.pulse()
-        _, final_scope = await client.authorize()
-        if scope != final_scope or libraries != await client.libraries():
-            raise AdapterError(
-                FailureKind.UNCERTAIN, "Backend permissions or libraries changed during review"
-            )
+        observation = await read_inventory(client, writer.pulse)
+    scope, libraries, collected = (
+        observation["scope"],
+        observation["libraries"],
+        observation["items"],
+    )
     for external_id, library in saved_libraries.items():
         if external_id not in collected:
             await writer.add(
@@ -259,6 +334,20 @@ async def inventory(inputs, writer, integration):
                 "items": len(collected[library["id"]]),
             },
         )
+
+    await writer.add(
+        "library",
+        "inventory-ready",
+        integration["name"],
+        "Complete backend observation is ready for an explicit inventory refresh review",
+        entity_id=integration["id"],
+        evidence={
+            "inventory_schema": 1,
+            "integration_id": integration["id"],
+            "inventory_digest": inventory_signature(observation),
+            "summary": inventory_summary(inputs, integration["id"], observation),
+        },
+    )
 
 
 async def shelf(inputs, writer, subscription):

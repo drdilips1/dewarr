@@ -25,3 +25,12 @@ async def reconcile_restored_transfers(operation_id: str) -> None:
     from app.domain.recovery_reconciliation import run
 
     await run(UUID(operation_id))
+
+
+@tasks.task(
+    name="recovery.inventory", queue="recovery", retry=ShelfRetryStrategy(max_attempts=3, wait=60)
+)
+async def reconcile_restored_inventory(operation_id: str) -> None:
+    from app.domain.recovery_inventory import run
+
+    await run(UUID(operation_id))

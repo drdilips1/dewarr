@@ -35,6 +35,8 @@ from app.jobs.retry import ShelfRetry
 from app.security import decrypt_secrets
 
 KIND = "recovery.reconcile"
+INVENTORY_KIND = "recovery.inventory"
+REVIEW_KINDS = (KIND, INVENTORY_KIND)
 logger = logging.getLogger(__name__)
 
 
@@ -89,7 +91,7 @@ async def require_idle(db, checkpoint_id, *, excluding=None):
     running = list(
         await db.scalars(
             select(Operation).where(
-                Operation.kind == KIND,
+                Operation.kind.in_(REVIEW_KINDS),
                 Operation.payload["checkpoint_id"].astext == str(checkpoint_id),
                 Operation.status.in_(["queued", "running"]),
             )
@@ -109,12 +111,12 @@ async def require_idle(db, checkpoint_id, *, excluding=None):
         operation.payload = {**operation.payload, "run_token": None, "lease_until": None}
 
 
-async def load(db, identifier, checkpoint, actor_id, *, lock=False):
+async def load(db, identifier, checkpoint, actor_id, *, lock=False, kind=KIND):
     await require_checkpoint(db, checkpoint.id, actor_id)
     operation = await db.get(Operation, identifier, populate_existing=True, with_for_update=lock)
     if (
         not operation
-        or operation.kind != KIND
+        or operation.kind != kind
         or operation.owner_id != actor_id
         or operation.payload.get("checkpoint_id") != str(checkpoint.id)
     ):
@@ -139,32 +141,44 @@ async def current_scan(db, scan_id, checkpoint_id, owner_id):
         or not scan.finished_at
         or scan.finished_at < datetime.now(UTC) - timedelta(minutes=15)
     ):
-        raise HTTPException(409, "Complete a fresh observation before reviewing transfers")
-    if scan.context_digest != digest(await context(db)):
+        raise HTTPException(409, "Complete a fresh observation before preparing recovery actions")
+    try:
+        current_context = digest(await context(db))
+    except ScanHeld as error:
+        raise HTTPException(409, str(error)) from None
+    if scan.context_digest != current_context:
         raise HTTPException(409, "Saved context changed; run fresh recovery observations")
     return scan
 
 
-async def prepare(db, checkpoint, owner_id, scan_id, finding_ids, key):
+async def review_inputs(db, checkpoint, owner_id, scan_id, finding_ids, key, *, kind=KIND):
     await transaction_lock(db, f"recovery:{checkpoint.id}")
     await require_checkpoint(db, checkpoint.id, owner_id)
     ordered = sorted(set(finding_ids))
     if len(ordered) != len(finding_ids) or not 1 <= len(ordered) <= 100:
-        raise HTTPException(422, "Choose 1 to 100 distinct matching transfer findings")
+        raise HTTPException(422, "Choose 1 to 100 distinct eligible findings")
     command = {"scan_id": str(scan_id), "finding_ids": [str(i) for i in ordered]}
     old = await db.scalar(
         select(Operation).where(Operation.owner_id == owner_id, Operation.idempotency_key == key)
     )
     if old:
         if (
-            old.kind != KIND
+            old.kind != kind
             or old.payload.get("checkpoint_id") != str(checkpoint.id)
             or old.payload.get("command") != command
         ):
             raise HTTPException(409, "This command key belongs to another operation")
-        return old
+        return old, None, command
     await require_idle(db, checkpoint.id)
     scan = await current_scan(db, scan_id, checkpoint.id, owner_id)
+    return None, scan, command
+
+
+async def prepare(db, checkpoint, owner_id, scan_id, finding_ids, key):
+    old, scan, command = await review_inputs(db, checkpoint, owner_id, scan_id, finding_ids, key)
+    if old:
+        return old
+    ordered = sorted(finding_ids)
     items, seen = [], set()
     for finding_id in ordered:
         finding = await db.get(RecoveryFinding, finding_id)
@@ -224,6 +238,20 @@ async def prepare(db, checkpoint, owner_id, scan_id, finding_ids, key):
                 "external_id": state.external_id,
             }
         )
+    return await save_review(
+        db,
+        checkpoint,
+        owner_id,
+        scan,
+        command,
+        items,
+        key,
+        kind=KIND,
+        message="Review recording these existing transfers; automation remains paused",
+    )
+
+
+async def save_review(db, checkpoint, owner_id, scan, command, items, key, *, kind, message):
     plan = {
         "checkpoint_id": str(checkpoint.id),
         "command": command,
@@ -233,10 +261,10 @@ async def prepare(db, checkpoint, owner_id, scan_id, finding_ids, key):
     }
     operation = Operation(
         owner_id=owner_id,
-        kind=KIND,
+        kind=kind,
         idempotency_key=key,
         status="prepared",
-        message="Review recording these existing transfers; automation remains paused",
+        message=message,
         payload={**plan, "revision": digest(plan)},
     )
     db.add(operation)
@@ -268,15 +296,15 @@ async def require_current_plan(db, operation):
             raise HTTPException(409, "Observation evidence changed; create a fresh review")
 
 
-async def accept(db, checkpoint, owner_id, identifier, revision, key):
+async def accept(db, checkpoint, owner_id, identifier, revision, key, *, kind=KIND):
     await transaction_lock(db, f"recovery:{checkpoint.id}")
-    operation = await load(db, identifier, checkpoint, owner_id, lock=True)
+    operation = await load(db, identifier, checkpoint, owner_id, lock=True, kind=kind)
     command = {"review_id": str(identifier), "revision": revision}
     receipt = await db.scalar(
         select(Operation).where(Operation.owner_id == owner_id, Operation.idempotency_key == key)
     )
     if receipt:
-        if receipt.kind != KIND + ".accept" or receipt.payload != command:
+        if receipt.kind != kind + ".accept" or receipt.payload != command:
             raise HTTPException(409, "This command key belongs to another operation")
         return operation
     if operation.status != "prepared" or operation.payload["revision"] != revision:
@@ -284,12 +312,12 @@ async def accept(db, checkpoint, owner_id, identifier, revision, key):
     await require_idle(db, checkpoint.id)
     await require_current_plan(db, operation)
     operation.status = "queued"
-    operation.message = "Rechecking selected transfers before recording their association"
-    operation.job_id = await enqueue(db, KIND, operation_id=str(operation.id))
+    operation.message = "Rechecking current evidence before applying the reviewed recovery action"
+    operation.job_id = await enqueue(db, kind, operation_id=str(operation.id))
     db.add(
         Operation(
             owner_id=owner_id,
-            kind=KIND + ".accept",
+            kind=kind + ".accept",
             idempotency_key=key,
             status="completed",
             message="Exact recovery review accepted; automation remains paused",
@@ -356,7 +384,7 @@ async def fresh_transfers(identifier, token, payload):
             )
         if not found or identity_signature(found) != item["identity_signature"]:
             raise ScanHeld("Transfer identity, routing or file membership changed since review")
-        observed[item["attempt_id"]] = found
+        observed[item["finding_id"]] = found
     return observed
 
 
@@ -424,10 +452,21 @@ async def record_transfer(db, operation, item, observed):
 
 
 async def run(identifier):
+    await run_review(
+        identifier,
+        kind=KIND,
+        read=fresh_transfers,
+        apply=record_transfer,
+        message="Selected transfers recorded. Run fresh observations before further review; "
+        "imports, lists and automation remain paused",
+    )
+
+
+async def run_review(identifier, *, kind, read, apply, message):
     token = uuid4()
     async with session_factory()() as db, db.begin():
         operation = await db.get(Operation, identifier)
-        if not operation or operation.kind != KIND or operation.status not in {"queued", "running"}:
+        if not operation or operation.kind != kind or operation.status not in {"queued", "running"}:
             return
         await transaction_lock(db, "recovery:" + operation.payload["checkpoint_id"])
         await db.refresh(operation, with_for_update=True)
@@ -453,7 +492,7 @@ async def run(identifier):
         payload = dict(operation.payload)
     try:
         async with asyncio.timeout(900):
-            observed = await fresh_transfers(identifier, token, payload)
+            observed = await read(identifier, token, payload)
         async with session_factory()() as db, db.begin():
             await transaction_lock(db, "recovery:" + payload["checkpoint_id"])
             operation = await db.get(Operation, identifier, with_for_update=True)
@@ -461,14 +500,11 @@ async def run(identifier):
                 return
             await require_current_plan(db, operation)
             results = [
-                await record_transfer(db, operation, item, observed[item["attempt_id"]])
+                await apply(db, operation, item, observed[item["finding_id"]])
                 for item in payload["items"]
             ]
             operation.status = "completed"
-            operation.message = (
-                "Selected transfers recorded. Run fresh observations before further review; "
-                "imports, lists and automation remain paused"
-            )
+            operation.message = message
             operation.payload = {
                 **payload,
                 "results": results,
@@ -480,10 +516,10 @@ async def run(identifier):
         if isinstance(error, (HTTPException, ScanHeld, AdapterError)):
             message = str(error.detail) if isinstance(error, HTTPException) else str(error)
         elif isinstance(error, TimeoutError):
-            message = "Current transfer verification timed out; no associations were applied"
+            message = "Current evidence verification timed out; no corrections were applied"
         else:
             logger.error("Recovery reconciliation %s failed (%s)", identifier, type(error).__name__)
-            message = "Recovery verification failed; no associations were applied"
+            message = "Recovery verification failed; no corrections were applied"
         async with session_factory()() as db, db.begin():
             operation = await db.get(Operation, identifier, with_for_update=True)
             if operation.payload.get("run_token") == str(token):

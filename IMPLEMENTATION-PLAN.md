@@ -1037,3 +1037,8 @@ A completed planning package is not a completed application. Update implementati
 ### Reviewed transfer reconciliation increment
 
 [Reviewed transfer recovery](docs/RECOVERY-RECONCILIATION.md) implements the matching-download portion of the Review and reconcile packet. It binds an explicit selected batch to a fresh scan, revalidates remote identity and current context, and atomically records existing transfers without dispatch/import/list effects. Preserve the bounded evidence in implementation status. Continue with untracked/conflicting effects, configuration repair, publication children, inventory/list rebaseline and controlled resume; this subset does not close S09-02 or transfer remaining requirements out of v1.
+
+
+### Reviewed inventory reconciliation increment
+
+[Reviewed ABS inventory recovery](docs/RECOVERY-INVENTORY.md) implements the backend-inventory part of Review and reconcile: complete current evidence, fresh verification, atomic local publication, missing/moved/inaccessible distinctions, unchanged grants and reused work/version/containment rules. Keep actual evidence in implementation status. Complete configuration/permission repair, publication children, untracked/conflicting effects, external lists, historical commands and controlled resume next. The bounded implementation does not close real-service/reference-load qualification, S09-02 or any remaining v1/expansion requirement.
