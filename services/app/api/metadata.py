@@ -107,7 +107,11 @@ async def provider_call(db, user_id, provider, operation, *args, force=False):
     await db.rollback()
     # No request transaction or connection is retained across provider I/O.
     async with CatalogGateway(
-        provider, scope, token, force=force, cache=operation not in {"list_page", "list_choices"}
+        provider,
+        scope,
+        token,
+        force=force,
+        cache=operation not in {"list_page", "list_choices", "community_lists", "community_list"},
     ) as gateway:
         adapter = (
             Hardcover(gateway.request) if provider == "hardcover" else OpenLibrary(gateway.request)

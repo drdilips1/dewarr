@@ -76,6 +76,16 @@ class Hardcover:
 
         return await related(self.query, external_id)
 
+    async def community_lists(self, term, page):
+        from app.adapters.hardcover_community import browse
+
+        return await browse(self.query, term, page)
+
+    async def community_list(self, external_id, cursor=0):
+        from app.adapters.hardcover_community import detail
+
+        return await detail(self.query, external_id, cursor)
+
     async def query(self, query, variables):
         value = await self.request(
             "POST", "v1/graphql", json={"query": query, "variables": variables}

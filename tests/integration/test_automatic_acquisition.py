@@ -109,6 +109,7 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     exact_version=False,
     recording_file_conflict=None,
     recording_catalog_change=False,
+    list_origin=None,
 ):
     route = ready_route
     if series_pack:
@@ -552,9 +553,13 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
                 ),
             },
         )
-        shelf = (await client.post("/api/lists", json={"name": "List-to-library fixture"})).json()[
-            "id"
-        ]
+        shelf = (
+            await list_origin.create(work_id)
+            if list_origin
+            else (await client.post("/api/lists", json={"name": "List-to-library fixture"})).json()[
+                "id"
+            ]
+        )
         route["scan_backend"].detect = not delayed_backend
         response = await client.post(
             f"/api/lists/{shelf}/acquisition/preview",
@@ -613,8 +618,11 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
                         f"/api/lists/{second_shelf}/entries", json={"work_id": work_id}
                     )
                 ).status_code == 204
-        added = await client.post(f"/api/lists/{shelf}/entries", json={"work_id": work_id})
-        assert added.status_code == 204
+        if list_origin:
+            await list_origin.add(shelf, work_id)
+        else:
+            added = await client.post(f"/api/lists/{shelf}/entries", json={"work_id": work_id})
+            assert added.status_code == 204
         if automatic_group:
             # Both independent policies authorize searches before either transfer starts.
             for saved_policy in [policy, second_policy]:

@@ -61,6 +61,10 @@ All AT-01–AT-30 are v1 release scenarios. Individual stage gates may exercise 
 
 ## 3. Required fixture corpus
 
+Community-follow assertions extend AT-05, AT-20, AT-22 and AT-27; they do not create new acceptance IDs. Exercise a public list with one ebook-owned work, one audio-owned work, one unmatched title, an alternate recording and more than one preview page. Follow must atomically create a private Browse subscription and a durable first sync, with no acquisition or remote follow mutation. Repeated/concurrent follow commands return the existing local follow and preserve paused/automatic settings. Inject enqueue rollback, deleted/detached receipt replay, account-generation change, role revocation, public-to-private change, rate limits and a list above the supported sync bound. No case may create a duplicate subscription, expose another user's follow, publish a partial baseline or reinterpret an error as empty membership.
+
+Then complete the same journey through explicit future-only activation: add a new upstream member, acquire only its missing requested media, confirm the actual ABS item, repeat the sync and restart the worker. Record one compatible transfer and stable ownership. Query validation against a saved GraphQL schema is recorded separately from actual-account execution; a schema-valid but provider-disabled search operator fails the integration gate. Browser evidence includes navigation, follow progress, actionable sync error, existing-follow reopening and keyboard/mobile operation.
+
 Build fixture directories during S00; filenames below describe cases rather than existing artifacts.
 
 | Corpus | Minimum representative cases |

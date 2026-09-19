@@ -4258,3 +4258,100 @@ test("discovery shelves connect provider previews, library ownership and list cu
     });
   }
 });
+
+test("community lists preview ownership and follow into private list automation", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(90_000);
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.route("https://covers.openlibrary.org/**", (route) =>
+    route.fulfill({
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="360"><rect width="240" height="360" fill="#263953"/><text x="24" y="90" fill="#ffffff" font-size="22">SEA STORIES</text><text x="24" y="128" fill="#b9c4d9" font-size="14">Synthetic test cover</text></svg>',
+    }),
+  );
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.getByRole("link", { name: "Discover", exact: true }).click();
+  await page.getByRole("link", { name: "Explore community lists" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Community lists", exact: true }),
+  ).toBeVisible();
+  await page.getByLabel("Search public lists", { exact: true }).fill("Sea");
+  await page.getByRole("button", { name: "Search lists", exact: true }).click();
+  const card = page.getByRole("link", { name: /Stories by the Sea/ });
+  await expect(card).toContainText("28 followers", { timeout: 30_000 });
+  await page.screenshot({
+    path: testInfo.outputPath("community-lists-desktop.png"),
+    fullPage: true,
+  });
+  await card.focus();
+  await page.keyboard.press("Enter");
+  await expect(
+    page.getByRole("heading", { name: "Stories by the Sea", level: 1 }),
+  ).toBeVisible();
+  const shelf = page.getByRole("region", {
+    name: "Books in this community list",
+    exact: true,
+  });
+  await expect(
+    shelf.getByRole("link", { name: /My protected catalog title/ }),
+  ).toContainText("In library");
+  const previewButton = shelf.getByRole("button", {
+    name: "Preview The Discovered Harbor",
+  });
+  await previewButton.focus();
+  await page.keyboard.press("Enter");
+  const preview = page.getByRole("region", {
+    name: "Catalog preview",
+    exact: true,
+  });
+  await expect(preview).toBeFocused();
+  await preview.getByRole("button", { name: "Close preview" }).click();
+  await expect(previewButton).toBeFocused();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("community-preview-mobile.png"),
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "Follow list", exact: true }).click();
+  await expect(page).toHaveURL(/\/lists\/[0-9a-f-]{36}$/);
+  const localUrl = page.url();
+  await expect(
+    page.getByRole("heading", { name: "Stories by the Sea", level: 1 }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "The Discovered Harbor", exact: true }),
+  ).toBeVisible({ timeout: 30_000 });
+  await page
+    .getByRole("button", { name: "Acquisition policy", exact: true })
+    .click();
+  await expect(
+    page.getByRole("combobox", { name: "Acquisition mode", exact: true }),
+  ).toHaveValue("browse");
+  await page.goto("/discover/lists/9101");
+  await page.getByRole("link", { name: "Open followed list" }).click();
+  await expect(page).toHaveURL(localUrl);
+  const lists = await (await page.request.get("/api/lists")).json();
+  const followed = lists.filter(
+    (list: { name: string }) => list.name === "Stories by the Sea",
+  );
+  expect(followed).toHaveLength(1);
+  expect(followed[0].shared).toBe(false);
+  const policy = await page.request.get(
+    `/api/lists/${followed[0].id}/acquisition`,
+  );
+  expect(policy.ok()).toBe(true);
+  expect(await policy.json()).toBeNull();
+  expect(errors).toEqual([]);
+});

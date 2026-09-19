@@ -36,9 +36,14 @@ export default function Discover({ canEdit }: { canEdit: boolean }) {
             your library.
           </p>
         </div>
-        <Link className="back-link" to="/search">
-          Find a specific book →
-        </Link>
+        <div className="button-row">
+          <Link className="back-link" to="/discover/lists">
+            Explore community lists →
+          </Link>
+          <Link className="back-link" to="/search">
+            Find a specific book →
+          </Link>
+        </div>
       </div>
       {selected && (
         <Preview

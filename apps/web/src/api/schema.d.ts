@@ -278,6 +278,57 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/discovery/lists": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Browse */
+    get: operations["browse_api_discovery_lists_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/discovery/lists/{external_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Detail */
+    get: operations["detail_api_discovery_lists__external_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/discovery/lists/{external_id}/follow": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Follow */
+    post: operations["follow_api_discovery_lists__external_id__follow_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/catalog/series/hardcover/{external_id}/main-books": {
     parameters: {
       query?: never;
@@ -3288,6 +3339,48 @@ export interface components {
        */
       evidence: "claimed";
     };
+    /** CommunityListCard */
+    CommunityListCard: {
+      /** External Id */
+      external_id: string;
+      /** Name */
+      name: string;
+      /** Description */
+      description: string | null;
+      /** Count */
+      count: number;
+      /** Followers */
+      followers: number | null;
+      /** Updated At */
+      updated_at: string | null;
+      /** Covers */
+      covers: string[];
+      /** Followed List Id */
+      followed_list_id?: string | null;
+      /** Follow Supported */
+      follow_supported: boolean;
+    };
+    /** CommunityListPage */
+    CommunityListPage: {
+      /** Items */
+      items: components["schemas"]["CommunityListCard"][];
+      /** Page */
+      page: number;
+      /** Has More */
+      has_more: boolean;
+      /** Warning */
+      warning?: string | null;
+    };
+    /** CommunityListPreview */
+    CommunityListPreview: {
+      info: components["schemas"]["CommunityListCard"];
+      /** Items */
+      items: components["schemas"]["DiscoveryItem"][];
+      /** Next Cursor */
+      next_cursor: number | null;
+      /** Warning */
+      warning?: string | null;
+    };
     /** ConnectionView */
     ConnectionView: {
       /**
@@ -3909,6 +4002,31 @@ export interface components {
       destination: string;
       /** Role */
       role: string;
+    };
+    /** FollowInput */
+    FollowInput: {
+      /** Name */
+      name?: string | null;
+    };
+    /** FollowResult */
+    FollowResult: {
+      /**
+       * List Id
+       * Format: uuid
+       */
+      list_id: string;
+      /**
+       * Subscription Id
+       * Format: uuid
+       */
+      subscription_id: string;
+      /** Reused */
+      reused: boolean;
+      /**
+       * Receipt Id
+       * Format: uuid
+       */
+      receipt_id: string;
     };
     /** FreezeInput */
     FreezeInput: {
@@ -7491,6 +7609,108 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["DiscoveryShelf"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  browse_api_discovery_lists_get: {
+    parameters: {
+      query?: {
+        q?: string;
+        page?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CommunityListPage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  detail_api_discovery_lists__external_id__get: {
+    parameters: {
+      query?: {
+        cursor?: number;
+      };
+      header?: never;
+      path: {
+        external_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CommunityListPreview"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  follow_api_discovery_lists__external_id__follow_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        external_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["FollowInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FollowResult"];
         };
       };
       /** @description Validation Error */

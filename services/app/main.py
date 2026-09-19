@@ -19,6 +19,7 @@ from app.api import (
     book_sources,
     capacity,
     catalog,
+    community_lists,
     destinations,
     discovery,
     download_attempts,
@@ -113,6 +114,7 @@ def create_app() -> FastAPI:
     app.include_router(operations.router, prefix="/api")
     app.include_router(catalog.router, prefix="/api")
     app.include_router(discovery.router, prefix="/api")
+    app.include_router(community_lists.router, prefix="/api")
     app.include_router(series.router, prefix="/api")
     app.include_router(series_requests.router, prefix="/api")
     app.include_router(lists.router, prefix="/api")

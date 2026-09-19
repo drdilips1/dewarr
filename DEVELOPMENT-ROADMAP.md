@@ -8,6 +8,17 @@ This guide is the short entry point. The complete specification is in [PRD](PRD.
 
 The planning package contains **42 functional requirements, 12 nonfunctional requirements, 61 development work packages and 35 acceptance scenarios**. The core product ships through S09; S10 contains separately scoped extensions. Use the [backlog CSV](DEVELOPMENT-BACKLOG.csv) for issue import and [requirements traceability](REQUIREMENTS-TRACEABILITY.csv) to connect each requirement to its acceptance evidence.
 
+| Development artifact | Use it to decide |
+|---|---|
+| [PRD](PRD.md) | Product scope, UX, defaults, identity/ownership semantics and required outcomes |
+| [Architecture](PRODUCT-ARCHITECTURE.md) and [decisions](IMPLEMENTATION-DECISIONS.md) | Module boundaries, integration contracts, data authority and P0/P1 engineering choices |
+| [Implementation plan](IMPLEMENTATION-PLAN.md) | Stage order, dependencies, role ownership, reviewable work packages and exit gates |
+| [Backlog](DEVELOPMENT-BACKLOG.csv) | Import the 61 stable packages into issue tracking; assign people and estimates at stage start |
+| [Acceptance plan](ACCEPTANCE-PLAN.md) and [traceability](REQUIREMENTS-TRACEABILITY.csv) | Required success/failure demonstrations and requirement coverage |
+| [Implementation status](docs/IMPLEMENTATION-STATUS.md) | Distinguish implemented subsets, recorded evidence and remaining qualification |
+
+The planning review also specifies the [community-list journey](PRD.md#community-discovery-to-automation-fr-02-fr-11fr-12-fr-31fr-34) and [seven S08 implementation packets](IMPLEMENTATION-PLAN.md#s08-delivery-packets-discovery-through-a-usable-subscription). The [community-list increment](docs/COMMUNITY-LISTS.md) now has bounded contract, subscription and acquisition evidence. Its documented search operation replaces the earlier unsupported query assumption; actual-account qualification and remaining S08 packets are still open.
+
 Read this guide first, then the PRD's [detailed behavior contracts](PRD.md#13-detailed-behavior-contracts). Developers use the implementation plan's [stage packages](IMPLEMENTATION-PLAN.md#3-stage-work-packages-and-gates) and [release delivery contract](IMPLEMENTATION-PLAN.md#16-release-delivery-contract). The current code is partially implemented; an existing screen or passing subset does not establish completion of a stage.
 
 The [stage closure plan](IMPLEMENTATION-PLAN.md#17-stage-closure-and-implementation-packets) lists remaining work for every stage. The [current development handoff](IMPLEMENTATION-PLAN.md#18-current-development-handoff) accounts for shared transfers, automatic pack coverage/grouping, same-owner transfer reuse, reviewed-series acquisition and inherited downloader/destination defaults. Each has bounded evidence; full series policies, broader reuse, source coverage, discovery and production qualification remain required. Earlier checkpoint descriptions are historical; use section 9 below for the current development order.
@@ -175,7 +186,7 @@ Starting point: committed revision `2dcc455`. Existing evidence covers bounded c
 
 This is the current order for the existing workspace, not a replacement for the greenfield S00–S10 dependency graph. Any unmet prerequisite discovered in a batch must be closed before activating its dependent behavior.
 
-[Initial discovery shelves](docs/DISCOVERY.md) now connect attributed Hardcover trending/recent/related signals and local fallback to existing catalog and list actions. Batch 5 still requires series continuation, community curation, full sharing/write-back and usability qualification; the new shelves do not establish full S08 acceptance.
+[Initial discovery shelves](docs/DISCOVERY.md) now connect attributed Hardcover trending/recent/related signals and local fallback to existing catalog and list actions. Community-list following now connects those shelves to the existing subscription and automation services. Batch 5 still requires series continuation, complete curation, full sharing/write-back and usability qualification; the new shelves do not establish full S08 acceptance.
 
 | Batch | Parent scope | Complete outcome | Acceptance demonstration |
 |---|---|---|---|
@@ -188,6 +199,8 @@ This is the current order for the existing workspace, not a replacement for the 
 | 7. Separate expansion releases | S10 | Additional library backends/clients, advanced recommendations, opt-in upgrades/reorganization and SSO | Each extension passes its own identity, authorization, compatibility and recovery contract. |
 
 Actual-service and filesystem qualification can start as soon as the relevant contracts stabilize; it should not wait until the final week of release work. Discovery design can proceed against the catalog contract while acquisition gaps close. Neither parallel activity bypasses the dependent release gates.
+
+Two documentation constraints deserve explicit qualification. Audiobookshelf's [API reference](https://api.audiobookshelf.org/) identifies itself as unmaintained: verify contracts and scanner boundaries against the selected server revision. Hardcover's [API guidance](https://docs.hardcover.app/api/getting-started/) restricts query operators, nesting and data access: schema validation alone cannot certify community search or list hydration. These checks belong to the relevant implementation packets, not a final release-day discovery.
 
 The [current implementation handoff](IMPLEMENTATION-PLAN.md#18-current-development-handoff) defines the first packet and the remaining series subpackages. Use existing stable ticket IDs in the [61-package backlog](DEVELOPMENT-BACKLOG.csv); smaller packets do not create a second competing backlog.
 

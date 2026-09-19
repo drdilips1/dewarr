@@ -369,6 +369,24 @@ The product uses five main destinations: Discover, Search, My Library, Lists and
 
 Usability acceptance uses task walkthroughs with defaults: connect ABS; find an owned book; request its missing medium; follow a list without historic downloads; inspect a series pack; fix one ambiguous child. Measure completion and confusion in S08, and resolve any task that requires unexplained advanced configuration.
 
+### Community discovery to automation: FR-02, FR-11–FR-12, FR-31–FR-34
+
+The normal journey is Discover → community list → preview → Follow → local list. Follow means a private local subscription in this app. It does not implicitly follow the list on Hardcover, share the local list, or enable downloads. The resulting list exposes the ordinary Browse / Manual / Automatic settings; there is no separate community-list acquisition engine.
+
+| Action or state | Product contract |
+|---|---|
+| Browse community lists | Use provider-supported public discovery and search. Attribute the source and any reported popularity metric. Unknown follower counts remain unknown. A bounded local filter must disclose that it searches only loaded results. |
+| Preview titles | Show known accessible library availability and separate ebook/audio indicators. An unresolved provider-to-catalog match says “Library match not established,” not “Missing.” A paginated preview is not a complete sync or a backfill estimate. |
+| Follow | Create one private local list, its inbound subscription and the first durable sync together. Default to Browse with downloads off. Show sync progress, last successful observation and repair actions. |
+| Follow again | Open this user's existing follow without resuming a paused subscription, replacing its name/profile or changing acquisition mode. Concurrent clicks and retries must not create another subscription through this action. |
+| First sync | Publish membership only after a complete verified observation. Partial preview data must never establish a future-only baseline or authorize historical downloads. |
+| Enable Automatic | Reuse the normal versioned activation preview: desired media, effective profile, destinations, owned/pending/excluded counts and current-versus-future entries. Recheck ownership and authorization at dispatch. |
+| Provider access changes | Recheck current account and list visibility; access failure is not an empty list or permission to reuse stale private content. Preserve prior local membership under its existing local access rules and show interrupted synchronization. |
+| Oversized or unsupported list | Explain the supported sync limit before creating an unusable subscription. Browsing a preview may remain available, explicitly bounded. Do not silently follow only the first pages. |
+| Unfollow or detach | Stop this subscription according to existing reason-lifecycle rules; preserve library files, independent local membership and unrelated request reasons. A replay of an old Follow receipt must not resurrect a deleted or detached subscription. |
+
+Optional external follow/list mutations remain a separate, explicitly enabled capability under FR-34. They must not be inferred from the local Follow action. Community-list discovery is useful before automation is configured, and its permissions remain independent of permission to download.
+
 ## 14. Decisions resolved before development and remaining gates
 
 | Priority | Decision | Baseline | Must be proved before |

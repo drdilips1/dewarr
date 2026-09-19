@@ -1141,3 +1141,51 @@ img.detail-cover {
 .preference-order button {
   padding: 4px 12px;
 }
+
+.community-card {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.community-covers {
+  display: flex;
+  height: 126px;
+  gap: 6px;
+  margin-bottom: 22px;
+  align-items: end;
+  overflow: hidden;
+  color: var(--muted);
+}
+.community-covers img {
+  height: 100%;
+  width: calc((100% - 18px) / 4);
+  max-width: 90px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+.community-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.community-card .status {
+  margin-top: 16px;
+}
+.community-direct {
+  margin-block: 16px;
+}
+.community-direct .inline-form {
+  margin-top: 16px;
+}
+.community-follow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+}
+.community-follow > div {
+  flex: 1 1 300px;
+}
+.community-follow .notice {
+  flex-basis: 100%;
+}

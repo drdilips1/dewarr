@@ -25,6 +25,7 @@ import { Loading, Notice } from "./components";
 
 const Catalog = lazy(() => import("./pages/Catalog"));
 const Discover = lazy(() => import("./pages/Discover"));
+const CommunityLists = lazy(() => import("./pages/CommunityLists"));
 const BookDetail = lazy(() => import("./pages/BookDetail"));
 const Series = lazy(() => import("./pages/Series"));
 const Lists = lazy(() => import("./pages/Lists"));
@@ -355,6 +356,18 @@ function Shell({ auth }: { auth: Auth }) {
               <Route
                 path="/discover"
                 element={<Discover canEdit={auth.user.role !== "viewer"} />}
+              />
+              <Route
+                path="/discover/lists"
+                element={
+                  <CommunityLists canEdit={auth.user.role !== "viewer"} />
+                }
+              />
+              <Route
+                path="/discover/lists/:externalId"
+                element={
+                  <CommunityLists canEdit={auth.user.role !== "viewer"} />
+                }
               />
               <Route
                 path="/download-preferences"

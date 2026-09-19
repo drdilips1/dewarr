@@ -1,10 +1,12 @@
 # Implementation status and evidence
 
-Latest checkpoint: [Discovery shelves and related books](DISCOVERY.md) connects attributed Hardcover signals and scoped library availability to catalog/list curation, with independently usable local fallback. Complete discovery/curation and full stage acceptance remain open. The final checkpoint records exact verification.
+Latest checkpoint: [Community-list discovery and following](COMMUNITY-LISTS.md) connects public Hardcover browse/search and scoped library previews to private local subscriptions and existing automation. Complete discovery/curation and full stage acceptance remain open. The final checkpoint records exact verification.
 
 Updated September 18, 2026. Objective remains **implement the full PRD end to end**, including the planned later capabilities. This is an implementation checkpoint, not a completion declaration.
 
 ## Current code
+
+- [Community lists](COMMUNITY-LISTS.md) adds public-list browse/search, fresh public-header validation, paginated book previews, current scoped ownership, private Follow receipts and atomic first-sync enqueue. Repeated follows preserve existing subscription/policy settings. New upstream membership uses the existing two-pass observation and list acquisition pipeline. Actual-account qualification, remaining discovery/curation and full S08 acceptance remain open.
 
 - [Discovery](DISCOVERY.md) adds monthly Hardcover trending, recent work publications, related-title suggestions and recent local catalog shelves. Accepted visible provider IDs alone bind ownership; protected local metadata, grants and collection/media badges remain intact. Provider/account errors and stale cache have explicit states, while local author matches provide an attributed related-book fallback. Preview → catalog → list/request uses the existing services without automatic browsing side effects.
 
@@ -620,3 +622,20 @@ Verification:
 Deployment: a private database/key backup and its archive catalog were verified (`discovery-backup-path.txt`). With zero active development jobs, the identified API and worker were restarted together. Readiness and `/discover` return **200**; unauthenticated discovery data returns **401**. Schema remains `0038_asset_containment`, one fresh worker is present and dispatch remains **disabled** (`discovery-runtime.json`).
 
 Remaining S08 work includes series-continuation shelves, community-list browsing/following from Discover, full local sharing, supported optional write-back, onboarding/usability and actual-provider/performance qualification. Earlier acquisition/collection/policy gates, full external-list certification, production hardening and all S10 packages remain in scope. This advances FR-11 and the discovery subset of AT-05; it does not complete S08 or the full PRD.
+
+## Community-list discovery and subscription checkpoint · September 18, 2026
+
+[Community lists](COMMUNITY-LISTS.md) connects Discover to documented Hardcover list search, current public records, scoped book previews and private local subscriptions. Follow creates its list, encrypted subscription, receipt and first sync job in one transaction. Repeated/concurrent follows reuse the existing subscription without changing paused or automatic settings. The existing two-pass worker and ordinary list policies supply baseline verification and automation; no external follow or read-status mutation is introduced.
+
+The earlier `_ilike` query assumption was replaced with the documented `List` search operation. Search hits supply IDs only; current public list metadata is separately fetched. Member identifiers and book hydration are split to fit the published depth restriction. Missing public matches/books, unsupported sync size, malformed responses and unknown library matches remain explicit.
+
+Verification at this checkpoint:
+
+- Community adapter/API/transaction/acquisition, discovery, Hardcover subscriptions and list policy/lifecycle/monitoring regression: **101 passed in 58.86 seconds**. Evidence: `.local/evidence/community-final-regression.log`. This is the targeted affected suite, not a new full-backend-suite claim.
+- The suite includes both ebook and audiobook workflows: public Follow → verified baseline → explicit future-only activation → new upstream membership → source selection → one transfer → real-file hardlink import → delayed synthetic ABS confirmation. Source bytes/inodes and repeated sync/follow deduplication are checked. The standalone acquisition run also passed **2 cases in 24.97 seconds**.
+- Durable-worker first-sync coverage, concurrent command reuse, account/role changes during provider I/O, private-list cache rejection, scoped availability/follow references, recovery mode, oversized lists, enqueue rollback, detached receipts and subscription-command lock ordering pass. Invalid list IDs fail before provider I/O.
+- Browser baseline plus community journey: **2 passed in 2.1 minutes**. Search, ownership, unknown-book preview/focus restoration, mobile overflow, Follow → actual local UUID route → synchronized private list, Browse defaults and existing-follow reopening are covered. Desktop/mobile screenshots were visually reviewed. Evidence: `.local/evidence/community-browser.log` and `apps/web/test-results/`.
+- Five community GraphQL queries validate against the recorded official Hardcover schema. Production frontend build, generated client, Python lint/format, frontend formatting, wheel packaging with **197 Python modules**, and local documentation/traceability checks pass. No new runtime dependency or migration is needed.
+- Development database/key/config backup verified with private file modes before restart. API and worker restarted on `0038_asset_containment`; readiness and community UI return 200, unauthenticated community data returns 401, one worker is fresh and download dispatch remains disabled. Evidence: `.local/evidence/community-runtime.json`.
+
+Actual Hardcover account access/search ordering and live source/client acquisition remain independent qualification gates; fixture responses do not certify them. Remaining S08 work includes series-continuation discovery, complete curation/sharing, supported optional write-back and task-based usability. All unmet S00–S10 obligations remain in scope. This checkpoint advances FR-11–FR-12 and the S07/S08 connection; it does not complete the full PRD.

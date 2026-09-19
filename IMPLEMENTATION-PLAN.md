@@ -268,6 +268,24 @@ Acceptance scenarios often span several stages. The [stage evidence scopes](ACCE
 
 **Exit/feature-complete beta:** AT-05 discovery/sharing, AT-23, AT-27 account/privacy and AT-28 core-flow checks pass. Every visible capability has a working implementation or clear unsupported state. Goodreads never displays a write-back control.
 
+#### S08 delivery packets: discovery through a usable subscription
+
+These are subtasks of the existing S08 packages, not new stage IDs or additional product scope. Deliver API, worker, UI and recovery behavior together where the packet requires them.
+
+| Order / parent | Implementation | Depends on / owner | Required evidence |
+|---|---|---|---|
+| 1 / S08-01–02 | Confirm supported public-list discovery/search queries, pagination, privacy fields, provider budgets and account capabilities. Separate provider contract validation from real-account authorization. | Existing catalog gateway; integration owner | Schema-valid queries plus supported-account checks. Permission, quota, malformed, empty and unavailable-search states are distinct. Unsupported query operators cannot underpin a required search feature. |
+| 2 / S08-02 | Add public list cards and paginated title preview. Reuse accepted catalog mappings and current library-grant projections; retain unresolved matches. | Packet 1; catalog/backend and frontend owners | Owned ebook, owned audio, alternate versions, unknown identity and revoked grants display correctly. Mobile and keyboard navigation preserve focus. |
+| 3 / S08-02 | Implement one local follow per user/provider-list through this action, with an idempotent receipt and atomic creation of private list, subscription and sync job. Reuse existing inbound synchronization. | Packet 1 and S07 subscription contract; list/backend owner | Concurrent follow/retry, different idempotency keys, rollback on enqueue failure, removed/detached receipt replay, account changes during I/O and viewer restrictions. Existing paused/automatic follows retain their settings. |
+| 4 / S08-02, S07-03–06 | Connect Follow to the local list and its ordinary acquisition settings. Default Browse; establish full baseline before future-only activation; route selected/backfilled books through the shared request service. | Packets 2–3 and qualified acquisition path; frontend/automation owners | Discover → follow → verified first sync → activate future additions → add upstream book → one missing-media acquisition → ABS confirmation. No download from browsing/following alone. |
+| 5 / S08-01–02 | Finish series-continuation shelves, local list ordering/bulk curation and deliberate sharing. Explain every recommendation signal. | Scoped catalog/inventory and list grants; discovery owner | Followed, shared and private lists stay distinct. Sharing never exposes provider credentials or inaccessible holdings. Revocation applies to cached projections. |
+| 6 / S08-03 | Add optional supported Hardcover list write-back through the existing durable job/outbox architecture. Keep external mutation separate from local Follow. | Verified mutation capability and conflict contract; integration owner | Lost response reconciles; echoed membership does not loop; unsupported mutation stays unavailable; no reading-status mutation from downloads. |
+| 7 / S08-04–05 | Qualify default onboarding, list policy, request, collection review and repair tasks; complete empty/error/stale/mobile/keyboard states. | Packets 2–6; UX and QA owners | AT-05, AT-23, AT-27 and AT-28 at full stage scope, plus the integrated list-to-library journey. Record confusion and resolve any reliance on unexplained advanced settings. |
+
+Current checkpoint: [Discovery](docs/DISCOVERY.md) supplies initial shelves, and [Community lists](docs/COMMUNITY-LISTS.md) connects public search/preview to private subscriptions and existing automation. The community increment has synthetic-contract, real-database/worker and real-file acquisition evidence; actual-account access and the remaining S08 packets still require qualification.
+
+**Provider contract:** Hardcover's [published guidance](https://docs.hardcover.app/api/getting-started/) restricts pattern operators and query depth. Community search now uses the documented [`List` search operation](https://docs.hardcover.app/api/guides/searching/), revalidates current public headers and hydrates books separately. All five queries validate against the recorded schema; actual-account execution remains an independent integration gate. Do not silently truncate list membership to make a query pass.
+
 ### S09 — Production readiness and v1.0 release
 
 **Entry:** S00–S08 complete; any core feature gaps identified explicitly. **Responsible:** release/platform, QA, all module owners. **Requirements:** FR-15 recovery, FR-35–FR-36; all v1 requirements and NFRs.

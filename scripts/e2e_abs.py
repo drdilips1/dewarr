@@ -308,6 +308,49 @@ async def catalog(request: Request, authorization: str = Header(default="")):
         raise HTTPException(401)
     body = await request.json()
     query = body.get("query", "")
+    if "Community" in query or ("ListMembershipPage(" in query and body["variables"]["id"] == 9101):
+        titles = {42: "The Catalog Journey", 9001: "The Discovered Harbor"}
+        records = {
+            key: {
+                "id": key,
+                "title": title,
+                "cached_contributors": [{"author": {"name": "Catalog Author"}}],
+                "cached_image": {"url": f"https://covers.openlibrary.org/b/id/{key}-M.jpg"},
+            }
+            for key, title in titles.items()
+        }
+        members = [
+            {
+                "id": i,
+                "book_id": key,
+                "book": records[key],
+                "edition_id": None,
+                "position": i,
+                "date_added": None,
+            }
+            for i, key in enumerate(titles, 1)
+            if i > body["variables"].get("after", 0)
+        ]
+        header = {
+            "id": 9101,
+            "name": "Stories by the Sea",
+            "description": "A community reading list for discovering your next chapter.",
+            "books_count": 2,
+            "followers_count": 28,
+            "public": True,
+            "user_id": 7,
+            "updated_at": "2026-09-18T00:00:00Z",
+            "list_books": members,
+        }
+        if "CommunitySearch(" in query:
+            return {
+                "data": {
+                    "search": {"results": {"hits": [{"document": {"id": "9101"}}], "found": 1}}
+                }
+            }
+        if "CommunityBooks(" in query:
+            return {"data": {"books": [records[key] for key in body["variables"]["ids"]]}}
+        return {"data": {"lists": [header]}}
     if "Discovery" in query:
         if catalog_state["discovery_failure"]:
             raise HTTPException(503)
