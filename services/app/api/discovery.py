@@ -6,17 +6,17 @@ from uuid import UUID
 
 from fastapi import APIRouter, Query
 from pydantic import BaseModel, Field
-from sqlalchemy import or_, select
+from sqlalchemy import func, or_, select
 
 from app.adapters.contracts import AdapterError
 from app.api.catalog import WorkView, work_view
 from app.api.dependencies import CurrentUser, Database
 from app.api.metadata import accessible_work, current_actor, provider_call
-from app.db.models import CatalogAccount, Work, WorkMetadataSource
-from app.domain.availability import availability_for
+from app.db.models import CatalogAccount, LibraryAsset, Work, WorkMetadataSource
+from app.domain.availability import availability_for, availability_rows
 from app.domain.catalog_bindings import visible_provider_works
 from app.domain.visibility import visible_origin_work, visible_work
-from app.domain.work_graph import family_ids
+from app.domain.work_graph import canonical_map, family_ids
 
 router = APIRouter(prefix="/discovery", tags=["discovery"])
 
@@ -47,6 +47,14 @@ class DiscoveryShelf(BaseModel):
     stale: bool = False
     warning: str | None = None
     retry_after: int | None = None
+
+
+class LibraryDiscoveryItem(DiscoveryItem):
+    observed_at: datetime
+
+
+class LibraryDiscoveryShelf(DiscoveryShelf):
+    items: list[LibraryDiscoveryItem] = Field(default_factory=list)
 
 
 async def project(db, user, books, reason):
@@ -105,6 +113,50 @@ async def local(user: CurrentUser, db: Database):
         title="Recently added to your catalog",
         attribution="Your accessible catalog · newest additions first",
         items=await local_items(db, user, rows, "Recently added to your catalog"),
+    )
+
+
+@router.get("/library", response_model=LibraryDiscoveryShelf)
+async def library(
+    user: CurrentUser,
+    db: Database,
+    medium: Literal["any", "ebook", "audio"] = "any",
+    page: int = Query(default=1, ge=1, le=100),
+    limit: int = Query(default=12, ge=1, le=24),
+):
+    mapping = canonical_map()
+    holdings = availability_rows(user, mapping)
+    if medium != "any":
+        holdings = holdings.where(LibraryAsset.medium == medium)
+    recent = (
+        holdings.with_only_columns(
+            mapping.c.work_id, func.max(LibraryAsset.created_at).label("observed_at")
+        )
+        .group_by(mapping.c.work_id)
+        .subquery()
+    )
+    rows = (
+        await db.execute(
+            select(Work, recent.c.observed_at)
+            .join(recent, recent.c.work_id == Work.id)
+            .where(Work.redirect_to.is_(None), visible_work(user))
+            .order_by(recent.c.observed_at.desc(), Work.title, Work.id)
+            .offset((page - 1) * limit)
+            .limit(limit + 1)
+        )
+    ).all()
+    items = await local_items(
+        db, user, [work for work, _ in rows[:limit]], "Recently observed complete library copy"
+    )
+    return LibraryDiscoveryShelf(
+        title="Recent library additions",
+        attribution="Your accessible libraries · latest copy first observed by this app",
+        page=page,
+        has_more=len(rows) > limit,
+        items=[
+            LibraryDiscoveryItem(**item.model_dump(), observed_at=observed_at)
+            for item, (_, observed_at) in zip(items, rows[:limit], strict=True)
+        ],
     )
 
 

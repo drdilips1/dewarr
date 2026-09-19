@@ -2203,6 +2203,78 @@
         }
       }
     },
+    "/api/discovery/library": {
+      "get": {
+        "tags": [
+          "discovery"
+        ],
+        "summary": "Library",
+        "operationId": "library_api_discovery_library_get",
+        "parameters": [
+          {
+            "name": "medium",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "any",
+                "ebook",
+                "audio"
+              ],
+              "type": "string",
+              "default": "any",
+              "title": "Medium"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 24,
+              "minimum": 1,
+              "default": 12,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LibraryDiscoveryShelf"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/discovery/hardcover/{shelf}": {
       "get": {
         "tags": [
@@ -17003,6 +17075,111 @@
           "results"
         ],
         "title": "InventoryReconciliationView"
+      },
+      "LibraryDiscoveryItem": {
+        "properties": {
+          "book": {
+            "$ref": "#/components/schemas/DiscoveryTitle"
+          },
+          "work": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WorkView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "observed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Observed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "book",
+          "reason",
+          "observed_at"
+        ],
+        "title": "LibraryDiscoveryItem"
+      },
+      "LibraryDiscoveryShelf": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "attribution": {
+            "type": "string",
+            "title": "Attribution"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "not-connected",
+              "unavailable"
+            ],
+            "title": "Status",
+            "default": "ready"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/LibraryDiscoveryItem"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page",
+            "default": 1
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More",
+            "default": false
+          },
+          "stale": {
+            "type": "boolean",
+            "title": "Stale",
+            "default": false
+          },
+          "warning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Warning"
+          },
+          "retry_after": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retry After"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "attribution"
+        ],
+        "title": "LibraryDiscoveryShelf"
       },
       "LibraryView": {
         "properties": {

@@ -25,3 +25,8 @@ The published contract was inspected at Hardcover documentation revision `e8d38c
 No migration, new secret or additional service is required. Deploy the API with the matching frontend and restart the worker from the same build. The feature uses schema `0038_asset_containment`, existing metadata accounts, inventory grants and catalog APIs. It does not enable download dispatch or alter reading progress.
 
 This advances S08-01 and FR-11 through provider discovery, explained related titles and usable local fallback, with a path into existing list curation. [Community-list discovery and following](COMMUNITY-LISTS.md) now connects Discover to private subscriptions and their existing automation controls. [Series-continuation shelves](SERIES-DISCOVERY.md) now add local catalog/library gaps. Whole-library series enrichment, full sharing, optional supported write-back, broader recommendation providers, task-based usability and actual-service/performance qualification remain open. The existing series pages and list subscription tools remain available. These increments do not close S08 or the full PRD.
+
+
+## Recent library additions
+
+Discover also includes [Recent library additions](LIBRARY-DISCOVERY.md), based on confirmed accessible holdings rather than catalog creation. It groups versions into canonical books, supports ebook/audio filters and labels first-observed copy dates. It is independent of Hardcover availability and retains the ordinary ownership, collection and stale-state semantics.

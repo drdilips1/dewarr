@@ -788,6 +788,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/discovery/library": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Library */
+    get: operations["library_api_discovery_library_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/discovery/hardcover/{shelf}": {
     parameters: {
       query?: never;
@@ -5611,6 +5628,52 @@ export interface components {
       results: {
         [key: string]: unknown;
       }[];
+    };
+    /** LibraryDiscoveryItem */
+    LibraryDiscoveryItem: {
+      book: components["schemas"]["DiscoveryTitle"];
+      work?: components["schemas"]["WorkView"] | null;
+      /** Reason */
+      reason: string;
+      /**
+       * Observed At
+       * Format: date-time
+       */
+      observed_at: string;
+    };
+    /** LibraryDiscoveryShelf */
+    LibraryDiscoveryShelf: {
+      /** Title */
+      title: string;
+      /** Attribution */
+      attribution: string;
+      /**
+       * Status
+       * @default ready
+       * @enum {string}
+       */
+      status: "ready" | "not-connected" | "unavailable";
+      /** Items */
+      items?: components["schemas"]["LibraryDiscoveryItem"][];
+      /**
+       * Page
+       * @default 1
+       */
+      page: number;
+      /**
+       * Has More
+       * @default false
+       */
+      has_more: boolean;
+      /**
+       * Stale
+       * @default false
+       */
+      stale: boolean;
+      /** Warning */
+      warning?: string | null;
+      /** Retry After */
+      retry_after?: number | null;
     };
     /** LibraryView */
     LibraryView: {
@@ -10808,6 +10871,39 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["DiscoveryShelf"];
+        };
+      };
+    };
+  };
+  library_api_discovery_library_get: {
+    parameters: {
+      query?: {
+        medium?: "any" | "ebook" | "audio";
+        page?: number;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["LibraryDiscoveryShelf"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
