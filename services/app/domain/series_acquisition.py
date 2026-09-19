@@ -229,6 +229,9 @@ async def retry(db, user, parent):
 
     await require_pack(db, user.id, parent.payload.get("pack_origin"))
     row = await db.get(Operation, UUID(parent.payload["acquisition_id"]), with_for_update=True)
+    from app.domain.operations import require_live_command
+
+    require_live_command(row)
     if not row.payload["enabled"]:
         raise HTTPException(409, "This series acquisition has finished or was cancelled")
     await validate_configuration(db, user, row.payload["configuration"])
@@ -295,7 +298,7 @@ async def run(identifier):
         return
     async with session_factory()() as db, db.begin():
         row = await db.get(Operation, identifier)
-        if not row or row.kind != KIND:
+        if not row or row.kind != KIND or row.payload.get("recovery_retirement"):
             return
         from app.domain.list_series import lock_origin, require_origin
 

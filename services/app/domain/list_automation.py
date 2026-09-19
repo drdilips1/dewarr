@@ -399,15 +399,27 @@ async def run(identifier):
         return
     async with session_factory()() as db, db.begin():
         operation = await db.get(Operation, identifier)
-        if not operation or operation.kind != KIND or operation.status == "completed":
+        if (
+            not operation
+            or operation.kind != KIND
+            or operation.status == "completed"
+            or operation.payload.get("recovery_retirement")
+        ):
             return
         policy = await db.get(ListAcquisitionPolicy, UUID(operation.payload["policy_id"]))
         if not policy or not policy.list_id:
+            await db.refresh(operation, with_for_update=True)
+            if operation.payload.get("recovery_retirement"):
+                return
             operation.status, operation.message = "completed", "The list was removed"
             return
         try:
             _, user = await owner_context(db, policy.owner_id, policy.list_id)
             await db.refresh(policy, with_for_update=True)
+            # The command can be retired while this worker waits for list/policy locks.
+            await db.refresh(operation, with_for_update=True)
+            if operation.payload.get("recovery_retirement") or operation.status == "completed":
+                return
             if not policy.active or policy.configuration["mode"] != "automatic":
                 operation.status, operation.message = "completed", "List acquisition is paused"
                 return
@@ -419,6 +431,9 @@ async def run(identifier):
                     409, "Policy settings or route approval changed; preview activation again"
                 )
         except HTTPException as error:
+            await db.refresh(operation, with_for_update=True)
+            if operation.payload.get("recovery_retirement"):
+                return
             operation.status, operation.message = "completed", str(error.detail)
             policy.message = str(error.detail)
             return

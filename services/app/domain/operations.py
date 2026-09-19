@@ -68,3 +68,8 @@ async def enqueue_sync(
     await db.flush()
     await db.refresh(operation)
     return operation
+
+
+def require_live_command(operation):
+    if operation.payload.get("recovery_retirement"):
+        raise HTTPException(409, "Recovery retired this command; create a fresh preview")

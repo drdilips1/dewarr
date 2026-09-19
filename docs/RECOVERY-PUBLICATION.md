@@ -35,7 +35,7 @@ The shared recovery review engine binds the current checkpoint/operator, latest 
 
 An existing publication timestamp is preserved. If the backup predates publication, the new timestamp records when recovery observed that fact; the audit explicitly identifies the observation time. It does not invent the time of the historical rename. Staged siblings keep their capacity reservations, and ordinary parent storage accounting remains conservative until its publication obligations are satisfied.
 
-The restricted registry contains only `recovery.scan`, `recovery.reconcile`, `recovery.inventory`, `recovery.publication`, `recovery.lists` and `recovery.outbound`, with no periodic tasks or built-in history cleanup. Accepted recovery actions exclude one another. This action makes no qBittorrent request, ABS scan/update, mapping-marker write, list mutation, file move, retag, acquisition fulfillment enqueue or import continuation. Original queued jobs remain fenced by the persistent pause. Future controlled resume must still resolve those historical commands and recheck original requester authority.
+The restricted registry contains only `recovery.scan`, `recovery.reconcile`, `recovery.inventory`, `recovery.publication`, `recovery.lists`, `recovery.outbound` and `recovery.commands`, with no periodic tasks or built-in history cleanup. Accepted recovery actions exclude one another. This action makes no qBittorrent request, ABS scan/update, mapping-marker write, list mutation, file move, retag, acquisition fulfillment enqueue or import continuation. Original queued jobs remain fenced by the persistent pause. Future controlled resume must still resolve those historical commands and recheck original requester authority.
 
 ## API and deployment
 

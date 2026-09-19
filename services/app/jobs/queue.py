@@ -58,6 +58,7 @@ def recovery_queue() -> procrastinate.App:
             "recovery.publication",
             "recovery.lists",
             "recovery.outbound",
+            "recovery.commands",
         }
         or queue.periodic_registry.periodic_tasks
     ):

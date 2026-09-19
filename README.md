@@ -112,3 +112,5 @@ For a new checkout, begin with S00. For this existing implementation, use the pl
 [List pagination](docs/LIST-PAGINATION.md) now bounds list/catalog hydration, supports cross-page curation and searches all authorized destinations and memberships. Request and policy previews reject selections made against changed membership revisions. Full performance and release qualification remain open.
 
 [Outbound recovery](docs/RECOVERY-OUTBOUND.md) records reviewed Hardcover command outcomes without resending list changes; uncertain effects and automation remain held.
+
+[Historical command review](docs/RECOVERY-COMMANDS.md) retires selected stale approvals and pauses acquisition controllers while preserving wanted books and reservations.

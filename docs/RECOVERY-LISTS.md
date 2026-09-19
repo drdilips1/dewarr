@@ -36,7 +36,7 @@ The recovery context includes list entries, catalog bindings/source identity, ac
 
 Each corrected subscription advances generation, drops its old run token, lease, operation association and automatic due time, and marks a previously running/queued sync as needing attention while retaining its staged evidence. Its old worker can no longer apply through ordinary subscription-context checks. The action similarly disconnects an old acquisition-policy tick. Broader historical request/series commands still need their separate recovery packet before resume. [Outbound recovery](RECOVERY-OUTBOUND.md) records independently verified outcomes and retains unresolved attempts.
 
-The dedicated worker registry contains exactly `recovery.scan`, `recovery.reconcile`, `recovery.inventory`, `recovery.publication`, `recovery.lists` and `recovery.outbound`. It has no ordinary acquisition, list-write, periodic scheduling or history-cleanup tasks. All accepted recovery actions exclude one another. A completed retry makes no further network calls or changes.
+The dedicated worker registry contains exactly `recovery.scan`, `recovery.reconcile`, `recovery.inventory`, `recovery.publication`, `recovery.lists`, `recovery.outbound` and `recovery.commands`. It has no ordinary acquisition, list-write, periodic scheduling or history-cleanup tasks. All accepted recovery actions exclude one another. A completed retry makes no further network calls or changes.
 
 ## API and deployment
 

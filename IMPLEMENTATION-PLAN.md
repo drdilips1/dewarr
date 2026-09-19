@@ -1057,3 +1057,8 @@ A completed planning package is not a completed application. Update implementati
 ### Reviewed outbound list outcomes
 
 [Outbound recovery](docs/RECOVERY-OUTBOUND.md) implements the saved outbound-ledger portion of Rebaseline lists and pending commands. Fresh original-target membership reads distinguish currently satisfied requests, exact removals with remaining memberships, and unresolved differences. Accepted evidence retires old commands from mutation execution, disables write-back and invalidates matching old leases; unknown effects retain their attempts and no remote changes are sent. Keep actual verification in implementation status. Historical request/series commands, remaining unresolved effects, permission/configuration repair and controlled resume remain required, along with all unaccepted S00–S10 obligations.
+
+
+### Historical request-command retirement
+
+[Reviewed command retirement](docs/RECOVERY-COMMANDS.md) now handles stale list/series request batches, activation previews, list acquisition checks, series acquisition controllers and active list policies. It preserves completed receipts, independent request reasons and reservations while removing selected stale execution authority. Retired commands cannot be retried through ordinary entrypoints. This is a scoped local-authority correction; the final queue fence, other historical approvals, current-authority activation and controlled resume still require implementation. Keep exact evidence and all remaining S00–S10 obligations in implementation status.

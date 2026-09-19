@@ -31,7 +31,7 @@ from app.domain.acquisition import (
 )
 from app.domain.automatic_routes import AutomaticRoutes
 from app.domain.list_requests import BatchInput, identity, pending_targets
-from app.domain.operations import transaction_lock
+from app.domain.operations import require_live_command, transaction_lock
 from app.domain.request_preferences import resolve
 from app.domain.visibility import visible_work
 from app.domain.work_graph import acquisition_lock, canonical_map, canonical_work, graph_lock
@@ -264,6 +264,7 @@ async def validate_identities(db, user, operation):
 
 
 async def start(db, user, operation):
+    require_live_command(operation)
     if get_settings().recovery_mode:
         raise HTTPException(409, "Series requests are paused for recovery")
     from app.domain.list_series import origin, require_origin
@@ -318,7 +319,7 @@ async def run(operation_id):
         raise RuntimeError("Series requests are paused for recovery")
     async with session_factory()() as db, db.begin():
         operation = await db.get(Operation, operation_id)
-        if not operation or operation.kind != KIND:
+        if not operation or operation.kind != KIND or operation.payload.get("recovery_retirement"):
             return
         from app.domain.list_series import lock_origin, origin, require_origin
 

@@ -162,6 +162,8 @@ async def context(db):
                         "lists.sync",
                         "lists.acquire",
                         "lists.requests",
+                        "series.requests",
+                        "series.acquire",
                         "lists.policy-preview",
                         "lists.writeback.compare",
                     ]
@@ -176,6 +178,7 @@ async def context(db):
         {
             "id": op.id,
             "owner_id": op.owner_id,
+            "kind": op.kind,
             "status": op.status,
             "payload": op.payload,
             "job_id": op.job_id,

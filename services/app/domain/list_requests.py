@@ -30,7 +30,7 @@ from app.domain.acquisition import (
     submit,
     validate_request,
 )
-from app.domain.operations import transaction_lock
+from app.domain.operations import require_live_command, transaction_lock
 from app.domain.request_preferences import PreferenceChoice, resolve
 from app.domain.request_scope import same_command
 from app.domain.visibility import visible_work
@@ -221,6 +221,7 @@ async def validate_plan(db, user, operation):
 
 
 async def start(db, user, operation):
+    require_live_command(operation)
     if get_settings().recovery_mode:
         raise HTTPException(409, "List requests are paused for recovery")
     if operation.status in {"completed", "queued", "running"}:
@@ -341,7 +342,7 @@ async def run(operation_id):
         raise RuntimeError("List requests are paused for recovery")
     async with session_factory()() as db, db.begin():
         operation = await db.get(Operation, operation_id)
-        if not operation or operation.kind != KIND:
+        if not operation or operation.kind != KIND or operation.payload.get("recovery_retirement"):
             return
         command = operation.payload["command"]
         # Ordinary requests lock their command before the list. Reserve child

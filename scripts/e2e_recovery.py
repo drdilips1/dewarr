@@ -11,6 +11,7 @@ from uuid import UUID
 
 import psycopg
 
+command_id = UUID("e07aa674-668c-4de7-ad78-bc2273d89a07")
 outbound_id = UUID("bcfc24e9-e3a7-4b9f-97a3-463c259a880b")
 checkpoint_id = UUID("9e5673bc-2292-4b61-aea8-a6fa3059054e")
 url = os.environ.get(
@@ -102,6 +103,30 @@ with psycopg.connect(url.replace("postgresql+psycopg://", "postgresql://")) as c
                 ),
             ),
         )
+    elif sys.argv[1:] == ["commands"]:
+        saved = connection.execute(
+            "SELECT l.id, l.owner_id FROM book_lists l JOIN restore_checkpoints r "
+            "ON r.operator_id=l.owner_id WHERE r.id=%s AND r.active "
+            "AND l.name='Recovery RSS baseline'",
+            (checkpoint_id,),
+        ).fetchone()
+        if not saved:
+            raise SystemExit("The paused list fixture is required")
+        connection.execute(
+            "INSERT INTO operations(id,owner_id,kind,idempotency_key,status,message,payload) "
+            "VALUES (%s,%s,'lists.requests','recovery-command-fixture','preview',%s,%s::jsonb)",
+            (
+                command_id,
+                saved[1],
+                "Synthetic historical batch preview",
+                json.dumps(
+                    {
+                        "command": {"list_id": str(saved[0]), "work_ids": []},
+                        "records": [],
+                    }
+                ),
+            ),
+        )
     elif sys.argv[1:] == ["clear"]:
         checkpoint = connection.execute(
             "SELECT snapshot FROM restore_checkpoints WHERE id = %s", (checkpoint_id,)
@@ -116,8 +141,8 @@ with psycopg.connect(url.replace("postgresql+psycopg://", "postgresql://")) as c
                     "UPDATE list_subscriptions SET enabled=%s, next_sync_at=%s WHERE id=%s",
                     (saved["enabled"], saved["next_sync_at"], UUID(key)),
                 )
-        connection.execute("DELETE FROM operations WHERE id=%s", (outbound_id,))
+        connection.execute("DELETE FROM operations WHERE id IN (%s,%s)", (outbound_id, command_id))
         connection.execute("DELETE FROM recovery_scans WHERE checkpoint_id = %s", (checkpoint_id,))
         connection.execute("DELETE FROM restore_checkpoints WHERE id = %s", (checkpoint_id,))
     else:
-        raise SystemExit("Choose pause, outbound or clear")
+        raise SystemExit("Choose pause, outbound, commands or clear")

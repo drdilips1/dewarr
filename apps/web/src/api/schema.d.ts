@@ -481,6 +481,57 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/recovery/command-reconciliations": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Prepare Command Reconciliation */
+    post: operations["prepare_command_reconciliation_api_recovery_command_reconciliations_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/recovery/command-reconciliations/{identifier}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Command Reconciliation */
+    get: operations["get_command_reconciliation_api_recovery_command_reconciliations__identifier__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/recovery/command-reconciliations/{identifier}/accept": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Accept Command Reconciliation */
+    post: operations["accept_command_reconciliation_api_recovery_command_reconciliations__identifier__accept_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/activity": {
     parameters: {
       query?: never;
@@ -3891,6 +3942,66 @@ export interface components {
        */
       evidence: "claimed";
     };
+    /** CommandReconciliationItemView */
+    CommandReconciliationItemView: {
+      /**
+       * Finding Id
+       * Format: uuid
+       */
+      finding_id: string;
+      /**
+       * Entity Id
+       * Format: uuid
+       */
+      entity_id: string;
+      /** Entity Type */
+      entity_type: string;
+      /** Title */
+      title: string;
+      /** Kind */
+      kind: string;
+      /** Saved State */
+      saved_state: string;
+      /** Action */
+      action: string;
+    };
+    /** CommandReconciliationView */
+    CommandReconciliationView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Scan Id
+       * Format: uuid
+       */
+      scan_id: string;
+      /** Status */
+      status: string;
+      /** Message */
+      message: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /** Revision */
+      revision: string;
+      /**
+       * Expires At
+       * Format: date-time
+       */
+      expires_at: string;
+      /** Items */
+      items: components["schemas"]["CommandReconciliationItemView"][];
+      /** Applied At */
+      applied_at: string | null;
+      /** Results */
+      results: {
+        [key: string]: unknown;
+      }[];
+    };
     /** CommunityListCard */
     CommunityListCard: {
       /** External Id */
@@ -6907,6 +7018,8 @@ export interface components {
       latest_scan?: components["schemas"]["ScanView"] | null;
       latest_reconciliation?:
         components["schemas"]["ReconciliationView"] | null;
+      latest_command_reconciliation?:
+        components["schemas"]["CommandReconciliationView"] | null;
       latest_outbound_reconciliation?:
         components["schemas"]["OutboundReconciliationView"] | null;
       latest_list_reconciliation?:
@@ -9362,6 +9475,109 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["OutboundReconciliationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  prepare_command_reconciliation_api_recovery_command_reconciliations_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReconciliationRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CommandReconciliationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_command_reconciliation_api_recovery_command_reconciliations__identifier__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        identifier: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CommandReconciliationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  accept_command_reconciliation_api_recovery_command_reconciliations__identifier__accept_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        identifier: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReconciliationAcceptance"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CommandReconciliationView"];
         };
       };
       /** @description Validation Error */

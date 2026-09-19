@@ -590,6 +590,9 @@ async def collect(inputs, writer):
             operation["id"],
             partial(recovery_outbound.observe, inputs, writer, operation),
         )
+    from app.domain import recovery_commands
+
+    await recovery_commands.observe(inputs, writer)
     await observe_files(inputs, writer)
     await writer.add(
         "review",

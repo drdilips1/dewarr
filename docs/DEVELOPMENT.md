@@ -203,3 +203,8 @@ List detail now defaults to 50 books and exposes count/matched/offset/limit; app
 ## Outbound recovery review
 
 [Reviewed outbound evidence](RECOVERY-OUTBOUND.md) adds original-target Hardcover membership checks and an operator preview/acceptance flow. It records current outcomes without resending list changes, fences old remote leases and requires fresh owner review before write-back can return. Deploy matching API/worker/client on unchanged schema 0042. Unknown effects remain held; historical commands and controlled resume are still open.
+
+
+## Historical request-command review
+
+[Recovery command retirement](RECOVERY-COMMANDS.md) adds an operator review for stale request approvals and acquisition controllers. It preserves already-recorded wanted books, reasons and reservations, retires selected workers/previews and requires fresh owner activation. Deploy matching API/worker/client on schema 0042. This action leaves other historical work and the persistent restore fence unresolved; it does not authorize resume.

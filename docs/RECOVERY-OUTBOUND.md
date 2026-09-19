@@ -41,7 +41,7 @@ No list mutation, inbound membership change, downloader action, file operation, 
 - `POST /api/recovery/outbound-reconciliations/{identifier}/accept`: accept its exact revision with a new idempotency header.
 - `GET /api/recovery`: returns the latest outbound review for reload.
 
-The restricted worker registers six tasks: `recovery.scan`, `recovery.reconcile`, `recovery.inventory`, `recovery.publication`, `recovery.lists` and `recovery.outbound`. It contains no ordinary mutations, periodic scheduling or history cleanup. Accepted recovery actions exclude one another. Observation reports created before this context expansion need a fresh scan to authorize corrections.
+The restricted worker registers seven tasks: `recovery.scan`, `recovery.reconcile`, `recovery.inventory`, `recovery.publication`, `recovery.lists`, `recovery.outbound` and `recovery.commands`. It contains no ordinary mutations, periodic scheduling or history cleanup. Accepted recovery actions exclude one another. Observation reports created before this context expansion need a fresh scan to authorize corrections.
 
 Deploy matching API, worker and generated client on schema `0042_recovery_scans`. No migration or runtime dependency is added. Preserve a verified database/key/configuration/journal backup before updating the running services.
 

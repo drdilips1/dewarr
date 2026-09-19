@@ -22,6 +22,7 @@ class RecoveryView(BaseModel):
     resume_available: bool = False
     latest_scan: "ScanView | None" = None
     latest_reconciliation: "ReconciliationView | None" = None
+    latest_command_reconciliation: "CommandReconciliationView | None" = None
     latest_outbound_reconciliation: "OutboundReconciliationView | None" = None
     latest_list_reconciliation: "ListReconciliationView | None" = None
     latest_publication_reconciliation: "PublicationReconciliationView | None" = None
@@ -90,6 +91,20 @@ async def review(admin: Admin, db: Database):
         if checkpoint
         else None
     )
+    command_review = (
+        await db.scalar(
+            select(Operation)
+            .where(
+                Operation.kind == "recovery.commands",
+                Operation.payload["checkpoint_id"].astext == str(checkpoint.id),
+                Operation.owner_id == admin.id,
+            )
+            .order_by(Operation.created_at.desc(), Operation.id.desc())
+            .limit(1)
+        )
+        if checkpoint
+        else None
+    )
     outbound_review = (
         await db.scalar(
             select(Operation)
@@ -133,6 +148,9 @@ async def review(admin: Admin, db: Database):
         else None
     )
     return RecoveryView(
+        latest_command_reconciliation=command_reconciliation_view(command_review)
+        if command_review
+        else None,
         latest_outbound_reconciliation=outbound_reconciliation_view(outbound_review)
         if outbound_review
         else None,
@@ -767,3 +785,95 @@ async def accept_outbound_reconciliation(
     )
     await db.commit()
     return outbound_reconciliation_view(operation)
+
+
+class CommandReconciliationItemView(BaseModel):
+    finding_id: UUID
+    entity_id: UUID
+    entity_type: str
+    title: str
+    kind: str
+    saved_state: str
+    action: str
+
+
+class CommandReconciliationView(ReconciliationView):
+    items: list[CommandReconciliationItemView]
+
+
+def command_reconciliation_view(operation):
+    return CommandReconciliationView(
+        id=operation.id,
+        scan_id=operation.payload["command"]["scan_id"],
+        status=operation.status,
+        message=operation.message,
+        created_at=operation.created_at,
+        revision=operation.payload["revision"],
+        expires_at=operation.payload["expires_at"],
+        items=[CommandReconciliationItemView(**item) for item in operation.payload["items"]],
+        applied_at=operation.payload.get("applied_at"),
+        results=operation.payload.get("results", []),
+    )
+
+
+@router.post("/command-reconciliations", response_model=CommandReconciliationView, status_code=201)
+async def prepare_command_reconciliation(
+    body: ReconciliationRequest,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_commands import prepare
+
+    operation = await prepare(
+        db,
+        await checkpoint_for(db, admin),
+        admin.id,
+        body.scan_id,
+        body.finding_ids,
+        idempotency_key,
+    )
+    await db.commit()
+    return command_reconciliation_view(operation)
+
+
+@router.get("/command-reconciliations/{identifier}", response_model=CommandReconciliationView)
+async def get_command_reconciliation(identifier: UUID, admin: Admin, db: Database):
+    from app.domain.recovery_reconciliation import COMMAND_KIND, load
+
+    return command_reconciliation_view(
+        await load(
+            db,
+            identifier,
+            await checkpoint_for(db, admin),
+            admin.id,
+            kind=COMMAND_KIND,
+        )
+    )
+
+
+@router.post(
+    "/command-reconciliations/{identifier}/accept",
+    response_model=CommandReconciliationView,
+    status_code=202,
+)
+async def accept_command_reconciliation(
+    identifier: UUID,
+    body: ReconciliationAcceptance,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_reconciliation import COMMAND_KIND, accept
+
+    operation = await accept(
+        db,
+        await checkpoint_for(db, admin),
+        admin.id,
+        identifier,
+        body.revision,
+        idempotency_key,
+        kind=COMMAND_KIND,
+    )
+    await db.commit()
+    return command_reconciliation_view(operation)

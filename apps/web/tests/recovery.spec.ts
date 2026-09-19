@@ -97,7 +97,7 @@ test("restored-state operator review replaces navigation and blocks catalog acce
         exact: true,
       }),
     ).toBeVisible();
-    const evidence = root + "/.local/evidence/recovery-outbound-ui";
+    const evidence = root + "/.local/evidence/recovery-commands-ui";
     mkdirSync(evidence, { recursive: true });
     await page.screenshot({ path: evidence + "/review.png", fullPage: true });
     await page
@@ -314,6 +314,64 @@ test("restored-state operator review replaces navigation and blocks catalog acce
     ).toEqual(before);
     expect((await page.request.get("/api/lists")).status()).toBe(423);
 
+    fixture("commands");
+    const outboundScan = (
+      await (await page.request.get("/api/recovery")).json()
+    ).latest_scan.id;
+    await page
+      .getByRole("button", { name: "Run read-only checks", exact: true })
+      .click();
+    await expect
+      .poll(
+        async () =>
+          (await (await page.request.get("/api/recovery")).json()).latest_scan
+            .id,
+      )
+      .not.toBe(outboundScan);
+    await expect(
+      page.getByRole("status").filter({ hasText: "Observation finished" }),
+    ).toBeVisible({ timeout: 60_000 });
+    await page.getByLabel("Filter observations").selectOption("review");
+    await page
+      .getByRole("button", {
+        name: "Review historical command for List request batch · Recovery RSS baseline",
+        exact: true,
+      })
+      .click();
+    await expect(
+      page.getByRole("heading", {
+        name: "Review historical commands",
+        exact: true,
+      }),
+    ).toBeFocused();
+    await expect(
+      page.getByText("Completed batch receipts are preserved.", {
+        exact: false,
+      }),
+    ).toBeVisible();
+    await page.screenshot({
+      path: evidence + "/command-review.png",
+      fullPage: true,
+    });
+    await page
+      .getByRole("button", { name: "Retire selected commands", exact: true })
+      .click();
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: "Historical commands retired" }),
+    ).toBeVisible({ timeout: 30_000 });
+    expect(
+      await (
+        await page.request.get("http://127.0.0.1:13379/fixture/writeback")
+      ).json(),
+    ).toEqual(outboundBefore);
+    expect(
+      await (
+        await page.request.get("http://127.0.0.1:13379/fixture/recovery-stats")
+      ).json(),
+    ).toEqual(before);
+
     await page.screenshot({ path: evidence + "/desktop.png", fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/lists");
@@ -345,6 +403,11 @@ test("restored-state operator review replaces navigation and blocks catalog acce
       page
         .getByRole("status")
         .filter({ hasText: "Outbound evidence recorded" }),
+    ).toBeVisible();
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: "Historical commands retired" }),
     ).toBeVisible();
     await page.getByLabel("Filter observations").selectOption("files");
     await expect(

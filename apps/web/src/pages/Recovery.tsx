@@ -23,6 +23,11 @@ import {
   PrepareOutboundReview,
   type OutboundReview,
 } from "./RecoveryOutbound";
+import {
+  CommandRecoveryReview,
+  PrepareCommandReview,
+  type CommandReview,
+} from "./RecoveryCommands";
 type RecoveryReview = components["schemas"]["ReconciliationView"];
 
 export default function Recovery() {
@@ -98,6 +103,9 @@ export default function Recovery() {
               publicationReview={
                 review.data.latest_publication_reconciliation ?? undefined
               }
+              commandReview={
+                review.data.latest_command_reconciliation ?? undefined
+              }
               outboundReview={
                 review.data.latest_outbound_reconciliation ?? undefined
               }
@@ -136,6 +144,7 @@ function RecoveryChecks({
   publicationReview,
   listReview,
   outboundReview,
+  commandReview,
 }: {
   scanId?: string;
   state?: string;
@@ -144,6 +153,7 @@ function RecoveryChecks({
   publicationReview?: PublicationReview;
   listReview?: ListBaselineReview;
   outboundReview?: OutboundReview;
+  commandReview?: CommandReview;
 }) {
   const client = useQueryClient();
   const [key, setKey] = useState(() => crypto.randomUUID());
@@ -157,6 +167,7 @@ function RecoveryChecks({
     publicationReview,
     listReview,
     outboundReview,
+    commandReview,
   ];
   const busy = reviews.some(
     (item) => item?.status === "queued" || item?.status === "running",
@@ -347,6 +358,17 @@ function RecoveryChecks({
                       disabled={busy}
                     />
                   )}
+                {state === "completed" &&
+                  finding.state === "command-ready" &&
+                  finding.domain === "review" &&
+                  !applied && (
+                    <PrepareCommandReview
+                      scanId={scanId!}
+                      findingId={finding.id}
+                      title={finding.title}
+                      disabled={busy}
+                    />
+                  )}
                 {finding.has_evidence && (
                   <FindingEvidence scanId={scanId!} findingId={finding.id} />
                 )}
@@ -410,6 +432,14 @@ function RecoveryChecks({
         <PublicationRecoveryReview
           key={publicationReview.id}
           review={publicationReview}
+          currentScan={scanId}
+          otherBusy={busy || applied}
+        />
+      )}
+      {commandReview && (
+        <CommandRecoveryReview
+          key={commandReview.id}
+          review={commandReview}
           currentScan={scanId}
           otherBusy={busy || applied}
         />

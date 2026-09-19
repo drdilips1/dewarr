@@ -27,7 +27,7 @@ from app.domain.acquisition import RequestOptions, RequestSpec, assess, evaluate
 from app.domain.automatic_routes import AutomaticRoutes, PolicyRoute, inherit, permitted
 from app.domain.automatic_routes import resolve as resolve_routes
 from app.domain.list_requests import owner_context, pending_targets
-from app.domain.operations import transaction_lock
+from app.domain.operations import require_live_command, transaction_lock
 from app.domain.release_profiles import PreferenceOverrides, overlay_profile, profile_snapshot
 from app.domain.request_constraints import combine
 from app.domain.visibility import visible_work
@@ -283,6 +283,7 @@ async def withdraw_generation(db, user, policy):
 
 
 async def activate(db, user, operation):
+    require_live_command(operation)
     if get_settings().recovery_mode:
         raise HTTPException(409, "List activation is paused for recovery")
     if operation.status == "completed":
