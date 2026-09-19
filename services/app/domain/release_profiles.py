@@ -62,8 +62,8 @@ class ReleasePreferences(ScopePreferences):
         default=["m4b", "mp3", "flac", "aac", "ogg", "opus"], min_length=1, max_length=20
     )
     source_order: list[str] = Field(default=["mam", "prowlarr"], min_length=1, max_length=100)
-    criteria: list[Literal["format", "source", "seeders", "narrator"]] = Field(
-        default=["format", "source", "seeders"], min_length=3, max_length=4
+    criteria: list[Literal["format", "source", "seeders", "narrator", "popularity"]] = Field(
+        default=["format", "source", "seeders"], min_length=3, max_length=5
     )
     preferred_narrators: NarratorNames = Field(default_factory=list)
     blocked_formats: list[str] = Field(default_factory=list, max_length=20)
@@ -84,12 +84,16 @@ class ReleasePreferences(ScopePreferences):
     @field_validator("criteria")
     @classmethod
     def order(cls, values):
-        if len(set(values)) != len(values) or set(values) - {"narrator"} != {
+        if len(set(values)) != len(values) or set(values) - {"narrator", "popularity"} != {
             "format",
             "source",
             "seeders",
         }:
-            raise ValueError("Include format, source and seeders once each; narrator is optional")
+            raise ValueError(
+                "Include format, source and seeders once each; narrator and popularity are optional"
+            )
+        if "popularity" in values and values.index("popularity") < values.index("source"):
+            raise ValueError("Source preference must precede source-local popularity")
         return values
 
     @field_validator("source_order")
@@ -379,6 +383,17 @@ def assess_release(release, work, preferences, medium="all"):
         if release.seeders is not None
         else "Seed count unknown"
     )
+    if "popularity" in preferences.criteria:
+        count = source_popularity(release)
+        explanation.append(
+            f"MAM reports {count} completed downloads; compared only within MAM"
+            if count is not None
+            else "Source-local popularity is unknown for this release"
+        )
+        explanation.append(
+            "Popularity groups each tracker/indexer by source preference; "
+            "equal source priorities use stable source identifiers, not cross-source counts"
+        )
     return ReleaseAssessment(
         identity=identity,
         blocked=blocked,
@@ -387,6 +402,12 @@ def assess_release(release, work, preferences, medium="all"):
         formats=formats,
         source_origin=origin,
     )
+
+
+def source_popularity(release):
+    """Only adapter-defined counters qualify; never substitute seeds or generic details."""
+    count = getattr(release, "snatches", None) if release.source == "mam" else None
+    return count if isinstance(count, int) and not isinstance(count, bool) and count >= 0 else None
 
 
 def ranking_key(release, assessment, preferences):
@@ -404,6 +425,7 @@ def ranking_key(release, assessment, preferences):
         if release.source in preferences.source_order
         else len(preferences.source_order)
     )
+    popularity = source_popularity(release)
     scores = {
         "narrator": (
             narrators.preference_rank(preferences.preferred_narrators, release.narrators)
@@ -411,8 +433,12 @@ def ranking_key(release, assessment, preferences):
             else 0,
         ),
         "format": (format_rank,),
-        "source": (source_rank,),
+        # A local counter has no cross-tracker scale. Explicitly group origins
+        # at the source criterion before evaluating it. Legacy profiles keep
+        # their exact prior key shape and cross-origin tie behavior.
+        "source": (source_rank, origin) if "popularity" in preferences.criteria else (source_rank,),
         "seeders": (release.seeders is None, -(release.seeders or 0)),
+        "popularity": (popularity is None, -(popularity or 0)),
     }
     # Identity/capability checks precede preferences; no seed count can rescue a wrong book.
     return (

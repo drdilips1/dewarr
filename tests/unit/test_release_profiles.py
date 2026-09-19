@@ -17,6 +17,7 @@ from app.domain.release_profiles import (
     overlay_profile,
     ranking_key,
     resolve_preferences,
+    source_popularity,
 )
 from tests.mam_fixture import release_row
 from tests.torrent_fixture import torrent_bytes
@@ -133,6 +134,70 @@ def test_unknowns_are_not_ownership_or_automatic_eligibility():
     assert assessment.formats == [] and len(assessment.review) == 2
     assert "Seed count unknown" in assessment.explanation
     assert not hasattr(assessment, "owned")
+
+
+def test_source_local_popularity_can_precede_seeds_but_not_eligibility():
+    preferences = ReleasePreferences(criteria=["format", "source", "popularity", "seeders"])
+    popular = candidate(id=1, times_completed=80, seeders=2, filetype="M4B")
+    seeded = candidate(id=2, times_completed=5, seeders=100, filetype="M4B")
+    unknown = candidate(id=3, times_completed=None, seeders=500, filetype="M4B")
+    zero = candidate(id=4, times_completed=0, seeders=1, filetype="M4B")
+    wrong = candidate(id=5, times_completed=999999, seeders=999999, filetype="M4B").model_copy(
+        update={"title": "Wrong title"}
+    )
+    blocked = candidate(id=6, times_completed=999999, seeders=999999, filetype="MP3")
+    preferences.blocked_formats = ["mp3"]
+    assert [
+        r.source_id for r in ordered([unknown, seeded, wrong, zero, blocked, popular], preferences)
+    ] == ["1", "2", "4", "3", "5", "6"]
+    assert ordered([popular, seeded], ReleasePreferences())[0].source_id == "2"
+    explanation = assess_release(popular, WORK, preferences).explanation
+    assert "MAM reports 80 completed downloads; compared only within MAM" in explanation
+
+
+def test_popularity_requires_source_groups_and_does_not_invent_other_tracker_counts():
+    with pytest.raises(ValidationError, match="Source preference must precede"):
+        ReleasePreferences(criteria=["popularity", "source", "format", "seeders"])
+    preferences = ReleasePreferences(
+        criteria=["source", "popularity", "format", "seeders"], source_order=["prowlarr", "mam"]
+    )
+    mam = candidate(id=1, times_completed=100000)
+    foreign = mam.model_copy(
+        update={"source": "prowlarr", "indexer_id": "7", "snatches": 999999999}
+    )
+    assert source_popularity(foreign) is None
+    assert ordered([mam, foreign], preferences)[0] is foreign
+    other = foreign.model_copy(update={"source_id": "2", "indexer_id": "8", "seeders": 999999})
+    assert ordered([other, foreign], preferences) == [foreign, other]
+    for invalid in [None, -1, True, "123"]:
+        assert source_popularity(mam.model_copy(update={"snatches": invalid})) is None
+    assert source_popularity(mam.model_copy(update={"snatches": 0})) == 0
+
+
+def test_popularity_does_not_change_legacy_snapshots_or_deterministic_ties():
+    first = candidate(id=1, times_completed=7, seeders=3)
+    second = candidate(id=2, times_completed=7, seeders=3)
+    legacy = ReleasePreferences()
+    assert legacy.criteria == ["format", "source", "seeders"]
+    assert ranking_key(first, assess_release(first, WORK, legacy), legacy) == (
+        False,
+        0,
+        (0,),
+        (0,),
+        (False, -3),
+        (0,),
+        "mam",
+        "1",
+    )
+    preferences = ReleasePreferences(criteria=["source", "popularity", "seeders", "format"])
+    assert ordered([second, first], preferences) == [first, second]
+    resolved, origins = resolve_preferences([("Profile", {"criteria": preferences.criteria})])
+    frozen = ProfileSnapshot(preferences=resolved, origins=origins).model_dump(mode="json")
+    assert ProfileSnapshot.model_validate(frozen).model_dump(mode="json") == frozen
+    cleared = overlay_profile(
+        ProfileSnapshot.model_validate(frozen), request_overrides={"criteria": legacy.criteria}
+    )
+    assert cleared.preferences.criteria == legacy.criteria
 
 
 @pytest.mark.parametrize(

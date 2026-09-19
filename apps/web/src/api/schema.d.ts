@@ -6986,7 +6986,9 @@ export interface components {
       /** Source Order */
       source_order?: string[];
       /** Criteria */
-      criteria?: ("format" | "source" | "seeders" | "narrator")[];
+      criteria?: (
+        "format" | "source" | "seeders" | "narrator" | "popularity"
+      )[];
       /** Preferred Narrators */
       preferred_narrators?: string[];
       /** Blocked Formats */
@@ -7670,7 +7672,7 @@ export interface components {
        *       "seeders"
        *     ]
        */
-      criteria: ("format" | "source" | "seeders" | "narrator")[];
+      criteria: ("format" | "source" | "seeders" | "narrator" | "popularity")[];
       /** Preferred Narrators */
       preferred_narrators?: string[];
       /** Blocked Formats */

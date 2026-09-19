@@ -31,6 +31,66 @@ from tests.prowlarr_fixture import release
 pytestmark = pytest.mark.integration
 
 
+async def test_popularity_profile_orders_live_source_observations_and_keeps_old_search_frozen(
+    client, admin, database, catalog, source_http
+):
+    await configure_mam(client)
+    criteria = ["format", "source", "popularity", "seeders"]
+    invalid = await client.post(
+        "/api/acquisition/profiles",
+        json={
+            "name": "Invalid",
+            "preferences": {"criteria": ["popularity", "source", "format", "seeders"]},
+        },
+    )
+    assert invalid.status_code == 422
+    response = await client.post(
+        "/api/acquisition/profiles",
+        json={"name": "Popular MAM releases", "preferences": {"criteria": criteria}},
+    )
+    assert response.status_code == 201, response.text
+    profile = response.json()
+    source_http["body"] = search_response(
+        data=[
+            release_row(
+                id=1, title="Harbor", author_info='{"1":"Writer"}', seeders=100, times_completed=2
+            ),
+            release_row(
+                id=2, title="Harbor", author_info='{"1":"Writer"}', seeders=1, times_completed=90
+            ),
+        ],
+        found=2,
+        total=2,
+    )
+    saved = await begin(client, catalog, profile_id=profile["id"], profile_generation=1)
+    await book_sources.run(UUID(saved["id"]), "mam")
+    observed = (await read(client, saved["id"])).json()
+    assert [row["release"]["source_id"] for row in observed["items"]] == ["2", "1"]
+    assert (
+        "MAM reports 90 completed downloads; compared only within MAM"
+        in observed["items"][0]["assessment"]["explanation"]
+    )
+    updated = await client.put(
+        f"/api/acquisition/profiles/{profile['id']}",
+        json={
+            "name": "Seeders first",
+            "expected_generation": 1,
+            "preferences": {"criteria": ["seeders", "format", "source"]},
+        },
+    )
+    assert updated.status_code == 200
+    old = (await read(client, saved["id"])).json()
+    assert old["profile"] == observed["profile"]
+    assert old["items"] == observed["items"]
+    fresh = await begin(
+        client, catalog, key="new-popularity-policy", profile_id=profile["id"], profile_generation=2
+    )
+    await book_sources.run(UUID(fresh["id"]), "mam")
+    assert [
+        row["release"]["source_id"] for row in (await read(client, fresh["id"])).json()["items"]
+    ] == ["1", "2"]
+
+
 async def begin(client, catalog, key="book-search-fixture", **body):
     response = await client.post(
         f"/api/catalog/works/{catalog['work']}/source-searches",

@@ -20772,11 +20772,12 @@
                 "format",
                 "source",
                 "seeders",
-                "narrator"
+                "narrator",
+                "popularity"
               ]
             },
             "type": "array",
-            "maxItems": 4,
+            "maxItems": 5,
             "minItems": 3,
             "title": "Criteria"
           },
@@ -22610,11 +22611,12 @@
                 "format",
                 "source",
                 "seeders",
-                "narrator"
+                "narrator",
+                "popularity"
               ]
             },
             "type": "array",
-            "maxItems": 4,
+            "maxItems": 5,
             "minItems": 3,
             "title": "Criteria",
             "default": [

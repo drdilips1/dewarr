@@ -50,11 +50,18 @@ function Order({
   label,
   values,
   onChange,
+  valid = () => true,
 }: {
   label: string;
   values: string[];
   onChange: (values: string[]) => void;
+  valid?: (values: string[]) => boolean;
 }) {
+  const moved = (index: number, step: number) => {
+    const next = [...values];
+    [next[index], next[index + step]] = [next[index + step], next[index]];
+    return next;
+  };
   return (
     <fieldset>
       <legend>{label}</legend>
@@ -66,7 +73,7 @@ function Order({
               <button
                 type="button"
                 aria-label={`Move ${value} up in ${label}`}
-                disabled={index === 0}
+                disabled={index === 0 || !valid(moved(index, -1))}
                 onClick={() => {
                   const next = [...values];
                   [next[index - 1], next[index]] = [
@@ -81,7 +88,9 @@ function Order({
               <button
                 type="button"
                 aria-label={`Move ${value} down in ${label}`}
-                disabled={index === values.length - 1}
+                disabled={
+                  index === values.length - 1 || !valid(moved(index, 1))
+                }
                 onClick={() => {
                   const next = [...values];
                   [next[index + 1], next[index]] = [
@@ -146,6 +155,11 @@ export default function PreferenceFields({
       <Order
         label={preferenceLabels[key]!}
         values={effective[key] || []}
+        valid={(values) =>
+          key !== "criteria" ||
+          !values.includes("popularity") ||
+          values.indexOf("source") < values.indexOf("popularity")
+        }
         onChange={(values) => onChange({ ...overrides, [key]: values })}
       />
       {origin(key)}
@@ -170,6 +184,39 @@ export default function PreferenceFields({
         onChange={onChange}
       />
       {order("criteria")}
+      <details>
+        <summary>Source popularity</summary>
+        <p className="muted">
+          Prefer higher completed-download counts within the same tracker.
+          Currently MAM provides this count; other sources remain unknown.
+          Source preference must come before popularity. Each tracker/indexer is
+          grouped separately; equal source priorities use stable source IDs.
+        </p>
+        <button
+          type="button"
+          onClick={() => {
+            const criteria = effective.criteria || [
+              "format",
+              "source",
+              "seeders",
+            ];
+            if (criteria.includes("popularity"))
+              onChange({
+                ...overrides,
+                criteria: criteria.filter((value) => value !== "popularity"),
+              });
+            else {
+              const next = [...criteria];
+              next.splice(next.indexOf("source") + 1, 0, "popularity");
+              onChange({ ...overrides, criteria: next });
+            }
+          }}
+        >
+          {effective.criteria?.includes("popularity")
+            ? "Stop ranking by popularity"
+            : "Use source popularity in ranking"}
+        </button>
+      </details>
       <details>
         <summary>Series search</summary>
         <label className="check-label">

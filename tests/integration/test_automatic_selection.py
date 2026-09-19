@@ -31,6 +31,70 @@ from tests.torrent_fixture import torrent_bytes
 pytestmark = pytest.mark.integration
 
 
+@pytest.mark.parametrize("refreshed_count", [100, 0])
+async def test_automatic_popularity_uses_same_source_counts_and_freezes_selected_observation(
+    client, database, source, monkeypatch, refreshed_count
+):
+    criteria = ["format", "source", "popularity", "seeders"]
+    response = await client.post(
+        "/api/acquisition/profiles",
+        json={"name": "Source popularity", "preferences": {"criteria": criteria}},
+    )
+    assert response.status_code == 201, response.text
+    profile = response.json()
+    second, artifact_id, release = await additional_candidate(
+        database, source, source_id="502", seeders=2
+    )
+    original = source["release"].model_copy(update={"snatches": 20})
+    popular = release.model_copy(update={"snatches": 100})
+    async with database() as db, db.begin():
+        search = await db.get(Operation, source["search"])
+        search.payload = {**search.payload, "profile": profile}
+        for result_id, art_id, value in [
+            (source["result"], source["artifact"], original),
+            (second, artifact_id, popular),
+        ]:
+            (await db.get(SourceResult, result_id)).release_snapshot = value.model_dump(mode="json")
+            (await db.get(SourceArtifact, art_id)).release_snapshot = value.model_dump(mode="json")
+    calls = []
+
+    async def resolve(owner, row):
+        calls.append(row.id)
+        return (
+            (artifact_id, popular.model_copy(update={"snatches": refreshed_count}))
+            if row.id == second
+            else (source["artifact"], original)
+        )
+
+    monkeypatch.setattr(automatic, "resolve_candidate", resolve)
+    operation = await start(client, source)
+    await automatic.run(UUID(operation["id"]))
+    if refreshed_count == 0:
+        interim = await detail(client, operation["id"])
+        assert interim["status"] == "queued"
+        assert "Inspected release evidence changed the ranking" in interim["message"]
+        await automatic.run(UUID(operation["id"]))
+    value = await detail(client, operation["id"])
+    assert value["status"] == "completed", value
+    assert calls == ([second] if refreshed_count else [second, source["result"]])
+    async with database() as db:
+        selection = await db.get(AcquisitionSelection, UUID(value["selection_id"]))
+        frozen = selection.frozen
+        assert frozen["profile"]["preferences"]["criteria"] == criteria
+        assert frozen["automatic_selection"]["source_popularity"] == {
+            "origin": "mam",
+            "metric": "completed_downloads",
+            "value": refreshed_count or 20,
+        }
+        assert await db.scalar(select(func.count()).select_from(DownloadAttempt)) == 0
+    await client.put(
+        f"/api/acquisition/profiles/{profile['id']}",
+        json={"name": "Changed later", "expected_generation": 1, "preferences": {}},
+    )
+    async with database() as db:
+        assert (await db.get(AcquisitionSelection, UUID(value["selection_id"]))).frozen == frozen
+
+
 @pytest.fixture
 async def source(client, database, admin, catalog, selection_route, monkeypatch):
     raw = torrent_bytes(name=b"Harbor", files=[{b"length": 12, b"path": [b"Harbor.m4b"]}])

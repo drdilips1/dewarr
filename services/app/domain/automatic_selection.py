@@ -51,6 +51,7 @@ from app.domain.release_profiles import (
     ranking_key,
     refresh_profile,
     same_profile,
+    source_popularity,
 )
 from app.domain.request_constraints import constrained_preferences
 from app.domain.request_scope import SCOPE_FIELDS
@@ -797,7 +798,7 @@ async def run(identifier):
             if remaining and remaining[0][1].id != row.id:
                 operation.status, operation.message = (
                     "queued",
-                    "Inspected formats changed the ranking; checking the next candidate",
+                    "Inspected release evidence changed the ranking; checking the next candidate",
                 )
                 operation.job_id = await enqueue(db, KIND, operation_id=str(identifier))
                 return
@@ -834,6 +835,20 @@ async def run(identifier):
                         "maximum_bytes": operation.payload["maximum_bytes"],
                         "inspections": len(payload["inspected"]),
                         "reported_seeders": fresh.seeders,
+                        **(
+                            {
+                                "source_popularity": {
+                                    "origin": fresh.source
+                                    + (":" + fresh.indexer_id if fresh.indexer_id else ""),
+                                    "metric": "completed_downloads"
+                                    if fresh.source == "mam"
+                                    else None,
+                                    "value": source_popularity(fresh),
+                                }
+                            }
+                            if "popularity" in profile.preferences.criteria
+                            else {}
+                        ),
                         "source_observed_at": fresh.observed_at.isoformat(),
                         "inspected_formats": payload["verified"][str(row.id)]["formats"],
                         "coverage": coverage,

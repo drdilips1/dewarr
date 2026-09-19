@@ -30,6 +30,18 @@ Preferred narrators are ordered names, not a filter. The earliest matching name 
 
 Existing profiles keep their three-criterion ranking order. Narrator preference breaks remaining ties before stable source identifiers. **Rank narrator preference first** adds `narrator` to the movable ranking priorities; it can then be placed before or after format, source and seeders. **Use narrator preference only to break ties** restores the three-criterion form. Required narrators filter candidates before any soft preference or seed count can affect selection.
 
+## Source-local popularity · September 19, 2026
+
+Expand **Source popularity** and choose **Use source popularity in ranking** to add an optional `popularity` criterion after `source`. It participates in the same profile, personal/installation and list/request inheritance as other ranking criteria. Move it above or below formats, seeders and explicit narrator preference where the source-order constraint permits. The editor disables moves that would put popularity before source, and the API rejects that order. Removing popularity leaves the other priorities intact; resetting Ranking priorities restores inheritance.
+
+Currently this uses only MAM's parsed `times_completed` / `snatches` count of completed downloads. Zero is a known count; missing, invalid or negative values remain unknown. Seeders are separate evidence. No generic field from AudiobookBay or Prowlarr is substituted for a comparable count. Source-result details and ranking explanations attribute the measure to MAM.
+
+When popularity is enabled, the source criterion groups exact tracker/indexer origins: the configured source priority comes first, then stable source identifiers for equal priorities. Popularity therefore compares counts only within one origin and after higher-priority criteria tie. Per-indexer source priorities remain available in the API's source order. Sources without a supported counter retain unknown popularity and continue through the other criteria. This intentionally does not treat raw counts from different trackers as a common scale. Profile ranking and manual view sorting remain separate.
+
+Existing profiles and built-in Balanced retain their original three-criterion order; adding this priority is explicit. Legacy ranking keys and frozen snapshots keep their previous meaning. Both aggregate source ranking and automatic candidate preparation use the same key. Automatic preparation re-ranks with refreshed source observations after inspection, and a new selection using popularity records the exact source origin, metric and count alongside its observation time. Later count/profile changes do not rewrite an existing selection. Identity/capability checks, required versions/narrators, blocked formats, source freshness and all acquisition restrictions remain independent.
+
+This implements configurable source popularity; broader source metrics, default-profile evolution and live-account qualification remain separate work. There is no database migration. New snapshots containing `popularity` require this API/worker version; do not downgrade to an older parser once such preferences or decisions have been saved.
+
 ## Request and list overrides
 
 A list policy has a collapsed **List download overrides** editor. A manual title request or list batch has **Download preferences for this request**, initially set to inherit. Both editors expose the release-preference fields and supported scope choices, with reset-to-inherited actions. Request previews and saved receipts retain effective values and their origins; previews show resolved request scope separately from release ordering.

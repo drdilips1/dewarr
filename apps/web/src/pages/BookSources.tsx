@@ -668,6 +668,13 @@ function Results({
             {item.release.source === "mam" && (
               <>
                 <p>
+                  MAM completed downloads:{" "}
+                  {item.release.snatches != null && item.release.snatches >= 0
+                    ? item.release.snatches.toLocaleString()
+                    : "Unknown"}
+                  . This is a MAM-only popularity measure.
+                </p>
+                <p>
                   Series:{" "}
                   {(item.release.series || [])
                     .map((s) => `${s.name} ${s.position || ""}`)
