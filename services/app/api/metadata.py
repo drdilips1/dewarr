@@ -30,6 +30,7 @@ from app.db.models import (
     WorkMetadataSource,
 )
 from app.domain.availability import availability_for
+from app.domain.catalog_bindings import visible_provider_works
 from app.domain.catalog_enrichment import TERMINAL, effective_status, proposal, schedule_enrichment
 from app.domain.catalog_metadata import (
     FIELDS,
@@ -202,7 +203,20 @@ async def save_preferences(body: MetadataPreferences, user: Admin, db: Database)
     return body
 
 
-@router.get("/search", response_model=SearchPage)
+class MetadataSearchPage(SearchPage):
+    known_works: dict[str, WorkView] = Field(default_factory=dict)
+
+
+async def known_works(db, user, provider, external_ids):
+    matched = await visible_provider_works(db, user, [(provider, value) for value in external_ids])
+    availability = await availability_for(db, user, list({work.id for work in matched.values()}))
+    return {
+        external_id: work_view(work, availability[work.id])
+        for (_, external_id), work in matched.items()
+    }
+
+
+@router.get("/search", response_model=MetadataSearchPage)
 async def search(
     user: CurrentUser,
     db: Database,
@@ -233,20 +247,34 @@ async def search(
             warning = "Hardcover is unavailable; showing Open Library results. " + str(error)
         except AdapterError as fallback_error:
             raise adapter_http_error(fallback_error) from fallback_error
-    return result.model_copy(update={"stale": stale, "warning": warning})
+    user = await current_actor(db, user_id)
+    return MetadataSearchPage(
+        **result.model_dump(exclude={"stale", "warning"}),
+        stale=stale,
+        warning=warning,
+        known_works=await known_works(
+            db, user, result.provider, [book.external_id for book in result.items]
+        ),
+    )
 
 
 class BookPreview(BaseModel):
     book: BookData
     stale: bool = False
     warning: str | None = None
+    work: WorkView | None = None
 
 
 @router.get("/books/{provider}/{external_id}", response_model=BookPreview)
 async def preview(provider: Provider, external_id: str, user: CurrentUser, db: Database):
+    user_id = user.id
     try:
-        book, stale, warning = await provider_call(db, user.id, provider, "fetch", external_id)
-        return BookPreview(book=book, stale=stale, warning=warning)
+        book, stale, warning = await provider_call(db, user_id, provider, "fetch", external_id)
+        user = await current_actor(db, user_id)
+        matched = await known_works(db, user, book.provider, [book.external_id])
+        return BookPreview(
+            book=book, stale=stale, warning=warning, work=matched.get(book.external_id)
+        )
     except AdapterError as error:
         raise adapter_http_error(error) from error
 

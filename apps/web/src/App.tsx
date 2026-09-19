@@ -17,6 +17,7 @@ import {
   NavLink,
   Route,
   Routes,
+  useLocation,
   useNavigate,
 } from "react-router-dom";
 import { api, ApiError, result, setCsrf } from "./api/client";
@@ -241,7 +242,12 @@ function SignIn({ onSuccess }: { onSuccess: (auth: Auth) => void }) {
 function Shell({ auth }: { auth: Auth }) {
   const client = useQueryClient();
   const navigate = useNavigate();
+  const location = useLocation();
   const [search, setSearch] = useState("");
+  useEffect(() => {
+    if (location.pathname === "/search")
+      setSearch(new URLSearchParams(location.search).get("q") || "");
+  }, [location.pathname, location.search]);
   const logout = useMutation({
     mutationFn: async () => result(await api.POST("/api/auth/logout")),
     onSuccess: () => {
@@ -252,7 +258,7 @@ function Shell({ auth }: { auth: Auth }) {
   });
   function searchSubmit(event: FormEvent) {
     event.preventDefault();
-    navigate("/?q=" + encodeURIComponent(search));
+    navigate("/search?q=" + encodeURIComponent(search.trim()));
   }
   return (
     <div className="app-shell">
@@ -354,8 +360,9 @@ function Shell({ auth }: { auth: Auth }) {
           <form className="search" onSubmit={searchSubmit}>
             <Search size={18} aria-hidden="true" />
             <input
-              aria-label="Search your catalog"
+              aria-label="Search books or authors"
               placeholder="Search books or authors"
+              maxLength={300}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />

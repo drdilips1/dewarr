@@ -4062,6 +4062,7 @@ export interface components {
       stale: boolean;
       /** Warning */
       warning?: string | null;
+      work?: components["schemas"]["WorkView"] | null;
     };
     /** BookSearchView */
     BookSearchView: {
@@ -6393,6 +6394,31 @@ export interface components {
         [key: string]: "hardcover" | "openlibrary";
       };
     };
+    /** MetadataSearchPage */
+    MetadataSearchPage: {
+      /**
+       * Provider
+       * @enum {string}
+       */
+      provider: "hardcover" | "openlibrary";
+      /** Items */
+      items: components["schemas"]["BookData"][];
+      /** Page */
+      page: number;
+      /** Has More */
+      has_more: boolean;
+      /**
+       * Stale
+       * @default false
+       */
+      stale: boolean;
+      /** Warning */
+      warning?: string | null;
+      /** Known Works */
+      known_works?: {
+        [key: string]: components["schemas"]["WorkView"];
+      };
+    };
     /** MetadataView */
     MetadataView: {
       /** Fields */
@@ -8012,27 +8038,6 @@ export interface components {
        * @default 0
        */
       offset: number;
-    };
-    /** SearchPage */
-    SearchPage: {
-      /**
-       * Provider
-       * @enum {string}
-       */
-      provider: "hardcover" | "openlibrary";
-      /** Items */
-      items: components["schemas"]["BookData"][];
-      /** Page */
-      page: number;
-      /** Has More */
-      has_more: boolean;
-      /**
-       * Stale
-       * @default false
-       */
-      stale: boolean;
-      /** Warning */
-      warning?: string | null;
     };
     /** SearchQueryEvidence */
     SearchQueryEvidence: {
@@ -13249,7 +13254,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["SearchPage"];
+          "application/json": components["schemas"]["MetadataSearchPage"];
         };
       };
       /** @description Validation Error */

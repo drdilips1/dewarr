@@ -1171,6 +1171,12 @@ nav a.active {
 .setup-next {
   margin: 24px 0;
 }
+.search-local {
+  margin-bottom: 32px;
+}
+.search-local .book-grid {
+  margin-top: 18px;
+}
 .setup-next .button-row {
   margin-top: 18px;
 }
@@ -1261,6 +1267,9 @@ nav a.active {
 }
 
 @media (max-width: 720px) {
+  .catalog-search-form > label {
+    flex-basis: 100%;
+  }
   .library-copy > .grow {
     flex-basis: 100%;
   }
@@ -1277,6 +1286,11 @@ nav a.active {
   gap: 16px;
 }
 .provider-result {
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none;
   justify-content: flex-start;
   align-items: center;
   text-align: left;

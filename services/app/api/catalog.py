@@ -2,11 +2,12 @@ from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field, field_validator
-from sqlalchemy import Text, cast, func, or_, select
+from sqlalchemy import func, select
 
 from app.api.dependencies import CurrentUser, Database, Member
 from app.db.models import AuditEvent, Work
 from app.domain.availability import Availability, availability_for
+from app.domain.catalog_search import local_match
 from app.domain.identity import work_key
 from app.domain.visibility import visible_origin_work, visible_work
 from app.domain.work_graph import canonical_map, canonical_work
@@ -79,9 +80,6 @@ async def works(
 ):
     conditions = [Work.redirect_to.is_(None), visible_work(user)]
     if q.strip():
-        pattern = (
-            "%" + q.strip().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
-        )
         mapping = canonical_map()
         from sqlalchemy.orm import aliased
 
@@ -91,7 +89,7 @@ async def works(
                 select(mapping.c.work_id)
                 .join(origin, origin.id == mapping.c.origin_id)
                 .where(
-                    or_(origin.title.ilike(pattern), cast(origin.authors, Text).ilike(pattern)),
+                    local_match(user, origin, q),
                     visible_origin_work(user, origin),
                 )
             )

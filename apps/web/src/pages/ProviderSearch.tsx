@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { BookOpen, Search } from "lucide-react";
+import { BookOpen, Check, Search } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
-import { Empty, Loading, Notice } from "../components";
+import { BookCard, Empty, Loading, Notice } from "../components";
 
 type Book = components["schemas"]["BookData"];
 type Provider = "hardcover" | "openlibrary";
@@ -31,6 +31,20 @@ export default function ProviderSearch({
   const [input, setInput] = useState(q);
   const [selected, setSelected] = useState<Book | null>(null);
   const selectedButton = useRef<HTMLButtonElement | null>(null);
+  useEffect(() => {
+    setInput(q);
+    setSelected(null);
+  }, [q, provider, page]);
+  const local = useQuery({
+    queryKey: ["works", "global-search", q],
+    queryFn: async () =>
+      result(
+        await api.GET("/api/catalog/works", {
+          params: { query: { q, limit: 6 } },
+        }),
+      ),
+    enabled: !matchWorkId && Boolean(q.trim()),
+  });
   const query = useQuery({
     queryKey: ["provider-search", q, provider, page],
     queryFn: async () =>
@@ -42,6 +56,14 @@ export default function ProviderSearch({
     enabled: Boolean(q.trim()),
     retry: false,
   });
+  const localIds = new Set(
+    ((!matchWorkId && local.data?.items) || []).map((work) => work.id),
+  );
+  const providerItems =
+    query.data?.items.filter((book) => {
+      const known = query.data?.known_works?.[book.external_id];
+      return matchWorkId || !known || !localIds.has(known.id);
+    }) || [];
   return (
     <>
       {!matchWorkId && (
@@ -50,8 +72,8 @@ export default function ProviderSearch({
             <p className="eyebrow">FIND YOUR NEXT BOOK</p>
             <h1>Search books</h1>
             <p className="muted">
-              Search the catalog, then explore editions and add titles to your
-              shelves.
+              Find books in your collection and discover new titles. Your
+              library status stays visible as you browse.
             </p>
           </div>
           <Link to="/metadata">Metadata settings</Link>
@@ -59,7 +81,7 @@ export default function ProviderSearch({
       )}
       {matchWorkId && <h3>Find the correct catalog record</h3>}
       <form
-        className="panel library-filters"
+        className="panel library-filters catalog-search-form"
         onSubmit={(event) => {
           event.preventDefault();
           setSelected(null);
@@ -74,6 +96,12 @@ export default function ProviderSearch({
             required
             maxLength={300}
           />
+          {!matchWorkId && (
+            <small>
+              Local search also includes known series, ISBNs, ASINs, and IDs
+              such as hardcover:42.
+            </small>
+          )}
         </label>
         <label>
           Catalog provider
@@ -94,6 +122,31 @@ export default function ProviderSearch({
           Search books
         </button>
       </form>
+      {!matchWorkId && q.trim() ? (
+        <section className="search-local" aria-label="Matches in your catalog">
+          <div className="section-heading">
+            <h2>In your catalog</h2>
+            {local.data?.total ? (
+              <Link to={`/?q=${encodeURIComponent(q)}`}>
+                View all {local.data.total} catalog matches →
+              </Link>
+            ) : null}
+          </div>
+          <Notice error={local.error} />
+          {local.isPending ? <Loading /> : null}
+          {local.data?.items.length ? (
+            <div className="book-grid">
+              {local.data.items.map((work) => (
+                <BookCard key={work.id} work={work} />
+              ))}
+            </div>
+          ) : local.data ? (
+            <p className="muted">
+              No matching titles in your accessible catalog.
+            </p>
+          ) : null}
+        </section>
+      ) : null}
       {query.data?.warning && (
         <p className="notice" role="status">
           {query.data.warning}
@@ -113,43 +166,68 @@ export default function ProviderSearch({
             <h2>{providerName(query.data.provider)} results</h2>
             <span className="muted">Page {page}</span>
           </div>
-          {query.data.items.length ? (
+          {providerItems.length ? (
             <div className="provider-results">
-              {query.data.items.map((book) => (
-                <button
-                  className="provider-result"
-                  key={`${book.provider}:${book.external_id}`}
-                  onClick={(event) => {
-                    selectedButton.current = event.currentTarget;
-                    setSelected(book);
-                  }}
-                  aria-pressed={
-                    selected?.external_id === book.external_id &&
-                    selected.provider === book.provider
-                  }
-                >
-                  {book.cover_url ? (
-                    <img
-                      src={book.cover_url}
-                      alt=""
-                      loading="lazy"
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    <div className="mini-cover">
-                      <BookOpen size={24} />
-                    </div>
-                  )}
-                  <span>
-                    <strong>{book.title}</strong>
-                    <small>
-                      {(book.authors || []).join(", ") || "Author unknown"}
-                    </small>
-                    <small>{book.publication_year || "Year unknown"}</small>
-                  </span>
-                </button>
-              ))}
+              {providerItems.map((book) => {
+                const known = query.data.known_works?.[book.external_id];
+                const content = (
+                  <>
+                    {book.cover_url ? (
+                      <img
+                        src={book.cover_url}
+                        alt=""
+                        loading="lazy"
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <div className="mini-cover">
+                        <BookOpen size={24} />
+                      </div>
+                    )}
+                    <span>
+                      <strong>{book.title}</strong>
+                      <small>
+                        {(book.authors || []).join(", ") || "Author unknown"}
+                      </small>
+                      <small>{book.publication_year || "Year unknown"}</small>
+                      {known ? (
+                        <SearchAvailability work={known} />
+                      ) : (
+                        <small>Library match not established</small>
+                      )}
+                    </span>
+                  </>
+                );
+                return known && !matchWorkId ? (
+                  <Link
+                    className="provider-result"
+                    key={`${book.provider}:${book.external_id}`}
+                    to={`/books/${known.id}`}
+                  >
+                    {content}
+                  </Link>
+                ) : (
+                  <button
+                    className="provider-result"
+                    key={`${book.provider}:${book.external_id}`}
+                    onClick={(event) => {
+                      selectedButton.current = event.currentTarget;
+                      setSelected(book);
+                    }}
+                    aria-pressed={
+                      selected?.external_id === book.external_id &&
+                      selected.provider === book.provider
+                    }
+                  >
+                    {content}
+                  </button>
+                );
+              })}
             </div>
+          ) : query.data.items.length ? (
+            <p className="muted">
+              These results are already shown in your catalog matches above.
+            </p>
           ) : (
             <Empty title="No matching books">
               Try a shorter title, another author spelling or a different
@@ -195,6 +273,27 @@ export default function ProviderSearch({
         />
       )}
     </>
+  );
+}
+
+function SearchAvailability({
+  work,
+}: {
+  work: components["schemas"]["WorkView"];
+}) {
+  return (
+    <span className="media-badges">
+      <span className={work.availability.owned ? "status owned" : "status"}>
+        {work.availability.owned ? (
+          <Check size={12} aria-hidden="true" />
+        ) : null}
+        {work.availability.owned ? "In library" : "In catalog"}
+      </span>
+      {work.availability.ebook ? <span>Ebook</span> : null}
+      {work.availability.audio ? <span>Audio</span> : null}
+      {work.availability.stale ? <span>Last known availability</span> : null}
+      {work.availability.in_collection ? <span>In collection</span> : null}
+    </span>
   );
 }
 
@@ -248,6 +347,8 @@ export function Preview({
     onSuccess: (work) => {
       client.invalidateQueries({ queryKey: ["works"] });
       client.invalidateQueries({ queryKey: ["discovery"] });
+      client.invalidateQueries({ queryKey: ["provider-search"] });
+      client.invalidateQueries({ queryKey: ["provider-book"] });
       if (matchWorkId) {
         onMatched?.();
         onClose();
@@ -296,7 +397,15 @@ export function Preview({
           <p className="muted">
             Adding a catalog title does not download it or mark it as owned.
           </p>
-          {canEdit && (
+          {preview.data?.work && !matchWorkId ? (
+            <>
+              <SearchAvailability work={preview.data.work} />
+              <Link className="back-link" to={`/books/${preview.data.work.id}`}>
+                Open existing book →
+              </Link>
+            </>
+          ) : null}
+          {canEdit && (matchWorkId || !preview.data?.work) && (
             <button
               className="primary"
               onClick={() => save.mutate()}

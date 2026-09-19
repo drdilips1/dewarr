@@ -6350,7 +6350,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SearchPage"
+                  "$ref": "#/components/schemas/MetadataSearchPage"
                 }
               }
             }
@@ -12848,6 +12848,16 @@
               }
             ],
             "title": "Warning"
+          },
+          "work": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WorkView"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -19053,6 +19063,64 @@
         "type": "object",
         "title": "MetadataPreferences"
       },
+      "MetadataSearchPage": {
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "hardcover",
+              "openlibrary"
+            ],
+            "title": "Provider"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/BookData"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          },
+          "stale": {
+            "type": "boolean",
+            "title": "Stale",
+            "default": false
+          },
+          "warning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Warning"
+          },
+          "known_works": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/WorkView"
+            },
+            "type": "object",
+            "title": "Known Works"
+          }
+        },
+        "type": "object",
+        "required": [
+          "provider",
+          "items",
+          "page",
+          "has_more"
+        ],
+        "title": "MetadataSearchPage"
+      },
       "MetadataView": {
         "properties": {
           "fields": {
@@ -23679,57 +23747,6 @@
         },
         "type": "object",
         "title": "SearchInput"
-      },
-      "SearchPage": {
-        "properties": {
-          "provider": {
-            "type": "string",
-            "enum": [
-              "hardcover",
-              "openlibrary"
-            ],
-            "title": "Provider"
-          },
-          "items": {
-            "items": {
-              "$ref": "#/components/schemas/BookData"
-            },
-            "type": "array",
-            "title": "Items"
-          },
-          "page": {
-            "type": "integer",
-            "title": "Page"
-          },
-          "has_more": {
-            "type": "boolean",
-            "title": "Has More"
-          },
-          "stale": {
-            "type": "boolean",
-            "title": "Stale",
-            "default": false
-          },
-          "warning": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Warning"
-          }
-        },
-        "type": "object",
-        "required": [
-          "provider",
-          "items",
-          "page",
-          "has_more"
-        ],
-        "title": "SearchPage"
       },
       "SearchQueryEvidence": {
         "properties": {
