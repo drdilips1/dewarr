@@ -24,6 +24,7 @@ import type { Auth } from "./api/client";
 import { Loading, Notice } from "./components";
 
 const Catalog = lazy(() => import("./pages/Catalog"));
+const GettingStarted = lazy(() => import("./pages/GettingStarted"));
 const Discover = lazy(() => import("./pages/Discover"));
 const CommunityLists = lazy(() => import("./pages/CommunityLists"));
 const BookDetail = lazy(() => import("./pages/BookDetail"));
@@ -273,6 +274,12 @@ function Shell({ auth }: { auth: Auth }) {
         </button>
         <p className="nav-caption">YOUR COLLECTION</p>
         <nav aria-label="Main navigation">
+          {auth.user.role === "admin" ? (
+            <NavLink to="/getting-started">
+              <Settings size={19} />
+              Getting started
+            </NavLink>
+          ) : null}
           <NavLink to="/discover">
             <Compass size={19} />
             Discover
@@ -361,6 +368,16 @@ function Shell({ auth }: { auth: Auth }) {
           <Suspense fallback={<Loading />}>
             <Routes>
               <Route
+                path="/getting-started"
+                element={
+                  auth.user.role === "admin" ? (
+                    <GettingStarted />
+                  ) : (
+                    <Navigate to="/" replace />
+                  )
+                }
+              />
+              <Route
                 path="/discover"
                 element={<Discover canEdit={auth.user.role !== "viewer"} />}
               />
@@ -388,7 +405,12 @@ function Shell({ auth }: { auth: Auth }) {
               />
               <Route
                 path="/"
-                element={<Catalog canEdit={auth.user.role !== "viewer"} />}
+                element={
+                  <Catalog
+                    canEdit={auth.user.role !== "viewer"}
+                    admin={auth.user.role === "admin"}
+                  />
+                }
               />
               <Route
                 path="/books/:id"

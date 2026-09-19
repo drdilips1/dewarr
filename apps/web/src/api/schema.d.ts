@@ -158,6 +158,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/setup/readiness": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Readiness */
+    get: operations["readiness_api_setup_readiness_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/recovery": {
     parameters: {
       query?: never;
@@ -8498,6 +8515,108 @@ export interface components {
        */
       publication_available: boolean;
     };
+    /** SetupDestination */
+    SetupDestination: {
+      /** Name */
+      name: string;
+      /** Medium */
+      medium: string;
+      /** Enabled */
+      enabled: boolean;
+      /** Configured */
+      configured: boolean;
+      /** Publication Available */
+      publication_available: boolean;
+    };
+    /** SetupDownloader */
+    SetupDownloader: {
+      /** Name */
+      name: string;
+      /** Enabled */
+      enabled: boolean;
+      /** Status */
+      status: string;
+      /** Last Success At */
+      last_success_at: string | null;
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Mappings Current */
+      mappings_current: boolean;
+    };
+    /** SetupLibrary */
+    SetupLibrary: {
+      /** Name */
+      name: string;
+      /** Enabled */
+      enabled: boolean;
+      /** Status */
+      status: string;
+      /** Last Success At */
+      last_success_at: string | null;
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Libraries */
+      libraries: number;
+      /** Inventoried Libraries */
+      inventoried_libraries: number;
+    };
+    /** SetupReadiness */
+    SetupReadiness: {
+      /**
+       * Observed At
+       * Format: date-time
+       */
+      observed_at: string;
+      /** Download Dispatch Enabled */
+      download_dispatch_enabled: boolean;
+      /** Libraries */
+      libraries: components["schemas"]["SetupLibrary"][];
+      catalog: components["schemas"]["SetupService"] | null;
+      /** Sources */
+      sources: components["schemas"]["SetupSource"][];
+      /** Downloaders */
+      downloaders: components["schemas"]["SetupDownloader"][];
+      /** Destinations */
+      destinations: components["schemas"]["SetupDestination"][];
+      /** Download Roots */
+      download_roots: number;
+      /** Destination Roots */
+      destination_roots: number;
+      /** Staging Configured */
+      staging_configured: boolean;
+    };
+    /** SetupService */
+    SetupService: {
+      /** Name */
+      name: string;
+      /** Enabled */
+      enabled: boolean;
+      /** Status */
+      status: string;
+      /** Last Success At */
+      last_success_at: string | null;
+    };
+    /** SetupSource */
+    SetupSource: {
+      /** Name */
+      name: string;
+      /** Enabled */
+      enabled: boolean;
+      /** Status */
+      status: string;
+      /** Last Success At */
+      last_success_at: string | null;
+      /** Key */
+      key: string;
+      /** Uses Proxy */
+      uses_proxy: boolean;
+    };
     /** SetupView */
     SetupView: {
       /** Needs Setup */
@@ -9421,6 +9540,26 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  readiness_api_setup_readiness_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SetupReadiness"];
         };
       };
     };

@@ -1149,6 +1149,31 @@ nav a.active {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
   gap: 20px;
 }
+.setup-grid {
+  margin: 20px 0 28px;
+}
+.setup-grid .panel {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.setup-grid h3 {
+  margin: 10px 0;
+}
+.setup-grid p,
+.setup-next p {
+  margin: 14px 0;
+}
+.setup-evidence {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+  margin-top: 18px;
+}
+.setup-next {
+  margin: 24px 0;
+}
+.setup-next .button-row {
+  margin-top: 18px;
+}
 .section-heading {
   display: flex;
   align-items: center;

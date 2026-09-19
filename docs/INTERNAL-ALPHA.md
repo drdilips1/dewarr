@@ -8,6 +8,8 @@ The native development instance is at **http://localhost:8000** on this Mac. It 
 
 Complete first-run administrator setup in the UI. The deployment bootstrap token is stored in the local environment configuration; keep it private and choose your own account password. Then configure catalog/library connections through the app. Download dispatch remains disabled in this installation. Browsing and setup can be tested first; actual downloading requires the controlled acquisition qualification below and an intentional deployment setting change.
 
+After signing in, open **Getting started** in the navigation, or **Set up your collection** in an empty catalog. It links the setup steps in order and reports saved library inventories, your own Hardcover connection, sources, downloader mappings, destination checks and the deployment's download switch. Refreshing this page only reads saved evidence. It does not test external connections, approve an import or enable downloads. An unavailable status request replaces the checks with a retry message rather than presenting cached evidence as current.
+
 Runtime and build evidence is recorded in [implementation status](IMPLEMENTATION-STATUS.md). Tests establish the scenarios they exercise, not blanket completion of a stage or compatibility with an untested live account.
 
 ## What is available for testing
@@ -29,7 +31,7 @@ Basic discovery, curation and acquisition exist. Full catalog/edition/collection
 
 Use the app normally and record friction; avoid turning this into only another automated-test exercise.
 
-1. **First run:** create the account and configure a catalog provider plus ABS. Record any setting that requires external explanation. Confirm connection failures tell you what to fix.
+1. **First run:** create the account, open Getting started and configure ABS plus an optional Hardcover account. Open Library search is available without a token. Return to Getting started after connection testing and inventory sync; record any setting that requires external explanation. Confirm connection failures tell you what to fix.
 2. **Recognize your library:** inspect a known ebook, an audiobook and a work with multiple recordings. Check the overall ownership badge, medium/version details and the selected ABS link. Resolve an intentionally ambiguous match.
 3. **Browse and curate:** search by title/author, inspect recommendations and series, create a local list, reorder/remove titles, and follow one external list in Browse mode. Check empty/error/stale states as well as successful results.
 4. **Compare sources:** connect MAM and its required route, then optional Prowlarr/ABB. Inspect raw titles, narrators, formats, sizes, seeds and pack coverage for known books. Verify the preferred result is the right book/version before testing acquisition.
@@ -55,7 +57,7 @@ This register is the concise product-facing list. Detailed obligations remain in
 | ALPHA-08 | Release qualification / production release blocker | Supported Compose/platform/service matrix, reference-load benchmarks, complete accessibility/security review, upgrade/restore timings and operator documentation | Mandatory v1 acceptance gates pass on the supported deployment, with measured evidence | S00–S09 gaps, AT-26–AT-30 |
 | ALPHA-09 | Planned expansion / later stages | Additional player backends including BookOrbit, other clients/Usenet, richer recommendation providers, optional upgrades/reorganization and SSO | Each extension passes its independent identity, permissions and recovery contract | S10-01–S10-06, FR-37–FR-42 |
 
-No full stage acceptance is claimed yet. This reflects both remaining functionality and uncompleted live-service/release evidence; it does not mean the implemented product is unusable. Internal-alpha feedback should now drive the product work alongside integrity fixes. Finish the bounded source-recovery increment, then prioritize the first connected-library and controlled-acquisition sessions over expanding recovery features ahead of user feedback.
+No full stage acceptance is claimed yet. This reflects both remaining functionality and uncompleted live-service/release evidence; it does not mean the implemented product is unusable. Internal-alpha feedback should now drive the product work alongside integrity fixes. Source connection recovery and the first-use setup overview are implemented; prioritize the first connected-library and controlled-acquisition sessions over expanding recovery features ahead of user feedback.
 
 ## Recording feedback
 

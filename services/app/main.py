@@ -50,6 +50,7 @@ from app.api import (
     series,
     series_discovery,
     series_requests,
+    setup,
     source_artifacts,
     sources,
 )
@@ -128,6 +129,7 @@ def create_app() -> FastAPI:
         )
 
     app.include_router(auth.router, prefix="/api")
+    app.include_router(setup.router, prefix="/api")
     app.include_router(recovery.router, prefix="/api")
     app.include_router(operations.router, prefix="/api")
     app.include_router(catalog.router, prefix="/api")

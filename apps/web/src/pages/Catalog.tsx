@@ -1,11 +1,17 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, X } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import { BookCard, Empty, Loading, Notice } from "../components";
 
-export default function Catalog({ canEdit }: { canEdit: boolean }) {
+export default function Catalog({
+  canEdit,
+  admin,
+}: {
+  canEdit: boolean;
+  admin: boolean;
+}) {
   const [params, setParams] = useSearchParams();
   const q = params.get("q") || "";
   const offset = Math.max(0, Number(params.get("offset")) || 0);
@@ -90,6 +96,19 @@ export default function Catalog({ canEdit }: { canEdit: boolean }) {
         </form>
       ) : null}
       <Notice error={books.error} />
+      {admin && books.data?.total === 0 && !q && offset === 0 ? (
+        <section
+          className="panel setup-next"
+          aria-label="Set up your collection"
+        >
+          <h2>Bring your books into view</h2>
+          <p>
+            Connect your library or find your first title. Downloads can wait
+            until you are ready.
+          </p>
+          <Link to="/getting-started">Set up your collection →</Link>
+        </section>
+      ) : null}
       {books.isPending ? <Loading /> : null}
       {books.data ? (
         <>

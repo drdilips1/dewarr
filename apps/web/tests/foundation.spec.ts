@@ -29,6 +29,27 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await expect(
     page.getByRole("heading", { name: "Your catalog" }),
   ).toBeVisible();
+  await page.getByRole("link", { name: "Set up your collection →" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Getting started" }),
+  ).toBeVisible();
+  await expect(page.getByLabel("Library setup")).toContainText(
+    "No library connection saved.",
+  );
+  await expect(page.getByLabel("Catalog setup")).toContainText(
+    "Hardcover is optional and not connected.",
+  );
+  await expect(page.getByLabel("Downloader setup")).toContainText(
+    "No downloader saved.",
+  );
+  await expect(page.getByLabel("Destination setup")).toContainText(
+    "No destinations saved.",
+  );
+  await page.screenshot({
+    path: testInfo.outputPath("getting-started-empty.png"),
+    fullPage: true,
+  });
+  await page.getByRole("link", { name: "Catalog", exact: true }).click();
   await page.getByRole("button", { name: "Add a title" }).click();
   await page.getByLabel("Title", { exact: true }).fill("The Synthetic Archive");
   await page.getByLabel("Author", { exact: true }).fill("Example Author");
@@ -93,6 +114,14 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await expect(inventory.getByText("completed", { exact: true })).toBeVisible({
     timeout: 15000,
   });
+  await page
+    .getByRole("link", { name: "Getting started", exact: true })
+    .click();
+  await expect(page.getByLabel("Library setup")).toContainText("Fixture ABS");
+  await expect(page.getByLabel("Library setup")).toContainText("connected");
+  await expect(page.getByLabel("Library setup")).not.toContainText(
+    "Review the connection and sync before relying on ownership.",
+  );
   await page.getByRole("link", { name: "My Library", exact: true }).click();
   await expect(
     page.getByRole("link", { name: "The First Harbor", exact: true }),

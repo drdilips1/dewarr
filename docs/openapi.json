@@ -304,6 +304,27 @@
         }
       }
     },
+    "/api/setup/readiness": {
+      "get": {
+        "tags": [
+          "setup"
+        ],
+        "summary": "Readiness",
+        "operationId": "readiness_api_setup_readiness_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetupReadiness"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/recovery": {
       "get": {
         "tags": [
@@ -24916,6 +24937,297 @@
           "tokens"
         ],
         "title": "SettingsView"
+      },
+      "SetupDestination": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "medium": {
+            "type": "string",
+            "title": "Medium"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "configured": {
+            "type": "boolean",
+            "title": "Configured"
+          },
+          "publication_available": {
+            "type": "boolean",
+            "title": "Publication Available"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "medium",
+          "enabled",
+          "configured",
+          "publication_available"
+        ],
+        "title": "SetupDestination"
+      },
+      "SetupDownloader": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "last_success_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Success At"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "mappings_current": {
+            "type": "boolean",
+            "title": "Mappings Current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "enabled",
+          "status",
+          "last_success_at",
+          "id",
+          "mappings_current"
+        ],
+        "title": "SetupDownloader"
+      },
+      "SetupLibrary": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "last_success_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Success At"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "libraries": {
+            "type": "integer",
+            "title": "Libraries"
+          },
+          "inventoried_libraries": {
+            "type": "integer",
+            "title": "Inventoried Libraries"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "enabled",
+          "status",
+          "last_success_at",
+          "id",
+          "libraries",
+          "inventoried_libraries"
+        ],
+        "title": "SetupLibrary"
+      },
+      "SetupReadiness": {
+        "properties": {
+          "observed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Observed At"
+          },
+          "download_dispatch_enabled": {
+            "type": "boolean",
+            "title": "Download Dispatch Enabled"
+          },
+          "libraries": {
+            "items": {
+              "$ref": "#/components/schemas/SetupLibrary"
+            },
+            "type": "array",
+            "title": "Libraries"
+          },
+          "catalog": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SetupService"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SetupSource"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "downloaders": {
+            "items": {
+              "$ref": "#/components/schemas/SetupDownloader"
+            },
+            "type": "array",
+            "title": "Downloaders"
+          },
+          "destinations": {
+            "items": {
+              "$ref": "#/components/schemas/SetupDestination"
+            },
+            "type": "array",
+            "title": "Destinations"
+          },
+          "download_roots": {
+            "type": "integer",
+            "title": "Download Roots"
+          },
+          "destination_roots": {
+            "type": "integer",
+            "title": "Destination Roots"
+          },
+          "staging_configured": {
+            "type": "boolean",
+            "title": "Staging Configured"
+          }
+        },
+        "type": "object",
+        "required": [
+          "observed_at",
+          "download_dispatch_enabled",
+          "libraries",
+          "catalog",
+          "sources",
+          "downloaders",
+          "destinations",
+          "download_roots",
+          "destination_roots",
+          "staging_configured"
+        ],
+        "title": "SetupReadiness"
+      },
+      "SetupService": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "last_success_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Success At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "enabled",
+          "status",
+          "last_success_at"
+        ],
+        "title": "SetupService"
+      },
+      "SetupSource": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "last_success_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Success At"
+          },
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "uses_proxy": {
+            "type": "boolean",
+            "title": "Uses Proxy"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "enabled",
+          "status",
+          "last_success_at",
+          "key",
+          "uses_proxy"
+        ],
+        "title": "SetupSource"
       },
       "SetupView": {
         "properties": {
