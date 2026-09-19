@@ -13,7 +13,11 @@ from sqlalchemy import delete, select, text
 
 from app.config import get_settings
 from app.db.models import (
+    AcquisitionIntent,
+    AcquisitionReason,
+    AcquisitionReservation,
     AcquisitionSelection,
+    AcquisitionTarget,
     AssetContains,
     AutomaticImport,
     BookList,
@@ -33,6 +37,10 @@ from app.db.models import (
     Library,
     LibraryAsset,
     LibraryGrant,
+    ListAcquisitionBook,
+    ListAcquisitionPolicy,
+    ListCatalogBinding,
+    ListEntry,
     ListObservation,
     ListSubscription,
     ListWritebackPolicy,
@@ -44,6 +52,7 @@ from app.db.models import (
     User,
     Version,
     Work,
+    WorkMetadataSource,
 )
 from app.db.session import session_factory
 from app.domain.operations import transaction_lock
@@ -108,6 +117,15 @@ async def context(db):
         ImportRun,
         ImportEntry,
         BookList,
+        ListEntry,
+        ListCatalogBinding,
+        WorkMetadataSource,
+        ListAcquisitionPolicy,
+        ListAcquisitionBook,
+        AcquisitionIntent,
+        AcquisitionReason,
+        AcquisitionReservation,
+        AcquisitionTarget,
         ListSubscription,
         ListObservation,
         ListWritebackPolicy,
@@ -132,6 +150,35 @@ async def context(db):
     result["outbound"] = [
         {"id": op.id, "owner_id": op.owner_id, "status": op.status, "payload": op.payload}
         for op in sorted(operations, key=lambda op: str(op.id))
+    ]
+    list_operations = list(
+        await db.scalars(
+            select(Operation)
+            .where(
+                Operation.kind.in_(
+                    [
+                        "lists.sync",
+                        "lists.acquire",
+                        "lists.requests",
+                        "lists.policy-preview",
+                        "lists.writeback.compare",
+                    ]
+                )
+            )
+            .limit(MAX_RECORDS + 1)
+        )
+    )
+    if len(list_operations) > MAX_RECORDS:
+        raise ScanHeld("Too much list command history for this recovery review")
+    result["list_operations"] = [
+        {
+            "id": op.id,
+            "owner_id": op.owner_id,
+            "status": op.status,
+            "payload": op.payload,
+            "job_id": op.job_id,
+        }
+        for op in sorted(list_operations, key=lambda op: str(op.id))
     ]
     result["roots"] = get_settings().model_dump(
         mode="json",

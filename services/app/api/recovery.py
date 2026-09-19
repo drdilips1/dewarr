@@ -22,6 +22,7 @@ class RecoveryView(BaseModel):
     resume_available: bool = False
     latest_scan: "ScanView | None" = None
     latest_reconciliation: "ReconciliationView | None" = None
+    latest_list_reconciliation: "ListReconciliationView | None" = None
     latest_publication_reconciliation: "PublicationReconciliationView | None" = None
     latest_inventory_reconciliation: "InventoryReconciliationView | None" = None
 
@@ -88,6 +89,20 @@ async def review(admin: Admin, db: Database):
         if checkpoint
         else None
     )
+    list_review = (
+        await db.scalar(
+            select(Operation)
+            .where(
+                Operation.kind == "recovery.lists",
+                Operation.payload["checkpoint_id"].astext == str(checkpoint.id),
+                Operation.owner_id == admin.id,
+            )
+            .order_by(Operation.created_at.desc(), Operation.id.desc())
+            .limit(1)
+        )
+        if checkpoint
+        else None
+    )
     publication_review = (
         await db.scalar(
             select(Operation)
@@ -103,6 +118,7 @@ async def review(admin: Admin, db: Database):
         else None
     )
     return RecoveryView(
+        latest_list_reconciliation=list_reconciliation_view(list_review) if list_review else None,
         latest_publication_reconciliation=publication_reconciliation_view(publication_review)
         if publication_review
         else None,
@@ -544,3 +560,97 @@ async def accept_publication_reconciliation(
     )
     await db.commit()
     return publication_reconciliation_view(operation)
+
+
+class ListReconciliationItemView(BaseModel):
+    finding_id: UUID
+    subscription_id: UUID
+    list_id: UUID
+    title: str
+    provider: str
+    complete: bool
+    summary: dict[str, int]
+    pause_acquisition: bool
+    pause_writeback: bool
+
+
+class ListReconciliationView(ReconciliationView):
+    items: list[ListReconciliationItemView]
+
+
+def list_reconciliation_view(operation):
+    return ListReconciliationView(
+        id=operation.id,
+        scan_id=operation.payload["command"]["scan_id"],
+        status=operation.status,
+        message=operation.message,
+        created_at=operation.created_at,
+        revision=operation.payload["revision"],
+        expires_at=operation.payload["expires_at"],
+        items=[ListReconciliationItemView(**item) for item in operation.payload["items"]],
+        applied_at=operation.payload.get("applied_at"),
+        results=operation.payload.get("results", []),
+    )
+
+
+@router.post("/list-reconciliations", response_model=ListReconciliationView, status_code=201)
+async def prepare_list_reconciliation(
+    body: ReconciliationRequest,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_lists import prepare
+
+    operation = await prepare(
+        db,
+        await checkpoint_for(db, admin),
+        admin.id,
+        body.scan_id,
+        body.finding_ids,
+        idempotency_key,
+    )
+    await db.commit()
+    return list_reconciliation_view(operation)
+
+
+@router.get("/list-reconciliations/{identifier}", response_model=ListReconciliationView)
+async def get_list_reconciliation(identifier: UUID, admin: Admin, db: Database):
+    from app.domain.recovery_reconciliation import LIST_KIND, load
+
+    return list_reconciliation_view(
+        await load(
+            db,
+            identifier,
+            await checkpoint_for(db, admin),
+            admin.id,
+            kind=LIST_KIND,
+        )
+    )
+
+
+@router.post(
+    "/list-reconciliations/{identifier}/accept",
+    response_model=ListReconciliationView,
+    status_code=202,
+)
+async def accept_list_reconciliation(
+    identifier: UUID,
+    body: ReconciliationAcceptance,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_reconciliation import LIST_KIND, accept
+
+    operation = await accept(
+        db,
+        await checkpoint_for(db, admin),
+        admin.id,
+        identifier,
+        body.revision,
+        idempotency_key,
+        kind=LIST_KIND,
+    )
+    await db.commit()
+    return list_reconciliation_view(operation)

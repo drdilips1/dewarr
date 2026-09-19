@@ -19,6 +19,33 @@ test("restored-state operator review replaces navigation and blocks catalog acce
   });
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
+  const login = await page.request.post("/api/auth/login", {
+    headers: { Origin: "http://127.0.0.1:8001" },
+    data: { username: "reader", password: "browser test password" },
+  });
+  expect(login.status()).toBe(200);
+  const headers = {
+    Origin: "http://127.0.0.1:8001",
+    "X-CSRF-Token": (await login.json()).csrf_token,
+  };
+  const listResponse = await page.request.post("/api/lists", {
+    headers,
+    data: { name: "Recovery RSS baseline" },
+  });
+  expect(listResponse.status()).toBe(201);
+  const listId = (await listResponse.json()).id;
+  const subscription = await page.request.put(
+    `/api/lists/${listId}/subscription`,
+    {
+      headers,
+      data: {
+        enabled: false,
+        feed_url:
+          "https://www.goodreads.com/review/list_rss/123?key=private-feed-key&shelf=to-read",
+      },
+    },
+  );
+  expect(subscription.status()).toBe(200);
   fixture("pause");
   try {
     await page.goto("/");
@@ -70,7 +97,7 @@ test("restored-state operator review replaces navigation and blocks catalog acce
         exact: true,
       }),
     ).toBeVisible();
-    const evidence = root + "/.local/evidence/recovery-publication-ui";
+    const evidence = root + "/.local/evidence/recovery-lists-ui";
     mkdirSync(evidence, { recursive: true });
     await page.screenshot({ path: evidence + "/review.png", fullPage: true });
     await page
@@ -175,6 +202,54 @@ test("restored-state operator review replaces navigation and blocks catalog acce
       await page.request.get("http://127.0.0.1:13379/fixture/recovery-stats")
     ).json();
     expect(publicationAfter).toEqual(before);
+    const publicationScan = (
+      await (await page.request.get("/api/recovery")).json()
+    ).latest_scan.id;
+    await page
+      .getByRole("button", { name: "Run read-only checks", exact: true })
+      .click();
+    await expect
+      .poll(
+        async () =>
+          (await (await page.request.get("/api/recovery")).json()).latest_scan
+            .id,
+      )
+      .not.toBe(publicationScan);
+    await expect(
+      page.getByRole("status").filter({ hasText: "Observation finished" }),
+    ).toBeVisible({ timeout: 60_000 });
+    await page.getByLabel("Filter observations").selectOption("lists");
+    await page
+      .getByRole("button", {
+        name: "Review list baseline for Recovery RSS baseline",
+        exact: true,
+      })
+      .click();
+    await expect(
+      page.getByRole("heading", {
+        name: "Review current list baseline",
+        exact: true,
+      }),
+    ).toBeFocused();
+    await expect(
+      page.getByText("RSS is a partial view.", { exact: false }),
+    ).toBeVisible();
+    await page.screenshot({
+      path: evidence + "/list-review.png",
+      fullPage: true,
+    });
+    await page
+      .getByRole("button", { name: "Record list baseline", exact: true })
+      .click();
+    await expect(
+      page.getByRole("status").filter({ hasText: "List baselines recorded" }),
+    ).toBeVisible({ timeout: 30_000 });
+    expect((await page.request.get("/api/lists")).status()).toBe(423);
+    expect(
+      await (
+        await page.request.get("http://127.0.0.1:13379/fixture/recovery-stats")
+      ).json(),
+    ).toEqual(before);
 
     await page.screenshot({ path: evidence + "/desktop.png", fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
@@ -199,6 +274,9 @@ test("restored-state operator review replaces navigation and blocks catalog acce
       page
         .getByRole("status")
         .filter({ hasText: "Selected publications recorded" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("status").filter({ hasText: "List baselines recorded" }),
     ).toBeVisible();
     await page.getByLabel("Filter observations").selectOption("files");
     await expect(

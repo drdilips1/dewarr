@@ -350,17 +350,12 @@ async def inventory(inputs, writer, integration):
     )
 
 
-async def shelf(inputs, writer, subscription):
+async def read_shelf(inputs, subscription, pulse):
     item = keyed(inputs["book_lists"])[subscription["list_id"]]
     owner = keyed(inputs["users"]).get(item["owner_id"])
     if not owner or not owner["active"] or owner["role"] == "viewer":
         raise ScanHeld("The list owner no longer has subscription access")
     config = decrypt_secrets(subscription["encrypted_config"])
-    previous = {
-        row["external_id"]: row
-        for row in inputs["list_observations"]
-        if row["subscription_id"] == subscription["id"]
-    }
     if subscription["provider"] == "hardcover":
         account = keyed(inputs["catalog_accounts"], "user_id").get(item["owner_id"])
         if not account or not account["enabled"]:
@@ -368,7 +363,7 @@ async def shelf(inputs, writer, subscription):
         secret = decrypt_secrets(account["encrypted_token"])["token"]
         stage, complete = None, False
         for _ in range(105):
-            await writer.pulse()
+            await pulse()
             for attempt in range(4):
                 try:
                     page = await hardcover_subscriptions.fetch_page(
@@ -386,7 +381,7 @@ async def shelf(inputs, writer, subscription):
                         or attempt == 3
                     ):
                         raise
-                    await writer.pulse()
+                    await pulse()
                     await asyncio.sleep(max(error.retry_after or 1, 1))
             stage, complete = hardcover_subscriptions.advance(stage, page)
             if complete:
@@ -397,51 +392,75 @@ async def shelf(inputs, writer, subscription):
             )
         records = hardcover_subscriptions.books(stage)
         complete_snapshot = True
-        policy = next(
-            (
-                row
-                for row in inputs["list_writeback_policies"]
-                if row["list_id"] == subscription["list_id"]
-            ),
-            None,
-        )
-        owner_changed = policy and (
-            str(policy["remote_owner_id"]) != stage["info"]["owner_id"]
-            or str(policy["external_list_id"]) != str(config["external_id"])
-        )
-        await writer.add(
-            "lists",
-            "conflict" if owner_changed else "observed",
-            item["name"],
-            "List owner or target differs from the saved write-back policy"
-            if owner_changed
-            else "Complete current Hardcover memberships verified; no list changes were sent",
-            entity_id=subscription["id"],
-            evidence={"info": stage["info"], "complete": True},
-        )
+        info = stage["info"]
     elif subscription["provider"] == "goodreads":
         from app.db.session import session_factory
         from app.domain.list_subscriptions import budget
 
         async with session_factory()() as db, db.begin():
             wait = await budget(db)
+        if wait and wait <= 30:
+            await pulse()
+            await asyncio.sleep(wait)
+            async with session_factory()() as db, db.begin():
+                wait = await budget(db)
         if wait:
             raise ScanHeld("Goodreads is rate limited; wait before starting another observation")
-        await writer.pulse()
+        await pulse()
         response = await fetch_feed(config["url"])
         if response.not_modified:
             raise ScanHeld("Goodreads did not return fresh feed content")
         records, complete_snapshot = response.items, False
-        await writer.add(
-            "lists",
-            "partial",
-            item["name"],
-            "RSS only proves visible additions; missing entries do not prove shelf removal",
-            entity_id=subscription["id"],
-            evidence={"complete": False, "visible_items": len(records)},
-        )
+        info = {}
     else:
         raise ScanHeld("This external list provider has no recovery observer")
+    return {"records": records, "complete": complete_snapshot, "info": info}
+
+
+def shelf_signature(observed):
+    return digest(
+        {**observed, "records": sorted(observed["records"], key=lambda r: r["external_id"])}
+    )
+
+
+async def shelf(inputs, writer, subscription):
+    item = keyed(inputs["book_lists"])[subscription["list_id"]]
+    observation = await read_shelf(inputs, subscription, writer.pulse)
+    records, complete_snapshot = observation["records"], observation["complete"]
+    previous = {
+        row["external_id"]: row
+        for row in inputs["list_observations"]
+        if row["subscription_id"] == subscription["id"]
+    }
+    policy = next(
+        (
+            row
+            for row in inputs["list_writeback_policies"]
+            if row["list_id"] == subscription["list_id"]
+        ),
+        None,
+    )
+    config = decrypt_secrets(subscription["encrypted_config"])
+    owner_changed = bool(
+        policy
+        and subscription["provider"] == "hardcover"
+        and (
+            str(policy["remote_owner_id"]) != observation["info"]["owner_id"]
+            or str(policy["external_list_id"]) != str(config["external_id"])
+        )
+    )
+    await writer.add(
+        "lists",
+        "conflict" if owner_changed else "observed" if complete_snapshot else "partial",
+        item["name"],
+        "List owner or target differs from the saved write-back policy"
+        if owner_changed
+        else "Complete current Hardcover memberships verified; no list changes were sent"
+        if complete_snapshot
+        else "RSS only proves visible additions; missing entries do not prove shelf removal",
+        entity_id=subscription["id"],
+        evidence={"info": observation["info"], "complete": complete_snapshot},
+    )
     current = {record["external_id"]: record for record in records}
     for key in sorted(current.keys() | (previous.keys() if complete_snapshot else set())):
         before, now = previous.get(key), current.get(key)
@@ -484,6 +503,34 @@ async def shelf(inputs, writer, subscription):
                 "desired": payload.get("desired"),
                 "book_id": payload.get("book_id"),
                 "current": current.get(str(payload.get("book_id"))),
+            },
+        )
+
+    if not owner_changed:
+        await writer.add(
+            "lists",
+            "list-ready",
+            item["name"],
+            "Current membership is ready for a reviewed baseline; acquisition stays paused",
+            entity_id=subscription["id"],
+            evidence={
+                "list_schema": 1,
+                "provider": subscription["provider"],
+                "membership_digest": shelf_signature(observation),
+                "complete": complete_snapshot,
+                "summary": {
+                    "visible": len(current),
+                    "new": len(current.keys() - previous.keys()),
+                    "returned": sum(
+                        not previous[key]["present"] for key in current.keys() & previous.keys()
+                    ),
+                    "missing": sum(
+                        previous[key]["present"] for key in previous.keys() - current.keys()
+                    )
+                    if complete_snapshot
+                    else 0,
+                    "excluded": sum(row["excluded"] for row in previous.values()),
+                },
             },
         )
 

@@ -126,7 +126,9 @@ async def test_goodreads_feed_is_partial_and_never_proves_missing_membership(
     await scans.run(UUID(identifier))
     result = await report(client, identifier, domain="lists")
     assert result["scan"]["state"] == "completed", result
-    assert {row["state"] for row in result["items"]} == {"partial", "untracked"}
+    assert {row["state"] for row in result["items"]} == {"partial", "untracked", "list-ready"}
+    ready = next(row for row in result["items"] if row["state"] == "list-ready")
+    assert ready["evidence"]["complete"] is False
     assert "private-feed-key" not in str(result)
     assert calls[0][1] == {}  # Force a fresh feed, not a stale 304 cache observation.
     async with database() as db:

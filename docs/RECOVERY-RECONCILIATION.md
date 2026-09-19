@@ -17,7 +17,7 @@ BOOK_ENV_FILE=/private/recovery/book-search-rehearsal/restore.env \
 uv run python -m app.jobs.worker --recovery
 ```
 
-Its allowed tasks are now `recovery.scan`, `recovery.reconcile` and the separately reviewed [inventory refresh](RECOVERY-INVENTORY.md), `recovery.inventory`, plus [per-book publication recovery](RECOVERY-PUBLICATION.md), `recovery.publication`. It has no ordinary acquisition/import/list task, periodic registration or built-in history cleanup. The scan remains read-only with respect to domain and remote state. The reconciliation task performs explicitly reviewed **local database corrections**; its only remote requests are authentication and reads. The regular worker still refuses a restored installation.
+Its allowed tasks are now `recovery.scan`, `recovery.reconcile` and the separately reviewed [inventory refresh](RECOVERY-INVENTORY.md), `recovery.inventory`, plus [per-book publication recovery](RECOVERY-PUBLICATION.md), `recovery.publication`, and [external-list baselines](RECOVERY-LISTS.md), `recovery.lists`. It has no ordinary acquisition/import/list task, periodic registration or built-in history cleanup. The scan remains read-only with respect to domain and remote state. The reconciliation task performs explicitly reviewed **local database corrections**; its only remote requests are authentication and reads. The regular worker still refuses a restored installation.
 
 ## Reconciliation contract
 

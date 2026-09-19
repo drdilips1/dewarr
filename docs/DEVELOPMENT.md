@@ -193,3 +193,8 @@ List detail now defaults to 50 books and exposes count/matched/offset/limit; app
 ### Reviewed publications during restore
 
 [Publication recovery](RECOVERY-PUBLICATION.md) adds `recovery.publication` to the isolated recovery registry and three operator review routes. It records already published children and exact-version ABS confirmation without file or remote mutations. Deploy matching API, worker and generated client on schema 0042; no migration or runtime dependency is added. Run fresh observations after deployment because frozen import and capacity context is now included. Controlled resume and remaining S09 qualification stay open; development dispatch stays disabled.
+
+
+### Reviewed external-list baselines during restore
+
+[List recovery](RECOVERY-LISTS.md) adds `recovery.lists` to the restricted worker and three explicit operator-review endpoints on schema 0042. Deploy matching API/worker/client and run fresh observations because the bound list/acquisition context expanded. Recovered members are baseline entries; acquisition and write-back remain paused for explicit owner review. No migration or dependency is added, and development dispatch remains disabled.

@@ -37,7 +37,8 @@ from app.security import decrypt_secrets
 KIND = "recovery.reconcile"
 INVENTORY_KIND = "recovery.inventory"
 PUBLICATION_KIND = "recovery.publication"
-REVIEW_KINDS = (KIND, INVENTORY_KIND, PUBLICATION_KIND)
+LIST_KIND = "recovery.lists"
+REVIEW_KINDS = (KIND, INVENTORY_KIND, PUBLICATION_KIND, LIST_KIND)
 logger = logging.getLogger(__name__)
 
 

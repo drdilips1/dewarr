@@ -830,7 +830,7 @@ async def submit(
     return intent, operation
 
 
-async def withdraw_list_reasons(db, user, list_id, work_id=None):
+async def deactivate_list_reasons(db, user, list_id, work_id=None):
     from app.domain.list_monitoring import withdraw_membership
 
     await withdraw_membership(db, list_id, work_id)
@@ -869,6 +869,11 @@ async def withdraw_list_reasons(db, user, list_id, work_id=None):
         for reason in reasons:
             reason.active = False
         await db.flush()
+    return intents
+
+
+async def withdraw_list_reasons(db, user, list_id, work_id=None):
+    for intent in await deactivate_list_reasons(db, user, list_id, work_id):
         await evaluate(db, user, intent)
 
 

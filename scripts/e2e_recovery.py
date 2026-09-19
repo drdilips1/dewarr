@@ -31,6 +31,12 @@ with psycopg.connect(url.replace("postgresql+psycopg://", "postgresql://")) as c
         ).fetchall()
         if not previous:
             raise SystemExit("The baseline synthetic downloader is required")
+        subscriptions = connection.execute(
+            "SELECT s.id, s.enabled, s.next_sync_at FROM list_subscriptions s "
+            "JOIN book_lists l ON l.id=s.list_id WHERE l.owner_id=%s "
+            "AND l.name='Recovery RSS baseline'",
+            (actor[0],),
+        ).fetchall()
         connection.execute("DELETE FROM login_sessions")
         connection.execute(
             "INSERT INTO restore_checkpoints(id, operator_id, backup_id, active, snapshot) "
@@ -40,12 +46,27 @@ with psycopg.connect(url.replace("postgresql+psycopg://", "postgresql://")) as c
                 actor[0],
                 checkpoint_id,
                 json.dumps(
-                    {"fixture_connections": {str(key): enabled for key, enabled in previous}}
+                    {
+                        "fixture_connections": {str(key): enabled for key, enabled in previous},
+                        "fixture_subscriptions": {
+                            str(key): {
+                                "enabled": enabled,
+                                "next_sync_at": due.isoformat() if due else None,
+                            }
+                            for key, enabled, due in subscriptions
+                        },
+                    }
                 ),
             ),
         )
         for key, _ in previous:
             connection.execute("UPDATE integrations SET enabled = true WHERE id = %s", (key,))
+        for key, _, _ in subscriptions:
+            # The UI harness worker predates this synthetic checkpoint. Keep its
+            # ordinary scheduler from racing the explicitly queued recovery jobs.
+            connection.execute(
+                "UPDATE list_subscriptions SET enabled=true, next_sync_at=NULL WHERE id=%s", (key,)
+            )
     elif sys.argv[1:] == ["clear"]:
         checkpoint = connection.execute(
             "SELECT snapshot FROM restore_checkpoints WHERE id = %s", (checkpoint_id,)
@@ -54,6 +75,11 @@ with psycopg.connect(url.replace("postgresql+psycopg://", "postgresql://")) as c
             for key, enabled in checkpoint[0].get("fixture_connections", {}).items():
                 connection.execute(
                     "UPDATE integrations SET enabled = %s WHERE id = %s", (enabled, UUID(key))
+                )
+            for key, saved in checkpoint[0].get("fixture_subscriptions", {}).items():
+                connection.execute(
+                    "UPDATE list_subscriptions SET enabled=%s, next_sync_at=%s WHERE id=%s",
+                    (saved["enabled"], saved["next_sync_at"], UUID(key)),
                 )
         connection.execute("DELETE FROM recovery_scans WHERE checkpoint_id = %s", (checkpoint_id,))
         connection.execute("DELETE FROM restore_checkpoints WHERE id = %s", (checkpoint_id,))

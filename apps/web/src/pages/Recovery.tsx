@@ -13,6 +13,11 @@ import {
   PreparePublicationReview,
   type PublicationReview,
 } from "./RecoveryPublication";
+import {
+  ListBaselineRecoveryReview,
+  PrepareListBaselineReview,
+  type ListBaselineReview,
+} from "./RecoveryLists";
 type RecoveryReview = components["schemas"]["ReconciliationView"];
 
 export default function Recovery() {
@@ -88,6 +93,7 @@ export default function Recovery() {
               publicationReview={
                 review.data.latest_publication_reconciliation ?? undefined
               }
+              listReview={review.data.latest_list_reconciliation ?? undefined}
               scanId={review.data.latest_scan?.id}
               state={review.data.latest_scan?.state}
             />
@@ -120,12 +126,14 @@ function RecoveryChecks({
   review,
   inventoryReview,
   publicationReview,
+  listReview,
 }: {
   scanId?: string;
   state?: string;
   review?: RecoveryReview;
   inventoryReview?: InventoryReview;
   publicationReview?: PublicationReview;
+  listReview?: ListBaselineReview;
 }) {
   const client = useQueryClient();
   const [key, setKey] = useState(() => crypto.randomUUID());
@@ -133,21 +141,13 @@ function RecoveryChecks({
   const [offset, setOffset] = useState(0);
   const [selected, setSelected] = useState<string[]>([]);
   const [prepareKey, setPrepareKey] = useState(() => crypto.randomUUID());
-  const transferBusy =
-    review?.status === "queued" || review?.status === "running";
-  const inventoryBusy =
-    inventoryReview?.status === "queued" ||
-    inventoryReview?.status === "running";
-  const publicationBusy =
-    publicationReview?.status === "queued" ||
-    publicationReview?.status === "running";
-  const busy = transferBusy || inventoryBusy || publicationBusy;
-  const applied =
-    (review?.scan_id === scanId && review?.status === "completed") ||
-    (inventoryReview?.scan_id === scanId &&
-      inventoryReview?.status === "completed") ||
-    (publicationReview?.scan_id === scanId &&
-      publicationReview?.status === "completed");
+  const reviews = [review, inventoryReview, publicationReview, listReview];
+  const busy = reviews.some(
+    (item) => item?.status === "queued" || item?.status === "running",
+  );
+  const applied = reviews.some(
+    (item) => item?.scan_id === scanId && item?.status === "completed",
+  );
   const preview = useMutation({
     mutationFn: async () =>
       result(
@@ -309,6 +309,17 @@ function RecoveryChecks({
                       disabled={busy}
                     />
                   )}
+                {state === "completed" &&
+                  finding.state === "list-ready" &&
+                  finding.domain === "lists" &&
+                  !applied && (
+                    <PrepareListBaselineReview
+                      scanId={scanId!}
+                      findingId={finding.id}
+                      title={finding.title}
+                      disabled={busy}
+                    />
+                  )}
                 {finding.has_evidence && (
                   <FindingEvidence scanId={scanId!} findingId={finding.id} />
                 )}
@@ -357,7 +368,7 @@ function RecoveryChecks({
           key={review.id}
           review={review}
           currentScan={scanId}
-          otherBusy={inventoryBusy || publicationBusy}
+          otherBusy={busy || applied}
         />
       )}
       {inventoryReview && (
@@ -365,7 +376,7 @@ function RecoveryChecks({
           key={inventoryReview.id}
           review={inventoryReview}
           currentScan={scanId}
-          otherBusy={transferBusy || publicationBusy}
+          otherBusy={busy || applied}
         />
       )}
       {publicationReview && (
@@ -373,7 +384,15 @@ function RecoveryChecks({
           key={publicationReview.id}
           review={publicationReview}
           currentScan={scanId}
-          otherBusy={transferBusy || inventoryBusy}
+          otherBusy={busy || applied}
+        />
+      )}
+      {listReview && (
+        <ListBaselineRecoveryReview
+          key={listReview.id}
+          review={listReview}
+          currentScan={scanId}
+          otherBusy={busy || applied}
         />
       )}
     </section>
