@@ -2,7 +2,7 @@
 
 Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md), then use these development deliverables:
 
-The latest recovery increment adds a [versioned backup and paused restore review](docs/RECOVERY.md). It preserves application state in a new database and blocks automation until reconciliation; supported reconciliation/resume and full release qualification remain open.
+The latest recovery increment adds [read-only external observations](docs/RECOVERY-OBSERVATIONS.md) to the [versioned backup and paused restore review](docs/RECOVERY.md). A restricted worker reports current transfers, library contents, lists and publication evidence while automation stays paused. Applying findings, controlled resume and full release qualification remain open.
 
 | Deliverable | Purpose |
 |---|---|

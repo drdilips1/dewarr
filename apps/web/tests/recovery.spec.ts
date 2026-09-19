@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 test("restored-state operator review replaces navigation and blocks catalog access", async ({
   page,
 }) => {
+  test.setTimeout(90_000);
   const root = fileURLToPath(new URL("../../../", import.meta.url));
   const fixture = (mode: string) =>
     execFileSync("uv", ["run", "python", "scripts/e2e_recovery.py", mode], {
@@ -36,7 +37,32 @@ test("restored-state operator review replaces navigation and blocks catalog acce
       page.getByRole("navigation", { name: "Main navigation" }),
     ).toHaveCount(0);
     expect((await page.request.get("/api/lists")).status()).toBe(423);
-    const evidence = root + "/.local/evidence/restore-ui";
+    const before = await (
+      await page.request.get("http://127.0.0.1:13379/fixture/recovery-stats")
+    ).json();
+    await page
+      .getByRole("button", { name: "Run read-only checks", exact: true })
+      .click();
+    await expect(page.getByRole("status")).toContainText(
+      "Observation finished",
+      { timeout: 60_000 },
+    );
+    await page.getByLabel("Filter observations").selectOption("downloads");
+    await expect(
+      page.getByText(
+        "Current transfer identity and destination match the saved attempt",
+        { exact: true },
+      ),
+    ).toBeVisible();
+    await page.getByText("Observed evidence", { exact: true }).first().click();
+    await expect(
+      page.getByText('"saved_external_may_exist"', { exact: false }),
+    ).toBeVisible();
+    const after = await (
+      await page.request.get("http://127.0.0.1:13379/fixture/recovery-stats")
+    ).json();
+    expect(after).toEqual(before);
+    const evidence = root + "/.local/evidence/recovery-scan-ui";
     mkdirSync(evidence, { recursive: true });
     await page.screenshot({ path: evidence + "/desktop.png", fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
@@ -46,6 +72,10 @@ test("restored-state operator review replaces navigation and blocks catalog acce
     ).toBeVisible();
     await expect(
       page.getByRole("heading", { name: "Before resuming" }),
+    ).toBeVisible();
+    await page.getByLabel("Filter observations").selectOption("files");
+    await expect(
+      page.getByText("Publication journals", { exact: true }),
     ).toBeVisible();
     expect(
       await page.evaluate(

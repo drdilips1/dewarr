@@ -1,6 +1,6 @@
 # Application-state backup and restore review
 
-This is the implemented **first part of S09-02 / FR-36 / AT-25**. It provides a versioned offline backup and a restore into a new database with a persistent pause. It does **not** yet provide external-state reconciliation or a supported resume command. Use it for a recovery rehearsal; do not switch your working installation to a restored database expecting automation to resume in this build.
+This is a partial implementation of **S09-02 / FR-36 / AT-25**. It provides a versioned offline backup, a restore into a new database with a persistent pause, and [read-only external observations](RECOVERY-OBSERVATIONS.md). It does **not** yet provide external-state reconciliation or a supported resume command. Use it for a recovery rehearsal; do not switch your working installation to a restored database expecting automation to resume in this build.
 
 ## What the bundle preserves
 
@@ -56,9 +56,9 @@ BOOK_PUBLIC_URL=http://localhost:8002 BOOK_COOKIE_SECURE=false \
 uv run uvicorn app.main:create_app --factory --host 127.0.0.1 --port 8002
 ```
 
-The localhost example uses HTTP; configure the correct HTTPS origin/cookie settings for a proxied deployment. `BOOK_*` environment variables override the generated file, so remove stale shell/container overrides, especially `BOOK_DATABASE_URL` and `BOOK_SECRET_KEY_FILE`. Let the app parse `restore.env`; **do not source it as shell code**. The generated configuration sets recovery mode and disables download dispatch. The active checkpoint and database pause independently block worker startup even if the environment flag is changed.
+The localhost example uses HTTP; configure the correct HTTPS origin/cookie settings for a proxied deployment. `BOOK_*` environment variables override the generated file, so remove stale shell/container overrides, especially `BOOK_DATABASE_URL` and `BOOK_SECRET_KEY_FILE`. Let the app parse `restore.env`; **do not source it as shell code**. The generated configuration sets recovery mode and disables download dispatch. The active checkpoint and database pause independently block ordinary worker startup even if the environment flag is changed. The explicit recovery worker is restricted to observation tasks.
 
-Sign in with the selected operator's existing credentials. The recovery screen replaces ordinary navigation, labels workflow counts as saved evidence, and explains why automation cannot resume. Other users cannot sign in; normal authenticated routes return `423`. The operator can read their session/recovery review and sign out. Existing temporary `BOOK_RECOVERY_MODE=true` diagnostic behavior on a database without a restore checkpoint is unchanged.
+Sign in with the selected operator's existing credentials. The recovery screen replaces ordinary navigation, labels workflow counts as saved evidence, and explains why automation cannot resume. Other users cannot sign in; normal authenticated routes return `423`. The operator can read their session/recovery review, start read-only observations, inspect their findings and sign out. To process observations, start `uv run python -m app.jobs.worker --recovery` with the same restored `BOOK_ENV_FILE`; see the [observation contract](RECOVERY-OBSERVATIONS.md). Existing temporary `BOOK_RECOVERY_MODE=true` diagnostic behavior on a database without a restore checkpoint is unchanged.
 
 ## Interrupted or rejected restore
 
@@ -68,7 +68,7 @@ A missing/wrong operator, mismatched encryption key, incompatible schema, failed
 
 ## Remaining reconciliation and resume contract
 
-No supported resume control is available yet. The next S09-02 increment must obtain and persist these observations before granting any effect authority:
+No supported resume control is available yet. Read-only observations now collect the following evidence; the remaining S09-02 implementation must review and reconcile it against current authority before permitting effects:
 
 - Current downloader census by application tags, hashes, save path and category, including transfers created after the backup and therefore absent from the restored ledger.
 - Current source/staging/published-file evidence, with receipt/inode/path checks and independent outcomes for each child of a partially imported pack. A historical receipt alone cannot authorize a move, replacement or deletion.

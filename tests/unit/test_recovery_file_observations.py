@@ -1,0 +1,102 @@
+# ruff: noqa: F811
+import json
+from uuid import uuid4
+
+import pytest
+
+from app.importing.publication import publish_item
+from app.importing.recovery import journal_census, observe_entry
+from tests.unit.test_import_publication import specification  # noqa: F401
+
+
+def inputs(spec):
+    return (
+        {"id": spec.entry_id, "state": "publishing", "specification": spec.model_dump(mode="json")},
+        {
+            "import_sources": {"books": str(spec.source_root)},
+            "import_destinations": {"ebooks": str(spec.destination_root)},
+            "import_staging_root": str(spec.staging_root),
+        },
+    )
+
+
+@pytest.mark.parametrize(
+    "point", ["stage-created", "file-staged", "prepared", "published-before-receipt", "complete"]
+)
+def test_recovery_reads_partial_and_published_files_without_changing_any_receipt(
+    specification, point
+):
+    spec = specification
+
+    def crash(phase):
+        if phase == point:
+            raise RuntimeError("simulated interruption")
+
+    if point == "complete":
+        publish_item(spec)
+    else:
+        with pytest.raises(RuntimeError):
+            publish_item(spec, checkpoint=crash)
+    before = {
+        str(p): (p.read_bytes(), p.stat().st_ino, p.stat().st_mtime_ns)
+        for p in spec.source_root.parent.rglob("*")
+        if p.is_file()
+    }
+    state, _, evidence = observe_entry(*inputs(spec))
+    assert state == ("published" if point in {"complete", "published-before-receipt"} else "staged")
+    assert evidence["source"] == "matches-frozen-files"
+    after = {
+        str(p): (p.read_bytes(), p.stat().st_ino, p.stat().st_mtime_ns)
+        for p in spec.source_root.parent.rglob("*")
+        if p.is_file()
+    }
+    assert before == after
+
+
+def test_deleted_publication_and_untracked_journal_are_reported(specification):
+    spec = specification
+    publish_item(spec)
+    for p in (spec.destination_root / spec.folder).iterdir():
+        p.unlink()
+    (spec.destination_root / spec.folder).rmdir()
+    assert observe_entry(*inputs(spec))[0] == "missing"
+    key = uuid4()
+    (spec.staging_root / f"{key}.json").write_text(
+        json.dumps({"entry_id": str(key), "state": "prepared"})
+    )
+    assert {r["entry_id"] for r in journal_census(spec.staging_root)} == {
+        str(spec.entry_id),
+        str(key),
+    }
+
+
+def test_symlinked_destination_and_changed_root_are_not_adopted(specification, tmp_path):
+    spec = specification
+    publish_item(spec)
+    target = spec.destination_root / spec.folder
+    real = tmp_path / "relocated"
+    target.rename(real)
+    target.symlink_to(real, target_is_directory=True)
+    with pytest.raises(OSError):
+        observe_entry(*inputs(spec))
+    entry, roots = inputs(spec)
+    roots["import_destinations"] = {"another": str(tmp_path / "another")}
+    with pytest.raises(RuntimeError, match="mounted roots"):
+        observe_entry(entry, roots)
+
+
+def test_journal_census_stops_at_total_byte_and_time_budgets(specification, monkeypatch):
+    from app.importing import recovery
+
+    spec = specification
+    publish_item(spec)
+    receipts = {p: p.read_bytes() for p in spec.staging_root.glob("*.json")}
+    monkeypatch.setattr(recovery, "MAX_JOURNAL_BYTES", 1)
+    with pytest.raises(RuntimeError, match="256 MiB"):
+        journal_census(spec.staging_root)
+    monkeypatch.setattr(recovery, "MAX_JOURNAL_BYTES", 256 * 1024 * 1024)
+    clock = iter([0, 61])
+    monkeypatch.setattr(recovery.time, "monotonic", lambda: next(clock))
+    with pytest.raises(RuntimeError, match="deadline"):
+        journal_census(spec.staging_root)
+    assert receipts == {p: p.read_bytes() for p in receipts}

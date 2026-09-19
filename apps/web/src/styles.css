@@ -39,6 +39,49 @@
   color: var(--muted);
   font-size: 14px;
 }
+.recovery-checks > p,
+.recovery-checks > details {
+  margin: 16px 0;
+  line-height: 1.6;
+}
+.recovery-checks pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  padding: 12px;
+  margin-top: 12px;
+  background: var(--bg);
+}
+.recovery-checks summary {
+  cursor: pointer;
+}
+.recovery-findings {
+  list-style: none;
+  padding: 0;
+}
+.recovery-findings > li {
+  border-top: 1px solid var(--line);
+  padding: 20px 0;
+}
+.recovery-findings p {
+  margin: 10px 0;
+}
+.recovery-finding-heading {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.recovery-finding-heading span {
+  text-transform: capitalize;
+  color: var(--muted);
+}
+.recovery-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0;
+}
 
 .discovery-section {
   margin-block: 30px 40px;

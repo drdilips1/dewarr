@@ -490,6 +490,86 @@ class QbitClient:
             raise AdapterError(FailureKind.PARSER, "qBittorrent returned a different transfer.")
         return state
 
+    async def census(self, *, known_hashes: set[str], categories: set[str], pulse):
+        """Enumerate the whole client, then observe application-relevant transfers.
+
+        Identity/routing markers are checked again after file observations. Progress and
+        speeds may advance normally. No remote transfer is adopted or changed here.
+        """
+        keys = {hash_value(value)[:40] for value in known_hashes}
+        fields = (
+            "hash",
+            "tags",
+            "category",
+            "save_path",
+            "auto_tmm",
+            "added_on",
+            "name",
+            "total_size",
+        )
+
+        async def listing():
+            result, offset, previous = {}, 0, ""
+            while True:
+                await pulse()
+                rows = await self._json("torrents/info", sort="hash", limit=250, offset=offset)
+                if not isinstance(rows, list) or len(rows) > 250:
+                    raise AdapterError(FailureKind.PARSER, "Invalid downloader census page")
+                if not rows:
+                    return result
+                for row in rows:
+                    try:
+                        key = hash_value(row["hash"])
+                        if key <= previous or any(field not in row for field in fields):
+                            raise ValueError
+                        if not isinstance(row["tags"], str) or not isinstance(row["category"], str):
+                            raise ValueError
+                        result[key] = {field: row[field] for field in fields}
+                        previous = key
+                    except (KeyError, TypeError, ValueError):
+                        raise AdapterError(
+                            FailureKind.PARSER,
+                            "Downloader census repeated or omitted identity evidence",
+                        ) from None
+                    if len(result) > 10000:
+                        raise AdapterError(
+                            FailureKind.UNSUPPORTED,
+                            "Recovery census supports at most 10,000 transfers per downloader",
+                        )
+                offset += len(rows)
+
+        await self.capabilities()
+        first = await listing()
+        if first != await listing():
+            raise AdapterError(
+                FailureKind.UNCERTAIN, "Downloader membership or routing changed during census"
+            )
+        states = []
+        for key, row in first.items():
+            tags = {tag.strip() for tag in row["tags"].split(",") if tag.strip()}
+            if (
+                key in keys
+                or row["category"] in categories
+                or any(tag.startswith("book-search:") for tag in tags)
+            ):
+                await pulse()
+                state = await self.status(key)
+                if (
+                    state.tags != tags
+                    or state.category != row["category"]
+                    or state.save_path != absolute_path(row["save_path"])
+                    or state.auto_managed != row["auto_tmm"]
+                ):
+                    raise AdapterError(
+                        FailureKind.UNCERTAIN, "Downloader routing changed while reading a transfer"
+                    )
+                states.append(state)
+        if first != await listing():
+            raise AdapterError(
+                FailureKind.UNCERTAIN, "Downloader changed after transfer observations"
+            )
+        return states, len(first)
+
     async def submit(
         self,
         artifact: bytes | str,

@@ -175,6 +175,57 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/recovery/scans": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Begin Scan */
+    post: operations["begin_scan_api_recovery_scans_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/recovery/scans/{scan_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Findings */
+    get: operations["findings_api_recovery_scans__scan_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/recovery/scans/{scan_id}/findings/{finding_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Finding Detail */
+    get: operations["finding_detail_api_recovery_scans__scan_id__findings__finding_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/activity": {
     parameters: {
       query?: never;
@@ -4278,6 +4329,40 @@ export interface components {
       /** Role */
       role: string;
     };
+    /** FindingView */
+    FindingView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Domain */
+      domain: string;
+      /** State */
+      state: string;
+      /** Title */
+      title: string;
+      /** Message */
+      message: string;
+      /** Entity Id */
+      entity_id: string | null;
+      /** Evidence */
+      evidence: {
+        [key: string]: unknown;
+      };
+      /** Has Evidence */
+      has_evidence: boolean;
+    };
+    /** FindingsPage */
+    FindingsPage: {
+      scan: components["schemas"]["ScanView"];
+      /** Items */
+      items: components["schemas"]["FindingView"][];
+      /** Total */
+      total: number;
+      /** Next Offset */
+      next_offset: number | null;
+    };
     /** FollowInput */
     FollowInput: {
       /** Name */
@@ -6240,6 +6325,7 @@ export interface components {
        * @default false
        */
       resume_available: boolean;
+      latest_scan?: components["schemas"]["ScanView"] | null;
     };
     /** ReleaseAssessment */
     ReleaseAssessment: {
@@ -6628,6 +6714,29 @@ export interface components {
       profile: components["schemas"]["NamingProfile"];
       /** Expected Revision */
       expected_revision: string;
+    };
+    /** ScanView */
+    ScanView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** State */
+      state: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /** Finished At */
+      finished_at: string | null;
+      /** Summary */
+      summary: {
+        [key: string]: unknown;
+      };
+      /** Message */
+      message: string;
     };
     /** ScopeBook */
     ScopeBook: {
@@ -8061,6 +8170,103 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["RecoveryView"];
+        };
+      };
+    };
+  };
+  begin_scan_api_recovery_scans_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ScanView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  findings_api_recovery_scans__scan_id__get: {
+    parameters: {
+      query?: {
+        offset?: number;
+        domain?: string | null;
+      };
+      header?: never;
+      path: {
+        scan_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FindingsPage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  finding_detail_api_recovery_scans__scan_id__findings__finding_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        scan_id: string;
+        finding_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FindingView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };

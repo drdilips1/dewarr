@@ -8,7 +8,7 @@ import httpx
 
 from app.adapters.goodreads import fetch_feed
 from app.config import get_settings
-from app.domain import list_subscriptions
+from app.domain import list_subscriptions, recovery_observers
 from app.jobs.worker import main
 
 if not urlsplit(get_settings().database_url.get_secret_value()).path.endswith("_browser_test"):
@@ -39,5 +39,6 @@ async def fixture_feed(url, **options):
 
 
 list_subscriptions.fetch_feed = fixture_feed
+recovery_observers.fetch_feed = fixture_feed
 logging.basicConfig(level=logging.INFO)
 asyncio.run(main())

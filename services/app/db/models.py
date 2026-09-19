@@ -70,6 +70,34 @@ class RateLimit(Base):
     resets_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
+class RecoveryScan(Identity, Base):
+    __tablename__ = "recovery_scans"
+    __table_args__ = (CheckConstraint("state IN ('queued', 'running', 'completed', 'held')"),)
+    checkpoint_id: Mapped[UUID] = mapped_column(ForeignKey("restore_checkpoints.id"), index=True)
+    operation_id: Mapped[UUID] = mapped_column(ForeignKey("operations.id"), unique=True)
+    state: Mapped[str] = mapped_column(String(20), default="queued")
+    context_digest: Mapped[str | None] = mapped_column(String(64))
+    run_token: Mapped[UUID | None] = mapped_column()
+    lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    summary: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+
+
+class RecoveryFinding(Identity, Base):
+    __tablename__ = "recovery_findings"
+    __table_args__ = (UniqueConstraint("scan_id", "position"),)
+    scan_id: Mapped[UUID] = mapped_column(
+        ForeignKey("recovery_scans.id", ondelete="CASCADE"), index=True
+    )
+    position: Mapped[int] = mapped_column(Integer)
+    domain: Mapped[str] = mapped_column(String(20))
+    state: Mapped[str] = mapped_column(String(30))
+    title: Mapped[str] = mapped_column(String(600))
+    message: Mapped[str] = mapped_column(String(600))
+    entity_id: Mapped[UUID | None] = mapped_column()
+    evidence: Mapped[dict[str, Any]] = mapped_column(JSONB)
+
+
 class Work(Identity, Base):
     __tablename__ = "works"
     __table_args__ = (

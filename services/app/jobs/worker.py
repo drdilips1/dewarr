@@ -1,12 +1,25 @@
+import argparse
 import asyncio
 import logging
 
 from app.config import get_settings
 from app.db.session import get_engine, session_factory
-from app.jobs.queue import get_queue
-from app.recovery import restore_pending, runtime_lease
+from app.jobs.queue import get_queue, recovery_queue
+from app.recovery import active_restore, restore_pending, runtime_lease
 
 logger = logging.getLogger(__name__)
+
+
+async def recover_observation_jobs(queue):
+    while True:
+        try:
+            for job in await queue.job_manager.get_stalled_jobs(
+                task_name="recovery.scan", seconds_since_heartbeat=60
+            ):
+                await queue.job_manager.retry_job(job)
+        except Exception as error:
+            logger.error("Recovery observation queue unavailable (%s)", type(error).__name__)
+        await asyncio.sleep(30)
 
 
 async def recover_stalled_jobs() -> None:
@@ -60,19 +73,35 @@ async def recover_stalled_jobs() -> None:
         await asyncio.sleep(30)
 
 
-async def main() -> None:
+async def main(*, recovery_only=False) -> None:
     settings = get_settings()
     settings.encryption_key()
-    if settings.recovery_mode:
+    if settings.recovery_mode and not recovery_only:
         raise RuntimeError("Workers are disabled in recovery mode; reconcile before resuming")
     try:
         async with runtime_lease():
             async with session_factory()() as db:
-                if await restore_pending(db):
+                if recovery_only:
+                    if not await active_restore(db):
+                        raise RuntimeError(
+                            "Recovery observations require an active restore checkpoint"
+                        )
+                    settings.recovery_mode = True
+                elif await restore_pending(db):
                     raise RuntimeError(
                         "Restored state requires reconciliation before workers can resume"
                     )
-            await run_worker()
+            if recovery_only:
+                queue = recovery_queue()
+                async with queue.open_async():
+                    recovery = asyncio.create_task(recover_observation_jobs(queue))
+                    try:
+                        await queue.run_worker_async(queues=["recovery"], concurrency=1)
+                    finally:
+                        recovery.cancel()
+                        await asyncio.gather(recovery, return_exceptions=True)
+            else:
+                await run_worker()
     finally:
         await get_engine().dispose()
 
@@ -94,4 +123,8 @@ async def run_worker() -> None:
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    asyncio.run(main())
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--recovery", action="store_true", help="Run only read-only restore observations"
+    )
+    asyncio.run(main(recovery_only=parser.parse_args().recovery))

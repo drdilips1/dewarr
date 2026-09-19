@@ -1,0 +1,485 @@
+"""Provider observations kept separate from ordinary sync/acquisition state machines."""
+
+import asyncio
+from functools import partial
+
+from app.adapters.audiobookshelf import Audiobookshelf
+from app.adapters.contracts import AdapterError, FailureKind
+from app.adapters.goodreads import fetch_feed
+from app.adapters.qbittorrent import QbitClient, verify_association
+from app.domain import hardcover_subscriptions
+from app.domain.inventory import summary_fingerprint
+from app.domain.recovery_scans import ScanHeld, digest
+from app.security import decrypt_secrets
+
+
+def keyed(rows, field="id"):
+    return {row[field]: row for row in rows}
+
+
+async def downloads(inputs, writer, integration):
+    selections = keyed(inputs["acquisition_selections"])
+    endpoint = digest({"url": integration["base_url"].rstrip("/")})
+    attempts = [
+        a
+        for a in inputs["download_attempts"]
+        if a["endpoint_key"] == endpoint
+        or selections[a["selection_id"]]["downloader_id"] == integration["id"]
+    ]
+    hashes, categories = (
+        set(),
+        {"book-search", integration["config"].get("category", "book-search")},
+    )
+    for attempt in attempts:
+        frozen = selections[attempt["selection_id"]]["frozen"]
+        hashes.update(
+            value
+            for key, value in frozen["descriptor"].items()
+            if key in {"infohash_v1", "infohash_v2"} and value
+        )
+        categories.add(frozen["downloader"]["category"])
+    secret = decrypt_secrets(integration["encrypted_secrets"])
+    async with QbitClient(
+        integration["base_url"], secret["username"], secret["password"]
+    ) as client:
+        states, total = await client.census(
+            known_hashes=hashes, categories=categories, pulse=writer.pulse
+        )
+    claimed = set()
+    for attempt in attempts:
+        frozen = selections[attempt["selection_id"]]["frozen"]
+        identities = {
+            value
+            for key, value in frozen["descriptor"].items()
+            if key in {"infohash_v1", "infohash_v2"} and value
+        }
+        tag = "book-search:" + str(attempt["id"])
+        relevant = [state for state in states if tag in state.tags or identities & state.identities]
+        evidence = {
+            "integration_id": integration["id"],
+            "saved_state": attempt["state"],
+            "saved_external_may_exist": attempt["external_may_exist"],
+            "states": [state.model_dump(mode="json") for state in relevant],
+        }
+        try:
+            if attempt["endpoint_key"] != endpoint:
+                raise AdapterError(
+                    FailureKind.UNCERTAIN, "The downloader endpoint differs from the saved transfer"
+                )
+            found = verify_association(
+                relevant,
+                tag=tag,
+                hashes=identities,
+                save_path=frozen["downloader"]["save_path"],
+                category=frozen["downloader"]["category"],
+            )
+            if found:
+                claimed.add(found.external_id)
+                state, message = (
+                    "matched",
+                    "Current transfer identity and destination match the saved attempt",
+                )
+            else:
+                state, message = (
+                    "missing",
+                    "Transfer was not observed; absence does not authorize resubmission",
+                )
+        except AdapterError as error:
+            state, message = "conflict", str(error)
+        await writer.add(
+            "downloads",
+            state,
+            frozen.get("release", {}).get("raw_title") or "Saved download",
+            message,
+            entity_id=attempt["id"],
+            evidence=evidence,
+        )
+    for state in states:
+        if state.external_id not in claimed:
+            await writer.add(
+                "downloads",
+                "untracked",
+                "Unassociated transfer " + state.external_id[:12],
+                "Application routing or identity is visible without a restored association",
+                evidence={
+                    "integration_id": integration["id"],
+                    "state": state.model_dump(mode="json"),
+                },
+            )
+    await writer.add(
+        "downloads",
+        "observed",
+        integration["name"],
+        "Downloader census completed without changing transfers",
+        entity_id=integration["id"],
+        evidence={
+            "total_transfers": total,
+            "relevant_transfers": len(states),
+            "unrelated_transfers": total - len(states),
+        },
+    )
+
+
+async def abs_library(client, library_id, pulse):
+    async def listing(*, expand):
+        seen, items, page, expected = {}, [], 0, None
+        while True:
+            await pulse()
+            records, total = await client.page(library_id, page)
+            current = summary_fingerprint(records)
+            if (
+                total > 10000
+                or (expected is not None and expected != total)
+                or len(current) != len(records)
+                or seen.keys() & current.keys()
+            ):
+                raise AdapterError(
+                    FailureKind.UNCERTAIN,
+                    "Library size or pagination changed, or exceeded 10,000 items",
+                )
+            if expand and records:
+                expanded = await client.expanded(list(current))
+                if any(item.library_id != library_id for item in expanded):
+                    raise AdapterError(
+                        FailureKind.UNCERTAIN, "A library item moved while being read"
+                    )
+                items.extend(expanded)
+            seen.update(current)
+            if len(seen) == total:
+                return seen, items
+            if not records or len(seen) > total:
+                raise AdapterError(
+                    FailureKind.UNCERTAIN, "Library did not provide complete pagination"
+                )
+            expected, page = total, page + 1
+
+    first, items = await listing(expand=True)
+    second, _ = await listing(expand=False)
+    if first != second:
+        raise AdapterError(FailureKind.UNCERTAIN, "Library changed during verification")
+    return items
+
+
+async def inventory(inputs, writer, integration):
+    saved_libraries = {
+        row["external_id"]: row
+        for row in inputs["libraries"]
+        if row["integration_id"] == integration["id"]
+    }
+    secret = decrypt_secrets(integration["encrypted_secrets"])["token"]
+    async with Audiobookshelf(integration["base_url"], secret) as client:
+        await writer.pulse()
+        _, scope = await client.authorize()
+        libraries = await client.libraries()
+        if len(libraries) > 100:
+            raise ScanHeld("Recovery supports at most 100 libraries per backend")
+        collected = {}
+        for library in libraries:
+            collected[library["id"]] = await abs_library(client, library["id"], writer.pulse)
+        await writer.pulse()
+        _, final_scope = await client.authorize()
+        if scope != final_scope or libraries != await client.libraries():
+            raise AdapterError(
+                FailureKind.UNCERTAIN, "Backend permissions or libraries changed during review"
+            )
+    for external_id, library in saved_libraries.items():
+        if external_id not in collected:
+            await writer.add(
+                "library",
+                "inaccessible",
+                library["name"],
+                "Saved library is no longer visible; missing access cannot prove deleted media",
+                entity_id=library["id"],
+                evidence={"integration_id": integration["id"]},
+            )
+    for library in libraries:
+        saved = saved_libraries.get(library["id"])
+        assets = {
+            (a["external_id"], a["medium"]): a
+            for a in inputs["library_assets"]
+            if saved and a["library_id"] == saved["id"]
+        }
+        current = {
+            (item.id, medium): item
+            for item in collected[library["id"]]
+            for medium in ("ebook", "audio")
+            if getattr(item, medium)
+        }
+        for key in sorted(assets.keys() | current.keys()):
+            asset, item = assets.get(key), current.get(key)
+            evidence = {
+                "integration_id": integration["id"],
+                "external_library_id": library["id"],
+                "external_item_id": key[0],
+                "medium": key[1],
+            }
+            if not item:
+                state, message = (
+                    "missing",
+                    "Saved media is absent; check moves before replacement",
+                )
+                evidence["saved_files"] = asset["files"]
+            elif not asset:
+                state, message = (
+                    "untracked",
+                    "Backend media is visible without a restored asset record",
+                )
+            elif item.missing or item.invalid or not getattr(item, "full_" + key[1]):
+                state, message = "changed", "Backend reports missing, invalid or incomplete media"
+            elif asset["metadata_snapshot"] != item.model_dump(mode="json"):
+                state, message = (
+                    "changed",
+                    "Current backend metadata or file evidence differs from the backup",
+                )
+            else:
+                state, message = (
+                    "matched",
+                    "Current backend evidence matches the saved asset observation",
+                )
+            if item:
+                evidence["item"] = item.model_dump(mode="json")
+            await writer.add(
+                "library",
+                state,
+                (item.title if item else asset["title"]) or "Saved library item",
+                message,
+                entity_id=asset["id"] if asset else None,
+                evidence=evidence,
+            )
+        await writer.add(
+            "library",
+            "observed" if not saved or scope == saved["scope_fingerprint"] else "changed",
+            library["name"],
+            "Fresh backend inventory collected; owned badges have not been changed",
+            entity_id=saved["id"] if saved else None,
+            evidence={
+                "integration_id": integration["id"],
+                "external_library_id": library["id"],
+                "scope_fingerprint": scope,
+                "items": len(collected[library["id"]]),
+            },
+        )
+
+
+async def shelf(inputs, writer, subscription):
+    item = keyed(inputs["book_lists"])[subscription["list_id"]]
+    owner = keyed(inputs["users"]).get(item["owner_id"])
+    if not owner or not owner["active"] or owner["role"] == "viewer":
+        raise ScanHeld("The list owner no longer has subscription access")
+    config = decrypt_secrets(subscription["encrypted_config"])
+    previous = {
+        row["external_id"]: row
+        for row in inputs["list_observations"]
+        if row["subscription_id"] == subscription["id"]
+    }
+    if subscription["provider"] == "hardcover":
+        account = keyed(inputs["catalog_accounts"], "user_id").get(item["owner_id"])
+        if not account or not account["enabled"]:
+            raise ScanHeld("The list owner's Hardcover account is unavailable")
+        secret = decrypt_secrets(account["encrypted_token"])["token"]
+        stage, complete = None, False
+        for _ in range(105):
+            await writer.pulse()
+            for attempt in range(4):
+                try:
+                    page = await hardcover_subscriptions.fetch_page(
+                        item["owner_id"],
+                        account["generation"],
+                        secret,
+                        str(config["external_id"]),
+                        stage["cursor"] if stage else 0,
+                    )
+                    break
+                except AdapterError as error:
+                    if (
+                        error.kind != FailureKind.RATE_LIMIT
+                        or (error.retry_after or 1) > 30
+                        or attempt == 3
+                    ):
+                        raise
+                    await writer.pulse()
+                    await asyncio.sleep(max(error.retry_after or 1, 1))
+            stage, complete = hardcover_subscriptions.advance(stage, page)
+            if complete:
+                break
+        if not complete:
+            raise ScanHeld(
+                "Hardcover did not complete membership verification within its page budget"
+            )
+        records = hardcover_subscriptions.books(stage)
+        complete_snapshot = True
+        policy = next(
+            (
+                row
+                for row in inputs["list_writeback_policies"]
+                if row["list_id"] == subscription["list_id"]
+            ),
+            None,
+        )
+        owner_changed = policy and (
+            str(policy["remote_owner_id"]) != stage["info"]["owner_id"]
+            or str(policy["external_list_id"]) != str(config["external_id"])
+        )
+        await writer.add(
+            "lists",
+            "conflict" if owner_changed else "observed",
+            item["name"],
+            "List owner or target differs from the saved write-back policy"
+            if owner_changed
+            else "Complete current Hardcover memberships verified; no list changes were sent",
+            entity_id=subscription["id"],
+            evidence={"info": stage["info"], "complete": True},
+        )
+    elif subscription["provider"] == "goodreads":
+        from app.db.session import session_factory
+        from app.domain.list_subscriptions import budget
+
+        async with session_factory()() as db, db.begin():
+            wait = await budget(db)
+        if wait:
+            raise ScanHeld("Goodreads is rate limited; wait before starting another observation")
+        await writer.pulse()
+        response = await fetch_feed(config["url"])
+        if response.not_modified:
+            raise ScanHeld("Goodreads did not return fresh feed content")
+        records, complete_snapshot = response.items, False
+        await writer.add(
+            "lists",
+            "partial",
+            item["name"],
+            "RSS only proves visible additions; missing entries do not prove shelf removal",
+            entity_id=subscription["id"],
+            evidence={"complete": False, "visible_items": len(records)},
+        )
+    else:
+        raise ScanHeld("This external list provider has no recovery observer")
+    current = {record["external_id"]: record for record in records}
+    for key in sorted(current.keys() | (previous.keys() if complete_snapshot else set())):
+        before, now = previous.get(key), current.get(key)
+        if not now:
+            state = "missing" if before["present"] else "observed"
+        elif not before:
+            state = "untracked"
+        elif not before["present"] or before["snapshot"] != now:
+            state = "changed"
+        else:
+            state = "matched"
+        await writer.add(
+            "lists",
+            state,
+            now["title"] if now else item["name"],
+            "Current list membership observed; subscription episodes and automation are unchanged",
+            entity_id=subscription["id"],
+            evidence={
+                "external_id": key,
+                "current": now,
+                "previous_observation_id": before["id"] if before else None,
+                "previous": before["snapshot"] if before else None,
+                "complete": complete_snapshot,
+            },
+        )
+    # A sent operation needs its exact membership IDs, not an inferred title match.
+    for operation in inputs["outbound"]:
+        payload = operation["payload"]
+        if str(payload.get("list_id")) != str(subscription["list_id"]):
+            continue
+        await writer.add(
+            "lists",
+            "needs-review",
+            item["name"],
+            "Saved outbound intent requires deliberate reconciliation before any write",
+            entity_id=operation["id"],
+            evidence={
+                "saved_status": operation["status"],
+                "pending_attempt": bool(payload.get("pending_attempt")),
+                "desired": payload.get("desired"),
+                "book_id": payload.get("book_id"),
+                "current": current.get(str(payload.get("book_id"))),
+            },
+        )
+
+
+async def collect(inputs, writer):
+    from app.importing.recovery import observe_files
+
+    async def observed(domain, title, identifier, callback):
+        try:
+            await callback()
+        except AdapterError as error:
+            await writer.add(
+                domain,
+                "blocked",
+                title,
+                str(error),
+                entity_id=identifier,
+                evidence={"failure": error.kind.value},
+            )
+        except ScanHeld as error:
+            await writer.add(domain, "blocked", title, str(error), entity_id=identifier)
+        except (KeyError, ValueError, OSError):
+            await writer.add(
+                domain,
+                "blocked",
+                title,
+                "Observation is incomplete; check configuration, credentials and mounted paths",
+                entity_id=identifier,
+            )
+
+    for integration in inputs["integrations"]:
+        observer = {"qbittorrent": downloads, "audiobookshelf": inventory}.get(integration["kind"])
+        if not observer:
+            continue
+        domain = "downloads" if integration["kind"] == "qbittorrent" else "library"
+        if not integration["enabled"]:
+            await writer.add(
+                domain,
+                "blocked",
+                integration["name"],
+                "Connection is disabled; no remote access was attempted",
+                entity_id=integration["id"],
+            )
+            continue
+        await observed(
+            domain,
+            integration["name"],
+            integration["id"],
+            partial(observer, inputs, writer, integration),
+        )
+    for subscription in inputs["list_subscriptions"]:
+        if not subscription["enabled"]:
+            await writer.add(
+                "lists",
+                "blocked",
+                "Disabled list subscription",
+                "Current membership has not been observed",
+                entity_id=subscription["id"],
+            )
+            continue
+        await observed(
+            "lists",
+            "External list",
+            subscription["id"],
+            partial(shelf, inputs, writer, subscription),
+        )
+    subscribed = {str(row["list_id"]) for row in inputs["list_subscriptions"]}
+    for operation in inputs["outbound"]:
+        if str(operation["payload"].get("list_id")) not in subscribed:
+            await writer.add(
+                "lists",
+                "needs-review",
+                "Detached outbound list history",
+                "Saved outbound intent has no attached subscription to observe",
+                entity_id=operation["id"],
+                evidence={
+                    "saved_status": operation["status"],
+                    "pending_attempt": bool(operation["payload"].get("pending_attempt")),
+                },
+            )
+    await observe_files(inputs, writer)
+    await writer.add(
+        "review",
+        "needs-review",
+        "Resume remains paused",
+        "Observations do not authorize resume. "
+        "Downloads, imports, owned badges and list memberships remain unchanged.",
+    )

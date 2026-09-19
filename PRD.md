@@ -12,7 +12,7 @@ For a compact development handoff, see the [Product and Development Roadmap](DEV
 
 The [launch journey checklist](#20-launch-journey-checklist) makes the combined product behavior reviewable. It adds no scope beyond the existing requirements. Use the implementation plan's [release delivery contract](IMPLEMENTATION-PLAN.md#16-release-delivery-contract) to sequence and accept development.
 
-Planning handoff reviewed September 19, 2026 against `30db130`: the roadmap identifies the committed starting point, selected stack, reuse boundaries, stage dependency path and next reviewable increment. The requirement baseline remains unchanged: 36 v1 functional requirements, six expansion requirements and 12 nonfunctional requirements. The 61-package backlog and 35 acceptance scenarios define delivery and verification; implementation checkpoints do not reduce that scope.
+Planning handoff reviewed September 19, 2026 against `6777581`: the roadmap identifies the committed starting point, selected stack, reuse boundaries, stage dependency path and next reviewable increment. The requirement baseline remains unchanged: 36 v1 functional requirements, six expansion requirements and 12 nonfunctional requirements. The 61-package backlog and 35 acceptance scenarios define delivery and verification; implementation checkpoints do not reduce that scope.
 
 ## 1. Product purpose
 

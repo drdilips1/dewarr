@@ -2,7 +2,7 @@
 
 This is an early development build. The full [PRD](../PRD.md) remains the target; [Implementation Status](IMPLEMENTATION-STATUS.md) records actual coverage. Do not connect production acquisition automation until the relevant import and recovery gates pass.
 
-Current request contract: back up the database and apply migrations through `0037_download_joins` before restarting API and worker together. [Saved-transfer reuse](DOWNLOAD-REUSE.md) adds independent join receipts and later import continuations. [Request restrictions](ACQUISITION-FOUNDATION.md#request-download-restrictions) preserve independent format and whole-transfer size limits across shared acquisitions. Populated history blocks lossy downgrade. Default dispatch remains disabled; this migration does not activate list automation.
+Current schema: `0042_recovery_scans`. Back up with the tool version matching the pre-upgrade schema, stop API/worker processes, apply migrations and restart matching builds. The request contract introduced at `0037_download_joins` remains in effect. [Saved-transfer reuse](DOWNLOAD-REUSE.md) adds independent join receipts and later import continuations. [Request restrictions](ACQUISITION-FOUNDATION.md#request-download-restrictions) preserve independent format and whole-transfer size limits across shared acquisitions. Populated history blocks lossy downgrade. Default dispatch remains disabled; this migration does not activate list automation.
 
 [Automatic reviewed-series acquisition](SERIES-ACQUISITION.md) adds a durable `series.acquire` task without a new migration. Update API and worker together before accepting automatic series requests. Finite accepted sets retain their own scope and authority; this does not enable future-sequel monitoring or installation dispatch.
 
@@ -179,3 +179,6 @@ List detail now defaults to 50 books and exposes count/matched/offset/limit; app
 
 
 [Existing-list comparisons](LIST-COMPARISONS.md) require `0040_list_comparisons` and the new `lists.writeback.compare` task. Back up database/key/configuration, stop old API/worker builds, migrate and restart matching backend/frontend versions. Initial enablement now waits for the comparison returned by the ownership preview; older previews need refreshing. Populated comparison history requires backup-based rollback. This does not enable dispatch or change existing write-back policies.
+
+
+[Read-only recovery observations](RECOVERY-OBSERVATIONS.md) require `0042_recovery_scans`. Populated scan history blocks downgrade; preserve a pre-upgrade database/key/configuration backup with the prior compatible tooling. The state-bundle format remains version 1, but its schema compatibility check now requires 0042. A restored database runs the API and explicit `python -m app.jobs.worker --recovery` only; ordinary workers stay blocked. Normal installations use the ordinary worker, and this migration does not activate download dispatch. Deploy the generated client/frontend together with matching backend code.

@@ -1,4 +1,5 @@
 import hmac
+import re
 from datetime import UTC, datetime
 from typing import Annotated
 
@@ -44,8 +45,16 @@ async def current_user(request: Request, db: Database) -> User:
             ("GET", "/api/auth/me"),
             ("POST", "/api/auth/logout"),
             ("GET", "/api/recovery"),
+            ("POST", "/api/recovery/scans"),
         }
-        if user.role != "admin" or (request.method, request.url.path) not in allowed:
+        report_read = request.method == "GET" and bool(
+            re.fullmatch(
+                r"/api/recovery/scans/[0-9a-f-]{36}(?:/findings/[0-9a-f-]{36})?", request.url.path
+            )
+        )
+        if user.role != "admin" or (
+            (request.method, request.url.path) not in allowed and not report_read
+        ):
             raise HTTPException(423, "Recovery review is active; application actions are paused")
     if request.method not in {"GET", "HEAD", "OPTIONS"}:
         require_origin(request)

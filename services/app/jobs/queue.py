@@ -22,6 +22,35 @@ def get_queue() -> procrastinate.App:
         )
     )
     queue.add_tasks_from(tasks, namespace="")
+    from app.jobs.recovery_tasks import tasks as recovery_tasks
+
+    queue.add_tasks_from(recovery_tasks, namespace="")
+    return queue
+
+
+class RecoveryApp(procrastinate.App):
+    def _register_builtin_tasks(self) -> None:
+        # Procrastinate 3.9.0 registers history cleanup in every ordinary App.
+        # Recovery must preserve that history and has exactly one permitted task.
+        # Keep the pinned-version registry/isolation test when upgrading the queue.
+        pass
+
+
+def recovery_queue() -> procrastinate.App:
+    from app.jobs.recovery_tasks import tasks as recovery_tasks
+
+    queue = RecoveryApp(
+        worker_defaults={"queues": ["recovery"], "concurrency": 1},
+        connector=procrastinate.PsycopgConnector(
+            conninfo=get_settings().psycopg_url,
+            min_size=1,
+            max_size=2,
+            kwargs={"options": "-csearch_path=public,book_queue"},
+        ),
+    )
+    queue.add_tasks_from(recovery_tasks, namespace="")
+    if set(queue.tasks) != {"recovery.scan"} or queue.periodic_registry.periodic_tasks:
+        raise RuntimeError("Recovery worker registry contains an unauthorized task")
     return queue
 
 

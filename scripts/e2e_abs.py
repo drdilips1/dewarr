@@ -81,12 +81,14 @@ async def qbit_fixture(path: str, request: Request):
                 "amount_left": 18,
                 "total_size": descriptor["content_bytes"],
                 "progress": 0.25,
+                "added_on": 100,
+                "name": descriptor["name"],
             },
             "descriptor": descriptor,
         }
         return PlainTextResponse("Ok.")
     if path == "torrents/info":
-        return [
+        rows = [
             value["row"]
             for digest, value in qbit_state["transfers"].items()
             if (not request.query_params.get("hashes") or request.query_params["hashes"] == digest)
@@ -95,6 +97,11 @@ async def qbit_fixture(path: str, request: Request):
                 or request.query_params["tag"] == value["row"]["tags"]
             )
         ]
+        if request.query_params.get("sort") == "hash":
+            rows.sort(key=lambda row: row["hash"])
+        offset = int(request.query_params.get("offset", 0))
+        limit = int(request.query_params.get("limit", len(rows) or 1))
+        return rows[offset : offset + limit]
     if path in {"torrents/properties", "torrents/files"}:
         value = qbit_state["transfers"].get(request.query_params.get("hash"))
         if not value:
@@ -117,6 +124,11 @@ async def qbit_fixture(path: str, request: Request):
             for item in descriptor["files"]
         ]
     raise HTTPException(404, "Unknown synthetic downloader operation")
+
+
+@app.get("/fixture/recovery-stats")
+async def recovery_stats():
+    return {"adds": qbit_state["adds"], "transfers": len(qbit_state["transfers"])}
 
 
 @app.api_route("/mam/{path:path}", methods=["GET", "POST"])

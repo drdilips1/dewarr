@@ -2,6 +2,7 @@ import asyncio
 import json
 import os
 import subprocess
+import sys
 from uuid import UUID, uuid4
 
 import httpx
@@ -173,7 +174,8 @@ async def test_restore_preserves_evidence_invalidates_sessions_and_fences_effect
         from sqlalchemy.engine import make_url
 
         target_engine = create_async_engine(
-            make_url(settings.database_url.get_secret_value()).set(database=target_name)
+            make_url(settings.database_url.get_secret_value()).set(database=target_name),
+            connect_args={"options": "-csearch_path=public,book_queue"},
         )
         sessions = async_sessionmaker(target_engine, expire_on_commit=False)
 
@@ -209,6 +211,45 @@ async def test_restore_preserves_evidence_invalidates_sessions_and_fences_effect
                     "/api/system/probe", headers={"Idempotency-Key": "restored-no-dispatch"}
                 )
             ).status_code == 423
+            observation = await restored_client.post(
+                "/api/recovery/scans", headers={"Idempotency-Key": "restored-read-only-scan"}
+            )
+            assert observation.status_code == 202, observation.text
+            process = await asyncio.create_subprocess_exec(
+                sys.executable,
+                "-m",
+                "app.jobs.worker",
+                "--recovery",
+                env=env,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+            )
+            try:
+                for _ in range(100):
+                    observed = await restored_client.get(
+                        "/api/recovery/scans/" + observation.json()["id"]
+                    )
+                    if observed.json()["scan"]["state"] in {"completed", "held"}:
+                        break
+                    await asyncio.sleep(0.1)
+                assert observed.json()["scan"]["state"] == "completed", observed.text
+            finally:
+                if process.returncode is None:
+                    process.terminate()
+                await asyncio.wait_for(process.communicate(), timeout=10)
+            with psycopg.connect(target_url) as connection:
+                assert (
+                    connection.execute(
+                        "SELECT status FROM operations WHERE idempotency_key = 'restore-evidence'"
+                    ).fetchone()[0]
+                    == "queued"
+                )
+                assert (
+                    connection.execute(
+                        "SELECT count(*) FROM restore_checkpoints WHERE active"
+                    ).fetchone()[0]
+                    == 1
+                )
             assert (await restored_client.post("/api/auth/logout")).status_code == 204
         with pytest.raises(BundleError, match="already exists"):
             await asyncio.to_thread(
