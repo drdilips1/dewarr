@@ -368,6 +368,32 @@ class ListSubscription(Identity, Base):
     lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
+class ListWritebackPolicy(Base):
+    __tablename__ = "list_writeback_policies"
+    list_id: Mapped[UUID] = mapped_column(
+        ForeignKey("book_lists.id", ondelete="CASCADE"), primary_key=True
+    )
+    subscription_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("list_subscriptions.id", ondelete="SET NULL")
+    )
+    generation: Mapped[int] = mapped_column(Integer, default=1)
+    enabled: Mapped[bool] = mapped_column(Boolean, default=False)
+    account_generation: Mapped[int] = mapped_column(Integer)
+    remote_owner_id: Mapped[int] = mapped_column(Integer)
+    external_list_id: Mapped[int] = mapped_column(Integer)
+    sequence: Mapped[int] = mapped_column(Integer, default=0)
+    confirmed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class ListWritebackLease(Base):
+    __tablename__ = "list_writeback_leases"
+    # Remote identity serializes multiple local lists/accounts targeting the same list.
+    target: Mapped[str] = mapped_column(String(100), primary_key=True)
+    operation_id: Mapped[UUID] = mapped_column(ForeignKey("operations.id"))
+    token: Mapped[UUID] = mapped_column()
+    lease_until: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
 class ListObservation(Identity, Base):
     __tablename__ = "list_observations"
     __table_args__ = (UniqueConstraint("subscription_id", "external_id"),)
@@ -384,7 +410,15 @@ class ListObservation(Identity, Base):
 
 class Operation(Identity, Base):
     __tablename__ = "operations"
-    __table_args__ = (UniqueConstraint("owner_id", "idempotency_key"),)
+    __table_args__ = (
+        UniqueConstraint("owner_id", "idempotency_key"),
+        Index(
+            "ix_operations_list_writeback",
+            text("(payload->>'list_id')"),
+            "created_at",
+            postgresql_where=text("kind = 'lists.writeback'"),
+        ),
+    )
     owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
     kind: Mapped[str] = mapped_column(String(60))
     idempotency_key: Mapped[str] = mapped_column(String(200))

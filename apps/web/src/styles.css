@@ -449,6 +449,25 @@ nav a.active {
 .editor button {
   align-self: flex-start;
 }
+.writeback-controls {
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+.writeback-controls > summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.writeback-controls > .editor {
+  margin-top: 18px;
+  margin-bottom: 0;
+}
+.writeback-change {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+.writeback-change p {
+  margin-bottom: 8px;
+}
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;

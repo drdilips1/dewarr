@@ -290,7 +290,7 @@ Current checkpoint: [Discovery](docs/DISCOVERY.md) supplies initial shelves, [Co
 
 #### Hardcover write-back implementation breakdown
 
-Next feature packet at `30db130`, under **S08-03 / FR-34 / AT-23**, with authorization and recovery assertions from AT-27 and AT-30. This is a development specification. It does not claim working outbound synchronization or certified account capabilities. The earlier S07 inbound and S08 curation/pagination checkpoints remain regression prerequisites.
+Packet under **S08-03 / FR-34 / AT-23**, with authorization and recovery assertions from AT-27 and AT-30. The [local-membership implementation](docs/LIST-WRITEBACK.md) now has API, worker, migration and browser evidence in [implementation status](docs/IMPLEMENTATION-STATUS.md). The table retains the complete acceptance contract, including initial difference review, actual account qualification and restored-state reconciliation that remain open. Preserve the earlier S07 inbound and S08 curation/pagination regressions; this is not full S08 acceptance.
 
 Hardcover's published mutation inventory includes `insert_list_book` and `delete_list_book` under `write:lists`. This establishes documented operations, not their exact current argument shape, permission behavior or retry guarantees. Pin the schema used for development and validate the minimal operation against an authorized test account before enabling it. List mutations must not request unrelated reading-progress authority. [Hardcover action and scope reference](https://github.com/hardcoverapp/hardcover-docs/blob/main/src/content/docs/api/GraphQL/Actions.mdx).
 
@@ -980,3 +980,10 @@ This packet closes remaining S03-03, S04 collection/import and S06 coverage obli
 | Native backend qualification | Certify the declared ABS version and supported layouts with actual synthetic ebook/audio collections. Extend the supported-filesystem matrix. | Exactly one intended item, correct physical metadata, playback/file association, inventory refresh, correction/review, crash recovery and documented limits. Synthetic HTTP observations alone do not close this step. |
 
 Domain/import ownership leads the identity and lifecycle work; frontend ownership supplies focused review, source detail and progress; integration/release ownership certifies actual services. Assign a concrete owner and reviewer when taking a step into development. Keep FR-14, FR-21–FR-22 and FR-25–FR-30 traceable to their existing acceptance scenarios. The reviewed path is a useful increment, but full collection automation and S04/S06 acceptance require the remaining steps.
+
+
+### Optional Hardcover write-back implementation checkpoint
+
+The local-membership portion of S08-03 / FR-34 / AT-23 now has an [implementation contract](docs/LIST-WRITEBACK.md): explicit future-only enablement for an owned Hardcover list, atomic outbound intentions, uncached one-attempt mutations, observed confirmation, conflict review and echo suppression. API, worker, generated client and desktop/mobile controls are delivered together on `0039_list_writeback`. Preserve these invariants while completing the remaining product sequence. Exact verification is recorded in [implementation status](docs/IMPLEMENTATION-STATUS.md).
+
+Live account/scope qualification, full restored-state reconciliation, complete usability and all earlier unmet S00–S10 obligations remain open. This checkpoint does not implement a download-completion available-list rule or general initial full-list difference review, and does not close S08. Continue the simple complete experience and integration/release packets without reimplementing the established outbound ledger.

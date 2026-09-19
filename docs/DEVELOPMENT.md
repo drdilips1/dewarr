@@ -172,3 +172,6 @@ List policies and manual request forms expose sparse release overrides. Request-
 [Local list curation](LIST-CURATION.md) adds synchronous `lists.curate` receipts and revision-aware list editing. No migration or new queue is required. Deploy the generated frontend/client with matching API/worker code on `0038_asset_containment`; legacy single-entry and full-order routes remain supported.
 
 List detail now defaults to 50 books and exposes count/matched/offset/limit; app consumers use bounded paging/search instead of assuming a complete response. Deploy the matching generated frontend/API together. See [list pagination](LIST-PAGINATION.md) for relative moves, optimistic selection revisions, compatibility and remaining qualification. No migration beyond `0038_asset_containment` is needed.
+
+
+[Optional Hardcover write-back](LIST-WRITEBACK.md) requires migration `0039_list_writeback` and the registered `lists.writeback` worker. Back up database/key/configuration, stop old API/worker builds, migrate and restart matching backend/frontend versions. Policies begin disabled; enablement checks ownership and applies to future local membership changes only. Populated outbound history requires backup-based rollback. Recovery mode holds outbound work; full restored-state reconciliation remains an S09 qualification gate. Download dispatch stays independent.

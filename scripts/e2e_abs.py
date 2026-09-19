@@ -294,6 +294,30 @@ async def fixture_watcher(request: Request):
 
 
 hardcover_list_state = {"mode": "normal"}
+writeback_state = {"members": [], "writes": [], "lose_response": False}
+
+
+@app.post("/fixture/writeback")
+async def writeback_control(request: Request):
+    body = await request.json()
+    if body.get("reset"):
+        writeback_state.update(
+            members=[{"id": 1, "list_id": 92, "book_id": 42, "edition_id": None}],
+            writes=[],
+            lose_response=False,
+        )
+    if "lose_response" in body:
+        writeback_state["lose_response"] = body["lose_response"]
+    if body.get("readd"):
+        writeback_state["members"] = [
+            {**row, "id": row["id"] + 100} for row in writeback_state["members"]
+        ]
+    return writeback_state
+
+
+@app.get("/fixture/writeback")
+async def writeback_status():
+    return writeback_state
 
 
 @app.post("/fixture/hardcover-list")
@@ -308,6 +332,64 @@ async def catalog(request: Request, authorization: str = Header(default="")):
         raise HTTPException(401)
     body = await request.json()
     query = body.get("query", "")
+    if any(
+        name in query
+        for name in [
+            "WritableListOwner(",
+            "WritableListMembership(",
+            "AddListMembership(",
+            "RemoveListMembership(",
+        ]
+    ) or ("ListMembershipPage(" in query and body["variables"]["id"] == 92):
+        variables = body["variables"]
+        header = {
+            "id": 92,
+            "name": "Write-back fixture list",
+            "user_id": 7,
+            "public": False,
+            "books_count": len(writeback_state["members"]),
+            "updated_at": "2026-09-19T00:00:00Z",
+        }
+        if "AddListMembership(" in query:
+            row = {
+                "id": max((row["id"] for row in writeback_state["members"]), default=0) + 1,
+                "list_id": variables["list"],
+                "book_id": variables["book"],
+                "edition_id": None,
+            }
+            writeback_state["members"].append(row)
+            writeback_state["writes"].append({"action": "add", **row})
+            if writeback_state["lose_response"]:
+                raise HTTPException(503, "Synthetic response lost after applying membership")
+            return {"data": {"insert_list_book": {"id": row["id"], "list_book": row}}}
+        if "RemoveListMembership(" in query:
+            writeback_state["members"] = [
+                r for r in writeback_state["members"] if r["id"] != variables["entry"]
+            ]
+            writeback_state["writes"].append({"action": "remove", "id": variables["entry"]})
+            if writeback_state["lose_response"]:
+                raise HTTPException(503, "Synthetic response lost after applying membership")
+            return {"data": {"delete_list_book": {"id": variables["entry"], "list_id": 92}}}
+        if "WritableListOwner(" in query:
+            return {"data": {"me": [{"id": 7}], "lists": [header]}}
+        if "WritableListMembership(" in query:
+            rows = [r for r in writeback_state["members"] if r["book_id"] == variables["book"]]
+            return {"data": {"me": [{"id": 7}], "lists": [{**header, "list_books": rows}]}}
+        rows = [
+            {
+                **r,
+                "position": r["id"],
+                "date_added": None,
+                "book": {
+                    "id": r["book_id"],
+                    "title": "The Catalog Journey",
+                    "cached_contributors": [{"author": {"name": "Catalog Author"}}],
+                },
+            }
+            for r in writeback_state["members"]
+            if r["id"] > variables["after"]
+        ]
+        return {"data": {"lists": [{**header, "list_books": rows}]}}
     if "Community" in query or ("ListMembershipPage(" in query and body["variables"]["id"] == 9101):
         titles = {42: "The Catalog Journey", 9001: "The Discovered Harbor"}
         records = {

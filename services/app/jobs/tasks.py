@@ -298,6 +298,15 @@ async def observe_shelf(operation_id: str) -> None:
     await run(UUID(operation_id))
 
 
+@tasks.task(
+    name="lists.writeback", queue="lists", retry=ShelfRetryStrategy(max_attempts=5, wait=60)
+)
+async def write_list_membership(operation_id: str) -> None:
+    from app.domain.list_writeback import run
+
+    await run(UUID(operation_id))
+
+
 @tasks.periodic(cron="* * * * *")
 @tasks.task(name="lists.schedule", queue="lists", retry=3)
 async def schedule_shelves(timestamp: int) -> None:

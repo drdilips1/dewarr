@@ -21,6 +21,8 @@ async def test_ordinary_assets_round_trip_but_live_or_historical_contents_preven
     client, admin, database
 ):
     _, _, asset, _ = await setup(client)
+    async with database() as db:
+        original_revision = await db.scalar(text("SELECT version_num FROM alembic_version"))
     try:
         lowered = await migrate("downgrade", "0037_download_joins")
         assert lowered.returncode == 0, lowered.stderr
@@ -58,7 +60,7 @@ async def test_ordinary_assets_round_trip_but_live_or_historical_contents_preven
         async with database() as db:
             assert (
                 await db.scalar(text("SELECT version_num FROM alembic_version"))
-                == "0038_asset_containment"
+                == original_revision
             )
     finally:
         raised = await migrate("upgrade", "head")

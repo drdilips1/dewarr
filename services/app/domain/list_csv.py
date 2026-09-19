@@ -262,6 +262,9 @@ async def run(operation_id):
                 db.add(entry)
                 membership[work.id] = [entry]
                 added += 1
+                from app.domain.list_writeback import record_change
+
+                await record_change(db, owner, item.id, work.id, True)
             await db.flush()
         row.committed_at = datetime.now(UTC)
         row.receipt = {

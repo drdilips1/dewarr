@@ -344,6 +344,9 @@ async def edit_list(list_id: UUID, body: ListPatch, user: Member, db: Database):
 @router.delete("/{list_id}", status_code=204)
 async def remove_list(list_id: UUID, user: Member, db: Database):
     item = await visible_list(list_id, user, db, edit=True)
+    from app.domain.list_writeback import require_reconciled_before_detach
+
+    await require_reconciled_before_detach(db, list_id)
     await db.delete(item)
     await db.flush()
     await withdraw_list_reasons(db, user, list_id)
@@ -370,6 +373,9 @@ async def add_entry(list_id: UUID, body: EntryInput, user: Member, db: Database)
             select(func.max(ListEntry.position)).where(ListEntry.list_id == list_id)
         )
         db.add(ListEntry(list_id=list_id, work_id=work.id, position=(position or 0) + 1))
+        from app.domain.list_writeback import record_change
+
+        await record_change(db, user, list_id, work.id, True)
     await db.commit()
 
 
@@ -377,6 +383,14 @@ async def add_entry(list_id: UUID, body: EntryInput, user: Member, db: Database)
 async def remove_entry(list_id: UUID, work_id: UUID, user: Member, db: Database):
     await visible_list(list_id, user, db, edit=True)
     await graph_lock(db)
+    existed = await db.scalar(
+        select(ListEntry.id)
+        .where(
+            ListEntry.list_id == list_id,
+            ListEntry.work_id.in_(family_ids(work_id)),
+        )
+        .limit(1)
+    )
     for observation in await db.scalars(
         select(ListObservation)
         .join(ListSubscription)
@@ -392,6 +406,10 @@ async def remove_entry(list_id: UUID, work_id: UUID, user: Member, db: Database)
         )
     )
     await withdraw_list_reasons(db, user, list_id, work_id)
+    if existed:
+        from app.domain.list_writeback import record_change
+
+        await record_change(db, user, list_id, work_id, False)
     await db.commit()
 
 

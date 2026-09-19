@@ -2509,6 +2509,422 @@
         }
       }
     },
+    "/api/lists/{list_id}/writeback": {
+      "get": {
+        "tags": [
+          "list-writeback"
+        ],
+        "summary": "Detail",
+        "operationId": "detail_api_lists__list_id__writeback_get",
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "List Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WritebackPolicyView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "list-writeback"
+        ],
+        "summary": "Configure",
+        "operationId": "configure_api_lists__list_id__writeback_put",
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "List Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WritebackConfigureInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WritebackPolicyView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lists/{list_id}/writeback/preview": {
+      "post": {
+        "tags": [
+          "list-writeback"
+        ],
+        "summary": "Preview",
+        "operationId": "preview_api_lists__list_id__writeback_preview_post",
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "List Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WritebackPreviewInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WritebackPreviewView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lists/{list_id}/writeback/changes": {
+      "get": {
+        "tags": [
+          "list-writeback"
+        ],
+        "summary": "History",
+        "operationId": "history_api_lists__list_id__writeback_changes_get",
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "List Id"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WritebackIntentPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lists/{list_id}/writeback/changes/{operation_id}/reconcile": {
+      "post": {
+        "tags": [
+          "list-writeback"
+        ],
+        "summary": "Reconcile",
+        "operationId": "reconcile_api_lists__list_id__writeback_changes__operation_id__reconcile_post",
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "List Id"
+            }
+          },
+          {
+            "name": "operation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Operation Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WritebackIntentView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lists/{list_id}/writeback/changes/preview": {
+      "post": {
+        "tags": [
+          "list-writeback"
+        ],
+        "summary": "Preview",
+        "operationId": "preview_api_lists__list_id__writeback_changes_preview_post",
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "List Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WritebackChangePreviewInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WritebackChangePreviewView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lists/{list_id}/writeback/changes/resolve": {
+      "post": {
+        "tags": [
+          "list-writeback"
+        ],
+        "summary": "Resolve",
+        "operationId": "resolve_api_lists__list_id__writeback_changes_resolve_post",
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "List Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WritebackResolveInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WritebackResolutionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/lists/{list_id}/csv/preview": {
       "post": {
         "tags": [
@@ -21646,6 +22062,342 @@
           "availability"
         ],
         "title": "WorkView"
+      },
+      "WritebackChangePreviewInput": {
+        "properties": {
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "work_id"
+        ],
+        "title": "WritebackChangePreviewInput"
+      },
+      "WritebackChangePreviewView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "local_present": {
+            "type": "boolean",
+            "title": "Local Present"
+          },
+          "remote_present": {
+            "type": "boolean",
+            "title": "Remote Present"
+          },
+          "remote_memberships": {
+            "type": "integer",
+            "title": "Remote Memberships"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "work_id",
+          "title",
+          "local_present",
+          "remote_present",
+          "remote_memberships",
+          "expires_at"
+        ],
+        "title": "WritebackChangePreviewView"
+      },
+      "WritebackConfigureInput": {
+        "properties": {
+          "expected_generation": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Expected Generation",
+            "default": 0
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "preview_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preview Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "enabled"
+        ],
+        "title": "WritebackConfigureInput"
+      },
+      "WritebackIntentPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/WritebackIntentView"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "offset",
+          "limit"
+        ],
+        "title": "WritebackIntentPage"
+      },
+      "WritebackIntentView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "work_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Work Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "desired_present": {
+            "type": "boolean",
+            "title": "Desired Present"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "may_have_applied": {
+            "type": "boolean",
+            "title": "May Have Applied"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "work_id",
+          "title",
+          "desired_present",
+          "status",
+          "message",
+          "created_at",
+          "may_have_applied"
+        ],
+        "title": "WritebackIntentView"
+      },
+      "WritebackPolicyView": {
+        "properties": {
+          "generation": {
+            "type": "integer",
+            "title": "Generation"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "available": {
+            "type": "boolean",
+            "title": "Available"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "external_list_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External List Id"
+          },
+          "confirmed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confirmed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "generation",
+          "enabled",
+          "available",
+          "message"
+        ],
+        "title": "WritebackPolicyView"
+      },
+      "WritebackPreviewInput": {
+        "properties": {
+          "expected_generation": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Expected Generation",
+            "default": 0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "WritebackPreviewInput"
+      },
+      "WritebackPreviewView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "list_name": {
+            "type": "string",
+            "title": "List Name"
+          },
+          "external_list_id": {
+            "type": "integer",
+            "title": "External List Id"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "default": "Enable future local membership changes only; existing differences will not be sent"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "list_name",
+          "external_list_id",
+          "expires_at"
+        ],
+        "title": "WritebackPreviewView"
+      },
+      "WritebackResolutionView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "outbound_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Outbound Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "message"
+        ],
+        "title": "WritebackResolutionView"
+      },
+      "WritebackResolveInput": {
+        "properties": {
+          "preview_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Preview Id"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "apply_local",
+              "keep_remote"
+            ],
+            "title": "Action"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "preview_id",
+          "action"
+        ],
+        "title": "WritebackResolveInput"
       },
       "app__api__identity__RevisionInput": {
         "properties": {

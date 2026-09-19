@@ -743,6 +743,109 @@ export interface paths {
     patch: operations["change_observation_api_lists__list_id__subscription_observations__observation_id__patch"];
     trace?: never;
   };
+  "/api/lists/{list_id}/writeback": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Detail */
+    get: operations["detail_api_lists__list_id__writeback_get"];
+    /** Configure */
+    put: operations["configure_api_lists__list_id__writeback_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/writeback/preview": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Preview */
+    post: operations["preview_api_lists__list_id__writeback_preview_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/writeback/changes": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** History */
+    get: operations["history_api_lists__list_id__writeback_changes_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/writeback/changes/{operation_id}/reconcile": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Reconcile */
+    post: operations["reconcile_api_lists__list_id__writeback_changes__operation_id__reconcile_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/writeback/changes/preview": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Preview */
+    post: operations["preview_api_lists__list_id__writeback_changes_preview_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/writeback/changes/resolve": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Resolve */
+    post: operations["resolve_api_lists__list_id__writeback_changes_resolve_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/lists/{list_id}/csv/preview": {
     parameters: {
       query?: never;
@@ -7335,6 +7438,158 @@ export interface components {
       provisional: boolean;
       availability: components["schemas"]["Availability"];
     };
+    /** WritebackChangePreviewInput */
+    WritebackChangePreviewInput: {
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+    };
+    /** WritebackChangePreviewView */
+    WritebackChangePreviewView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /** Title */
+      title: string;
+      /** Local Present */
+      local_present: boolean;
+      /** Remote Present */
+      remote_present: boolean;
+      /** Remote Memberships */
+      remote_memberships: number;
+      /**
+       * Expires At
+       * Format: date-time
+       */
+      expires_at: string;
+    };
+    /** WritebackConfigureInput */
+    WritebackConfigureInput: {
+      /**
+       * Expected Generation
+       * @default 0
+       */
+      expected_generation: number;
+      /** Enabled */
+      enabled: boolean;
+      /** Preview Id */
+      preview_id?: string | null;
+    };
+    /** WritebackIntentPage */
+    WritebackIntentPage: {
+      /** Items */
+      items: components["schemas"]["WritebackIntentView"][];
+      /** Total */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+    };
+    /** WritebackIntentView */
+    WritebackIntentView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Work Id */
+      work_id: string | null;
+      /** Title */
+      title: string;
+      /** Desired Present */
+      desired_present: boolean;
+      /** Status */
+      status: string;
+      /** Message */
+      message: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /** May Have Applied */
+      may_have_applied: boolean;
+    };
+    /** WritebackPolicyView */
+    WritebackPolicyView: {
+      /** Generation */
+      generation: number;
+      /** Enabled */
+      enabled: boolean;
+      /** Available */
+      available: boolean;
+      /** Message */
+      message: string;
+      /** External List Id */
+      external_list_id?: number | null;
+      /** Confirmed At */
+      confirmed_at?: string | null;
+    };
+    /** WritebackPreviewInput */
+    WritebackPreviewInput: {
+      /**
+       * Expected Generation
+       * @default 0
+       */
+      expected_generation: number;
+    };
+    /** WritebackPreviewView */
+    WritebackPreviewView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** List Name */
+      list_name: string;
+      /** External List Id */
+      external_list_id: number;
+      /**
+       * Expires At
+       * Format: date-time
+       */
+      expires_at: string;
+      /**
+       * Message
+       * @default Enable future local membership changes only; existing differences will not be sent
+       */
+      message: string;
+    };
+    /** WritebackResolutionView */
+    WritebackResolutionView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Message */
+      message: string;
+      /** Outbound Id */
+      outbound_id?: string | null;
+    };
+    /** WritebackResolveInput */
+    WritebackResolveInput: {
+      /**
+       * Preview Id
+       * Format: uuid
+       */
+      preview_id: string;
+      /**
+       * Action
+       * @enum {string}
+       */
+      action: "apply_local" | "keep_remote";
+    };
     /** RevisionInput */
     app__api__identity__RevisionInput: {
       /** Expected Revision */
@@ -8949,6 +9204,251 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  detail_api_lists__list_id__writeback_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["WritebackPolicyView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  configure_api_lists__list_id__writeback_put: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["WritebackConfigureInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["WritebackPolicyView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  preview_api_lists__list_id__writeback_preview_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["WritebackPreviewInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["WritebackPreviewView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  history_api_lists__list_id__writeback_changes_get: {
+    parameters: {
+      query?: {
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["WritebackIntentPage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  reconcile_api_lists__list_id__writeback_changes__operation_id__reconcile_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        list_id: string;
+        operation_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["WritebackIntentView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  preview_api_lists__list_id__writeback_changes_preview_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["WritebackChangePreviewInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["WritebackChangePreviewView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  resolve_api_lists__list_id__writeback_changes_resolve_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["WritebackResolveInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["WritebackResolutionView"];
+        };
       };
       /** @description Validation Error */
       422: {

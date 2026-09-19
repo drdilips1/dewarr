@@ -229,6 +229,9 @@ async def detach(list_id: UUID, user: Member, db: Database):
     row = await subscription(db, user, list_id)
     if not row:
         return
+    from app.domain.list_writeback import require_reconciled_before_detach
+
+    await require_reconciled_before_detach(db, list_id)
     for entry in await db.scalars(select(ListEntry).where(ListEntry.list_id == list_id)):
         entry.locally_added = True
     if row.operation_id:

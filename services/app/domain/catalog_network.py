@@ -9,7 +9,7 @@ from email.utils import parsedate_to_datetime
 
 from sqlalchemy import delete, select
 
-from app.adapters.contracts import AdapterError, FailureKind
+from app.adapters.contracts import AdapterError, FailureKind, MutationError
 from app.adapters.http import JsonEndpoint
 from app.config import get_settings
 from app.db.models import ProviderBudget, ProviderCache
@@ -166,3 +166,43 @@ class CatalogGateway:
     async def invalidate(self):
         async with session_factory()() as db, db.begin():
             await db.execute(delete(ProviderCache).where(ProviderCache.key.in_(self.used_keys)))
+
+    async def mutate(self, document, variables):
+        """One uncached mutation attempt; callers persist intent before invoking it."""
+        if self.provider != "hardcover":
+            raise MutationError(
+                FailureKind.UNSUPPORTED,
+                "This catalog provider does not support list changes",
+                may_have_applied=False,
+            )
+        try:
+            await self.reserve()
+        except AdapterError as error:
+            raise MutationError(
+                error.kind,
+                str(error),
+                may_have_applied=False,
+                retry_after=error.retry_after,
+            ) from None
+        try:
+            response = await self.http.request(
+                "POST", "v1/graphql", json={"query": document, "variables": variables}
+            )
+        except AdapterError as error:
+            delay = retry_delay(self.http.response_headers, datetime.now(UTC))
+            if error.kind == FailureKind.RATE_LIMIT:
+                delay = max(delay, 60)
+            await self.cooldown(delay)
+            raise MutationError(
+                error.kind,
+                str(error),
+                may_have_applied=error.kind
+                not in {
+                    FailureKind.AUTHENTICATION,
+                    FailureKind.PERMISSION,
+                    FailureKind.RATE_LIMIT,
+                },
+                retry_after=max(error.retry_after or 0, math.ceil(delay)) or None,
+            ) from None
+        await self.cooldown(retry_delay(self.http.response_headers, datetime.now(UTC)))
+        return response

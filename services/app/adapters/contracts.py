@@ -27,6 +27,14 @@ class AdapterError(Exception):
         self.retry_after = retry_after
 
 
+class MutationError(AdapterError):
+    """Whether reconciliation is required before retrying an external write."""
+
+    def __init__(self, kind, message, *, may_have_applied, retry_after=None):
+        super().__init__(kind, message, retry_after=retry_after)
+        self.may_have_applied = may_have_applied
+
+
 class Capabilities(BaseModel):
     version: str | None = None
     operations: set[str] = Field(default_factory=set)

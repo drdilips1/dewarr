@@ -80,7 +80,7 @@ async def check_revision(db, list_id, expected):
         )
 
 
-async def curate(db, user, list_id, body, key):
+async def curate(db, user, list_id, body, key, *, suppress_writeback=False):
     _, user = await owner_context(db, user.id, list_id)
     await transaction_lock(db, f"operation:{user.id}:{key}")
     command = {"list_id": str(list_id), **body.model_dump(mode="json")}
@@ -114,6 +114,7 @@ async def curate(db, user, list_id, body, key):
         )
     ).all()
     existing = {root: entry for entry, root in rows}
+    changed_roots = set()
     changed = 0
     if body.action == "add":
         position = max((entry.position for entry, _ in rows), default=0)
@@ -123,6 +124,7 @@ async def curate(db, user, list_id, body, key):
                 continue
             position += 1
             db.add(ListEntry(list_id=list_id, work_id=root, position=position))
+            changed_roots.add(root)
             changed += 1
     else:
         origins = select(mapping.c.origin_id).where(mapping.c.work_id.in_(roots))
@@ -143,6 +145,12 @@ async def curate(db, user, list_id, body, key):
         for root in sorted(roots):
             await withdraw_list_reasons(db, user, list_id, root)
         changed = len(set(roots) & set(existing))
+        changed_roots = set(roots) & set(existing)
+    if not suppress_writeback:
+        from app.domain.list_writeback import record_change
+
+        for root in sorted(changed_roots):
+            await record_change(db, user, list_id, root, body.action == "add")
     receipt = {"action": body.action, "selected": len(roots), "changed": changed}
     operation = Operation(
         owner_id=user.id,

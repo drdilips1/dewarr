@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
+import ListWriteback from "./ListWriteback";
 
 type Subscription = components["schemas"]["SubscriptionView"];
 type Observation = components["schemas"]["ObservationView"];
@@ -211,6 +212,7 @@ export default function ListSubscription({ listId }: { listId: string }) {
           </button>
         </details>
       )}
+      {hardcover && data && <ListWriteback key={data.id} listId={listId} />}
     </section>
   );
 }

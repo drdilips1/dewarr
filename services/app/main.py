@@ -36,6 +36,8 @@ from app.api import (
     list_policies,
     list_requests,
     list_subscriptions,
+    list_writeback,
+    list_writeback_review,
     lists,
     metadata,
     operations,
@@ -121,6 +123,8 @@ def create_app() -> FastAPI:
     app.include_router(series_requests.router, prefix="/api")
     app.include_router(lists.router, prefix="/api")
     app.include_router(list_subscriptions.router, prefix="/api")
+    app.include_router(list_writeback.router, prefix="/api")
+    app.include_router(list_writeback_review.router, prefix="/api")
     app.include_router(list_csv.router, prefix="/api")
     app.include_router(list_requests.router, prefix="/api")
     app.include_router(list_policies.router, prefix="/api")
