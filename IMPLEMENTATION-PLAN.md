@@ -1042,3 +1042,8 @@ A completed planning package is not a completed application. Update implementati
 ### Reviewed inventory reconciliation increment
 
 [Reviewed ABS inventory recovery](docs/RECOVERY-INVENTORY.md) implements the backend-inventory part of Review and reconcile: complete current evidence, fresh verification, atomic local publication, missing/moved/inaccessible distinctions, unchanged grants and reused work/version/containment rules. Keep actual evidence in implementation status. Complete configuration/permission repair, publication children, untracked/conflicting effects, external lists, historical commands and controlled resume next. The bounded implementation does not close real-service/reference-load qualification, S09-02 or any remaining v1/expansion requirement.
+
+
+### Reviewed publication reconciliation increment
+
+[Reviewed publication recovery](docs/RECOVERY-PUBLICATION.md) implements the verified-published-child portion of Review and reconcile. It checks current journal ownership and frozen contents, records renames ahead of the restored ledger, and confirms exact ABS editions/recordings only when complete current backend and physical-file evidence agree. Selected children have explicit outcomes; unselected staged siblings remain untouched. Atomic batches, withdrawn-request holds and the persistent pause prevent a correction from becoming a replay. Keep exact test/build/runtime evidence in implementation status. Continue with staged/untracked/conflicting effects, configuration/permission repair, list/outbound rebaseline, historical-job resolution and controlled resume. All unaccepted S00–S10 obligations remain in scope.

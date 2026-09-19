@@ -36,7 +36,8 @@ from app.security import decrypt_secrets
 
 KIND = "recovery.reconcile"
 INVENTORY_KIND = "recovery.inventory"
-REVIEW_KINDS = (KIND, INVENTORY_KIND)
+PUBLICATION_KIND = "recovery.publication"
+REVIEW_KINDS = (KIND, INVENTORY_KIND, PUBLICATION_KIND)
 logger = logging.getLogger(__name__)
 
 
@@ -291,9 +292,14 @@ async def require_current_plan(db, operation):
     if payload["context_digest"] != scan.context_digest:
         raise HTTPException(409, "The reviewed observation context changed")
     for item in payload["items"]:
-        finding = await db.get(RecoveryFinding, UUID(item["finding_id"]))
-        if not finding or finding_signature(finding) != item["finding_digest"]:
-            raise HTTPException(409, "Observation evidence changed; create a fresh review")
+        for reference in [item, *item.get("additional_findings", [])]:
+            finding = await db.get(RecoveryFinding, UUID(reference["finding_id"]))
+            if (
+                not finding
+                or finding.scan_id != scan.id
+                or finding_signature(finding) != reference["finding_digest"]
+            ):
+                raise HTTPException(409, "Observation evidence changed; create a fresh review")
 
 
 async def accept(db, checkpoint, owner_id, identifier, revision, key, *, kind=KIND):

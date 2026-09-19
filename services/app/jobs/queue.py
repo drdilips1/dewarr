@@ -50,7 +50,8 @@ def recovery_queue() -> procrastinate.App:
     )
     queue.add_tasks_from(recovery_tasks, namespace="")
     if (
-        set(queue.tasks) != {"recovery.scan", "recovery.reconcile", "recovery.inventory"}
+        set(queue.tasks)
+        != {"recovery.scan", "recovery.reconcile", "recovery.inventory", "recovery.publication"}
         or queue.periodic_registry.periodic_tasks
     ):
         raise RuntimeError("Recovery worker registry contains an unauthorized task")

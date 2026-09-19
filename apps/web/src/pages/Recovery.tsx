@@ -8,6 +8,11 @@ import {
   PrepareInventoryReview,
   type InventoryReview,
 } from "./RecoveryInventory";
+import {
+  PublicationRecoveryReview,
+  PreparePublicationReview,
+  type PublicationReview,
+} from "./RecoveryPublication";
 type RecoveryReview = components["schemas"]["ReconciliationView"];
 
 export default function Recovery() {
@@ -80,6 +85,9 @@ export default function Recovery() {
               inventoryReview={
                 review.data.latest_inventory_reconciliation ?? undefined
               }
+              publicationReview={
+                review.data.latest_publication_reconciliation ?? undefined
+              }
               scanId={review.data.latest_scan?.id}
               state={review.data.latest_scan?.state}
             />
@@ -111,11 +119,13 @@ function RecoveryChecks({
   state,
   review,
   inventoryReview,
+  publicationReview,
 }: {
   scanId?: string;
   state?: string;
   review?: RecoveryReview;
   inventoryReview?: InventoryReview;
+  publicationReview?: PublicationReview;
 }) {
   const client = useQueryClient();
   const [key, setKey] = useState(() => crypto.randomUUID());
@@ -128,11 +138,16 @@ function RecoveryChecks({
   const inventoryBusy =
     inventoryReview?.status === "queued" ||
     inventoryReview?.status === "running";
-  const busy = transferBusy || inventoryBusy;
+  const publicationBusy =
+    publicationReview?.status === "queued" ||
+    publicationReview?.status === "running";
+  const busy = transferBusy || inventoryBusy || publicationBusy;
   const applied =
     (review?.scan_id === scanId && review?.status === "completed") ||
     (inventoryReview?.scan_id === scanId &&
-      inventoryReview?.status === "completed");
+      inventoryReview?.status === "completed") ||
+    (publicationReview?.scan_id === scanId &&
+      publicationReview?.status === "completed");
   const preview = useMutation({
     mutationFn: async () =>
       result(
@@ -283,6 +298,17 @@ function RecoveryChecks({
                       disabled={busy}
                     />
                   )}
+                {state === "completed" &&
+                  finding.state === "published" &&
+                  finding.domain === "files" &&
+                  !applied && (
+                    <PreparePublicationReview
+                      scanId={scanId!}
+                      findingId={finding.id}
+                      title={finding.title}
+                      disabled={busy}
+                    />
+                  )}
                 {finding.has_evidence && (
                   <FindingEvidence scanId={scanId!} findingId={finding.id} />
                 )}
@@ -331,7 +357,7 @@ function RecoveryChecks({
           key={review.id}
           review={review}
           currentScan={scanId}
-          otherBusy={inventoryBusy}
+          otherBusy={inventoryBusy || publicationBusy}
         />
       )}
       {inventoryReview && (
@@ -339,7 +365,15 @@ function RecoveryChecks({
           key={inventoryReview.id}
           review={inventoryReview}
           currentScan={scanId}
-          otherBusy={transferBusy}
+          otherBusy={transferBusy || publicationBusy}
+        />
+      )}
+      {publicationReview && (
+        <PublicationRecoveryReview
+          key={publicationReview.id}
+          review={publicationReview}
+          currentScan={scanId}
+          otherBusy={transferBusy || inventoryBusy}
         />
       )}
     </section>

@@ -188,3 +188,8 @@ List detail now defaults to 50 books and exposes count/matched/offset/limit; app
 
 
 [Reviewed inventory recovery](RECOVERY-INVENTORY.md) adds `recovery.inventory` to the isolated worker without a schema/dependency change. Fresh observation context includes catalog identities, grants and verified asset coverage. The worker re-reads the full reviewed ABS inventory before one atomic publication, leaves existing grants unchanged and fences prior inventory leases. Deploy matching API/worker/frontend after backup; recovery still has no supported resume command.
+
+
+### Reviewed publications during restore
+
+[Publication recovery](RECOVERY-PUBLICATION.md) adds `recovery.publication` to the isolated recovery registry and three operator review routes. It records already published children and exact-version ABS confirmation without file or remote mutations. Deploy matching API, worker and generated client on schema 0042; no migration or runtime dependency is added. Run fresh observations after deployment because frozen import and capacity context is now included. Controlled resume and remaining S09 qualification stay open; development dispatch stays disabled.

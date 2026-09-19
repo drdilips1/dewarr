@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 test("restored-state operator review replaces navigation and blocks catalog access", async ({
   page,
 }) => {
-  test.setTimeout(90_000);
+  test.setTimeout(120_000);
   const root = fileURLToPath(new URL("../../../", import.meta.url));
   const fixture = (mode: string) =>
     execFileSync("uv", ["run", "python", "scripts/e2e_recovery.py", mode], {
@@ -70,7 +70,7 @@ test("restored-state operator review replaces navigation and blocks catalog acce
         exact: true,
       }),
     ).toBeVisible();
-    const evidence = root + "/.local/evidence/recovery-inventory-ui";
+    const evidence = root + "/.local/evidence/recovery-publication-ui";
     mkdirSync(evidence, { recursive: true });
     await page.screenshot({ path: evidence + "/review.png", fullPage: true });
     await page
@@ -131,6 +131,51 @@ test("restored-state operator review replaces navigation and blocks catalog acce
       await page.request.get("http://127.0.0.1:13379/fixture/recovery-stats")
     ).json();
     expect(inventoryAfter).toEqual(before);
+    const inventoryScan = (
+      await (await page.request.get("/api/recovery")).json()
+    ).latest_scan.id;
+    await page
+      .getByRole("button", { name: "Run read-only checks", exact: true })
+      .click();
+    await expect
+      .poll(
+        async () =>
+          (await (await page.request.get("/api/recovery")).json()).latest_scan
+            .id,
+      )
+      .not.toBe(inventoryScan);
+    await expect(
+      page.getByRole("status").filter({ hasText: "Observation finished" }),
+    ).toBeVisible({ timeout: 60_000 });
+    await page.getByLabel("Filter observations").selectOption("files");
+    await page
+      .getByRole("button", { name: /^Review publication for/ })
+      .first()
+      .click();
+    await expect(
+      page.getByRole("heading", {
+        name: "Review published books",
+        exact: true,
+      }),
+    ).toBeFocused();
+    await page.screenshot({
+      path: evidence + "/publication-review.png",
+      fullPage: true,
+    });
+    await page
+      .getByRole("button", { name: "Record published books", exact: true })
+      .click();
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: "Selected publications recorded" }),
+    ).toBeVisible({ timeout: 30_000 });
+    expect((await page.request.get("/api/lists")).status()).toBe(423);
+    const publicationAfter = await (
+      await page.request.get("http://127.0.0.1:13379/fixture/recovery-stats")
+    ).json();
+    expect(publicationAfter).toEqual(before);
+
     await page.screenshot({ path: evidence + "/desktop.png", fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/lists");
@@ -149,6 +194,11 @@ test("restored-state operator review replaces navigation and blocks catalog acce
       page
         .getByRole("status")
         .filter({ hasText: "Current inventory recorded" }),
+    ).toBeVisible();
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: "Selected publications recorded" }),
     ).toBeVisible();
     await page.getByLabel("Filter observations").selectOption("files");
     await expect(

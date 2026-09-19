@@ -328,6 +328,57 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/recovery/publication-reconciliations": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Prepare Publication Reconciliation */
+    post: operations["prepare_publication_reconciliation_api_recovery_publication_reconciliations_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/recovery/publication-reconciliations/{identifier}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Publication Reconciliation */
+    get: operations["get_publication_reconciliation_api_recovery_publication_reconciliations__identifier__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/recovery/publication-reconciliations/{identifier}/accept": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Accept Publication Reconciliation */
+    post: operations["accept_publication_reconciliation_api_recovery_publication_reconciliations__identifier__accept_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/activity": {
     parameters: {
       query?: never;
@@ -6422,6 +6473,68 @@ export interface components {
        */
       limit: number;
     };
+    /** PublicationReconciliationItemView */
+    PublicationReconciliationItemView: {
+      /**
+       * Finding Id
+       * Format: uuid
+       */
+      finding_id: string;
+      /**
+       * Entry Id
+       * Format: uuid
+       */
+      entry_id: string;
+      /** Title */
+      title: string;
+      /** Medium */
+      medium: string;
+      /** Folder */
+      folder: string;
+      /** Saved State */
+      saved_state: string;
+      /** Outcome */
+      outcome: string;
+      /** Reason */
+      reason: string;
+    };
+    /** PublicationReconciliationView */
+    PublicationReconciliationView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Scan Id
+       * Format: uuid
+       */
+      scan_id: string;
+      /** Status */
+      status: string;
+      /** Message */
+      message: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /** Revision */
+      revision: string;
+      /**
+       * Expires At
+       * Format: date-time
+       */
+      expires_at: string;
+      /** Items */
+      items: components["schemas"]["PublicationReconciliationItemView"][];
+      /** Applied At */
+      applied_at: string | null;
+      /** Results */
+      results: {
+        [key: string]: unknown;
+      }[];
+    };
     /** RankedReleaseView */
     RankedReleaseView: {
       /**
@@ -6561,6 +6674,8 @@ export interface components {
       latest_scan?: components["schemas"]["ScanView"] | null;
       latest_reconciliation?:
         components["schemas"]["ReconciliationView"] | null;
+      latest_publication_reconciliation?:
+        components["schemas"]["PublicationReconciliationView"] | null;
       latest_inventory_reconciliation?:
         components["schemas"]["InventoryReconciliationView"] | null;
     };
@@ -8701,6 +8816,109 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["InventoryReconciliationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  prepare_publication_reconciliation_api_recovery_publication_reconciliations_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReconciliationRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PublicationReconciliationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_publication_reconciliation_api_recovery_publication_reconciliations__identifier__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        identifier: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PublicationReconciliationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  accept_publication_reconciliation_api_recovery_publication_reconciliations__identifier__accept_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        identifier: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReconciliationAcceptance"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PublicationReconciliationView"];
         };
       };
       /** @description Validation Error */

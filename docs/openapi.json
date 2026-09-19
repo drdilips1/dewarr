@@ -816,6 +816,167 @@
         }
       }
     },
+    "/api/recovery/publication-reconciliations": {
+      "post": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Prepare Publication Reconciliation",
+        "operationId": "prepare_publication_reconciliation_api_recovery_publication_reconciliations_post",
+        "parameters": [
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReconciliationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicationReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recovery/publication-reconciliations/{identifier}": {
+      "get": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Get Publication Reconciliation",
+        "operationId": "get_publication_reconciliation_api_recovery_publication_reconciliations__identifier__get",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Identifier"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicationReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recovery/publication-reconciliations/{identifier}/accept": {
+      "post": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Accept Publication Reconciliation",
+        "operationId": "accept_publication_reconciliation_api_recovery_publication_reconciliations__identifier__accept_post",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Identifier"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReconciliationAcceptance"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicationReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/activity": {
       "get": {
         "tags": [
@@ -19307,6 +19468,133 @@
         ],
         "title": "ProwlarrSearch"
       },
+      "PublicationReconciliationItemView": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Finding Id"
+          },
+          "entry_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Entry Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "medium": {
+            "type": "string",
+            "title": "Medium"
+          },
+          "folder": {
+            "type": "string",
+            "title": "Folder"
+          },
+          "saved_state": {
+            "type": "string",
+            "title": "Saved State"
+          },
+          "outcome": {
+            "type": "string",
+            "title": "Outcome"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "finding_id",
+          "entry_id",
+          "title",
+          "medium",
+          "folder",
+          "saved_state",
+          "outcome",
+          "reason"
+        ],
+        "title": "PublicationReconciliationItemView"
+      },
+      "PublicationReconciliationView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "scan_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Scan Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PublicationReconciliationItemView"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "applied_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Applied At"
+          },
+          "results": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "scan_id",
+          "status",
+          "message",
+          "created_at",
+          "revision",
+          "expires_at",
+          "items",
+          "applied_at",
+          "results"
+        ],
+        "title": "PublicationReconciliationView"
+      },
       "RankedReleaseView": {
         "properties": {
           "id": {
@@ -19642,6 +19930,16 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ReconciliationView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "latest_publication_reconciliation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PublicationReconciliationView"
               },
               {
                 "type": "null"

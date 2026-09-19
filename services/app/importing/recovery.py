@@ -23,12 +23,14 @@ from app.state_bundle import journal_name
 MAX_JOURNAL_BYTES = 256 * 1024 * 1024
 
 
-def observe_entry(entry, roots):
+def read_publication(entry, roots):
+    """Return verified evidence and its original receipt without modifying either."""
     if not entry["specification"]:
         return (
             "unobserved",
             "No frozen publication specification exists",
             {"saved_state": entry["state"]},
+            None,
         )
     spec = PublicationSpec.model_validate(entry["specification"])
     if (
@@ -72,8 +74,13 @@ def observe_entry(entry, roots):
                         "conflict",
                         "Destination exists without matching publication ownership evidence",
                         evidence,
+                        receipt,
                     )
+                files = publication_identities(folder, spec)
                 verify_item(folder, spec, deadline)
+                if files != publication_identities(folder, spec):
+                    raise ScanHeld("Published media or metadata changed during observation")
+                evidence["media_identities"] = {file.name: files[file.name] for file in spec.files}
                 if before != identity(os.fstat(folder)):
                     raise ScanHeld("Published directory changed during observation")
                 evidence["destination_identity"] = object_id(folder)
@@ -126,7 +133,28 @@ def observe_entry(entry, roots):
                 current_staging
             ) != object_id(staging):
                 raise ScanHeld("Publication roots changed during observation")
-        return state, message, evidence
+            if state == "published":
+                # An unchanged open child can outlive a renamed/replaced ancestor.
+                # Rewalk its current name, not just the root and held descriptors.
+                with beneath(current_destination, spec.folder, folder=True) as current_folder:
+                    if (
+                        identity(os.fstat(current_folder)) != before
+                        or publication_identities(current_folder, spec) != files
+                    ):
+                        raise ScanHeld("Published path changed during observation")
+        return state, message, evidence, receipt
+
+
+def publication_identities(folder, spec):
+    result = {}
+    for name in {file.name for file in spec.files} | set(spec.sidecars) | set(spec.binary_sidecars):
+        with beneath(folder, name) as media:
+            result[name] = identity(os.fstat(media))
+    return result
+
+
+def observe_entry(entry, roots):
+    return read_publication(entry, roots)[:3]
 
 
 def journal_census(path):

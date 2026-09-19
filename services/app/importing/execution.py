@@ -350,6 +350,106 @@ async def finish_state(entry_id, token, state, message, *, receipt=None):
         operation.message = message
 
 
+async def confirm_observation(db, current, integration, library, item, observed_cover, actor_id):
+    """Record an already verified item within the caller's transaction.
+
+    Callers must verify current identity, route, collection, physical files and ABS
+    evidence before entering this helper. It neither publishes nor queues work.
+    """
+    spec = PublicationSpec.model_validate(current.specification)
+    version = await db.get(Version, current.version_id)
+    namespace = f"abs:{integration.id}"
+    link = await db.scalar(
+        select(ProviderObject)
+        .where(
+            ProviderObject.provider == namespace,
+            ProviderObject.kind == f"item:{version.medium}",
+            ProviderObject.external_id == item.id,
+        )
+        .with_for_update()
+    )
+    if link and link.manual_lock and link.version_id != version.id:
+        raise PublicationError("A manual library match conflicts with this imported version")
+    if not link:
+        link = ProviderObject(
+            provider=namespace, kind=f"item:{version.medium}", external_id=item.id
+        )
+        db.add(link)
+    link.work_id, link.version_id, link.manual_lock, link.match_status = (
+        version.work_id,
+        version.id,
+        True,
+        "matched",
+    )
+    link.snapshot = item.model_dump(mode="json")
+    await db.flush()
+    await apply_item(db, library, item, library.generation, integration.id, {item.id})
+    await db.flush()
+    asset = await db.scalar(
+        select(LibraryAsset).where(
+            LibraryAsset.library_id == library.id,
+            LibraryAsset.external_id == item.id,
+            LibraryAsset.medium == version.medium,
+        )
+    )
+    if not asset or not asset.full_content or asset.version_id != version.id:
+        raise PublicationError("ABS observation did not produce the intended full library asset")
+    if version.medium == "ebook":
+        # A reviewed ebook group may contain several complete formats.
+        # The exact file set was checked by matches; ABS exposes only
+        # one of those as its primary ebookFile.
+        selected_paths = set(
+            current.expected_metadata.get("ebook_media_paths") or [file.path for file in item.ebook]
+        )
+        asset.files = [
+            {**file.model_dump(), "import_verified": True}
+            for file in item.library_files
+            if file.path in selected_paths and file.format in EBOOK
+        ]
+    current.asset_id, current.confirmed_at = asset.id, datetime.now(UTC)
+    contents = current.expected_metadata.get("collection_contents", [])
+    if contents:
+        from app.domain.containment import review as accept_contents
+        from app.domain.corrections import asset_state, revision
+
+        try:
+            await accept_contents(
+                db,
+                actor_id,
+                asset.id,
+                [UUID(book["work_id"]) for book in contents],
+                revision(await asset_state(db, asset, link)),
+                physical_version=version,
+            )
+        except HTTPException as error:
+            raise PublicationError(str(error.detail)) from error
+    if current.cover_export and current.cover_export["state"] == "prepared":
+        selected = item.cover_path == str(
+            PurePosixPath(current.configuration["destination"]["backend_path"])
+            / spec.folder
+            / "cover.jpg"
+        )
+        unchanged = observed_cover == current.cover_export["sha256"]
+        current.cover_export = {
+            **current.cover_export,
+            "backend_selected": selected,
+            "unchanged": unchanged,
+            "message": "Selected cover detected in Audiobookshelf"
+            if selected and unchanged
+            else (
+                "Artwork changed or ABS selected another cover; "
+                "the initial export will not overwrite it"
+            ),
+        }
+    current.state, current.message, current.run_token, current.next_check_at = (
+        "confirmed",
+        "Available in Audiobookshelf",
+        None,
+        None,
+    )
+    return version, contents, asset
+
+
 async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda _: None):
     client_factory = client_factory or Audiobookshelf
     token = uuid4()
@@ -455,100 +555,8 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
             async with session_factory()() as db, db.begin():
                 current = await db.get(ImportEntry, entry_id)
                 _, _, integration, library = await context(db, current, token, lock=True)
-                version = await db.get(Version, current.version_id)
-                namespace = f"abs:{integration.id}"
-                link = await db.scalar(
-                    select(ProviderObject)
-                    .where(
-                        ProviderObject.provider == namespace,
-                        ProviderObject.kind == f"item:{version.medium}",
-                        ProviderObject.external_id == item.id,
-                    )
-                    .with_for_update()
-                )
-                if link and link.manual_lock and link.version_id != version.id:
-                    raise PublicationError(
-                        "A manual library match conflicts with this imported version"
-                    )
-                if not link:
-                    link = ProviderObject(
-                        provider=namespace, kind=f"item:{version.medium}", external_id=item.id
-                    )
-                    db.add(link)
-                link.work_id, link.version_id, link.manual_lock, link.match_status = (
-                    version.work_id,
-                    version.id,
-                    True,
-                    "matched",
-                )
-                link.snapshot = item.model_dump(mode="json")
-                await db.flush()
-                await apply_item(db, library, item, library.generation, integration.id, {item.id})
-                await db.flush()
-                asset = await db.scalar(
-                    select(LibraryAsset).where(
-                        LibraryAsset.library_id == library.id,
-                        LibraryAsset.external_id == item.id,
-                        LibraryAsset.medium == version.medium,
-                    )
-                )
-                if not asset or not asset.full_content or asset.version_id != version.id:
-                    raise PublicationError(
-                        "ABS observation did not produce the intended full library asset"
-                    )
-                if version.medium == "ebook":
-                    # A reviewed ebook group may contain several complete formats.
-                    # The exact file set was checked by matches; ABS exposes only
-                    # one of those as its primary ebookFile.
-                    selected_paths = set(
-                        current.expected_metadata.get("ebook_media_paths")
-                        or [file.path for file in item.ebook]
-                    )
-                    asset.files = [
-                        {**file.model_dump(), "import_verified": True}
-                        for file in item.library_files
-                        if file.path in selected_paths and file.format in EBOOK
-                    ]
-                current.asset_id, current.confirmed_at = asset.id, datetime.now(UTC)
-                contents = current.expected_metadata.get("collection_contents", [])
-                if contents:
-                    from app.domain.containment import review as accept_contents
-                    from app.domain.corrections import asset_state, revision
-
-                    try:
-                        await accept_contents(
-                            db,
-                            operation.owner_id,
-                            asset.id,
-                            [UUID(book["work_id"]) for book in contents],
-                            revision(await asset_state(db, asset, link)),
-                            physical_version=version,
-                        )
-                    except HTTPException as error:
-                        raise PublicationError(str(error.detail)) from error
-                if current.cover_export and current.cover_export["state"] == "prepared":
-                    selected = item.cover_path == str(
-                        PurePosixPath(current.configuration["destination"]["backend_path"])
-                        / spec.folder
-                        / "cover.jpg"
-                    )
-                    unchanged = observed_cover == current.cover_export["sha256"]
-                    current.cover_export = {
-                        **current.cover_export,
-                        "backend_selected": selected,
-                        "unchanged": unchanged,
-                        "message": "Selected cover detected in Audiobookshelf"
-                        if selected and unchanged
-                        else (
-                            "Artwork changed or ABS selected another cover; "
-                            "the initial export will not overwrite it"
-                        ),
-                    }
-                current.state, current.message, current.run_token, current.next_check_at = (
-                    "confirmed",
-                    "Available in Audiobookshelf",
-                    None,
-                    None,
+                version, contents, asset = await confirm_observation(
+                    db, current, integration, library, item, observed_cover, operation.owner_id
                 )
                 stored_operation = await db.get(Operation, operation_id)
                 stored_operation.status, stored_operation.message = "completed", current.message

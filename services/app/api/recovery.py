@@ -22,6 +22,7 @@ class RecoveryView(BaseModel):
     resume_available: bool = False
     latest_scan: "ScanView | None" = None
     latest_reconciliation: "ReconciliationView | None" = None
+    latest_publication_reconciliation: "PublicationReconciliationView | None" = None
     latest_inventory_reconciliation: "InventoryReconciliationView | None" = None
 
 
@@ -87,7 +88,24 @@ async def review(admin: Admin, db: Database):
         if checkpoint
         else None
     )
+    publication_review = (
+        await db.scalar(
+            select(Operation)
+            .where(
+                Operation.kind == "recovery.publication",
+                Operation.payload["checkpoint_id"].astext == str(checkpoint.id),
+                Operation.owner_id == admin.id,
+            )
+            .order_by(Operation.created_at.desc(), Operation.id.desc())
+            .limit(1)
+        )
+        if checkpoint
+        else None
+    )
     return RecoveryView(
+        latest_publication_reconciliation=publication_reconciliation_view(publication_review)
+        if publication_review
+        else None,
         latest_inventory_reconciliation=inventory_reconciliation_view(inventory_review)
         if inventory_review
         else None,
@@ -429,3 +447,100 @@ async def accept_inventory_reconciliation(
     )
     await db.commit()
     return inventory_reconciliation_view(operation)
+
+
+class PublicationReconciliationItemView(BaseModel):
+    finding_id: UUID
+    entry_id: UUID
+    title: str
+    medium: str
+    folder: str
+    saved_state: str
+    outcome: str
+    reason: str
+
+
+class PublicationReconciliationView(ReconciliationView):
+    items: list[PublicationReconciliationItemView]
+
+
+def publication_reconciliation_view(operation):
+    return PublicationReconciliationView(
+        id=operation.id,
+        scan_id=operation.payload["command"]["scan_id"],
+        status=operation.status,
+        message=operation.message,
+        created_at=operation.created_at,
+        revision=operation.payload["revision"],
+        expires_at=operation.payload["expires_at"],
+        items=[PublicationReconciliationItemView(**item) for item in operation.payload["items"]],
+        applied_at=operation.payload.get("applied_at"),
+        results=operation.payload.get("results", []),
+    )
+
+
+@router.post(
+    "/publication-reconciliations", response_model=PublicationReconciliationView, status_code=201
+)
+async def prepare_publication_reconciliation(
+    body: ReconciliationRequest,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_publication import prepare
+
+    operation = await prepare(
+        db,
+        await checkpoint_for(db, admin),
+        admin.id,
+        body.scan_id,
+        body.finding_ids,
+        idempotency_key,
+    )
+    await db.commit()
+    return publication_reconciliation_view(operation)
+
+
+@router.get(
+    "/publication-reconciliations/{identifier}", response_model=PublicationReconciliationView
+)
+async def get_publication_reconciliation(identifier: UUID, admin: Admin, db: Database):
+    from app.domain.recovery_reconciliation import PUBLICATION_KIND, load
+
+    return publication_reconciliation_view(
+        await load(
+            db,
+            identifier,
+            await checkpoint_for(db, admin),
+            admin.id,
+            kind=PUBLICATION_KIND,
+        )
+    )
+
+
+@router.post(
+    "/publication-reconciliations/{identifier}/accept",
+    response_model=PublicationReconciliationView,
+    status_code=202,
+)
+async def accept_publication_reconciliation(
+    identifier: UUID,
+    body: ReconciliationAcceptance,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_reconciliation import PUBLICATION_KIND, accept
+
+    operation = await accept(
+        db,
+        await checkpoint_for(db, admin),
+        admin.id,
+        identifier,
+        body.revision,
+        idempotency_key,
+        kind=PUBLICATION_KIND,
+    )
+    await db.commit()
+    return publication_reconciliation_view(operation)

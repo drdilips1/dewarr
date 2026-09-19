@@ -2,7 +2,7 @@
 
 Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md), then use these development deliverables:
 
-The latest recovery increment adds [read-only external observations](docs/RECOVERY-OBSERVATIONS.md) to the [versioned backup and paused restore review](docs/RECOVERY.md). A restricted worker reports current transfers, library contents, lists and publication evidence while automation stays paused. [Reviewed matching-transfer recovery](docs/RECOVERY-RECONCILIATION.md) now records freshly verified associations without dispatching or importing. [Reviewed inventory recovery](docs/RECOVERY-INVENTORY.md) now refreshes current ABS evidence while preserving grants and holding missing media. Other reconciliation, controlled resume and full release qualification remain open.
+The latest recovery increment adds [read-only external observations](docs/RECOVERY-OBSERVATIONS.md) to the [versioned backup and paused restore review](docs/RECOVERY.md). A restricted worker reports current transfers, library contents, lists and publication evidence while automation stays paused. [Reviewed matching-transfer recovery](docs/RECOVERY-RECONCILIATION.md) now records freshly verified associations without dispatching or importing. [Reviewed inventory recovery](docs/RECOVERY-INVENTORY.md) now refreshes current ABS evidence while preserving grants and holding missing media. [Reviewed publication recovery](docs/RECOVERY-PUBLICATION.md) now records existing published children and confirms exact ABS versions when fresh evidence agrees, without changing files or resuming automation. Other reconciliation, controlled resume and full release qualification remain open.
 
 | Deliverable | Purpose |
 |---|---|

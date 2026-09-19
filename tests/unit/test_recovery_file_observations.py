@@ -1,11 +1,12 @@
 # ruff: noqa: F811
 import json
+import shutil
 from uuid import uuid4
 
 import pytest
 
 from app.importing.publication import publish_item
-from app.importing.recovery import journal_census, observe_entry
+from app.importing.recovery import journal_census, observe_entry, read_publication
 from tests.unit.test_import_publication import specification  # noqa: F401
 
 
@@ -100,3 +101,72 @@ def test_journal_census_stops_at_total_byte_and_time_budgets(specification, monk
     with pytest.raises(RuntimeError, match="deadline"):
         journal_census(spec.staging_root)
     assert receipts == {p: p.read_bytes() for p in receipts}
+
+
+def test_recovery_returns_original_receipt_and_current_media_identity(specification):
+    spec = specification
+    publish_item(spec)
+    state, _, evidence, receipt = read_publication(*inputs(spec))
+    assert state == "published"
+    assert receipt == json.loads((spec.staging_root / f"{spec.entry_id}.json").read_bytes())
+    for file in spec.files:
+        current = (spec.destination_root / spec.folder / file.name).stat()
+        assert evidence["media_identities"][file.name]["inode"] == current.st_ino
+        assert evidence["media_identities"][file.name]["mtime_ns"] == current.st_mtime_ns
+
+
+def test_media_replacement_during_hash_verification_is_rejected(specification, monkeypatch):
+    from app.importing import recovery
+
+    spec = specification
+    publish_item(spec)
+    original = recovery.verify_item
+
+    def replace_after_hash(*args):
+        original(*args)
+        target = spec.destination_root / spec.folder / spec.files[0].name
+        contents = target.read_bytes()
+        target.unlink()
+        target.write_bytes(contents)
+
+    monkeypatch.setattr(recovery, "verify_item", replace_after_hash)
+    with pytest.raises(RuntimeError, match="media or metadata changed"):
+        observe_entry(*inputs(spec))
+
+
+def test_ancestor_replacement_cannot_leave_proof_for_an_unreachable_folder(
+    specification, monkeypatch, tmp_path
+):
+    from app.importing import recovery
+
+    spec = specification
+    publish_item(spec)
+    original = recovery.verify_item
+    old_parent = tmp_path / "relocated-author"
+    parent = (spec.destination_root / spec.folder).parent
+
+    def replace_ancestor(*args):
+        original(*args)
+        # The open book directory itself is unchanged when its parent moves.
+        parent.rename(old_parent)
+        shutil.copytree(old_parent, parent)
+
+    monkeypatch.setattr(recovery, "verify_item", replace_ancestor)
+    with pytest.raises(RuntimeError, match="Published path changed"):
+        observe_entry(*inputs(spec))
+
+
+def test_sidecar_edit_after_hashing_is_not_accepted(specification, monkeypatch):
+    from app.importing import recovery
+
+    spec = specification
+    publish_item(spec)
+    original = recovery.verify_item
+
+    def edit_after_hash(*args):
+        original(*args)
+        (spec.destination_root / spec.folder / "metadata.opf").write_text("<changed/>")
+
+    monkeypatch.setattr(recovery, "verify_item", edit_after_hash)
+    with pytest.raises(RuntimeError, match="media or metadata changed"):
+        observe_entry(*inputs(spec))

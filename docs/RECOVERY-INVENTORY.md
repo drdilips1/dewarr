@@ -10,7 +10,7 @@ This implements the Audiobookshelf inventory portion of S09-02 / FR-36 / AT-25. 
 4. Choose **Record current inventory**. The worker re-reads complete current membership, expanded items and permissions, then updates the selected backends atomically. Changed remote evidence or local context holds the action without publishing a partial inventory.
 5. Read the saved outcome. Run fresh observations before preparing another recovery action, since the restored context has changed. Results survive reload and backup.
 
-The shared review engine enforces current designated-operator access, CSRF, exact idempotent commands, a revision-bound preview, 15-minute observation freshness, expiring worker leases and a final token/context check. Transfer and inventory recovery actions exclude one another while queued/running; a new observation cannot race an accepted action. Completed retries do not repeat network reads or writes. Expected upstream failures are summarized; unexpected logs contain only operation ID and error class.
+The shared review engine enforces current designated-operator access, CSRF, exact idempotent commands, a revision-bound preview, 15-minute observation freshness, expiring worker leases and a final token/context check. Transfer, inventory and [publication recovery](RECOVERY-PUBLICATION.md) actions exclude one another while queued/running; a new observation cannot race an accepted action. Completed retries do not repeat network reads or writes. Expected upstream failures are summarized; unexpected logs contain only operation ID and error class.
 
 ## Inventory rules
 
@@ -32,7 +32,7 @@ A completed `InventoryRun` and audit record identify the recovery review and obs
 
 ## Boundaries and deployment
 
-The restricted worker registers exactly `recovery.scan`, `recovery.reconcile` and `recovery.inventory`. It has no ordinary or periodic task and no built-in history cleanup. Use `python -m app.jobs.worker --recovery` only with a restored checkpoint. Normal installations use the ordinary worker.
+The restricted worker registers exactly `recovery.scan`, `recovery.reconcile`, `recovery.inventory` and `recovery.publication`. It has no ordinary or periodic task and no built-in history cleanup. Use `python -m app.jobs.worker --recovery` only with a restored checkpoint. Normal installations use the ordinary worker.
 
 New APIs:
 
