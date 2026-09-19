@@ -1,3 +1,5 @@
+import Order from "./PreferenceOrder";
+import SourcePriorities from "./SourcePriorities";
 import ScopeFields from "./ScopeFields";
 import RouteFields, { EffectiveRoutes } from "./RouteFields";
 import NarratorNamesField from "./NarratorNamesField";
@@ -45,70 +47,6 @@ const formats = [
   "ogg",
   "opus",
 ];
-
-function Order({
-  label,
-  values,
-  onChange,
-  valid = () => true,
-}: {
-  label: string;
-  values: string[];
-  onChange: (values: string[]) => void;
-  valid?: (values: string[]) => boolean;
-}) {
-  const moved = (index: number, step: number) => {
-    const next = [...values];
-    [next[index], next[index + step]] = [next[index + step], next[index]];
-    return next;
-  };
-  return (
-    <fieldset>
-      <legend>{label}</legend>
-      <ol className="preference-order">
-        {values.map((value, index) => (
-          <li key={value}>
-            <span>{value}</span>
-            <div>
-              <button
-                type="button"
-                aria-label={`Move ${value} up in ${label}`}
-                disabled={index === 0 || !valid(moved(index, -1))}
-                onClick={() => {
-                  const next = [...values];
-                  [next[index - 1], next[index]] = [
-                    next[index],
-                    next[index - 1],
-                  ];
-                  onChange(next);
-                }}
-              >
-                ↑
-              </button>
-              <button
-                type="button"
-                aria-label={`Move ${value} down in ${label}`}
-                disabled={
-                  index === values.length - 1 || !valid(moved(index, 1))
-                }
-                onClick={() => {
-                  const next = [...values];
-                  [next[index + 1], next[index]] = [
-                    next[index],
-                    next[index + 1],
-                  ];
-                  onChange(next);
-                }}
-              >
-                ↓
-              </button>
-            </div>
-          </li>
-        ))}
-      </ol>
-    </fieldset>
-  );
-}
 
 export default function PreferenceFields({
   overrides,
@@ -322,20 +260,11 @@ export default function PreferenceFields({
           </>
         )}
       </details>
-      {order("source_order")}
-      {!effective.source_order?.includes("audiobookbay") && (
-        <button
-          type="button"
-          onClick={() =>
-            onChange({
-              ...overrides,
-              source_order: [...(effective.source_order || []), "audiobookbay"],
-            })
-          }
-        >
-          Add AudiobookBay to source preference
-        </button>
-      )}
+      <SourcePriorities
+        values={effective.source_order || []}
+        onChange={(source_order) => onChange({ ...overrides, source_order })}
+      />
+      {origin("source_order")}
       <details>
         <summary>Unknown seed counts</summary>
         <label className="check-label">

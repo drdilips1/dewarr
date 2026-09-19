@@ -1440,6 +1440,11 @@ img.detail-cover {
 .preference-order li > div {
   display: flex;
   gap: 6px;
+  flex-shrink: 0;
+}
+.preference-order li > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .preference-order button {
   padding: 4px 12px;

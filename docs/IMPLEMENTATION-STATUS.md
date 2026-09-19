@@ -1,6 +1,6 @@
 # Implementation status and evidence
 
-Latest checkpoint: [Source connection recovery](RECOVERY-SOURCES.md) adds reviewed MAM/session/proxy, Prowlarr and AudiobookBay settings with separate durable verification. Metadata-account repair, actual file-route qualification, unresolved effects/reservations, fresh wanted-work activation, controlled resume and full stage qualification remain open.
+Latest checkpoint: [Individual indexer priorities](DOWNLOAD-PREFERENCES.md) exposes named Prowlarr indexers in the shared preference editor, with explicit loading, saved ordering and outage handling. The [internal alpha guide](INTERNAL-ALPHA.md) defines the first real-library testing session and remaining work. Live integration qualification, broader version/collection coverage, unfinished recovery, release gates and S10 remain open.
 
 Updated September 19, 2026. Objective remains **implement the full PRD end to end**, including the planned later capabilities. This is an implementation checkpoint, not a completion declaration.
 
@@ -1138,3 +1138,19 @@ Verification:
 Deployment: the identified native API/worker stopped gracefully with no active development jobs or restore. A private backup using committed `be840df` was verified, and matching updated services restarted. Readiness/preferences return **200**, anonymous profile access returns **401**, live OpenAPI matches the generated contract, and one worker is fresh (`source-popularity-runtime.json`). Schema remains 0044 and dispatch remains disabled; zero active development users remain.
 
 Broader source metrics, default-profile evolution, live-account qualification, the alpha register and incomplete S00–S10 obligations remain open. This implements configurable source-local popularity, not full S06/S07 or PRD acceptance.
+
+
+## Individual Prowlarr priority editor · September 19, 2026
+
+This increment builds on `2189a60` and advances FR-19–FR-20 / AT-11–AT-12. The shared Source preference editor now supports explicitly loading named Prowlarr indexers, adding an eligible indexer before the general fallback, reordering and removing priorities, and restoring omitted standard sources. Duplicate names remain distinguishable by ID. Saved priorities use the existing resolver and API contract; the shared editor exposes them in profiles, defaults and list/request overrides.
+
+Loading is an explicit action. Opening the form does not contact Prowlarr. Excluded/native-MAM overlaps, disabled/no-search indexers, unsupported protocols and incompatible book categories display reasons and cannot be added. Cached names show their observation time. A missing indexer or lookup outage preserves saved entries and permits reordering/removal; failed lookups disable new additions until a successful refresh. Edits remain local until the enclosing form is saved. At least one priority is retained, the existing 100-entry bound applies, and resetting Source preference restores inheritance. Ranking preferences do not change queried sources or connection exclusions.
+
+Verification:
+
+- The first browser run passed its two prerequisite journeys and failed an assertion against a native disabled option. The rendered option already contained `disabled`; the corrected test checks the native property instead of the element-state matcher.
+- Final affected browser run: **4 passed in 2.1 minutes** (`.local/evidence/source-priorities-browser-reviewed.log`). It covers the baseline catalog/list/acquisition journey, Prowlarr partial failure and shared artifact handoff, source-popularity persistence/order constraints, and individual indexer selection. The new journey verifies explicit loading, duplicate-name IDs, unsupported options, insertion/reordering, persisted profile and search snapshots, reload, missing-indexer and outage retention, unsaved removal, last-entry protection and inheritance reset.
+- The new test calls the actual authenticated fixture indexer endpoint before extending its public response with capability/name cases. Its missing-indexer and outage responses are deliberately simulated. These observations do not certify actual Prowlarr accounts or additional indexer protocols.
+- Desktop/mobile screenshots in `source-priorities-ui/` were visually inspected. No page errors or horizontal overflow occurred. Frontend formatting, TypeScript checking, production build and `git diff --check` pass. Backend, API schema, dependency and database contracts are unchanged; backend suites were not repeated for this UI-only increment.
+
+The native instance serves the matching rebuilt index and BookSources chunk. Readiness returns ready, one worker is fresh, schema remains `0044_recovery_approvals`, no restore is active and download dispatch remains disabled (`source-priorities-runtime.json`). API/worker code remains `2189a60` and needs no restart. There are still zero active users in the development database; live first-use setup and actual service qualification remain required. This checkpoint does not accept a full stage or close the S00–S10 objective.
