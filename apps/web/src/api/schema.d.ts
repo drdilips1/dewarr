@@ -3716,6 +3716,8 @@ export interface components {
       library_name: string;
       /** Title */
       title: string;
+      /** Authors */
+      authors?: string[];
       /** Medium */
       medium: string;
       /** State */
@@ -13112,6 +13114,17 @@ export interface operations {
         work_id?: string | null;
         library_id?: string | null;
         needs_review?: boolean;
+        q?: string;
+        medium?: "any" | "ebook" | "audio";
+        state?:
+          | "any"
+          | "present"
+          | "stale"
+          | "missing-suspected"
+          | "missing-confirmed"
+          | "scope-unavailable"
+          | "moved";
+        sort?: "title" | "recent";
         offset?: number;
         limit?: number;
       };

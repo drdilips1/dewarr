@@ -4,7 +4,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
-from sqlalchemy import delete, func, select
+from sqlalchemy import Text, cast, delete, func, or_, select
 
 from app.api.dependencies import Admin, CurrentUser, Database
 from app.db.models import (
@@ -19,7 +19,7 @@ from app.db.models import (
     Work,
 )
 from app.domain.corrections import asset_state, correct_asset, revision
-from app.domain.visibility import visible_library
+from app.domain.visibility import visible_library, visible_work
 from app.domain.work_graph import canonical_map, family_ids
 
 router = APIRouter(prefix="/library", tags=["library"])
@@ -43,6 +43,7 @@ class AssetView(BaseModel):
     library_id: UUID
     library_name: str
     title: str
+    authors: list[str] = Field(default_factory=list)
     medium: str
     state: str
     full_content: bool
@@ -154,6 +155,18 @@ async def assets(
     work_id: UUID | None = None,
     library_id: UUID | None = None,
     needs_review: bool = False,
+    q: str = Query(default="", max_length=300),
+    medium: Literal["any", "ebook", "audio"] = "any",
+    state: Literal[
+        "any",
+        "present",
+        "stale",
+        "missing-suspected",
+        "missing-confirmed",
+        "scope-unavailable",
+        "moved",
+    ] = "any",
+    sort: Literal["title", "recent"] = "title",
     offset: int = Query(default=0, ge=0),
     limit: int = Query(default=40, ge=1, le=100),
 ):
@@ -172,6 +185,33 @@ async def assets(
         conditions.append(Library.id == library_id)
     if needs_review:
         conditions.append(LibraryAsset.match_status == "needs-review")
+    if medium != "any":
+        conditions.append(LibraryAsset.medium == medium)
+    if state != "any":
+        conditions.append(LibraryAsset.state == state)
+    if q.strip():
+        # Search only declared title/credit fields, never arbitrary provider payloads.
+        pattern = (
+            "%" + q.strip().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
+        )
+        mapping = canonical_map()
+        catalog_matches = (
+            select(AssetContains.asset_id)
+            .join(mapping, mapping.c.origin_id == AssetContains.work_id)
+            .join(Work, Work.id == mapping.c.work_id)
+            .where(
+                visible_work(user),
+                or_(Work.title.ilike(pattern), cast(Work.authors, Text).ilike(pattern)),
+            )
+        )
+        conditions.append(
+            or_(
+                LibraryAsset.title.ilike(pattern),
+                cast(LibraryAsset.metadata_snapshot["authors"], Text).ilike(pattern),
+                cast(LibraryAsset.metadata_snapshot["narrators"], Text).ilike(pattern),
+                LibraryAsset.id.in_(catalog_matches),
+            )
+        )
     query = (
         select(LibraryAsset, Library, Integration)
         .join(Library, LibraryAsset.library_id == Library.id)
@@ -181,7 +221,13 @@ async def assets(
     total = await db.scalar(select(func.count()).select_from(query.subquery()))
     rows = (
         await db.execute(
-            query.order_by(LibraryAsset.title, LibraryAsset.id).offset(offset).limit(limit)
+            query.order_by(
+                *([LibraryAsset.created_at.desc()] if sort == "recent" else []),
+                LibraryAsset.title.asc().nulls_last(),
+                LibraryAsset.id,
+            )
+            .offset(offset)
+            .limit(limit)
         )
     ).all()
     coverage = (
@@ -240,6 +286,7 @@ async def assets(
                 library_id=library.id,
                 library_name=library.name,
                 title=asset.title or "Unidentified book",
+                authors=asset.metadata_snapshot.get("authors", []),
                 medium=asset.medium,
                 state=asset.state,
                 full_content=asset.full_content,

@@ -6089,6 +6089,65 @@
             }
           },
           {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 300,
+              "default": "",
+              "title": "Q"
+            }
+          },
+          {
+            "name": "medium",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "any",
+                "ebook",
+                "audio"
+              ],
+              "type": "string",
+              "default": "any",
+              "title": "Medium"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "any",
+                "present",
+                "stale",
+                "missing-suspected",
+                "missing-confirmed",
+                "scope-unavailable",
+                "moved"
+              ],
+              "type": "string",
+              "default": "any",
+              "title": "State"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "title",
+                "recent"
+              ],
+              "type": "string",
+              "default": "title",
+              "title": "Sort"
+            }
+          },
+          {
             "name": "offset",
             "in": "query",
             "required": false,
@@ -11963,6 +12022,13 @@
           "title": {
             "type": "string",
             "title": "Title"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Authors"
           },
           "medium": {
             "type": "string",

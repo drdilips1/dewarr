@@ -1243,6 +1243,20 @@ nav a.active {
   flex-wrap: wrap;
   margin-bottom: 24px;
 }
+.library-search {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.library-search label {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+.library-filters > label {
+  max-width: 100%;
+}
 .check-label {
   display: flex;
   flex-direction: row;
