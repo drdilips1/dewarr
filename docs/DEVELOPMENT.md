@@ -170,3 +170,5 @@ List policies and manual request forms expose sparse release overrides. Request-
 [Series discovery](SERIES-DISCOVERY.md) adds a read-only local shelf to Discover using current scoped holdings and observed series catalogs. Rebuild the generated API client/frontend and deploy matching API/worker code. Schema remains `0038_asset_containment`; there is no new task, integration credential or migration.
 
 [Local list curation](LIST-CURATION.md) adds synchronous `lists.curate` receipts and revision-aware list editing. No migration or new queue is required. Deploy the generated frontend/client with matching API/worker code on `0038_asset_containment`; legacy single-entry and full-order routes remain supported.
+
+List detail now defaults to 50 books and exposes count/matched/offset/limit; app consumers use bounded paging/search instead of assuming a complete response. Deploy the matching generated frontend/API together. See [list pagination](LIST-PAGINATION.md) for relative moves, optimistic selection revisions, compatibility and remaining qualification. No migration beyond `0038_asset_containment` is needed.

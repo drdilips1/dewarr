@@ -6,11 +6,11 @@ List owners can edit a name and description, choose household sharing, add catal
 
 Books appear before external connection settings. Catalog addition and list editing open only when requested. **Edit list** opens one form for the name, description and **Share with this household** setting. Sharing deliberately exposes that list and its permitted book metadata to signed-in accounts on the installation. It does not grant editing rights, library access, acquisition-policy access or the owner's provider credentials. The index distinguishes **Shared by you**, **Shared with you** and **Private**.
 
-**Add books from catalog** offers title/author search, twenty results per page and a selection of up to one hundred catalog books. Selections survive catalog-search pages. Existing loaded memberships are labeled and the server always deduplicates canonical identities. The picker explains that adding a book to a list with an active automatic policy can acquire missing media through that existing policy.
+**Add books from catalog** offers title/author search, twenty results per page and a selection of up to one hundred catalog books. Selections survive catalog-search pages. Existing memberships, including unloaded pages, are labeled and the server always deduplicates canonical identities. The picker explains that adding a book to a list with an active automatic policy can acquire missing media through that existing policy.
 
-The list grid renders fifty loaded books per page. Owners can select the displayed page, clear selection or remove selected entries. Single-book remove buttons use the same receipt-backed command. Removing a synced entry preserves its exclusion; a deliberate local re-add keeps it as local membership without silently clearing that external exclusion. Removal does not delete files, cancel unrelated reasons or remove other lists' memberships.
+The list grid fetches fifty books per page from the server. Owners can select the displayed page, clear selection or remove selected entries. Single-book remove buttons use the same receipt-backed command. Removing a synced entry preserves its exclusion; a deliberate local re-add keeps it as local membership without silently clearing that external exclusion. Removal does not delete files, cancel unrelated reasons or remove other lists' memberships.
 
-Move earlier/later retains the existing order controls, now with a current-membership revision. Hidden memberships left after source/library access revocation retain their positions; owners can reorder visible books without submitting inaccessible IDs. Canonical aliases remain one displayed book.
+Move earlier/later uses a server-side relative move with a current-membership revision, including across page boundaries. Hidden memberships left after source/library access revocation retain their positions; owners can reorder visible books without submitting inaccessible IDs. Canonical aliases remain one displayed book.
 
 ## Concurrency and replay
 
@@ -36,6 +36,6 @@ Coverage includes atomic/concurrent edits, exact replay, changed command keys, c
 
 The browser journey covers catalog bulk add, ordering, editing, conflicting tabs, explicit sharing, a separate household viewer, revocation, keyboard bulk removal and preserved library ownership. Results and deployment evidence are recorded in [Implementation Status](IMPLEMENTATION-STATUS.md).
 
-This increment retains the existing list index/detail response bounds (200 lists and 10,000 loaded books); grid paging limits rendering rather than paginating the underlying detail API. Complete server-side pagination and selector consistency for larger collections remain required before the large-list/performance gate can close. Optional Hardcover write-back, full task-based usability, actual-service qualification and remaining S08/S09 gates also remain open. It does not complete the full PRD.
+The subsequent [list pagination increment](LIST-PAGINATION.md) adds server pages, full-list membership checks and searchable destination/request/backlog selectors. The complete large-list performance gate still requires the reference benchmark corpus. Optional Hardcover write-back, full task-based usability, actual-service qualification and remaining S08/S09 gates also remain open. It does not complete the full PRD.
 
 No database migration, runtime dependency or new provider credential is needed. Deploy the generated API client/frontend and matching API/worker code on `0038_asset_containment`. New completed `lists.curate` operations are command receipts, not queued jobs.

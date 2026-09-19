@@ -1,12 +1,14 @@
 # Implementation status and evidence
 
-Latest checkpoint: [Local list curation](LIST-CURATION.md) adds detail editing, atomic bulk catalog membership commands, conflict-aware ordering and explicit household sharing/revocation. Server pagination for large lists, supported write-back, usability and full stage acceptance remain open. The final checkpoint records the bounded verification.
+Latest checkpoint: [List pagination](LIST-PAGINATION.md) supplies bounded server pages, cross-page curation, full-list membership badges, relative moves and searchable destination/request/backlog selectors. Stale selection revisions are checked again before previews. Supported write-back, usability, reference-load qualification and full stage acceptance remain open.
 
-Updated September 18, 2026. Objective remains **implement the full PRD end to end**, including the planned later capabilities. This is an implementation checkpoint, not a completion declaration.
+Updated September 19, 2026. Objective remains **implement the full PRD end to end**, including the planned later capabilities. This is an implementation checkpoint, not a completion declaration.
 
 ## Current code
 
-- [Local list curation](LIST-CURATION.md) supplies sparse detail edits, settings/content revisions, atomic bulk add/remove receipts, canonical membership and exclusion handling, reader-scoped sharing and revocation. Retried commands cannot replay over later membership episodes; removals preserve files and independent reasons. The list grid pages rendering only; full server pagination and large-list selector consistency remain open.
+- [List pagination](LIST-PAGINATION.md) removes browsing truncation at 200 lists/10,000 members through bounded pages and server search. Membership revision aggregation stays in PostgreSQL; only a page of metadata/availability is hydrated. Relative moves preserve hidden slots and canonical aliases; request/policy previews reject changed membership episodes. The automatic activation cap and acquisition budgets remain unchanged.
+
+- [Local list curation](LIST-CURATION.md) supplies sparse detail edits, settings/content revisions, atomic bulk add/remove receipts, canonical membership and exclusion handling, reader-scoped sharing and revocation. Retried commands cannot replay over later membership episodes; removals preserve files and independent reasons. The subsequent pagination checkpoint completes bounded server browsing and shared selectors; reference-load performance qualification remains open.
 
 - [Series continuation](SERIES-DISCOVERY.md) projects loaded catalog series against accessible verified holdings, groups canonical aliases, distinguishes media gaps from overall ownership and exposes ordering/date/staleness uncertainty. The shelf uses batched local reads and creates no requests or downloads. Whole-library series discovery and full S08 qualification remain open.
 
@@ -683,3 +685,26 @@ Verification:
 Deployment: the private database/key/configuration backup and readable archive catalog were verified (`list-curation-backup-path.txt`). With zero active development jobs, the identified API and worker were stopped and restarted together. Readiness and Lists return **200**, unauthenticated list data and curation return **401**, one worker is fresh and dispatch remains **disabled** on `0038_asset_containment` (`list-curation-runtime.json`). No actual provider account or native backend certification is inferred from synthetic service fixtures.
 
 Large-list server pagination, authoritative selectors, optional Hardcover writes, full task-based usability and actual-service qualification remain required. This advances FR-02/FR-12 within S08 and existing list lifecycle assertions; no full stage or full-PRD completion is claimed. All unmet S00–S10 obligations remain in scope.
+
+
+## Large-list pagination and selection checkpoint · September 19, 2026
+
+This increment builds on `f543830`. [List pagination](LIST-PAGINATION.md) replaces all app consumers of full list responses with bounded pages and searches: list index, destination choices on books/series, local curation, manual requests and automatic-policy backfill. The catalog picker checks membership against the whole list. Overall and filtered book counts are separate; canonical aliases are counted once and current library grants still govern availability.
+
+The grid keeps selected UUIDs across pages, preserving its membership revision. Further page requests reject changes, and manual request/policy preview commands now validate that revision again under the existing locks. Membership removal/re-addition is therefore a conflict, even when the displayed work is unchanged. Exact preview receipts still replay without repeating effects. Relative move commands resolve visible neighbors on the server, work across page boundaries and preserve hidden slots and aliases; stale/lost-response retries cannot move twice.
+
+Verification:
+
+- Curation, catalog, manual requests, policies and merge regression: **64 passed in 29.33 seconds** (`.local/evidence/list-pagination-regression.log`).
+- Existing list monitoring, CSV, Hardcover subscriptions, community discovery and both real-file curation acquisition cases: **58 passed in 27.88 seconds** (`list-pagination-automation.log`). These workflows retain their original media/episode/recovery semantics.
+- Final pagination-specific corpus: **8 passed in 12.89 seconds** (`list-pagination-final.log`). It includes 215 list destinations, a 10,005-member list whose final page hydrates only five availability records, literal search, scope/counts, cross-page movement, equal positions, hidden memberships, canonical aliases, move replay rejection and stale request/policy previews after re-addition. This is bounded-hydration evidence, not the full NFR benchmark.
+
+- Final affected browser run: **6 passed in 4.2 minutes** (`list-pagination-browser-finish.log`): setup/acquisition, Hardcover subscriptions, manual list requests, series curation and list-derived acquisition, household sharing/revocation, and the new large-list journey. The automatic-list acquisition journey separately passed in **4.2 minutes** in `list-pagination-browser-qualified.log`; that earlier run subsequently stopped on an outdated series-checkbox assertion, corrected in the successful final run.
+- Final spacing review: **2 passed in 1.6 minutes** (`list-pagination-browser-layout.log`) after separating the search focus outline from adjacent actions. Desktop/mobile screenshots were visually inspected and retained in `.local/evidence/list-pagination-ui/`. The new journey selects/removes across pages, recognizes an unloaded membership, searches request/backlog controls, filters the grid and finds a destination beyond the first index page. The final build was used for these captures.
+- Browser qualification exposed fixture dependencies and obsolete selectors. The automatic journey now enables/tests its own downloader, approves the verified import route and waits for in-progress subscription verification. The series test expects the shared picker's visible In library label. These fixes preserve meaningful lifecycle assertions.
+
+- Python lint/format, frontend production build/format and reproducible OpenAPI/client generation pass. The built wheel matches all **199 backend Python modules**. Documentation checks validate 480 local links, 54 requirement rows and 61 stable backlog packages.
+
+Deployment: a private database/key/configuration backup and its archive catalog were verified (`list-pagination-backup-path.txt`). With zero active development jobs, only the identified development API/worker were restarted. Readiness and Lists return **200**, new unauthenticated page/catalog endpoints return **401**, one worker is fresh and dispatch stays **disabled** on `0038_asset_containment` (`list-pagination-runtime.json`).
+
+No migration, dependency or provider credential is introduced. Existing open editors may need to refresh because the membership fingerprint encoding changed; saved command receipts remain compatible. Automatic policy activation retains its explicit 10,000-entry limit and finite selection/transfer budgets. Live index paging is not a frozen snapshot, while every read and command rechecks access and uses UUID identities. Actual-service qualification, optional Hardcover write-back, complete usability/performance, earlier unmet gates and all S10 capabilities remain in scope; this does not complete the PRD.

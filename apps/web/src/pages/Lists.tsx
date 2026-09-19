@@ -25,9 +25,16 @@ export default function Lists({ canEdit }: { canEdit: boolean }) {
 
 function ListIndex({ canEdit }: { canEdit: boolean }) {
   const client = useQueryClient();
+  const [offset, setOffset] = useState(0);
+  const [search, setSearch] = useState("");
   const lists = useQuery({
-    queryKey: ["lists"],
-    queryFn: async () => result(await api.GET("/api/lists")),
+    queryKey: ["lists", search, offset],
+    queryFn: async () =>
+      result(
+        await api.GET("/api/lists/page", {
+          params: { query: { offset, limit: 25, q: search } },
+        }),
+      ),
     staleTime: 0,
     gcTime: 0,
     refetchInterval: 15_000,
@@ -41,7 +48,10 @@ function ListIndex({ canEdit }: { canEdit: boolean }) {
       form.reset();
       return created;
     },
-    onSuccess: () => client.invalidateQueries({ queryKey: ["lists"] }),
+    onSuccess: () => {
+      setOffset(0);
+      return client.invalidateQueries({ queryKey: ["lists"] });
+    },
   });
   return (
     <>
@@ -76,11 +86,21 @@ function ListIndex({ canEdit }: { canEdit: boolean }) {
           </button>
         </form>
       ) : null}
+      <label>
+        Find lists
+        <input
+          value={search}
+          onChange={(event) => {
+            setSearch(event.target.value);
+            setOffset(0);
+          }}
+        />
+      </label>
       <Notice error={lists.error || create.error} />
       {lists.isPending ? <Loading /> : null}
-      {!lists.error && lists.data?.length ? (
+      {!lists.error && lists.data?.items.length ? (
         <div className="list-grid">
-          {lists.data.map((list) => (
+          {lists.data.items.map((list) => (
             <Link
               className="list-card panel"
               key={list.id}
@@ -102,10 +122,27 @@ function ListIndex({ canEdit }: { canEdit: boolean }) {
           ))}
         </div>
       ) : !lists.isPending && !lists.error ? (
-        <Empty title="Give your next reads a home">
+        <Empty title="No matching lists here">
           Create a list, then add books from their catalog pages.
         </Empty>
       ) : null}
+      {!lists.error && lists.data && (offset > 0 || lists.data.total > 25) && (
+        <div className="pagination" aria-label="List pages">
+          <button disabled={!offset} onClick={() => setOffset(offset - 25)}>
+            Previous lists
+          </button>
+          <span>
+            {offset + 1}–{offset + lists.data.items.length} of{" "}
+            {lists.data.total}
+          </span>
+          <button
+            disabled={offset + 25 >= lists.data.total}
+            onClick={() => setOffset(offset + 25)}
+          >
+            Next lists
+          </button>
+        </div>
+      )}
     </>
   );
 }
@@ -113,23 +150,42 @@ function ListIndex({ canEdit }: { canEdit: boolean }) {
 function ListDetail({ id, canEdit }: { id: string; canEdit: boolean }) {
   const client = useQueryClient();
   const path = { list_id: id };
+  const [offset, setOffset] = useState(0);
+  const [pageRevision, setPageRevision] = useState<string>();
+  const [search, setSearch] = useState("");
   const [csvOpen, setCsvOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [requestsOpen, setRequestsOpen] = useState(false);
   const [policyOpen, setPolicyOpen] = useState(false);
   const list = useQuery({
-    queryKey: ["list", id],
+    queryKey: ["list", id, offset, pageRevision, search],
     queryFn: async () =>
-      result(await api.GET("/api/lists/{list_id}", { params: { path } })),
+      result(
+        await api.GET("/api/lists/{list_id}", {
+          params: {
+            path,
+            query: {
+              offset,
+              limit: 50,
+              expected_revision: pageRevision,
+              q: search,
+            },
+          },
+        }),
+      ),
     staleTime: 0,
     gcTime: 0,
+    placeholderData: (previous) => previous,
     refetchInterval: 15_000,
   });
   const refresh = async () => {
+    setPageRevision(undefined);
+    setOffset(0);
     await Promise.all([
       client.invalidateQueries({ queryKey: ["list", id] }),
       client.invalidateQueries({ queryKey: ["lists"] }),
       client.invalidateQueries({ queryKey: ["works"] }),
+      client.invalidateQueries({ queryKey: ["curation-catalog", id] }),
     ]);
   };
   if (list.isPending) return <Loading />;
@@ -137,7 +193,15 @@ function ListDetail({ id, canEdit }: { id: string; canEdit: boolean }) {
     return (
       <>
         <Notice error={list.error} />
-        <button onClick={() => list.refetch()}>Reload list</button>
+        <button
+          onClick={() => {
+            setPageRevision(undefined);
+            setOffset(0);
+            void list.refetch();
+          }}
+        >
+          Reload list
+        </button>
       </>
     );
   const editable = canEdit && list.data.editable;
@@ -173,6 +237,17 @@ function ListDetail({ id, canEdit }: { id: string; canEdit: boolean }) {
           own access.
         </p>
       )}
+      <label className="list-search">
+        Search this list
+        <input
+          value={search}
+          onChange={(event) => {
+            setSearch(event.target.value);
+            setOffset(0);
+            setPageRevision(undefined);
+          }}
+        />
+      </label>
       {editable && editing && (
         <ListSettings
           list={list.data}
@@ -190,7 +265,7 @@ function ListDetail({ id, canEdit }: { id: string; canEdit: boolean }) {
           </button>
           {requestsOpen && (
             <Suspense fallback={<Loading />}>
-              <ListRequests key={id} listId={id} works={list.data.items} />
+              <ListRequests key={id} listId={id} />
             </Suspense>
           )}
           <button
@@ -201,7 +276,7 @@ function ListDetail({ id, canEdit }: { id: string; canEdit: boolean }) {
           </button>
           {policyOpen && (
             <Suspense fallback={<Loading />}>
-              <ListPolicy key={id} listId={id} works={list.data.items} />
+              <ListPolicy key={id} listId={id} />
             </Suspense>
           )}
           <button onClick={() => setCsvOpen(!csvOpen)} aria-expanded={csvOpen}>
@@ -214,7 +289,17 @@ function ListDetail({ id, canEdit }: { id: string; canEdit: boolean }) {
           ) : null}
         </div>
       ) : null}
-      <ListCuration list={list.data} editable={editable} onChange={refresh} />
+      <ListCuration
+        list={list.data}
+        editable={editable}
+        onChange={refresh}
+        loading={list.isFetching}
+        filtered={Boolean(search.trim())}
+        onPage={(next) => {
+          setPageRevision(list.data.content_revision);
+          setOffset(next);
+        }}
+      />
       {editable && (
         <Suspense fallback={<Loading />}>
           <ListSubscription listId={id} />

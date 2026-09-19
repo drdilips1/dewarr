@@ -42,6 +42,9 @@ MAX_BOOKS = 100
 
 
 class BatchInput(BaseModel):
+    expected_content_revision: str | None = Field(
+        default=None, min_length=64, max_length=64, exclude_if=lambda value: value is None
+    )
     model_config = ConfigDict(extra="forbid")
     work_ids: list[UUID] = Field(min_length=1, max_length=MAX_BOOKS)
     specification: RequestOptions
@@ -116,6 +119,8 @@ async def preview(db, user, list_id, body, key):
         "specification": body.specification.model_dump(mode="json"),
         "scope_inheritance": 1,
     }
+    if body.expected_content_revision is not None:
+        command["expected_content_revision"] = body.expected_content_revision
     if body.release_preferences is not None:
         command["release_preferences"] = body.release_preferences.model_dump(
             mode="json", exclude_unset=True
@@ -131,6 +136,10 @@ async def preview(db, user, list_id, body, key):
         db, user, body.specification, RequestReason(list_id=list_id), body.release_preferences
     )
     await graph_lock(db)
+    from app.domain.list_curation import check_revision
+
+    await graph_lock(db)
+    await check_revision(db, list_id, body.expected_content_revision)
     works = await selected_works(db, user, list_id, body.work_ids)
     records = []
     for work in works:

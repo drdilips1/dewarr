@@ -37,6 +37,9 @@ KIND = "lists.policy-preview"
 
 
 class ListPolicyInput(BaseModel):
+    expected_content_revision: str | None = Field(
+        default=None, min_length=64, max_length=64, exclude_if=lambda value: value is None
+    )
     model_config = ConfigDict(extra="forbid")
     mode: Literal["browse", "manual", "automatic"] = "browse"
     specification: RequestOptions
@@ -190,6 +193,10 @@ async def preview(db, user, list_id, body, key):
     if body.expected_revision != (policy.revision if policy else 0):
         raise HTTPException(409, "List policy changed; reload before previewing")
     config = await configuration(db, user, list_id, body)
+    from app.domain.list_curation import check_revision
+
+    await graph_lock(db)
+    await check_revision(db, list_id, body.expected_content_revision)
     records = await members(db, user, list_id)
     if not set(map(str, body.include_work_ids)) <= {r["work_id"] for r in records}:
         raise HTTPException(409, "Backlog selection is no longer in this list")

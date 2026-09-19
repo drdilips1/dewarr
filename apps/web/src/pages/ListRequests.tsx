@@ -1,3 +1,4 @@
+import ListBookPicker from "./ListBookPicker";
 import { EffectiveScope } from "./ScopeFields";
 import RequestPreferences, { type Choice } from "./RequestPreferences";
 import { EffectivePreferences } from "./PreferenceFields";
@@ -10,7 +11,6 @@ import { Loading, Notice } from "../components";
 import DownloadConstraints from "./DownloadConstraints";
 
 type Spec = components["schemas"]["RequestOptions"];
-type Work = components["schemas"]["WorkView"];
 const states: Record<string, string> = {
   satisfied: "Available",
   wanted: "Missing",
@@ -26,13 +26,7 @@ const media: Record<string, string> = {
   either: "Either medium",
 };
 
-export default function ListRequests({
-  listId,
-  works,
-}: {
-  listId: string;
-  works: Work[];
-}) {
+export default function ListRequests({ listId }: { listId: string }) {
   const policy = useQuery({
     queryKey: ["list-policy", listId],
     queryFn: async () =>
@@ -48,7 +42,6 @@ export default function ListRequests({
     <ListRequestEditor
       key={`${listId}:${policy.data?.revision || 0}`}
       listId={listId}
-      works={works}
       defaults={
         policy.data
           ? {
@@ -65,12 +58,10 @@ export default function ListRequests({
 
 function ListRequestEditor({
   listId,
-  works,
   defaults,
   profile,
 }: {
   listId: string;
-  works: Work[];
   defaults?: Spec;
   profile?: components["schemas"]["ProfileSnapshot"];
 }) {
@@ -82,8 +73,8 @@ function ListRequestEditor({
     download_constraints: defaults?.download_constraints,
   });
   const [preferences, setPreferences] = useState<Choice>({});
-  const [filter, setFilter] = useState("");
-  const [page, setPage] = useState(0);
+  const [selectionValid, setSelectionValid] = useState(false);
+  const [contentRevision, setContentRevision] = useState<string>();
   const [historyOffset, setHistoryOffset] = useState(0);
   const key = useRef(crypto.randomUUID());
   const completed = useRef<string | null>(null);
@@ -147,6 +138,7 @@ function ListRequestEditor({
           params: { path, header: { "idempotency-key": key.current } },
           body: {
             work_ids: selected,
+            expected_content_revision: contentRevision,
             specification: spec,
             release_preferences: preferences,
           },
@@ -186,14 +178,6 @@ function ListRequestEditor({
     key.current = crypto.randomUUID();
     preview.reset();
   };
-  const filtered = works.filter((w) =>
-    `${w.title} ${w.authors.join(" ")}`
-      .toLocaleLowerCase()
-      .includes(filter.toLocaleLowerCase()),
-  );
-  const visible = filtered.slice(page * 25, (page + 1) * 25);
-  const chosen = new Set(selected);
-  const combined = [...new Set([...selected, ...visible.map((w) => w.id)])];
   const value = saved.data;
   return (
     <section className="panel editor" aria-label="List wanted media">
@@ -227,79 +211,18 @@ function ListRequestEditor({
         >
           <fieldset disabled={preview.isPending} className="editor">
             <legend>Select books and media</legend>
-            <label>
-              Find books in this list
-              <input
-                value={filter}
-                onChange={(event) => {
-                  setFilter(event.target.value);
-                  setPage(0);
-                }}
-              />
-            </label>
-            <p>
-              {selected.length} selected · {filtered.length} matching books
-            </p>
-            <div className="inline-form">
-              <button
-                type="button"
-                disabled={!visible.length || combined.length > 100}
-                onClick={() => {
-                  setSelected(combined);
-                  changed();
-                }}
-              >
-                Select this page
-              </button>
-              <button
-                type="button"
-                disabled={!selected.length}
-                onClick={() => {
-                  setSelected([]);
-                  changed();
-                }}
-              >
-                Clear selection
-              </button>
-            </div>
-            {visible.map((work) => (
-              <label className="checkbox" key={work.id}>
-                <input
-                  type="checkbox"
-                  checked={chosen.has(work.id)}
-                  disabled={!chosen.has(work.id) && selected.length >= 100}
-                  onChange={(event) => {
-                    setSelected(
-                      event.target.checked
-                        ? [...selected, work.id]
-                        : selected.filter((v) => v !== work.id),
-                    );
-                    changed();
-                  }}
-                />
-                {work.title} {work.availability.owned ? "· In library" : ""}
-              </label>
-            ))}
-            <div className="inline-form">
-              <button
-                type="button"
-                disabled={page === 0}
-                onClick={() => setPage(page - 1)}
-              >
-                Previous books
-              </button>
-              <span>
-                Page {page + 1} of{" "}
-                {Math.max(1, Math.ceil(filtered.length / 25))}
-              </span>
-              <button
-                type="button"
-                disabled={(page + 1) * 25 >= filtered.length}
-                onClick={() => setPage(page + 1)}
-              >
-                Next books
-              </button>
-            </div>
+            <ListBookPicker
+              listId={listId}
+              selected={selected}
+              onChange={(ids) => {
+                setSelected(ids);
+                changed();
+              }}
+              maximum={100}
+              label="Find books in this list"
+              onValidityChange={setSelectionValid}
+              onRevisionChange={setContentRevision}
+            />
             <label>
               Media to request
               <select
@@ -353,7 +276,9 @@ function ListRequestEditor({
             />
             <button
               className="primary"
-              disabled={!selected.length || preview.isPending}
+              disabled={
+                !selected.length || preview.isPending || !selectionValid
+              }
             >
               Preview wanted media
             </button>

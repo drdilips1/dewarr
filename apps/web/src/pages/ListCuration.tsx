@@ -12,22 +12,30 @@ export default function ListCuration({
   list,
   editable,
   onChange,
+  loading,
+  filtered,
+  onPage,
 }: {
   list: Detail;
   editable: boolean;
+  loading: boolean;
+  filtered: boolean;
+  onPage: (offset: number) => void;
   onChange: () => Promise<unknown>;
 }) {
   const [selection, setSelection] = useState<string[]>([]);
-  const [offset, setOffset] = useState(0);
   const [adding, setAdding] = useState(false);
   const [message, setMessage] = useState("");
-  const available = new Set(list.items.map((work) => work.id));
-  const selected = selection.filter((id) => available.has(id));
-  const pageOffset = Math.min(
-    offset,
-    Math.max(0, Math.ceil(list.items.length / 50) - 1) * 50,
-  );
-  const shown = list.items.slice(pageOffset, pageOffset + 50);
+  const [selectionRevision, setSelectionRevision] = useState<string>();
+  const selected = selection;
+  const pageOffset = list.offset;
+  const shown = list.items;
+  const stale =
+    selected.length > 0 && selectionRevision !== list.content_revision;
+  function select(ids: string[]) {
+    if (!selected.length) setSelectionRevision(list.content_revision);
+    setSelection(ids);
+  }
   const change = useMutation({
     mutationFn: async ({ body, key }: { body: Input; key: string }) =>
       result(
@@ -55,16 +63,14 @@ export default function ListCuration({
       id: string;
       direction: number;
     }) => {
-      const ids = list.items.map((work) => work.id);
-      const index = ids.indexOf(id);
-      [ids[index], ids[index + direction]] = [
-        ids[index + direction],
-        ids[index],
-      ];
       return result(
-        await api.PUT("/api/lists/{list_id}/order", {
+        await api.POST("/api/lists/{list_id}/move", {
           params: { path: { list_id: list.id } },
-          body: { work_ids: ids, expected_revision: list.content_revision },
+          body: {
+            work_id: id,
+            direction,
+            expected_revision: list.content_revision,
+          },
         }),
       );
     },
@@ -73,20 +79,22 @@ export default function ListCuration({
       await onChange();
     },
   });
-  const busy = change.isPending || reorder.isPending;
+  const busy = loading || change.isPending || reorder.isPending || stale;
   function remove(ids: string[]) {
     setMessage("");
     change.mutate({
       body: {
         action: "remove",
         work_ids: ids,
-        expected_revision: list.content_revision,
+        expected_revision: selected.length
+          ? selectionRevision
+          : list.content_revision,
       },
       key: crypto.randomUUID(),
     });
   }
   return (
-    <section aria-label="List books">
+    <section className="list-books" aria-label="List books">
       {editable && (
         <>
           <div className="button-row list-curation-toolbar">
@@ -103,7 +111,7 @@ export default function ListCuration({
                       .size > 100
                   }
                   onClick={() =>
-                    setSelection([
+                    select([
                       ...new Set([
                         ...selected,
                         ...shown.map((work) => work.id),
@@ -114,7 +122,9 @@ export default function ListCuration({
                   Select this page
                 </button>
                 <button
-                  disabled={!selected.length || busy}
+                  disabled={
+                    !selected.length || change.isPending || reorder.isPending
+                  }
                   onClick={() => setSelection([])}
                 >
                   Clear selection
@@ -132,6 +142,12 @@ export default function ListCuration({
             Select up to 100 books. Removing entries keeps library files and
             other lists; synced entries stay excluded from this list.
           </p>
+          {stale && (
+            <p role="alert">
+              This list changed. Clear your selection and review the current
+              books.
+            </p>
+          )}
           {adding && <CatalogPicker list={list} onChange={onChange} />}
           <Notice error={change.error || reorder.error} />
           {change.error && (
@@ -183,7 +199,7 @@ export default function ListCuration({
                       (!selected.includes(work.id) && selected.length >= 100)
                     }
                     onChange={(event) =>
-                      setSelection(
+                      select(
                         event.target.checked
                           ? [...selected, work.id]
                           : selected.filter((id) => id !== work.id),
@@ -200,6 +216,7 @@ export default function ListCuration({
                     className="icon-button"
                     aria-label={`Move ${work.title} earlier`}
                     disabled={
+                      filtered ||
                       pageOffset + position === 0 ||
                       busy ||
                       Boolean(change.error)
@@ -214,7 +231,8 @@ export default function ListCuration({
                     className="icon-button"
                     aria-label={`Move ${work.title} later`}
                     disabled={
-                      pageOffset + position === list.items.length - 1 ||
+                      filtered ||
+                      pageOffset + position === list.count - 1 ||
                       busy ||
                       Boolean(change.error)
                     }
@@ -238,24 +256,33 @@ export default function ListCuration({
           ))}
         </div>
       ) : (
-        <Empty title="This list is ready for a story">
+        <Empty
+          title={
+            filtered
+              ? "No matching list books"
+              : "This list is ready for a story"
+          }
+        >
           Add books from your catalog, or find new titles in Discover.
         </Empty>
       )}
-      {list.items.length > 50 && (
+      {filtered && editable && (
+        <p className="muted">Clear the search to change book order.</p>
+      )}
+      {list.matched > 50 && (
         <div className="pagination" aria-label="List book pages">
           <button
             disabled={pageOffset === 0 || busy}
-            onClick={() => setOffset(pageOffset - 50)}
+            onClick={() => onPage(pageOffset - 50)}
           >
             Previous books
           </button>
           <span role="status">
-            {pageOffset + 1}–{pageOffset + shown.length} of {list.items.length}
+            {pageOffset + 1}–{pageOffset + shown.length} of {list.matched}
           </span>
           <button
-            disabled={pageOffset + 50 >= list.items.length || busy}
-            onClick={() => setOffset(pageOffset + 50)}
+            disabled={pageOffset + 50 >= list.matched || busy}
+            onClick={() => onPage(pageOffset + 50)}
           >
             Next books
           </button>
@@ -278,17 +305,20 @@ function CatalogPicker({
   const [selected, setSelected] = useState<string[]>([]);
   const [message, setMessage] = useState("");
   const query = useQuery({
-    queryKey: ["curation-catalog", search, offset],
+    queryKey: ["curation-catalog", list.id, search, offset],
     queryFn: async () =>
       result(
-        await api.GET("/api/catalog/works", {
-          params: { query: { q: search, offset, limit: 20 } },
+        await api.GET("/api/lists/{list_id}/catalog", {
+          params: {
+            path: { list_id: list.id },
+            query: { q: search, offset, limit: 20 },
+          },
         }),
       ),
     staleTime: 0,
     gcTime: 0,
   });
-  const existing = new Set(list.items.map((work) => work.id));
+  const existing = new Set(query.data?.member_ids || []);
   const save = useMutation({
     mutationFn: async ({ body, key }: { body: Input; key: string }) =>
       result(

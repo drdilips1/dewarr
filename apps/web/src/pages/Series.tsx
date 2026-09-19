@@ -1,3 +1,4 @@
+import ListChoice from "./ListChoice";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
@@ -41,11 +42,6 @@ function SeriesContent({
       ["queued", "running", "retrying"].includes(query.state.data?.status || "")
         ? 1500
         : false,
-  });
-  const lists = useQuery({
-    queryKey: ["lists"],
-    queryFn: async () => result(await api.GET("/api/lists")),
-    enabled: canEdit,
   });
   const mainBooks = useQuery({
     queryKey: ["series-main-books", externalId, catalog.data?.generation],
@@ -152,7 +148,6 @@ function SeriesContent({
           catalog.error ||
           refresh.error ||
           add.error ||
-          lists.error ||
           policy.error ||
           mainBooks.error
         }
@@ -181,26 +176,15 @@ function SeriesContent({
       </details>
       {canEdit && data.items.length > 0 && (
         <section className="panel editor" aria-label="Curate series">
-          <label>
-            Destination list
-            <select
-              disabled={add.isPending}
-              value={listId}
-              onChange={(e) => {
-                setListId(e.target.value);
-                setAdded(0);
-              }}
-            >
-              <option value="">Choose your list</option>
-              {lists.data
-                ?.filter((l) => l.editable)
-                .map((l) => (
-                  <option value={l.id} key={l.id}>
-                    {l.name}
-                  </option>
-                ))}
-            </select>
-          </label>
+          <ListChoice
+            value={listId}
+            label="Destination list"
+            disabled={add.isPending}
+            onChange={(id) => {
+              setListId(id);
+              setAdded(0);
+            }}
+          />
           {listId && policy.isSuccess && (
             <p role="status">
               {policy.data?.active &&

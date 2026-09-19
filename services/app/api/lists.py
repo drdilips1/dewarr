@@ -1,10 +1,11 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Header, HTTPException
+from fastapi import APIRouter, Header, HTTPException, Query
 from pydantic import BaseModel, ConfigDict, Field, model_validator
-from sqlalchemy import delete, func, or_, select
+from sqlalchemy import Text, case, cast, delete, func, or_, select, update
 
-from app.api.catalog import WorkView, work_view
+from app.api.catalog import WorkPage, WorkView, work_view
+from app.api.catalog import works as catalog_works
 from app.api.dependencies import CurrentUser, Database, Member
 from app.db.models import BookList, ListEntry, ListObservation, ListSubscription, Work
 from app.domain import list_curation
@@ -34,6 +35,49 @@ class ListView(ListInput):
 class ListDetail(ListView):
     items: list[WorkView]
     content_revision: str
+    offset: int
+    limit: int
+    matched: int
+
+
+class ListPage(BaseModel):
+    items: list[ListView]
+    total: int
+    offset: int
+    limit: int
+
+
+class ListCatalogPage(WorkPage):
+    member_ids: list[UUID]
+
+
+class MoveInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    work_id: UUID
+    direction: int = Field(ge=-1, le=1)
+    expected_revision: str = Field(min_length=64, max_length=64)
+
+    @model_validator(mode="after")
+    def nonzero(self):
+        if self.direction == 0:
+            raise ValueError("Choose earlier or later")
+        return self
+
+
+def search_pattern(value):
+    return "%" + value.strip().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
+
+
+def ordered_roots(list_id):
+    mapping = canonical_map()
+    return (
+        select(mapping.c.work_id, func.min(ListEntry.position).label("position"))
+        .select_from(ListEntry)
+        .join(mapping, mapping.c.origin_id == ListEntry.work_id)
+        .where(ListEntry.list_id == list_id)
+        .group_by(mapping.c.work_id)
+        .subquery()
+    )
 
 
 class ListPatch(BaseModel):
@@ -90,7 +134,26 @@ async def visible_list(
 
 
 @router.get("", response_model=list[ListView])
-async def list_all(user: CurrentUser, db: Database):
+async def list_all(
+    user: CurrentUser,
+    db: Database,
+    offset: int = Query(default=0, ge=0),
+    limit: int = Query(default=50, ge=1, le=200),
+    q: str = Query(default="", max_length=200),
+    editable: bool = False,
+):
+    conditions = [or_(BookList.owner_id == user.id, BookList.shared.is_(True))]
+    if editable:
+        conditions.append(BookList.owner_id == user.id)
+    if q.strip():
+        conditions.append(BookList.name.ilike(search_pattern(q)))
+    page_ids = (
+        select(BookList.id)
+        .where(*conditions)
+        .order_by(BookList.created_at.desc(), BookList.id)
+        .offset(offset)
+        .limit(limit)
+    )
     mapping = canonical_map()
     rows = (
         await db.execute(
@@ -102,13 +165,35 @@ async def list_all(user: CurrentUser, db: Database):
             )
             .outerjoin(ListEntry, ListEntry.list_id == BookList.id)
             .outerjoin(mapping, mapping.c.origin_id == ListEntry.work_id)
-            .where(or_(BookList.owner_id == user.id, BookList.shared.is_(True)))
+            .where(BookList.id.in_(page_ids))
             .group_by(BookList.id)
-            .order_by(BookList.created_at.desc())
-            .limit(200)
+            .order_by(BookList.created_at.desc(), BookList.id)
         )
     ).all()
     return [list_view(item, count, user.id) for item, count in rows]
+
+
+@router.get("/page", response_model=ListPage)
+async def list_page(
+    user: CurrentUser,
+    db: Database,
+    offset: int = Query(default=0, ge=0),
+    limit: int = Query(default=25, ge=1, le=100),
+    q: str = Query(default="", max_length=200),
+    editable: bool = False,
+):
+    conditions = [or_(BookList.owner_id == user.id, BookList.shared.is_(True))]
+    if editable:
+        conditions.append(BookList.owner_id == user.id)
+    if q.strip():
+        conditions.append(BookList.name.ilike(search_pattern(q)))
+    total = await db.scalar(select(func.count()).select_from(BookList).where(*conditions))
+    return ListPage(
+        items=await list_all(user, db, offset, limit, q, editable),
+        total=total or 0,
+        offset=offset,
+        limit=limit,
+    )
 
 
 @router.post("", response_model=ListView, status_code=201)
@@ -120,28 +205,114 @@ async def create_list(body: ListInput, user: Member, db: Database):
 
 
 @router.get("/{list_id}", response_model=ListDetail)
-async def detail(list_id: UUID, user: CurrentUser, db: Database):
-    # Keep the rendered order and revision in the same list/identity snapshot.
+async def detail(
+    list_id: UUID,
+    user: CurrentUser,
+    db: Database,
+    offset: int = Query(default=0, ge=0),
+    limit: int = Query(default=50, ge=1, le=100),
+    q: str = Query(default="", max_length=300),
+    expected_revision: str | None = Query(default=None, min_length=64, max_length=64),
+):
     item = await visible_list(list_id, user, db, lock_read=True)
     await graph_lock(db)
-    mapping = canonical_map()
-    works = (
-        await db.scalars(
-            select(Work)
-            .join(mapping, mapping.c.work_id == Work.id)
-            .join(ListEntry, ListEntry.work_id == mapping.c.origin_id)
-            .where(ListEntry.list_id == list_id, visible_work(user))
-            .group_by(Work.id)
-            .order_by(func.min(ListEntry.position), Work.id)
-            .limit(10000)
+    revision = await list_curation.content_revision(db, list_id)
+    if expected_revision is not None and expected_revision != revision:
+        raise HTTPException(
+            409, "List membership or order changed. Refresh the list and review your selection."
         )
+    roots = ordered_roots(list_id)
+    base = select(Work).join(roots, roots.c.work_id == Work.id).where(visible_work(user))
+    count = await db.scalar(select(func.count()).select_from(base.subquery()))
+    if q.strip():
+        pattern = search_pattern(q)
+        base = base.where(or_(Work.title.ilike(pattern), cast(Work.authors, Text).ilike(pattern)))
+    matched = await db.scalar(select(func.count()).select_from(base.subquery()))
+    works = (
+        await db.scalars(base.order_by(roots.c.position, Work.id).offset(offset).limit(limit))
     ).all()
     availability = await availability_for(db, user, [work.id for work in works])
     return ListDetail(
-        **list_view(item, len(works), user.id).model_dump(),
+        **list_view(item, count or 0, user.id).model_dump(),
         items=[work_view(work, availability[work.id]) for work in works],
-        content_revision=await list_curation.content_revision(db, list_id),
+        content_revision=revision,
+        offset=offset,
+        limit=limit,
+        matched=matched or 0,
     )
+
+
+@router.get("/{list_id}/catalog", response_model=ListCatalogPage)
+async def list_catalog(
+    list_id: UUID,
+    user: CurrentUser,
+    db: Database,
+    offset: int = Query(default=0, ge=0),
+    limit: int = Query(default=20, ge=1, le=100),
+    q: str = Query(default="", max_length=300),
+):
+    await visible_list(list_id, user, db, lock_read=True)
+    await graph_lock(db)
+    page = await catalog_works(user, db, q, offset, limit)
+    roots = ordered_roots(list_id)
+    members = await db.scalars(
+        select(roots.c.work_id).where(roots.c.work_id.in_([w.id for w in page.items]))
+    )
+    return ListCatalogPage(**page.model_dump(), member_ids=list(members))
+
+
+@router.post("/{list_id}/move", status_code=204)
+async def move_entry(list_id: UUID, body: MoveInput, user: Member, db: Database):
+    await visible_list(list_id, user, db, edit=True)
+    await graph_lock(db)
+    await list_curation.check_revision(db, list_id, body.expected_revision)
+    roots = ordered_roots(list_id)
+    visible = (
+        select(
+            Work.id,
+            func.lag(Work.id).over(order_by=(roots.c.position, Work.id)).label("previous"),
+            func.lead(Work.id).over(order_by=(roots.c.position, Work.id)).label("following"),
+        )
+        .join(roots, roots.c.work_id == Work.id)
+        .where(visible_work(user))
+        .subquery()
+    )
+    row = (await db.execute(select(visible).where(visible.c.id == body.work_id))).first()
+    if row is None:
+        raise HTTPException(404, "Book is no longer accessible in this list")
+    neighbor = row.previous if body.direction == -1 else row.following
+    if neighbor is None:
+        raise HTTPException(409, "This book is already at the end of the visible list")
+    # Normalize ranks in SQL, including hidden slots and all aliases, before swapping.
+    ranked = select(
+        roots.c.work_id,
+        func.row_number().over(order_by=(roots.c.position, roots.c.work_id)).label("rank"),
+    ).cte()
+    pair = dict(
+        (
+            await db.execute(select(ranked).where(ranked.c.work_id.in_([body.work_id, neighbor])))
+        ).all()
+    )
+    mapping = canonical_map()
+    positions = (
+        select(
+            mapping.c.origin_id,
+            case(
+                (ranked.c.work_id == body.work_id, pair[neighbor]),
+                (ranked.c.work_id == neighbor, pair[body.work_id]),
+                else_=ranked.c.rank,
+            ).label("position"),
+        )
+        .join(ranked, ranked.c.work_id == mapping.c.work_id)
+        .subquery()
+    )
+    await db.execute(
+        update(ListEntry)
+        .where(ListEntry.list_id == list_id, ListEntry.work_id == positions.c.origin_id)
+        .values(position=positions.c.position)
+        .execution_options(synchronize_session=False)
+    )
+    await db.commit()
 
 
 @router.patch("/{list_id}", response_model=ListView)

@@ -1,3 +1,4 @@
+import ListBookPicker from "./ListBookPicker";
 import { EffectiveScope } from "./ScopeFields";
 import PreferenceFields, {
   EffectivePreferences,
@@ -14,15 +15,8 @@ import { chooseRoute, destinationPreference } from "./RouteFields";
 
 type Policy = components["schemas"]["ListPolicyView"];
 type Input = components["schemas"]["ListPolicyInput"];
-type Work = components["schemas"]["WorkView"];
 
-export default function ListPolicy({
-  listId,
-  works,
-}: {
-  listId: string;
-  works: Work[];
-}) {
+export default function ListPolicy({ listId }: { listId: string }) {
   const cache = useQueryClient();
   const path = { list_id: listId };
   const policy = useQuery({
@@ -98,7 +92,6 @@ export default function ListPolicy({
           <PolicyEditor
             key={`${listId}:${policy.data?.revision || 0}`}
             listId={listId}
-            works={works}
             policy={policy.data}
             saved={saved}
           />
@@ -156,12 +149,10 @@ export default function ListPolicy({
 
 function PolicyEditor({
   listId,
-  works,
   policy,
   saved,
 }: {
   listId: string;
-  works: Work[];
   policy: Policy | null;
   saved: (value: Policy) => void;
 }) {
@@ -217,7 +208,8 @@ function PolicyEditor({
     ),
   );
   const [selected, setSelected] = useState<string[]>([]);
-  const [filter, setFilter] = useState("");
+  const [selectionValid, setSelectionValid] = useState(false);
+  const [contentRevision, setContentRevision] = useState<string>();
   const [previewId, setPreviewId] = useState<string | null>(null);
   const [offset, setOffset] = useState(0);
   const key = useRef(crypto.randomUUID());
@@ -277,6 +269,8 @@ function PolicyEditor({
     preference_overrides: overrides,
     expected_revision: policy?.revision || 0,
     include_work_ids: mode === "automatic" ? selected : [],
+    expected_content_revision:
+      mode === "automatic" && selected.length ? contentRevision : undefined,
     downloader_id:
       mode === "automatic" && (downloaderId || !preferences.downloader_id)
         ? downloader?.id
@@ -501,44 +495,18 @@ function PolicyEditor({
                     Include current books ({selected.length} selected, maximum
                     25)
                   </summary>
-                  <label>
-                    Find current books
-                    <input
-                      value={filter}
-                      onChange={(e) => setFilter(e.target.value)}
-                    />
-                  </label>
-                  {works
-                    .filter((w) =>
-                      w.title
-                        .toLocaleLowerCase()
-                        .includes(filter.toLocaleLowerCase()),
-                    )
-                    .slice(0, 100)
-                    .map((w) => (
-                      <label key={w.id}>
-                        <input
-                          type="checkbox"
-                          checked={selected.includes(w.id)}
-                          disabled={
-                            selected.length >= 25 && !selected.includes(w.id)
-                          }
-                          onChange={(e) => {
-                            setSelected(
-                              e.target.checked
-                                ? [...selected, w.id]
-                                : selected.filter((id) => id !== w.id),
-                            );
-                            changed();
-                          }}
-                        />
-                        {w.title}
-                      </label>
-                    ))}
-                  <small>
-                    Showing up to 100 matching books. Search to narrow a larger
-                    list.
-                  </small>
+                  <ListBookPicker
+                    listId={listId}
+                    selected={selected}
+                    onChange={(ids) => {
+                      setSelected(ids);
+                      changed();
+                    }}
+                    maximum={25}
+                    label="Find current books"
+                    onValidityChange={setSelectionValid}
+                    onRevisionChange={setContentRevision}
+                  />
                 </details>
               </>
             )}
@@ -546,6 +514,9 @@ function PolicyEditor({
               className="primary"
               disabled={
                 preview.isPending ||
+                (mode === "automatic" &&
+                  selected.length > 0 &&
+                  !selectionValid) ||
                 !profiles.isSuccess ||
                 (!!profileId && !profile) ||
                 (mode === "automatic" &&

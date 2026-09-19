@@ -680,6 +680,10 @@ nav a.active {
 .list-card:hover {
   border-color: #8b94df;
 }
+.list-search,
+.list-books {
+  margin-bottom: 24px;
+}
 .list-tools > button {
   margin-right: 12px;
   margin-bottom: 12px;

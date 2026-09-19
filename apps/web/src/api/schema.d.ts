@@ -535,6 +535,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/lists/page": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Page */
+    get: operations["list_page_api_lists_page_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/lists/{list_id}": {
     parameters: {
       query?: never;
@@ -552,6 +569,40 @@ export interface paths {
     head?: never;
     /** Edit List */
     patch: operations["edit_list_api_lists__list_id__patch"];
+    trace?: never;
+  };
+  "/api/lists/{list_id}/catalog": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List Catalog */
+    get: operations["list_catalog_api_lists__list_id__catalog_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/move": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Move Entry */
+    post: operations["move_entry_api_lists__list_id__move_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
     trace?: never;
   };
   "/api/lists/{list_id}/entries": {
@@ -3059,6 +3110,8 @@ export interface components {
     };
     /** BatchInput */
     BatchInput: {
+      /** Expected Content Revision */
+      expected_content_revision?: string | null;
       /** Work Ids */
       work_ids: string[];
       specification: components["schemas"]["RequestOptions"];
@@ -4538,6 +4591,19 @@ export interface components {
        */
       minimum_free_percent: number;
     };
+    /** ListCatalogPage */
+    ListCatalogPage: {
+      /** Items */
+      items: components["schemas"]["WorkView"][];
+      /** Total */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+      /** Member Ids */
+      member_ids: string[];
+    };
     /** ListChoice */
     ListChoice: {
       /** External Id */
@@ -4582,6 +4648,12 @@ export interface components {
       items: components["schemas"]["WorkView"][];
       /** Content Revision */
       content_revision: string;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+      /** Matched */
+      matched: number;
     };
     /** ListInput */
     ListInput: {
@@ -4594,6 +4666,17 @@ export interface components {
        * @default false
        */
       shared: boolean;
+    };
+    /** ListPage */
+    ListPage: {
+      /** Items */
+      items: components["schemas"]["ListView"][];
+      /** Total */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
     };
     /** ListPatch */
     ListPatch: {
@@ -4608,6 +4691,8 @@ export interface components {
     };
     /** ListPolicyInput */
     ListPolicyInput: {
+      /** Expected Content Revision */
+      expected_content_revision?: string | null;
       /**
        * Mode
        * @default browse
@@ -5158,6 +5243,18 @@ export interface components {
       offset: number;
       /** Limit */
       limit: number;
+    };
+    /** MoveInput */
+    MoveInput: {
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /** Direction */
+      direction: number;
+      /** Expected Revision */
+      expected_revision: string;
     };
     /** NamingMetadata */
     NamingMetadata: {
@@ -6687,6 +6784,8 @@ export interface components {
     };
     /** SeriesRequestInput */
     SeriesRequestInput: {
+      /** Expected Content Revision */
+      expected_content_revision?: string | null;
       /** Work Ids */
       work_ids: string[];
       specification: components["schemas"]["RequestOptions"];
@@ -8266,7 +8365,12 @@ export interface operations {
   };
   list_all_api_lists_get: {
     parameters: {
-      query?: never;
+      query?: {
+        offset?: number;
+        limit?: number;
+        q?: string;
+        editable?: boolean;
+      };
       header?: never;
       path?: never;
       cookie?: never;
@@ -8280,6 +8384,15 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["ListView"][];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -8317,9 +8430,48 @@ export interface operations {
       };
     };
   };
+  list_page_api_lists_page_get: {
+    parameters: {
+      query?: {
+        offset?: number;
+        limit?: number;
+        q?: string;
+        editable?: boolean;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ListPage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   detail_api_lists__list_id__get: {
     parameters: {
-      query?: never;
+      query?: {
+        offset?: number;
+        limit?: number;
+        q?: string;
+        expected_revision?: string | null;
+      };
       header?: never;
       path: {
         list_id: string;
@@ -8400,6 +8552,74 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["ListView"];
         };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  list_catalog_api_lists__list_id__catalog_get: {
+    parameters: {
+      query?: {
+        offset?: number;
+        limit?: number;
+        q?: string;
+      };
+      header?: never;
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ListCatalogPage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  move_entry_api_lists__list_id__move_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        list_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MoveInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
       /** @description Validation Error */
       422: {

@@ -1,3 +1,4 @@
+import ListChoice from "./ListChoice";
 import { lazy, Suspense, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ArrowLeft, BookOpen, Check, Headphones } from "lucide-react";
@@ -50,11 +51,6 @@ function BookDetailContent({
     staleTime: 0,
     gcTime: 0,
     refetchInterval: 15_000,
-  });
-  const lists = useQuery({
-    queryKey: ["lists"],
-    queryFn: async () => result(await api.GET("/api/lists")),
-    enabled: canEdit,
   });
   const add = useMutation({
     mutationFn: async () =>
@@ -150,39 +146,21 @@ function BookDetailContent({
               }}
             >
               <h2>Add to a list</h2>
-              <Notice error={lists.error || add.error} />
-              {lists.data?.some((list) => list.editable) ? (
-                <div className="inline-form">
-                  <label className="grow">
-                    Reading list
-                    <select
-                      value={listId}
-                      onChange={(e) => {
-                        setListId(e.target.value);
-                        setSaved(false);
-                      }}
-                      required
-                    >
-                      <option value="">Choose a list</option>
-                      {lists.data
-                        .filter((list) => list.editable)
-                        .map((list) => (
-                          <option key={list.id} value={list.id}>
-                            {list.name}
-                          </option>
-                        ))}
-                    </select>
-                  </label>
-                  <button className="primary" disabled={add.isPending}>
-                    Add to list
-                  </button>
-                </div>
-              ) : (
-                <p className="muted">
-                  <Link to="/lists">Create a reading list</Link> to save this
-                  title.
-                </p>
-              )}
+              <Notice error={add.error} />
+              <div className="inline-form">
+                <ListChoice
+                  value={listId}
+                  label="Reading list"
+                  disabled={add.isPending}
+                  onChange={(id) => {
+                    setListId(id);
+                    setSaved(false);
+                  }}
+                />
+                <button className="primary" disabled={!listId || add.isPending}>
+                  Add to list
+                </button>
+              </div>
               {saved ? (
                 <p className="success" role="status">
                   Added to your list.

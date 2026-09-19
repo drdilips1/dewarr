@@ -270,3 +270,15 @@ These cases refine AT-12–AT-14, AT-20–AT-22 and AT-30 for SC-02–SC-07. The
 - Overlapping list jobs, series refresh, review updates and dispatch run concurrently without lock-order deadlock, duplicate targets or duplicate physical transfers. Restart at those boundaries and repeat the same observations.
 - Prefer-pack expansion imports its additional qualifying children; Complete series also handles separate releases and an advertised-but-absent child. Test both modes separately rather than using one successful pack case as proof of both.
 - Exercise the resulting controls and per-child states in the browser, and run real-file import with immediate and delayed backend confirmation. If a confirmed item later becomes missing, preserve acquisition history and expose reconciliation; do not silently declare it still present or reacquire it.
+
+## 15. List pagination and selection assertions
+
+Apply these assertions to FR-02/FR-12, AT-05/AT-22/AT-26/AT-27 and the S02/S08/S09 scopes. [List pagination](docs/LIST-PAGINATION.md) records the implemented contract; successful bounded-page fixtures alone do not close the reference-load gate.
+
+1. Browse more than 200 authorized lists and more than 10,000 members without silent truncation. Return accurate authorized total/filtered counts while hydrating only the requested page. Literal title/author/name searches, canonical aliases, hidden memberships and tied positions have explicit cases.
+2. Select books across pages/searches within the command limit. Counts reflect the selected UUIDs, not only visible checkboxes. No page transition selects an unseen book implicitly. Clear/review the selection after a membership/order conflict.
+3. Move a book across a page boundary without requiring the client to submit the entire list. Preserve hidden slots and all alias memberships. A repeated command after a lost response must not move the book again.
+4. Catalog additions identify memberships on unloaded pages. Book and series destination selectors can find every authorized owned list; shared read-only lists cannot become editable destinations.
+5. Manual request and automatic backlog selectors search the full list. Reject a stale content revision when creating a preview, including removal/re-addition of a selected work. Existing exact receipts retain replay semantics; new selection does not weaken downstream authority or version checks.
+6. Shared readers receive their own scoped availability. Access errors hide cached content; private identities do not appear in page totals, search or membership checks. The live list index may change between requests, but all actions remain tied to explicit authorized identities.
+7. Verify keyboard/mobile operation and bounded query/hydration behavior, then benchmark the PRD reference dataset separately. A larger browsable list does not silently raise automatic activation, backlog, transfer or storage limits.

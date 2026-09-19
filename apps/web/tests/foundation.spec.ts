@@ -2956,6 +2956,7 @@ test("list policy activates future additions and acquires a synced title without
   page,
 }, testInfo) => {
   test.setTimeout(360_000);
+  page.setDefaultTimeout(15_000);
   await page.goto("/");
   await page.getByLabel("Username", { exact: true }).fill("reader");
   await page
@@ -2986,6 +2987,27 @@ test("list policy activates future additions and acquires a synced title without
     .click();
   await page.getByRole("link", { name: "Connections", exact: true }).click();
   await page.getByRole("link", { name: "Downloaders", exact: true }).click();
+  // This focused journey must establish its own enabled downloader and import route.
+  const downloader = page.getByRole("article", {
+    name: "qBittorrent",
+    exact: true,
+  });
+  await downloader
+    .getByRole("button", { name: "Edit downloader", exact: true })
+    .click();
+  const downloaderSettings = page.getByRole("form", {
+    name: "qBittorrent connection settings",
+  });
+  await downloaderSettings
+    .getByLabel("Enable connection", { exact: true })
+    .check();
+  await downloaderSettings
+    .getByRole("button", { name: "Save downloader", exact: true })
+    .click();
+  await downloader
+    .getByRole("button", { name: "Test saved connection", exact: true })
+    .click();
+  await expect(downloader).toContainText("connected");
   await page.getByText("Transfer and storage limits", { exact: true }).click();
   const capacity = page.getByRole("form", {
     name: "Transfer and storage limits",
@@ -2993,6 +3015,18 @@ test("list policy activates future additions and acquires a synced title without
   await capacity.getByLabel("Active downloads per downloader").fill("5");
   await capacity.getByRole("button", { name: "Save capacity limits" }).click();
   await expect(page.getByRole("status")).toContainText("Capacity limits saved");
+  await page.goto("/organization/destinations");
+  const importPolicy = page.getByRole("region", {
+    name: "Automatic import policy",
+  });
+  await expect(importPolicy.getByRole("status")).toBeVisible();
+  const enableImports = importPolicy.getByRole("button", {
+    name: /^(Enable automatic import|Approve the verified route again)$/,
+  });
+  if (await enableImports.isVisible()) await enableImports.click();
+  await expect(importPolicy).toContainText(
+    "New completed downloads with clear catalog and file evidence can import automatically",
+  );
   await page.getByRole("link", { name: "Lists", exact: true }).click();
   await page.getByRole("link", { name: /Hardcover curated shelf/ }).click();
   const subscription = page.getByRole("region", {
@@ -3007,7 +3041,7 @@ test("list policy activates future additions and acquires a synced title without
     .click();
   await subscription
     .getByRole("button", { name: "Refresh Hardcover list", exact: true })
-    .click();
+    .click({ timeout: 60_000 });
   await expect(subscription.getByRole("status")).toContainText(
     "Hardcover list verified: 3 books",
     { timeout: 50_000 },
@@ -3062,7 +3096,7 @@ test("list policy activates future additions and acquires a synced title without
   });
   await subscription
     .getByRole("button", { name: "Refresh Hardcover list", exact: true })
-    .click();
+    .click({ timeout: 60_000 });
   await expect(subscription.getByRole("status")).toContainText(
     "Hardcover list verified: 4 books",
     { timeout: 60_000 },
@@ -3376,6 +3410,7 @@ test("series catalog preserves uncertainty and curates selected books", async ({
   page,
 }, testInfo) => {
   test.setTimeout(240_000);
+  page.setDefaultTimeout(15_000);
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
@@ -3855,7 +3890,10 @@ test("series catalog preserves uncertainty and curates selected books", async ({
     })
     .click();
   await policy
-    .getByRole("checkbox", { name: "My protected catalog title", exact: true })
+    .getByRole("checkbox", {
+      name: "My protected catalog title · In library",
+      exact: true,
+    })
     .check();
   await policy
     .getByRole("button", { name: "Preview list policy", exact: true })
@@ -4684,5 +4722,186 @@ test("local list curation shares read-only views and clears them after revocatio
   await expect(
     page.getByRole("link", { name: /My protected catalog title/ }),
   ).toContainText("In library");
+  expect(errors).toEqual([]);
+});
+
+test("large lists retain cross-page selections and search every list consumer", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(180_000);
+  page.setDefaultTimeout(15_000);
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Sign out", exact: true }),
+  ).toBeVisible();
+  const auth = await (await page.request.get("/api/auth/me")).json();
+  const headers = {
+    Origin: "http://127.0.0.1:8001",
+    "X-CSRF-Token": auth.csrf_token,
+  };
+  const post = async (url: string, data: unknown) => {
+    const response = await page.request.post(url, { headers, data });
+    expect(response.ok(), await response.text()).toBeTruthy();
+    return response.json();
+  };
+  const list = await post("/api/lists", { name: "Pagination reading" });
+  for (let i = 0; i < 26; i++)
+    await post("/api/lists", { name: `Additional list ${i}` });
+  const ids: string[] = [];
+  for (let i = 0; i < 61; i++)
+    ids.push(
+      (
+        await post("/api/catalog/works", {
+          title: `Pagination book ${String(i).padStart(3, "0")}`,
+          authors: ["Pagination Author"],
+        })
+      ).id,
+    );
+  const add = await page.request.post(`/api/lists/${list.id}/curation`, {
+    headers: { ...headers, "Idempotency-Key": "browser-pagination-seed" },
+    data: { action: "add", work_ids: ids },
+  });
+  expect(add.ok(), await add.text()).toBeTruthy();
+  await page.goto("/lists");
+  await expect(
+    page.getByRole("button", { name: "Next lists", exact: true }),
+  ).toBeVisible();
+  await page
+    .getByRole("textbox", { name: "Find lists", exact: true })
+    .fill("Pagination reading");
+  await page.getByRole("link", { name: /Pagination reading/ }).click();
+  const books = page.getByRole("region", { name: "List books", exact: true });
+  await expect(books.getByRole("heading", { level: 3 })).toHaveCount(50);
+  await books
+    .getByRole("checkbox", { name: "Select Pagination book 000", exact: true })
+    .check();
+  await books.getByRole("button", { name: "Next books", exact: true }).click();
+  await books
+    .getByRole("checkbox", { name: "Select Pagination book 050", exact: true })
+    .check();
+  await books
+    .getByRole("button", { name: "Remove selected (2)", exact: true })
+    .click();
+  await expect(
+    books.getByRole("status").filter({ hasText: "removed" }),
+  ).toHaveText("2 books removed from this list. Library files were kept.");
+  await books
+    .getByRole("button", { name: "Add books from catalog", exact: true })
+    .click();
+  const catalog = page.getByRole("region", {
+    name: "Add catalog books",
+    exact: true,
+  });
+  await catalog.getByRole("textbox").fill("Pagination book 060");
+  await catalog
+    .getByRole("button", { name: "Search catalog", exact: true })
+    .click();
+  await expect(
+    catalog.getByRole("checkbox", {
+      name: "Add Pagination book 060",
+      exact: true,
+    }),
+  ).toBeDisabled();
+  await expect(catalog.getByText(/In this list/)).toBeVisible();
+  await books
+    .getByRole("button", { name: "Close catalog picker", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Request books", exact: true })
+    .click();
+  const requests = page.getByRole("region", {
+    name: "List wanted media",
+    exact: true,
+  });
+  await requests
+    .getByRole("textbox", { name: "Find books in this list", exact: true })
+    .fill("Pagination book 060");
+  await requests
+    .getByRole("checkbox", { name: "Pagination book 060", exact: true })
+    .check();
+  await requests
+    .getByRole("combobox", { name: "Media to request", exact: true })
+    .selectOption("ebook");
+  await requests
+    .getByRole("button", { name: "Preview wanted media", exact: true })
+    .click();
+  await expect(
+    requests.getByRole("heading", {
+      name: "Ebook · 1 selected book",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Close list requests", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Acquisition policy", exact: true })
+    .click();
+  const policy = page.getByRole("region", {
+    name: "List acquisition policy",
+    exact: true,
+  });
+  await policy
+    .getByRole("combobox", { name: "Acquisition mode", exact: true })
+    .selectOption("automatic");
+  await policy
+    .getByText("Include current books (0 selected, maximum 25)", {
+      exact: true,
+    })
+    .click();
+  await policy
+    .getByRole("textbox", { name: "Find current books", exact: true })
+    .fill("Pagination book 060");
+  await policy
+    .getByRole("checkbox", { name: "Pagination book 060", exact: true })
+    .check();
+  await expect(
+    policy.getByText("Include current books (1 selected, maximum 25)", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Close acquisition policy", exact: true })
+    .click();
+  await page
+    .getByRole("textbox", { name: "Search this list", exact: true })
+    .fill("Pagination book 060");
+  await expect(books.getByRole("heading", { level: 3 })).toHaveText([
+    "Pagination book 060",
+  ]);
+  await page.screenshot({
+    path: testInfo.outputPath("list-pagination-desktop.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
+    )
+    .toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("list-pagination-mobile.png"),
+    fullPage: true,
+  });
+  await page.goto(`/books/${ids[60]}`);
+  await page
+    .getByRole("textbox", { name: "Find lists by name", exact: true })
+    .fill("Pagination reading");
+  await page.getByLabel("Reading list", { exact: true }).selectOption(list.id);
+  await page.getByRole("button", { name: "Add to list", exact: true }).click();
+  await expect(
+    page.getByRole("status").filter({ hasText: "Added to your list." }),
+  ).toBeVisible();
+  const after = await (await page.request.get(`/api/lists/${list.id}`)).json();
+  expect(after.count).toBe(59);
   expect(errors).toEqual([]);
 });

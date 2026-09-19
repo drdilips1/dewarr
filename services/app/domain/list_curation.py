@@ -7,7 +7,8 @@ from uuid import UUID
 
 from fastapi import HTTPException
 from pydantic import BaseModel, ConfigDict, Field, model_validator
-from sqlalchemy import delete, select, update
+from sqlalchemy import Text, cast, delete, func, literal, select, update
+from sqlalchemy.dialects.postgresql import aggregate_order_by
 
 from app.db.models import AuditEvent, ListEntry, ListObservation, ListSubscription, Operation, Work
 from app.domain.acquisition import withdraw_list_reasons
@@ -47,16 +48,29 @@ def settings_revision(item):
 
 async def content_revision(db, list_id):
     mapping = canonical_map()
-    rows = (
-        await db.execute(
-            select(ListEntry.id, ListEntry.work_id, mapping.c.work_id, ListEntry.position)
-            .select_from(ListEntry)
-            .join(mapping, mapping.c.origin_id == ListEntry.work_id)
-            .where(ListEntry.list_id == list_id)
-            .order_by(ListEntry.id)
+    # Aggregate in PostgreSQL so paging does not hydrate every membership in Python.
+    row = (
+        cast(ListEntry.id, Text)
+        + literal(":")
+        + cast(ListEntry.work_id, Text)
+        + literal(":")
+        + cast(mapping.c.work_id, Text)
+        + literal(":")
+        + cast(ListEntry.position, Text)
+    )
+    fingerprint = await db.scalar(
+        select(
+            func.md5(
+                func.coalesce(
+                    func.string_agg(row, aggregate_order_by(literal("|"), ListEntry.id)), ""
+                )
+            )
         )
-    ).all()
-    return digest([list_id, [tuple(row) for row in rows]])
+        .select_from(ListEntry)
+        .join(mapping, mapping.c.origin_id == ListEntry.work_id)
+        .where(ListEntry.list_id == list_id)
+    )
+    return digest([list_id, "membership-v2", fingerprint])
 
 
 async def check_revision(db, list_id, expected):
