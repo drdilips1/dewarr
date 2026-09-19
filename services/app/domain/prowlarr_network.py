@@ -18,11 +18,15 @@ from app.security import decrypt_secrets
 REQUEST_INTERVAL = 1.0
 
 
-async def prowlarr_call(user_id, operation, argument=None, *, expected_generation=None):
+async def prowlarr_call(
+    user_id, operation, argument=None, *, expected_generation=None, recovery_guard=None
+):
     token = uuid4()
     async with session_factory()() as db, db.begin():
         await check_actor(db, user_id, admin=operation == "test")
         await transaction_lock(db, "source:prowlarr")
+        if recovery_guard is not None:
+            await recovery_guard(db)
         row = await db.get(SourceConnection, "prowlarr")
         if not row or not row.enabled:
             raise HTTPException(409, "An administrator must connect and enable Prowlarr first")

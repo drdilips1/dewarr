@@ -1,6 +1,6 @@
 # Product and development handoff
 
-September 19, 2026 · Product baseline v1.9 · Planning review against committed revision `93a0dde`.
+September 19, 2026 · Product baseline v1.9 · Planning review against committed revision `ec85b46`.
 
 Build a self-hosted book discovery, curation and acquisition app above Audiobookshelf. Browse a familiar Seerr-style catalog, see existing holdings, compare ebook editions and audiobook recordings, aggregate releases, and acquire missing media through manual requests or followed lists. Organize new downloads into verified library items while preserving the original torrent data.
 
@@ -50,6 +50,24 @@ flowchart TD
 ```
 
 The essential entities are Work, CatalogVersion, Representation, SourceRelease, LibraryAsset, ListMembership, AcquisitionIntent, Transfer and ImportManifest. A version records a real edition or recording; an encoding is a representation; competing tracker results are releases. One transfer can contain several works, and one asset can be an inseparable omnibus. Namespaced provider IDs support matching but do not replace app-owned identity.
+
+### Integration delivery contract
+
+Each connection has an independently tested adapter. Successful authentication is only one capability: inventory access, list access, search, acquisition and write-back must be qualified separately. The interface choices below describe what to implement; they do not certify an account or a deployed service version.
+
+| Connection | Interface and responsibility | Required behavior when limited or unavailable | Delivery |
+|---|---|---|---|
+| Audiobookshelf | Authenticated server API for libraries/items and optional scans; events where available, with periodic inventory reconciliation | Keep stale holdings distinguishable from confirmed absence; wait for observed items before showing availability; support watcher-only confirmation when scan permission is absent | S03–S04 |
+| Hardcover | Server-side GraphQL adapter for catalog, editions, series, discovery and authorized list observations; separately enabled supported list mutations | Cache attributed metadata, retain unresolved entries, expose account/capability errors and keep write-back independent of read access | S02, S07–S08 |
+| Open Library | Targeted work/edition lookup through a separate metadata adapter | Fill identity-validated gaps; do not infer a recording or narrator from work-level metadata | S02 |
+| MyAnonamouse | Native search/detail and torrent resolution; encrypted `mam_id`, serialized session rotation and explicit configured proxy route | Distinguish authentication, quota, parser and empty-result states; preserve rotated credentials; a required proxy failure cannot fall back to direct access | S05 |
+| AudiobookBay | Bounded search/detail parsing and magnet/torrent metadata resolution for supported hosts | Isolate parser failures from other sources; unknown seeds and unverified collection contents remain unknown | S06 |
+| Prowlarr | API adapter retaining indexer identity, categories, capabilities and acquisition routing | Suppress redundant native-MAM querying; retain origin-specific download credentials; disable unsupported transports | S06 |
+| qBittorrent | Web API for capabilities, submission, transfer association, status and file observations | Reconcile a lost submission response before retrying; preserve original seeding data; apply explicit client-to-worker path mappings | S05 |
+| Goodreads | Inbound shelf RSS and user-provided CSV through the list adapter | Repeated entries are idempotent; an entry missing from a limited feed does not prove removal; expose no unsupported write-back action | S07 |
+| Gluetun | External HTTP proxy route for configured source traffic; torrent egress remains a separate deployment concern | Test the actual configured route and report failure without bypass; UI traffic and unrelated providers need not share the route | S05 |
+
+The [Hardcover API guide](https://docs.hardcover.app/api/getting-started/) describes a changing GraphQL API; its published onboarding details are not a substitute for current operation/account tests. The [ABS directory guide](https://audiobookshelf.org/docs/documentation/libraries/book-library/directory-structure/) defines scanner-sensitive book boundaries. These are why capability qualification and actual item-count/layout tests belong in the delivery gates. Detailed adapter behavior and researched references remain in [D03, D07 and D10–D11](IMPLEMENTATION-DECISIONS.md).
 
 ## 2. The defining experience
 
@@ -168,9 +186,9 @@ Assign an accountable developer and reviewer at scheduling time. With one develo
 
 ## 9. Remaining development batches from the current checkpoint
 
-Committed baseline: `93a0dde`, schema 0044. Recorded increments include bounded catalog/inventory, acquisition/import, lists/series, discovery/curation, write-back and successive recovery safeguards. Consult implementation status for exact coverage; no blanket completion follows from this list.
+Reviewed implementation checkpoint: `ec85b46`, schema 0044. Recorded increments include bounded catalog/inventory, acquisition/import, lists/series, discovery/curation, write-back and successive recovery safeguards. Consult implementation status for exact coverage; no blanket completion follows from this list. This checkpoint identifies the code reviewed for this handoff, not a minimum version or a stage acceptance.
 
-The committed baseline includes [saved automation review](docs/RECOVERY-AUTOMATION.md). The [current account permission review](docs/RECOVERY-ACCESS.md) increment adds explicit permission confirmation and repair; measured results and its bounded acceptance scope are recorded in implementation status. [ABS/qBittorrent connection repair](docs/RECOVERY-CONNECTIONS.md) now provides explicit credential and downloader-mapping review. Other source/account settings, file-route qualification, unresolved effects and fresh wanted-work activation still precede controlled resume.
+The checkpoint includes [saved automation review](docs/RECOVERY-AUTOMATION.md), [account permission review](docs/RECOVERY-ACCESS.md), and [ABS/qBittorrent connection repair](docs/RECOVERY-CONNECTIONS.md). Those increments provide explicit policy, permission, credential and downloader-mapping review while restore remains paused. The next increment supplies [source settings and durable verification](docs/RECOVERY-SOURCES.md); its evidence is recorded separately. Metadata-account settings, actual file-route qualification, unresolved effects and fresh wanted-work activation still precede controlled resume. Measured results and their bounded acceptance scope are recorded in implementation status.
 
 | Workstream | Remaining outcome | Required demonstration |
 |---|---|---|
@@ -186,11 +204,13 @@ Recovery does not replace the broader product work. Earlier unmet stage prerequi
 
 ## 10. Development start and release handoff
 
+**Current product priority:** begin the [internal alpha sessions](docs/INTERNAL-ALPHA.md) on the native deployment. Configure the real library, gather setup/browsing feedback and qualify a controlled acquisition. The remaining recovery and production gates below remain mandatory, but they should not delay these user-testing sessions.
+
 For a fresh implementation, follow S00 → S01 → S02/S03 → S04 → S05 → S06 → S07 → S08 → S09. For this existing workspace:
 
 1. **Inventory current evidence.** Compare HEAD and working changes with implementation status. Preserve delivered subsets and attach every remaining assertion to its stable package.
-2. **Preserve and qualify current permission review.** Account roles, automation privileges and library grants use the implemented exact preview and acceptance flow. Do not mistake policy pause or local permission confirmation for a supported resume workflow.
-3. **Complete recovery authority and resume.** Preserve queue/approval fences; revalidate current access, routes and external effects; resolve or explicitly hold uncertain work; activate only freshly authorized wanted work; rehearse actual restore and resume.
+2. **Complete current connection and route recovery.** Preserve delivered account/ABS/qBittorrent reviews. Preserve the source/session repair increment and complete metadata-account repair; verify current file destinations and mappings before granting fresh import authority. Saving settings, verifying a connection and qualifying a file route are distinct outcomes.
+3. **Complete recovery authority and resume.** Preserve queue/approval fences; reconcile external effects and reservations; resolve or explicitly hold uncertain work; activate only freshly authorized wanted work; rehearse actual restore and controlled resume. Do not mistake local settings confirmation for permission to resume automation.
 4. **Close source, version and automation gaps.** Run the shared acceptance story across qualified services and layouts, including policy changes and shared reasons. Use the existing acquisition/import services.
 5. **Finish the full product experience.** Review setup, catalog, versions/sources, recommendations, list curation/activation, collection review and repair on desktop and mobile.
 6. **Accept the release candidate.** Close all mandatory evidence, publish versioned build artifacts and supported compatibility information, complete upgrade/restore instructions and release documentation. Take S10 separately.

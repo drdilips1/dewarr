@@ -595,6 +595,9 @@ async def collect(inputs, writer):
     await recovery_commands.observe(inputs, writer)
     await recovery_access.observe(inputs, writer)
     await recovery_connections.observe(inputs, writer)
+    from app.domain import recovery_sources
+
+    await recovery_sources.observe(inputs, writer)
     await observe_files(inputs, writer)
     await writer.add(
         "review",

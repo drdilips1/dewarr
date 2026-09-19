@@ -28,6 +28,8 @@ RECOVERY_TASKS = {
     "recovery.commands",
     "recovery.access",
     "recovery.connections",
+    "recovery.sources",
+    "recovery.source-test",
 }
 
 # One statement seals both the high-water mark and exact subject membership.

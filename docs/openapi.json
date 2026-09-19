@@ -1782,6 +1782,167 @@
         }
       }
     },
+    "/api/recovery/source-reconciliations": {
+      "post": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Prepare Source Reconciliation",
+        "operationId": "prepare_source_reconciliation_api_recovery_source_reconciliations_post",
+        "parameters": [
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SourceReconciliationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recovery/source-reconciliations/{identifier}": {
+      "get": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Get Source Reconciliation",
+        "operationId": "get_source_reconciliation_api_recovery_source_reconciliations__identifier__get",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Identifier"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recovery/source-reconciliations/{identifier}/accept": {
+      "post": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Accept Source Reconciliation",
+        "operationId": "accept_source_reconciliation_api_recovery_source_reconciliations__identifier__accept_post",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Identifier"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReconciliationAcceptance"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/activity": {
       "get": {
         "tags": [
@@ -21731,6 +21892,77 @@
         ],
         "title": "RecoveryQbitSettings"
       },
+      "RecoverySourceSettings": {
+        "properties": {
+          "source_key": {
+            "type": "string",
+            "enum": [
+              "mam",
+              "prowlarr",
+              "audiobookbay"
+            ],
+            "title": "Source Key"
+          },
+          "base_url": {
+            "type": "string",
+            "title": "Base Url"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "proxy_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proxy Url"
+          },
+          "has_credentials": {
+            "type": "boolean",
+            "title": "Has Credentials"
+          },
+          "has_proxy_credentials": {
+            "type": "boolean",
+            "title": "Has Proxy Credentials"
+          },
+          "excluded_indexers": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Excluded Indexers"
+          },
+          "metadata_downloader_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metadata Downloader Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source_key",
+          "base_url",
+          "enabled",
+          "proxy_url",
+          "has_credentials",
+          "has_proxy_credentials",
+          "excluded_indexers",
+          "metadata_downloader_id"
+        ],
+        "title": "RecoverySourceSettings"
+      },
       "RecoveryView": {
         "properties": {
           "queue_fence": {
@@ -21814,6 +22046,16 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ConnectionReconciliationView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "latest_source_reconciliation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SourceReconciliationView"
               },
               {
                 "type": "null"
@@ -24760,6 +25002,288 @@
         ],
         "title": "SourceArtifactView"
       },
+      "SourceChoice": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Finding Id"
+          },
+          "source_key": {
+            "type": "string",
+            "enum": [
+              "mam",
+              "prowlarr",
+              "audiobookbay"
+            ],
+            "title": "Source Key"
+          },
+          "base_url": {
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Base Url"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "proxy_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proxy Url"
+          },
+          "mam_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 8192,
+                "minLength": 1,
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mam Id"
+          },
+          "api_key": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 1,
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Api Key"
+          },
+          "proxy_username": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300,
+                "minLength": 1,
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proxy Username"
+          },
+          "proxy_password": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 1,
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proxy Password"
+          },
+          "clear_proxy_credentials": {
+            "type": "boolean",
+            "title": "Clear Proxy Credentials",
+            "default": false
+          },
+          "excluded_indexers": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "maxItems": 1000,
+            "title": "Excluded Indexers"
+          },
+          "metadata_downloader_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metadata Downloader Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "finding_id",
+          "source_key",
+          "base_url",
+          "enabled"
+        ],
+        "title": "SourceChoice"
+      },
+      "SourceReconciliationRequest": {
+        "properties": {
+          "scan_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Scan Id"
+          },
+          "change": {
+            "$ref": "#/components/schemas/SourceChoice"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "scan_id",
+          "change"
+        ],
+        "title": "SourceReconciliationRequest"
+      },
+      "SourceReconciliationView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "scan_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Scan Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SourceRepairItemView"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "applied_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Applied At"
+          },
+          "results": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Results"
+          },
+          "verification": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SourceVerificationView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "scan_id",
+          "status",
+          "message",
+          "created_at",
+          "revision",
+          "expires_at",
+          "items",
+          "applied_at",
+          "results",
+          "verification"
+        ],
+        "title": "SourceReconciliationView"
+      },
+      "SourceRepairItemView": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Finding Id"
+          },
+          "source_key": {
+            "type": "string",
+            "title": "Source Key"
+          },
+          "before": {
+            "$ref": "#/components/schemas/RecoverySourceSettings"
+          },
+          "after": {
+            "$ref": "#/components/schemas/RecoverySourceSettings"
+          },
+          "replace_credentials": {
+            "type": "boolean",
+            "title": "Replace Credentials"
+          },
+          "proxy_credentials": {
+            "type": "string",
+            "enum": [
+              "keep",
+              "clear",
+              "replace"
+            ],
+            "title": "Proxy Credentials"
+          }
+        },
+        "type": "object",
+        "required": [
+          "finding_id",
+          "source_key",
+          "before",
+          "after",
+          "replace_credentials",
+          "proxy_credentials"
+        ],
+        "title": "SourceRepairItemView"
+      },
       "SourceSeries": {
         "properties": {
           "source_id": {
@@ -24788,6 +25312,43 @@
           "name"
         ],
         "title": "SourceSeries"
+      },
+      "SourceVerificationView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "verified_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verified At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "message",
+          "verified_at"
+        ],
+        "title": "SourceVerificationView"
       },
       "SourceView": {
         "properties": {

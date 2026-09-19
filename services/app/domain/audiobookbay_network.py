@@ -19,13 +19,17 @@ from app.security import decrypt_secrets
 REQUEST_INTERVAL = 4.0
 
 
-async def abb_call(user_id, operation, argument=None, *, expected_generation=None):
+async def abb_call(
+    user_id, operation, argument=None, *, expected_generation=None, recovery_guard=None
+):
     if operation not in {"test", "search", "detail"}:
         raise ValueError("Unsupported ABB observation")
     token = uuid4()
     async with session_factory()() as db, db.begin():
         await check_actor(db, user_id, admin=operation == "test")
         await transaction_lock(db, "source:audiobookbay")
+        if recovery_guard is not None:
+            await recovery_guard(db)
         row = await db.get(SourceConnection, "audiobookbay")
         if not row or not row.enabled:
             raise HTTPException(409, "An administrator must connect and enable AudiobookBay first")

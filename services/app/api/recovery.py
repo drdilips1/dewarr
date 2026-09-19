@@ -18,6 +18,7 @@ from app.db.models import (
 )
 from app.domain.recovery_access import AccessChoice
 from app.domain.recovery_connections import ConnectionChoice
+from app.domain.recovery_sources import SourceChoice
 from app.recovery import active_restore, restore_pending
 
 router = APIRouter(prefix="/recovery", tags=["recovery"])
@@ -40,6 +41,7 @@ class RecoveryView(BaseModel):
     latest_scan: "ScanView | None" = None
     latest_access_reconciliation: "AccessReconciliationView | None" = None
     latest_connection_reconciliation: "ConnectionReconciliationView | None" = None
+    latest_source_reconciliation: "SourceReconciliationView | None" = None
     latest_reconciliation: "ReconciliationView | None" = None
     latest_command_reconciliation: "CommandReconciliationView | None" = None
     latest_outbound_reconciliation: "OutboundReconciliationView | None" = None
@@ -194,8 +196,25 @@ async def review(admin: Admin, db: Database):
         if checkpoint
         else None
     )
+    source_review = (
+        await db.scalar(
+            select(Operation)
+            .where(
+                Operation.kind == "recovery.sources",
+                Operation.payload["checkpoint_id"].astext == str(checkpoint.id),
+                Operation.owner_id == admin.id,
+            )
+            .order_by(Operation.created_at.desc(), Operation.id.desc())
+            .limit(1)
+        )
+        if checkpoint
+        else None
+    )
     fence = await db.get(RecoveryQueueFence, checkpoint.id) if checkpoint else None
     return RecoveryView(
+        latest_source_reconciliation=await source_reconciliation_view(db, source_review)
+        if source_review
+        else None,
         latest_connection_reconciliation=connection_reconciliation_view(connection_review)
         if connection_review
         else None,
@@ -1152,3 +1171,124 @@ async def accept_connection_reconciliation(
     )
     await db.commit()
     return connection_reconciliation_view(operation)
+
+
+class RecoverySourceSettings(BaseModel):
+    source_key: Literal["mam", "prowlarr", "audiobookbay"]
+    base_url: str
+    enabled: bool
+    proxy_url: str | None
+    has_credentials: bool
+    has_proxy_credentials: bool
+    excluded_indexers: list[int]
+    metadata_downloader_id: UUID | None
+
+
+class SourceRepairItemView(BaseModel):
+    finding_id: UUID
+    source_key: str
+    before: RecoverySourceSettings
+    after: RecoverySourceSettings
+    replace_credentials: bool
+    proxy_credentials: Literal["keep", "clear", "replace"]
+
+
+class SourceVerificationView(BaseModel):
+    id: UUID
+    status: str
+    message: str
+    verified_at: datetime | None
+
+
+class SourceReconciliationView(ReconciliationView):
+    items: list[SourceRepairItemView]
+    verification: SourceVerificationView | None
+
+
+class SourceReconciliationRequest(BaseModel):
+    model_config = {"extra": "forbid"}
+    scan_id: UUID
+    change: SourceChoice
+
+
+async def source_reconciliation_view(db, operation):
+    proof = None
+    test_id = next(
+        (item["test_id"] for item in operation.payload.get("results", []) if item.get("test_id")),
+        None,
+    )
+    if test_id:
+        test = await db.get(Operation, UUID(test_id))
+        if test and test.owner_id == operation.owner_id and test.kind == "recovery.source-test":
+            proof = SourceVerificationView(
+                id=test.id,
+                status=test.status,
+                message=test.message,
+                verified_at=test.payload.get("verified_at"),
+            )
+    return SourceReconciliationView(
+        id=operation.id,
+        scan_id=operation.payload["command"]["scan_id"],
+        status=operation.status,
+        message=operation.message,
+        created_at=operation.created_at,
+        revision=operation.payload["revision"],
+        expires_at=operation.payload["expires_at"],
+        items=[SourceRepairItemView(**item) for item in operation.payload["items"]],
+        applied_at=operation.payload.get("applied_at"),
+        results=operation.payload.get("results", []),
+        verification=proof,
+    )
+
+
+@router.post("/source-reconciliations", response_model=SourceReconciliationView, status_code=201)
+async def prepare_source_reconciliation(
+    body: SourceReconciliationRequest,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_sources import prepare
+
+    operation = await prepare(
+        db, await checkpoint_for(db, admin), admin.id, body.scan_id, body.change, idempotency_key
+    )
+    await db.commit()
+    return await source_reconciliation_view(db, operation)
+
+
+@router.get("/source-reconciliations/{identifier}", response_model=SourceReconciliationView)
+async def get_source_reconciliation(identifier: UUID, admin: Admin, db: Database):
+    from app.domain.recovery_reconciliation import load
+    from app.domain.recovery_sources import KIND
+
+    operation = await load(db, identifier, await checkpoint_for(db, admin), admin.id, kind=KIND)
+    return await source_reconciliation_view(db, operation)
+
+
+@router.post(
+    "/source-reconciliations/{identifier}/accept",
+    response_model=SourceReconciliationView,
+    status_code=202,
+)
+async def accept_source_reconciliation(
+    identifier: UUID,
+    body: ReconciliationAcceptance,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_reconciliation import accept
+    from app.domain.recovery_sources import KIND
+
+    operation = await accept(
+        db,
+        await checkpoint_for(db, admin),
+        admin.id,
+        identifier,
+        body.revision,
+        idempotency_key,
+        kind=KIND,
+    )
+    await db.commit()
+    return await source_reconciliation_view(db, operation)

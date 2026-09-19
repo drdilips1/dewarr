@@ -4,7 +4,7 @@ This is a partial implementation of **S09-02 / FR-36 / AT-25**. It provides a ve
 
 Current schema 0044 also seals [saved approvals](RECOVERY-APPROVALS.md), preventing restored previews from authorizing new downloads, imports or list changes. This extends the historical queue boundary without enabling resume.
 
-[Account permission review](RECOVERY-ACCESS.md) now lets the operator confirm or repair roles, automation privileges and library grants before resume. It preserves wanted books and external files; current configuration and reactivation still need separate checks. [Library/downloader connection review](RECOVERY-CONNECTIONS.md) adds fresh credential checks and qBittorrent path-mapping repair. Other source/account configuration, file-route qualification and reactivation remain separate. The restricted registry now has nine explicit recovery tasks.
+[Account permission review](RECOVERY-ACCESS.md) now lets the operator confirm or repair roles, automation privileges and library grants before resume. It preserves wanted books and external files; current configuration and reactivation still need separate checks. [Library/downloader connection review](RECOVERY-CONNECTIONS.md) adds fresh credential checks and qBittorrent path-mapping repair. [Source connection review](RECOVERY-SOURCES.md) adds MAM/session/proxy, Prowlarr and AudiobookBay repair with a separate durable verification result. Metadata-account configuration, file-route qualification and reactivation remain separate. The restricted registry now has eleven explicit recovery tasks.
 
 ## What the bundle preserves
 

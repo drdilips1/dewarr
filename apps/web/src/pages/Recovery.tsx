@@ -38,6 +38,11 @@ import {
   PrepareConnectionReview,
   type ConnectionReview,
 } from "./RecoveryConnections";
+import {
+  SourceRecoveryReview,
+  PrepareSourceReview,
+  type SourceReview,
+} from "./RecoverySources";
 type RecoveryReview = components["schemas"]["ReconciliationView"];
 
 export default function Recovery() {
@@ -153,6 +158,9 @@ export default function Recovery() {
               connectionReview={
                 review.data.latest_connection_reconciliation ?? undefined
               }
+              sourceReview={
+                review.data.latest_source_reconciliation ?? undefined
+              }
               scanId={review.data.latest_scan?.id}
               state={review.data.latest_scan?.state}
             />
@@ -190,6 +198,7 @@ function RecoveryChecks({
   commandReview,
   accessReview,
   connectionReview,
+  sourceReview,
 }: {
   scanId?: string;
   state?: string;
@@ -201,6 +210,7 @@ function RecoveryChecks({
   commandReview?: CommandReview;
   accessReview?: AccessReview;
   connectionReview?: ConnectionReview;
+  sourceReview?: SourceReview;
 }) {
   const client = useQueryClient();
   const [key, setKey] = useState(() => crypto.randomUUID());
@@ -217,10 +227,13 @@ function RecoveryChecks({
     commandReview,
     accessReview,
     connectionReview,
+    sourceReview,
   ];
-  const busy = reviews.some(
-    (item) => item?.status === "queued" || item?.status === "running",
-  );
+  const busy =
+    reviews.some(
+      (item) => item?.status === "queued" || item?.status === "running",
+    ) ||
+    ["queued", "running"].includes(sourceReview?.verification?.status ?? "");
   const applied = reviews.some(
     (item) => item?.scan_id === scanId && item?.status === "completed",
   );
@@ -445,6 +458,17 @@ function RecoveryChecks({
                       disabled={busy}
                     />
                   )}
+                {state === "completed" &&
+                  ["source-ready", "source-verified"].includes(finding.state) &&
+                  finding.domain === "review" &&
+                  !applied && (
+                    <PrepareSourceReview
+                      scanId={scanId!}
+                      findingId={finding.id}
+                      title={finding.title}
+                      disabled={busy}
+                    />
+                  )}
                 {finding.has_evidence && (
                   <FindingEvidence scanId={scanId!} findingId={finding.id} />
                 )}
@@ -508,6 +532,14 @@ function RecoveryChecks({
         <PublicationRecoveryReview
           key={publicationReview.id}
           review={publicationReview}
+          currentScan={scanId}
+          otherBusy={busy || applied}
+        />
+      )}
+      {sourceReview && (
+        <SourceRecoveryReview
+          key={sourceReview.id}
+          review={sourceReview}
           currentScan={scanId}
           otherBusy={busy || applied}
         />

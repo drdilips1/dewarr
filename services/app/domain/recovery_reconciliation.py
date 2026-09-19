@@ -51,6 +51,8 @@ REVIEW_KINDS = (
     COMMAND_KIND,
     ACCESS_KIND,
     CONNECTION_KIND,
+    "recovery.sources",
+    "recovery.source-test",
 )
 logger = logging.getLogger(__name__)
 

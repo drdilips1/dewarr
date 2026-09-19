@@ -51,6 +51,7 @@ from app.db.models import (
     RecoveryFinding,
     RecoveryScan,
     RestoreCheckpoint,
+    SourceConnection,
     User,
     Version,
     Work,
@@ -97,6 +98,7 @@ async def context(db):
     for model in (
         User,
         Integration,
+        SourceConnection,
         CatalogAccount,
         Library,
         LibraryAsset,

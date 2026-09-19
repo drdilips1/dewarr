@@ -26,10 +26,10 @@ The API provides POST `/api/recovery/connection-reconciliations`, GET `/api/reco
 
 New requests cannot reuse a command key with changed credentials or settings. Another configured qBittorrent connection cannot occupy the same endpoint. A failed item rolls back all local changes. Queued secrets are encrypted; no credential-bearing draft is included in the API response. Sessions, request reasons, transfers, reservations and publication records are not reassigned or replayed.
 
-The restricted recovery worker now includes `recovery.connections`, for nine explicit tasks and no ordinary or periodic registrations. API and worker must be deployed together. Schema remains `0044_recovery_approvals`; no migration or runtime dependency is added.
+This increment added `recovery.connections`; the current exact registry, including source verification, is documented in [source recovery](RECOVERY-SOURCES.md). It has no ordinary or periodic registrations. API and worker must be deployed together. Schema remains `0044_recovery_approvals`; no migration or runtime dependency is added.
 
 ## Qualification and remaining scope
 
 See [implementation status](IMPLEMENTATION-STATUS.md) for measured verification and environment limits. The browser harness uses a synthetic paused state; actual offline restore, live services and release-platform compatibility require their own evidence.
 
-MAM/session and proxy repair, other source/metadata-account settings, import-destination qualification, uncertain effects/reservations, fresh wanted-book activation and controlled resume remain required. This increment does not complete configuration recovery, S09 or the full PRD.
+[Source recovery](RECOVERY-SOURCES.md) now supplies MAM/session/proxy, Prowlarr and AudiobookBay settings review. Metadata-account settings, import-destination qualification, uncertain effects/reservations, fresh wanted-book activation and controlled resume remain required. This increment does not complete configuration recovery, S09 or the full PRD.

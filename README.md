@@ -1,6 +1,8 @@
 # Book discovery app — planning workspace
 
-Current recovery work includes [account permission review](docs/RECOVERY-ACCESS.md) and [library/downloader connection repair](docs/RECOVERY-CONNECTIONS.md): explicit permission, credential and path-mapping corrections while the restore pause remains active. See [implementation status](docs/IMPLEMENTATION-STATUS.md) for measured evidence and remaining full-PRD work.
+For actual use and feedback, start with the [internal alpha guide and outstanding-work register](docs/INTERNAL-ALPHA.md). The native app is available at http://localhost:8000; initial account/service setup and controlled live qualification are still required.
+
+Current recovery work includes [account permission review](docs/RECOVERY-ACCESS.md) and [library/downloader connection repair](docs/RECOVERY-CONNECTIONS.md): explicit permission, credential and path-mapping corrections while the restore pause remains active. [Source recovery](docs/RECOVERY-SOURCES.md) now adds MAM/session/proxy, Prowlarr and AudiobookBay settings review with separate durable verification. See [implementation status](docs/IMPLEMENTATION-STATUS.md) for measured evidence and remaining full-PRD work.
 
 
 Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md), then use these development deliverables:

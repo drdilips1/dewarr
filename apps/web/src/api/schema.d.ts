@@ -634,6 +634,57 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/recovery/source-reconciliations": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Prepare Source Reconciliation */
+    post: operations["prepare_source_reconciliation_api_recovery_source_reconciliations_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/recovery/source-reconciliations/{identifier}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Source Reconciliation */
+    get: operations["get_source_reconciliation_api_recovery_source_reconciliations__identifier__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/recovery/source-reconciliations/{identifier}/accept": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Accept Source Reconciliation */
+    post: operations["accept_source_reconciliation_api_recovery_source_reconciliations__identifier__accept_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/activity": {
     parameters: {
       query?: never;
@@ -7367,6 +7418,28 @@ export interface components {
       /** Mappings */
       mappings: components["schemas"]["RecoveryPathMapping"][];
     };
+    /** RecoverySourceSettings */
+    RecoverySourceSettings: {
+      /**
+       * Source Key
+       * @enum {string}
+       */
+      source_key: "mam" | "prowlarr" | "audiobookbay";
+      /** Base Url */
+      base_url: string;
+      /** Enabled */
+      enabled: boolean;
+      /** Proxy Url */
+      proxy_url: string | null;
+      /** Has Credentials */
+      has_credentials: boolean;
+      /** Has Proxy Credentials */
+      has_proxy_credentials: boolean;
+      /** Excluded Indexers */
+      excluded_indexers: number[];
+      /** Metadata Downloader Id */
+      metadata_downloader_id: string | null;
+    };
     /** RecoveryView */
     RecoveryView: {
       queue_fence?: components["schemas"]["QueueFenceView"] | null;
@@ -7394,6 +7467,8 @@ export interface components {
         components["schemas"]["AccessReconciliationView"] | null;
       latest_connection_reconciliation?:
         components["schemas"]["ConnectionReconciliationView"] | null;
+      latest_source_reconciliation?:
+        components["schemas"]["SourceReconciliationView"] | null;
       latest_reconciliation?:
         components["schemas"]["ReconciliationView"] | null;
       latest_command_reconciliation?:
@@ -8460,6 +8535,108 @@ export interface components {
        */
       dispatch_available: boolean;
     };
+    /** SourceChoice */
+    SourceChoice: {
+      /**
+       * Finding Id
+       * Format: uuid
+       */
+      finding_id: string;
+      /**
+       * Source Key
+       * @enum {string}
+       */
+      source_key: "mam" | "prowlarr" | "audiobookbay";
+      /** Base Url */
+      base_url: string;
+      /** Enabled */
+      enabled: boolean;
+      /** Proxy Url */
+      proxy_url?: string | null;
+      /** Mam Id */
+      mam_id?: string | null;
+      /** Api Key */
+      api_key?: string | null;
+      /** Proxy Username */
+      proxy_username?: string | null;
+      /** Proxy Password */
+      proxy_password?: string | null;
+      /**
+       * Clear Proxy Credentials
+       * @default false
+       */
+      clear_proxy_credentials: boolean;
+      /** Excluded Indexers */
+      excluded_indexers?: number[];
+      /** Metadata Downloader Id */
+      metadata_downloader_id?: string | null;
+    };
+    /** SourceReconciliationRequest */
+    SourceReconciliationRequest: {
+      /**
+       * Scan Id
+       * Format: uuid
+       */
+      scan_id: string;
+      change: components["schemas"]["SourceChoice"];
+    };
+    /** SourceReconciliationView */
+    SourceReconciliationView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Scan Id
+       * Format: uuid
+       */
+      scan_id: string;
+      /** Status */
+      status: string;
+      /** Message */
+      message: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /** Revision */
+      revision: string;
+      /**
+       * Expires At
+       * Format: date-time
+       */
+      expires_at: string;
+      /** Items */
+      items: components["schemas"]["SourceRepairItemView"][];
+      /** Applied At */
+      applied_at: string | null;
+      /** Results */
+      results: {
+        [key: string]: unknown;
+      }[];
+      verification: components["schemas"]["SourceVerificationView"] | null;
+    };
+    /** SourceRepairItemView */
+    SourceRepairItemView: {
+      /**
+       * Finding Id
+       * Format: uuid
+       */
+      finding_id: string;
+      /** Source Key */
+      source_key: string;
+      before: components["schemas"]["RecoverySourceSettings"];
+      after: components["schemas"]["RecoverySourceSettings"];
+      /** Replace Credentials */
+      replace_credentials: boolean;
+      /**
+       * Proxy Credentials
+       * @enum {string}
+       */
+      proxy_credentials: "keep" | "clear" | "replace";
+    };
     /** SourceSeries */
     SourceSeries: {
       /** Source Id */
@@ -8468,6 +8645,20 @@ export interface components {
       name: string;
       /** Position */
       position?: string | null;
+    };
+    /** SourceVerificationView */
+    SourceVerificationView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Status */
+      status: string;
+      /** Message */
+      message: string;
+      /** Verified At */
+      verified_at: string | null;
     };
     /** SourceView */
     SourceView: {
@@ -10162,6 +10353,109 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["ConnectionReconciliationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  prepare_source_reconciliation_api_recovery_source_reconciliations_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SourceReconciliationRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SourceReconciliationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_source_reconciliation_api_recovery_source_reconciliations__identifier__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        identifier: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SourceReconciliationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  accept_source_reconciliation_api_recovery_source_reconciliations__identifier__accept_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        identifier: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReconciliationAcceptance"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SourceReconciliationView"];
         };
       };
       /** @description Validation Error */

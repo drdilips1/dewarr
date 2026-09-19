@@ -135,6 +135,12 @@ async def recovery_stats():
     }
 
 
+@app.get("/fixture/mam-session")
+async def fixture_mam_session():
+    # Invented isolated browser-fixture credential; never a real tracker session.
+    return {"cookie": mam_state["cookie"]}
+
+
 @app.api_route("/mam/{path:path}", methods=["GET", "POST"])
 async def mam_fixture(path: str, request: Request):
     if request.cookies.get("mam_id") != mam_state["cookie"]:

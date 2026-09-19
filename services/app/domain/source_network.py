@@ -27,12 +27,20 @@ async def check_actor(db, user_id, *, admin=False):
 
 
 async def source_call(
-    user_id, operation, argument=None, *, with_generation=False, expected_generation=None
+    user_id,
+    operation,
+    argument=None,
+    *,
+    with_generation=False,
+    expected_generation=None,
+    recovery_guard=None,
 ):
     token = uuid4()
     async with session_factory()() as db, db.begin():
         await check_actor(db, user_id, admin=operation == "test")
         await transaction_lock(db, "source:mam")
+        if recovery_guard is not None:
+            await recovery_guard(db)
         row = await db.get(SourceConnection, "mam")
         if not row or not row.enabled:
             raise HTTPException(409, "An administrator must connect and enable MAM first")
