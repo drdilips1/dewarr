@@ -7,6 +7,7 @@ import DiscoveryShelf, {
   type DiscoveryItem,
 } from "../components/DiscoveryShelf";
 import { Preview } from "./ProviderSearch";
+import SeriesContinuation from "../components/SeriesContinuation";
 
 export default function Discover({ canEdit }: { canEdit: boolean }) {
   const [selected, setSelected] = useState<string | null>(null);
@@ -84,6 +85,7 @@ export default function Discover({ canEdit }: { canEdit: boolean }) {
           </section>
         </>
       )}
+      <SeriesContinuation />
       <section className="discovery-section" aria-label="Your catalog picks">
         <Notice error={local.error} />
         {local.isPending && <Loading />}

@@ -4355,3 +4355,125 @@ test("community lists preview ownership and follow into private list automation"
   expect(await policy.json()).toBeNull();
   expect(errors).toEqual([]);
 });
+
+test("series discovery shows library gaps and preserves owned formats through curation", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(120_000);
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Sign out", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Discover", exact: true }).click();
+  const shelf = page.getByRole("region", {
+    name: "Continue your series",
+    exact: true,
+  });
+  await expect(shelf).toContainText("Open a book you own");
+  await shelf.getByRole("link", { name: "Browse your catalog" }).click();
+  await page.getByRole("link", { name: /My protected catalog title/ }).click();
+  await page
+    .getByRole("link", { name: "The Journey Series", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Load series from Hardcover", exact: true })
+    .click();
+  await expect(
+    page.getByRole("status").filter({ hasText: "Verified 4 series entries" }),
+  ).toBeVisible({ timeout: 30_000 });
+  await page.getByRole("link", { name: "Discover", exact: true }).click();
+  const series = shelf.getByRole("article", {
+    name: "The Journey Series library gaps",
+  });
+  await expect(series).toContainText("1 in library · 1 missing book");
+  await expect(series).toContainText("1 with unknown publication date");
+  await expect(
+    series.getByRole("link", { name: /Hardcover List Arrival/ }),
+  ).toBeVisible();
+  await expect(
+    series.getByRole("link", { name: /My protected catalog title/ }),
+  ).toHaveCount(0);
+  await expect(series).not.toContainText("Journey Collection");
+  await shelf
+    .getByRole("combobox", { name: "Find missing" })
+    .selectOption("audio");
+  const owned = series.getByRole("link", {
+    name: /My protected catalog title/,
+  });
+  await expect(series).toContainText("2 missing audiobooks");
+  await expect(owned).toContainText("In library");
+  await expect(owned).toContainText("Ebook");
+  await shelf.screenshot({
+    path: testInfo.outputPath("series-discovery-desktop.png"),
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(owned).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await shelf.screenshot({
+    path: testInfo.outputPath("series-discovery-mobile.png"),
+  });
+  const seriesLink = series.getByRole("link", {
+    name: "View series",
+    exact: false,
+  });
+  await seriesLink.focus();
+  await page.keyboard.press("Enter");
+  await expect(
+    page.getByRole("heading", { name: "The Journey Series", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Series requests", exact: true }),
+  ).toBeVisible();
+  await page
+    .getByLabel("Select Hardcover List Arrival", { exact: true })
+    .check();
+  const curation = page.getByRole("region", { name: "Curate series" });
+  await curation
+    .getByLabel("Destination list")
+    .selectOption({ label: "Weekend reads" });
+  await curation
+    .getByRole("button", {
+      name: "Add selected books to list (1)",
+      exact: true,
+    })
+    .click();
+  await expect(
+    curation.getByRole("status").filter({ hasText: "Added" }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Lists", exact: true }).click();
+  await page.getByRole("link", { name: /Weekend reads/ }).click();
+  await expect(
+    page.getByRole("heading", { name: "Hardcover List Arrival", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Discover", exact: true }).click();
+  await expect(series).toBeVisible();
+  await page.route("**/api/discovery/series?*", (route) =>
+    route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ detail: "Series shelf temporarily unavailable" }),
+    }),
+  );
+  await shelf
+    .getByRole("combobox", { name: "Find missing" })
+    .selectOption("ebook");
+  await expect(shelf.getByRole("alert")).toHaveText(
+    "Series shelf temporarily unavailable",
+  );
+  await expect(series).toHaveCount(0);
+  await page.unroute("**/api/discovery/series?*");
+  await shelf.getByRole("button", { name: "Retry series shelf" }).click();
+  await expect(series).toContainText("1 missing ebook");
+  expect(errors).toEqual([]);
+});

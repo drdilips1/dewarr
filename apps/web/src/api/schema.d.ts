@@ -278,6 +278,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/discovery/series": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Series Gaps */
+    get: operations["series_gaps_api_discovery_series_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/discovery/lists": {
     parameters: {
       query?: never;
@@ -6514,6 +6531,65 @@ export interface components {
       publication: string;
       work: components["schemas"]["WorkView"];
     };
+    /** SeriesGap */
+    SeriesGap: {
+      /** External Id */
+      external_id: string;
+      /** Name */
+      name: string;
+      /**
+       * Fetched At
+       * Format: date-time
+       */
+      fetched_at: string;
+      /** Catalog Stale */
+      catalog_stale: boolean;
+      /** Inventory Stale */
+      inventory_stale: boolean;
+      /** Owned */
+      owned: number;
+      /** Ebook */
+      ebook: number;
+      /** Audio */
+      audio: number;
+      /** Published */
+      published: number;
+      /** Missing */
+      missing: number;
+      /** Unknown Publication */
+      unknown_publication: number;
+      /** Future Publication */
+      future_publication: number;
+      /** Books */
+      books: components["schemas"]["SeriesGapBook"][];
+    };
+    /** SeriesGapBook */
+    SeriesGapBook: {
+      work: components["schemas"]["WorkView"];
+      /** Position */
+      position: string | null;
+      /** Ambiguous Position */
+      ambiguous_position: boolean;
+    };
+    /** SeriesGapShelf */
+    SeriesGapShelf: {
+      /** Items */
+      items?: components["schemas"]["SeriesGap"][];
+      /**
+       * Medium
+       * @enum {string}
+       */
+      medium: "any" | "ebook" | "audio";
+      /** Page */
+      page: number;
+      /** Has More */
+      has_more: boolean;
+      /**
+       * Attribution
+       * @default Your observed Hardcover catalogs and accessible library holdings
+       */
+      attribution: string;
+    };
     /** SeriesPlanView */
     SeriesPlanView: {
       /**
@@ -7609,6 +7685,39 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["DiscoveryShelf"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  series_gaps_api_discovery_series_get: {
+    parameters: {
+      query?: {
+        medium?: "any" | "ebook" | "audio";
+        page?: number;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SeriesGapShelf"];
         };
       };
       /** @description Validation Error */

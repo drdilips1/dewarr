@@ -1,10 +1,12 @@
 # Implementation status and evidence
 
-Latest checkpoint: [Community-list discovery and following](COMMUNITY-LISTS.md) connects public Hardcover browse/search and scoped library previews to private local subscriptions and existing automation. Complete discovery/curation and full stage acceptance remain open. The final checkpoint records exact verification.
+Latest checkpoint: [Series continuation](SERIES-DISCOVERY.md) adds published gaps from loaded Hardcover series to Discover, with ebook/audio filters, current scoped ownership and links to existing curation/acquisition. Complete curation/sharing, supported write-back and full stage acceptance remain open. The final checkpoint records exact verification.
 
 Updated September 18, 2026. Objective remains **implement the full PRD end to end**, including the planned later capabilities. This is an implementation checkpoint, not a completion declaration.
 
 ## Current code
+
+- [Series continuation](SERIES-DISCOVERY.md) projects loaded catalog series against accessible verified holdings, groups canonical aliases, distinguishes media gaps from overall ownership and exposes ordering/date/staleness uncertainty. The shelf uses batched local reads and creates no requests or downloads. Whole-library series discovery and full S08 qualification remain open.
 
 - [Community lists](COMMUNITY-LISTS.md) adds public-list browse/search, fresh public-header validation, paginated book previews, current scoped ownership, private Follow receipts and atomic first-sync enqueue. Repeated follows preserve existing subscription/policy settings. New upstream membership uses the existing two-pass observation and list acquisition pipeline. Actual-account qualification, remaining discovery/curation and full S08 acceptance remain open.
 
@@ -639,3 +641,21 @@ Verification at this checkpoint:
 - Development database/key/config backup verified with private file modes before restart. API and worker restarted on `0038_asset_containment`; readiness and community UI return 200, unauthenticated community data returns 401, one worker is fresh and download dispatch remains disabled. Evidence: `.local/evidence/community-runtime.json`.
 
 Actual Hardcover account access/search ordering and live source/client acquisition remain independent qualification gates; fixture responses do not certify them. Remaining S08 work includes series-continuation discovery, complete curation/sharing, supported optional write-back and task-based usability. All unmet S00–S10 obligations remain in scope. This checkpoint advances FR-11–FR-12 and the S07/S08 connection; it does not complete the full PRD.
+
+## Series-continuation discovery checkpoint · September 18, 2026
+
+[Series discovery](SERIES-DISCOVERY.md) adds **Continue your series** to Discover. Each user's loaded Hardcover catalogs are filtered against accessible verified library assets. Canonical aliases and verified omnibus children retain the shared ownership semantics; future/unknown publications, compilations, partial records and removed memberships cannot become published gap recommendations. Ebook/audio filters retain the overall In library badge when the other medium exists. Series and book links use the existing curation and request flows; the shelf itself has no provider or acquisition side effects.
+
+The scoped availability SELECT is extracted into a shared helper used by both ordinary availability projections and the series candidate query. Eligible series are selected before pagination; membership and ownership hydration is batched. The UI keeps four series per page and three title previews per series, with uncertainty labels, empty-state guidance, keyboard links and error/retry behavior.
+
+Verification at this checkpoint:
+
+- Affected integration regression: **175 passed in 51.87 seconds**, covering the new series shelf, series catalogs/requests/scope reviews, discovery/community lists, canonical merges, containment/collection importing, catalog lists and acquisition. Evidence: `.local/evidence/series-discovery-regression.log`. This is the targeted affected suite, not a full-backend-suite claim.
+- The new API cases cover both medium filters, either-medium ownership, read-only behavior, stale observations, uncertain positions/dates, future/removed/compilation/partial records, private catalogs, member/viewer grants and revocation, disabled/inaccessible sources, canonical grouping, collection children, pagination and validation. A 1,255-membership fixture verifies fixed read count for one versus four series and three previews per card; it does not certify the full NFR performance dataset.
+- Final browser baseline and connected series journey: **2 passed in 1.7 minutes**. Empty shelf → owned book → durable catalog refresh → fresh shelf → audio filter with ebook ownership → keyboard series link → existing request section/curation → actual local list, plus mobile overflow and error/retry. Evidence: `.local/evidence/series-discovery-browser-verified.log`. Desktop/mobile captures were inspected and retained in `.local/evidence/series-discovery-ui/`.
+- The first browser run found that the global 30-second query freshness setting retained the empty shelf after a successful series refresh. The shelf now uses zero stale time and no inactive cache; the repeated journey verifies immediate navigation refresh. The fix changes product behavior rather than increasing the assertion timeout.
+- Python lint/format, frontend production build/format and reproducible OpenAPI/client generation pass. The wheel matches all **198 backend Python modules**. No new migration, dependency, service or secret is introduced.
+
+Deployment: a private database/encryption-key/configuration backup and readable archive catalog were verified (`.local/evidence/series-discovery-backup-path.txt`). With zero active jobs, the identified development API and worker were restarted together. Readiness and Discover return **200**, unauthenticated series data returns **401**, one worker is fresh and dispatch remains **disabled** on `0038_asset_containment` (`series-discovery-runtime.json`). Documentation checks validate **297 local links**, 54 requirement rows and 61 backlog packages.
+
+This advances FR-11/S08-01 and the discovery portion of AT-05. Catalog refresh/provider responses in the connected browser journey are synthetic; actual-account qualification remains independent. Local sharing/curation, supported optional Hardcover writes, usability, broader recommendation coverage and full integration/performance/release gates remain open, as do all unmet S00–S10 requirements. No whole-library automatic series enrichment or completed PRD is claimed.

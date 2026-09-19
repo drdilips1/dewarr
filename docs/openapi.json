@@ -644,6 +644,78 @@
         }
       }
     },
+    "/api/discovery/series": {
+      "get": {
+        "tags": [
+          "discovery"
+        ],
+        "summary": "Series Gaps",
+        "operationId": "series_gaps_api_discovery_series_get",
+        "parameters": [
+          {
+            "name": "medium",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "any",
+                "ebook",
+                "audio"
+              ],
+              "type": "string",
+              "default": "any",
+              "title": "Medium"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 12,
+              "minimum": 1,
+              "default": 4,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeriesGapShelf"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/discovery/lists": {
       "get": {
         "tags": [
@@ -19106,6 +19178,152 @@
           "work"
         ],
         "title": "SeriesEntryView"
+      },
+      "SeriesGap": {
+        "properties": {
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "fetched_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Fetched At"
+          },
+          "catalog_stale": {
+            "type": "boolean",
+            "title": "Catalog Stale"
+          },
+          "inventory_stale": {
+            "type": "boolean",
+            "title": "Inventory Stale"
+          },
+          "owned": {
+            "type": "integer",
+            "title": "Owned"
+          },
+          "ebook": {
+            "type": "integer",
+            "title": "Ebook"
+          },
+          "audio": {
+            "type": "integer",
+            "title": "Audio"
+          },
+          "published": {
+            "type": "integer",
+            "title": "Published"
+          },
+          "missing": {
+            "type": "integer",
+            "title": "Missing"
+          },
+          "unknown_publication": {
+            "type": "integer",
+            "title": "Unknown Publication"
+          },
+          "future_publication": {
+            "type": "integer",
+            "title": "Future Publication"
+          },
+          "books": {
+            "items": {
+              "$ref": "#/components/schemas/SeriesGapBook"
+            },
+            "type": "array",
+            "title": "Books"
+          }
+        },
+        "type": "object",
+        "required": [
+          "external_id",
+          "name",
+          "fetched_at",
+          "catalog_stale",
+          "inventory_stale",
+          "owned",
+          "ebook",
+          "audio",
+          "published",
+          "missing",
+          "unknown_publication",
+          "future_publication",
+          "books"
+        ],
+        "title": "SeriesGap"
+      },
+      "SeriesGapBook": {
+        "properties": {
+          "work": {
+            "$ref": "#/components/schemas/WorkView"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "ambiguous_position": {
+            "type": "boolean",
+            "title": "Ambiguous Position"
+          }
+        },
+        "type": "object",
+        "required": [
+          "work",
+          "position",
+          "ambiguous_position"
+        ],
+        "title": "SeriesGapBook"
+      },
+      "SeriesGapShelf": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SeriesGap"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "medium": {
+            "type": "string",
+            "enum": [
+              "any",
+              "ebook",
+              "audio"
+            ],
+            "title": "Medium"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          },
+          "attribution": {
+            "type": "string",
+            "title": "Attribution",
+            "default": "Your observed Hardcover catalogs and accessible library holdings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "medium",
+          "page",
+          "has_more"
+        ],
+        "title": "SeriesGapShelf"
       },
       "SeriesPlanView": {
         "properties": {

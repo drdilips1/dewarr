@@ -44,6 +44,7 @@ from app.api import (
     release_profiles,
     requests,
     series,
+    series_discovery,
     series_requests,
     source_artifacts,
     sources,
@@ -114,6 +115,7 @@ def create_app() -> FastAPI:
     app.include_router(operations.router, prefix="/api")
     app.include_router(catalog.router, prefix="/api")
     app.include_router(discovery.router, prefix="/api")
+    app.include_router(series_discovery.router, prefix="/api")
     app.include_router(community_lists.router, prefix="/api")
     app.include_router(series.router, prefix="/api")
     app.include_router(series_requests.router, prefix="/api")

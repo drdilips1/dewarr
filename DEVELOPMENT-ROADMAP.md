@@ -1,6 +1,6 @@
 # Product and development handoff
 
-September 18, 2026 · v1.9 product baseline · Execution handoff includes automatic/manual reviewed packs, native AudiobookBay and reviewed collection contents/import. Each has bounded implementation evidence; actual-service qualification remains open. This guide is a plan, not a claim of completed functionality.
+September 18, 2026 · v1.9 product baseline · Planning handoff reviewed against committed revision `70e38c8`, including initial discovery and community-list subscriptions. Implementation is partial; no complete stage gate is accepted. Uncommitted work is not acceptance evidence.
 
 Build a self-hosted book discovery, curation and acquisition app above Audiobookshelf. The experience should feel familiar to a Seerr user: browse attractive shelves, open one book page, see what is already owned, inspect available versions and sources, and request missing media. The app also owns organizing its newly downloaded files so that Audiobookshelf can serve them correctly.
 
@@ -37,6 +37,10 @@ The [stage closure plan](IMPLEMENTATION-PLAN.md#17-stage-closure-and-implementat
 | Rich native MAM behavior to reference or adapt with notices | MouseSearch |
 
 Use a modular backend with isolated adapters, a separate durable worker, PostgreSQL and a React frontend. Do not require users to install another acquisition manager. Prowlarr is an optional source integration; native MAM remains first-class. BookOrbit is a later backend adapter and an architectural reference, subject to its separate license boundary.
+
+The selected implementation stack is React/TypeScript/Vite with Tailwind and TanStack Query; FastAPI/Pydantic with a generated TypeScript API client; PostgreSQL/SQLAlchemy/Alembic; and Procrastinate for durable jobs. API and worker share domain services but run as separate processes. Docker Compose supplies the application and database; ABS, qBittorrent, Gluetun and optional Prowlarr remain external connections. This is the engineering choice for this project, not an upstream requirement.
+
+Reuse is selective: Seerr supplies presentation references and eligible visual components; MouseSearch supplies native MAM search/session/detail references; Shelfmark supplies metadata-search-to-release-aggregation references. BookOrbit supplies metadata-policy ideas to implement independently under the selected project license. Each copied file or asset needs recorded upstream revision, license and notices. The checked repositories identify [Seerr](https://github.com/seerr-team/seerr), [MouseSearch](https://github.com/sevenlayercookie/MouseSearch) and [Shelfmark](https://github.com/calibrain/shelfmark) as MIT, while [BookOrbit](https://github.com/bookorbit/bookorbit#license-and-attribution) identifies AGPL-3.0-only and additional terms. See [D05](IMPLEMENTATION-DECISIONS.md#d05--license-and-reuse-boundary) for the reuse boundary.
 
 ```mermaid
 flowchart TD
@@ -108,6 +112,8 @@ Detailed tickets, dependencies, role ownership and acceptance references are mai
 **Private alpha:** S05. **Automated-list beta:** S07. **Complete discovery beta:** S08. **Production v1:** S09. S10 remains on the roadmap; it cannot absorb unfinished v1 requirements.
 
 The dependency order matters: importing is proven on synthetic completed downloads before automatic downloading is enabled. List automation uses the same acquisition path as manual requests. It must not become a second downloader implementation.
+
+Dependency path: **S00 → S01 → S02 + S03 → S04 → S05 → S06 → S07 → S08 → S09**. S02 and S03 can develop independently against the agreed identity contract; their integration is required before import qualification. Discovery UI and provider contract research can begin earlier, while dependent acquisition capabilities remain gated. Security, accessibility, migrations and recovery are part of every affected stage.
 
 ## 5. What must remain simple in the UI
 
@@ -182,11 +188,11 @@ A ticket is complete when its full outcome and failure paths are demonstrated, d
 
 ## 9. Remaining development batches from the current checkpoint
 
-Starting point: committed revision `2dcc455`. Existing evidence covers bounded catalog/inventory, MAM/Prowlarr acquisition, preferences/routes, external-list observations, automatic selection/import, reviewed series, shared transfers/reuse, and automatic/manual reviewed pack children. Exact scopes are in [Implementation Status](docs/IMPLEMENTATION-STATUS.md). No complete S00–S09 gate is accepted. The native ABB checkpoint adds configuration, source observations, bounded metadata inspection and shared acquisition/import. It does not establish public-host or real qBittorrent metadata compatibility.
+Starting point for this handoff: committed revision `70e38c8`. Existing evidence covers bounded catalog/inventory, MAM/Prowlarr acquisition, preferences/routes, external-list observations, automatic selection/import, reviewed series, shared transfers/reuse, automatic/manual reviewed pack children, native ABB, reviewed collection contents/import, and initial discovery/community-list subscriptions. Exact scopes are in [Implementation Status](docs/IMPLEMENTATION-STATUS.md). No complete S00–S09 gate is accepted. Fixture-backed acquisition does not establish actual-account, public-host or real qBittorrent metadata compatibility.
 
 This is the current order for the existing workspace, not a replacement for the greenfield S00–S10 dependency graph. Any unmet prerequisite discovered in a batch must be closed before activating its dependent behavior.
 
-[Initial discovery shelves](docs/DISCOVERY.md) now connect attributed Hardcover trending/recent/related signals and local fallback to existing catalog and list actions. Community-list following now connects those shelves to the existing subscription and automation services. Batch 5 still requires series continuation, complete curation, full sharing/write-back and usability qualification; the new shelves do not establish full S08 acceptance.
+[Initial discovery shelves](docs/DISCOVERY.md) now connect attributed Hardcover trending/recent/related signals and local fallback to existing catalog and list actions. Community-list following now connects those shelves to the existing subscription and automation services. [Series continuation](docs/SERIES-DISCOVERY.md) now adds loaded-catalog gaps with scoped ownership and medium filters. Batch 5 still requires complete curation, full sharing/write-back and usability qualification; the new shelves do not establish full S08 acceptance.
 
 | Batch | Parent scope | Complete outcome | Acceptance demonstration |
 |---|---|---|---|
@@ -206,7 +212,19 @@ The [current implementation handoff](IMPLEMENTATION-PLAN.md#18-current-developme
 
 ## 10. Development start and release handoff
 
-Native ABB has reached the shared acquisition/import path with bounded automated evidence; see [its contract and limits](docs/AUDIOBOOKBAY-INTEGRATION.md). Continue series/version and policy closure while obtaining actual-service qualification. No fixture-backed connector alone closes a source or release stage.
+The current bounded product increment is [series-continuation discovery](docs/SERIES-DISCOVERY.md), within S08-01 and S08 delivery packet 5. It connects loaded catalog series and scoped holdings to existing curation and acquisition pages. The contract below remains its acceptance boundary. This does not reorder the dependency gates: earlier acquisition, identity, importer and connector obligations still require closure before release. Exact evidence is recorded in implementation status.
+
+| First increment | Implementation and acceptance contract |
+|---|---|
+| User outcome | From Discover, see missing published books in observed series that contain an accessible owned book; open the existing book or series page for curation or acquisition. |
+| Authority | Use user-scoped catalog membership and confirmed accessible library holdings. Describe library gaps, not reading progress. State when catalogs are partial, old or not yet loaded; never imply that every owned series has been discovered. |
+| Default and customization | Default to either-medium ownership; offer ebook and audiobook filters. A work missing audio can retain its overall green check when an ebook exists. No numeric recommendation weights are needed. |
+| Identity and uncertainty | Group canonical works, avoid duplicate cards for provider aliases, preserve unknown dates/order, and distinguish compilations/partial records. Numeric series position alone cannot establish main-series acquisition authority. |
+| Integration | Paginated read-only API and responsive shelf use the existing availability and catalog services. Browsing cannot create requests or transfers. Acquisition uses the existing scope/profile review and shared pipeline. |
+| Evidence | Test private catalogs, revoked library grants, stale inventory, canonical merges, duplicate positions, unpublished/unknown-date entries and medium filters. Verify bounded queries and no browsing side effects. Browser proof covers owned badges, links into the existing series flow, keyboard navigation and mobile layout. |
+| Completion record | Attach revision, API/browser evidence and remaining limitations to implementation status; update requirement coverage without marking S08 complete. |
+
+Next, finish local curation/sharing, supported optional Hardcover writes, and usability within the existing S08 packages. In parallel with product work where resources permit, close batches 1–4's source/version/policy/list qualification and all prerequisite gates. Native ABB's [contract and limits](docs/AUDIOBOOKBAY-INTEGRATION.md) remain relevant: a fixture-backed connector alone cannot close a source or release stage.
 
 Use one shared acceptance story through the entire plan: two overlapping lists, a trilogy with an ebook already owned, two audiobook narrations, a pack containing an uncertain child and a delayed ABS scan.
 

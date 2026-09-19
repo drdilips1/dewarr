@@ -12,6 +12,8 @@ For a compact development handoff, see the [Product and Development Roadmap](DEV
 
 The [launch journey checklist](#20-launch-journey-checklist) makes the combined product behavior reviewable. It adds no scope beyond the existing requirements. Use the implementation plan's [release delivery contract](IMPLEMENTATION-PLAN.md#16-release-delivery-contract) to sequence and accept development.
 
+Planning handoff reviewed September 18, 2026: the roadmap now identifies the committed starting point, selected stack, reuse boundaries, stage dependency path and next reviewable increment. The requirement baseline remains unchanged: 36 v1 functional requirements, six expansion requirements and 12 nonfunctional requirements. The 61-package backlog and 35 acceptance scenarios define delivery and verification; implementation checkpoints do not reduce that scope.
+
 ## 1. Product purpose
 
 Build a self-hosted discovery, curation and acquisition application for ebooks and audiobooks. It sits above Audiobookshelf, knows what the connected library contains, presents books through familiar Seerr-style browsing, searches multiple download sources, and completes acquisition through qBittorrent and an organized library import.

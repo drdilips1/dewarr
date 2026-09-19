@@ -29,6 +29,20 @@ async def availability_for(
     by_root = {}
     for origin, root in roots.items():
         by_root.setdefault(root, []).append(origin)
+    query = availability_rows(user, mapping).where(mapping.c.work_id.in_(by_root))
+    for work_id, medium, state, containment in (await db.execute(query)).all():
+        for origin in by_root[work_id]:
+            availability = result[origin]
+            availability.owned = True
+            availability.ebook |= medium == "ebook"
+            availability.audio |= medium == "audio"
+            availability.stale |= state == "stale"
+            availability.in_collection |= containment is not None
+    return result
+
+
+def availability_rows(user: User, mapping):
+    """Shared scoped ownership relation for projections and library-backed discovery."""
     query = (
         select(mapping.c.work_id, LibraryAsset.medium, LibraryAsset.state, LibraryAsset.containment)
         .select_from(AssetContains)
@@ -37,7 +51,6 @@ async def availability_for(
         .join(Library, LibraryAsset.library_id == Library.id)
         .join(Integration, Library.integration_id == Integration.id)
         .where(
-            mapping.c.work_id.in_(by_root),
             AssetContains.verified.is_(True),
             LibraryAsset.full_content.is_(True),
             LibraryAsset.state.in_(["present", "stale"]),
@@ -49,12 +62,4 @@ async def availability_for(
         query = query.join(LibraryGrant, LibraryGrant.library_id == LibraryAsset.library_id).where(
             LibraryGrant.user_id == user.id
         )
-    for work_id, medium, state, containment in (await db.execute(query)).all():
-        for origin in by_root[work_id]:
-            availability = result[origin]
-            availability.owned = True
-            availability.ebook |= medium == "ebook"
-            availability.audio |= medium == "audio"
-            availability.stale |= state == "stale"
-            availability.in_collection |= containment is not None
-    return result
+    return query
