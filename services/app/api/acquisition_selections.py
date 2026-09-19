@@ -216,7 +216,9 @@ async def options(user: Member, db: Database):
                 medium=row.medium,
                 revision=fingerprint(configuration),
                 source_key=source_key,
-                ready=selections.verified_probe(row, configuration, {"source_key": source_key}),
+                ready=await selections.verified_probe(
+                    db, row, configuration, {"source_key": source_key}
+                ),
                 automatic_import_ready=automatic_ready,
             )
         )

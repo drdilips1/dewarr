@@ -8,6 +8,7 @@ import AutomaticImportPolicy from "./AutomaticImportPolicy";
 
 type Destination = components["schemas"]["DestinationView"];
 type Library = components["schemas"]["LibraryView"];
+type Downloader = components["schemas"]["DownloaderView"];
 
 export default function Destinations() {
   const [params] = useSearchParams();
@@ -15,12 +16,13 @@ export default function Destinations() {
   const query = useQuery({
     queryKey: ["destination-setup"],
     queryFn: async () => {
-      const [roots, libraries, destinations] = await Promise.all([
+      const [roots, libraries, destinations, downloaders] = await Promise.all([
         api.GET("/api/organization/destination-roots").then(result),
         api.GET("/api/library/libraries").then(result),
         api.GET("/api/organization/destinations").then(result),
+        api.GET("/api/downloaders").then(result),
       ]);
-      return { roots, libraries, destinations };
+      return { roots, libraries, destinations, downloaders };
     },
   });
   if (query.isPending) return <Loading />;
@@ -50,8 +52,9 @@ export default function Destinations() {
       )}
       {!planId && (
         <p className="muted">
-          To test the hardlink route with a real source file, open a saved
-          import plan and choose Check destination.
+          You can test an empty download folder before acquiring your first
+          book. Connect and test qBittorrent, save a destination, then test the
+          route below.
         </p>
       )}
       {query.data.roots.map((root) => {
@@ -65,6 +68,7 @@ export default function Destinations() {
             saved={saved}
             libraries={query.data.libraries}
             planId={planId}
+            downloaders={query.data.downloaders}
           />
         );
       })}
@@ -77,11 +81,13 @@ function DestinationEditor({
   saved,
   libraries,
   planId,
+  downloaders,
 }: {
   root: string;
   saved?: Destination;
   libraries: Library[];
   planId: string | null;
+  downloaders: Downloader[];
 }) {
   const cache = useQueryClient();
   const [libraryId, setLibraryId] = useState(saved?.library_id || "");
@@ -94,6 +100,14 @@ function DestinationEditor({
   const [backendPath, setBackendPath] = useState(saved?.backend_path || "");
   const [enabled, setEnabled] = useState(saved?.enabled ?? true);
   const [operationId, setOperationId] = useState<string | null>(null);
+  const [downloaderId, setDownloaderId] = useState("");
+  const candidates = downloaders.filter(
+    (item) =>
+      item.enabled && item.status === "connected" && item.mappings_current,
+  );
+  const downloader =
+    candidates.find((item) => item.id === downloaderId) ||
+    (!downloaderId && candidates.length === 1 ? candidates[0] : undefined);
   const attempt = useRef<{ payload: string; key: string } | null>(null);
   const status = useQuery({
     queryKey: ["destination-operation", operationId],
@@ -134,10 +148,33 @@ function DestinationEditor({
   });
   const probe = useMutation({
     mutationFn: async () => {
-      const payload = JSON.stringify([saved!.id, planId, saved!.revision]);
+      const payload = JSON.stringify([
+        saved!.id,
+        planId,
+        saved!.revision,
+        !planId && downloader?.id,
+        !planId && downloader?.generation,
+      ]);
       if (attempt.current?.payload !== payload) {
         attempt.current = { payload, key: crypto.randomUUID() };
       }
+      if (!planId)
+        return result(
+          await api.POST(
+            "/api/organization/destinations/{destination_id}/setup-probe",
+            {
+              params: {
+                path: { destination_id: saved!.id },
+                header: { "idempotency-key": attempt.current.key },
+              },
+              body: {
+                downloader_id: downloader!.id,
+                downloader_generation: downloader!.generation,
+                expected_revision: saved!.revision,
+              },
+            },
+          ),
+        );
       return result(
         await api.POST(
           "/api/organization/destinations/{destination_id}/probe",
@@ -169,7 +206,7 @@ function DestinationEditor({
     (operationId &&
       (!status.data ||
         ["queued", "running"].includes(status.data.operation?.status || "")));
-  const report = status.data?.destination?.probe || saved?.probe;
+  const report = operationId ? status.data?.destination?.probe : saved?.probe;
   return (
     <section className="panel editor" aria-label={`Destination ${root}`}>
       <h2>{root}</h2>
@@ -264,15 +301,37 @@ function DestinationEditor({
           destinationId={saved.id}
           revision={saved.revision}
           verified={
-            (status.data?.destination || saved).publication_available ?? false
+            (operationId ? status.data?.destination : saved)
+              ?.publication_available ?? false
           }
           unsaved={changed || !!busy}
         />
       )}
       <div className="form-actions">
+        {!planId ? (
+          <label>
+            Downloader to test
+            <select
+              value={downloader?.id || ""}
+              disabled={!!busy}
+              onChange={(event) => setDownloaderId(event.target.value)}
+            >
+              <option value="">Choose a tested downloader</option>
+              {candidates.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
         <button
           disabled={
-            !!busy || changed || !saved?.configured || !enabled || !planId
+            !!busy ||
+            changed ||
+            !saved?.configured ||
+            !enabled ||
+            (!planId && !downloader)
           }
           onClick={() => probe.mutate()}
         >
@@ -281,10 +340,26 @@ function DestinationEditor({
       </div>
       <p className="muted">
         The test creates and removes its own temporary files and empty folders.
-        It checks the selected file's link route and verifies the folder mapping
-        through Audiobookshelf. The ABS connection needs upload permission for
-        its path check; no book is uploaded.
+        {planId
+          ? " It checks the selected file's link route"
+          : " It writes a small temporary file in the downloader's save folder and checks its link route"}{" "}
+        and verifies the folder mapping through Audiobookshelf. The ABS
+        connection needs upload permission for its path check; no book is
+        uploaded.
       </p>
+      {!planId && downloader ? (
+        <p className="muted break-text">
+          qBittorrent save folder: {downloader.save_path}. The mapped folder
+          must already exist and be writable by the worker. Downloaded files are
+          checked again during import.
+        </p>
+      ) : null}
+      {!planId && !candidates.length ? (
+        <p>
+          <Link to="/downloaders">Connect and test a downloader</Link> with
+          current path mappings to test this route.
+        </p>
+      ) : null}
       <Notice error={probe.error || status.error} />
       {status.data?.operation &&
         status.data.operation.message !== report?.message && (

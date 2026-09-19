@@ -6,7 +6,7 @@ from sqlalchemy import select
 from app.config import get_settings
 from app.db.models import RestoreCheckpoint
 from app.domain.recovery_approvals import denial
-from app.importing.destinations import destination_configuration
+from app.importing.destinations import destination_configuration, setup_route_current
 from app.importing.naming import StrictModel, fingerprint
 
 
@@ -32,6 +32,9 @@ async def view(db, row):
         "source_path"
     ):
         probe = None
+    if probe:
+        if not await setup_route_current(db, probe):
+            probe = None
     if probe:
         historical = (
             await denial(db, "operation", row.probe_operation_id)

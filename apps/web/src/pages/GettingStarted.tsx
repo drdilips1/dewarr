@@ -181,7 +181,8 @@ export default function GettingStarted() {
               <h3>Choose library destinations</h3>
               <p>
                 Choose ebook and audio destinations as needed. Preview naming
-                and test the hardlink or copy route using a saved import plan.
+                and test the hardlink or copy route from your downloader's save
+                folder.
               </p>
               {!data.destinations.length ? (
                 <p>No destinations saved.</p>

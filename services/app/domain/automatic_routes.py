@@ -119,7 +119,9 @@ async def resolve(db, user, spec, downloader_id, generation, routes):
         )
         destination = await db.get(ImportDestination, route.destination_id)
         config = await destination_configuration(db, destination)
-        if destination.medium != medium or not verified_probe(destination, config, mapping):
+        if destination.medium != medium or not await verified_probe(
+            db, destination, config, mapping
+        ):
             raise HTTPException(409, "Verify each download-to-library route before activation")
         expected = getattr(spec, medium + "_library_id")
         if expected and expected != destination.library_id:

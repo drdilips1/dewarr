@@ -4,6 +4,7 @@ from pathlib import Path
 from uuid import UUID, uuid4
 
 from cryptography.fernet import InvalidToken
+from fastapi import HTTPException
 from sqlalchemy import select
 
 from app.adapters.audiobookshelf import Audiobookshelf
@@ -11,10 +12,11 @@ from app.adapters.contracts import AdapterError
 from app.config import get_settings
 from app.db.models import AuditEvent, ImportDestination, Integration, Library, Operation, User
 from app.db.session import session_factory
+from app.domain.downloaders import mapped_path
 from app.importing.backend import verify_backend
 from app.importing.filesystem import InspectionError
 from app.importing.naming import fingerprint
-from app.importing.publication import PublishFile, probe_destination
+from app.importing.publication import PublishFile, probe_destination, probe_download_folder
 from app.security import decrypt_secrets
 
 
@@ -76,7 +78,24 @@ async def route_unchanged(db, destination, payload):
     return (
         await destination_configuration(db, destination) == payload["configuration"]
         and str(get_settings().import_sources.get(payload["source_key"])) == payload["source_path"]
+        and await setup_route_current(db, payload)
     )
+
+
+async def setup_route_current(db, evidence):
+    binding = evidence.get("setup_downloader")
+    if not binding:
+        return True
+    row = await db.get(Integration, UUID(binding["id"]), populate_existing=True)
+    if not row or row.kind != "qbittorrent" or row.owner_id is not None or not row.enabled:
+        return False
+    if row.credential_generation != binding["generation"] or row.status != "connected":
+        return False
+    try:
+        mapping = mapped_path(row, row.config["save_path"])
+    except (HTTPException, KeyError, ValueError):
+        return False
+    return mapping == binding["mapping"]
 
 
 async def probe_route(operation_id: UUID, *, client_factory=None):
@@ -134,15 +153,24 @@ async def probe_route(operation_id: UUID, *, client_factory=None):
                     raise InspectionError(
                         "Download and staging roots must be outside all library roots"
                     )
-        report = await asyncio.to_thread(
-            probe_destination,
-            Path(payload["source_path"]),
-            payload["source_relative"],
-            PublishFile.model_validate(payload["file"]),
-            Path(configuration["root_path"]),
-            Path(configuration["staging_path"]),
-            **({"source_kind": "file"} if payload.get("source_kind") == "file" else {}),
-        )
+        if payload.get("setup_downloader"):
+            report = await asyncio.to_thread(
+                probe_download_folder,
+                Path(payload["source_path"]),
+                payload["setup_downloader"]["mapping"]["relative_path"],
+                Path(configuration["root_path"]),
+                Path(configuration["staging_path"]),
+            )
+        else:
+            report = await asyncio.to_thread(
+                probe_destination,
+                Path(payload["source_path"]),
+                payload["source_relative"],
+                PublishFile.model_validate(payload["file"]),
+                Path(configuration["root_path"]),
+                Path(configuration["staging_path"]),
+                **({"source_kind": "file"} if payload.get("source_kind") == "file" else {}),
+            )
         ok = report["no_replace"] and report[configuration["mode"]]
         if ok:
             backend = configuration["backend"]
@@ -195,6 +223,11 @@ async def probe_route(operation_id: UUID, *, client_factory=None):
             "source_path": payload["source_path"],
             "configuration_revision": fingerprint(configuration),
             "checked_at": datetime.now(UTC).isoformat(),
+            **(
+                {"setup_downloader": payload["setup_downloader"]}
+                if payload.get("setup_downloader")
+                else {}
+            ),
             **report,
         }
         destination.probe_token = None

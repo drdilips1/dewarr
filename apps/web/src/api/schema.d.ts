@@ -2625,6 +2625,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organization/destinations/{destination_id}/setup-probe": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Setup Probe */
+    post: operations["setup_probe_api_organization_destinations__destination_id__setup_probe_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organization/destinations/{destination_id}/probe": {
     parameters: {
       query?: never;
@@ -8565,6 +8582,18 @@ export interface components {
       libraries: number;
       /** Inventoried Libraries */
       inventoried_libraries: number;
+    };
+    /** SetupProbeInput */
+    SetupProbeInput: {
+      /**
+       * Downloader Id
+       * Format: uuid
+       */
+      downloader_id: string;
+      /** Downloader Generation */
+      downloader_generation: number;
+      /** Expected Revision */
+      expected_revision: string;
     };
     /** SetupReadiness */
     SetupReadiness: {
@@ -14801,6 +14830,43 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["DestinationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  setup_probe_api_organization_destinations__destination_id__setup_probe_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        destination_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SetupProbeInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OperationView"];
         };
       };
       /** @description Validation Error */

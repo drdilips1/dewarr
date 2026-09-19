@@ -40,7 +40,7 @@ from app.domain.request_constraints import constrained_preferences
 from app.domain.request_preferences import for_selection
 from app.domain.source_artifacts import artifact_bytes, member
 from app.domain.work_graph import acquisition_lock, canonical_work
-from app.importing.destinations import destination_configuration
+from app.importing.destinations import destination_configuration, setup_route_current
 from app.importing.naming import fingerprint
 from app.importing.versioning import version_revision
 
@@ -70,10 +70,17 @@ async def owned_selection(db, user, identifier):
     return row
 
 
-def verified_probe(destination, configuration, mapping):
+async def verified_probe(db, destination, configuration, mapping):
     probe = destination.probe or {}
+    binding = probe.get("setup_downloader")
     return bool(
         destination.enabled
+        and await setup_route_current(db, probe)
+        and (
+            not binding
+            or mapping.get("relative_path", binding["mapping"]["relative_path"])
+            == binding["mapping"]["relative_path"]
+        )
         and probe.get("status") == "verified"
         and probe.get("configuration_revision") == fingerprint(configuration)
         and probe.get("source_key") == mapping["source_key"]
@@ -242,8 +249,8 @@ async def prepare(db, user, body, key, *, automatic_evidence=None):
     configuration = await destination_configuration(db, destination)
     if destination.medium != rule["medium"]:
         raise HTTPException(422, "Choose an import destination for the requested medium")
-    if fingerprint(configuration) != body.destination_revision or not verified_probe(
-        destination, configuration, mapping
+    if fingerprint(configuration) != body.destination_revision or not await verified_probe(
+        db, destination, configuration, mapping
     ):
         raise HTTPException(409, "The download-to-library route needs a current verified probe")
     # This record is the frozen handoff for a future dispatch ledger. It cannot
@@ -401,7 +408,7 @@ async def configuration_current(
             == UUID(frozen["work_id"])
             and await destination_configuration(db, destination) == frozen["destination"]
             and mapped_path(downloader, downloader.config["save_path"]) == frozen["mapping"]
-            and verified_probe(destination, frozen["destination"], frozen["mapping"])
+            and await verified_probe(db, destination, frozen["destination"], frozen["mapping"])
         )
     except HTTPException:
         return False

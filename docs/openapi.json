@@ -8801,6 +8801,70 @@
         }
       }
     },
+    "/api/organization/destinations/{destination_id}/setup-probe": {
+      "post": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Setup Probe",
+        "operationId": "setup_probe_api_organization_destinations__destination_id__setup_probe_post",
+        "parameters": [
+          {
+            "name": "destination_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Destination Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetupProbeInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/organization/destinations/{destination_id}/probe": {
       "post": {
         "tags": [
@@ -25069,6 +25133,33 @@
           "inventoried_libraries"
         ],
         "title": "SetupLibrary"
+      },
+      "SetupProbeInput": {
+        "properties": {
+          "downloader_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Downloader Id"
+          },
+          "downloader_generation": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Downloader Generation"
+          },
+          "expected_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Expected Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "downloader_id",
+          "downloader_generation",
+          "expected_revision"
+        ],
+        "title": "SetupProbeInput"
       },
       "SetupReadiness": {
         "properties": {

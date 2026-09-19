@@ -1,0 +1,253 @@
+import asyncio
+import errno
+from datetime import UTC, datetime
+from uuid import UUID
+
+import pytest
+from sqlalchemy import func, select
+
+from app.config import get_settings
+from app.db.models import FrozenImportPlan, Integration, Library, Operation, User
+from app.importing import destinations, publication
+from app.importing.filesystem import identity
+from app.jobs.queue import get_queue
+from app.security import encrypt_secrets
+from tests.abs_import_fixture import ImportBackendFixture
+
+pytestmark = pytest.mark.integration
+
+
+@pytest.fixture
+async def empty_route(client, admin, database, tmp_path, monkeypatch):
+    source, target, staging = (
+        tmp_path.resolve() / name for name in ("downloads", "library", "stage")
+    )
+    for root in (source, target, staging):
+        root.mkdir(mode=0o700)
+    (source / "books").mkdir()
+    backend = ImportBackendFixture(target)
+    monkeypatch.setattr(destinations, "Audiobookshelf", backend.client)
+    monkeypatch.setattr(get_settings(), "import_sources", {"fixture": source})
+    monkeypatch.setattr(get_settings(), "import_destinations", {"ebooks": target})
+    monkeypatch.setattr(get_settings(), "import_staging_root", staging)
+    async with database() as db, db.begin():
+        connection = Integration(
+            name="ABS",
+            kind="audiobookshelf",
+            base_url="http://fixture",
+            encrypted_secrets=encrypt_secrets({"token": "private-import-token"}),
+            status="connected",
+            enabled=True,
+        )
+        downloader = Integration(
+            name="qBit",
+            kind="qbittorrent",
+            base_url="http://unused.invalid",
+            encrypted_secrets="never-contact-downloader",
+            status="connected",
+            enabled=True,
+            credential_generation=1,
+            config={
+                "save_path": "/downloads/books",
+                "category": "book-search",
+                "mappings": [
+                    {
+                        "download_root": "/downloads",
+                        "source_key": "fixture",
+                        "source_path": str(source),
+                    }
+                ],
+            },
+        )
+        db.add_all([connection, downloader])
+        await db.flush()
+        library = Library(
+            integration_id=connection.id,
+            external_id="synthetic",
+            name="Ebooks",
+            accessible=True,
+            last_complete_sync=datetime.now(UTC),
+        )
+        db.add(library)
+        await db.flush()
+        library_id, downloader_id = library.id, downloader.id
+    saved = await client.put(
+        "/api/organization/destinations/ebooks",
+        json={
+            "library_id": str(library_id),
+            "medium": "ebook",
+            "backend_path": "/books",
+        },
+    )
+    assert saved.status_code == 200, saved.text
+    return {
+        "destination": saved.json(),
+        "downloader": downloader_id,
+        "source": source,
+        "target": target,
+        "staging": staging,
+        "backend": backend,
+    }
+
+
+async def start(client, route, key="empty-folder-probe", **overrides):
+    return await client.post(
+        f"/api/organization/destinations/{route['destination']['id']}/setup-probe",
+        headers={"Idempotency-Key": key},
+        json={
+            "downloader_id": str(route["downloader"]),
+            "downloader_generation": 1,
+            "expected_revision": route["destination"]["revision"],
+            **overrides,
+        },
+    )
+
+
+async def current(client):
+    response = await client.get("/api/organization/destinations")
+    assert response.status_code == 200
+    return response.json()[0]
+
+
+async def test_empty_folder_can_qualify_before_any_plan_or_download(
+    client, admin, database, empty_route
+):
+    responses = await asyncio.gather(*(start(client, empty_route) for _ in range(3)))
+    assert all(item.status_code == 202 for item in responses)
+    assert len({item.json()["id"] for item in responses}) == 1
+    await get_queue().run_worker_async(wait=False, concurrency=1)
+    checked = await current(client)
+    assert checked["publication_available"]
+    assert checked["probe"]["hardlink"] and checked["probe"]["backend"]["root_mapping"]
+    assert checked["probe"]["setup_downloader"]["mapping"]["relative_path"] == "books"
+    assert not list((empty_route["source"] / "books").iterdir())
+    assert not list(empty_route["staging"].iterdir()) and not list(empty_route["target"].iterdir())
+    options = (await client.get("/api/acquisition/selections/options")).json()
+    assert options["downloaders"][0]["ready"] and options["destinations"][0]["ready"]
+    policy = (
+        await client.get(f"/api/organization/destinations/{checked['id']}/automatic-import")
+    ).json()
+    assert policy["can_enable"] and not policy["enabled"]
+    async with database() as db:
+        assert await db.scalar(select(func.count()).select_from(FrozenImportPlan)) == 0
+        assert await db.scalar(select(func.count()).select_from(Operation)) == 1
+    assert (await start(client, empty_route)).json()["id"] == responses[0].json()["id"]
+    assert (await start(client, empty_route, downloader_generation=2)).status_code == 409
+
+
+@pytest.mark.parametrize("change", ["generation", "disabled", "path", "mapping"])
+async def test_changed_downloader_invalidates_probe_and_selection_options(
+    client, admin, database, empty_route, change
+):
+    assert (await start(client, empty_route)).status_code == 202
+    await get_queue().run_worker_async(wait=False, concurrency=1)
+    assert (await current(client))["publication_available"]
+    async with database() as db, db.begin():
+        row = await db.get(Integration, empty_route["downloader"])
+        if change == "generation":
+            row.credential_generation += 1
+        elif change == "disabled":
+            row.enabled = False
+        elif change == "path":
+            row.config = {**row.config, "save_path": "/downloads/changed"}
+        else:
+            row.config = {
+                **row.config,
+                "mappings": [{**row.config["mappings"][0], "source_path": "/changed"}],
+            }
+    assert not (await current(client))["publication_available"]
+    options = (await client.get("/api/acquisition/selections/options")).json()
+    assert not options["destinations"][0]["ready"]
+
+
+@pytest.mark.parametrize("when", ["before", "during"])
+async def test_late_settings_change_discards_setup_result(
+    client, admin, database, empty_route, when
+):
+    response = await start(client, empty_route)
+    assert response.status_code == 202
+
+    async def change(_=None):
+        async with database() as db, db.begin():
+            row = await db.get(Integration, empty_route["downloader"])
+            row.credential_generation += 1
+
+    if when == "before":
+        await change()
+    else:
+        empty_route["backend"].before_exists = change
+    await get_queue().run_worker_async(wait=False, concurrency=1)
+    assert not (await current(client))["publication_available"]
+    async with database() as db:
+        op = await db.get(Operation, UUID(response.json()["id"]))
+        assert op.status == "failed"
+    assert not list((empty_route["source"] / "books").iterdir())
+    assert not list(empty_route["target"].iterdir())
+
+
+async def test_setup_probe_requires_fresh_settings_and_admin_consent(
+    client, admin, database, empty_route
+):
+    assert (await start(client, empty_route, downloader_generation=2)).status_code == 409
+    assert (await start(client, empty_route, expected_revision="0" * 64)).status_code == 409
+    csrf = client.headers.pop("X-CSRF-Token")
+    assert (await start(client, empty_route)).status_code == 403
+    client.headers["X-CSRF-Token"] = csrf
+    async with database() as db, db.begin():
+        (await db.get(User, UUID(admin["id"]))).role = "member"
+    assert (await start(client, empty_route)).status_code == 403
+    async with database() as db:
+        assert await db.scalar(select(func.count()).select_from(Operation)) == 0
+
+
+@pytest.mark.parametrize("failure", ["missing-folder", "symlink", "backend"])
+async def test_failed_setup_does_not_touch_downloaded_files(
+    client, admin, empty_route, failure, tmp_path
+):
+    saved = empty_route["source"] / "keep.epub"
+    saved.write_bytes(b"existing download")
+    before = identity(saved.stat())
+    folder = empty_route["source"] / "books"
+    if failure == "missing-folder":
+        folder.rmdir()
+    elif failure == "symlink":
+        folder.rmdir()
+        folder.symlink_to(tmp_path)
+    else:
+        empty_route["backend"].version = "unsupported"
+    assert (await start(client, empty_route)).status_code == 202
+    await get_queue().run_worker_async(wait=False, concurrency=1)
+    checked = await current(client)
+    assert not checked["publication_available"] and checked["probe"]["status"] == "failed"
+    assert saved.read_bytes() == b"existing download" and identity(saved.stat()) == before
+    assert not list(empty_route["target"].iterdir()) and not list(empty_route["staging"].iterdir())
+    assert not list(tmp_path.rglob(".book-search-route-*"))
+
+
+@pytest.mark.parametrize("mode", ["hardlink", "copy"])
+async def test_cross_filesystem_route_requires_explicit_copy_policy(
+    client, admin, empty_route, monkeypatch, mode
+):
+    def cross_device(*args, **kwargs):
+        raise OSError(errno.EXDEV, "different filesystem")
+
+    monkeypatch.setattr(publication.os, "link", cross_device)
+    saved = empty_route["destination"]
+    response = await client.put(
+        "/api/organization/destinations/ebooks",
+        json={
+            "library_id": saved["library_id"],
+            "medium": "ebook",
+            "backend_path": "/books",
+            "mode": mode,
+            "expected_revision": saved["revision"],
+        },
+    )
+    assert response.status_code == 200
+    empty_route["destination"] = response.json()
+    assert (await start(client, empty_route)).status_code == 202
+    await get_queue().run_worker_async(wait=False, concurrency=1)
+    checked = await current(client)
+    assert checked["publication_available"] == (mode == "copy")
+    assert checked["mode"] == mode
+    assert not checked["probe"]["hardlink"] and checked["probe"]["copy"]

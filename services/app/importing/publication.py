@@ -575,6 +575,61 @@ def publish_item(
                             return receipt
 
 
+def probe_download_folder(
+    source_root: Path, relative: str, destination_root: Path, staging_root: Path
+):
+    """Use an owned temporary file to qualify an empty downloader save folder."""
+    if any(
+        left.is_relative_to(right) or right.is_relative_to(left)
+        for left, right in (
+            (source_root, destination_root),
+            (source_root, staging_root),
+            (destination_root, staging_root),
+        )
+    ):
+        raise PublicationError("Source, staging and library roots must not overlap")
+    if relative:
+        relative_parts(relative)
+    name = f".book-search-route-{uuid4().hex}.tmp"
+    content = b"book-search temporary route test\n"
+    with directory(source_root) as root, ExitStack() as handles:
+        parent = handles.enter_context(beneath(root, relative, folder=True)) if relative else root
+        fd = os.open(name, os.O_RDWR | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=parent)
+        try:
+            owned = object_id(fd)
+            try:
+                write_all(fd, content)
+                os.fsync(fd)
+                source = f"{relative}/{name}" if relative else name
+                return probe_destination(
+                    source_root,
+                    source,
+                    PublishFile(
+                        source=name,
+                        name="probe",
+                        sha256=hashlib.sha256(content).hexdigest(),
+                        identity=identity(os.fstat(fd)),
+                    ),
+                    destination_root,
+                    staging_root,
+                    source_kind="file",
+                )
+            finally:
+                try:
+                    observed = os.stat(name, dir_fd=parent, follow_symlinks=False)
+                except FileNotFoundError:
+                    pass
+                else:
+                    if {"device": observed.st_dev, "inode": observed.st_ino} != owned:
+                        raise PublicationError(
+                            "Setup probe changed; unrecognized replacement preserved"
+                        )
+                    os.unlink(name, dir_fd=parent)
+                    sync_directory(parent)
+        finally:
+            os.close(fd)
+
+
 def probe_destination(
     source_root: Path,
     source_relative: str,

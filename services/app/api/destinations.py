@@ -17,6 +17,7 @@ from app.db.models import (
     Library,
     Operation,
 )
+from app.domain.downloaders import connection_or_404, mapped_path
 from app.domain.operations import transaction_lock
 from app.importing.destination_view import DestinationView, view
 from app.importing.destinations import destination_configuration, permitted
@@ -90,6 +91,79 @@ async def save_destination(root_key: str, body: DestinationInput, admin: Admin, 
 class ProbeInput(StrictModel):
     plan_id: UUID
     expected_revision: str = Field(pattern=r"^[a-f0-9]{64}$")
+
+
+class SetupProbeInput(StrictModel):
+    downloader_id: UUID
+    downloader_generation: int = Field(ge=1)
+    expected_revision: str = Field(pattern=r"^[a-f0-9]{64}$")
+
+
+@router.post(
+    "/destinations/{destination_id}/setup-probe", response_model=OperationView, status_code=202
+)
+async def setup_probe(
+    destination_id: UUID,
+    body: SetupProbeInput,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    await transaction_lock(db, f"operation:{admin.id}:{idempotency_key}")
+    command = {"destination_id": str(destination_id), **body.model_dump(mode="json")}
+    existing = await db.scalar(
+        select(Operation).where(
+            Operation.owner_id == admin.id, Operation.idempotency_key == idempotency_key
+        )
+    )
+    if existing:
+        if (
+            existing.kind != "organization.probe"
+            or existing.payload.get("setup_command") != command
+        ):
+            raise HTTPException(409, "This operation key was already used for another command")
+        return existing
+    row = await db.scalar(
+        select(ImportDestination).where(ImportDestination.id == destination_id).with_for_update()
+    )
+    if not row or not (await view(db, row)).configured:
+        raise HTTPException(422, "Configure destination and private staging roots first")
+    configuration = await destination_configuration(db, row)
+    if (await view(db, row)).revision != body.expected_revision:
+        raise HTTPException(409, "Destination settings changed; review them before probing")
+    downloader = await connection_or_404(db, body.downloader_id)
+    if not downloader.enabled or downloader.status != "connected":
+        raise HTTPException(409, "Enable and test the downloader before checking its save folder")
+    if downloader.credential_generation != body.downloader_generation:
+        raise HTTPException(409, "Downloader settings changed; reload before probing")
+    mapping = mapped_path(downloader, downloader.config["save_path"])
+    operation = Operation(
+        owner_id=admin.id,
+        kind="organization.probe",
+        idempotency_key=idempotency_key,
+        message="Waiting to test the downloader save folder and library destination",
+        payload={
+            "destination_id": str(row.id),
+            "configuration": configuration,
+            "setup_command": command,
+            "setup_downloader": {
+                "id": str(downloader.id),
+                "generation": downloader.credential_generation,
+                "mapping": mapping,
+            },
+            "source_key": mapping["source_key"],
+            "source_path": str(get_settings().import_sources[mapping["source_key"]]),
+        },
+    )
+    if not await permitted(db, operation, row):
+        raise HTTPException(409, "Destination access or recovery mode prevents probing")
+    db.add(operation)
+    await db.flush()
+    row.probe_operation_id, row.probe_token, row.probe = operation.id, None, None
+    operation.job_id = await enqueue(db, "organization.probe", operation_id=str(operation.id))
+    await db.commit()
+    await db.refresh(operation)
+    return operation
 
 
 @router.post("/destinations/{destination_id}/probe", response_model=OperationView, status_code=202)

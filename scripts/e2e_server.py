@@ -27,6 +27,7 @@ destination_root.mkdir()
 staging_root.mkdir(mode=0o700)
 download_root = media_root / "downloads"
 download_root.mkdir()
+(download_root / "bootstrap").mkdir()
 (media_root / "completed").rename(download_root / "completed")
 epub(
     download_root / "matched/book.epub",
