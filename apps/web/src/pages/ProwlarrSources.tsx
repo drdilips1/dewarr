@@ -126,6 +126,9 @@ export default function ProwlarrSources({
         <div>
           <p className="eyebrow">DOWNLOAD SOURCES</p>
           <h1>Search Prowlarr</h1>
+          <Link to={`/sources/audiobookbay?${params.toString()}`}>
+            Search AudiobookBay
+          </Link>
           <p>Compare book releases across your connected indexers.</p>
           <Link to={`/sources?${params.toString()}`}>Native MAM search</Link>
         </div>

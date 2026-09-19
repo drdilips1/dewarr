@@ -7,8 +7,7 @@ from fastapi import HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import select
 
-from app.adapters.mam import MAMRelease
-from app.adapters.prowlarr import ProwlarrRelease
+from app.adapters.source_releases import release_value as parse_release
 from app.adapters.torrent_descriptor import TorrentDescriptor
 from app.config import get_settings
 from app.db.models import (
@@ -177,9 +176,7 @@ async def prepare(db, user, body, key, *, automatic_evidence=None):
     artifact_bytes(artifact)
     if descriptor.artifact_sha256 != artifact.sha256:
         raise HTTPException(409, "The saved torrent descriptor needs inspection again")
-    release = (MAMRelease if artifact.source_key == "mam" else ProwlarrRelease).model_validate(
-        artifact.release_snapshot
-    )
+    release = parse_release(artifact.source_key, artifact.release_snapshot)
     profile = await for_selection(db, user, intent, body)
     if automatic_evidence:
         maximum = automatic_evidence["maximum_bytes"]

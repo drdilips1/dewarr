@@ -2,11 +2,10 @@ from datetime import datetime
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, Path
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from app.adapters.contracts import AdapterError
-from app.adapters.mam import MAMRelease
-from app.adapters.prowlarr import ProwlarrRelease
+from app.adapters.source_releases import SourceRelease
 from app.adapters.torrent_descriptor import TorrentDescriptor
 from app.api.dependencies import Database, Member
 from app.api.metadata import adapter_http_error
@@ -24,7 +23,7 @@ class SourceArtifactView(BaseModel):
     source_generation: int
     current_connection: bool
     descriptor: TorrentDescriptor
-    release: MAMRelease | ProwlarrRelease = Field(discriminator="source")
+    release: SourceRelease
     dispatch_available: bool = False
 
 

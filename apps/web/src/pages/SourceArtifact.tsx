@@ -26,12 +26,17 @@ export default function SourceArtifact() {
       <header className="page-heading">
         <div>
           <p className="eyebrow">
-            {release.source === "mam" ? "MAM" : "PROWLARR"} RELEASE
+            {release.source === "mam"
+              ? "MAM"
+              : release.source === "audiobookbay"
+                ? "AUDIOBOOKBAY"
+                : "PROWLARR"}{" "}
+            RELEASE
           </p>
           <h1>Torrent manifest</h1>
           <p>{release.title}</p>
           <Link
-            to={`/sources${release.source === "prowlarr" ? "/prowlarr" : ""}?q=${encodeURIComponent(release.title)}`}
+            to={`/sources${release.source === "mam" ? "" : `/${release.source}`}?q=${encodeURIComponent(release.title)}`}
           >
             Return to source search
           </Link>

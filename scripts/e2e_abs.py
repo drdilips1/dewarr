@@ -48,6 +48,14 @@ async def qbit_fixture(path: str, request: Request):
         return PlainTextResponse("v5.2.3")
     if path == "app/webapiVersion":
         return PlainTextResponse("2.15.1")
+    if path in {"torrents/fetchMetadata", "torrents/saveMetadata"}:
+        magnet = parse_qs((await request.body()).decode()).get("source", [""])[0]
+        digest = describe(torrent_bytes())["infohash_v1"]
+        if digest not in magnet:
+            raise HTTPException(404)
+        if path == "torrents/fetchMetadata":
+            return {"hash": digest, "info": {}}
+        return Response(torrent_bytes(), media_type="application/x-bittorrent")
     if path == "torrents/add":
         message = BytesParser(policy=policy.default).parsebytes(
             ("Content-Type: " + request.headers["content-type"] + "\r\n\r\n").encode()
@@ -599,3 +607,17 @@ async def shelf_fixture(request: Request):
         media_type="application/rss+xml",
         headers={"ETag": etag},
     )
+
+
+@app.get("/")
+async def abb_search_fixture():
+    from tests.abb_fixture import search
+
+    return Response(search(), media_type="text/html")
+
+
+@app.get("/abss/harbor-alex-morgan/")
+async def abb_detail_fixture():
+    from tests.abb_fixture import detail
+
+    return Response(detail(digest=describe(torrent_bytes())["infohash_v1"]), media_type="text/html")

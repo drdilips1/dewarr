@@ -162,3 +162,62 @@ async def test_connection(user_id, connection_id):
         )
     if failure:
         raise failure
+
+
+async def resolve_metadata(user_id, connection_id, magnet, *, expected_generation=None):
+    """Bounded read-only metadata inspection sharing the diagnostic connection lease."""
+    from app.domain.source_artifacts import member
+
+    token = uuid4()
+    async with session_factory()() as db, db.begin():
+        await transaction_lock(db, SETTINGS_LOCK)
+        await member(db, user_id)
+        row = await connection_or_404(db, connection_id)
+        if not row.enabled or (
+            expected_generation is not None and row.credential_generation != expected_generation
+        ):
+            raise HTTPException(409, "Downloader settings changed; select its current connection")
+        now = datetime.now(UTC)
+        if row.lease_until and row.lease_until > now:
+            raise AdapterError(
+                FailureKind.RATE_LIMIT, "Downloader inspection is busy.", retry_after=2
+            )
+        if row.next_sync_at and row.next_sync_at > now:
+            raise AdapterError(
+                FailureKind.RATE_LIMIT,
+                "Downloader inspection is cooling down.",
+                retry_after=math.ceil((row.next_sync_at - now).total_seconds()),
+            )
+        generation, endpoint = row.credential_generation, row.base_url
+        credentials = decrypt_secrets(row.encrypted_secrets)
+        row.lease_token, row.lease_until = token, now + timedelta(seconds=90)
+        row.next_sync_at = now + timedelta(seconds=TEST_INTERVAL)
+    failure, content = None, None
+    try:
+        async with (
+            asyncio.timeout(60),
+            QbitClient(endpoint, credentials["username"], credentials["password"]) as client,
+        ):
+            content = await client.resolve_magnet(magnet)
+    except AdapterError as error:
+        failure = error
+    except TimeoutError:
+        failure = AdapterError(FailureKind.TIMEOUT, "Torrent metadata inspection timed out.")
+    async with session_factory()() as db, db.begin():
+        await transaction_lock(db, SETTINGS_LOCK)
+        row = await connection_or_404(db, connection_id)
+        if row.lease_token != token:
+            raise HTTPException(409, "Downloader inspection expired; retry current settings")
+        row.lease_token, row.lease_until = None, None
+        changed = row.credential_generation != generation or not row.enabled
+        row.next_sync_at = datetime.now(UTC) + timedelta(
+            seconds=max(TEST_INTERVAL, failure.retry_after or 0) if failure else TEST_INTERVAL
+        )
+        # A torrent lacking peers does not imply the entire downloader is broken.
+    async with session_factory()() as db:
+        await member(db, user_id)
+    if changed:
+        raise HTTPException(409, "Downloader changed during metadata inspection; retry")
+    if failure:
+        raise failure
+    return content, generation

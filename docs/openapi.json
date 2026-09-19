@@ -6880,6 +6880,214 @@
         }
       }
     },
+    "/api/sources/audiobookbay/connection": {
+      "get": {
+        "tags": [
+          "sources"
+        ],
+        "summary": "Connection",
+        "operationId": "connection_api_sources_audiobookbay_connection_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ABBConnectionView"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "sources"
+        ],
+        "summary": "Save Connection",
+        "operationId": "save_connection_api_sources_audiobookbay_connection_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ABBConnectionInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ABBConnectionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sources/audiobookbay/connection/test": {
+      "post": {
+        "tags": [
+          "sources"
+        ],
+        "summary": "Test Connection",
+        "operationId": "test_connection_api_sources_audiobookbay_connection_test_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ABBConnectionView"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sources/audiobookbay/search": {
+      "post": {
+        "tags": [
+          "sources"
+        ],
+        "summary": "Search",
+        "operationId": "search_api_sources_audiobookbay_search_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ABBSearch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ABBPageView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sources/audiobookbay/results/{result_id}": {
+      "get": {
+        "tags": [
+          "sources"
+        ],
+        "summary": "Detail",
+        "operationId": "detail_api_sources_audiobookbay_results__result_id__get",
+        "parameters": [
+          {
+            "name": "result_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Result Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ABBRelease"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sources/audiobookbay/results/{result_id}/artifact": {
+      "post": {
+        "tags": [
+          "sources"
+        ],
+        "summary": "Resolve",
+        "operationId": "resolve_api_sources_audiobookbay_results__result_id__artifact_post",
+        "parameters": [
+          {
+            "name": "result_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Result Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceArtifactView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/downloaders": {
       "get": {
         "tags": [
@@ -7619,6 +7827,437 @@
   },
   "components": {
     "schemas": {
+      "ABBConnectionInput": {
+        "properties": {
+          "base_url": {
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Base Url"
+          },
+          "proxy_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proxy Url"
+          },
+          "proxy_username": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300,
+                "minLength": 1,
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proxy Username"
+          },
+          "proxy_password": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 1,
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proxy Password"
+          },
+          "clear_proxy_credentials": {
+            "type": "boolean",
+            "title": "Clear Proxy Credentials",
+            "default": false
+          },
+          "metadata_downloader_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metadata Downloader Id"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": true
+          },
+          "expected_generation": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Expected Generation",
+            "default": 0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "base_url"
+        ],
+        "title": "ABBConnectionInput"
+      },
+      "ABBConnectionView": {
+        "properties": {
+          "configured": {
+            "type": "boolean",
+            "title": "Configured"
+          },
+          "base_url": {
+            "type": "string",
+            "title": "Base Url"
+          },
+          "proxy_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proxy Url"
+          },
+          "has_proxy_credentials": {
+            "type": "boolean",
+            "title": "Has Proxy Credentials"
+          },
+          "metadata_downloader_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metadata Downloader Id"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "generation": {
+            "type": "integer",
+            "title": "Generation"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "last_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Error"
+          },
+          "last_success_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Success At"
+          },
+          "route": {
+            "type": "string",
+            "title": "Route"
+          }
+        },
+        "type": "object",
+        "required": [
+          "configured",
+          "base_url",
+          "proxy_url",
+          "has_proxy_credentials",
+          "metadata_downloader_id",
+          "enabled",
+          "generation",
+          "status",
+          "last_error",
+          "last_success_at",
+          "route"
+        ],
+        "title": "ABBConnectionView"
+      },
+      "ABBPageView": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ABBResultView"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "page",
+          "has_more"
+        ],
+        "title": "ABBPageView"
+      },
+      "ABBRelease": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "const": "audiobookbay",
+            "title": "Source",
+            "default": "audiobookbay"
+          },
+          "source_id": {
+            "type": "string",
+            "title": "Source Id"
+          },
+          "indexer_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Indexer Id"
+          },
+          "raw_title": {
+            "type": "string",
+            "title": "Raw Title"
+          },
+          "medium": {
+            "type": "string",
+            "const": "audio",
+            "title": "Medium",
+            "default": "audio"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Authors"
+          },
+          "narrators": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Narrators"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "formats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Formats"
+          },
+          "size_bytes": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size Bytes"
+          },
+          "seeders": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seeders"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "coverage": {
+            "items": {
+              "$ref": "#/components/schemas/CoverageClaim"
+            },
+            "type": "array",
+            "title": "Coverage"
+          },
+          "protocol": {
+            "type": "string",
+            "const": "torrent",
+            "title": "Protocol",
+            "default": "torrent"
+          },
+          "details": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Details"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "detail_path": {
+            "type": "string",
+            "title": "Detail Path"
+          },
+          "observed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Observed At"
+          },
+          "acquisition_supported": {
+            "type": "boolean",
+            "title": "Acquisition Supported",
+            "default": true
+          },
+          "metadata_resolved": {
+            "type": "boolean",
+            "title": "Metadata Resolved",
+            "default": false
+          },
+          "abridged": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Abridged"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/ClaimedFile"
+            },
+            "type": "array",
+            "title": "Files"
+          },
+          "limitation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Limitation"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source_id",
+          "raw_title",
+          "title",
+          "detail_path",
+          "observed_at"
+        ],
+        "title": "ABBRelease"
+      },
+      "ABBResultView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "release": {
+            "$ref": "#/components/schemas/ABBRelease"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "expires_at",
+          "release"
+        ],
+        "title": "ABBResultView"
+      },
+      "ABBSearch": {
+        "properties": {
+          "q": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Q"
+          },
+          "page": {
+            "type": "integer",
+            "maximum": 201.0,
+            "minimum": 1.0,
+            "title": "Page",
+            "default": 1
+          }
+        },
+        "type": "object",
+        "required": [
+          "q"
+        ],
+        "title": "ABBSearch"
+      },
       "ABSConnectionInput": {
         "properties": {
           "kind": {
@@ -9253,6 +9892,36 @@
           "revision"
         ],
         "title": "ClaimInput"
+      },
+      "ClaimedFile": {
+        "properties": {
+          "path": {
+            "type": "string",
+            "title": "Path"
+          },
+          "size_bytes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size Bytes"
+          },
+          "evidence": {
+            "type": "string",
+            "const": "claimed",
+            "title": "Evidence",
+            "default": "claimed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "title": "ClaimedFile"
       },
       "ConnectionView": {
         "properties": {
@@ -14672,6 +15341,10 @@
             ],
             "title": "Audio Destination Id"
           },
+          "allow_unknown_seeders": {
+            "type": "boolean",
+            "title": "Allow Unknown Seeders"
+          },
           "search_series": {
             "type": "boolean",
             "title": "Search Series"
@@ -15478,12 +16151,16 @@
               },
               {
                 "$ref": "#/components/schemas/ProwlarrRelease"
+              },
+              {
+                "$ref": "#/components/schemas/ABBRelease"
               }
             ],
             "title": "Release",
             "discriminator": {
               "propertyName": "source",
               "mapping": {
+                "audiobookbay": "#/components/schemas/ABBRelease",
                 "mam": "#/components/schemas/MAMRelease",
                 "prowlarr": "#/components/schemas/ProwlarrRelease"
               }
@@ -15808,6 +16485,11 @@
               }
             ],
             "title": "Audio Destination Id"
+          },
+          "allow_unknown_seeders": {
+            "type": "boolean",
+            "title": "Allow Unknown Seeders",
+            "default": false
           },
           "search_series": {
             "type": "boolean",
@@ -18193,12 +18875,16 @@
               },
               {
                 "$ref": "#/components/schemas/ProwlarrRelease"
+              },
+              {
+                "$ref": "#/components/schemas/ABBRelease"
               }
             ],
             "title": "Release",
             "discriminator": {
               "propertyName": "source",
               "mapping": {
+                "audiobookbay": "#/components/schemas/ABBRelease",
                 "mam": "#/components/schemas/MAMRelease",
                 "prowlarr": "#/components/schemas/ProwlarrRelease"
               }

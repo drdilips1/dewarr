@@ -61,6 +61,9 @@ export default function Sources({
           <Link to={`/sources/prowlarr?${params.toString()}`}>
             Search Prowlarr indexers
           </Link>
+          <Link to={`/sources/audiobookbay?${params.toString()}`}>
+            Search AudiobookBay
+          </Link>
           <p>
             Find source releases by title, author or series, then inspect the
             edition and recording details.

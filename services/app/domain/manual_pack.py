@@ -6,8 +6,7 @@ from uuid import UUID
 from fastapi import HTTPException
 from sqlalchemy import select
 
-from app.adapters.mam import MAMRelease
-from app.adapters.prowlarr import ProwlarrRelease
+from app.adapters.source_releases import release_value as parse_release
 from app.adapters.torrent_descriptor import TorrentDescriptor
 from app.config import get_settings
 from app.db.models import (
@@ -97,9 +96,7 @@ async def preview(db, user, selection_id):
     if planned["state"] != "ready":
         return result
     artifact = await db.get(SourceArtifact, selection.artifact_id)
-    release = (MAMRelease if artifact.source_key == "mam" else ProwlarrRelease).model_validate(
-        artifact.release_snapshot
-    )
+    release = parse_release(artifact.source_key, artifact.release_snapshot)
     descriptor = TorrentDescriptor.model_validate(artifact.descriptor)
     artifact_bytes(artifact)
     if (

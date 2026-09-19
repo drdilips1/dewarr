@@ -263,7 +263,7 @@ class QbitClient:
     async def __aexit__(self, *args):
         await self.client.aclose()
 
-    async def _request(self, method, path, *, mutating=False, **kwargs):
+    async def _request(self, method, path, *, mutating=False, accepted_statuses=(), **kwargs):
         try:
             async with (
                 asyncio.timeout(45),
@@ -288,6 +288,7 @@ class QbitClient:
                 if status == 404 and not mutating:
                     raise AdapterError(FailureKind.NOT_FOUND, "qBittorrent resource was not found.")
                 accepted = {200, 202} if mutating else {200}
+                accepted.update(accepted_statuses)
                 if path == "auth/login":
                     accepted.add(204)
                 if status not in accepted:
@@ -340,7 +341,90 @@ class QbitClient:
             protocols={"torrent"},
             limitations=["POSIX paths; actual server compatibility requires certification."],
         )
+        version = tuple(map(int, raw.strip().decode().lstrip("v").split(".")[:2]))
+        if version >= (5, 2):
+            self._capabilities.operations.add("magnet-metadata")
         return self._capabilities
+
+    async def resolve_magnet(self, magnet: str, *, wait_seconds=40, interval=2) -> bytes:
+        """Fetch metadata through qBit's network without adding or starting a transfer.
+
+        This uses the 5.2 metadata cache API. Never emulate it by adding a magnet
+        and racing to stop a payload download, or by running a local P2P session.
+        The exported torrent, not the JSON/page file claims, establishes identity.
+        """
+        expected = magnet_hashes(magnet)
+        # Do not let a source-controlled URL turn metadata inspection into an
+        # arbitrary web fetch through the downloader's trusted network.
+        if set(parse_qs(urlsplit(magnet).query)) - {"xt", "tr", "dn"}:
+            raise AdapterError(
+                FailureKind.UNSUPPORTED,
+                "Magnet inspection supports torrent identities and trackers only.",
+            )
+        capabilities = await self.capabilities()
+        if "magnet-metadata" not in capabilities.operations:
+            raise AdapterError(
+                FailureKind.UNSUPPORTED,
+                "Magnet inspection requires qBittorrent 5.2 or newer with metadata cache APIs.",
+            )
+        from app.adapters.torrent_descriptor import inspect_torrent
+
+        try:
+            async with asyncio.timeout(wait_seconds):
+                while True:
+                    status, raw = await self._request(
+                        "POST",
+                        "torrents/fetchMetadata",
+                        data={"source": magnet},
+                        accepted_statuses=(202,),
+                    )
+                    try:
+                        observation = json.loads(raw)
+                        if not isinstance(observation, dict):
+                            raise ValueError("Invalid metadata observation")
+                    except (ValueError, UnicodeError) as error:
+                        raise AdapterError(
+                            FailureKind.PARSER, "qBittorrent returned unreadable metadata status."
+                        ) from error
+                    if status == 202:
+                        await asyncio.sleep(interval)
+                        continue
+                    if not isinstance(observation.get("info"), dict):
+                        raise AdapterError(
+                            FailureKind.PARSER,
+                            "qBittorrent did not establish resolved torrent metadata.",
+                        )
+                    status, raw = await self._request(
+                        "POST",
+                        "torrents/saveMetadata",
+                        data={"source": magnet},
+                        accepted_statuses=(409,),
+                    )
+                    if status == 409:
+                        # fetchMetadata may have observed an existing transfer,
+                        # which is not necessarily present in its separate cache.
+                        # Exporting it is read-only and never grants adoption.
+                        try:
+                            key = hash_value(observation["hash"])
+                        except (KeyError, ValueError) as error:
+                            raise AdapterError(
+                                FailureKind.PARSER,
+                                "qBittorrent returned an invalid metadata identity.",
+                            ) from error
+                        _, raw = await self._request("GET", "torrents/export", params={"hash": key})
+                    descriptor = await inspect_torrent(raw)
+                    hashes = {h for h in (descriptor.infohash_v1, descriptor.infohash_v2) if h}
+                    if not expected <= hashes:
+                        raise AdapterError(
+                            FailureKind.PARSER,
+                            "Resolved torrent does not match the requested magnet identity.",
+                        )
+                    return raw
+        except TimeoutError as error:
+            raise AdapterError(
+                FailureKind.TIMEOUT,
+                "Torrent metadata is not available yet; retry inspection later.",
+            ) from error
 
     async def _json(self, path, **params):
         await self._login()

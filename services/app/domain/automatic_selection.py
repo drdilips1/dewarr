@@ -12,8 +12,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import select, text
 
 from app.adapters.contracts import AdapterError, FailureKind
-from app.adapters.mam import MAMRelease
-from app.adapters.prowlarr import ProwlarrRelease
+from app.adapters.source_releases import release_value as parse_release
 from app.adapters.torrent_descriptor import TorrentDescriptor
 from app.config import get_settings
 from app.db.models import (
@@ -87,9 +86,7 @@ class AutomaticSelectionInput(BaseModel):
 
 
 def release_value(row):
-    return (MAMRelease if row.source_key == "mam" else ProwlarrRelease).model_validate(
-        row.release_snapshot
-    )
+    return parse_release(row.source_key, row.release_snapshot)
 
 
 async def context(db, user_id, body):
@@ -383,7 +380,17 @@ async def candidates(db, operation, work, profile, rule, version):
     return ranked
 
 
-async def resolve_candidate(owner_id, row):
+async def resolve_candidate(owner_id, row, *, downloader_id=None, downloader_generation=None):
+    if row.source_key == "audiobookbay":
+        from app.domain.audiobookbay_network import resolve_abb
+
+        return await resolve_abb(
+            owner_id,
+            release_value(row),
+            expected_generation=row.source_generation,
+            downloader_id=downloader_id,
+            downloader_generation=downloader_generation,
+        )
     if row.source_key == "mam":
         artifact, generation = await source_call(
             owner_id,
@@ -566,7 +573,15 @@ async def run(identifier):
             fresh = type(release_value(row)).model_validate(cached["release"])
         else:
             async with asyncio.timeout(180):
-                artifact_id, fresh = await resolve_candidate(owner_id, row)
+                if row.source_key == "audiobookbay":
+                    artifact_id, fresh = await resolve_candidate(
+                        owner_id,
+                        row,
+                        downloader_id=body.downloader_id,
+                        downloader_generation=body.downloader_generation,
+                    )
+                else:
+                    artifact_id, fresh = await resolve_candidate(owner_id, row)
     except (AdapterError, HTTPException, TimeoutError) as error:
         async with session_factory()() as db, db.begin():
             await transaction_lock(db, f"auto-select:{identifier}")

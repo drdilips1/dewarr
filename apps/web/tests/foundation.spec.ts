@@ -3847,3 +3847,110 @@ test("series catalog preserves uncertainty and curates selected books", async ({
   expect(errors).toEqual([]);
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });
+
+test("AudiobookBay settings, rich postings and metadata inspection use the shared manifest", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(90_000);
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Your catalog", exact: true }),
+  ).toBeVisible();
+  await page.goto("/downloaders");
+  const downloaderCard = page.getByRole("article", {
+    name: "qBittorrent",
+    exact: true,
+  });
+  await downloaderCard
+    .getByRole("button", { name: "Edit downloader", exact: true })
+    .click();
+  const downloaderForm = page.getByRole("form", {
+    name: "qBittorrent connection settings",
+  });
+  await downloaderForm.getByLabel("Enable connection", { exact: true }).check();
+  await downloaderForm
+    .getByRole("button", { name: "Save downloader", exact: true })
+    .click();
+  await expect(
+    downloaderCard.getByRole("button", {
+      name: "Test saved connection",
+      exact: true,
+    }),
+  ).toBeEnabled();
+  await page.goto("/sources/audiobookbay");
+  await page
+    .getByText("AudiobookBay connection · not-configured", { exact: true })
+    .click();
+  await page
+    .getByLabel("Site origin", { exact: true })
+    .fill("http://127.0.0.1:13379");
+  await page
+    .getByLabel("Metadata downloader", { exact: true })
+    .selectOption({ label: "qBittorrent" });
+  await page
+    .getByRole("button", { name: "Save connection", exact: true })
+    .click();
+  await expect(
+    page.getByText("AudiobookBay connection · untested", { exact: true }),
+  ).toBeVisible();
+  await page
+    .getByLabel("Search title, author or series", { exact: true })
+    .fill("Harbor");
+  await page
+    .getByRole("button", { name: "Search source", exact: true })
+    .click();
+  const results = page.getByRole("region", { name: "AudiobookBay results" });
+  await expect(
+    results.getByRole("heading", { name: "Harbor", exact: true }),
+  ).toBeVisible();
+  await expect(results).toContainText("Seed count unknown");
+  await results
+    .getByRole("button", { name: "Posting details", exact: true })
+    .click();
+  await expect(
+    results.getByText("Claimed files (2)", { exact: true }),
+  ).toBeVisible({ timeout: 20_000 });
+  await results.getByText("Claimed files (2)", { exact: true }).click();
+  await expect(results).toContainText("Harbor/Harbor.m4b");
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("abb-mobile.png"),
+    fullPage: true,
+  });
+  await results
+    .getByRole("button", { name: "Inspect torrent", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Torrent manifest", exact: true }),
+  ).toBeVisible({ timeout: 20_000 });
+  await expect(
+    page.getByText("AUDIOBOOKBAY RELEASE", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(
+      "Torrent metadata is saved privately. No download has been started.",
+      { exact: true },
+    ),
+  ).toBeVisible();
+  await page.reload();
+  await expect(
+    page.getByRole("heading", { name: "Torrent manifest", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Return to source search" }),
+  ).toHaveAttribute("href", /sources\/audiobookbay/);
+  await expect(page.locator("body")).not.toContainText(
+    "private-fixture-passkey",
+  );
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+});

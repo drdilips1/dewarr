@@ -1,6 +1,6 @@
 # Product and development handoff
 
-September 18, 2026 · v1.9 product baseline · Execution handoff refreshed against committed revision `7d506a5`, including the automatic Prefer-pack increment and its separate verification record. This guide is a plan, not a claim of completed functionality.
+September 18, 2026 · v1.9 product baseline · Execution handoff refreshed against committed revision `2dcc455`, including automatic and manual reviewed-pack preparation. The native AudiobookBay checkpoint adds bounded implementation evidence; actual-service qualification remains open. This guide is a plan, not a claim of completed functionality.
 
 Build a self-hosted book discovery, curation and acquisition app above Audiobookshelf. The experience should feel familiar to a Seerr user: browse attractive shelves, open one book page, see what is already owned, inspect available versions and sources, and request missing media. The app also owns organizing its newly downloaded files so that Audiobookshelf can serve them correctly.
 
@@ -117,7 +117,7 @@ The plan defines **42 functional requirements**: 36 for v1 and six later capabil
 
 Code existence, fixture success, live compatibility and stage acceptance are separate statuses. Missing service credentials or container/runtime certification must remain visible as unverified gates. No P0/P1 integrity, privacy, wrong-book acquisition, false-ownership or mandatory-workflow failure is acceptable for production v1.
 
-For this workspace, first compare the current revision and uncommitted work with [verified implementation status](docs/IMPLEMENTATION-STATUS.md). Reuse completed modules and finish the outstanding assertions. Release/narrator preferences, reviewed finite-series acquisition, compatible transfer reuse and inherited downloader/destination defaults have bounded evidence. Inherited series scope and list-derived expansion now have bounded evidence. The automatic Prefer-pack increment now supplies bounded incidental child fulfillment. Next are remaining manual-surface and series/version qualification, followed by reviewed policy changes, as specified in the [current implementation handoff](IMPLEMENTATION-PLAN.md#18-current-development-handoff). Native ABB, full version handling, discovery and production qualification remain part of the full delivery plan.
+For this workspace, first compare the current revision and uncommitted work with [verified implementation status](docs/IMPLEMENTATION-STATUS.md). Reuse the existing catalog, inventory, selection, list, shared-transfer and import services. Native ABB now uses the shared acquisition path with synthetic-service and real-file evidence. Complete its actual-service qualification alongside series/version and policy gaps, then qualify the complete list journey, deliver discovery/curation and pass the production gates. Section 9 is the current execution order; earlier checkpoint narratives are historical.
 
 At each stage start, split its packages into reviewable tickets with an owner, affected FR/AT IDs, input/output contract, success/failure fixtures and demo. Estimate remaining implementation, verification, integration access and contingency separately after inspecting the code and measuring throughput. At stage end, attach the revision and actual results, update coverage, and resolve blockers before enabling the dependent capability. Calendar estimates are forecasts; acceptance gates remain mandatory.
 
@@ -152,66 +152,64 @@ The core requested product is delivered through S09. Additional backends such as
 
 ## 8. Development execution contract
 
-The implementation owner selects the earliest unmet dependency from S00–S09 and closes one observable user journey at a time. Frontend layouts and adapter fixtures can progress against agreed contracts, but a release waits for its actual integration evidence. S10 work is estimated and accepted separately.
+Develop complete user journeys across API, worker and UI. Reuse one acquisition pipeline for manual requests, bulk actions and list automation. Source adapters supply observations and acquisition artifacts; they do not each implement their own downloader or importer.
 
 Every development ticket records:
 
-1. **Scope:** parent stage/package, FR IDs, user outcome and explicit exclusions.
-2. **Contract:** API/schema changes, authority, durable state transitions and compatibility assumptions.
-3. **Failure handling:** idempotency, retries, cancellation, stale settings and recovery after an external side effect.
-4. **Delivery:** backend, worker, UI and migration changes needed for the complete outcome.
-5. **Proof:** applicable AT assertions, default/advanced/error-state demo and recorded revision/environment.
-6. **Operations:** rollout or capability gate, backup/migration implications, repair path and documentation.
+1. **Scope:** parent stage/package, FR IDs, user outcome and exclusions.
+2. **Contract:** API/schema changes, identity, authority, durable transitions and integration capabilities.
+3. **Failure behavior:** retries, cancellation, stale settings, uncertain external effects and recovery.
+4. **Delivery:** backend, worker, UI, generated client and migrations needed for that outcome.
+5. **Proof:** applicable AT assertions, default/advanced/error-state demonstration, revision and environment.
+6. **Operations:** capability activation, upgrade/repair path, documentation and remaining limitations.
 
-Use one acquisition pipeline for manual requests and list automation. Resolve settings field by field in this order: request override → list override → selected profile → personal defaults → installation defaults → built-in defaults. Independently enforce administrator restrictions and each surviving request reason's hard constraints. Show effective values and their origins, preserve an explicit clear separately from an omitted field, and freeze submitted choices and import manifests.
+Settings resolve field by field: request override → list override → selected profile → personal defaults → installation defaults → built-in defaults. Administrator restrictions and grants apply independently. Show effective values and their origins, distinguish clearing from inheritance, and freeze submitted choices and import manifests. Applying changed settings to existing unsatisfied work requires a reviewed revision; it cannot rewrite an external transfer.
 
-The next policy increment is accepted only when manual requests, list previews, source search, selection and automatic dispatch agree on the effective settings; overlapping requests share only compatible work; stale previews are rejected; and changes cannot rewrite an existing transfer's requirements. Media, language, narrator and route defaults already have bounded evidence. Series expansion and reviewed changes to accepted requests remain delivery items; broader route compatibility remains a qualification requirement.
+Assign an implementation owner and acceptance reviewer at ticket start; one developer may perform both with separate review steps. Estimate implementation, verification, external-service access and contingency separately. Record a range and confidence, then reforecast after the demonstration. Package count is not a duration estimate, and waiting for credentials is not engineering progress. No unsupported calendar commitment is part of this plan.
 
-After that increment, follow the existing package dependencies through complete source/pack handling, list-automation qualification, discovery/curation and production operations. A release candidate must demonstrate fresh install, the eight launch journeys, worker interruption, an upstream outage and restore with an external transfer already running. The release record names supported service/filesystem combinations and any intentionally disabled optional capabilities.
+A ticket is complete when its full outcome and failure paths are demonstrated, documentation and migrations are ready, and remaining limitations are explicit. A release milestone also requires all of its dependency gates. A fixture-backed connector, a connector qualified against an actual service, and an accepted product stage are separate statuses.
 
 ## 9. Remaining development batches from the current checkpoint
 
-This sequence makes the existing stage backlog actionable; it adds no packages and does not mark any stage complete. Committed baseline `e1a462a` includes automatic pack grouping, same-owner transfer reuse, automatic acquisition of a finite reviewed series, inherited downloader/destination defaults, reusable main-book scope reviews and the [list-derived series increment](docs/LIST-SERIES.md), with bounded inheritance, lifecycle and real-file evidence. The subsequent [automatic Prefer-pack increment](docs/PACK-EXPANSION.md) supplies incidental child fulfillment; neither checkpoint completes the parent stages. Use the [current handoff](IMPLEMENTATION-PLAN.md#18-current-development-handoff) and implementation status for exact verification, deployment state and the next unfinished contract.
+Starting point: committed revision `2dcc455`. Existing evidence covers bounded catalog/inventory, MAM/Prowlarr acquisition, preferences/routes, external-list observations, automatic selection/import, reviewed series, shared transfers/reuse, and automatic/manual reviewed pack children. Exact scopes are in [Implementation Status](docs/IMPLEMENTATION-STATUS.md). No complete S00–S09 gate is accepted. The native ABB checkpoint adds configuration, source observations, bounded metadata inspection and shared acquisition/import. It does not establish public-host or real qBittorrent metadata compatibility.
 
-Batch 1 now has bounded narrator inheritance, source/import, ownership, ranking and browser evidence. Its wider recording-equivalence and live-service gates are not implied by those results; see the narrator checkpoint in implementation status. Continue with the earliest unmet dependencies in batches 2–7.
+This is the current order for the existing workspace, not a replacement for the greenfield S00–S10 dependency graph. Any unmet prerequisite discovered in a batch must be closed before activating its dependent behavior.
 
-| Batch | Existing package scope | Deliverable | Required demonstration |
+| Batch | Parent scope | Complete outcome | Acceptance demonstration |
 |---|---|---|---|
-| 1. Narrator and recording preferences | S06-04, S07-04 | Inherited preferred versus required narrators; exact-recording constraints; effective-value UI; frozen request evidence | Preferred narrator changes ranking; unknown or wrong required narrator cannot fulfill; an existing ebook still keeps the overall owned check; compatible requests share safely |
-| 2. Series and shared coverage | S06-03–S06-05; S04 collection assertions | Just-book/prefer-pack/complete-series policies, finite expansion, per-child coverage and omnibus handling | A partly owned trilogy downloads once, imports missing verified children, holds an ambiguous child and resumes without repeating successful work |
-| 3. Policy revisions and route qualification | S06-04, S07-04–S07-06 | Build on inherited approved routes; add reviewed changes to unsatisfied requests and complete route compatibility | Changing a list policy previews affected targets, preserves dispatched selections and frozen manifests, and respects each remaining request reason; changed defaults never silently redirect an accepted transfer |
-| 4. Source completeness and connector qualification | S05–S07 outstanding adapter assertions | Native ABB; complete Prowlarr/native-source deduplication; actual MAM, qBittorrent, ABS and list-provider evidence | Partial-source search, lost submission response, proxy failure, list pagination and real file-to-ABS confirmation recover correctly |
-| 5. Full list-to-library automation | S07 remaining assertions | Future-only/backfill/catch-up, overlapping list reasons, exclusions and bounded unattended scheduling | A newly added external-list book reaches ABS without routine per-title approval; repeats, restarts and overlapping lists cause no duplicate acquisition |
-| 6. Discovery and curation | S08; remaining S02 UX | Bookstore shelves, related books, series browsing, local sharing, supported community lists and optional Hardcover list write-back | Browse, follow, curate and request through an accessible interface; provider failures retain useful cached/local views; no reading-status side effects |
-| 7. Production qualification | S09 plus any earlier unmet gate | Supported Compose deployment, migrations, backup/restore, compatibility, performance, accessibility and operator guides | Fresh install, upgrade and restore pass; all mandatory v1 journeys and their failure cases have evidence on the declared deployment |
-| 8. Separate expansion releases | S10 | Additional backends/clients, richer recommendations, deliberate upgrades/reorganization and SSO | Each extension passes its own adapter, authorization and recovery contract |
+| 1. Source integration qualification | S06-01–S06-03, S06-06; S05 lifecycle | Qualify the implemented ABB/shared acquisition path against actual supported hosts and clients; finish release equivalence and broader source combinations | Repeat the fixture-backed metadata → single transfer → import → ABS journey against the declared service matrix. Verify source/proxy failures and source overlap without duplicate dispatch. |
+| 2. Versions, series and shared coverage | S03–S04 remaining assertions; S06-04–S06-06 | Finish recording/edition identity, mixed-media/route rules, finite series policies, pack children and truthful omnibus coverage | Partly owned trilogy, two narrations and one ambiguous child: correct targets, no duplicate owned import, independent recovery and stable seeded files. |
+| 3. Policy changes and reason lifecycle | S06-04; S07-03–S07-06 | Reviewed changes to unsatisfied requests; consistent inherited settings; overlapping list/manual reasons; revocation and resume behavior | Change a list profile during acquisition: preserve submitted choices, preview pending changes and retain independently authorized work. |
+| 4. External-list automation and actual-service qualification | S05–S07 remaining gates | Hardcover/RSS/CSV observations, baseline/backfill/catch-up, quotas, exclusions and bounded unattended scheduling through certified connectors | Add a book upstream; acquire its missing medium without routine per-title approval. Repeat sync, overlap lists, interrupt the worker and delay ABS; no repeat transfer or false ownership. |
+| 5. Discovery and curation | S08; remaining S02 experience | Bookstore shelves, explained related books, community-list following, local sharing, supported optional Hardcover list writes and straightforward settings | Browse → related title → list → selective or automatic request; private data remains private; provider failure leaves useful local/cached views. |
+| 6. Production qualification | S09 and all earlier unmet gates | Supported Compose deployment, full compatibility matrix, migrations, backup/restore, performance, accessibility and operator documentation | Fresh install, populated upgrade and restore with an existing external transfer; all mandatory launch journeys pass on the declared environment. |
+| 7. Separate expansion releases | S10 | Additional library backends/clients, advanced recommendations, opt-in upgrades/reorganization and SSO | Each extension passes its own identity, authorization, compatibility and recovery contract. |
 
-Batch 4's independent connector work can proceed once its contracts are stable; the automation beta still waits for all required source, series and import evidence. No launch estimate should be inferred from the number of batches. Estimate each remaining ticket after inspecting its code, fixtures and external-service access needs.
+Actual-service and filesystem qualification can start as soon as the relevant contracts stabilize; it should not wait until the final week of release work. Discovery design can proceed against the catalog contract while acquisition gaps close. Neither parallel activity bypasses the dependent release gates.
 
-Batch 2 is decomposed into [six series implementation tasks](IMPLEMENTATION-PLAN.md#series-increment-reviewable-implementation-sequence): catalog observation, browsing/curation, target-set preview, shared pack selection, verified child fulfillment and list-to-library demonstration. Bounded evidence covers those foundations, automatic pack coverage/grouping, later same-owner transfer reuse and automatic acquisition of a finite reviewed series. The [next reviewable packets](IMPLEMENTATION-PLAN.md#next-reviewable-packets-series-scope-and-list-expansion) build on the committed scope-review foundation to finish inheritance, derived authority, pack expansion and recovery. Broader route/media and ownership combinations, full recording/edition and omnibus handling, and actual-service qualification remain open. Saved requests or a completed download never substitute for confirmed library coverage.
-
-For the next milestone, demonstrate two overlapping lists and a partly owned trilogy: the automatic policy resolves a finite authorized scope, one compatible pack downloads, each missing verified child imports independently, an ambiguous child enters review, and a delayed ABS scan eventually confirms each successful child. Repeating sync, refreshing the catalog and restarting the worker must neither expand the accepted scope nor repeat the transfer. Then continue batches 3–7; passing this demonstration alone does not deliver the entire product.
-
+The [current implementation handoff](IMPLEMENTATION-PLAN.md#18-current-development-handoff) defines the first packet and the remaining series subpackages. Use existing stable ticket IDs in the [61-package backlog](DEVELOPMENT-BACKLOG.csv); smaller packets do not create a second competing backlog.
 
 ## 10. Development start and release handoff
 
-Use the existing implementation as the starting point. Keep the 61 parent packages and 54 requirements as the stable scope; use smaller implementation tickets beneath them rather than restarting the project or rewriting the backlog after each checkpoint.
+Native ABB has reached the shared acquisition/import path with bounded automated evidence; see [its contract and limits](docs/AUDIOBOOKBAY-INTEGRATION.md). Continue series/version and policy closure while obtaining actual-service qualification. No fixture-backed connector alone closes a source or release stage.
 
-The inherited series/list increment now has bounded evidence against SC-02, SC-03, SC-05 and SC-06, recorded in implementation status. Its defining flow is: activate a list with Complete series, observe a new root book, freeze its eligible series set, preserve independent authority for each child, select compatible releases, import the missing children and confirm them in ABS. Include pause, removal/re-addition, changed settings, overlapping lists and worker restart. A settings dropdown or passing happy path is insufficient. Prefer-pack incidental expansion is the separate SC-04 outcome and remains required even if Complete series passes first.
+Use one shared acceptance story through the entire plan: two overlapping lists, a trilogy with an ebook already owned, two audiobook narrations, a pack containing an uncertain child and a delayed ABS scan.
 
-For full series-stage acceptance, demonstrate all of these distinct cases; the bounded increment does not establish them all:
-
-| Case | Required result |
+| Situation | Required result |
 |---|---|
-| Ebook owned; list requests Both | Overall ownership remains checked; only the missing qualifying audiobook is acquired. |
-| Two narrations and multiple trackers | Catalog recordings remain distinct; tracker duplicates do not create new versions. Exact narration requirements survive search, import and inventory matching. |
-| Partly owned trilogy in one pack | One transfer; skip the satisfied child, independently import the missing resolved children and hold uncertain mappings. |
-| Prefer packs for one missing book | Additional authorized, covered, qualifying children are imported. Merely retaining their bytes in the torrent is insufficient. |
-| Complete series without a suitable pack | Missing targets can use individual releases; one failed child does not discard successful siblings. |
-| New sequel or changed series metadata | Previously accepted scope does not expand. Future monitoring requires its own active policy. |
-| List root removed and later re-added | Old authority cannot revive accidentally; the new membership episode rechecks inventory, surviving reasons and compatible pending work. |
-| Proxy, source or ABS outage | No route bypass, fabricated empty library or repeat transfer; useful partial results and the next recovery action stay visible. |
+| Ebook owned; policy requests Both | Keep the green work check; acquire only qualifying missing audio. |
+| Several trackers offer one recording | Show several releases under the same catalog recording. |
+| Exact narration requested | Wrong or unknown narration cannot silently satisfy it. |
+| Pack includes an owned title | Keep the original torrent intact; skip duplicate publication of the owned book. |
+| One pack child is ambiguous | Hold that child and complete independently resolved siblings. |
+| Complete series has no suitable pack | Use eligible individual releases; retain visible gaps. |
+| List membership disappears or returns | Preserve files and other active reasons; recheck a new membership episode. RSS omission alone proves no removal. |
+| New sequel appears in catalog | Do not enlarge a frozen request; future acquisition requires an active follow/list policy. |
+| Source, proxy or ABS fails | Show partial/stale state and a valid repair action; no route bypass or duplicate download. |
+| Worker restarts or app backup is restored | Reconcile saved transfers and publications before resuming effects. |
 
-Build on the [automatic Prefer-pack increment](docs/PACK-EXPANSION.md) and [manual pack preparation](docs/MANUAL-PACKS.md) to finish remaining SC-04 source-surface and series/version qualification first, then execute batches 3–7 above and close any earlier unmet stage gates. Manual preparation handles a finite reviewed set on one saved artifact and route; it does not establish full recording/edition or omnibus support. S08 is essential to the requested product: bookstore browsing, recommendations, list curation and simple settings are release requirements, not polish deferred beyond v1. S09 accepts the combined product only after the documented source/backend/filesystem matrix and operational rehearsals pass.
+The release candidate must include a versioned build, supported service/filesystem matrix, schema migrations, upgrade/restore instructions, retained dependency notices, administrator guide, user guide and evidence for every mandatory FR/NFR. Demonstrate all eight [launch journeys](PRD.md#20-launch-journey-checklist), including keyboard/mobile operation and actionable failure states.
 
-For every milestone, deliver a runnable build, migrations and rollback/repair guidance where relevant, API/client contracts, a default-path browser demonstration, failure evidence, operator documentation and a list of remaining limitations. Record an accountable implementation owner and acceptance reviewer; one person may fill both roles with separate review steps. Estimate from the remaining work and available integration access, then reforecast at each milestone rather than assigning unsupported calendar dates.
+Core v1 is accepted at S09 after FR-01–FR-36, NFR-01–NFR-12 and the full relevant AT-01–AT-30 scope pass. S10 has six separately scoped capabilities and five associated acceptance scenarios. Optional capabilities can remain disabled only where the PRD explicitly allows that; required sources, list automation and discovery cannot be relabeled optional to pass release review.
+
+The plan is ready for staged development without another product-preference decision. Compatibility, provider access and layout support remain evidence gates to resolve during implementation. This planning handoff does not mark the application complete.

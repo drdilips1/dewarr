@@ -5,6 +5,7 @@ import type { components } from "../api/schema";
 type Preferences = components["schemas"]["ReleasePreferences"];
 export type Overrides = components["schemas"]["PreferenceOverrides"];
 export const preferenceLabels: Partial<Record<keyof Preferences, string>> = {
+  allow_unknown_seeders: "Allow unknown seed counts",
   criteria: "Ranking priorities",
   source_order: "Source preference",
   ebook_formats: "Ebook format preference",
@@ -275,6 +276,41 @@ export default function PreferenceFields({
         )}
       </details>
       {order("source_order")}
+      {!effective.source_order?.includes("audiobookbay") && (
+        <button
+          type="button"
+          onClick={() =>
+            onChange({
+              ...overrides,
+              source_order: [...(effective.source_order || []), "audiobookbay"],
+            })
+          }
+        >
+          Add AudiobookBay to source preference
+        </button>
+      )}
+      <details>
+        <summary>Unknown seed counts</summary>
+        <label className="check-label">
+          <input
+            type="checkbox"
+            checked={effective.allow_unknown_seeders ?? false}
+            onChange={(event) =>
+              onChange({
+                ...overrides,
+                allow_unknown_seeders: event.target.checked,
+              })
+            }
+          />
+          Allow AudiobookBay releases after torrent metadata resolves
+        </label>
+        <p className="muted">
+          Off by default. Metadata resolution verifies the torrent manifest, not
+          a seeder count or guaranteed payload availability. All identity,
+          format, size and import checks still apply.
+        </p>
+        {origin("allow_unknown_seeders")}
+      </details>
       <details>
         <summary>Formats and transfer limits</summary>
         {order("ebook_formats")}

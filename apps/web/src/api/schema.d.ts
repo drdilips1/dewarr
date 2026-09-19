@@ -2119,6 +2119,92 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/sources/audiobookbay/connection": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Connection */
+    get: operations["connection_api_sources_audiobookbay_connection_get"];
+    /** Save Connection */
+    put: operations["save_connection_api_sources_audiobookbay_connection_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/sources/audiobookbay/connection/test": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Test Connection */
+    post: operations["test_connection_api_sources_audiobookbay_connection_test_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/sources/audiobookbay/search": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Search */
+    post: operations["search_api_sources_audiobookbay_search_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/sources/audiobookbay/results/{result_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Detail */
+    get: operations["detail_api_sources_audiobookbay_results__result_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/sources/audiobookbay/results/{result_id}/artifact": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Resolve */
+    post: operations["resolve_api_sources_audiobookbay_results__result_id__artifact_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/downloaders": {
     parameters: {
       query?: never;
@@ -2331,6 +2417,163 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    /** ABBConnectionInput */
+    ABBConnectionInput: {
+      /** Base Url */
+      base_url: string;
+      /** Proxy Url */
+      proxy_url?: string | null;
+      /** Proxy Username */
+      proxy_username?: string | null;
+      /** Proxy Password */
+      proxy_password?: string | null;
+      /**
+       * Clear Proxy Credentials
+       * @default false
+       */
+      clear_proxy_credentials: boolean;
+      /** Metadata Downloader Id */
+      metadata_downloader_id?: string | null;
+      /**
+       * Enabled
+       * @default true
+       */
+      enabled: boolean;
+      /**
+       * Expected Generation
+       * @default 0
+       */
+      expected_generation: number;
+    };
+    /** ABBConnectionView */
+    ABBConnectionView: {
+      /** Configured */
+      configured: boolean;
+      /** Base Url */
+      base_url: string;
+      /** Proxy Url */
+      proxy_url: string | null;
+      /** Has Proxy Credentials */
+      has_proxy_credentials: boolean;
+      /** Metadata Downloader Id */
+      metadata_downloader_id: string | null;
+      /** Enabled */
+      enabled: boolean;
+      /** Generation */
+      generation: number;
+      /** Status */
+      status: string;
+      /** Last Error */
+      last_error: string | null;
+      /** Last Success At */
+      last_success_at: string | null;
+      /** Route */
+      route: string;
+    };
+    /** ABBPageView */
+    ABBPageView: {
+      /** Items */
+      items: components["schemas"]["ABBResultView"][];
+      /** Page */
+      page: number;
+      /** Has More */
+      has_more: boolean;
+    };
+    /** ABBRelease */
+    ABBRelease: {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      source: "audiobookbay";
+      /** Source Id */
+      source_id: string;
+      /** Indexer Id */
+      indexer_id?: string | null;
+      /** Raw Title */
+      raw_title: string;
+      /**
+       * Medium
+       * @default audio
+       * @constant
+       */
+      medium: "audio";
+      /** Authors */
+      authors?: string[];
+      /** Narrators */
+      narrators?: string[];
+      /** Language */
+      language?: string | null;
+      /** Formats */
+      formats?: string[];
+      /** Size Bytes */
+      size_bytes?: number | null;
+      /** Seeders */
+      seeders?: number | null;
+      /** Description */
+      description?: string | null;
+      /** Coverage */
+      coverage?: components["schemas"]["CoverageClaim"][];
+      /**
+       * Protocol
+       * @default torrent
+       * @constant
+       */
+      protocol: "torrent";
+      /** Details */
+      details?: {
+        [key: string]: unknown;
+      };
+      /** Title */
+      title: string;
+      /** Detail Path */
+      detail_path: string;
+      /**
+       * Observed At
+       * Format: date-time
+       */
+      observed_at: string;
+      /**
+       * Acquisition Supported
+       * @default true
+       */
+      acquisition_supported: boolean;
+      /**
+       * Metadata Resolved
+       * @default false
+       */
+      metadata_resolved: boolean;
+      /** Abridged */
+      abridged?: boolean | null;
+      /** Files */
+      files?: components["schemas"]["ClaimedFile"][];
+      /** Limitation */
+      limitation?: string | null;
+    };
+    /** ABBResultView */
+    ABBResultView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Expires At
+       * Format: date-time
+       */
+      expires_at: string;
+      release: components["schemas"]["ABBRelease"];
+    };
+    /** ABBSearch */
+    ABBSearch: {
+      /** Q */
+      q: string;
+      /**
+       * Page
+       * @default 1
+       */
+      page: number;
+    };
     /** ABSConnectionInput */
     ABSConnectionInput: {
       /**
@@ -2949,6 +3192,19 @@ export interface components {
     ClaimInput: {
       /** Revision */
       revision: string;
+    };
+    /** ClaimedFile */
+    ClaimedFile: {
+      /** Path */
+      path: string;
+      /** Size Bytes */
+      size_bytes?: number | null;
+      /**
+       * Evidence
+       * @default claimed
+       * @constant
+       */
+      evidence: "claimed";
     };
     /** ConnectionView */
     ConnectionView: {
@@ -4925,6 +5181,8 @@ export interface components {
       ebook_destination_id?: string | null;
       /** Audio Destination Id */
       audio_destination_id?: string | null;
+      /** Allow Unknown Seeders */
+      allow_unknown_seeders?: boolean;
       /** Search Series */
       search_series?: boolean;
       /** Prefer Series Packs */
@@ -5203,7 +5461,8 @@ export interface components {
       /** Release */
       release:
         | components["schemas"]["MAMRelease"]
-        | components["schemas"]["ProwlarrRelease"];
+        | components["schemas"]["ProwlarrRelease"]
+        | components["schemas"]["ABBRelease"];
       assessment: components["schemas"]["ReleaseAssessment"];
       /**
        * Expires At
@@ -5302,6 +5561,11 @@ export interface components {
       ebook_destination_id?: string | null;
       /** Audio Destination Id */
       audio_destination_id?: string | null;
+      /**
+       * Allow Unknown Seeders
+       * @default false
+       */
+      allow_unknown_seeders: boolean;
       /**
        * Search Series
        * @default true
@@ -6188,7 +6452,8 @@ export interface components {
       /** Release */
       release:
         | components["schemas"]["MAMRelease"]
-        | components["schemas"]["ProwlarrRelease"];
+        | components["schemas"]["ProwlarrRelease"]
+        | components["schemas"]["ABBRelease"];
       /**
        * Dispatch Available
        * @default false
@@ -11061,6 +11326,174 @@ export interface operations {
     };
   };
   resolve_api_sources_prowlarr_results__result_id__artifact_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        result_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SourceArtifactView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  connection_api_sources_audiobookbay_connection_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ABBConnectionView"];
+        };
+      };
+    };
+  };
+  save_connection_api_sources_audiobookbay_connection_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ABBConnectionInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ABBConnectionView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  test_connection_api_sources_audiobookbay_connection_test_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ABBConnectionView"];
+        };
+      };
+    };
+  };
+  search_api_sources_audiobookbay_search_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ABBSearch"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ABBPageView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  detail_api_sources_audiobookbay_results__result_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        result_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ABBRelease"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  resolve_api_sources_audiobookbay_results__result_id__artifact_post: {
     parameters: {
       query?: never;
       header?: never;

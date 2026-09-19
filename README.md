@@ -12,6 +12,10 @@ Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md), then u
 
 Delivery milestones are manual acquisition at S05, list automation at S07, complete discovery and curation at S08, and production v1 at S09. S10 contains separately scoped extensions. The documents describe required outcomes; [implementation status](docs/IMPLEMENTATION-STATUS.md) records what has actually been verified.
 
+The current planning handoff is refreshed against `2dcc455`. Follow the roadmap's [remaining development batches](DEVELOPMENT-ROADMAP.md#9-remaining-development-batches-from-the-current-checkpoint) for execution order. The checkpoint descriptions below record successive increments; their older statements about unfinished work do not override the current handoff.
+
+Native AudiobookBay now has [source search, metadata inspection and shared acquisition](docs/AUDIOBOOKBAY-INTEGRATION.md), including an explicit automatic-selection option for unknown seed counts. Actual public-host/qBittorrent certification and the full S06 stage remain open.
+
 Latest manual-pack increment: [Review additional pack books](docs/MANUAL-PACKS.md) prepares finite reviewed children from a saved manual selection and hands them to the shared-download action. Preparation is atomic and does not start the download. Broader version/omnibus, source-surface and actual-service qualification remain open; exact verification is recorded in implementation status.
 
 Latest Prefer-pack increment: [Additional books from a preferred pack](docs/PACK-EXPANSION.md) connects a selected automatic torrent to additional covered, reviewed books in the same medium. It reuses the saved artifact and shared transfer, checks each child independently, and exposes per-book progress. The manual path has the separate contract above.

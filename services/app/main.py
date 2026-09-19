@@ -12,6 +12,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from app.api import (
     acquisition_preferences,
     acquisition_selections,
+    audiobookbay,
     auth,
     automatic_imports,
     automatic_selection,
@@ -137,6 +138,7 @@ def create_app() -> FastAPI:
     app.include_router(book_sources.router, prefix="/api")
     app.include_router(release_profiles.router, prefix="/api")
     app.include_router(prowlarr.router, prefix="/api")
+    app.include_router(audiobookbay.router, prefix="/api")
     app.include_router(downloaders.router, prefix="/api")
     app.include_router(source_artifacts.router, prefix="/api")
     app.include_router(acquisition_preferences.router, prefix="/api")

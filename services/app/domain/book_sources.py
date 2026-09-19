@@ -8,13 +8,16 @@ from fastapi import HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy import delete, select
 
+from app.adapters.audiobookbay import ABBSearch
 from app.adapters.contracts import AdapterError, FailureKind
 from app.adapters.mam import MAMSearch
 from app.adapters.prowlarr import ProwlarrSearch
+from app.adapters.source_releases import SOURCE_NAMES
 from app.config import get_settings
 from app.db.models import Operation, SourceArtifact, SourceConnection, SourceResult, User, Work
 from app.db.session import session_factory
 from app.domain import series_preparation, source_queries
+from app.domain.audiobookbay_network import abb_call
 from app.domain.operations import transaction_lock
 from app.domain.prowlarr_network import prowlarr_call
 from app.domain.release_profiles import PreferenceOverrides
@@ -143,19 +146,21 @@ async def start(db, user, work_id, body, key, *, pack_origin=None):
     sources = {
         key: {
             "state": "queued",
-            "name": "MAM" if key == "mam" else "Prowlarr indexers",
+            "name": SOURCE_NAMES[key],
             "count": 0,
             "message": "Waiting for a worker",
             "generation": row.generation,
         }
         for key, row in connections.items()
-        if key in {"mam", "prowlarr"}
+        if key in SOURCE_NAMES
     }
-    if "mam" in sources:
-        sources["mam"].update(query_key="book", query=query)
+    for native in ("mam", "audiobookbay"):
+        if native not in sources:
+            continue
+        sources[native].update(query_key="book", query=query)
         for term in query_plan["queries"][1:]:
-            sources["mam:" + term["key"]] = {
-                **sources["mam"],
+            sources[native + ":" + term["key"]] = {
+                **sources[native],
                 "query_key": term["key"],
                 "query": term["query"],
             }
@@ -177,7 +182,7 @@ async def start(db, user, work_id, body, key, *, pack_origin=None):
         },
         message="Searching connected sources"
         if sources
-        else "Connect MAM or Prowlarr to search releases",
+        else "Connect MAM, AudiobookBay or Prowlarr to search releases",
         status="queued" if sources else "completed",
     )
     preparation = (
@@ -199,7 +204,7 @@ async def start(db, user, work_id, body, key, *, pack_origin=None):
 
 async def enqueue_sources(db, operation):
     payload = deepcopy(operation.payload)
-    for source in sorted(payload["sources"].keys() & {"mam", "prowlarr"}):
+    for source in sorted(payload["sources"].keys() & SOURCE_NAMES.keys()):
         job = await enqueue(db, "sources.search", operation_id=str(operation.id), source=source)
         payload["workers"][source] = {"job_id": job, "attempts": 0}
         if operation.job_id is None:
@@ -215,13 +220,15 @@ async def launch(db, operation, user, work):
         db, user, work, payload["query"], profile.get("search_series", True)
     )
     payload["query_plan"] = plan
-    roots = {key: value for key, value in payload["sources"].items() if key in {"mam", "prowlarr"}}
+    roots = {key: value for key, value in payload["sources"].items() if key in SOURCE_NAMES}
     payload["sources"] = roots
-    if "mam" in roots:
-        roots["mam"].update(query_key="book", query=payload["query"])
+    for native in ("mam", "audiobookbay"):
+        if native not in roots:
+            continue
+        roots[native].update(query_key="book", query=payload["query"])
         for term in plan["queries"][1:]:
-            roots["mam:" + term["key"]] = {
-                **roots["mam"],
+            roots[native + ":" + term["key"]] = {
+                **roots[native],
                 "query_key": term["key"],
                 "query": term["query"],
             }
@@ -407,7 +414,7 @@ async def run(identifier, source):
         if datetime.fromisoformat(payload["expires_at"]) <= datetime.now(UTC):
             raise HTTPException(409, "Search expired. Start a new search.")
         generation = payload["sources"][source]["generation"]
-        if source == "mam":
+        if source in {"mam", "audiobookbay"}:
             for unit, state in payload["sources"].items():
                 if not (unit == source or unit.startswith(source + ":")) or state["state"] in {
                     "completed",
@@ -420,22 +427,48 @@ async def run(identifier, source):
                         source,
                         token,
                         unit,
-                        {"state": "running", "message": "Searching MAM"},
+                        {"state": "running", "message": "Searching " + SOURCE_NAMES[source]},
                     ):
                         return
-                    page, generation = await source_call(
-                        owner_id,
-                        "search",
-                        MAMSearch(
-                            q=state.get("query", payload["query"]),
-                            medium=payload["medium"],
-                            language_ids=[],
-                            offset=payload["offset"],
-                            limit=50,
-                        ),
-                        with_generation=True,
-                        expected_generation=generation,
-                    )
+                    if source == "audiobookbay":
+                        if payload["medium"] == "ebook":
+                            await update_unit(
+                                identifier,
+                                source,
+                                token,
+                                unit,
+                                {
+                                    "state": "completed",
+                                    "message": "AudiobookBay supplies audiobooks only",
+                                    "has_more": False,
+                                },
+                                [],
+                                generation,
+                            )
+                            continue
+                        page, generation = await abb_call(
+                            owner_id,
+                            "search",
+                            ABBSearch(
+                                q=state.get("query", payload["query"]),
+                                page=payload["offset"] // 50 + 1,
+                            ),
+                            expected_generation=generation,
+                        )
+                    else:
+                        page, generation = await source_call(
+                            owner_id,
+                            "search",
+                            MAMSearch(
+                                q=state.get("query", payload["query"]),
+                                medium=payload["medium"],
+                                language_ids=[],
+                                offset=payload["offset"],
+                                limit=50,
+                            ),
+                            with_generation=True,
+                            expected_generation=generation,
+                        )
                     if not await update_unit(
                         identifier,
                         source,

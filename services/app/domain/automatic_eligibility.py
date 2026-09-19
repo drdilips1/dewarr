@@ -70,8 +70,15 @@ def eligibility(
     required_language = rule["language"] or (version.language if version else None)
     if not language_accepts(required_language, release.language):
         reasons.append("The source does not confirm the required language")
-    if release.seeders is None or release.seeders == 0:
+    unknown_allowed = (
+        release.seeders is None
+        and preferences.allow_unknown_seeders
+        and release.source == "audiobookbay"
+    )
+    if release.seeders == 0 or (release.seeders is None and not unknown_allowed):
         reasons.append("At least one reported seeder is required for automatic selection")
+    if unknown_allowed and descriptor and not getattr(release, "metadata_resolved", False):
+        reasons.append("Unknown seed counts require resolved torrent metadata before selection")
     text = " ".join(
         [release.raw_title, getattr(release, "title", ""), *getattr(release, "tags", [])]
     )
@@ -94,6 +101,8 @@ def eligibility(
     if rule["abridged"] is not None:
         # Exact source tags are claims; narration duration or prose is not an abridgment flag.
         tags = {normalized(tag) for tag in getattr(release, "tags", [])}
+        if release.source == "audiobookbay" and release.abridged is not None:
+            tags.add("abridged" if release.abridged else "unabridged")
         expected = "abridged" if rule["abridged"] else "unabridged"
         opposite = "unabridged" if rule["abridged"] else "abridged"
         if expected not in tags or opposite in tags:

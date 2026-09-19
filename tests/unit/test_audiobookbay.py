@@ -1,0 +1,210 @@
+import base64
+from urllib.parse import parse_qs, urlsplit
+
+import httpx
+import pytest
+
+from app.adapters.audiobookbay import (
+    ABBClient,
+    ABBSearch,
+    detail_path,
+    parse_detail,
+    parse_search,
+    size,
+)
+from app.adapters.contracts import AdapterError, FailureKind
+from app.adapters.qbittorrent import magnet_hashes
+from tests.abb_fixture import HASH, ORIGIN, PATH, detail, post, search
+
+
+def test_search_preserves_explicit_metadata_without_inventing_seed_counts():
+    page = parse_search(search(more=True), ORIGIN, 1)
+    assert page.has_more and len(page.items) == 1
+    release = page.items[0]
+    assert release.title == "Harbor" and release.raw_title == "Harbor - Alex Morgan"
+    assert release.authors == ["Alex Morgan"] and release.narrators == ["Casey Reader"]
+    assert release.language == "en" and release.formats == ["m4b"]
+    assert release.size_bytes == 1610612736 and release.seeders is None
+    assert release.abridged is False
+    assert release.detail_path == PATH and release.files == []
+
+
+def test_unlabelled_author_and_narrator_remain_unknown():
+    release = parse_search(post(body="Format: MP3"), ORIGIN, 1).items[0]
+    assert release.authors == [] and release.narrators == []
+    assert release.title == release.raw_title and release.abridged is None
+
+
+@pytest.mark.parametrize(
+    "body,expected",
+    [
+        ("This abridged edition was replaced by an unabridged recording.", None),
+        ("<p>Unabridged</p><p>Abridged</p>", None),
+        ("<p>Abridgment: Abridged</p><p>Also available unabridged elsewhere.</p>", True),
+        ("<p>Unabridged</p><p>Earlier abridged editions omitted chapters.</p>", False),
+    ],
+)
+def test_abridgment_requires_unambiguous_explicit_posting_label(body, expected):
+    release = parse_search(post(body=body), ORIGIN, 1).items[0]
+    assert release.abridged is expected
+
+
+def test_detail_claims_remain_claims_and_magnet_is_not_exposed_in_repr():
+    result = parse_detail(detail(), ORIGIN, PATH)
+    assert magnet_hashes(result.magnet) == {HASH}
+    assert [(f.path, f.size_bytes, f.evidence) for f in result.release.files] == [
+        ("Harbor/Harbor.m4b", 12, "claimed"),
+        ("Harbor/cover.jpg", 2, "claimed"),
+    ]
+    assert result.release.size_bytes == 14
+    assert "magnet" not in repr(result)
+    assert parse_qs(urlsplit(result.magnet).query)["tr"] == [
+        "udp://tracker.example.com:80/announce"
+    ]
+
+
+@pytest.mark.parametrize(
+    "value,expected",
+    [(HASH.upper(), HASH), (" \n".join([HASH[:20], HASH[20:]]), HASH), ("a" * 64, "a" * 64)],
+)
+def test_v1_whitespace_and_v2_hashes_have_correct_magnet_namespaces(value, expected):
+    result = parse_detail(detail(digest=value), ORIGIN, PATH)
+    assert magnet_hashes(result.magnet) == {expected}
+    xt = parse_qs(urlsplit(result.magnet).query)["xt"][0]
+    assert xt.startswith("urn:btmh:1220" if len(expected) == 64 else "urn:btih:")
+
+
+def test_canonical_magnet_fallback_strips_webseeds_and_private_trackers():
+    digest = base64.b32encode(bytes.fromhex(HASH)).decode()
+    html = detail(
+        digest="not-a-hash",
+        extra=f'<a href="magnet:?xt=urn:btih:{digest}&amp;xs=http://127.0.0.1/private&amp;tr=http://127.0.0.1/tracker">Download</a>',
+    )
+    magnet = parse_detail(html, ORIGIN, PATH).magnet
+    assert magnet_hashes(magnet) == {HASH}
+    assert "127.0.0.1" not in magnet and "xs=" not in magnet
+
+
+def test_conflicting_identities_fail_instead_of_selecting_a_different_release():
+    with pytest.raises(AdapterError, match="conflicting torrent identities"):
+        parse_detail(
+            detail(extra=f'<a href="magnet:?xt=urn:btih:{"b" * 40}">Other</a>'), ORIGIN, PATH
+        )
+    result = parse_detail(detail(digest=""), ORIGIN, PATH)
+    assert result.magnet is None and not result.release.acquisition_supported
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://other.test/abss/book/",
+        "//other.test/abss/book/",
+        "/abss/../admin/",
+        "/abss/%252e%252e/",
+        "/abss/%2e%2e/",
+        "/abss/book/?token=secret",
+        "/abss/book/#comment",
+        "/abss/book%5cadmin/",
+        "/login/",
+        "https://u:p@abb.test/abss/book/",
+    ],
+)
+def test_detail_links_cannot_change_origin_or_address_arbitrary_resources(url):
+    with pytest.raises(ValueError):
+        detail_path(url, ORIGIN)
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<html>Maintenance</html>",
+        '<div class="post"><p>Changed layout</p></div>',
+        '<form><input type="password"></form>',
+        '<div id="challenge-form"></div>',
+    ],
+)
+def test_layout_and_auth_failures_never_become_empty_searches(html):
+    with pytest.raises(AdapterError):
+        parse_search(html, ORIGIN, 1)
+    empty = parse_search('<div id="content"><h2>Nothing Found</h2></div>', ORIGIN, 1)
+    assert not empty.items and not empty.has_more
+
+
+@pytest.mark.parametrize(
+    "value,expected",
+    [
+        ("1.5 GiB", 1610612736),
+        ("25 Bytes", 25),
+        ("-1 MB", None),
+        ("NaN MB", None),
+        ("999999999999 TB", None),
+        ("1 XB", None),
+    ],
+)
+def test_sizes_are_bounded_and_unknown_is_not_zero(value, expected):
+    assert size(value) == expected
+
+
+async def test_bounded_client_initializes_session_and_uses_search_page_contract():
+    requests = []
+
+    async def handler(request):
+        requests.append(request)
+        if not request.url.query:
+            return httpx.Response(
+                200,
+                text=search(),
+                headers={"content-type": "text/html", "set-cookie": "public=fixture; Path=/"},
+            )
+        assert request.headers["cookie"] == "public=fixture"
+        assert dict(request.url.params) == {"s": "Harbor", "cat": "undefined"}
+        return httpx.Response(200, text=search(), headers={"content-type": "text/html"})
+
+    async with ABBClient(ORIGIN, transport=httpx.MockTransport(handler)) as client:
+        assert (await client.search(ABBSearch(q="Harbor", page=2))).items[0].title == "Harbor"
+    assert [r.url.path for r in requests] == ["/", "/page/2/"]
+
+
+@pytest.mark.parametrize(
+    "code,kind",
+    [
+        (302, FailureKind.ROUTE),
+        (403, FailureKind.PERMISSION),
+        (429, FailureKind.RATE_LIMIT),
+        (503, FailureKind.UNAVAILABLE),
+    ],
+)
+async def test_http_failures_are_classified_without_following_redirects(code, kind):
+    calls = []
+
+    async def handler(request):
+        calls.append(request)
+        return httpx.Response(
+            code, headers={"location": "http://127.0.0.1/private", "Retry-After": "17"}
+        )
+
+    async with ABBClient(ORIGIN, transport=httpx.MockTransport(handler)) as client:
+        with pytest.raises(AdapterError) as error:
+            await client.search(ABBSearch(q="Harbor"))
+        assert error.value.kind == kind and len(calls) == 1
+
+
+async def test_large_and_non_html_responses_are_rejected(monkeypatch):
+    from app.adapters import audiobookbay
+
+    monkeypatch.setattr(audiobookbay, "MAX_HTML", 50)
+    for content, headers in [
+        ("x" * 51, {"content-type": "text/html"}),
+        ("{}", {"content-type": "application/json"}),
+    ]:
+        async with ABBClient(
+            ORIGIN,
+            transport=httpx.MockTransport(
+                lambda request, body=content, head=headers: httpx.Response(
+                    200, text=body, headers=head
+                )
+            ),
+        ) as client:
+            with pytest.raises(AdapterError) as error:
+                await client.test()
+            assert error.value.kind == FailureKind.PARSER

@@ -1,12 +1,14 @@
 # Implementation status and evidence
 
-Latest checkpoint: [Inherited series scope and automatic lists](LIST-SERIES.md) connects Complete reviewed series to finite list-derived acquisition, with frozen membership authority and per-child import checks. See the final checkpoint for exact verification. Prefer-pack incidental expansion and the remaining PRD stages are incomplete.
+Latest checkpoint: [Native AudiobookBay](AUDIOBOOKBAY-INTEGRATION.md) adds source search/detail, metadata-only magnet inspection and the shared manual/automatic acquisition pipeline. The final checkpoint records verification and remaining actual-service gates. Automatic and manual reviewed-pack expansion also have bounded evidence; full stage acceptance remains open.
 
 Updated September 18, 2026. Objective remains **implement the full PRD end to end**, including the planned later capabilities. This is an implementation checkpoint, not a completion declaration.
 
 ## Current code
 
-- [List-derived series acquisition](LIST-SERIES.md) adds inherited Just book / Prefer packs / Complete reviewed series settings, finite backlog previews, future-entry scope resolution and originating-list links. Child selection and publication retain the originating policy generation and membership episode. Pause/resume, removal/re-addition and review changes have bounded lifecycle evidence. A post-download publication check rejects withdrawn origin even when another manual reason survives; a pause preserves already-submitted lifecycle work. Manual Complete-series requests still use the series page, and incidental Prefer-pack expansion remains unfinished.
+- [Native AudiobookBay](AUDIOBOOKBAY-INTEGRATION.md) supplies configurable source/proxy settings, rich posting observations, private verified artifacts, qBittorrent 5.2 metadata resolution and common manual/automatic acquisition. Unknown seed counts require an explicit automation opt-in and resolved metadata. Actual public-host/client certification and broader release equivalence remain pending.
+
+- [List-derived series acquisition](LIST-SERIES.md) adds inherited Just book / Prefer packs / Complete reviewed series settings, finite backlog previews, future-entry scope resolution and originating-list links. Child selection and publication retain the originating policy generation and membership episode. Pause/resume, removal/re-addition and review changes have bounded lifecycle evidence. A post-download publication check rejects withdrawn origin even when another manual reason survives; a pause preserves already-submitted lifecycle work. Manual Complete-series requests still use the series page. Later automatic and manual reviewed-pack checkpoints add bounded incidental expansion; broader version/route/omnibus qualification remains pending.
 
 - [Inherited route defaults](ROUTE-DEFAULTS.md) now carry a downloader and ebook/audio destinations through installation, personal, profile, list and request preferences. Manual/automatic selectors and list/series automation consume them while preserving explicit choices, current approval and frozen routes. Unavailable defaults never silently choose a replacement. This adds no migration; precise checkpoint evidence is recorded below. Inherited Complete series expansion and broader PRD qualification remain pending.
 
@@ -91,7 +93,7 @@ Updated September 18, 2026. Objective remains **implement the full PRD end to en
 | S03 | Inventory path implemented and fixture verified | Complete ABS certification beyond the eight native scanner/API cases; change-event adapter; broader identifier/file-based move resolution; explicit repair/ignore/replacement intents |
 | S04 | Reviewed manual import, local identifier matching, per-child publication/reservations/fencing, PDF/CBZ, same-edition formats, PDF companions and ABS confirmation implemented | Broader metadata/source resolution and collection coverage; additional formats and omnibus handling; file-alias reconciliation; full recovery and compatibility matrix |
 | S05 | Native MAM browsing/session/artifact foundation, reviewed release selection, qBittorrent settings/path mapping/transport/association and qualifying automatic import continuation implemented and fixture verified | Live MAM/qBittorrent certification; source-to-catalog resolution without valid embedded identifiers; changed-endpoint/path repair, withdrawn-owner resolution, shared-transfer reuse and full transfer-to-library integration; complete manual acquisition/recovery gate |
-| S06 | Prowlarr acquisition, durable combined book search, private ordered ranking profiles and personal/installation release defaults implemented and fixture verified | Native AudiobookBay; full eligibility, ranking/coverage/series policies and profile inheritance; release equivalence, shared-pack reuse and live source certification |
+| S06 | Native MAM/ABB/Prowlarr paths, combined search, inherited profiles and bounded reviewed/shared-pack acquisition implemented and fixture verified | Broader recording/edition, mixed-route/media and omnibus coverage; pending-policy revisions; release equivalence and actual-source/client certification |
 | S07 | Inbound observations, reviewed CSV/batches and bounded standing policies with future-only/backfill/catch-up, scheduled search and single-book automatic acquisition implemented | Live list certification; broader identity correction and large-list reconciliation, full inheritance and source/series/recording coverage; complete unattended release qualification |
 | S08–S09 | Pending | Discovery/write-back, complete hardening and release |
 | S10 | Pending | All six expansion work packages remain in scope and unimplemented |
@@ -99,6 +101,8 @@ Updated September 18, 2026. Objective remains **implement the full PRD end to en
 No full stage gate is marked complete. Working isolated foundations are not substitutes for the complete required workflow.
 
 ## Verified evidence
+
+This table retains earlier foundation evidence. Later dated checkpoints below specify newer changes and exact regression scope; historical test counts are not current whole-product acceptance.
 
 Environment: macOS arm64, Python 3.13.14, local PostgreSQL 16.14, Procrastinate 3.9.0, Node 26.7.0 and ffprobe 8.1.2. These are actual local test versions, distinct from the planned production certification matrix.
 
@@ -509,3 +513,22 @@ Verification:
 Deployment: a private database/key backup was created and the dump catalog verified (`manual-pack-backup-path.txt`). With no active development jobs, the verified API/worker processes were stopped and restarted together. Readiness returned **200**, one fresh worker was observed, both new API routes are exposed, schema remains `0037_download_joins`, and dispatch remains **disabled** (`manual-pack-runtime.json`). Synthetic services/files establish the workflow evidence; no live tracker account or external library was certified.
 
 Remaining work includes broader manual source entry points and large/uncertain collection manifests; per-book exact recording/edition evidence, mixed routes/media and omnibus containment; reviewed policy revisions; native ABB and full source qualification; external-list release qualification; bookstore discovery/curation; production and S10. This increment advances SC-04 manual preparation and does not close S06/S07 or the full PRD.
+
+
+## Native AudiobookBay acquisition checkpoint · September 18, 2026
+
+This increment builds on `2dcc455`. [Native AudiobookBay](AUDIOBOOKBAY-INTEGRATION.md) connects configurable source/proxy settings and rich native search/detail to verified private torrent artifacts and the existing manual/automatic acquisition engine. Book searches aggregate ABB alongside MAM/Prowlarr; ebook-only searches do not query this audio source. Posting file lists remain claims, and catalog editions are not created from tracker options.
+
+Magnet inspection uses qBittorrent's 5.2 metadata APIs, validates exported torrent hashes and paths, and never adds/starts a payload transfer. Older clients expose a capability error while ordinary torrent-file acquisitions remain supported. Source/downloader leases, persisted cooldowns, credential generations and current account permissions fence network results before persistence. Unknown seed counts require an explicit automatic-selection preference plus resolved metadata; they are not reported as zero or treated as proof of payload availability. Abridgment requires an explicit unambiguous posting label, not descriptive prose about another edition.
+
+Verification:
+
+- Full backend regression before the final abridgment-label refinement and six additional tests: **1,494 passed in 463.27 s** (`.local/evidence/abb-full-backend.log`). This establishes that revision's regression result; the entire suite was not repeated after that parser refinement.
+- Final ABB parser, qBittorrent metadata, eligibility, source API and actual-file acquisition regression: **61 passed in 9.45 s** (`abb-final-regression.log`). It covers expired/private results, revoked viewers/accounts, proxy credential preservation/clearing, in-flight source/downloader changes, unknown seeds, malformed pages, leases/cooldowns, unsupported clients and wrong torrent identity.
+- Real generated audio, real torrent descriptors and hardlink imports pass immediate and delayed synthetic ABS confirmation. Each successful flow submits once, preserves source bytes/inodes, excludes unrelated neighboring files and replays without another transfer. External downloader/ABS HTTP behavior is synthetic; this is not actual-service certification.
+- Final browser run: **2 journeys passed in 1.8 min** (`abb-browser.log`): existing setup/shared acquisition plus ABB connection, rich results, posting claims, metadata inspection, common manifest reload and mobile layout. The mobile screenshot was inspected. Initial attempts exposed an ambiguous select label, a stale frontend bundle and the five-second assertion being shorter than the real source pacing. The label is explicit, the test waits for the bounded operation, and `npm run test:e2e` now builds the frontend first. A final proxy-help wording clarification does not change behavior.
+- Backend lint/format, frontend production build/format, reproducible OpenAPI/client generation, schema alignment and diff checks pass. No migration is needed beyond `0037_download_joins`. The wheel matches all **188 backend Python modules**; new parsing dependencies retain their installed MIT notices. All **254** checked local documentation links/anchors and the **54-requirement/61-package** exports remain consistent.
+
+Deployment: a private database/key backup was saved and its dump catalog verified (`abb-backup-path.txt`). With no active development jobs, the verified API/worker processes were restarted together. Readiness returned **200**, one fresh worker was observed, the ABB API is exposed, schema remains `0037_download_joins`, and dispatch remains **disabled** (`abb-runtime.json`). No live source credentials or external library were used in this qualification.
+
+Remaining work: actual public ABB host and real qBittorrent 5.2 metadata certification; full source equivalence and broader source combinations; recording/edition, mixed-route/media and omnibus coverage; reviewed policy revisions; complete external-list release qualification; discovery/curation; production and S10. The connected ABB foundation advances S06 without closing its full gate or the full PRD goal.

@@ -40,6 +40,7 @@ class ReleasePreferences(ScopePreferences):
     downloader_id: UUID | None = Field(default=None, exclude_if=lambda value: value is None)
     ebook_destination_id: UUID | None = Field(default=None, exclude_if=lambda value: value is None)
     audio_destination_id: UUID | None = Field(default=None, exclude_if=lambda value: value is None)
+    allow_unknown_seeders: bool = Field(default=False, exclude_if=lambda value: not value)
     search_series: bool = True
     prefer_series_packs: bool = True
     series_scope: Literal["just_book", "prefer_packs", "complete_series"] | None = Field(
@@ -95,7 +96,7 @@ class ReleasePreferences(ScopePreferences):
     @classmethod
     def sources(cls, values):
         if len(set(values)) != len(values) or any(
-            not re.fullmatch(r"mam|prowlarr(?::[1-9][0-9]{0,9})?", v) for v in values
+            not re.fullmatch(r"mam|audiobookbay|prowlarr(?::[1-9][0-9]{0,9})?", v) for v in values
         ):
             raise ValueError("Use distinct source names or Prowlarr indexer references")
         return values
@@ -125,6 +126,8 @@ class PreferenceOverrides(ReleasePreferences):
         }:
             if field in self.model_fields_set and getattr(self, field) is None:
                 values[field] = None
+        if "allow_unknown_seeders" in self.model_fields_set:
+            values["allow_unknown_seeders"] = self.allow_unknown_seeders
         return {key: value for key, value in values.items() if key in self.model_fields_set}
 
 

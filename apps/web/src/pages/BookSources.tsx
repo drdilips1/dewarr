@@ -429,7 +429,9 @@ function Results({
             <p className="eyebrow">
               {item.release.source === "mam"
                 ? "MAM"
-                : item.release.indexer_name}
+                : item.release.source === "audiobookbay"
+                  ? "AudiobookBay"
+                  : item.release.indexer_name}
             </p>
             <h3>{item.release.title}</h3>
             {!!item.query_keys?.length && data.query_plan && (

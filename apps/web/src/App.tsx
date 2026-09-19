@@ -30,6 +30,7 @@ const ActivityPage = lazy(() => import("./pages/Activity"));
 const Connections = lazy(() => import("./pages/Connections"));
 const DownloadPreferences = lazy(() => import("./pages/DownloadPreferences"));
 const Downloaders = lazy(() => import("./pages/Downloaders"));
+const AudiobookBaySources = lazy(() => import("./pages/AudiobookBaySources"));
 const ProwlarrSources = lazy(() => import("./pages/ProwlarrSources"));
 const Sources = lazy(() => import("./pages/Sources"));
 const SourceArtifact = lazy(() => import("./pages/SourceArtifact"));
@@ -388,6 +389,15 @@ function Shell({ auth }: { auth: Auth }) {
                 path="/sources"
                 element={
                   <Sources
+                    admin={auth.user.role === "admin"}
+                    canAcquire={auth.user.role !== "viewer"}
+                  />
+                }
+              />
+              <Route
+                path="/sources/audiobookbay"
+                element={
+                  <AudiobookBaySources
                     admin={auth.user.role === "admin"}
                     canAcquire={auth.user.role !== "viewer"}
                   />

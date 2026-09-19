@@ -1,6 +1,6 @@
 # Acceptance, compatibility and release verification
 
-Planning baseline v1.8 · September 18, 2026.
+Aligned with PRD planning baseline v1.9 · September 18, 2026.
 
 **Status: acceptance definitions; implementation evidence is tracked in [Implementation Status](docs/IMPLEMENTATION-STATUS.md).** Some foundation subsets have now been tested; no full scenario is yet certified complete. This document maps [PRD requirements](PRD.md) to the gates in [Development Plan](IMPLEMENTATION-PLAN.md). Research/source inspection is evidence for a design choice, not a passing runtime test.
 

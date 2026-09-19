@@ -7,8 +7,9 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select, text
 
 from app.adapters.contracts import AdapterError
-from app.adapters.mam import MAMRelease
-from app.adapters.prowlarr import ProwlarrRelease
+from app.adapters.source_releases import SourceRelease
+from app.adapters.source_releases import release_value as parse_release
+from app.api.audiobookbay import resolve as resolve_abb
 from app.api.dependencies import CurrentUser, Database, Member
 from app.api.metadata import adapter_http_error
 from app.api.prowlarr import resolve as resolve_prowlarr
@@ -64,7 +65,7 @@ class SearchQueryPlan(BaseModel):
 
 class RankedReleaseView(BaseModel):
     id: UUID
-    release: MAMRelease | ProwlarrRelease = Field(discriminator="source")
+    release: SourceRelease
     assessment: ReleaseAssessment
     expires_at: datetime
     current_connection: bool
@@ -145,9 +146,7 @@ async def view(db, user, operation_id):
     )
     ranked = []
     for row in rows:
-        release = (MAMRelease if row.source_key == "mam" else ProwlarrRelease).model_validate(
-            row.release_snapshot
-        )
+        release = parse_release(row.source_key, row.release_snapshot)
         connection = connections.get(row.source_key)
         ranked.append(
             RankedReleaseView(
@@ -271,6 +270,8 @@ async def inspect(search_id: UUID, result_id: UUID, user: Member, db: Database):
     connection = await db.get(SourceConnection, row.source_key)
     if not connection or not connection.enabled or connection.generation != row.source_generation:
         raise HTTPException(409, "Source connection changed. Search again.")
+    if row.source_key == "audiobookbay":
+        return await resolve_abb(result_id, user, db)
     if row.source_key == "prowlarr":
         return await resolve_prowlarr(result_id, user, db)
     owner_id, generation, source_id = (

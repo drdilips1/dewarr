@@ -30,7 +30,9 @@ async def resolve_mam(user_id, source_id, *, expected_generation=None):
     return await persist_artifact(user_id, source_id, artifact, generation, "mam")
 
 
-async def persist_artifact(user_id, source_id, artifact, generation, source_key):
+async def persist_artifact(
+    user_id, source_id, artifact, generation, source_key, *, expected_downloader=None
+):
     descriptor = await inspect_torrent(artifact.content)
     digest = hashlib.sha256(artifact.content).hexdigest()
     if digest != descriptor.artifact_sha256:
@@ -43,6 +45,13 @@ async def persist_artifact(user_id, source_id, artifact, generation, source_key)
             raise HTTPException(
                 409, "Source settings changed while inspecting the torrent. Resolve it again."
             )
+        if expected_downloader:
+            from app.domain.downloaders import SETTINGS_LOCK, connection_or_404
+
+            await transaction_lock(db, SETTINGS_LOCK)
+            downloader = await connection_or_404(db, expected_downloader[0])
+            if not downloader.enabled or downloader.credential_generation != expected_downloader[1]:
+                raise HTTPException(409, "Downloader changed while inspecting metadata; retry")
         existing = await db.scalar(
             select(SourceArtifact).where(
                 SourceArtifact.owner_id == user_id,
