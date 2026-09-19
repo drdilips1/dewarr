@@ -1,11 +1,10 @@
-import { useEffect } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Check, Clock } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, result } from "../api/client";
 import Downloads from "./Downloads";
 import DownloadReviews from "./DownloadReviews";
 import ActivityRequests from "./ActivityRequests";
-import { Empty, Loading, Notice } from "../components";
+import { Notice } from "../components";
+import OperationHistory from "./OperationHistory";
 
 export default function Activity({
   admin,
@@ -15,39 +14,6 @@ export default function Activity({
   canRequest: boolean;
 }) {
   const client = useQueryClient();
-  const activity = useQuery({
-    queryKey: ["activity"],
-    queryFn: async () => result(await api.GET("/api/activity")),
-    refetchInterval: (query) =>
-      query.state.data?.some((item) =>
-        ["queued", "running"].includes(item.status),
-      )
-        ? 2000
-        : 15000,
-    staleTime: 0,
-    gcTime: 0,
-    retry: false,
-  });
-  useEffect(() => {
-    if (
-      activity.data?.some(
-        (item) => item.kind === "library.sync" && item.status === "completed",
-      )
-    ) {
-      for (const key of [
-        "assets",
-        "catalog",
-        "work",
-        "works",
-        "requests",
-        "request-preview",
-        "libraries",
-        "connections",
-      ]) {
-        void client.invalidateQueries({ queryKey: [key] });
-      }
-    }
-  }, [activity.data, client]);
   const probe = useMutation({
     mutationFn: async () =>
       result(
@@ -76,86 +42,8 @@ export default function Activity({
       <Downloads canManage={canRequest} />
       <ActivityRequests canManage={canRequest} />
       {admin && <DownloadReviews />}
-      <Notice error={activity.error || probe.error} />
-      {activity.isPending ? <Loading /> : null}
-      {activity.error && (
-        <button
-          disabled={activity.isFetching}
-          onClick={() => activity.refetch()}
-        >
-          Retry activity
-        </button>
-      )}
-      {!activity.error && activity.data?.length ? (
-        <div className="activity-list">
-          {activity.data.map((item) => (
-            <article className="activity-row" key={item.id}>
-              <div
-                className={
-                  item.status === "completed"
-                    ? "activity-icon success"
-                    : "activity-icon"
-                }
-              >
-                {item.status === "completed" ? (
-                  <Check size={20} />
-                ) : (
-                  <Clock size={20} />
-                )}
-              </div>
-              <div className="grow">
-                <h2>
-                  {item.kind === "acquisition.auto-select"
-                    ? "Automatic release preparation"
-                    : item.kind === "lists.requests"
-                      ? "List wanted media"
-                      : item.kind === "lists.csv"
-                        ? "CSV list import"
-                        : item.kind === "lists.sync"
-                          ? "External list observation"
-                          : item.kind === "discovery.follow-list"
-                            ? "Follow community list"
-                            : item.kind === "sources.search"
-                              ? "Book source search"
-                              : item.kind === "system.probe"
-                                ? "Background worker check"
-                                : item.kind === "organization.automatic"
-                                  ? "Automatic library import"
-                                  : item.kind === "library.sync"
-                                    ? "Audiobookshelf inventory sync"
-                                    : item.kind === "acquisition.evaluate"
-                                      ? "Wanted media check"
-                                      : item.kind === "acquisition.download"
-                                        ? "Book download"
-                                        : item.kind === "acquisition.repair"
-                                          ? "Download connection repair"
-                                          : item.kind === "acquisition.review"
-                                            ? "Download import review"
-                                            : item.kind === "acquisition.select"
-                                              ? "Release selection"
-                                              : item.kind ===
-                                                    "metadata.enrich" ||
-                                                  item.kind ===
-                                                    "metadata.resolve-import"
-                                                ? "Automatic metadata lookup"
-                                                : item.kind}
-                </h2>
-                <p>{item.message}</p>
-              </div>
-              <div className="activity-meta">
-                <span className="status">{item.status}</span>
-                <time dateTime={item.created_at}>
-                  {new Date(item.created_at).toLocaleString()}
-                </time>
-              </div>
-            </article>
-          ))}
-        </div>
-      ) : !activity.isPending && !activity.error ? (
-        <Empty title="Nothing in the queue">
-          Your requests and background checks will appear here.
-        </Empty>
-      ) : null}
+      <Notice error={probe.error} />
+      <OperationHistory />
     </>
   );
 }

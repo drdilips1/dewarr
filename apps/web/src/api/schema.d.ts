@@ -702,6 +702,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/activity/page": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Activity Page */
+    get: operations["activity_page_api_activity_page_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/activity": {
     parameters: {
       query?: never;
@@ -3705,6 +3722,53 @@ export interface components {
       offset: number;
       /** Limit */
       limit: number;
+    };
+    /** ActivityContext */
+    ActivityContext: {
+      /** Href */
+      href: string;
+      /** Label */
+      label: string;
+    };
+    /** ActivityItem */
+    ActivityItem: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Kind */
+      kind: string;
+      /** Status */
+      status: string;
+      /** Message */
+      message: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+      context?: components["schemas"]["ActivityContext"] | null;
+    };
+    /** ActivityPage */
+    ActivityPage: {
+      /** Items */
+      items: components["schemas"]["ActivityItem"][];
+      /** Total */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+      /** Statuses */
+      statuses: string[];
+      /** Kinds */
+      kinds: string[];
     };
     /** AssetPage */
     AssetPage: {
@@ -10767,6 +10831,41 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["SourceReconciliationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  activity_page_api_activity_page_get: {
+    parameters: {
+      query?: {
+        q?: string;
+        status?: string;
+        kind?: string;
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ActivityPage"];
         };
       };
       /** @description Validation Error */

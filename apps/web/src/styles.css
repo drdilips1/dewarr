@@ -908,8 +908,20 @@ nav a.active {
   color: #a2e1c7;
   background: #1a3f36;
 }
-.activity-row h2 {
+.activity-row h2,
+.activity-row h3 {
   font-size: 14px;
+}
+.activity-row .grow {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.operation-details {
+  margin-top: 12px;
+  font-size: 12px;
+}
+.operation-details code {
+  overflow-wrap: anywhere;
 }
 .activity-row p {
   font-size: 13px;
@@ -1152,6 +1164,15 @@ nav a.active {
   .activity-meta {
     margin-left: 52px;
     text-align: left;
+  }
+  .operation-history .activity-row {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    align-items: start;
+  }
+  .operation-history .activity-meta {
+    grid-column: 2;
+    margin-left: 0;
   }
   .auth-page {
     grid-template-columns: 1fr;

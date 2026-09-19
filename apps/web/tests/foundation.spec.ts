@@ -89,9 +89,15 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   });
   await page.getByRole("link", { name: "Activity", exact: true }).click();
   await page.getByRole("button", { name: "Check background worker" }).click();
-  await expect(page.getByText("completed", { exact: true })).toBeVisible({
-    timeout: 10_000,
-  });
+  await expect(
+    page
+      .getByRole("region", { name: "Background activity", exact: true })
+      .getByRole("article", {
+        name: "Background worker check: completed",
+        exact: true,
+      })
+      .getByText("completed", { exact: true }),
+  ).toBeVisible({ timeout: 10_000 });
   await page.getByRole("link", { name: "Connections", exact: true }).click();
   await page
     .getByRole("button", { name: "Connect Audiobookshelf", exact: true })
