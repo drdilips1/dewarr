@@ -154,6 +154,39 @@ button.discovery-book:hover {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
 }
+.followed-list-card {
+  min-width: 0;
+}
+.followed-list-card header > p {
+  margin: 8px 0;
+}
+.followed-list-books {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.followed-list-books > li {
+  min-width: 0;
+}
+.followed-list-card h3 {
+  overflow-wrap: anywhere;
+}
+.followed-list-books .type-cover {
+  padding: 12px;
+  overflow-wrap: anywhere;
+}
+.followed-list-books .type-cover span {
+  font-size: 18px;
+  -webkit-line-clamp: 4;
+}
+@media (max-width: 600px) {
+  .followed-list-books {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 .series-gap-card {
   min-width: 0;
   display: flex;

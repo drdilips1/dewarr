@@ -34,6 +34,7 @@ from app.api import (
     library,
     list_comparisons,
     list_csv,
+    list_discovery,
     list_policies,
     list_requests,
     list_subscriptions,
@@ -144,6 +145,7 @@ def create_app() -> FastAPI:
     app.include_router(list_writeback_review.router, prefix="/api")
     app.include_router(list_comparisons.router, prefix="/api")
     app.include_router(list_csv.router, prefix="/api")
+    app.include_router(list_discovery.router, prefix="/api")
     app.include_router(list_requests.router, prefix="/api")
     app.include_router(list_policies.router, prefix="/api")
     app.include_router(integrations.router, prefix="/api")

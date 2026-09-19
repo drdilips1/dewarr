@@ -1509,6 +1509,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/discovery/followed-lists": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Followed Lists */
+    get: operations["followed_lists_api_discovery_followed_lists_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/lists/{list_id}/requests/preview": {
     parameters: {
       query?: never;
@@ -5171,6 +5188,48 @@ export interface components {
        * Format: uuid
        */
       receipt_id: string;
+    };
+    /** FollowedListCard */
+    FollowedListCard: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Name */
+      name: string;
+      /**
+       * Provider
+       * @enum {string}
+       */
+      provider: "hardcover" | "goodreads";
+      /** Enabled */
+      enabled: boolean;
+      /** Sync State */
+      sync_state: string;
+      /** Last Success At */
+      last_success_at: string | null;
+      /** Count */
+      count: number;
+      /** Owned */
+      owned: number;
+      /** Provisional */
+      provisional: number;
+      /** Inventory Stale */
+      inventory_stale: boolean;
+      /** Books */
+      books: components["schemas"]["WorkView"][];
+    };
+    /** FollowedListShelf */
+    FollowedListShelf: {
+      /** Items */
+      items: components["schemas"]["FollowedListCard"][];
+      /** Total */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
     };
     /** FreezeInput */
     FreezeInput: {
@@ -12531,6 +12590,39 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["OperationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  followed_lists_api_discovery_followed_lists_get: {
+    parameters: {
+      query?: {
+        provider?: "all" | "hardcover" | "goodreads";
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FollowedListShelf"];
         };
       };
       /** @description Validation Error */
