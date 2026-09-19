@@ -1,5 +1,62 @@
 @import "tailwindcss";
 
+.discovery-section {
+  margin-block: 30px 40px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+.discovery-heading p {
+  margin: 8px 0 0;
+  font-size: 13px;
+}
+.discovery-shelf {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 170px;
+  gap: 22px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding: 8px 5px 18px;
+  margin: 0 -5px;
+  list-style: none;
+}
+.discovery-shelf > li {
+  min-width: 0;
+  scroll-snap-align: start;
+}
+button.discovery-book {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+button.discovery-book:hover {
+  background: transparent;
+}
+.discovery-reason,
+.discovery-date {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 8px 0 0;
+}
+.discovery-section .discovery-pagination {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+.discovery-book > small {
+  font-size: 12px;
+  font-weight: 400;
+}
+@media (max-width: 600px) {
+  .discovery-shelf {
+    grid-auto-columns: 145px;
+    gap: 16px;
+  }
+}
+
 :root {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: #f3f4f6;

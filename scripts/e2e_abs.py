@@ -19,7 +19,7 @@ from tests.mam_fixture import release_row, search_response  # noqa: E402
 from tests.torrent_fixture import torrent_bytes  # noqa: E402
 
 app = FastAPI()
-catalog_state = {"narrator": "Sample Narrator"}
+catalog_state = {"narrator": "Sample Narrator", "discovery_failure": False}
 backend_state = {"watcher_enabled": True}
 qbit_state = {"transfers": {}, "adds": 0}
 mam_state = {"cookie": "browser-mam-fixture", "requests": 0}
@@ -308,6 +308,41 @@ async def catalog(request: Request, authorization: str = Header(default="")):
         raise HTTPException(401)
     body = await request.json()
     query = body.get("query", "")
+    if "Discovery" in query:
+        if catalog_state["discovery_failure"]:
+            raise HTTPException(503)
+        if "DiscoveryTrending(" in query:
+            return {"data": {"books_trending": {"ids": [42, 9001, 9002]}}}
+        if "DiscoveryRelated(" in query:
+            return {
+                "data": {
+                    "books": [
+                        {"id": body["variables"]["id"], "cached_similar_book_ids": [9001, 42]}
+                    ]
+                }
+            }
+        keys = body["variables"]["ids"] if "DiscoveryBooks(" in query else [9002]
+        return {
+            "data": {
+                "books": [
+                    {
+                        "id": key,
+                        "title": {
+                            42: "The Catalog Journey",
+                            9001: "The Discovered Harbor",
+                            9002: "A New Chapter",
+                        }[key],
+                        "cached_contributors": [{"author": {"name": "Catalog Author"}}],
+                        **(
+                            {"release_date": body["variables"]["to"]}
+                            if "DiscoveryRecent(" in query
+                            else {}
+                        ),
+                    }
+                    for key in keys
+                ]
+            }
+        }
     if "CatalogSeriesPage(" in query:
         members = [
             {
@@ -431,6 +466,20 @@ async def catalog(request: Request, authorization: str = Header(default="")):
             }
         }
     if "CatalogBook(" in query:
+        if body["variables"]["id"] in {9001, 9002}:
+            key = body["variables"]["id"]
+            return {
+                "data": {
+                    "books": [
+                        {
+                            "id": key,
+                            "title": "The Discovered Harbor" if key == 9001 else "A New Chapter",
+                            "description": "A synthetic discovery title.",
+                            "cached_contributors": [{"author": {"name": "Catalog Author"}}],
+                        }
+                    ]
+                }
+            }
         return {
             "data": {
                 "books": [
@@ -451,6 +500,15 @@ async def catalog(request: Request, authorization: str = Header(default="")):
             }
         }
     if "CatalogEditions(" in query:
+        if body["variables"]["id"] in {9001, 9002}:
+            key = body["variables"]["id"]
+            return {
+                "data": {
+                    "editions": [
+                        {"id": key + 100, "book_id": key, "reading_format": {"format": "Ebook"}}
+                    ]
+                }
+            }
         return {
             "data": {
                 "editions": [

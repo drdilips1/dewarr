@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Activity,
   BookOpen,
+  Compass,
   Library,
   List,
   LogOut,
@@ -23,6 +24,7 @@ import type { Auth } from "./api/client";
 import { Loading, Notice } from "./components";
 
 const Catalog = lazy(() => import("./pages/Catalog"));
+const Discover = lazy(() => import("./pages/Discover"));
 const BookDetail = lazy(() => import("./pages/BookDetail"));
 const Series = lazy(() => import("./pages/Series"));
 const Lists = lazy(() => import("./pages/Lists"));
@@ -263,6 +265,10 @@ function Shell({ auth }: { auth: Auth }) {
         </button>
         <p className="nav-caption">YOUR COLLECTION</p>
         <nav aria-label="Main navigation">
+          <NavLink to="/discover">
+            <Compass size={19} />
+            Discover
+          </NavLink>
           <NavLink to="/" end>
             <Library size={19} />
             Catalog
@@ -346,6 +352,10 @@ function Shell({ auth }: { auth: Auth }) {
           <Notice error={logout.error} />
           <Suspense fallback={<Loading />}>
             <Routes>
+              <Route
+                path="/discover"
+                element={<Discover canEdit={auth.user.role !== "viewer"} />}
+              />
               <Route
                 path="/download-preferences"
                 element={

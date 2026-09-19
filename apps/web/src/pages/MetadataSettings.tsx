@@ -38,6 +38,7 @@ export default function MetadataSettings({ admin }: { admin: boolean }) {
       ),
     onSuccess: (value) => {
       client.setQueryData(["metadata-account"], value);
+      client.removeQueries({ queryKey: ["discovery"] });
       setToken("");
       setMessage("Your catalog connection was saved.");
     },

@@ -4143,3 +4143,118 @@ test("reviewed omnibus contents retain one backend item and reversible ownership
   }
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });
+
+test("discovery shelves connect provider previews, library ownership and list curation", async ({
+  page,
+}, testInfo) => {
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.getByRole("link", { name: "Discover", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Discover", exact: true }),
+  ).toBeVisible();
+  const trending = page.getByRole("region", {
+    name: "Trending books",
+    exact: true,
+  });
+  await expect(
+    trending.getByText("Hardcover · trending over the last month", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  const owned = trending.getByRole("link", {
+    name: /My protected catalog title/,
+  });
+  await expect(owned).toContainText("In library");
+  const previewButton = trending.getByRole("button", {
+    name: "Preview The Discovered Harbor",
+  });
+  await previewButton.focus();
+  await page.keyboard.press("Enter");
+  const preview = page.getByRole("region", {
+    name: "Catalog preview",
+    exact: true,
+  });
+  await expect(preview).toBeFocused();
+  await expect(
+    preview.getByRole("heading", { name: "The Discovered Harbor" }),
+  ).toBeVisible();
+  await preview.getByRole("button", { name: "Close preview" }).click();
+  await expect(previewButton).toBeFocused();
+  await previewButton.click();
+  await preview.getByRole("button", { name: "Add to catalog" }).click();
+  await expect(
+    page.getByRole("heading", { name: "The Discovered Harbor", level: 1 }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Related books", exact: true }),
+  ).toContainText("Suggested by Hardcover");
+  await page
+    .getByLabel("Reading list")
+    .selectOption({ label: "Weekend reads" });
+  await page.getByRole("button", { name: "Add to list", exact: true }).click();
+  await expect(
+    page.getByText("Added to your list.", { exact: true }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Lists", exact: true }).click();
+  await page.getByRole("link", { name: /Weekend reads/ }).click();
+  await expect(
+    page.getByRole("heading", { name: "The Discovered Harbor", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Discover", exact: true }).click();
+  await expect(
+    trending.getByRole("link", { name: /The Discovered Harbor/ }),
+  ).toBeVisible();
+  await expect(
+    page
+      .getByRole("region", { name: "Recently published books" })
+      .getByText(/Published \d/),
+  ).toBeVisible();
+  await page.screenshot({
+    path: testInfo.outputPath("discover-desktop.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("discover-mobile.png"),
+    fullPage: true,
+  });
+  const auth = await (await page.request.get("/api/auth/me")).json();
+  const headers = {
+    Origin: "http://127.0.0.1:8001",
+    "X-CSRF-Token": auth.csrf_token,
+  };
+  try {
+    expect(
+      (
+        await page.request.put("/api/metadata/account", {
+          headers,
+          data: { enabled: false },
+        })
+      ).ok(),
+    ).toBe(true);
+    await page.reload();
+    await expect(
+      page.getByRole("link", { name: "Connect Hardcover", exact: true }),
+    ).toHaveCount(1);
+    await expect(
+      page
+        .getByRole("region", { name: "Your catalog picks" })
+        .getByRole("link", { name: /The Discovered Harbor/ }),
+    ).toBeVisible();
+  } finally {
+    await page.request.put("/api/metadata/account", {
+      headers,
+      data: { enabled: true },
+    });
+  }
+});

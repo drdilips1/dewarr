@@ -175,6 +175,8 @@ Starting point: committed revision `2dcc455`. Existing evidence covers bounded c
 
 This is the current order for the existing workspace, not a replacement for the greenfield S00–S10 dependency graph. Any unmet prerequisite discovered in a batch must be closed before activating its dependent behavior.
 
+[Initial discovery shelves](docs/DISCOVERY.md) now connect attributed Hardcover trending/recent/related signals and local fallback to existing catalog and list actions. Batch 5 still requires series continuation, community curation, full sharing/write-back and usability qualification; the new shelves do not establish full S08 acceptance.
+
 | Batch | Parent scope | Complete outcome | Acceptance demonstration |
 |---|---|---|---|
 | 1. Source integration qualification | S06-01–S06-03, S06-06; S05 lifecycle | Qualify the implemented ABB/shared acquisition path against actual supported hosts and clients; finish release equivalence and broader source combinations | Repeat the fixture-backed metadata → single transfer → import → ABS journey against the declared service matrix. Verify source/proxy failures and source overlap without duplicate dispatch. |

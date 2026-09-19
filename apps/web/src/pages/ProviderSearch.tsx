@@ -198,7 +198,7 @@ export default function ProviderSearch({
   );
 }
 
-function Preview({
+export function Preview({
   provider,
   externalId,
   canEdit,
@@ -247,6 +247,7 @@ function Preview({
           ),
     onSuccess: (work) => {
       client.invalidateQueries({ queryKey: ["works"] });
+      client.invalidateQueries({ queryKey: ["discovery"] });
       if (matchWorkId) {
         onMatched?.();
         onClose();

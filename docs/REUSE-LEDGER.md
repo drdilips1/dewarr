@@ -35,3 +35,5 @@ This ledger records actual reuse, not permission to copy every file in a referen
 - CSV snapshots: original parser/orchestration/UI using Python standard-library `csv`; synthetic Goodreads-shaped export fixtures and explicit mapping. No Goodreads/third-party app implementation or private exports bundled. Interface reference: https://docs.python.org/3.13/library/csv.html.
 
 Hardcover list integration also references the official list/user GraphQL schemas through independently written `services/app/adapters/hardcover_lists.py` operations and synthetic fixtures. No upstream application code or bundled schema was copied; see [Hardcover list subscriptions](HARDCOVER-LISTS.md) for exact references and live-certification limits.
+
+Discovery uses independently written queries against the same publisher's GraphQL contract, inspected at `e8d38c8b7bd53cada7e97121ab0cacfa0804013c`. No upstream app implementation, live catalog dataset or cover art is bundled. [Discovery](DISCOVERY.md) records the exact schema reference, supported signals and remaining actual-account qualification.

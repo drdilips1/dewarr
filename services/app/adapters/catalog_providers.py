@@ -66,6 +66,16 @@ class Hardcover:
     def __init__(self, request):
         self.request = request
 
+    async def discovery(self, shelf, page, today):
+        from app.adapters.hardcover_discovery import browse
+
+        return await browse(self.query, shelf, page, today)
+
+    async def related(self, external_id):
+        from app.adapters.hardcover_discovery import related
+
+        return await related(self.query, external_id)
+
     async def query(self, query, variables):
         value = await self.request(
             "POST", "v1/graphql", json={"query": query, "variables": variables}

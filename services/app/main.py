@@ -20,6 +20,7 @@ from app.api import (
     capacity,
     catalog,
     destinations,
+    discovery,
     download_attempts,
     download_reviews,
     downloaders,
@@ -111,6 +112,7 @@ def create_app() -> FastAPI:
     app.include_router(auth.router, prefix="/api")
     app.include_router(operations.router, prefix="/api")
     app.include_router(catalog.router, prefix="/api")
+    app.include_router(discovery.router, prefix="/api")
     app.include_router(series.router, prefix="/api")
     app.include_router(series_requests.router, prefix="/api")
     app.include_router(lists.router, prefix="/api")

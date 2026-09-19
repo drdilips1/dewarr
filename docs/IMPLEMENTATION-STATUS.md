@@ -1,10 +1,12 @@
 # Implementation status and evidence
 
-Latest checkpoint: [Reviewed omnibus import](COLLECTION-IMPORT.md) carries explicitly confirmed complete-work coverage through inspected-file publication and ABS detection while retaining the physical collection edition. Unattended contents verification and full stage acceptance remain open. The final checkpoint records exact verification.
+Latest checkpoint: [Discovery shelves and related books](DISCOVERY.md) connects attributed Hardcover signals and scoped library availability to catalog/list curation, with independently usable local fallback. Complete discovery/curation and full stage acceptance remain open. The final checkpoint records exact verification.
 
 Updated September 18, 2026. Objective remains **implement the full PRD end to end**, including the planned later capabilities. This is an implementation checkpoint, not a completion declaration.
 
 ## Current code
+
+- [Discovery](DISCOVERY.md) adds monthly Hardcover trending, recent work publications, related-title suggestions and recent local catalog shelves. Accepted visible provider IDs alone bind ownership; protected local metadata, grants and collection/media badges remain intact. Provider/account errors and stale cache have explicit states, while local author matches provide an attributed related-book fallback. Preview → catalog → list/request uses the existing services without automatic browsing side effects.
 
 - [Reviewed omnibus import](COLLECTION-IMPORT.md) freezes selected complete child works beside the physical catalog edition. It uses the existing hardlink/copy publisher and establishes child ownership only after backend confirmation. Repeat import retains physical-edition deduplication; generic child requests do not inherit the collection's edition, language or narrator constraints. Stale child identities hold the operation, and changed physical-version/file evidence invalidates coverage. No migration beyond `0038_asset_containment` is required.
 
@@ -101,7 +103,8 @@ Updated September 18, 2026. Objective remains **implement the full PRD end to en
 | S05 | Native MAM browsing/session/artifact foundation, reviewed release selection, qBittorrent settings/path mapping/transport/association and qualifying automatic import continuation implemented and fixture verified | Live MAM/qBittorrent certification; source-to-catalog resolution without valid embedded identifiers; changed-endpoint/path repair, withdrawn-owner resolution, shared-transfer reuse and full transfer-to-library integration; complete manual acquisition/recovery gate |
 | S06 | Native MAM/ABB/Prowlarr paths, combined search, inherited profiles and bounded reviewed/shared-pack acquisition implemented and fixture verified | Broader recording/edition, mixed-route/media and omnibus coverage; pending-policy revisions; release equivalence and actual-source/client certification |
 | S07 | Inbound observations, reviewed CSV/batches and bounded standing policies with future-only/backfill/catch-up, scheduled search and single-book automatic acquisition implemented | Live list certification; broader identity correction and large-list reconciliation, full inheritance and source/series/recording coverage; complete unattended release qualification |
-| S08–S09 | Pending | Discovery/write-back, complete hardening and release |
+| S08 | Provider trending/recent/related discovery and local fallback implemented; complete stage pending | Series-continuation shelves, community curation, sharing/write-back, usability and actual-provider qualification |
+| S09 | Pending | Full hardening, compatibility, recovery and release qualification |
 | S10 | Pending | All six expansion work packages remain in scope and unimplemented |
 
 No full stage gate is marked complete. Working isolated foundations are not substitutes for the complete required workflow.
@@ -596,3 +599,24 @@ Verification:
 Deployment: the private PostgreSQL/key backup and archive catalog were verified (`collection-import-backup-path.txt`). With zero active development jobs, the identified API and worker were stopped and restarted together. Readiness returned **200**, schema remains `0038_asset_containment`, one fresh worker is present and dispatch remains **disabled** (`collection-import-runtime.json`). Tests use real local files with synthetic external-service observations; actual native ABS omnibus certification remains open.
 
 The end-to-end implementation plan now includes an explicit collection qualification packet distinguishing reviewed import, unattended contents evidence, per-target acquisition authority and native backend acceptance. Unattended omnibus verification/acquisition, broader constrained versions/routes, policy revisions, source/list certification, discovery/curation, production and S10 remain required. No full stage or full-PRD completion is claimed.
+
+## Discovery shelves checkpoint · September 18, 2026
+
+This increment builds on `4c49b1a`. [Discovery](DISCOVERY.md) adds a working `/discover` page with monthly Hardcover trending, recent work publications, and recent local catalog additions. Book pages also expose attributed related suggestions with an exact-author local fallback. A provider preview leads to the existing catalog import, editions, list curation and acquisition actions. Browsing alone creates no books or acquisition state.
+
+Provider IDs are hydrated in bounded batches and matched only against accepted, visible catalog sources. Canonical duplicates collapse; ambiguous or unknown matches do not assert ownership. Protected local metadata remains on matched cards, and inventory is projected through current library grants even when the provider response is cached. Account generation changes fence in-flight results, and related lookup rechecks the seed's access afterward. Transient failures can show explicitly stale provider data; credential/permission failures cannot reuse that fallback. Local shelves remain independently usable.
+
+The UI uses cover shelves, reason labels, keyboard-operable preview/close with focus restoration, mobile horizontal scrolling and a single disconnected-account prompt. Pagination appears only when needed. Visible shelves recheck availability periodically, respecting provider cooldowns and server-side metadata caching. Changing the catalog connection clears discovery queries. No new migration, runtime dependency or service is introduced.
+
+Verification:
+
+- Initial adapter/API suite: **33 passed in 4.52 s** (`.local/evidence/discovery-initial.log`). It covers ordered batched hydration, bounded date queries, malformed/partial provider replies, accepted IDs, canonical deduplication, private catalog/library grants, current inventory over cached metadata, outage states, account generation changes and side-effect-free browsing.
+- All four production discovery queries validate against the official Hardcover GraphQL schema at `e8d38c8b7bd53cada7e97121ab0cacfa0804013c` (`discovery-schema-validation.log`). Validation used an ephemeral GraphQL parser; no project dependency was added. This establishes schema compatibility, not actual token-scope/service qualification.
+- Full backend baseline: **1,583 passed, 1 failed in 584.39 s** (`discovery-full.log`). The existing withdrawn-list-reason test drained the entire worker before merge; due periodic jobs could create an outstanding download, which the production identity guard correctly rejected. The test now explicitly stops at its intended pre-dispatch boundary and asserts that no attempt exists. The production guard was not relaxed.
+- Final discovery, metadata, identity merge and list-monitoring regression: **66 passed in 21.29 s** (`discovery-final-regression.log`). This includes the corrected test and an added case revoking a private seed's library access during provider I/O. The full suite was not repeated after the test-only boundary correction.
+- Final browser verification: **2 journeys passed in 1.7 min** (`discovery-browser-verified.log`), including the existing setup/acquisition workflow and Discover → keyboard preview → catalog import → local list → matched card. It checks owned versus unknown cards, related attribution, release dates, mobile overflow and disconnected local browsing. Desktop/mobile captures were inspected and retained in `.local/evidence/discover-*.png`. An initial run exposed repeated attribution labels; redundant per-card text and unnecessary pagination were removed.
+- Backend lint/format, frontend production build/format, reproducible OpenAPI/client generation, schema alignment and diff checks pass. The wheel matches all **194 backend Python modules**.
+
+Deployment: a private database/key backup and its archive catalog were verified (`discovery-backup-path.txt`). With zero active development jobs, the identified API and worker were restarted together. Readiness and `/discover` return **200**; unauthenticated discovery data returns **401**. Schema remains `0038_asset_containment`, one fresh worker is present and dispatch remains **disabled** (`discovery-runtime.json`).
+
+Remaining S08 work includes series-continuation shelves, community-list browsing/following from Discover, full local sharing, supported optional write-back, onboarding/usability and actual-provider/performance qualification. Earlier acquisition/collection/policy gates, full external-list certification, production hardening and all S10 packages remain in scope. This advances FR-11 and the discovery subset of AT-05; it does not complete S08 or the full PRD.

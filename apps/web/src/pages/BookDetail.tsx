@@ -10,6 +10,7 @@ import WorkMerge from "./WorkMerge";
 import Wanted, { type WantedVersion } from "./Wanted";
 
 const BookSources = lazy(() => import("./BookSources"));
+const RelatedBooks = lazy(() => import("../components/RelatedBooks"));
 
 export default function BookDetail({
   canEdit,
@@ -228,6 +229,9 @@ function BookDetailContent({
           {admin && <WorkMerge work={work} />}
           <h2 className="library-access">Your library copies</h2>
           <LibraryAssets workId={id} admin={admin} />
+          <Suspense fallback={<Loading />}>
+            <RelatedBooks workId={id} canEdit={canEdit} />
+          </Suspense>
         </>
       )}
     </>

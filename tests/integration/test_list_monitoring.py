@@ -207,8 +207,11 @@ async def test_withdrawn_reason_is_not_reauthorized_by_a_canonical_merge(
     f = policy_fixture
     await add(client, f)
     saved = await activate(client, f, await preview(client, f, include_work_ids=[f["work"]]))
-    await tick(database, saved)
+    # Withdraw at the pre-dispatch boundary. Draining the entire worker also runs
+    # due periodic acquisition jobs and can legitimately submit before withdrawal.
+    await tick(database, saved, worker=False)
     async with database() as db:
+        assert not await db.scalar(select(DownloadAttempt.id))
         reason = await db.scalar(
             select(AcquisitionReason).where(AcquisitionReason.reference.startswith("policy:"))
         )
