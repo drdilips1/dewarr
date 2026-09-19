@@ -182,3 +182,6 @@ List detail now defaults to 50 books and exposes count/matched/offset/limit; app
 
 
 [Read-only recovery observations](RECOVERY-OBSERVATIONS.md) require `0042_recovery_scans`. Populated scan history blocks downgrade; preserve a pre-upgrade database/key/configuration backup with the prior compatible tooling. The state-bundle format remains version 1, but its schema compatibility check now requires 0042. A restored database runs the API and explicit `python -m app.jobs.worker --recovery` only; ordinary workers stay blocked. Normal installations use the ordinary worker, and this migration does not activate download dispatch. Deploy the generated client/frontend together with matching backend code.
+
+
+[Reviewed transfer recovery](RECOVERY-RECONCILIATION.md) adds `recovery.reconcile` to the restricted recovery worker on existing schema `0042_recovery_scans`. Back up and restart matching API/worker/frontend builds. No migration or dispatch activation is needed. Re-run observations after this upgrade because their context now also includes transfer capacity, memberships and identity claims. The action records verified existing transfers only; the restored installation still has no supported resume command.

@@ -1032,3 +1032,8 @@ A completed planning package is not a completed application. Update implementati
 ### Recovery observation implementation checkpoint
 
 [Read-only recovery observations](docs/RECOVERY-OBSERVATIONS.md) now provide checkpoint-bound reports and an isolated worker on schema `0042_recovery_scans`. The [implementation evidence](docs/IMPLEMENTATION-STATUS.md) records full backend regression, affected tests, actual restored-worker isolation, browser behavior and the local migration. Treat the Observe external state packet as an implemented bounded increment; its limits and actual-service qualification remain explicit. Continue with reviewed reconciliation, list/command rebaseline and controlled resume. No observation result authorizes replay or clears the persistent pause, and all remaining v1/expansion obligations remain unchanged.
+
+
+### Reviewed transfer reconciliation increment
+
+[Reviewed transfer recovery](docs/RECOVERY-RECONCILIATION.md) implements the matching-download portion of the Review and reconcile packet. It binds an explicit selected batch to a fresh scan, revalidates remote identity and current context, and atomically records existing transfers without dispatch/import/list effects. Preserve the bounded evidence in implementation status. Continue with untracked/conflicting effects, configuration repair, publication children, inventory/list rebaseline and controlled resume; this subset does not close S09-02 or transfer remaining requirements out of v1.

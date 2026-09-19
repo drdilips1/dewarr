@@ -17,6 +17,9 @@ from app.db.models import (
     BookList,
     CatalogAccount,
     DownloadAttempt,
+    DownloadCapacity,
+    DownloadIdentityClaim,
+    DownloadMembership,
     ImportEntry,
     Integration,
     Library,
@@ -76,6 +79,9 @@ async def context(db):
         LibraryAsset,
         AcquisitionSelection,
         DownloadAttempt,
+        DownloadCapacity,
+        DownloadIdentityClaim,
+        DownloadMembership,
         ImportEntry,
         BookList,
         ListSubscription,
@@ -129,6 +135,9 @@ async def start(db, checkpoint, key):
         if not scan or scan.checkpoint_id != checkpoint.id:
             raise HTTPException(409, "This command key belongs to another operation")
         return scan
+    from app.domain.recovery_reconciliation import require_idle
+
+    await require_idle(db, checkpoint.id)
     running = await db.scalar(
         select(RecoveryScan)
         .where(

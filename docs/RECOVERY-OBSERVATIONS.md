@@ -1,6 +1,6 @@
 # Read-only recovery observations
 
-This implements the observation portion of S09-02 / FR-36 / AT-25 on schema `0042_recovery_scans`. A designated restore operator can collect current external evidence while the persistent restore pause remains active. Reports do not reconcile domain records, authorize resubmission or permit resume. The next delivery packets are defined in the [implementation plan](../IMPLEMENTATION-PLAN.md#19-recovery-delivery-packets-and-final-release-order).
+This implements the observation portion of S09-02 / FR-36 / AT-25 on schema `0042_recovery_scans`. A designated restore operator can collect current external evidence while the persistent restore pause remains active. Reports do not reconcile domain records, authorize resubmission or permit resume. A separate [reviewed transfer action](RECOVERY-RECONCILIATION.md) can record selected freshly verified associations while the restore stays paused. The next delivery packets are defined in the [implementation plan](../IMPLEMENTATION-PLAN.md#19-recovery-delivery-packets-and-final-release-order).
 
 ## Operator journey
 
@@ -11,7 +11,7 @@ BOOK_ENV_FILE=/private/recovery/book-search-rehearsal/restore.env \
 uv run python -m app.jobs.worker --recovery
 ```
 
-Remove stale `BOOK_*` overrides first, especially database/key overrides. The process requires an active restore checkpoint and holds the normal shared maintenance lease. An ordinary worker still refuses a restored database. The recovery worker registers only `recovery.scan`, consumes only its dedicated queue, and does not register periodic automation or Procrastinate's built-in history cleanup. The registry restriction is tested against the pinned queue version and must be requalified when upgrading it.
+Remove stale `BOOK_*` overrides first, especially database/key overrides. The process requires an active restore checkpoint and holds the normal shared maintenance lease. An ordinary worker still refuses a restored database. The recovery worker registers only `recovery.scan` and the separately reviewed local `recovery.reconcile` action, consumes only its dedicated queue, and does not register periodic automation or Procrastinate's built-in history cleanup. The registry restriction is tested against the pinned queue version and must be requalified when upgrading it.
 
 Sign in as the designated operator and choose **Run read-only checks**. The screen shows progress, observation time, area filters and pages of up to 50 findings. Expand **Observed evidence** to load an individual finding's details; full file inventories are not loaded for every summary card. Sign-out clears the session's query cache. Other users and ordinary product routes remain blocked.
 
@@ -43,4 +43,4 @@ Observation records and provider rate accounting are written to the application 
 
 Tests cover census pagination and changing routing/membership, transfers ahead of backup, untracked effects, missing/new backend items, complete Hardcover versus partial RSS observations, partial/published file evidence, unchanged bytes/inodes/receipts, command replay, leases, bounded summaries with lazy detail and checkpoint privacy. The actual native PostgreSQL restore test launches the restricted worker as a subprocess and proves that ordinary queued work stays queued. Browser tests exercise a disposable recovery fixture; they are separate from that offline restore test.
 
-See [implementation status](IMPLEMENTATION-STATUS.md) for exact passing runs and environments. Native PostgreSQL evidence does not certify the Compose deployment. Still required: reviewed application of findings, current permission/configuration repair, stale approval/command handling, authoritative inventory/list rebaseline, safe partial-pack continuation, controlled resume, actual-service/platform qualification and measured RPO/RTO. No full stage or PRD completion is implied.
+See [implementation status](IMPLEMENTATION-STATUS.md) for exact passing runs and environments. Native PostgreSQL evidence does not certify the Compose deployment. Reviewed matching-transfer application is now available separately. Still required: resolution of other findings, current permission/configuration repair, stale approval/command handling, authoritative inventory/list rebaseline, safe partial-pack continuation, controlled resume, actual-service/platform qualification and measured RPO/RTO. No full stage or PRD completion is implied.

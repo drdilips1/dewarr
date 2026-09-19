@@ -46,14 +46,23 @@ async def current_user(request: Request, db: Database) -> User:
             ("POST", "/api/auth/logout"),
             ("GET", "/api/recovery"),
             ("POST", "/api/recovery/scans"),
+            ("POST", "/api/recovery/reconciliations"),
         }
         report_read = request.method == "GET" and bool(
             re.fullmatch(
                 r"/api/recovery/scans/[0-9a-f-]{36}(?:/findings/[0-9a-f-]{36})?", request.url.path
             )
         )
+        review_action = bool(
+            re.fullmatch(r"/api/recovery/reconciliations/[0-9a-f-]{36}", request.url.path)
+            and request.method == "GET"
+            or re.fullmatch(r"/api/recovery/reconciliations/[0-9a-f-]{36}/accept", request.url.path)
+            and request.method == "POST"
+        )
         if user.role != "admin" or (
-            (request.method, request.url.path) not in allowed and not report_read
+            (request.method, request.url.path) not in allowed
+            and not report_read
+            and not review_action
         ):
             raise HTTPException(423, "Recovery review is active; application actions are paused")
     if request.method not in {"GET", "HEAD", "OPTIONS"}:

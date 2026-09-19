@@ -411,6 +411,22 @@ async def find(client, selection, tag):
     return list(found.values())
 
 
+def transfer_stage(selection, state):
+    """Classify verified transfer evidence without scheduling import or changing state."""
+    if not state.completed and not state.reported_complete:
+        return "downloading", "Transfer associated; waiting for complete files"
+    expected = {
+        item["path"]: item["size_bytes"] for item in selection.frozen["descriptor"]["files"]
+    }
+    actual = {item.relative_path: item.size_bytes for item in state.files}
+    if expected != actual or state.total_bytes != selection.frozen["descriptor"]["torrent_bytes"]:
+        return "held", "Completed files differ from the inspected torrent; review the downloader"
+    return (
+        "complete",
+        "Download complete; file inspection and library confirmation are still required",
+    )
+
+
 async def finish_observation(db, attempt, selection, state):
     if not state:
         await record(
@@ -422,29 +438,10 @@ async def finish_observation(db, attempt, selection, state):
         )
         return
     attempt.observation = state.model_dump(mode="json")
-    if not state.completed and not state.reported_complete:
-        await record(
-            db, attempt, "downloading", "Transfer associated; waiting for complete files", poll=True
-        )
+    next_state, message = transfer_stage(selection, state)
+    await record(db, attempt, next_state, message, poll=next_state == "downloading")
+    if next_state != "complete":
         return
-    expected = {
-        item["path"]: item["size_bytes"] for item in selection.frozen["descriptor"]["files"]
-    }
-    actual = {item.relative_path: item.size_bytes for item in state.files}
-    if expected != actual or state.total_bytes != selection.frozen["descriptor"]["torrent_bytes"]:
-        await record(
-            db,
-            attempt,
-            "held",
-            "Completed files differ from the inspected torrent; review the downloader",
-        )
-        return
-    await record(
-        db,
-        attempt,
-        "complete",
-        "Download complete; file inspection and library confirmation are still required",
-    )
     members = await download_memberships.for_attempt(db, attempt.id)
     for item in members:
         await enqueue(db, "acquisition.fulfillment", work_id=item.frozen["origin_work_id"])

@@ -2,7 +2,7 @@ from datetime import datetime
 from uuid import UUID
 
 from fastapi import APIRouter, Header, HTTPException, Query
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 
 from app.api.dependencies import Admin, Database
@@ -21,6 +21,7 @@ class RecoveryView(BaseModel):
     imports: dict[str, int]
     resume_available: bool = False
     latest_scan: "ScanView | None" = None
+    latest_reconciliation: "ReconciliationView | None" = None
 
 
 class ScanView(BaseModel):
@@ -51,13 +52,28 @@ async def review(admin: Admin, db: Database):
         await db.scalar(
             select(RecoveryScan)
             .where(RecoveryScan.checkpoint_id == checkpoint.id)
-            .order_by(RecoveryScan.created_at.desc())
+            .order_by(RecoveryScan.created_at.desc(), RecoveryScan.id.desc())
+            .limit(1)
+        )
+        if checkpoint
+        else None
+    )
+    latest_review = (
+        await db.scalar(
+            select(Operation)
+            .where(
+                Operation.kind == "recovery.reconcile",
+                Operation.payload["checkpoint_id"].astext == str(checkpoint.id),
+                Operation.owner_id == admin.id,
+            )
+            .order_by(Operation.created_at.desc(), Operation.id.desc())
             .limit(1)
         )
         if checkpoint
         else None
     )
     return RecoveryView(
+        latest_reconciliation=reconciliation_view(latest_review) if latest_review else None,
         paused=get_settings().recovery_mode or await restore_pending(db),
         backup_id=checkpoint.backup_id if checkpoint else None,
         restored_at=checkpoint.created_at if checkpoint else None,
@@ -201,3 +217,106 @@ async def finding_detail(scan_id: UUID, finding_id: UUID, admin: Admin, db: Data
         **{key: getattr(row, key) for key in FindingView.model_fields if key != "has_evidence"},
         has_evidence=bool(row.evidence),
     )
+
+
+class ReconciliationItemView(BaseModel):
+    finding_id: UUID
+    attempt_id: UUID
+    title: str
+    saved_state: str
+    saved_external_may_exist: bool
+    observed_state: str
+    external_id: str
+
+
+class ReconciliationView(BaseModel):
+    id: UUID
+    scan_id: UUID
+    status: str
+    message: str
+    created_at: datetime
+    revision: str
+    expires_at: datetime
+    items: list[ReconciliationItemView]
+    applied_at: datetime | None
+    results: list[dict]
+
+
+def reconciliation_view(operation):
+    return ReconciliationView(
+        id=operation.id,
+        scan_id=operation.payload["command"]["scan_id"],
+        status=operation.status,
+        message=operation.message,
+        created_at=operation.created_at,
+        revision=operation.payload["revision"],
+        expires_at=operation.payload["expires_at"],
+        items=[ReconciliationItemView(**item) for item in operation.payload["items"]],
+        applied_at=operation.payload.get("applied_at"),
+        results=operation.payload.get("results", []),
+    )
+
+
+class ReconciliationRequest(BaseModel):
+    scan_id: UUID
+    finding_ids: list[UUID] = Field(min_length=1, max_length=100)
+
+
+class ReconciliationAcceptance(BaseModel):
+    revision: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+
+async def checkpoint_for(db, admin):
+    checkpoint = await active_restore(db)
+    if not checkpoint or checkpoint.operator_id != admin.id:
+        raise HTTPException(409, "An active restore checkpoint is required")
+    return checkpoint
+
+
+@router.post("/reconciliations", response_model=ReconciliationView, status_code=201)
+async def prepare_reconciliation(
+    body: ReconciliationRequest,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_reconciliation import prepare
+
+    operation = await prepare(
+        db,
+        await checkpoint_for(db, admin),
+        admin.id,
+        body.scan_id,
+        body.finding_ids,
+        idempotency_key,
+    )
+    await db.commit()
+    return reconciliation_view(operation)
+
+
+@router.get("/reconciliations/{identifier}", response_model=ReconciliationView)
+async def get_reconciliation(identifier: UUID, admin: Admin, db: Database):
+    from app.domain.recovery_reconciliation import load
+
+    return reconciliation_view(
+        await load(db, identifier, await checkpoint_for(db, admin), admin.id)
+    )
+
+
+@router.post(
+    "/reconciliations/{identifier}/accept", response_model=ReconciliationView, status_code=202
+)
+async def accept_reconciliation(
+    identifier: UUID,
+    body: ReconciliationAcceptance,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_reconciliation import accept
+
+    operation = await accept(
+        db, await checkpoint_for(db, admin), admin.id, identifier, body.revision, idempotency_key
+    )
+    await db.commit()
+    return reconciliation_view(operation)

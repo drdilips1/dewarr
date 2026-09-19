@@ -51,6 +51,8 @@
   padding: 12px;
   margin-top: 12px;
   background: var(--bg);
+  max-height: 26rem;
+  overflow: auto;
 }
 .recovery-checks summary {
   cursor: pointer;
@@ -65,6 +67,13 @@
 }
 .recovery-findings p {
   margin: 10px 0;
+}
+.recovery-findings .difference-choice {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 12px 0;
 }
 .recovery-finding-heading {
   display: flex;
@@ -1436,4 +1445,25 @@ img.detail-cover {
 }
 .community-follow .notice {
   flex-basis: 100%;
+}
+
+.recovery-decision {
+  border: 1px solid #45516a;
+  border-radius: 8px;
+  margin-top: 24px;
+  padding: 18px;
+  overflow-wrap: anywhere;
+}
+.recovery-decision p,
+.recovery-selection {
+  margin-top: 14px;
+}
+.recovery-decision ul {
+  padding-left: 20px;
+  list-style: disc;
+  margin-block: 14px;
+}
+.recovery-decision li {
+  margin-block: 8px;
+  line-height: 1.6;
 }

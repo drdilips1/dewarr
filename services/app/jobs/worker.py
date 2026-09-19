@@ -13,10 +13,11 @@ logger = logging.getLogger(__name__)
 async def recover_observation_jobs(queue):
     while True:
         try:
-            for job in await queue.job_manager.get_stalled_jobs(
-                task_name="recovery.scan", seconds_since_heartbeat=60
-            ):
-                await queue.job_manager.retry_job(job)
+            for task_name in ("recovery.scan", "recovery.reconcile"):
+                for job in await queue.job_manager.get_stalled_jobs(
+                    task_name=task_name, seconds_since_heartbeat=60
+                ):
+                    await queue.job_manager.retry_job(job)
         except Exception as error:
             logger.error("Recovery observation queue unavailable (%s)", type(error).__name__)
         await asyncio.sleep(30)
@@ -125,6 +126,6 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--recovery", action="store_true", help="Run only read-only restore observations"
+        "--recovery", action="store_true", help="Run only restricted restore recovery tasks"
     )
     asyncio.run(main(recovery_only=parser.parse_args().recovery))

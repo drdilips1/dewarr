@@ -58,12 +58,35 @@ test("restored-state operator review replaces navigation and blocks catalog acce
     await expect(
       page.getByText('"saved_external_may_exist"', { exact: false }),
     ).toBeVisible();
+    await page
+      .getByRole("checkbox", { name: /Select .* for recovery review/ })
+      .check();
+    await page
+      .getByRole("button", { name: "Review selected transfers", exact: true })
+      .click();
+    await expect(
+      page.getByRole("heading", {
+        name: "Review existing transfers",
+        exact: true,
+      }),
+    ).toBeVisible();
+    const evidence = root + "/.local/evidence/recovery-reconcile-ui";
+    mkdirSync(evidence, { recursive: true });
+    await page.screenshot({ path: evidence + "/review.png", fullPage: true });
+    await page
+      .getByRole("button", { name: "Record verified transfers", exact: true })
+      .click();
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: "Selected transfers recorded" }),
+    ).toBeVisible({ timeout: 30_000 });
+    expect((await page.request.get("/api/recovery")).status()).toBe(200);
+    expect((await page.request.get("/api/lists")).status()).toBe(423);
     const after = await (
       await page.request.get("http://127.0.0.1:13379/fixture/recovery-stats")
     ).json();
     expect(after).toEqual(before);
-    const evidence = root + "/.local/evidence/recovery-scan-ui";
-    mkdirSync(evidence, { recursive: true });
     await page.screenshot({ path: evidence + "/desktop.png", fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/lists");
@@ -72,6 +95,11 @@ test("restored-state operator review replaces navigation and blocks catalog acce
     ).toBeVisible();
     await expect(
       page.getByRole("heading", { name: "Before resuming" }),
+    ).toBeVisible();
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: "Selected transfers recorded" }),
     ).toBeVisible();
     await page.getByLabel("Filter observations").selectOption("files");
     await expect(

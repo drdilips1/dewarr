@@ -12,6 +12,7 @@ class CensusServer:
         self.calls = []
         self.mutate = None
         self.pages = 0
+        self.file_rows = {}
 
     async def handle(self, request):
         self.calls.append((request.method, request.url.path))
@@ -26,6 +27,12 @@ class CensusServer:
         if path == "torrents/info":
             if "hashes" in request.url.params:
                 values = [r for r in self.rows if r["hash"] == request.url.params["hashes"]]
+            elif "tag" in request.url.params:
+                values = [
+                    r
+                    for r in self.rows
+                    if request.url.params["tag"] in {tag.strip() for tag in r["tags"].split(",")}
+                ]
             else:
                 self.pages += 1
                 if self.mutate:
@@ -40,7 +47,7 @@ class CensusServer:
                 200, json=properties(infohash_v1=selected["hash"], save_path=selected["save_path"])
             )
         if path == "torrents/files":
-            return httpx.Response(200, json=files())
+            return httpx.Response(200, json=self.file_rows.get(request.url.params["hash"], files()))
         raise AssertionError(path)
 
     def client(self, endpoint="http://qbit.test", username="fixture", password="secret"):

@@ -128,7 +128,10 @@ async def qbit_fixture(path: str, request: Request):
 
 @app.get("/fixture/recovery-stats")
 async def recovery_stats():
-    return {"adds": qbit_state["adds"], "transfers": len(qbit_state["transfers"])}
+    return {
+        "adds": qbit_state["adds"],
+        "transfers": {key: value["row"] for key, value in sorted(qbit_state["transfers"].items())},
+    }
 
 
 @app.api_route("/mam/{path:path}", methods=["GET", "POST"])

@@ -1,7 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api, result, setCsrf } from "../api/client";
 import { Loading, Notice } from "../components";
+import type { components } from "../api/schema";
+type RecoveryReview = components["schemas"]["ReconciliationView"];
 
 export default function Recovery() {
   const client = useQueryClient();
@@ -42,8 +44,8 @@ export default function Recovery() {
           <>
             <h2>Saved workflow evidence</h2>
             <p>
-              These counts describe the backup. They do not confirm the current
-              state of your downloader or library.
+              These are saved workflow states, including corrections made during
+              recovery. They do not confirm the current state of your library.
             </p>
             <div className="recovery-counts">
               {[
@@ -68,6 +70,8 @@ export default function Recovery() {
               ))}
             </div>
             <RecoveryChecks
+              key={review.data.latest_scan?.id ?? "none"}
+              review={review.data.latest_reconciliation ?? undefined}
               scanId={review.data.latest_scan?.id}
               state={review.data.latest_scan?.state}
             />
@@ -97,14 +101,41 @@ export default function Recovery() {
 function RecoveryChecks({
   scanId,
   state,
+  review,
 }: {
   scanId?: string;
   state?: string;
+  review?: RecoveryReview;
 }) {
   const client = useQueryClient();
   const [key, setKey] = useState(() => crypto.randomUUID());
   const [domain, setDomain] = useState("");
   const [offset, setOffset] = useState(0);
+  const [selected, setSelected] = useState<string[]>([]);
+  const [prepareKey, setPrepareKey] = useState(() => crypto.randomUUID());
+  const busy = review?.status === "queued" || review?.status === "running";
+  const applied = review?.scan_id === scanId && review?.status === "completed";
+  const preview = useMutation({
+    mutationFn: async () =>
+      result(
+        await api.POST("/api/recovery/reconciliations", {
+          params: { header: { "idempotency-key": prepareKey } },
+          body: { scan_id: scanId!, finding_ids: selected },
+        }),
+      ),
+    onSuccess: async () => {
+      setSelected([]);
+      setPrepareKey(crypto.randomUUID());
+      await client.invalidateQueries({ queryKey: ["recovery"] });
+    },
+  });
+  function choose(id: string, checked: boolean) {
+    setSelected((previous) =>
+      checked ? [...previous, id] : previous.filter((item) => item !== id),
+    );
+    setPrepareKey(crypto.randomUUID());
+  }
+
   const start = useMutation({
     mutationFn: async () =>
       result(
@@ -141,7 +172,9 @@ function RecoveryChecks({
         unchanged.
       </p>
       <button
-        disabled={start.isPending || state === "queued" || state === "running"}
+        disabled={
+          start.isPending || busy || state === "queued" || state === "running"
+        }
         onClick={() => start.mutate()}
       >
         {state === "running"
@@ -155,8 +188,9 @@ function RecoveryChecks({
         <summary>Running the recovery worker</summary>
         <p>
           Start the worker with your restored configuration and the recovery
-          option. It processes only these observations and has no ordinary
-          automation tasks.
+          option. It processes observations and explicitly reviewed local
+          corrections. Ordinary download, import and list automation stays
+          paused.
         </p>
         <pre>python -m app.jobs.worker --recovery</pre>
       </details>
@@ -199,12 +233,50 @@ function RecoveryChecks({
                   <span>{finding.state.replaceAll("-", " ")}</span>
                 </div>
                 <p>{finding.message}</p>
+                {state === "completed" &&
+                  finding.domain === "downloads" &&
+                  finding.state === "matched" &&
+                  !applied && (
+                    <label className="difference-choice">
+                      <input
+                        type="checkbox"
+                        checked={selected.includes(finding.id)}
+                        disabled={
+                          busy ||
+                          preview.isPending ||
+                          (!selected.includes(finding.id) &&
+                            selected.length >= 100)
+                        }
+                        onChange={(event) =>
+                          choose(finding.id, event.target.checked)
+                        }
+                      />
+                      Select {finding.title} for recovery review
+                    </label>
+                  )}
                 {finding.has_evidence && (
                   <FindingEvidence scanId={scanId!} findingId={finding.id} />
                 )}
               </li>
             ))}
           </ul>
+          {state === "completed" && !applied && (
+            <div className="recovery-selection">
+              <p>
+                {selected.length} matching transfers selected across pages
+                (maximum 100).
+              </p>
+              <button
+                disabled={!selected.length || busy || preview.isPending}
+                onClick={() => preview.mutate()}
+              >
+                {preview.isPending
+                  ? "Preparing review…"
+                  : "Review selected transfers"}
+              </button>
+              <Notice error={preview.error} />
+            </div>
+          )}
           <div className="recovery-pagination">
             <button
               disabled={offset === 0}
@@ -221,6 +293,91 @@ function RecoveryChecks({
           </div>
         </>
       )}
+      {review && (
+        <ReconciliationReview
+          key={review.id}
+          review={review}
+          currentScan={scanId}
+        />
+      )}
+    </section>
+  );
+}
+
+function ReconciliationReview({
+  review,
+  currentScan,
+}: {
+  review: RecoveryReview;
+  currentScan?: string;
+}) {
+  const client = useQueryClient();
+  const [key] = useState(() => crypto.randomUUID());
+  const heading = useRef<HTMLHeadingElement>(null);
+  const prepared = review.status === "prepared";
+  useEffect(() => {
+    if (prepared) heading.current?.focus();
+  }, [review.id, prepared]);
+  const accept = useMutation({
+    mutationFn: async () =>
+      result(
+        await api.POST("/api/recovery/reconciliations/{identifier}/accept", {
+          params: {
+            path: { identifier: review.id },
+            header: { "idempotency-key": key },
+          },
+          body: { revision: review.revision },
+        }),
+      ),
+    onSuccess: () => client.invalidateQueries({ queryKey: ["recovery"] }),
+  });
+  return (
+    <section
+      className="recovery-decision"
+      aria-labelledby="reconciliation-title"
+    >
+      <h3 id="reconciliation-title" ref={heading} tabIndex={-1}>
+        Review existing transfers
+      </h3>
+      <p>
+        Record these transfers as already submitted so they cannot be added
+        again. The worker rechecks identity, location and files before updating
+        the saved records. Progress may have advanced since the observation.
+      </p>
+      <p>
+        This does not approve imports or resume automation. Unmatched transfers,
+        library changes and external lists still need reconciliation.
+      </p>
+      <ul>
+        {review.items.map((item) => (
+          <li key={item.attempt_id}>
+            <strong>{item.title}</strong>: saved {item.saved_state}, observed{" "}
+            {item.observed_state}.
+            {!item.saved_external_may_exist &&
+              " The restored record has no submission marker."}
+          </li>
+        ))}
+      </ul>
+      <p role="status">{review.message}</p>
+      {review.status === "prepared" && (
+        <>
+          <p className="muted">
+            Review expires {new Date(review.expires_at).toLocaleString()}.
+          </p>
+          {review.scan_id !== currentScan && (
+            <p>A newer observation exists. Prepare a new review from it.</p>
+          )}
+          <button
+            disabled={accept.isPending || review.scan_id !== currentScan}
+            onClick={() => accept.mutate()}
+          >
+            {accept.isPending
+              ? "Accepting review…"
+              : "Record verified transfers"}
+          </button>
+        </>
+      )}
+      <Notice error={accept.error} />
     </section>
   );
 }

@@ -494,6 +494,167 @@
         }
       }
     },
+    "/api/recovery/reconciliations": {
+      "post": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Prepare Reconciliation",
+        "operationId": "prepare_reconciliation_api_recovery_reconciliations_post",
+        "parameters": [
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReconciliationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recovery/reconciliations/{identifier}": {
+      "get": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Get Reconciliation",
+        "operationId": "get_reconciliation_api_recovery_reconciliations__identifier__get",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Identifier"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recovery/reconciliations/{identifier}/accept": {
+      "post": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Accept Reconciliation",
+        "operationId": "accept_reconciliation_api_recovery_reconciliations__identifier__accept_post",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Identifier"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReconciliationAcceptance"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/activity": {
       "get": {
         "tags": [
@@ -18986,6 +19147,167 @@
         ],
         "title": "ReasonView"
       },
+      "ReconciliationAcceptance": {
+        "properties": {
+          "revision": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Revision"
+          }
+        },
+        "type": "object",
+        "required": [
+          "revision"
+        ],
+        "title": "ReconciliationAcceptance"
+      },
+      "ReconciliationItemView": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Finding Id"
+          },
+          "attempt_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Attempt Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "saved_state": {
+            "type": "string",
+            "title": "Saved State"
+          },
+          "saved_external_may_exist": {
+            "type": "boolean",
+            "title": "Saved External May Exist"
+          },
+          "observed_state": {
+            "type": "string",
+            "title": "Observed State"
+          },
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "finding_id",
+          "attempt_id",
+          "title",
+          "saved_state",
+          "saved_external_may_exist",
+          "observed_state",
+          "external_id"
+        ],
+        "title": "ReconciliationItemView"
+      },
+      "ReconciliationRequest": {
+        "properties": {
+          "scan_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Scan Id"
+          },
+          "finding_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Finding Ids"
+          }
+        },
+        "type": "object",
+        "required": [
+          "scan_id",
+          "finding_ids"
+        ],
+        "title": "ReconciliationRequest"
+      },
+      "ReconciliationView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "scan_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Scan Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ReconciliationItemView"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "applied_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Applied At"
+          },
+          "results": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "scan_id",
+          "status",
+          "message",
+          "created_at",
+          "revision",
+          "expires_at",
+          "items",
+          "applied_at",
+          "results"
+        ],
+        "title": "ReconciliationView"
+      },
       "RecoveryView": {
         "properties": {
           "paused": {
@@ -19039,6 +19361,16 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ScanView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "latest_reconciliation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReconciliationView"
               },
               {
                 "type": "null"
