@@ -3,10 +3,20 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import { Notice } from "../components";
+import ListDifferences from "./ListDifferences";
 
-export default function ListWriteback({ listId }: { listId: string }) {
+export default function ListWriteback({
+  listId,
+  onMembershipChange,
+}: {
+  listId: string;
+  onMembershipChange?: () => void;
+}) {
   const [expanded, setExpanded] = useState(false);
   const [offset, setOffset] = useState(0);
+  const [comparisonId, setComparisonId] = useState<string | null>(null);
+  const [comparisonReady, setComparisonReady] = useState(false);
+  const [comparisonMessage, setComparisonMessage] = useState("");
   const cache = useQueryClient();
   const path = { list_id: listId };
   const keys = useRef(new Map<string, string>());
@@ -61,7 +71,12 @@ export default function ListWriteback({ listId }: { listId: string }) {
           body: { expected_generation: policy.data?.generation ?? 0 },
         }),
       ),
-    onSuccess: () => keys.current.delete(`enable:${policy.data?.generation}`),
+    onSuccess: (data) => {
+      keys.current.delete(`enable:${policy.data?.generation}`);
+      setComparisonId(data.comparison_id ?? null);
+      setComparisonReady(false);
+      setComparisonMessage("");
+    },
   });
   const configure = useMutation({
     mutationFn: async (enabled: boolean) =>
@@ -121,6 +136,7 @@ export default function ListWriteback({ listId }: { listId: string }) {
       ),
     onSuccess: () => {
       review.reset();
+      onMembershipChange?.();
       refresh();
     },
   });
@@ -184,42 +200,65 @@ export default function ListWriteback({ listId }: { listId: string }) {
                     Pause write-back
                   </button>
                 )}
-                {(!policy.data.enabled || !policy.data.available) && (
+                {
                   <button
                     disabled={
                       busy || (!policy.data.available && !policy.data.enabled)
                     }
                     onClick={() => preview.mutate()}
                   >
-                    Review enablement
+                    {policy.data.enabled
+                      ? "Compare existing books"
+                      : "Review enablement"}
                   </button>
-                )}
+                }
               </div>
-              {preview.data && (
-                <div className="notice" role="status">
-                  <p>
-                    Send future local membership changes to{" "}
-                    <strong>{preview.data.list_name}</strong> on Hardcover.
-                    Existing differences are left for individual review.
-                  </p>
-                  <p>
-                    Your token needs list read/write and profile-read access.
-                    Ownership is verified; write permission is confirmed by the
-                    first successful membership change.
-                  </p>
-                  <div className="button-row">
-                    <button
-                      className="primary"
-                      disabled={busy}
-                      onClick={() => configure.mutate(true)}
-                    >
-                      Enable future changes
-                    </button>
-                    <button disabled={busy} onClick={() => preview.reset()}>
-                      Cancel enablement
-                    </button>
+              {preview.data &&
+                (!policy.data.enabled || !policy.data.available) && (
+                  <div className="notice" role="status">
+                    <p>
+                      Send future local membership changes to{" "}
+                      <strong>{preview.data.list_name}</strong> on Hardcover.
+                      Existing differences are shown below and require a
+                      separate selection.
+                    </p>
+                    <p>
+                      Your token needs list read/write and profile-read access.
+                      Ownership is verified; write permission is confirmed by
+                      the first successful membership change.
+                    </p>
+                    <div className="button-row">
+                      <button
+                        className="primary"
+                        disabled={busy || !comparisonReady}
+                        onClick={() => configure.mutate(true)}
+                      >
+                        Enable future changes
+                      </button>
+                      <button disabled={busy} onClick={() => preview.reset()}>
+                        Cancel enablement
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
+              {comparisonMessage && <p role="status">{comparisonMessage}</p>}
+              {comparisonId && (
+                <ListDifferences
+                  key={comparisonId}
+                  listId={listId}
+                  comparisonId={comparisonId}
+                  generation={policy.data.generation}
+                  enabled={policy.data.enabled && policy.data.available}
+                  onReady={setComparisonReady}
+                  onApplied={(message) => {
+                    setComparisonMessage(message);
+                    setComparisonId(null);
+                    setComparisonReady(false);
+                    preview.reset();
+                    onMembershipChange?.();
+                    refresh();
+                  }}
+                />
               )}
               {policy.data.confirmed_at && (
                 <p className="muted">

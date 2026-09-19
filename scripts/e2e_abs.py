@@ -312,6 +312,11 @@ async def writeback_control(request: Request):
         writeback_state["members"] = [
             {**row, "id": row["id"] + 100} for row in writeback_state["members"]
         ]
+    if body.get("comparison_books"):
+        writeback_state["members"].extend(
+            {"id": 1000 + n, "list_id": 92, "book_id": 2000 + n, "edition_id": None}
+            for n in range(12)
+        )
     return writeback_state
 
 
@@ -382,14 +387,16 @@ async def catalog(request: Request, authorization: str = Header(default="")):
                 "date_added": None,
                 "book": {
                     "id": r["book_id"],
-                    "title": "The Catalog Journey",
+                    "title": "The Catalog Journey"
+                    if r["book_id"] == 42
+                    else f"Compared remote book {r['book_id']}",
                     "cached_contributors": [{"author": {"name": "Catalog Author"}}],
                 },
             }
             for r in writeback_state["members"]
             if r["id"] > variables["after"]
         ]
-        return {"data": {"lists": [{**header, "list_books": rows}]}}
+        return {"data": {"lists": [{**header, "list_books": rows[:100]}]}}
     if "Community" in query or ("ListMembershipPage(" in query and body["variables"]["id"] == 9101):
         titles = {42: "The Catalog Journey", 9001: "The Discovered Harbor"}
         records = {

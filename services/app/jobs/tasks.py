@@ -307,6 +307,15 @@ async def write_list_membership(operation_id: str) -> None:
     await run(UUID(operation_id))
 
 
+@tasks.task(
+    name="lists.writeback.compare", queue="lists", retry=ShelfRetryStrategy(max_attempts=5, wait=60)
+)
+async def compare_list_membership(operation_id: str) -> None:
+    from app.domain.list_comparisons import run
+
+    await run(UUID(operation_id))
+
+
 @tasks.periodic(cron="* * * * *")
 @tasks.task(name="lists.schedule", queue="lists", retry=3)
 async def schedule_shelves(timestamp: int) -> None:

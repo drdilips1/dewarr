@@ -105,6 +105,14 @@ async def enable(client, shelf, generation=0):
         headers={"Idempotency-Key": str(uuid4())},
     )
     assert preview.status_code == 200, preview.text
+    from app.domain import list_comparisons
+
+    for _ in range(30):
+        try:
+            await list_comparisons.run(UUID(preview.json()["comparison_id"]))
+        except ShelfRetry:
+            continue
+        break
     reply = await client.put(
         path,
         json={
@@ -588,9 +596,7 @@ async def test_writeback_migration_refuses_to_drop_outbound_history(
     await finish(await start(client, shelf))
     await enable(client, shelf)
     result = await migrate("downgrade", "0038_asset_containment")
-    assert (
-        result.returncode != 0 and "outbound history requires a pre-upgrade backup" in result.stderr
-    )
+    assert result.returncode != 0 and "history requires a pre-upgrade backup" in result.stderr
     assert (await client.get(f"/api/lists/{shelf}/writeback")).json()["enabled"]
 
 

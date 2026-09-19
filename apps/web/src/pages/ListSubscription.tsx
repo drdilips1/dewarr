@@ -9,7 +9,13 @@ import ListWriteback from "./ListWriteback";
 type Subscription = components["schemas"]["SubscriptionView"];
 type Observation = components["schemas"]["ObservationView"];
 
-export default function ListSubscription({ listId }: { listId: string }) {
+export default function ListSubscription({
+  listId,
+  onMembershipChange,
+}: {
+  listId: string;
+  onMembershipChange?: () => void;
+}) {
   const cache = useQueryClient();
   const [expanded, setExpanded] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -212,7 +218,13 @@ export default function ListSubscription({ listId }: { listId: string }) {
           </button>
         </details>
       )}
-      {hardcover && data && <ListWriteback key={data.id} listId={listId} />}
+      {hardcover && data && (
+        <ListWriteback
+          key={data.id}
+          listId={listId}
+          onMembershipChange={onMembershipChange}
+        />
+      )}
     </section>
   );
 }

@@ -175,3 +175,6 @@ List detail now defaults to 50 books and exposes count/matched/offset/limit; app
 
 
 [Optional Hardcover write-back](LIST-WRITEBACK.md) requires migration `0039_list_writeback` and the registered `lists.writeback` worker. Back up database/key/configuration, stop old API/worker builds, migrate and restart matching backend/frontend versions. Policies begin disabled; enablement checks ownership and applies to future local membership changes only. Populated outbound history requires backup-based rollback. Recovery mode holds outbound work; full restored-state reconciliation remains an S09 qualification gate. Download dispatch stays independent.
+
+
+[Existing-list comparisons](LIST-COMPARISONS.md) require `0040_list_comparisons` and the new `lists.writeback.compare` task. Back up database/key/configuration, stop old API/worker builds, migrate and restart matching backend/frontend versions. Initial enablement now waits for the comparison returned by the ownership preview; older previews need refreshing. Populated comparison history requires backup-based rollback. This does not enable dispatch or change existing write-back policies.

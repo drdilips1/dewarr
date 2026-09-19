@@ -846,6 +846,40 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/lists/{list_id}/writeback/differences/{comparison_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Page */
+    get: operations["page_api_lists__list_id__writeback_differences__comparison_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/lists/{list_id}/writeback/differences/{comparison_id}/resolve": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Resolve */
+    post: operations["resolve_api_lists__list_id__writeback_differences__comparison_id__resolve_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/lists/{list_id}/csv/preview": {
     parameters: {
       query?: never;
@@ -4758,6 +4792,86 @@ export interface components {
       /** Matched */
       matched: number;
     };
+    /** ListDifferencePage */
+    ListDifferencePage: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Status */
+      status: string;
+      /** Message */
+      message: string;
+      /** Expires At */
+      expires_at: string | null;
+      /** Counts */
+      counts: {
+        [key: string]: number;
+      };
+      /** Items */
+      items: components["schemas"]["ListDifferenceView"][];
+      /** Total */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
+    };
+    /** ListDifferenceReceipt */
+    ListDifferenceReceipt: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Selected */
+      selected: number;
+      /** Action */
+      action: string;
+      /** Outbound Ids */
+      outbound_ids: string[];
+      /** Message */
+      message: string;
+    };
+    /** ListDifferenceSelection */
+    ListDifferenceSelection: {
+      /** Row Ids */
+      row_ids: string[];
+      /**
+       * Action
+       * @enum {string}
+       */
+      action: "apply_local" | "keep_remote";
+      /** Expected Policy Generation */
+      expected_policy_generation: number;
+    };
+    /** ListDifferenceView */
+    ListDifferenceView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Work Id */
+      work_id: string | null;
+      /** Title */
+      title: string;
+      /** State */
+      state: string;
+      /** Local Present */
+      local_present: boolean | null;
+      /** Remote Present */
+      remote_present: boolean | null;
+      /** Remote Memberships */
+      remote_memberships: number | null;
+      /** Can Apply Local */
+      can_apply_local: boolean;
+      /** Can Keep Remote */
+      can_keep_remote: boolean;
+      /** Reason */
+      reason: string | null;
+    };
     /** ListInput */
     ListInput: {
       /** Name */
@@ -7559,6 +7673,8 @@ export interface components {
        * Format: date-time
        */
       expires_at: string;
+      /** Comparison Id */
+      comparison_id?: string | null;
       /**
        * Message
        * @default Enable future local membership changes only; existing differences will not be sent
@@ -9448,6 +9564,82 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["WritebackResolutionView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  page_api_lists__list_id__writeback_differences__comparison_id__get: {
+    parameters: {
+      query?: {
+        offset?: number;
+        limit?: number;
+        state?:
+          "differences" | "all" | "local_only" | "remote_only" | "unmatched";
+        q?: string;
+      };
+      header?: never;
+      path: {
+        list_id: string;
+        comparison_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ListDifferencePage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  resolve_api_lists__list_id__writeback_differences__comparison_id__resolve_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        list_id: string;
+        comparison_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ListDifferenceSelection"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ListDifferenceReceipt"];
         };
       };
       /** @description Validation Error */

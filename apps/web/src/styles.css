@@ -1071,6 +1071,28 @@ nav a.active {
   gap: 12px;
   margin-top: 14px;
 }
+.list-differences {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #45516a;
+  border-radius: 8px;
+}
+.list-differences .button-row {
+  margin-top: 0;
+}
+.difference-choice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow-wrap: anywhere;
+}
+.difference-choice input[type="checkbox"] {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
 .break-text {
   overflow-wrap: anywhere;
 }

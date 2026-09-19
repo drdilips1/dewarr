@@ -39,6 +39,7 @@ class WritebackPreviewView(BaseModel):
     list_name: str
     external_list_id: int
     expires_at: datetime
+    comparison_id: UUID | None = None
     message: str = (
         "Enable future local membership changes only; existing differences will not be sent"
     )
@@ -179,10 +180,14 @@ async def preview(
         or revision != await content_revision(db, list_id)
     ):
         raise HTTPException(409, "Account, list or membership changed; create a fresh preview")
+    from app.domain import list_comparisons
+
+    comparison = await list_comparisons.start(db, owner_id, ctx, remote.owner_id)
     view = {
         "list_name": remote.name,
         "external_list_id": remote.id,
         "expires_at": (datetime.now(UTC) + timedelta(minutes=10)).isoformat(),
+        "comparison_id": str(comparison.id),
     }
     operation = Operation(
         owner_id=owner_id,
@@ -241,6 +246,14 @@ async def configure(
             raise HTTPException(
                 409, "Create a fresh ownership and membership preview before enabling write-back"
             )
+        from app.domain import list_comparisons
+
+        comparison_id = saved.payload["view"].get("comparison_id")
+        if not comparison_id:
+            raise HTTPException(409, "Create a new preview to compare existing memberships")
+        comparison, _ = await list_comparisons.current(db, UUID(comparison_id), user.id, list_id)
+        if comparison.status != "completed":
+            raise HTTPException(409, "Wait for the existing membership comparison before enabling")
         if not policy:
             policy = ListWritebackPolicy(list_id=list_id, generation=0, sequence=0)
             db.add(policy)

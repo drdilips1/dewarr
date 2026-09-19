@@ -302,7 +302,10 @@ function ListDetail({ id, canEdit }: { id: string; canEdit: boolean }) {
       />
       {editable && (
         <Suspense fallback={<Loading />}>
-          <ListSubscription listId={id} />
+          <ListSubscription
+            listId={id}
+            onMembershipChange={() => void refresh()}
+          />
         </Suspense>
       )}
     </>

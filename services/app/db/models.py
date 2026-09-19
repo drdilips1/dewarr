@@ -394,6 +394,19 @@ class ListWritebackLease(Base):
     lease_until: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
+class ListComparisonRow(Identity, Base):
+    __tablename__ = "list_comparison_rows"
+    __table_args__ = (UniqueConstraint("comparison_id", "position"),)
+    comparison_id: Mapped[UUID] = mapped_column(
+        ForeignKey("operations.id", ondelete="CASCADE"), index=True
+    )
+    position: Mapped[int] = mapped_column(Integer)
+    work_id: Mapped[UUID | None] = mapped_column(ForeignKey("works.id"))
+    title: Mapped[str] = mapped_column(Text)
+    state: Mapped[str] = mapped_column(String(30))
+    snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB)
+
+
 class ListObservation(Identity, Base):
     __tablename__ = "list_observations"
     __table_args__ = (UniqueConstraint("subscription_id", "external_id"),)

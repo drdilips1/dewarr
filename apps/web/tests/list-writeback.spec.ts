@@ -12,7 +12,7 @@ test.beforeEach(() => {
 test("Hardcover write-back confirms membership, reconciles lost responses and reviews conflicts", async ({
   page,
 }, testInfo) => {
-  test.setTimeout(180_000);
+  test.setTimeout(240_000);
   page.setDefaultTimeout(15_000);
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
@@ -63,6 +63,9 @@ test("Hardcover write-back confirms membership, reconciles lost responses and re
   ).toBeVisible();
   await panel.getByRole("button", { name: "Review enablement" }).click();
   await expect(panel).toContainText("Write-back fixture list");
+  await expect(
+    panel.getByRole("button", { name: "Enable future changes" }),
+  ).toBeEnabled({ timeout: 45_000 });
   await panel.getByRole("button", { name: "Enable future changes" }).click();
   await expect(
     panel.getByText("Write-back enabled", { exact: true }),
@@ -163,6 +166,92 @@ test("Hardcover write-back confirms membership, reconciles lost responses and re
   await addFromCatalog();
   await expect(panel.locator(".writeback-change")).toHaveCount(4);
   expect((await remote()).writes).toHaveLength(3);
+  await page.request.post("http://127.0.0.1:13379/fixture/writeback", {
+    data: { comparison_books: true, lose_response: false },
+  });
+  await panel.getByRole("button", { name: "Review enablement" }).click();
+  const differences = panel.getByRole("region", {
+    name: "Existing list differences",
+  });
+  await expect(differences).toContainText(
+    "1 only here · 12 only on Hardcover",
+    { timeout: 45_000 },
+  );
+  expect((await remote()).writes).toHaveLength(3);
+  await panel.getByRole("button", { name: "Enable future changes" }).click();
+  await expect(
+    panel.getByText("Write-back enabled", { exact: true }),
+  ).toBeVisible();
+  await differences.getByLabel("Show memberships").selectOption("local_only");
+  await differences
+    .getByRole("checkbox", { name: `Select difference for ${title}` })
+    .check();
+  await differences
+    .getByRole("button", { name: "Apply local state to selected" })
+    .click();
+  await expect(panel).toContainText(
+    "1 selected membership differences queued for Hardcover confirmation",
+  );
+  await expect(panel.locator(".writeback-change")).toHaveCount(5);
+  await expect(panel.locator(".writeback-change").first()).toContainText(
+    "completed",
+    { timeout: 45_000 },
+  );
+  expect((await remote()).writes).toHaveLength(4);
+  await panel
+    .getByRole("button", { name: "Compare existing books", exact: true })
+    .click();
+  await expect(differences).toContainText(
+    "0 only here · 12 only on Hardcover",
+    { timeout: 45_000 },
+  );
+  await differences
+    .getByRole("checkbox", {
+      name: "Select difference for Compared remote book 2000",
+      exact: true,
+    })
+    .check();
+  await differences.getByRole("button", { name: "Next differences" }).click();
+  await differences
+    .getByRole("checkbox", {
+      name: "Select difference for Compared remote book 2011",
+      exact: true,
+    })
+    .check();
+  await expect(differences).toContainText("2 selected across pages");
+  await page.screenshot({
+    path: testInfo.outputPath("list-differences-desktop.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
+    )
+    .toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("list-differences-mobile.png"),
+    fullPage: true,
+  });
+  await differences
+    .getByRole("button", { name: "Keep Hardcover state for selected" })
+    .click();
+  await expect(panel).toContainText(
+    "2 selected membership differences applied to this local list",
+  );
+  await expect(
+    books
+      .getByRole("heading", { name: "Compared remote book 2000", exact: true })
+      .first(),
+  ).toBeVisible();
+  await expect(
+    books
+      .getByRole("heading", { name: "Compared remote book 2011", exact: true })
+      .first(),
+  ).toBeVisible();
+  expect((await remote()).writes).toHaveLength(4);
   await page.setViewportSize({ width: 390, height: 844 });
   await expect
     .poll(() =>
