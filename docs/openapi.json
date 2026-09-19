@@ -1621,6 +1621,167 @@
         }
       }
     },
+    "/api/recovery/connection-reconciliations": {
+      "post": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Prepare Connection Reconciliation",
+        "operationId": "prepare_connection_reconciliation_api_recovery_connection_reconciliations_post",
+        "parameters": [
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectionReconciliationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recovery/connection-reconciliations/{identifier}": {
+      "get": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Get Connection Reconciliation",
+        "operationId": "get_connection_reconciliation_api_recovery_connection_reconciliations__identifier__get",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Identifier"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recovery/connection-reconciliations/{identifier}/accept": {
+      "post": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Accept Connection Reconciliation",
+        "operationId": "accept_connection_reconciliation_api_recovery_connection_reconciliations__identifier__accept_post",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Identifier"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReconciliationAcceptance"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/activity": {
       "get": {
         "tags": [
@@ -13197,6 +13358,296 @@
         ],
         "title": "CommunityListPreview"
       },
+      "ConnectionChoice": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Finding Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "audiobookshelf",
+              "qbittorrent"
+            ],
+            "title": "Kind"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "base_url": {
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Base Url"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "public_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Public Url"
+          },
+          "token": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 8192,
+                "minLength": 1,
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Token"
+          },
+          "username": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300,
+                "minLength": 1,
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Username"
+          },
+          "password": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 1,
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Password"
+          },
+          "save_path": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Save Path"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{1,100}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "mappings": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/DownloadMapping"
+                },
+                "type": "array",
+                "maxItems": 20,
+                "minItems": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mappings"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "finding_id",
+          "kind",
+          "name",
+          "base_url",
+          "enabled"
+        ],
+        "title": "ConnectionChoice"
+      },
+      "ConnectionReconciliationRequest": {
+        "properties": {
+          "scan_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Scan Id"
+          },
+          "changes": {
+            "items": {
+              "$ref": "#/components/schemas/ConnectionChoice"
+            },
+            "type": "array",
+            "maxItems": 10,
+            "minItems": 1,
+            "title": "Changes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "scan_id",
+          "changes"
+        ],
+        "title": "ConnectionReconciliationRequest"
+      },
+      "ConnectionReconciliationView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "scan_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Scan Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ConnectionRepairItemView"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "applied_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Applied At"
+          },
+          "results": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "scan_id",
+          "status",
+          "message",
+          "created_at",
+          "revision",
+          "expires_at",
+          "items",
+          "applied_at",
+          "results"
+        ],
+        "title": "ConnectionReconciliationView"
+      },
+      "ConnectionRepairItemView": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Finding Id"
+          },
+          "integration_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Integration Id"
+          },
+          "before": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RecoveryABSSettings"
+              },
+              {
+                "$ref": "#/components/schemas/RecoveryQbitSettings"
+              }
+            ],
+            "title": "Before"
+          },
+          "after": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RecoveryABSSettings"
+              },
+              {
+                "$ref": "#/components/schemas/RecoveryQbitSettings"
+              }
+            ],
+            "title": "After"
+          },
+          "replace_credentials": {
+            "type": "boolean",
+            "title": "Replace Credentials"
+          }
+        },
+        "type": "object",
+        "required": [
+          "finding_id",
+          "integration_id",
+          "before",
+          "after",
+          "replace_credentials"
+        ],
+        "title": "ConnectionRepairItemView"
+      },
       "ConnectionView": {
         "properties": {
           "id": {
@@ -21166,6 +21617,120 @@
         ],
         "title": "ReconciliationView"
       },
+      "RecoveryABSSettings": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "audiobookshelf",
+            "title": "Kind"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "base_url": {
+            "type": "string",
+            "title": "Base Url"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "has_credentials": {
+            "type": "boolean",
+            "title": "Has Credentials"
+          },
+          "public_url": {
+            "type": "string",
+            "title": "Public Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "name",
+          "base_url",
+          "enabled",
+          "has_credentials",
+          "public_url"
+        ],
+        "title": "RecoveryABSSettings"
+      },
+      "RecoveryPathMapping": {
+        "properties": {
+          "download_root": {
+            "type": "string",
+            "title": "Download Root"
+          },
+          "source_key": {
+            "type": "string",
+            "title": "Source Key"
+          },
+          "worker_path": {
+            "type": "string",
+            "title": "Worker Path"
+          }
+        },
+        "type": "object",
+        "required": [
+          "download_root",
+          "source_key",
+          "worker_path"
+        ],
+        "title": "RecoveryPathMapping"
+      },
+      "RecoveryQbitSettings": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "qbittorrent",
+            "title": "Kind"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "base_url": {
+            "type": "string",
+            "title": "Base Url"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "has_credentials": {
+            "type": "boolean",
+            "title": "Has Credentials"
+          },
+          "save_path": {
+            "type": "string",
+            "title": "Save Path"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "mappings": {
+            "items": {
+              "$ref": "#/components/schemas/RecoveryPathMapping"
+            },
+            "type": "array",
+            "title": "Mappings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "name",
+          "base_url",
+          "enabled",
+          "has_credentials",
+          "save_path",
+          "category",
+          "mappings"
+        ],
+        "title": "RecoveryQbitSettings"
+      },
       "RecoveryView": {
         "properties": {
           "queue_fence": {
@@ -21239,6 +21804,16 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/AccessReconciliationView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "latest_connection_reconciliation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConnectionReconciliationView"
               },
               {
                 "type": "null"

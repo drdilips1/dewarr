@@ -18,6 +18,8 @@ For the latest execution starting point, use the roadmap's [development start an
 
 The [account-access review increment](docs/RECOVERY-ACCESS.md) adds explicit permission confirmation and repair within S09-02. It must be followed by current connection/path configuration, unresolved-effect/reservation handling, fresh wanted-work activation and controlled resume; all earlier product and qualification gates remain required.
 
+The [library/downloader connection repair increment](docs/RECOVERY-CONNECTIONS.md) implements current ABS and qBittorrent settings review within S09-02. MAM/proxy and other source/account configuration, file-route qualification, unresolved effects and fresh-work activation remain required before controlled resume.
+
 ## 1. Delivery strategy
 
 Deliver a working vertical slice early, then expand source coverage and automation. Build durable domain state, identity and inventory before dispatch; certify importing before connecting automatic acquisition. Hardening, accessibility, authorization and migration testing start with their first affected feature rather than waiting for the final stage.

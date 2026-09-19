@@ -170,7 +170,7 @@ Assign an accountable developer and reviewer at scheduling time. With one develo
 
 Committed baseline: `93a0dde`, schema 0044. Recorded increments include bounded catalog/inventory, acquisition/import, lists/series, discovery/curation, write-back and successive recovery safeguards. Consult implementation status for exact coverage; no blanket completion follows from this list.
 
-The committed baseline includes [saved automation review](docs/RECOVERY-AUTOMATION.md). The [current account permission review](docs/RECOVERY-ACCESS.md) increment adds explicit permission confirmation and repair; measured results and its bounded acceptance scope are recorded in implementation status. Current connection/path configuration, unresolved effects and fresh wanted-work activation still precede controlled resume.
+The committed baseline includes [saved automation review](docs/RECOVERY-AUTOMATION.md). The [current account permission review](docs/RECOVERY-ACCESS.md) increment adds explicit permission confirmation and repair; measured results and its bounded acceptance scope are recorded in implementation status. [ABS/qBittorrent connection repair](docs/RECOVERY-CONNECTIONS.md) now provides explicit credential and downloader-mapping review. Other source/account settings, file-route qualification, unresolved effects and fresh wanted-work activation still precede controlled resume.
 
 | Workstream | Remaining outcome | Required demonstration |
 |---|---|---|

@@ -79,3 +79,12 @@ async def review_restored_access(operation_id: str) -> None:
     from app.domain.recovery_access import run
 
     await run(UUID(operation_id))
+
+
+@tasks.task(
+    name="recovery.connections", queue="recovery", retry=ShelfRetryStrategy(max_attempts=3, wait=60)
+)
+async def review_restored_connections(operation_id: str) -> None:
+    from app.domain.recovery_connections import run
+
+    await run(UUID(operation_id))

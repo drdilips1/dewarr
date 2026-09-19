@@ -41,6 +41,7 @@ LIST_KIND = "recovery.lists"
 OUTBOUND_KIND = "recovery.outbound"
 COMMAND_KIND = "recovery.commands"
 ACCESS_KIND = "recovery.access"
+CONNECTION_KIND = "recovery.connections"
 REVIEW_KINDS = (
     KIND,
     INVENTORY_KIND,
@@ -49,6 +50,7 @@ REVIEW_KINDS = (
     OUTBOUND_KIND,
     COMMAND_KIND,
     ACCESS_KIND,
+    CONNECTION_KIND,
 )
 logger = logging.getLogger(__name__)
 

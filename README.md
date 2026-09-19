@@ -1,6 +1,6 @@
 # Book discovery app — planning workspace
 
-Current recovery work includes [account permission review](docs/RECOVERY-ACCESS.md): explicit role, automation and library-grant corrections while the restore pause remains active. See [implementation status](docs/IMPLEMENTATION-STATUS.md) for measured evidence and remaining full-PRD work.
+Current recovery work includes [account permission review](docs/RECOVERY-ACCESS.md) and [library/downloader connection repair](docs/RECOVERY-CONNECTIONS.md): explicit permission, credential and path-mapping corrections while the restore pause remains active. See [implementation status](docs/IMPLEMENTATION-STATUS.md) for measured evidence and remaining full-PRD work.
 
 
 Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md), then use these development deliverables:

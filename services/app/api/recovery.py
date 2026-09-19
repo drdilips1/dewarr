@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Header, HTTPException, Query
@@ -16,6 +17,7 @@ from app.db.models import (
     RecoveryScan,
 )
 from app.domain.recovery_access import AccessChoice
+from app.domain.recovery_connections import ConnectionChoice
 from app.recovery import active_restore, restore_pending
 
 router = APIRouter(prefix="/recovery", tags=["recovery"])
@@ -37,6 +39,7 @@ class RecoveryView(BaseModel):
     resume_available: bool = False
     latest_scan: "ScanView | None" = None
     latest_access_reconciliation: "AccessReconciliationView | None" = None
+    latest_connection_reconciliation: "ConnectionReconciliationView | None" = None
     latest_reconciliation: "ReconciliationView | None" = None
     latest_command_reconciliation: "CommandReconciliationView | None" = None
     latest_outbound_reconciliation: "OutboundReconciliationView | None" = None
@@ -177,8 +180,25 @@ async def review(admin: Admin, db: Database):
         if checkpoint
         else None
     )
+    connection_review = (
+        await db.scalar(
+            select(Operation)
+            .where(
+                Operation.kind == "recovery.connections",
+                Operation.payload["checkpoint_id"].astext == str(checkpoint.id),
+                Operation.owner_id == admin.id,
+            )
+            .order_by(Operation.created_at.desc(), Operation.id.desc())
+            .limit(1)
+        )
+        if checkpoint
+        else None
+    )
     fence = await db.get(RecoveryQueueFence, checkpoint.id) if checkpoint else None
     return RecoveryView(
+        latest_connection_reconciliation=connection_reconciliation_view(connection_review)
+        if connection_review
+        else None,
         latest_access_reconciliation=access_reconciliation_view(access_review)
         if access_review
         else None,
@@ -1017,3 +1037,118 @@ async def accept_access_reconciliation(
     )
     await db.commit()
     return access_reconciliation_view(operation)
+
+
+class RecoveryPathMapping(BaseModel):
+    download_root: str
+    source_key: str
+    worker_path: str
+
+
+class RecoveryABSSettings(BaseModel):
+    kind: Literal["audiobookshelf"]
+    name: str
+    base_url: str
+    enabled: bool
+    has_credentials: bool
+    public_url: str
+
+
+class RecoveryQbitSettings(BaseModel):
+    kind: Literal["qbittorrent"]
+    name: str
+    base_url: str
+    enabled: bool
+    has_credentials: bool
+    save_path: str
+    category: str
+    mappings: list[RecoveryPathMapping]
+
+
+class ConnectionRepairItemView(BaseModel):
+    finding_id: UUID
+    integration_id: UUID
+    before: RecoveryABSSettings | RecoveryQbitSettings
+    after: RecoveryABSSettings | RecoveryQbitSettings
+    replace_credentials: bool
+
+
+class ConnectionReconciliationView(ReconciliationView):
+    items: list[ConnectionRepairItemView]
+
+
+class ConnectionReconciliationRequest(BaseModel):
+    model_config = {"extra": "forbid"}
+    scan_id: UUID
+    changes: list[ConnectionChoice] = Field(min_length=1, max_length=10)
+
+
+def connection_reconciliation_view(operation):
+    return ConnectionReconciliationView(
+        id=operation.id,
+        scan_id=operation.payload["command"]["scan_id"],
+        status=operation.status,
+        message=operation.message,
+        created_at=operation.created_at,
+        revision=operation.payload["revision"],
+        expires_at=operation.payload["expires_at"],
+        items=[ConnectionRepairItemView(**item) for item in operation.payload["items"]],
+        applied_at=operation.payload.get("applied_at"),
+        results=operation.payload.get("results", []),
+    )
+
+
+@router.post(
+    "/connection-reconciliations", response_model=ConnectionReconciliationView, status_code=201
+)
+async def prepare_connection_reconciliation(
+    body: ConnectionReconciliationRequest,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_connections import prepare
+
+    operation = await prepare(
+        db, await checkpoint_for(db, admin), admin.id, body.scan_id, body.changes, idempotency_key
+    )
+    await db.commit()
+    return connection_reconciliation_view(operation)
+
+
+@router.get("/connection-reconciliations/{identifier}", response_model=ConnectionReconciliationView)
+async def get_connection_reconciliation(identifier: UUID, admin: Admin, db: Database):
+    from app.domain.recovery_connections import KIND
+    from app.domain.recovery_reconciliation import load
+
+    return connection_reconciliation_view(
+        await load(db, identifier, await checkpoint_for(db, admin), admin.id, kind=KIND)
+    )
+
+
+@router.post(
+    "/connection-reconciliations/{identifier}/accept",
+    response_model=ConnectionReconciliationView,
+    status_code=202,
+)
+async def accept_connection_reconciliation(
+    identifier: UUID,
+    body: ReconciliationAcceptance,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_connections import KIND
+    from app.domain.recovery_reconciliation import accept
+
+    operation = await accept(
+        db,
+        await checkpoint_for(db, admin),
+        admin.id,
+        identifier,
+        body.revision,
+        idempotency_key,
+        kind=KIND,
+    )
+    await db.commit()
+    return connection_reconciliation_view(operation)

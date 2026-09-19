@@ -27,6 +27,7 @@ RECOVERY_TASKS = {
     "recovery.outbound",
     "recovery.commands",
     "recovery.access",
+    "recovery.connections",
 }
 
 # One statement seals both the high-water mark and exact subject membership.
