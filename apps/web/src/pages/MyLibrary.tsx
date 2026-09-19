@@ -5,6 +5,7 @@ import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Empty, Loading, Notice } from "../components";
 import IdentityHistory from "./IdentityHistory";
+import CollectionContents from "./CollectionContents";
 
 type Asset = components["schemas"]["AssetView"];
 export default function MyLibrary({ admin }: { admin: boolean }) {
@@ -75,6 +76,7 @@ export function LibraryAssets({
 }) {
   const [offset, setOffset] = useState(0);
   const [matching, setMatching] = useState<Asset | null>(null);
+  const [collection, setCollection] = useState<Asset | null>(null);
   const assets = useQuery({
     queryKey: ["assets", workId, libraryId, review, offset],
     queryFn: async () =>
@@ -98,6 +100,12 @@ export function LibraryAssets({
       <Notice error={assets.error} />
       {matching && (
         <MatchForm asset={matching} close={() => setMatching(null)} />
+      )}
+      {collection && (
+        <CollectionContents
+          asset={collection}
+          close={() => setCollection(null)}
+        />
       )}
       {assets.isPending ? (
         <Loading />
@@ -128,9 +136,21 @@ export function LibraryAssets({
                 <p className="muted">
                   {asset.library_name} ·{" "}
                   {asset.full_content
-                    ? "Full book"
+                    ? asset.collection
+                      ? "In collection · Verified complete books"
+                      : "Full book"
                     : "Supplementary or needs verification"}
                 </p>
+                {asset.collection && (
+                  <ul aria-label="Collection contents">
+                    {asset.contents?.map((book) => (
+                      <li key={book.work_id}>
+                        <Link to={`/books/${book.work_id}`}>{book.title}</Link>
+                        {!book.verified && " · Needs verification"}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
               <div className="activity-meta">
                 <span className="status">
@@ -153,7 +173,22 @@ export function LibraryAssets({
                     Open in Audiobookshelf
                   </a>
                   {admin && (
-                    <button onClick={() => setMatching(asset)}>
+                    <button
+                      onClick={() => {
+                        setMatching(null);
+                        setCollection(asset);
+                      }}
+                    >
+                      Review collection contents
+                    </button>
+                  )}
+                  {admin && (
+                    <button
+                      onClick={() => {
+                        setCollection(null);
+                        setMatching(asset);
+                      }}
+                    >
                       Correct match
                     </button>
                   )}

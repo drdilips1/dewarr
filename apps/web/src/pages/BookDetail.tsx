@@ -124,6 +124,11 @@ function BookDetailContent({
               </span>
             ) : null}
           </div>
+          {work.availability.in_collection && (
+            <p className="status">
+              In collection · Open the shared library item below
+            </p>
+          )}
           {work.availability.stale && (
             <p className="muted">
               Last known availability. The library needs a fresh sync.

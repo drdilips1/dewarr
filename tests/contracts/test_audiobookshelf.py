@@ -197,7 +197,13 @@ async def test_inventory_repeated_sync_versions_and_companions(client, admin, da
     await sync(client, connection, fixture, "first-inventory")
     works = (await client.get("/api/catalog/works")).json()["items"]
     assert len(works) == 1
-    assert works[0]["availability"] == {"owned": True, "ebook": True, "audio": True, "stale": False}
+    assert works[0]["availability"] == {
+        "owned": True,
+        "ebook": True,
+        "audio": True,
+        "stale": False,
+        "in_collection": False,
+    }
     assert works[0]["publication_year"] is None  # Recording year is not the original work year.
     assets = (await client.get("/api/library/assets")).json()
     assert assets["total"] == 5

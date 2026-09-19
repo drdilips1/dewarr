@@ -3954,3 +3954,122 @@ test("AudiobookBay settings, rich postings and metadata inspection use the share
   );
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
 });
+
+test("reviewed omnibus contents retain one backend item and reversible ownership", async ({
+  page,
+}, testInfo) => {
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Sign out", exact: true }),
+  ).toBeVisible();
+  const session = await (await page.request.get("/api/auth/me")).json();
+  const headers = {
+    Origin: "http://127.0.0.1:8001",
+    "X-CSRF-Token": session.csrf_token,
+  };
+  const titles = ["Omnibus Review Alpha", "Omnibus Review Beta"];
+  const ids: string[] = [];
+  for (const title of titles) {
+    const created = await page.request.post("/api/catalog/works", {
+      headers,
+      data: { title, authors: ["Collection Writer"] },
+    });
+    expect(created.status()).toBe(201);
+    ids.push((await created.json()).id);
+  }
+  const prior = await (await page.request.get("/api/library/assets")).json();
+  await page.getByRole("link", { name: "My Library", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Review collection contents", exact: true })
+    .first()
+    .click();
+  const confirm = page.getByRole("button", {
+    name: "Confirm collection contents",
+    exact: true,
+  });
+  await expect(confirm).toBeDisabled();
+  await page.getByLabel("Find a book in your catalog").fill("Omnibus Review");
+  for (const title of titles)
+    await page
+      .getByRole("checkbox", {
+        name: `${title} — Collection Writer`,
+        exact: true,
+      })
+      .check();
+  await expect(confirm).toBeDisabled();
+  await page
+    .getByRole("checkbox", {
+      name: /I checked this item and each selected book is complete/,
+    })
+    .check();
+  await confirm.click();
+  await expect(
+    page.getByRole("list", { name: "Collection contents", exact: true }),
+  ).toContainText(titles[0]);
+  await page.reload();
+  const contents = page.getByRole("list", {
+    name: "Collection contents",
+    exact: true,
+  });
+  await expect(contents).toContainText(titles[1]);
+  const after = await (await page.request.get("/api/library/assets")).json();
+  expect(after.total).toBe(prior.total);
+  const collection = after.items.find(
+    (item: { collection: boolean }) => item.collection,
+  );
+  expect(collection.version_id).toBeNull();
+  expect(collection.open_url).toBe(prior.items[0].open_url);
+  await contents.getByRole("link", { name: titles[1], exact: true }).click();
+  await expect(
+    page.getByText("In collection · Open the shared library item below", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Open in Audiobookshelf", exact: true }),
+  ).toHaveCount(1);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page
+    .getByRole("button", { name: "Review collection contents", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Selected books (2)", exact: true }),
+  ).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("collection-review-mobile.png"),
+    fullPage: true,
+  });
+  const reviewForm = page.getByRole("form", {
+    name: "Collection contents review",
+  });
+  await reviewForm
+    .getByText("Match correction history", { exact: true })
+    .click();
+  await reviewForm
+    .getByRole("button", { name: "Undo correction", exact: true })
+    .first()
+    .click();
+  await expect(reviewForm).toBeHidden();
+  const restored = await (await page.request.get("/api/library/assets")).json();
+  expect(restored.total).toBe(prior.total);
+  expect(
+    restored.items.some((item: { collection: boolean }) => item.collection),
+  ).toBe(false);
+  for (const id of ids) {
+    const work = await (
+      await page.request.get(`/api/catalog/works/${id}`)
+    ).json();
+    expect(work.availability.owned).toBe(false);
+  }
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+});

@@ -16,6 +16,8 @@ The current planning handoff is refreshed against `2dcc455`. Follow the roadmap'
 
 Native AudiobookBay now has [source search, metadata inspection and shared acquisition](docs/AUDIOBOOKBAY-INTEGRATION.md), including an explicit automatic-selection option for unknown seed counts. Actual public-host/qBittorrent certification and the full S06 stage remain open.
 
+Administrators can now [verify complete books in one library collection](docs/COLLECTION-CONTENTS.md). One observed ABS item supplies truthful shared ownership, with correction history and review when file evidence changes. Automatic omnibus acquisition/import remains pending.
+
 Exact audiobook requests can now use [corroborated recording selection](docs/EXACT-VERSION-ACQUISITION.md): an explicit matching ISBN and full narrator credits qualify the candidate, frozen catalog evidence protects dispatch, and downloaded-file inspection still decides whether it matches. Generic constrained packs and broader version reconciliation remain open.
 
 Latest manual-pack increment: [Review additional pack books](docs/MANUAL-PACKS.md) prepares finite reviewed children from a saved manual selection and hands them to the shared-download action. Preparation is atomic and does not start the download. Broader version/omnibus, source-surface and actual-service qualification remain open; exact verification is recorded in implementation status.

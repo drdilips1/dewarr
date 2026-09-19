@@ -948,6 +948,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/library/assets/{asset_id}/contents": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Review Contents */
+    put: operations["review_contents_api_library_assets__asset_id__contents_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/metadata/account": {
     parameters: {
       query?: never;
@@ -2711,6 +2728,13 @@ export interface components {
       open_url: string;
       /** Match Revision */
       match_revision?: string | null;
+      /**
+       * Collection
+       * @default false
+       */
+      collection: boolean;
+      /** Contents */
+      contents?: components["schemas"]["ContainedBookView"][];
     };
     /** AttemptPage */
     AttemptPage: {
@@ -2889,6 +2913,11 @@ export interface components {
        * @default false
        */
       stale: boolean;
+      /**
+       * In Collection
+       * @default false
+       */
+      in_collection: boolean;
     };
     /** BatchInput */
     BatchInput: {
@@ -3235,6 +3264,30 @@ export interface components {
       last_error: string | null;
       /** Last Success At */
       last_success_at: string | null;
+    };
+    /** ContainedBookView */
+    ContainedBookView: {
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /** Title */
+      title: string;
+      /** Verified */
+      verified: boolean;
+    };
+    /** ContentsInput */
+    ContentsInput: {
+      /** Work Ids */
+      work_ids: string[];
+      /** Expected Revision */
+      expected_revision: string;
+      /**
+       * Complete Books Confirmed
+       * @constant
+       */
+      complete_books_confirmed: true;
     };
     /** CoverExportView */
     CoverExportView: {
@@ -8795,6 +8848,39 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["app__api__library__MatchInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  review_contents_api_library_assets__asset_id__contents_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        asset_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ContentsInput"];
       };
     };
     responses: {

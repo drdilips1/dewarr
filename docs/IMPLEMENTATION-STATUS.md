@@ -1,10 +1,12 @@
 # Implementation status and evidence
 
-Latest checkpoint: [Exact version acquisition](EXACT-VERSION-ACQUISITION.md) enables automatic single-book recording candidates with corroborated ISBN/narrator evidence and freezes catalog identity through dispatch. The final checkpoint records exact verification. Native ABB and reviewed-pack workflows retain their prior bounded evidence; full stage acceptance remains open.
+Latest checkpoint: [Verified collection contents](COLLECTION-CONTENTS.md) adds reviewed complete-work coverage for one observed ABS item, shared ownership, sticky evidence invalidation and reversible corrections. Automatic omnibus acquisition/import and full stage acceptance remain open. The final checkpoint records exact verification.
 
 Updated September 18, 2026. Objective remains **implement the full PRD end to end**, including the planned later capabilities. This is an implementation checkpoint, not a completion declaration.
 
 ## Current code
+
+- [Verified collection contents](COLLECTION-CONTENTS.md) supplies an administrator review flow for a single observed omnibus item. Confirmed children share its backend link without fabricated files or editions. Changed evidence removes ownership and pauses compatible acquisition pending review; library grants and correction history remain enforced.
 
 - [Exact version acquisition](EXACT-VERSION-ACQUISITION.md) permits ISBN-corroborated single-book recordings with matching complete narrator credits. Frozen version revisions and pending metadata conflicts fence preparation/dispatch; actual files still require independent version matching and backend confirmation. Generic exact-version packs and broader edition equivalence remain pending.
 
@@ -555,3 +557,22 @@ Verification:
 Deployment: a private database/key backup was created and its dump catalog verified (`exact-recording-backup-path.txt`). With no active development jobs, the verified API and worker were restarted together. Readiness returned **200**, one fresh worker was observed, schema remains `0037_download_joins`, and dispatch remains **disabled** (`exact-recording-runtime.json`). The new acquisition workflow uses synthetic external services and actual generated files; it does not certify a live tracker, qBittorrent instance or external library.
 
 Remaining work includes per-book exact recording/edition evidence for generic collections, cross-provider edition equivalence, mixed routes/media and omnibus containment, reviewed policy revisions, full source and external-list certification, discovery/curation, production and S10. The native MAM explicit-ISBN path advances AT-12 and version-specific acquisition; it does not complete the full source/version stage or the PRD.
+
+## Reviewed collection containment checkpoint · September 18, 2026
+
+This increment builds on `f4aff5a`. [Verified collection contents](COLLECTION-CONTENTS.md) adds a complete administrator review flow for already observed inseparable ebook/audio collections. Selected complete works share one real backend item, become owned through existing library grants and link to that same item. The catalog/library UI labels collection ownership and lists verified contents. No child file, recording or edition is manufactured; standalone, exact-version and uncorroborated language/narrator constraints remain independent.
+
+The proof freezes bibliographic and per-file identity evidence. Unchanged inventory preserves it; changed evidence invalidates coverage until explicit review. Compatible requests wait for that review rather than immediately downloading a replacement. Ordinary matching replaces collection coverage, and the correction journal can restore the previous decision only while its evidence remains current. Integration/asset locks and expected revisions protect concurrent review and inventory publication. Migration `0038_asset_containment` adds the nullable proof, with rollback guards for both live proofs and retained correction history.
+
+Verification:
+
+- Initial containment and correction tests: **17 passed in 6.02 s** (`.local/evidence/containment-initial.log`). They verify ebook/audio coverage, stable item/version counts, unchanged resync, metadata/file/missing invalidation, private grants, ordinary match replacement and undo.
+- Full backend baseline before the final replacement-download guard and SQL-null/migration refinements: **1,541 passed, 1 failed in 481.41 s** (`containment-full.log`). The failure was an exact response assertion missing the new additive `in_collection: false` field. Its expected contract was updated; the full suite was not repeated after the final refinements.
+- Final affected ABS inventory, containment, identity/catalog, work merging, requests, automatic acquisition, standing-list lifecycle, fulfillment, shared import and migration regression: **170 passed in 139.57 s** (`containment-final-regression.log`). This includes the corrected response assertion; concurrent reviews; waiting for invalidated coverage without claiming ownership; preserving standalone requests; and preventing stale undo.
+- Migration verification downgrades/upgrades ordinary populated assets without losing their identity, confirms nullable proofs use SQL null, rejects rollback with live containment and separately rejects rollback when only correction history remains. The schema returns to `0038_asset_containment`.
+- Browser verification: **2 journeys passed in 1.6 min** (`containment-browser-verified.log`), covering existing setup/acquisition and the new real-API collection review, acknowledgement, reload, shared backend link, mobile layout and undo. Initial attempts exposed an ambiguous history locator and a test reading before undo completion; the test now scopes the review form and awaits its successful close. The mobile screenshot was inspected. A subsequent UI-only handler refinement ensures ordinary matching and collection review cannot both remain open; the production build passes after that change.
+- Backend lint/format, frontend production build/format, reproducible OpenAPI/client generation, schema alignment and diff checks pass. The wheel matches all **191 backend Python modules**; **179** changed-document local link targets exist.
+
+Deployment: a private database/key backup was created and its dump catalog verified (`containment-backup-path.txt`). With no active development jobs, the verified old API/worker were stopped, migration `0038_asset_containment` applied and both services restarted together. Readiness returned **200**, one fresh worker was observed, the contents API is exposed and dispatch remains **disabled** (`containment-runtime.json`). This workflow uses synthetic ABS observations with file evidence; it is not certification of actual omnibus content or a live backend integration.
+
+This checkpoint advances reviewed FR-26 containment for an existing backend item; automatic omnibus acquisition/import, per-child version evidence, mixed routes/media, policy revisions, broader source/list qualification, discovery, production and S10 remain required. It does not close a parent stage or the full PRD.

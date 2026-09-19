@@ -3117,6 +3117,52 @@
         }
       }
     },
+    "/api/library/assets/{asset_id}/contents": {
+      "put": {
+        "tags": [
+          "library"
+        ],
+        "summary": "Review Contents",
+        "operationId": "review_contents_api_library_assets__asset_id__contents_put",
+        "parameters": [
+          {
+            "name": "asset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Asset Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContentsInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/metadata/account": {
       "get": {
         "tags": [
@@ -8621,6 +8667,18 @@
               }
             ],
             "title": "Match Revision"
+          },
+          "collection": {
+            "type": "boolean",
+            "title": "Collection",
+            "default": false
+          },
+          "contents": {
+            "items": {
+              "$ref": "#/components/schemas/ContainedBookView"
+            },
+            "type": "array",
+            "title": "Contents"
           }
         },
         "type": "object",
@@ -9071,6 +9129,11 @@
           "stale": {
             "type": "boolean",
             "title": "Stale",
+            "default": false
+          },
+          "in_collection": {
+            "type": "boolean",
+            "title": "In Collection",
             "default": false
           }
         },
@@ -10013,6 +10076,61 @@
           "last_success_at"
         ],
         "title": "ConnectionView"
+      },
+      "ContainedBookView": {
+        "properties": {
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "verified": {
+            "type": "boolean",
+            "title": "Verified"
+          }
+        },
+        "type": "object",
+        "required": [
+          "work_id",
+          "title",
+          "verified"
+        ],
+        "title": "ContainedBookView"
+      },
+      "ContentsInput": {
+        "properties": {
+          "work_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 2,
+            "title": "Work Ids"
+          },
+          "expected_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Expected Revision"
+          },
+          "complete_books_confirmed": {
+            "type": "boolean",
+            "const": true,
+            "title": "Complete Books Confirmed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "work_ids",
+          "expected_revision",
+          "complete_books_confirmed"
+        ],
+        "title": "ContentsInput"
       },
       "CoverExportView": {
         "properties": {

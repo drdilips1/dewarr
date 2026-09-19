@@ -68,6 +68,7 @@ export function BookCard({ work }: { work: Work }) {
           </span>
         ) : null}
         {work.availability.stale ? <span>Last known availability</span> : null}
+        {work.availability.in_collection ? <span>In collection</span> : null}
       </div>
     </Link>
   );

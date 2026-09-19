@@ -154,8 +154,8 @@ async def apply_item(db, library, item, generation, integration_id, seen):
             db.add(link)
         # Serialize same-title resolution across independent backend connections.
         await transaction_lock(db, "identity:" + normalized(item.title))
-        work = await resolve_abs_work(db, item, link)
-        if version_changed(item, link, medium):
+        work = None if asset and asset.containment else await resolve_abs_work(db, item, link)
+        if not (asset and asset.containment) and version_changed(item, link, medium):
             work = None
             link.match_status = "needs-review"
         if not asset:
@@ -218,6 +218,10 @@ async def apply_item(db, library, item, generation, integration_id, seen):
         # Assign after awaited queries: autoflush must not persist only the primary
         # before additional verified formats are appended to an ordinary JSON list.
         asset.files = observed_files
+        if asset.containment:
+            from app.domain.containment import reconcile
+
+            await reconcile(db, asset, link, item)
 
 
 async def publish_library(

@@ -13,6 +13,7 @@ class Availability(BaseModel):
     ebook: bool = False
     audio: bool = False
     stale: bool = False
+    in_collection: bool = False
 
 
 async def availability_for(
@@ -29,7 +30,7 @@ async def availability_for(
     for origin, root in roots.items():
         by_root.setdefault(root, []).append(origin)
     query = (
-        select(mapping.c.work_id, LibraryAsset.medium, LibraryAsset.state)
+        select(mapping.c.work_id, LibraryAsset.medium, LibraryAsset.state, LibraryAsset.containment)
         .select_from(AssetContains)
         .join(mapping, mapping.c.origin_id == AssetContains.work_id)
         .join(LibraryAsset, AssetContains.asset_id == LibraryAsset.id)
@@ -48,11 +49,12 @@ async def availability_for(
         query = query.join(LibraryGrant, LibraryGrant.library_id == LibraryAsset.library_id).where(
             LibraryGrant.user_id == user.id
         )
-    for work_id, medium, state in (await db.execute(query)).all():
+    for work_id, medium, state, containment in (await db.execute(query)).all():
         for origin in by_root[work_id]:
             availability = result[origin]
             availability.owned = True
             availability.ebook |= medium == "ebook"
             availability.audio |= medium == "audio"
             availability.stale |= state == "stale"
+            availability.in_collection |= containment is not None
     return result

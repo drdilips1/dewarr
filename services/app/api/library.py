@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, Query
@@ -15,6 +16,7 @@ from app.db.models import (
     LibraryGrant,
     ProviderObject,
     User,
+    Work,
 )
 from app.domain.corrections import asset_state, correct_asset, revision
 from app.domain.visibility import visible_library
@@ -52,6 +54,14 @@ class AssetView(BaseModel):
     last_seen_at: datetime | None
     open_url: str
     match_revision: str | None = None
+    collection: bool = False
+    contents: list["ContainedBookView"] = Field(default_factory=list)
+
+
+class ContainedBookView(BaseModel):
+    work_id: UUID
+    title: str
+    verified: bool
 
 
 class AssetPage(BaseModel):
@@ -64,6 +74,12 @@ class AssetPage(BaseModel):
 class MatchInput(BaseModel):
     work_id: UUID | None
     expected_revision: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
+
+
+class ContentsInput(BaseModel):
+    work_ids: list[UUID] = Field(min_length=2, max_length=100)
+    expected_revision: str = Field(pattern=r"^[a-f0-9]{64}$")
+    complete_books_confirmed: Literal[True]
 
 
 @router.get("/libraries", response_model=list[LibraryView])
@@ -195,6 +211,16 @@ async def assets(
         else []
     )
     by_key = {(link.provider, link.kind, link.external_id): link for link in links}
+    titles = dict(
+        (
+            await db.execute(select(Work.id, Work.title).where(Work.id.in_(set(roots.values()))))
+        ).all()
+    )
+    contents = {}
+    for row in coverage:
+        by_work = contents.setdefault(row.asset_id, {})
+        root = roots[row.work_id]
+        by_work[root] = by_work.get(root, False) or row.verified
     views = []
     for asset, library, connection in rows:
         link = by_key.get((f"abs:{connection.id}", f"item:{asset.medium}", asset.external_id))
@@ -223,6 +249,13 @@ async def assets(
                     )
                 ),
                 match_revision=match_revision,
+                collection=asset.containment is not None,
+                contents=[
+                    ContainedBookView(work_id=root, title=titles[root], verified=verified)
+                    for root, verified in sorted(contents.get(asset.id, {}).items())
+                ]
+                if asset.containment
+                else [],
                 version_id=asset.version_id,
                 narrators=asset.metadata_snapshot.get("narrators", [])
                 if asset.medium == "audio"
@@ -240,4 +273,12 @@ async def assets(
 @router.post("/assets/{asset_id}/match", status_code=204)
 async def match_asset(asset_id: UUID, body: MatchInput, admin: Admin, db: Database):
     await correct_asset(db, admin.id, asset_id, body.work_id, body.expected_revision)
+    await db.commit()
+
+
+@router.put("/assets/{asset_id}/contents", status_code=204)
+async def review_contents(asset_id: UUID, body: ContentsInput, admin: Admin, db: Database):
+    from app.domain.containment import review
+
+    await review(db, admin.id, asset_id, body.work_ids, body.expected_revision)
     await db.commit()

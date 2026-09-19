@@ -131,6 +131,8 @@ async def asset_state(db, asset, link, *, coverage=None):
         "full_content": asset.full_content,
         "accepted_evidence": evidence(link.snapshot),
         "observed_evidence": evidence(asset.metadata_snapshot),
+        "observed_files": sorted(asset.files, key=lambda value: value["path"]),
+        "containment": asset.containment,
         "coverage": [{"work_id": str(row.work_id), "verified": row.verified} for row in coverage],
     }
 
@@ -175,6 +177,7 @@ async def correct_asset(db, actor_id, asset_id, work_id, expected_revision=None)
             ):
                 link.version_id = prior.id
                 break
+    asset.containment = None
     link.work_id, link.manual_lock = work_id, True
     await db.execute(delete(AssetContains).where(AssetContains.asset_id == asset.id))
     if work:
@@ -356,7 +359,12 @@ async def change_state(db, change, *, lock=False):
         return await merge_change_state(db, change, lock=lock)
     if change.kind == "asset_match":
         asset, link = await asset_target(db, change.entity_id, lock=lock)
-        return await asset_state(db, asset, link), (asset, link)
+        current = await asset_state(db, asset, link)
+        # Older ordinary-match journal records predate collection evidence.
+        for key in ("observed_files", "containment"):
+            if key not in change.after:
+                current.pop(key)
+        return current, (asset, link)
     if change.kind == "source_detach":
         work, source = await source_target(db, change.entity_id, lock=lock)
         return source_state(work, source), (work, source)
@@ -394,6 +402,7 @@ async def undo_change(db, actor_id, change_id):
         await restore_merge(db, change)
     elif change.kind == "asset_match":
         asset, link = targets
+        asset.containment = before.get("containment")
         restored_work = (
             await db.get(Work, uuid_or_none(before["work_id"])) if before["work_id"] else None
         )

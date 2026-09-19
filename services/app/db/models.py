@@ -266,6 +266,7 @@ class LibraryAsset(Identity, Base):
     metadata_snapshot: Mapped[dict[str, Any]] = mapped_column(
         JSONB, default=dict, server_default="{}"
     )
+    containment: Mapped[dict[str, Any] | None] = mapped_column(JSONB(none_as_null=True))
 
 
 class AssetContains(Base):

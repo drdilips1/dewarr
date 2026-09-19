@@ -16,7 +16,7 @@ from pydantic import (
     model_serializer,
     model_validator,
 )
-from sqlalchemy import func, select
+from sqlalchemy import and_, func, or_, select
 
 from app.config import get_settings
 from app.db.models import (
@@ -359,8 +359,10 @@ async def inventory_candidates(db, user, work_id):
             .join(AssetContains)
             .where(
                 AssetContains.work_id.in_(family_ids(work_id)),
-                AssetContains.verified.is_(True),
-                LibraryAsset.full_content.is_(True),
+                or_(
+                    and_(AssetContains.verified.is_(True), LibraryAsset.full_content.is_(True)),
+                    LibraryAsset.containment["valid"].as_boolean().is_(False),
+                ),
                 Library.accessible.is_(True),
                 Integration.enabled.is_(True),
                 visible_library(user),
@@ -383,7 +385,7 @@ def asset_satisfies(asset, version, count, rule):
         rule.get("required_narrators", []), version.narrators if version else []
     ):
         return False
-    return not rule["standalone"] or count == 1
+    return not rule["standalone"] or (count == 1 and not asset.containment)
 
 
 async def assess(db, user, work_id, spec):
@@ -395,7 +397,7 @@ async def assess(db, user, work_id, spec):
             (asset, version)
             for medium in media
             for asset, version, count in rows
-            if asset_satisfies(asset, version, count, spec.rule(medium))
+            if asset.full_content and asset_satisfies(asset, version, count, spec.rule(medium))
         ]
         present = next((asset for asset, _ in matched if asset.state == "present"), None)
         if present:
@@ -406,6 +408,22 @@ async def assess(db, user, work_id, spec):
                     "message": "Already available in your library",
                     "asset_id": present.id,
                     "medium": present.medium,
+                }
+            )
+        elif any(
+            asset.containment
+            and not asset.full_content
+            and asset_satisfies(asset, version, count, spec.rule(medium))
+            for medium in media
+            for asset, version, count in rows
+        ):
+            outcomes.append(
+                {
+                    "slot": slot,
+                    "state": "awaiting-inventory",
+                    "message": "Review changed collection contents before acquiring another copy",
+                    "asset_id": None,
+                    "medium": media[0],
                 }
             )
         elif any(
