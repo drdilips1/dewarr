@@ -94,6 +94,28 @@ export default function Recovery() {
                 </div>
               ))}
             </div>
+            <section aria-labelledby="queue-boundary-title">
+              <h2 id="queue-boundary-title">Historical queue protection</h2>
+              {review.data.queue_fence ? (
+                <p>
+                  {review.data.queue_fence.historical_jobs} saved jobs are
+                  fenced. Restored commands, download attempts, import records
+                  and books also retain their recovery boundary. Retrying an old
+                  job or giving it a new queue ID does not authorize it to run.
+                </p>
+              ) : (
+                <p>
+                  No sealed queue boundary is recorded. Keep automation paused;
+                  the restored database needs the supported offline upgrade
+                  before a future resume can be reviewed.
+                </p>
+              )}
+              <p>
+                Protection remains after recovery. Resuming current work
+                requires a separate review; this screen does not enable
+                automation.
+              </p>
+            </section>
             <RecoveryChecks
               key={review.data.latest_scan?.id ?? "none"}
               review={review.data.latest_reconciliation ?? undefined}

@@ -69,6 +69,12 @@ with psycopg.connect(url.replace("postgresql+psycopg://", "postgresql://")) as c
             connection.execute(
                 "UPDATE list_subscriptions SET enabled=true, next_sync_at=NULL WHERE id=%s", (key,)
             )
+        from app.recovery_queue import SEAL_SQL
+
+        connection.execute(
+            SEAL_SQL.replace("%", "%%").replace(":checkpoint_id", "%(checkpoint_id)s"),
+            {"checkpoint_id": checkpoint_id},
+        )
     elif sys.argv[1:] == ["outbound"]:
         saved = connection.execute(
             "SELECT l.id, l.owner_id FROM book_lists l JOIN restore_checkpoints r "

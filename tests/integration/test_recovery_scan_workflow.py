@@ -330,5 +330,5 @@ async def test_observation_migration_roundtrip_and_history_preservation(client, 
     assert result["items"][-1]["state"] == "needs-review"
     async with database() as db:
         assert await db.scalar(text("SELECT version_num FROM alembic_version")) == (
-            "0042_recovery_scans"
+            "0043_recovery_queue_fences"
         )

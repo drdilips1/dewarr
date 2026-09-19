@@ -7,13 +7,26 @@ from sqlalchemy import func, select
 
 from app.api.dependencies import Admin, Database
 from app.config import get_settings
-from app.db.models import DownloadAttempt, ImportEntry, Operation, RecoveryFinding, RecoveryScan
+from app.db.models import (
+    DownloadAttempt,
+    ImportEntry,
+    Operation,
+    RecoveryFinding,
+    RecoveryQueueFence,
+    RecoveryScan,
+)
 from app.recovery import active_restore, restore_pending
 
 router = APIRouter(prefix="/recovery", tags=["recovery"])
 
 
+class QueueFenceView(BaseModel):
+    historical_jobs: int
+    subjects: dict[str, int]
+
+
 class RecoveryView(BaseModel):
+    queue_fence: QueueFenceView | None = None
     paused: bool
     backup_id: UUID | None
     restored_at: datetime | None
@@ -147,7 +160,11 @@ async def review(admin: Admin, db: Database):
         if checkpoint
         else None
     )
+    fence = await db.get(RecoveryQueueFence, checkpoint.id) if checkpoint else None
     return RecoveryView(
+        queue_fence=QueueFenceView(historical_jobs=fence.job_count, subjects=fence.subject_counts)
+        if fence
+        else None,
         latest_command_reconciliation=command_reconciliation_view(command_review)
         if command_review
         else None,

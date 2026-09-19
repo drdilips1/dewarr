@@ -8,18 +8,34 @@ from app.config import get_settings
 tasks = procrastinate.Blueprint()
 
 
+class WorkerApp(procrastinate.App):
+    def _register_builtin_tasks(self) -> None:
+        from procrastinate import builtin_tasks
+
+        # The pinned library mutates the shared builtin blueprint's namespace on
+        # each App construction. Bind a fresh task, retaining both supported names.
+        task = self.task(
+            name="builtin:procrastinate.builtin_tasks.remove_old_jobs",
+            pass_context=True,
+            queue="builtin",
+        )(builtin_tasks.remove_old_jobs.func)
+        self.add_task_alias(task=task, alias="procrastinate.builtin_tasks.remove_old_jobs")
+
+
 @lru_cache
 def get_queue() -> procrastinate.App:
     # Register task definitions before building the queue's task registry.
     from app.jobs import tasks as _tasks  # noqa: F401
+    from app.recovery_queue import guard_job
 
-    queue = procrastinate.App(
+    queue = WorkerApp(
+        worker_defaults={"worker_middleware": [guard_job]},
         connector=procrastinate.PsycopgConnector(
             conninfo=get_settings().psycopg_url,
             min_size=1,
             max_size=4,
             kwargs={"options": "-csearch_path=public,book_queue"},
-        )
+        ),
     )
     queue.add_tasks_from(tasks, namespace="")
     from app.jobs.recovery_tasks import tasks as recovery_tasks

@@ -20463,6 +20463,27 @@
         ],
         "title": "PublicationReconciliationView"
       },
+      "QueueFenceView": {
+        "properties": {
+          "historical_jobs": {
+            "type": "integer",
+            "title": "Historical Jobs"
+          },
+          "subjects": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Subjects"
+          }
+        },
+        "type": "object",
+        "required": [
+          "historical_jobs",
+          "subjects"
+        ],
+        "title": "QueueFenceView"
+      },
       "RankedReleaseView": {
         "properties": {
           "id": {
@@ -20737,6 +20758,16 @@
       },
       "RecoveryView": {
         "properties": {
+          "queue_fence": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/QueueFenceView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "paused": {
             "type": "boolean",
             "title": "Paused"

@@ -63,6 +63,28 @@ class RestoreCheckpoint(Identity, Base):
     snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB)
 
 
+class RecoveryQueueFence(Base):
+    __tablename__ = "recovery_queue_fences"
+    checkpoint_id: Mapped[UUID] = mapped_column(
+        ForeignKey("restore_checkpoints.id", ondelete="CASCADE"), primary_key=True
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    job_id_through: Mapped[int] = mapped_column(BigInteger)
+    job_count: Mapped[int] = mapped_column(BigInteger)
+    subject_counts: Mapped[dict[str, Any]] = mapped_column(JSONB)
+
+
+class RecoveryQueueSubject(Base):
+    __tablename__ = "recovery_queue_subjects"
+    __table_args__ = (Index("ix_recovery_queue_subject_lookup", "kind", "subject_id"),)
+    checkpoint_id: Mapped[UUID] = mapped_column(
+        ForeignKey("restore_checkpoints.id", ondelete="CASCADE"), primary_key=True
+    )
+    kind: Mapped[str] = mapped_column(String(30), primary_key=True)
+    # Intentionally no subject FK: deleting ordinary history must not erase this boundary.
+    subject_id: Mapped[UUID] = mapped_column(primary_key=True)
+
+
 class RateLimit(Base):
     __tablename__ = "rate_limits"
     key: Mapped[str] = mapped_column(String(100), primary_key=True)

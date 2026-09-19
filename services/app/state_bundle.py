@@ -24,7 +24,7 @@ from app.config import Settings, get_settings
 from app.db.models import Base
 from app.recovery import MAINTENANCE_LOCK
 
-SCHEMA = "0042_recovery_scans"
+SCHEMA = "0043_recovery_queue_fences"
 CONFIG_FIELDS = {
     "public_url",
     "cookie_secure",
@@ -341,11 +341,12 @@ def restore(
         with connection.transaction():
             connection.execute("DELETE FROM login_sessions")
             connection.execute("UPDATE restore_checkpoints SET active = false WHERE active")
+            checkpoint_id = uuid4()
             connection.execute(
                 "INSERT INTO restore_checkpoints(id, operator_id, backup_id, active, snapshot) "
                 "VALUES (%s, %s, %s, true, %s)",
                 (
-                    uuid4(),
+                    checkpoint_id,
                     actor[0],
                     manifest.backup_id,
                     Jsonb(
@@ -360,6 +361,13 @@ def restore(
                     ),
                 ),
             )
+            from app.recovery_queue import SEAL_SQL
+
+            connection.execute(
+                SEAL_SQL.replace("%", "%%").replace(":checkpoint_id", "%(checkpoint_id)s"),
+                {"checkpoint_id": checkpoint_id},
+            )
+
         private_write(output / "app_key", key + b"\n")
         config = json.loads((bundle / "settings.json").read_bytes())
         config.update(

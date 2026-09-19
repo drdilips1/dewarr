@@ -6879,6 +6879,15 @@ export interface components {
         [key: string]: unknown;
       }[];
     };
+    /** QueueFenceView */
+    QueueFenceView: {
+      /** Historical Jobs */
+      historical_jobs: number;
+      /** Subjects */
+      subjects: {
+        [key: string]: number;
+      };
+    };
     /** RankedReleaseView */
     RankedReleaseView: {
       /**
@@ -6996,6 +7005,7 @@ export interface components {
     };
     /** RecoveryView */
     RecoveryView: {
+      queue_fence?: components["schemas"]["QueueFenceView"] | null;
       /** Paused */
       paused: boolean;
       /** Backup Id */

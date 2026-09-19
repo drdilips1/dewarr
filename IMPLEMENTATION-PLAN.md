@@ -6,6 +6,8 @@ This plan implements [the PRD](PRD.md) using [the researched decisions](IMPLEMEN
 
 The [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md) provides a concise handoff across these documents, including the product boundary, P0/P1 decisions and milestone demonstrations.
 
+The latest S09-02 increment adds [durable restored-queue protection](docs/RECOVERY-QUEUE.md) on schema 0043. Preserve historical job and subject boundaries while implementing current-authority activation and controlled resume. This partial recovery result does not close S09 or replace any unmet S00–S10 gate; measured evidence belongs in implementation status.
+
 For the existing workspace, use its [remaining development batches](DEVELOPMENT-ROADMAP.md#9-remaining-development-batches-from-the-current-checkpoint) alongside section 16. These batches map outstanding work to the stable packages below; they do not add scope or supersede stage acceptance gates.
 
 The [stage closure plan](#17-stage-closure-and-implementation-packets) defines the stage obligations. Its checkpoint narratives and sections 7–17 retain historical implementation guidance; the [backend handoff](#18-current-development-handoff), including collection qualification, retains the remaining source, series and import obligations. Use these with the complete S00–S10 backlog and current implementation evidence; neither marks partially implemented stages complete.

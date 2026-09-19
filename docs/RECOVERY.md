@@ -44,7 +44,7 @@ uv run python -m app.state_bundle restore /private/backups/book-search-2026-09-1
   --output /private/recovery/book-search-rehearsal
 ```
 
-Both the database name and output directory must be new. The command never cleans, drops or overwrites an existing database. It sets a persistent database-level pause before importing the archive, verifies the restored schema/key, removes every old login session, and records an active restore checkpoint naming the operator. Queue rows, command receipts, workflow states and existing publication evidence remain intact for later reconciliation. The restored copy does not modify the source database.
+Both the database name and output directory must be new. The command never cleans, drops or overwrites an existing database. It sets a persistent database-level pause before importing the archive, verifies the restored schema/key, removes every old login session, and records an active restore checkpoint naming the operator. It atomically seals the [historical queue and record boundary](RECOVERY-QUEUE.md) with that checkpoint. Queue rows, command receipts, workflow states and existing publication evidence remain intact for later reconciliation. The restored copy does not modify the source database.
 
 The output directory contains `restore.env`, the key, the original manifest and reference copies of publication journals. These copied journals are **not** written over the live staging root. They may describe an earlier filesystem state and must be compared with current receipts and physical files.
 

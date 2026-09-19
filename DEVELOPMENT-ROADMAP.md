@@ -23,6 +23,8 @@ Read this guide first, then the PRD's [detailed behavior contracts](PRD.md#13-de
 
 The [stage closure plan](IMPLEMENTATION-PLAN.md#17-stage-closure-and-implementation-packets) lists obligations for every stage. The [backend handoff](IMPLEMENTATION-PLAN.md#18-current-development-handoff) retains shared-transfer, series, source and collection qualification work. Use section 9 for remaining workstreams and section 10 for the next implementation sequence. Earlier checkpoint descriptions are historical; they must not restart delivered subsets or remove unmet acceptance requirements.
 
+Current recovery handoff: [historical command retirement](docs/RECOVERY-COMMANDS.md) and [durable restored-queue protection](docs/RECOVERY-QUEUE.md) add bounded S09-02 safeguards. The latter requires schema 0043. Remaining development must supply current-authority activation, other approval-family checks, unresolved-effect handling and controlled resume, followed by populated restore qualification. Retain the full product scope above; these safeguards do not constitute a completed release gate.
+
 ## 1. Product boundary
 
 | Concern | Owner |
