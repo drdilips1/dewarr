@@ -6,8 +6,8 @@ from pathlib import PurePosixPath
 from app.domain import pack_coverage
 from app.domain.acquisition import language_accepts
 from app.domain.release_profiles import assess_release, normalized
+from app.domain.release_versions import abridgment, version_reasons
 from app.domain.request_constraints import constrained_preferences
-from app.importing.match_evidence import isbn_forms
 
 EBOOKS = {"epub", "pdf", "cbz"}
 AUDIO = {"m4b", "mp3", "flac", "aac", "ogg", "opus"}
@@ -100,30 +100,10 @@ def eligibility(
             )
     if rule["abridged"] is not None:
         # Exact source tags are claims; narration duration or prose is not an abridgment flag.
-        tags = {normalized(tag) for tag in getattr(release, "tags", [])}
-        if release.source == "audiobookbay" and release.abridged is not None:
-            tags.add("abridged" if release.abridged else "unabridged")
-        expected = "abridged" if rule["abridged"] else "unabridged"
-        opposite = "unabridged" if rule["abridged"] else "abridged"
-        if expected not in tags or opposite in tags:
+        if abridgment(release) is not rule["abridged"]:
             reasons.append("The source does not confirm the required abridgment")
     if version:
-        if version.medium == "audio":
-            reasons.append(
-                "Exact recording identity requires review; narrator names alone are insufficient"
-            )
-        else:
-            expected = set().union(
-                *(
-                    isbn_forms(v)
-                    for k, values in version.identifiers.items()
-                    if k.lower() in {"isbn", "isbn10", "isbn13", "isbn_10", "isbn_13"}
-                    for v in (values if isinstance(values, list) else [values])
-                )
-            )
-            observed = isbn_forms(getattr(release, "isbn", None) or "")
-            if not expected or not expected.intersection(observed):
-                reasons.append("The source does not corroborate the selected edition's ISBN")
+        reasons.extend(version_reasons(release, version))
     ceiling = limit_bytes(preferences, rule["medium"], pack=is_pack and bool(pack_sources))
     if release.size_bytes is not None and release.size_bytes > ceiling:
         reasons.append("Reported transfer size exceeds the automatic selection limit")

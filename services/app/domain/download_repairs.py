@@ -122,7 +122,13 @@ async def proposal(db, user, attempt, selection):
         "downloader": {**frozen["downloader"], "generation": downloader.credential_generation},
         "destination": configuration,
     }
-    if not await configuration_current(db, selection, committed=True, configuration=desired):
+    if not await configuration_current(
+        db,
+        selection,
+        committed=True,
+        configuration=desired,
+        version_identity_required=not attempt.external_may_exist,
+    ):
         raise HTTPException(
             409,
             "Book identity or route verification changed; "

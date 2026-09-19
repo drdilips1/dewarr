@@ -1,10 +1,12 @@
 # Implementation status and evidence
 
-Latest checkpoint: [Native AudiobookBay](AUDIOBOOKBAY-INTEGRATION.md) adds source search/detail, metadata-only magnet inspection and the shared manual/automatic acquisition pipeline. The final checkpoint records verification and remaining actual-service gates. Automatic and manual reviewed-pack expansion also have bounded evidence; full stage acceptance remains open.
+Latest checkpoint: [Exact version acquisition](EXACT-VERSION-ACQUISITION.md) enables automatic single-book recording candidates with corroborated ISBN/narrator evidence and freezes catalog identity through dispatch. The final checkpoint records exact verification. Native ABB and reviewed-pack workflows retain their prior bounded evidence; full stage acceptance remains open.
 
 Updated September 18, 2026. Objective remains **implement the full PRD end to end**, including the planned later capabilities. This is an implementation checkpoint, not a completion declaration.
 
 ## Current code
+
+- [Exact version acquisition](EXACT-VERSION-ACQUISITION.md) permits ISBN-corroborated single-book recordings with matching complete narrator credits. Frozen version revisions and pending metadata conflicts fence preparation/dispatch; actual files still require independent version matching and backend confirmation. Generic exact-version packs and broader edition equivalence remain pending.
 
 - [Native AudiobookBay](AUDIOBOOKBAY-INTEGRATION.md) supplies configurable source/proxy settings, rich posting observations, private verified artifacts, qBittorrent 5.2 metadata resolution and common manual/automatic acquisition. Unknown seed counts require an explicit automation opt-in and resolved metadata. Actual public-host/client certification and broader release equivalence remain pending.
 
@@ -532,3 +534,24 @@ Verification:
 Deployment: a private database/key backup was saved and its dump catalog verified (`abb-backup-path.txt`). With no active development jobs, the verified API/worker processes were restarted together. Readiness returned **200**, one fresh worker was observed, the ABB API is exposed, schema remains `0037_download_joins`, and dispatch remains **disabled** (`abb-runtime.json`). No live source credentials or external library were used in this qualification.
 
 Remaining work: actual public ABB host and real qBittorrent 5.2 metadata certification; full source equivalence and broader source combinations; recording/edition, mixed-route/media and omnibus coverage; reviewed policy revisions; complete external-list release qualification; discovery/curation; production and S10. The connected ABB foundation advances S06 without closing its full gate or the full PRD goal.
+
+## Exact recording acquisition checkpoint · September 18, 2026
+
+This increment builds on `7d83f91`. [Exact version acquisition](EXACT-VERSION-ACQUISITION.md) allows automatic single-book recording selection when an explicit valid ISBN and complete narrator credits corroborate the requested catalog version. Equivalent ISBN-10/13 values normalize with checksum validation. Missing or contradictory evidence stays reviewable. Source releases and encodings do not create additional catalog versions.
+
+Automatic operations freeze the catalog identity revision before inspection; new manual and automatic version-specific selections retain that revision through dispatch and import authority. Changed identifiers, publication year, narrator credits and other identity fields require fresh preparation. Pending provider conflicts block automatic preparation/dispatch. Legacy unsubmitted automatic exact-version records without frozen identity require fresh selection. Existing external transfers remain observable without resubmission, including after a catalog correction or while reconciling legacy selections.
+
+History access and existing-transfer observation distinguish semantic corrections from permission revocation: exact-version visibility, account, route and source checks still apply. A corrected narrator conflicting with a required name pauses the request before import scheduling and preserves the completed transfer with a review message. A correction that leaves request constraints compatible reaches the frozen import identity guard. Neither path publishes stale media or marks the book owned.
+
+Verification:
+
+- Full backend baseline before the final observation/import authority refinements: **1,526 passed in 477.68 s** (`.local/evidence/exact-recording-full.log`). This is baseline evidence, not a claim that the complete suite was repeated after those refinements.
+- Real generated audio and torrent workflows cover immediate/delayed synthetic ABS confirmation, exact catalog version assignment, stable version counts, one downloader submission, source byte preservation and hardlink inode equality. Wrong embedded ISBN or narrator is held despite matching source claims. Catalog corrections after submission preserve observation and prevent publication.
+- The initial final regression exposed history/observation validation treating a semantic narrator conflict as lost access. The correction skips only semantic version constraints for read-only views and existing-transfer observation; exact-version authorization remains mandatory. A separate test withdraws accepted metadata and verifies the corrected recording becomes inaccessible again. Subsequent focused tests passed **10 cases in 8.66 s** (`exact-recording-access-fix.log`). The completion test distinguishes a paused request before import scheduling from an import receipt held by the frozen revision guard; neither condition is treated as availability.
+- Existing setup/catalog/request/source browser regression passed **1 journey in 1.5 min** (`exact-recording-browser.log`). This exercises the existing recording-request UI and common acquisition surfaces; it does not independently certify the new exact-recording automatic flow in the browser.
+- Final affected eligibility, recording, acquisition/request, download/repair/review, automatic import and shared-pack regression: **266 passed in 169.03 s** (`exact-recording-final-regression.log`). This run includes all final access/observation/import changes and the metadata-withdrawal privacy case.
+- Backend lint/format, frontend production build/format, reproducible OpenAPI/client generation, schema alignment and diff checks pass. No migration is needed beyond `0037_download_joins`. The built wheel matches all **189 backend Python modules**; **149** checked local link targets in changed documents exist.
+
+Deployment: a private database/key backup was created and its dump catalog verified (`exact-recording-backup-path.txt`). With no active development jobs, the verified API and worker were restarted together. Readiness returned **200**, one fresh worker was observed, schema remains `0037_download_joins`, and dispatch remains **disabled** (`exact-recording-runtime.json`). The new acquisition workflow uses synthetic external services and actual generated files; it does not certify a live tracker, qBittorrent instance or external library.
+
+Remaining work includes per-book exact recording/edition evidence for generic collections, cross-provider edition equivalence, mixed routes/media and omnibus containment, reviewed policy revisions, full source and external-list certification, discovery/curation, production and S10. The native MAM explicit-ISBN path advances AT-12 and version-specific acquisition; it does not complete the full source/version stage or the PRD.

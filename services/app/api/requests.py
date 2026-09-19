@@ -119,7 +119,9 @@ async def view(db, user, intent):
     try:
         if user.role == "viewer":
             raise HTTPException(403, "Read-only account")
-        work_title = (await validate_request(db, user, intent.work_id, spec)).title
+        work_title = (
+            await validate_request(db, user, intent.work_id, spec, check_version_constraints=False)
+        ).title
         for medium in ("ebook", "audio"):
             version_id = getattr(spec, medium + "_version_id")
             if version_id:

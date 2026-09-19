@@ -73,7 +73,11 @@ async def view(db, user, operation):
     if not intent or intent.owner_id != user.id:
         raise HTTPException(404, "Request not found")
     await validate_request(
-        db, user, intent.work_id, RequestSpec.model_validate(intent.specification)
+        db,
+        user,
+        intent.work_id,
+        RequestSpec.model_validate(intent.specification),
+        check_version_constraints=False,
     )
     selection_id = operation.payload.get("selection_id")
     selection = await db.get(AcquisitionSelection, UUID(selection_id)) if selection_id else None

@@ -19,6 +19,7 @@ from app.db.models import (
     ImportDestination,
     Integration,
     Operation,
+    ProviderObject,
     SourceArtifact,
     SourceConnection,
     Version,
@@ -41,6 +42,7 @@ from app.domain.source_artifacts import artifact_bytes, member
 from app.domain.work_graph import acquisition_lock, canonical_work
 from app.importing.destinations import destination_configuration
 from app.importing.naming import fingerprint
+from app.importing.versioning import version_revision
 
 
 class SelectionInput(BaseModel):
@@ -264,6 +266,7 @@ async def prepare(db, user, body, key, *, automatic_evidence=None):
             "work_title": work.title,
             "requirements": dict(rule),
             "version": version_evidence(version),
+            **({"version_identity_revision": version_revision(version)} if version else {}),
             "slot": target.slot,
             "source_generation": artifact.source_generation,
             "artifact_sha256": artifact.sha256,
@@ -336,7 +339,14 @@ async def cancel(db, user, selection):
     return selection
 
 
-async def configuration_current(db, selection, *, committed=False, configuration=None):
+async def configuration_current(
+    db, selection, *, committed=False, configuration=None, version_identity_required=True
+):
+    """Validate routes and frozen identity before effects.
+
+    Read-only transfer observation may skip version identity checks. Import
+    authority independently fences the frozen revision before publication.
+    """
     if (
         selection.state not in ({"prepared", "committed"} if committed else {"prepared"})
         or get_settings().recovery_mode
@@ -351,6 +361,27 @@ async def configuration_current(db, selection, *, committed=False, configuration
     version = (
         await db.get(Version, UUID(version_id), populate_existing=True) if version_id else None
     )
+    if (
+        version_identity_required
+        and version
+        and frozen.get("automatic_selection")
+        and "version_identity_revision" not in frozen
+    ):
+        return False
+    if (
+        version_identity_required
+        and version
+        and frozen.get("automatic_selection")
+        and await db.scalar(
+            select(ProviderObject.id)
+            .where(
+                ProviderObject.version_id == version.id,
+                ProviderObject.match_status == "needs-review",
+            )
+            .limit(1)
+        )
+    ):
+        return False
     try:
         return bool(
             source
@@ -360,7 +391,12 @@ async def configuration_current(db, selection, *, committed=False, configuration
             and downloader.enabled
             and downloader.credential_generation == frozen["downloader"]["generation"]
             and destination
-            and version_evidence(version) == frozen["version"]
+            and (not version_identity_required or version_evidence(version) == frozen["version"])
+            and (
+                not version_identity_required
+                or "version_identity_revision" not in frozen
+                or (version and version_revision(version) == frozen["version_identity_revision"])
+            )
             and (await canonical_work(db, UUID(frozen["origin_work_id"]))).id
             == UUID(frozen["work_id"])
             and await destination_configuration(db, destination) == frozen["destination"]

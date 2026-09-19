@@ -24,6 +24,7 @@ from app.db.models import (
     LibraryGrant,
     SourceConnection,
     User,
+    Version,
 )
 from app.domain import automatic_selection, book_sources
 from app.domain import download_attempts as downloads
@@ -105,6 +106,9 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     pack_import_change=None,
     required_narrators=None,
     expect_pack_review=False,
+    exact_version=False,
+    recording_file_conflict=None,
+    recording_catalog_change=False,
 ):
     route = ready_route
     if series_pack:
@@ -120,6 +124,23 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     else:
         audio(source, tags={"isbn": "9781234567897", "language": "en"})
         await prepare_audio_route(client, database, route, work_id, source)
+    requested_version_id = route["plan"]["document"]["groups"][0].get("version_id")
+    if exact_version:
+        assert requested_version_id
+        async with database() as db:
+            initial_version_count = await db.scalar(select(func.count()).select_from(Version))
+    if recording_file_conflict:
+        source.unlink()
+        audio(
+            source,
+            tags={
+                "isbn": "9780140328721"
+                if recording_file_conflict == "identifier"
+                else "9781234567897",
+                "language": "en",
+                **({"composer": "Another Reader"} if recording_file_conflict == "narrator" else {}),
+            },
+        )
     epub(route["source"] / "private-neighbor.epub", title="Unrelated private download")
     if counterfeit:
         epub(source, title="Second Harbor", isbn="9780140328721")
@@ -144,8 +165,6 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
             database, title="Second Harbor", identifiers={"isbn_13": "9780140328721"}, medium=medium
         )
         if medium == "audio":
-            from app.db.models import Version
-
             async with database() as db, db.begin():
                 version = await db.get(Version, second["version"])
                 version.narrators = ["Jordan Lee"]
@@ -275,6 +294,20 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
     monkeypatch.setattr(automatic_selection, "source_call", source_call)
     qbit = Client(database, descriptor.model_dump(mode="json"))
     qbit.complete = True
+    if recording_catalog_change:
+        original_submit = qbit.submit
+
+        async def change_version_after_submission(*args, **kwargs):
+            receipt = await original_submit(*args, **kwargs)
+            async with database() as db, db.begin():
+                version = await db.get(Version, UUID(requested_version_id))
+                if recording_catalog_change == "narrators":
+                    version.narrators = ["Another Reader"]
+                else:
+                    version.publication_year = 2026
+            return receipt
+
+        qbit.submit = change_version_after_submission
     monkeypatch.setattr(downloads, "QbitClient", lambda *args: qbit)
 
     if pack_import_change:
@@ -624,6 +657,7 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
                 {"work": work_id},
                 medium,
                 **{medium + "_library_id": route["library_id"]},
+                **({medium + "_version_id": requested_version_id} if exact_version else {}),
                 **(
                     {
                         "required_narrators": ["Jordan Lee"]
@@ -837,7 +871,6 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
                 ).operation_id == prior_import["entry_operation"]
                 from fastapi import HTTPException
 
-                from app.db.models import Version
                 from app.importing.automatic import publication_authority
 
                 original_entry = await db.get(ImportEntry, prior_import["entry_id"])
@@ -960,14 +993,30 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
         for path in source.parent.glob("*." + extension):
             assert any(dest.stat().st_ino == path.stat().st_ino for dest in imported)
         return
-    if counterfeit:
+    if counterfeit or recording_file_conflict or recording_catalog_change:
         from app.db.models import AutomaticImport
 
         async with database() as db:
             automatic_import = await db.scalar(select(AutomaticImport))
-            assert automatic_import and automatic_import.state == "held", automatic_import.message
+            if recording_catalog_change == "narrators":
+                from app.db.models import AcquisitionTarget
+
+                # The narrator requirement pauses the request before import is queued.
+                # Other identity changes reach the frozen import revision guard.
+                assert automatic_import is None
+                target = await db.scalar(select(AcquisitionTarget))
+                assert target.state == "paused", target.message
+                attempt = await db.scalar(select(DownloadAttempt))
+                assert "needs review before import" in attempt.message
+            else:
+                assert automatic_import and automatic_import.state == "held", (
+                    automatic_import.message if automatic_import else "No import receipt"
+                )
             assert not await db.scalar(select(ImportEntry.id))
             assert not await db.scalar(select(DownloadFulfillment.id))
+            if recording_catalog_change:
+                attempt = await db.scalar(select(DownloadAttempt))
+                assert attempt.state == "complete", attempt.message
         assert not (await client.get(f"/api/catalog/works/{work_id}")).json()["availability"][
             "owned"
         ]
@@ -983,6 +1032,10 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
         entries = list(await db.scalars(select(ImportEntry)))
         assert len(entries) == 1
         entry = entries[0]
+        if exact_version:
+            assert str(entry.version_id) == requested_version_id
+            assert selection.frozen["requirements"]["version_id"] == requested_version_id
+            assert selection.frozen["version_identity_revision"]
         assert entry.state == ("awaiting-library" if delayed_backend else "confirmed"), (
             entry.message
         )
@@ -1000,6 +1053,10 @@ async def test_search_to_automatic_download_and_confirmed_member_library(
         fulfillment = await db.scalar(select(DownloadFulfillment))
         assert fulfillment and fulfillment.import_entry_id == entry.id
         assert await db.scalar(select(func.count()).select_from(DownloadAttempt)) == 1
+        if exact_version:
+            assert (
+                await db.scalar(select(func.count()).select_from(Version)) == initial_version_count
+            )
     output = list(route["target"].rglob("*." + extension))
     assert len(output) == 1 and output[0].stat().st_ino == source.stat().st_ino
     assert output[0].read_bytes() == original == source.read_bytes()
@@ -1327,4 +1384,60 @@ async def test_narrator_constrained_pack_waits_for_per_book_evidence(
         series_pack=True,
         expand_pack=True,
         expect_pack_review=True,
+    )
+
+
+@pytest.mark.parametrize("delayed_backend", [False, True])
+async def test_exact_recording_acquires_and_confirms_only_requested_catalog_version(
+    client, admin, database, ready_route, review_account, monkeypatch, delayed_backend
+):
+    await test_search_to_automatic_download_and_confirmed_member_library(
+        client,
+        admin,
+        database,
+        ready_route,
+        review_account,
+        monkeypatch,
+        "audio",
+        delayed_backend,
+        request_limits=True,
+        exact_version=True,
+    )
+
+
+@pytest.mark.parametrize("conflict", ["identifier", "narrator"])
+async def test_exact_recording_source_claim_cannot_override_conflicting_downloaded_audio(
+    client, admin, database, ready_route, review_account, monkeypatch, conflict
+):
+    await test_search_to_automatic_download_and_confirmed_member_library(
+        client,
+        admin,
+        database,
+        ready_route,
+        review_account,
+        monkeypatch,
+        "audio",
+        False,
+        request_limits=True,
+        exact_version=True,
+        recording_file_conflict=conflict,
+    )
+
+
+@pytest.mark.parametrize("field", ["publication_year", "narrators"])
+async def test_exact_recording_catalog_change_after_submission_preserves_transfer_and_holds_import(
+    client, admin, database, ready_route, review_account, monkeypatch, field
+):
+    await test_search_to_automatic_download_and_confirmed_member_library(
+        client,
+        admin,
+        database,
+        ready_route,
+        review_account,
+        monkeypatch,
+        "audio",
+        False,
+        request_limits=True,
+        exact_version=True,
+        recording_catalog_change=field,
     )

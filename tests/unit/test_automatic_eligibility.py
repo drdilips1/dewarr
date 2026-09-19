@@ -137,6 +137,66 @@ def test_exact_ebook_requires_corroborated_isbn_and_actual_formats_obey_profile(
     )
 
 
+@pytest.mark.parametrize("isbn", ["9780306406157", "0-306-40615-2", "ISBN-13: 978-0-306-40615-7"])
+def test_exact_recording_with_explicit_isbn_and_complete_credits_can_be_selected(isbn):
+    version = SimpleNamespace(
+        medium="audio",
+        language="en",
+        narrators=["Reader"],
+        abridged=False,
+        identifiers={"isbn_13": ["9780306406157"]},
+    )
+    assert not eligibility(
+        release(isbn=isbn, narrators=[" reader "], tags=["Unabridged"]),
+        WORK,
+        RULE,
+        ReleasePreferences(),
+        version=version,
+        descriptor=descriptor(["Harbor.m4b"]),
+    )
+
+
+@pytest.mark.parametrize(
+    "changes,expected",
+    [
+        ({"isbn": None}, "recording identity"),
+        ({"isbn": "9780140328721"}, "recording identity"),
+        ({"isbn": "9780306406158"}, "recording identity"),
+        ({"narrators": []}, "complete narrator"),
+        ({"narrators": ["Other Reader"]}, "complete narrator"),
+        ({"narrators": ["Reader", "Other Reader"]}, "complete narrator"),
+        ({"tags": ["Abridged"]}, "abridgment conflicts"),
+        ({"tags": ["Abridged", "Unabridged"]}, "contradictory"),
+    ],
+)
+def test_exact_recording_rejects_missing_or_conflicting_source_evidence(changes, expected):
+    version = SimpleNamespace(
+        medium="audio",
+        language="en",
+        narrators=["Reader"],
+        abridged=False,
+        identifiers={"isbn13": "9780306406157"},
+    )
+    value = release(isbn="9780306406157", narrators=["Reader"]).model_copy(update=changes)
+    assert any(
+        expected in reason
+        for reason in eligibility(value, WORK, RULE, ReleasePreferences(), version=version)
+    )
+
+
+def test_same_invalid_isbn_never_establishes_edition_identity():
+    version = SimpleNamespace(medium="ebook", language="en", identifiers={"isbn": "9780306406158"})
+    value = release(isbn="9780306406158").model_copy(
+        update={"medium": "ebook", "formats": ["epub"]}
+    )
+    assert any(
+        "ISBN" in reason
+        for reason in eligibility(
+            value, WORK, {**RULE, "medium": "ebook"}, ReleasePreferences(), version=version
+        )
+    )
+
+
 def test_automatic_limit_counts_padding_and_profiles_cannot_raise_installation_ceiling():
     assert limit_bytes(ReleasePreferences(maximum_bytes=50 * 1024**3), "ebook") == 1024**3
     assert limit_bytes(ReleasePreferences(maximum_bytes=1024), "audio") == 1024

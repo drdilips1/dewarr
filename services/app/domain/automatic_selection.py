@@ -21,6 +21,7 @@ from app.db.models import (
     AcquisitionTarget,
     ListCatalogBinding,
     Operation,
+    ProviderObject,
     SourceArtifact,
     SourceConnection,
     SourceResult,
@@ -57,6 +58,7 @@ from app.domain.source_artifacts import persist_artifact
 from app.domain.source_network import source_call
 from app.domain.visibility import visible_origin_work
 from app.domain.work_graph import acquisition_lock, family_ids
+from app.importing.versioning import version_revision
 from app.jobs.queue import enqueue
 from app.jobs.retry import SourceSearchRetry
 from app.security import decrypt_secrets
@@ -87,6 +89,14 @@ class AutomaticSelectionInput(BaseModel):
 
 def release_value(row):
     return parse_release(row.source_key, row.release_snapshot)
+
+
+def verify_version_snapshot(payload, version):
+    if version and "version_identity_revision" not in payload:
+        raise HTTPException(409, "Version identity was not frozen; start a fresh selection")
+    current = version_revision(version) if version else None
+    if payload.get("version_identity_revision") != current:
+        raise HTTPException(409, "Catalog edition or recording changed; start a fresh selection")
 
 
 async def context(db, user_id, body):
@@ -181,6 +191,16 @@ async def context(db, user_id, body):
         )
     rule = dict(reservation.requirements)
     version = await db.get(Version, UUID(rule["version_id"])) if rule["version_id"] else None
+    if version and await db.scalar(
+        select(ProviderObject.id)
+        .where(
+            ProviderObject.version_id == version.id, ProviderObject.match_status == "needs-review"
+        )
+        .limit(1)
+    ):
+        raise HTTPException(
+            409, "Resolve this catalog version's metadata conflict before automatic selection"
+        )
     return user, work, search, profile, rule, version
 
 
@@ -209,7 +229,7 @@ async def begin(db, user, body, key, *, list_authority=None, series_authority=No
         ):
             raise HTTPException(409, "This command key was already used for another selection")
         return previous
-    _, work, search, profile, rule, _ = await context(db, user.id, body)
+    _, work, search, profile, rule, version = await context(db, user.id, body)
     approval = (
         await automatic_dispatch.approve_route(
             db, user.id, body.destination_id, body.destination_revision
@@ -256,6 +276,7 @@ async def begin(db, user, body, key, *, list_authority=None, series_authority=No
             "work": deepcopy(search.payload["work"]),
             "profile": profile.model_dump(mode="json"),
             "requirements": rule,
+            "version_identity_revision": version_revision(version) if version else None,
             "pack_catalog": await pack_coverage.catalog(db, user, work)
             if profile.preferences.allows_series_packs
             else None,
@@ -494,6 +515,7 @@ async def run(identifier):
                 intent_id=body.intent_id,
             )
             user, work, search, profile, rule, version = await context(db, operation.owner_id, body)
+            verify_version_snapshot(operation.payload, version)
             if body.download_when_ready:
                 await automatic_dispatch.approve_route(
                     db,
@@ -650,6 +672,7 @@ async def run(identifier):
                 db, owner_id, operation.payload.get("series_authority"), intent_id=body.intent_id
             )
             user, work, search, profile, rule, version = await context(db, owner_id, body)
+            verify_version_snapshot(operation.payload, version)
             frozen_catalog = operation.payload.get("pack_catalog")
             if frozen_catalog is not None and frozen_catalog != await pack_coverage.catalog(
                 db, user, work

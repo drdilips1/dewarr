@@ -240,7 +240,7 @@ async def compatible_reservation(db, candidate, rule):
     return compatible
 
 
-async def validate_request(db, user, work_id, spec, reason=None):
+async def validate_request(db, user, work_id, spec, reason=None, *, check_version_constraints=True):
     canonical = await canonical_work(db, work_id)
     work = await db.scalar(
         select(Work).where(
@@ -301,6 +301,11 @@ async def validate_request(db, user, work_id, spec, reason=None):
             raise HTTPException(
                 404, "Requested edition or recording is not available in this catalog"
             )
+        # Reading saved history or observing an existing transfer still requires
+        # access to this exact version. A later metadata correction is a content
+        # conflict, not a revocation of that access.
+        if not check_version_constraints:
+            continue
         if (
             spec.language
             and version.language

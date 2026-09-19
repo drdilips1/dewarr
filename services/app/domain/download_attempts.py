@@ -123,12 +123,15 @@ async def selection_authority(db, selection, *, wanted, configuration=None, disp
                 medium + "_library_id": destination.library_id,
             }
         ),
+        check_version_constraints=wanted,
     )
     if configuration is None:
         from app.domain.download_repairs import accepted_configuration
 
         configuration = await accepted_configuration(db, selection)
-    if not await configuration_current(db, selection, committed=True, configuration=configuration):
+    if not await configuration_current(
+        db, selection, committed=True, configuration=configuration, version_identity_required=wanted
+    ):
         raise HTTPException(409, "Saved acquisition settings changed; review the download route")
     artifact = await db.get(SourceArtifact, selection.artifact_id)
     content = artifact_bytes(artifact)
@@ -448,7 +451,17 @@ async def finish_observation(db, attempt, selection, state):
     user = await db.get(User, attempt.owner_id)
     active = await wanted_members(db, members)
     if not active:
-        attempt.message = "Download complete; no selected book currently needs import"
+        paused = any(
+            [
+                (await db.get(AcquisitionTarget, item.target_id)).state == "paused"
+                for item in members
+            ]
+        )
+        attempt.message = (
+            "Download complete; request metadata or access needs review before import"
+            if paused
+            else "Download complete; no selected book currently needs import"
+        )
         (await db.get(Operation, attempt.operation_id)).message = attempt.message
         return False
     # The transport representative remains immutable; continuation may be needed

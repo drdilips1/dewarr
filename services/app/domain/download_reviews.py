@@ -25,6 +25,7 @@ from app.db.models import (
     ListEntry,
     Operation,
     User,
+    Version,
 )
 from app.domain import download_memberships, narrators
 from app.domain.acquisition import RequestSpec, evaluate, language_accepts, validate_request
@@ -33,6 +34,7 @@ from app.domain.operations import transaction_lock
 from app.domain.release_profiles import ProfileSnapshot, enforce_inspected_profile
 from app.domain.work_graph import canonical_work, family_ids
 from app.importing.naming import fingerprint
+from app.importing.versioning import version_revision
 
 
 async def assignment(db, attempt_id):
@@ -81,6 +83,14 @@ async def requester_authority(db, selection, *, lock=False):
             }
         ),
     )
+    if expected := selection.frozen.get("version_identity_revision"):
+        version = await db.get(
+            Version, UUID(selection.frozen["requirements"]["version_id"]), populate_existing=True
+        )
+        if not version or version_revision(version) != expected:
+            raise HTTPException(
+                409, "The selected catalog version changed; review it before importing"
+            )
     if owner.role != "admin":
         grant_query = select(LibraryGrant).where(
             LibraryGrant.user_id == owner.id, LibraryGrant.library_id == destination.library_id

@@ -193,7 +193,9 @@ export default function AutomaticSelection({
           : " Single-book torrents only."}
         {effectiveSeriesScope(search.profile.preferences) === "prefer_packs" &&
           " Automatic acquisition also imports additional qualifying books from your saved main-book review, using that same pack and medium. Preparation alone covers this requested book."}
-        Uncertain coverage and exact versions need review.
+        Exact editions require a matching catalog ISBN; recordings also require
+        matching narrator credits. Uncertain versions and collection coverage
+        need review.
       </p>
       <p className="muted">
         Single-book transfer limit: {transferSize(limit)}.
