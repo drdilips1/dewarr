@@ -430,6 +430,57 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/recovery/outbound-reconciliations": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Prepare Outbound Reconciliation */
+    post: operations["prepare_outbound_reconciliation_api_recovery_outbound_reconciliations_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/recovery/outbound-reconciliations/{identifier}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Outbound Reconciliation */
+    get: operations["get_outbound_reconciliation_api_recovery_outbound_reconciliations__identifier__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/recovery/outbound-reconciliations/{identifier}/accept": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Accept Outbound Reconciliation */
+    post: operations["accept_outbound_reconciliation_api_recovery_outbound_reconciliations__identifier__accept_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/activity": {
     parameters: {
       query?: never;
@@ -6083,6 +6134,68 @@ export interface components {
       /** Expected Revision */
       expected_revision?: string | null;
     };
+    /** OutboundReconciliationItemView */
+    OutboundReconciliationItemView: {
+      /**
+       * Finding Id
+       * Format: uuid
+       */
+      finding_id: string;
+      /**
+       * Operation Id
+       * Format: uuid
+       */
+      operation_id: string;
+      /** Title */
+      title: string;
+      /** Desired */
+      desired: boolean;
+      /** Saved Status */
+      saved_status: string;
+      /** Pending Attempt */
+      pending_attempt: boolean;
+      /** Outcome */
+      outcome: string;
+      /** Message */
+      message: string;
+    };
+    /** OutboundReconciliationView */
+    OutboundReconciliationView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Scan Id
+       * Format: uuid
+       */
+      scan_id: string;
+      /** Status */
+      status: string;
+      /** Message */
+      message: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /** Revision */
+      revision: string;
+      /**
+       * Expires At
+       * Format: date-time
+       */
+      expires_at: string;
+      /** Items */
+      items: components["schemas"]["OutboundReconciliationItemView"][];
+      /** Applied At */
+      applied_at: string | null;
+      /** Results */
+      results: {
+        [key: string]: unknown;
+      }[];
+    };
     /** PackBook */
     PackBook: {
       /**
@@ -6794,6 +6907,8 @@ export interface components {
       latest_scan?: components["schemas"]["ScanView"] | null;
       latest_reconciliation?:
         components["schemas"]["ReconciliationView"] | null;
+      latest_outbound_reconciliation?:
+        components["schemas"]["OutboundReconciliationView"] | null;
       latest_list_reconciliation?:
         components["schemas"]["ListReconciliationView"] | null;
       latest_publication_reconciliation?:
@@ -9144,6 +9259,109 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["ListReconciliationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  prepare_outbound_reconciliation_api_recovery_outbound_reconciliations_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReconciliationRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OutboundReconciliationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_outbound_reconciliation_api_recovery_outbound_reconciliations__identifier__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        identifier: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OutboundReconciliationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  accept_outbound_reconciliation_api_recovery_outbound_reconciliations__identifier__accept_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        identifier: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReconciliationAcceptance"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OutboundReconciliationView"];
         };
       };
       /** @description Validation Error */

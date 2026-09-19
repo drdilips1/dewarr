@@ -198,3 +198,8 @@ List detail now defaults to 50 books and exposes count/matched/offset/limit; app
 ### Reviewed external-list baselines during restore
 
 [List recovery](RECOVERY-LISTS.md) adds `recovery.lists` to the restricted worker and three explicit operator-review endpoints on schema 0042. Deploy matching API/worker/client and run fresh observations because the bound list/acquisition context expanded. Recovered members are baseline entries; acquisition and write-back remain paused for explicit owner review. No migration or dependency is added, and development dispatch remains disabled.
+
+
+## Outbound recovery review
+
+[Reviewed outbound evidence](RECOVERY-OUTBOUND.md) adds original-target Hardcover membership checks and an operator preview/acceptance flow. It records current outcomes without resending list changes, fences old remote leases and requires fresh owner review before write-back can return. Deploy matching API/worker/client on unchanged schema 0042. Unknown effects remain held; historical commands and controlled resume are still open.

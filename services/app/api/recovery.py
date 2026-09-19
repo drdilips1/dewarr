@@ -22,6 +22,7 @@ class RecoveryView(BaseModel):
     resume_available: bool = False
     latest_scan: "ScanView | None" = None
     latest_reconciliation: "ReconciliationView | None" = None
+    latest_outbound_reconciliation: "OutboundReconciliationView | None" = None
     latest_list_reconciliation: "ListReconciliationView | None" = None
     latest_publication_reconciliation: "PublicationReconciliationView | None" = None
     latest_inventory_reconciliation: "InventoryReconciliationView | None" = None
@@ -89,6 +90,20 @@ async def review(admin: Admin, db: Database):
         if checkpoint
         else None
     )
+    outbound_review = (
+        await db.scalar(
+            select(Operation)
+            .where(
+                Operation.kind == "recovery.outbound",
+                Operation.payload["checkpoint_id"].astext == str(checkpoint.id),
+                Operation.owner_id == admin.id,
+            )
+            .order_by(Operation.created_at.desc(), Operation.id.desc())
+            .limit(1)
+        )
+        if checkpoint
+        else None
+    )
     list_review = (
         await db.scalar(
             select(Operation)
@@ -118,6 +133,9 @@ async def review(admin: Admin, db: Database):
         else None
     )
     return RecoveryView(
+        latest_outbound_reconciliation=outbound_reconciliation_view(outbound_review)
+        if outbound_review
+        else None,
         latest_list_reconciliation=list_reconciliation_view(list_review) if list_review else None,
         latest_publication_reconciliation=publication_reconciliation_view(publication_review)
         if publication_review
@@ -654,3 +672,98 @@ async def accept_list_reconciliation(
     )
     await db.commit()
     return list_reconciliation_view(operation)
+
+
+class OutboundReconciliationItemView(BaseModel):
+    finding_id: UUID
+    operation_id: UUID
+    title: str
+    desired: bool
+    saved_status: str
+    pending_attempt: bool
+    outcome: str
+    message: str
+
+
+class OutboundReconciliationView(ReconciliationView):
+    items: list[OutboundReconciliationItemView]
+
+
+def outbound_reconciliation_view(operation):
+    return OutboundReconciliationView(
+        id=operation.id,
+        scan_id=operation.payload["command"]["scan_id"],
+        status=operation.status,
+        message=operation.message,
+        created_at=operation.created_at,
+        revision=operation.payload["revision"],
+        expires_at=operation.payload["expires_at"],
+        items=[OutboundReconciliationItemView(**item) for item in operation.payload["items"]],
+        applied_at=operation.payload.get("applied_at"),
+        results=operation.payload.get("results", []),
+    )
+
+
+@router.post(
+    "/outbound-reconciliations", response_model=OutboundReconciliationView, status_code=201
+)
+async def prepare_outbound_reconciliation(
+    body: ReconciliationRequest,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_outbound import prepare
+
+    operation = await prepare(
+        db,
+        await checkpoint_for(db, admin),
+        admin.id,
+        body.scan_id,
+        body.finding_ids,
+        idempotency_key,
+    )
+    await db.commit()
+    return outbound_reconciliation_view(operation)
+
+
+@router.get("/outbound-reconciliations/{identifier}", response_model=OutboundReconciliationView)
+async def get_outbound_reconciliation(identifier: UUID, admin: Admin, db: Database):
+    from app.domain.recovery_reconciliation import OUTBOUND_KIND, load
+
+    return outbound_reconciliation_view(
+        await load(
+            db,
+            identifier,
+            await checkpoint_for(db, admin),
+            admin.id,
+            kind=OUTBOUND_KIND,
+        )
+    )
+
+
+@router.post(
+    "/outbound-reconciliations/{identifier}/accept",
+    response_model=OutboundReconciliationView,
+    status_code=202,
+)
+async def accept_outbound_reconciliation(
+    identifier: UUID,
+    body: ReconciliationAcceptance,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_reconciliation import OUTBOUND_KIND, accept
+
+    operation = await accept(
+        db,
+        await checkpoint_for(db, admin),
+        admin.id,
+        identifier,
+        body.revision,
+        idempotency_key,
+        kind=OUTBOUND_KIND,
+    )
+    await db.commit()
+    return outbound_reconciliation_view(operation)

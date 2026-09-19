@@ -38,7 +38,8 @@ KIND = "recovery.reconcile"
 INVENTORY_KIND = "recovery.inventory"
 PUBLICATION_KIND = "recovery.publication"
 LIST_KIND = "recovery.lists"
-REVIEW_KINDS = (KIND, INVENTORY_KIND, PUBLICATION_KIND, LIST_KIND)
+OUTBOUND_KIND = "recovery.outbound"
+REVIEW_KINDS = (KIND, INVENTORY_KIND, PUBLICATION_KIND, LIST_KIND, OUTBOUND_KIND)
 logger = logging.getLogger(__name__)
 
 

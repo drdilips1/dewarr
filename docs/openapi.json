@@ -1138,6 +1138,167 @@
         }
       }
     },
+    "/api/recovery/outbound-reconciliations": {
+      "post": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Prepare Outbound Reconciliation",
+        "operationId": "prepare_outbound_reconciliation_api_recovery_outbound_reconciliations_post",
+        "parameters": [
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReconciliationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OutboundReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recovery/outbound-reconciliations/{identifier}": {
+      "get": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Get Outbound Reconciliation",
+        "operationId": "get_outbound_reconciliation_api_recovery_outbound_reconciliations__identifier__get",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Identifier"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OutboundReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recovery/outbound-reconciliations/{identifier}/accept": {
+      "post": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Accept Outbound Reconciliation",
+        "operationId": "accept_outbound_reconciliation_api_recovery_outbound_reconciliations__identifier__accept_post",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Identifier"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReconciliationAcceptance"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OutboundReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/activity": {
       "get": {
         "tags": [
@@ -18258,6 +18419,133 @@
         ],
         "title": "OrderInput"
       },
+      "OutboundReconciliationItemView": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Finding Id"
+          },
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "desired": {
+            "type": "boolean",
+            "title": "Desired"
+          },
+          "saved_status": {
+            "type": "string",
+            "title": "Saved Status"
+          },
+          "pending_attempt": {
+            "type": "boolean",
+            "title": "Pending Attempt"
+          },
+          "outcome": {
+            "type": "string",
+            "title": "Outcome"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "finding_id",
+          "operation_id",
+          "title",
+          "desired",
+          "saved_status",
+          "pending_attempt",
+          "outcome",
+          "message"
+        ],
+        "title": "OutboundReconciliationItemView"
+      },
+      "OutboundReconciliationView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "scan_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Scan Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/OutboundReconciliationItemView"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "applied_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Applied At"
+          },
+          "results": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "scan_id",
+          "status",
+          "message",
+          "created_at",
+          "revision",
+          "expires_at",
+          "items",
+          "applied_at",
+          "results"
+        ],
+        "title": "OutboundReconciliationView"
+      },
       "PackBook": {
         "properties": {
           "work_id": {
@@ -20227,6 +20515,16 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ReconciliationView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "latest_outbound_reconciliation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OutboundReconciliationView"
               },
               {
                 "type": "null"

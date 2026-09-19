@@ -78,6 +78,7 @@ async def test_recovery_worker_cannot_run_ordinary_jobs_and_commands_are_idempot
         "recovery.inventory",
         "recovery.publication",
         "recovery.lists",
+        "recovery.outbound",
     }
     async with queue.open_async():
         await queue.run_worker_async(wait=False, concurrency=1)

@@ -52,3 +52,12 @@ async def rebaseline_restored_lists(operation_id: str) -> None:
     from app.domain.recovery_lists import run
 
     await run(UUID(operation_id))
+
+
+@tasks.task(
+    name="recovery.outbound", queue="recovery", retry=ShelfRetryStrategy(max_attempts=3, wait=60)
+)
+async def reconcile_restored_outbound(operation_id: str) -> None:
+    from app.domain.recovery_outbound import run
+
+    await run(UUID(operation_id))

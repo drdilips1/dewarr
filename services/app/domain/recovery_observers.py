@@ -486,26 +486,6 @@ async def shelf(inputs, writer, subscription):
                 "complete": complete_snapshot,
             },
         )
-    # A sent operation needs its exact membership IDs, not an inferred title match.
-    for operation in inputs["outbound"]:
-        payload = operation["payload"]
-        if str(payload.get("list_id")) != str(subscription["list_id"]):
-            continue
-        await writer.add(
-            "lists",
-            "needs-review",
-            item["name"],
-            "Saved outbound intent requires deliberate reconciliation before any write",
-            entity_id=operation["id"],
-            evidence={
-                "saved_status": operation["status"],
-                "pending_attempt": bool(payload.get("pending_attempt")),
-                "desired": payload.get("desired"),
-                "book_id": payload.get("book_id"),
-                "current": current.get(str(payload.get("book_id"))),
-            },
-        )
-
     if not owner_changed:
         await writer.add(
             "lists",
@@ -597,20 +577,19 @@ async def collect(inputs, writer):
             subscription["id"],
             partial(shelf, inputs, writer, subscription),
         )
-    subscribed = {str(row["list_id"]) for row in inputs["list_subscriptions"]}
+    from app.domain import recovery_outbound
+
     for operation in inputs["outbound"]:
-        if str(operation["payload"].get("list_id")) not in subscribed:
-            await writer.add(
-                "lists",
-                "needs-review",
-                "Detached outbound list history",
-                "Saved outbound intent has no attached subscription to observe",
-                entity_id=operation["id"],
-                evidence={
-                    "saved_status": operation["status"],
-                    "pending_attempt": bool(operation["payload"].get("pending_attempt")),
-                },
-            )
+        if operation["status"] in {"completed", "superseded"} and not operation["payload"].get(
+            "pending_attempt"
+        ):
+            continue
+        await observed(
+            "lists",
+            "Saved outbound list change",
+            operation["id"],
+            partial(recovery_outbound.observe, inputs, writer, operation),
+        )
     await observe_files(inputs, writer)
     await writer.add(
         "review",

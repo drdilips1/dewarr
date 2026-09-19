@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 test("restored-state operator review replaces navigation and blocks catalog access", async ({
   page,
 }) => {
-  test.setTimeout(120_000);
+  test.setTimeout(180_000);
   const root = fileURLToPath(new URL("../../../", import.meta.url));
   const fixture = (mode: string) =>
     execFileSync("uv", ["run", "python", "scripts/e2e_recovery.py", mode], {
@@ -97,7 +97,7 @@ test("restored-state operator review replaces navigation and blocks catalog acce
         exact: true,
       }),
     ).toBeVisible();
-    const evidence = root + "/.local/evidence/recovery-lists-ui";
+    const evidence = root + "/.local/evidence/recovery-outbound-ui";
     mkdirSync(evidence, { recursive: true });
     await page.screenshot({ path: evidence + "/review.png", fullPage: true });
     await page
@@ -251,6 +251,69 @@ test("restored-state operator review replaces navigation and blocks catalog acce
       ).json(),
     ).toEqual(before);
 
+    fixture("outbound");
+    await page.request.post("http://127.0.0.1:13379/fixture/writeback", {
+      data: { reset: true },
+    });
+    const outboundBefore = await (
+      await page.request.get("http://127.0.0.1:13379/fixture/writeback")
+    ).json();
+    const listScan = (await (await page.request.get("/api/recovery")).json())
+      .latest_scan.id;
+    await page
+      .getByRole("button", { name: "Run read-only checks", exact: true })
+      .click();
+    await expect
+      .poll(
+        async () =>
+          (await (await page.request.get("/api/recovery")).json()).latest_scan
+            .id,
+      )
+      .not.toBe(listScan);
+    await expect(
+      page.getByRole("status").filter({ hasText: "Observation finished" }),
+    ).toBeVisible({ timeout: 60_000 });
+    await page
+      .getByRole("button", {
+        name: "Review outbound change for Hardcover book 42 · list 92",
+        exact: true,
+      })
+      .click();
+    await expect(
+      page.getByRole("heading", {
+        name: "Review outbound list changes",
+        exact: true,
+      }),
+    ).toBeFocused();
+    await expect(
+      page
+        .getByText("Desired membership is currently visible;", { exact: false })
+        .last(),
+    ).toBeVisible();
+    await page.screenshot({
+      path: evidence + "/outbound-review.png",
+      fullPage: true,
+    });
+    await page
+      .getByRole("button", { name: "Record outbound evidence", exact: true })
+      .click();
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: "Outbound evidence recorded" }),
+    ).toBeVisible({ timeout: 30_000 });
+    expect(
+      await (
+        await page.request.get("http://127.0.0.1:13379/fixture/writeback")
+      ).json(),
+    ).toEqual(outboundBefore);
+    expect(
+      await (
+        await page.request.get("http://127.0.0.1:13379/fixture/recovery-stats")
+      ).json(),
+    ).toEqual(before);
+    expect((await page.request.get("/api/lists")).status()).toBe(423);
+
     await page.screenshot({ path: evidence + "/desktop.png", fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/lists");
@@ -277,6 +340,11 @@ test("restored-state operator review replaces navigation and blocks catalog acce
     ).toBeVisible();
     await expect(
       page.getByRole("status").filter({ hasText: "List baselines recorded" }),
+    ).toBeVisible();
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: "Outbound evidence recorded" }),
     ).toBeVisible();
     await page.getByLabel("Filter observations").selectOption("files");
     await expect(

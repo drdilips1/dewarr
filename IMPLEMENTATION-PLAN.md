@@ -1052,3 +1052,8 @@ A completed planning package is not a completed application. Update implementati
 ### Reviewed inbound-list baseline increment
 
 [Reviewed list baselines](docs/RECOVERY-LISTS.md) implement the inbound part of Rebaseline lists and pending commands. Current Hardcover/RSS membership is rechecked and recorded with exclusions/manual additions intact; complete removals withdraw only the selected list's reasons, while RSS omissions remain unknown. Recovered members become baseline entries, acquisition/write-back require fresh owner review, and old sync leases/generations cannot publish. Existing reservations, independent request histories and uncertain outbound attempts remain evidence for their separate reconciliation. Keep exact verification in implementation status. Continue uncertain outbound and historical-command reconciliation, remaining conflicting/untracked effects and controlled resume; all unaccepted S00–S10 requirements stay in scope.
+
+
+### Reviewed outbound list outcomes
+
+[Outbound recovery](docs/RECOVERY-OUTBOUND.md) implements the saved outbound-ledger portion of Rebaseline lists and pending commands. Fresh original-target membership reads distinguish currently satisfied requests, exact removals with remaining memberships, and unresolved differences. Accepted evidence retires old commands from mutation execution, disables write-back and invalidates matching old leases; unknown effects retain their attempts and no remote changes are sent. Keep actual verification in implementation status. Historical request/series commands, remaining unresolved effects, permission/configuration repair and controlled resume remain required, along with all unaccepted S00–S10 obligations.

@@ -11,6 +11,7 @@ from uuid import UUID
 
 import psycopg
 
+outbound_id = UUID("bcfc24e9-e3a7-4b9f-97a3-463c259a880b")
 checkpoint_id = UUID("9e5673bc-2292-4b61-aea8-a6fa3059054e")
 url = os.environ.get(
     "BOOK_E2E_DATABASE_URL",
@@ -67,6 +68,40 @@ with psycopg.connect(url.replace("postgresql+psycopg://", "postgresql://")) as c
             connection.execute(
                 "UPDATE list_subscriptions SET enabled=true, next_sync_at=NULL WHERE id=%s", (key,)
             )
+    elif sys.argv[1:] == ["outbound"]:
+        saved = connection.execute(
+            "SELECT l.id, l.owner_id FROM book_lists l JOIN restore_checkpoints r "
+            "ON r.operator_id=l.owner_id WHERE r.id=%s AND r.active "
+            "AND l.name='Recovery RSS baseline'",
+            (checkpoint_id,),
+        ).fetchone()
+        if not saved:
+            raise SystemExit("The paused baseline fixture is required")
+        connection.execute(
+            "INSERT INTO operations(id,owner_id,kind,idempotency_key,status,message,payload) "
+            "VALUES (%s,%s,'lists.writeback','recovery-outbound-fixture','attention',%s,%s::jsonb)",
+            (
+                outbound_id,
+                saved[1],
+                "Synthetic lost write response",
+                json.dumps(
+                    {
+                        "list_id": str(saved[0]),
+                        "remote_owner_id": 7,
+                        "external_list_id": 92,
+                        "book_id": 42,
+                        "desired": True,
+                        "attempts": 1,
+                        "base": {"owner_id": 7, "list_id": 92, "book_id": 42, "memberships": []},
+                        "pending_attempt": {
+                            "action": "add",
+                            "entry_id": None,
+                            "sent_at": "2026-09-19T00:00:00Z",
+                        },
+                    }
+                ),
+            ),
+        )
     elif sys.argv[1:] == ["clear"]:
         checkpoint = connection.execute(
             "SELECT snapshot FROM restore_checkpoints WHERE id = %s", (checkpoint_id,)
@@ -81,7 +116,8 @@ with psycopg.connect(url.replace("postgresql+psycopg://", "postgresql://")) as c
                     "UPDATE list_subscriptions SET enabled=%s, next_sync_at=%s WHERE id=%s",
                     (saved["enabled"], saved["next_sync_at"], UUID(key)),
                 )
+        connection.execute("DELETE FROM operations WHERE id=%s", (outbound_id,))
         connection.execute("DELETE FROM recovery_scans WHERE checkpoint_id = %s", (checkpoint_id,))
         connection.execute("DELETE FROM restore_checkpoints WHERE id = %s", (checkpoint_id,))
     else:
-        raise SystemExit("Choose pause or clear")
+        raise SystemExit("Choose pause, outbound or clear")

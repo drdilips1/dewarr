@@ -32,7 +32,7 @@ A completed `InventoryRun` and audit record identify the recovery review and obs
 
 ## Boundaries and deployment
 
-The restricted worker registers exactly `recovery.scan`, `recovery.reconcile`, `recovery.inventory`, `recovery.publication` and `recovery.lists`. It has no ordinary or periodic task and no built-in history cleanup. Use `python -m app.jobs.worker --recovery` only with a restored checkpoint. Normal installations use the ordinary worker.
+The restricted worker registers exactly `recovery.scan`, `recovery.reconcile`, `recovery.inventory`, `recovery.publication`, `recovery.lists` and `recovery.outbound`. It has no ordinary or periodic task and no built-in history cleanup. Use `python -m app.jobs.worker --recovery` only with a restored checkpoint. Normal installations use the ordinary worker.
 
 New APIs:
 

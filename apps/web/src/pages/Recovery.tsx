@@ -18,6 +18,11 @@ import {
   PrepareListBaselineReview,
   type ListBaselineReview,
 } from "./RecoveryLists";
+import {
+  OutboundRecoveryReview,
+  PrepareOutboundReview,
+  type OutboundReview,
+} from "./RecoveryOutbound";
 type RecoveryReview = components["schemas"]["ReconciliationView"];
 
 export default function Recovery() {
@@ -93,6 +98,9 @@ export default function Recovery() {
               publicationReview={
                 review.data.latest_publication_reconciliation ?? undefined
               }
+              outboundReview={
+                review.data.latest_outbound_reconciliation ?? undefined
+              }
               listReview={review.data.latest_list_reconciliation ?? undefined}
               scanId={review.data.latest_scan?.id}
               state={review.data.latest_scan?.state}
@@ -127,6 +135,7 @@ function RecoveryChecks({
   inventoryReview,
   publicationReview,
   listReview,
+  outboundReview,
 }: {
   scanId?: string;
   state?: string;
@@ -134,6 +143,7 @@ function RecoveryChecks({
   inventoryReview?: InventoryReview;
   publicationReview?: PublicationReview;
   listReview?: ListBaselineReview;
+  outboundReview?: OutboundReview;
 }) {
   const client = useQueryClient();
   const [key, setKey] = useState(() => crypto.randomUUID());
@@ -141,7 +151,13 @@ function RecoveryChecks({
   const [offset, setOffset] = useState(0);
   const [selected, setSelected] = useState<string[]>([]);
   const [prepareKey, setPrepareKey] = useState(() => crypto.randomUUID());
-  const reviews = [review, inventoryReview, publicationReview, listReview];
+  const reviews = [
+    review,
+    inventoryReview,
+    publicationReview,
+    listReview,
+    outboundReview,
+  ];
   const busy = reviews.some(
     (item) => item?.status === "queued" || item?.status === "running",
   );
@@ -320,6 +336,17 @@ function RecoveryChecks({
                       disabled={busy}
                     />
                   )}
+                {state === "completed" &&
+                  finding.state === "outbound-ready" &&
+                  finding.domain === "lists" &&
+                  !applied && (
+                    <PrepareOutboundReview
+                      scanId={scanId!}
+                      findingId={finding.id}
+                      title={finding.title}
+                      disabled={busy}
+                    />
+                  )}
                 {finding.has_evidence && (
                   <FindingEvidence scanId={scanId!} findingId={finding.id} />
                 )}
@@ -383,6 +410,14 @@ function RecoveryChecks({
         <PublicationRecoveryReview
           key={publicationReview.id}
           review={publicationReview}
+          currentScan={scanId}
+          otherBusy={busy || applied}
+        />
+      )}
+      {outboundReview && (
+        <OutboundRecoveryReview
+          key={outboundReview.id}
+          review={outboundReview}
           currentScan={scanId}
           otherBusy={busy || applied}
         />

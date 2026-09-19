@@ -19,6 +19,7 @@ async def recover_observation_jobs(queue):
                 "recovery.inventory",
                 "recovery.publication",
                 "recovery.lists",
+                "recovery.outbound",
             ):
                 for job in await queue.job_manager.get_stalled_jobs(
                     task_name=task_name, seconds_since_heartbeat=60

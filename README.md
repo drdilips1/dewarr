@@ -110,3 +110,5 @@ The PRD controls product behavior; the implementation decisions control the rese
 For a new checkout, begin with S00. For this existing implementation, use the plan's [execution and handoff contracts](IMPLEMENTATION-PLAN.md#8-execution-and-handoff-contracts) and verified status to continue incomplete work. The first full manual acquisition milestone is S05, list-driven automation is S07, and production v1 requires S09. S10 capabilities are separate later releases.
 
 [List pagination](docs/LIST-PAGINATION.md) now bounds list/catalog hydration, supports cross-page curation and searches all authorized destinations and memberships. Request and policy previews reject selections made against changed membership revisions. Full performance and release qualification remain open.
+
+[Outbound recovery](docs/RECOVERY-OUTBOUND.md) records reviewed Hardcover command outcomes without resending list changes; uncertain effects and automation remain held.

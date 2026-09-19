@@ -1,6 +1,6 @@
 # Reviewed external-list baselines after restore
 
-This implements the inbound-list baseline portion of S09-02 / FR-36 / AT-25. It builds on [read-only observations](RECOVERY-OBSERVATIONS.md) and the shared [reviewed recovery engine](RECOVERY-RECONCILIATION.md). It does not resolve uncertain sent writes or provide controlled resume.
+This implements the inbound-list baseline portion of S09-02 / FR-36 / AT-25. It builds on [read-only observations](RECOVERY-OBSERVATIONS.md) and the shared [reviewed recovery engine](RECOVERY-RECONCILIATION.md). [Outbound evidence recovery](RECOVERY-OUTBOUND.md) independently reconciles saved write outcomes; neither action provides controlled resume.
 
 ## Operator workflow
 
@@ -34,9 +34,9 @@ A preview binds the checkpoint, current designated administrator, latest complet
 
 The recovery context includes list entries, catalog bindings/source identity, acquisition policies/books/intents/reasons/reservations/targets and pending list-command projections. Old observation reports remain readable but need a fresh scan before authorizing changes under this build.
 
-Each corrected subscription advances generation, drops its old run token, lease, operation association and automatic due time, and marks a previously running/queued sync as needing attention while retaining its staged evidence. Its old worker can no longer apply through ordinary subscription-context checks. The action similarly disconnects an old acquisition-policy tick. Broader historical request/series commands and uncertain outbound attempts still need their separate recovery packet before resume.
+Each corrected subscription advances generation, drops its old run token, lease, operation association and automatic due time, and marks a previously running/queued sync as needing attention while retaining its staged evidence. Its old worker can no longer apply through ordinary subscription-context checks. The action similarly disconnects an old acquisition-policy tick. Broader historical request/series commands still need their separate recovery packet before resume. [Outbound recovery](RECOVERY-OUTBOUND.md) records independently verified outcomes and retains unresolved attempts.
 
-The dedicated worker registry contains exactly `recovery.scan`, `recovery.reconcile`, `recovery.inventory`, `recovery.publication` and `recovery.lists`. It has no ordinary acquisition, list-write, periodic scheduling or history-cleanup tasks. All accepted recovery actions exclude one another. A completed retry makes no further network calls or changes.
+The dedicated worker registry contains exactly `recovery.scan`, `recovery.reconcile`, `recovery.inventory`, `recovery.publication`, `recovery.lists` and `recovery.outbound`. It has no ordinary acquisition, list-write, periodic scheduling or history-cleanup tasks. All accepted recovery actions exclude one another. A completed retry makes no further network calls or changes.
 
 ## API and deployment
 
@@ -51,4 +51,4 @@ Deploy matching API, worker and generated client on schema `0042_recovery_scans`
 
 The synthetic tests cover both providers, omissions versus complete removals, exclusions/manual membership, catch-up versus future additions, independent request reasons, retained reservations/outbound evidence, changed authority/evidence, stale synchronization leases, command replay and atomic rollback. Browser evidence covers the explicit operator workflow, durable reload, mobile layout and unchanged synthetic external media/download records. The browser pause fixture predates its checkpoint and keeps its dedicated RSS subscription unscheduled; it is not an actual offline restore. Restricted restored-worker tests remain separate.
 
-Exact results are recorded in [implementation status](IMPLEMENTATION-STATUS.md). Uncertain outbound reconciliation, remaining conflicting/untracked effects, permission/configuration repair, historical-command resolution and controlled resume still require implementation and qualification. Actual-service/platform, full populated restore/resume, reference-load and RPO/RTO gates remain open; S09 and the full PRD are not complete.
+Exact results are recorded in [implementation status](IMPLEMENTATION-STATUS.md). Remaining unresolved outbound and conflicting/untracked effects, permission/configuration repair, historical-command resolution and controlled resume still require implementation and qualification. Actual-service/platform, full populated restore/resume, reference-load and RPO/RTO gates remain open; S09 and the full PRD are not complete.

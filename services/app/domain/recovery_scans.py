@@ -43,6 +43,7 @@ from app.db.models import (
     ListEntry,
     ListObservation,
     ListSubscription,
+    ListWritebackLease,
     ListWritebackPolicy,
     Operation,
     ProviderObject,
@@ -128,6 +129,7 @@ async def context(db):
         AcquisitionTarget,
         ListSubscription,
         ListObservation,
+        ListWritebackLease,
         ListWritebackPolicy,
     ):
         rows = (await db.scalars(select(model).limit(MAX_RECORDS + 1))).all()
