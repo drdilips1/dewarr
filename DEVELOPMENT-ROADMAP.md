@@ -1,6 +1,6 @@
 # Product and development handoff
 
-September 18, 2026 · v1.9 product baseline · Planning handoff reviewed against committed revision `ed26c78`, including discovery, community-list subscriptions and series continuation. Implementation is partial; no complete stage gate is accepted. Uncommitted work is not acceptance evidence.
+September 19, 2026 · v1.9 product baseline · Planning handoff reviewed against committed revision `30db130`, including discovery, community-list subscriptions, series continuation, household curation/sharing and list pagination. Implementation is partial; no complete stage gate is accepted. Uncommitted work is not acceptance evidence.
 
 Build a self-hosted book discovery, curation and acquisition app above Audiobookshelf. The experience should feel familiar to a Seerr user: browse attractive shelves, open one book page, see what is already owned, inspect available versions and sources, and request missing media. The app also owns organizing its newly downloaded files so that Audiobookshelf can serve them correctly.
 
@@ -21,7 +21,7 @@ The planning review also specifies the [community-list journey](PRD.md#community
 
 Read this guide first, then the PRD's [detailed behavior contracts](PRD.md#13-detailed-behavior-contracts). Developers use the implementation plan's [stage packages](IMPLEMENTATION-PLAN.md#3-stage-work-packages-and-gates) and [release delivery contract](IMPLEMENTATION-PLAN.md#16-release-delivery-contract). The current code is partially implemented; an existing screen or passing subset does not establish completion of a stage.
 
-The [stage closure plan](IMPLEMENTATION-PLAN.md#17-stage-closure-and-implementation-packets) lists remaining work for every stage. The [current development handoff](IMPLEMENTATION-PLAN.md#18-current-development-handoff) accounts for shared transfers, automatic pack coverage/grouping, same-owner transfer reuse, reviewed-series acquisition and inherited downloader/destination defaults. Each has bounded evidence; full series policies, broader reuse, source coverage, discovery and production qualification remain required. Earlier checkpoint descriptions are historical; use section 9 below for the current development order.
+The [stage closure plan](IMPLEMENTATION-PLAN.md#17-stage-closure-and-implementation-packets) lists obligations for every stage. The [backend handoff](IMPLEMENTATION-PLAN.md#18-current-development-handoff) retains shared-transfer, series, source and collection qualification work. Use section 9 for remaining workstreams and section 10 for the next implementation sequence. Earlier checkpoint descriptions are historical; they must not restart delivered subsets or remove unmet acceptance requirements.
 
 ## 1. Product boundary
 
@@ -134,7 +134,7 @@ The plan defines **42 functional requirements**: 36 for v1 and six later capabil
 
 Code existence, fixture success, live compatibility and stage acceptance are separate statuses. Missing service credentials or container/runtime certification must remain visible as unverified gates. No P0/P1 integrity, privacy, wrong-book acquisition, false-ownership or mandatory-workflow failure is acceptable for production v1.
 
-For this workspace, first compare the current revision and uncommitted work with [verified implementation status](docs/IMPLEMENTATION-STATUS.md). Reuse the existing catalog, inventory, selection, list, shared-transfer and import services. Native ABB now uses the shared acquisition path with synthetic-service and real-file evidence. Complete its actual-service qualification alongside series/version and policy gaps, then qualify the complete list journey, deliver discovery/curation and pass the production gates. Section 9 is the current execution order; earlier checkpoint narratives are historical.
+For this workspace, first compare the current revision and uncommitted work with [verified implementation status](docs/IMPLEMENTATION-STATUS.md). Reuse the existing catalog, inventory, selection, list, shared-transfer and import services. The next feature packet is optional Hardcover list write-back, followed by complete usability review. Qualify actual services, series/version behavior and list automation alongside that work, then close production gates. Section 9 groups the remaining obligations; section 10 gives the current packet order.
 
 At each stage start, split its packages into reviewable tickets with an owner, affected FR/AT IDs, input/output contract, success/failure fixtures and demo. Estimate remaining implementation, verification, integration access and contingency separately after inspecting the code and measuring throughput. At stage end, attach the revision and actual results, update coverage, and resolve blockers before enabling the dependent capability. Calendar estimates are forecasts; acceptance gates remain mandatory.
 
@@ -188,11 +188,11 @@ A ticket is complete when its full outcome and failure paths are demonstrated, d
 
 ## 9. Remaining development batches from the current checkpoint
 
-Starting point for this handoff: committed revision `ed26c78`. Existing evidence covers bounded catalog/inventory, MAM/Prowlarr acquisition, preferences/routes, external-list observations, automatic selection/import, reviewed series, shared transfers/reuse, automatic/manual reviewed pack children, native ABB, reviewed collection contents/import, and initial discovery/community-list subscriptions. Exact scopes are in [Implementation Status](docs/IMPLEMENTATION-STATUS.md). No complete S00–S09 gate is accepted. Fixture-backed acquisition does not establish actual-account, public-host or real qBittorrent metadata compatibility.
+Starting point for this handoff: committed revision `30db130`. Existing evidence covers bounded catalog/inventory, MAM/Prowlarr acquisition, preferences/routes, external-list observations, automatic selection/import, reviewed series, shared transfers/reuse, automatic/manual reviewed pack children, native ABB, reviewed collection contents/import, discovery/community-list subscriptions, series continuation, curation/sharing and list pagination. Exact scopes are in [Implementation Status](docs/IMPLEMENTATION-STATUS.md). No complete S00–S09 gate is accepted. Fixture-backed acquisition does not establish actual-account, public-host or real qBittorrent metadata compatibility.
 
-This is the current order for the existing workspace, not a replacement for the greenfield S00–S10 dependency graph. Any unmet prerequisite discovered in a batch must be closed before activating its dependent behavior.
+These are remaining workstreams for the existing workspace; their numbers group obligations rather than impose a serial schedule. Section 10 selects the next packets. Any unmet prerequisite discovered in a workstream must be closed before activating its dependent behavior. The S00–S10 dependency graph and release gates still apply.
 
-[Initial discovery shelves](docs/DISCOVERY.md) now connect attributed Hardcover trending/recent/related signals and local fallback to existing catalog and list actions. Community-list following now connects those shelves to the existing subscription and automation services. [Series continuation](docs/SERIES-DISCOVERY.md) now adds loaded-catalog gaps with scoped ownership and medium filters. Batch 5 still requires complete curation, full sharing/write-back and usability qualification; the new shelves do not establish full S08 acceptance.
+[Initial discovery shelves](docs/DISCOVERY.md), community-list following and [series continuation](docs/SERIES-DISCOVERY.md) connect catalog discovery to scoped inventory and existing list/acquisition services. [Local curation](docs/LIST-CURATION.md) and [pagination](docs/LIST-PAGINATION.md) add bulk editing, household sharing and bounded selectors. Workstream 5 retains optional write-back, complete usability and provider qualification; these bounded checkpoints do not establish full S08 acceptance.
 
 | Batch | Parent scope | Complete outcome | Acceptance demonstration |
 |---|---|---|---|
@@ -212,7 +212,7 @@ The [current implementation handoff](IMPLEMENTATION-PLAN.md#18-current-developme
 
 ## 10. Development start and release handoff
 
-The prior committed starting point is `ed26c78`: initial discovery, community-list subscriptions and series continuation have bounded evidence. The subsequent [local curation checkpoint](docs/IMPLEMENTATION-STATUS.md#local-list-curation-and-household-sharing-checkpoint--september-18-2026) records bulk commands, detail edits, sharing/revocation, final UI review, packaging and matching development deployment. Neither checkpoint closes S08 or any earlier stage gate. The subsequent [list pagination checkpoint](docs/LIST-PAGINATION.md) now supplies bounded browsing, full membership checks and searchable selectors. Supported optional Hardcover write-back is the next product packet; reference-load and all remaining integration gates remain open.
+The current committed starting point is `30db130`. Preserve the bounded evidence for discovery, community subscriptions, series continuation, [local curation/sharing](docs/LIST-CURATION.md) and [list pagination](docs/LIST-PAGINATION.md). Supported optional Hardcover write-back is the next product packet; use its [implementation breakdown](IMPLEMENTATION-PLAN.md#hardcover-write-back-implementation-breakdown). Reference-load, full usability and all remaining integration gates stay open.
 
 Use the following packets to turn the full stage plan into reviewable development increments. These are subdivisions of existing packages, not additional requirements. Assign a named owner and reviewer at packet start. Deliver backend behavior, UI, failure states and evidence together; a screen alone does not complete a packet.
 

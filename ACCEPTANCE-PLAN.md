@@ -282,3 +282,22 @@ Apply these assertions to FR-02/FR-12, AT-05/AT-22/AT-26/AT-27 and the S02/S08/S
 5. Manual request and automatic backlog selectors search the full list. Reject a stale content revision when creating a preview, including removal/re-addition of a selected work. Existing exact receipts retain replay semantics; new selection does not weaken downstream authority or version checks.
 6. Shared readers receive their own scoped availability. Access errors hide cached content; private identities do not appear in page totals, search or membership checks. The live list index may change between requests, but all actions remain tied to explicit authorized identities.
 7. Verify keyboard/mobile operation and bounded query/hydration behavior, then benchmark the PRD reference dataset separately. A larger browsable list does not silently raise automatic activation, backlog, transfer or storage limits.
+
+## 16. Optional Hardcover write-back assertions
+
+Apply these to FR-34 / AT-23, with FR-02 / AT-27 authorization and FR-36 / AT-30 recovery coverage. They qualify the [S08-03 implementation breakdown](IMPLEMENTATION-PLAN.md#hardcover-write-back-implementation-breakdown); no new requirement or acceptance ID is introduced.
+
+| Boundary | Required assertion |
+|---|---|
+| Capability | Pin and validate mutation inputs/results, scopes, editable list types and permissions. An exposed schema field alone does not certify an account. Unsupported and read-only accounts retain inbound features with clear outbound limitations. |
+| Enablement | Outbound starts disabled. Only the local owner with appropriate remote authority can enable a specific list/action. Preview historic differences; do not dispatch an implicit initial backlog. Goodreads never exposes outbound control. |
+| Atomic intent | Local curation, authorized desired state and job enqueue commit together or all roll back. Concurrent/replayed commands create one logical intent; changed payload under the same key is rejected. |
+| Lost response | Apply a mutation remotely, drop its response and stop the worker before recording success. On recovery, observe remote state before retrying; an already-satisfied desire completes without a second mutation. A partial/failed fetch cannot establish absence. |
+| Concurrent changes | Exercise edits before the initial read, between read and mutation, and before confirmation. Record whether upstream conditional operations exist. Without them, do not claim atomic conflict prevention; verify narrow membership effects and expose detected ambiguity. No whole-list overwrite is allowed. |
+| Membership episodes | Remove and re-add the same book while an older command is pending. Account/list replacement, policy revisions and local episode changes invalidate or reconcile the obsolete command instead of applying it to a new target. |
+| Echo handling | Deliver the same inbound snapshot repeatedly and out of order where the provider permits. An outbound confirmation does not emit a new outbound change or duplicate acquisition; local exclusions and independent request reasons survive. |
+| Pause/revocation | Pause before dispatch and after a request is sent. Stop unsent effects; reconcile any already-sent effect without assuming cancellation. Revoked role, remote permission or token scope prevents further unauthorized writes. Resume reviews pending differences. |
+| Reading and files | Download/import/ABS confirmation does not write reading status, ratings or progress. Only an explicitly configured available-list rule may emit its scoped membership change. Remote membership removal never deletes library files. |
+| Restore and UX | Restore an older database with outbound paused; reconcile actual remote memberships before resume. Demonstrate pending, confirmed, unsupported, paused and conflict states in keyboard/mobile flows with redacted diagnostics and no private-account disclosure. |
+
+Record actual-service results separately from synthetic server and schema-validation results. Certify desired-state convergence within the supported API contract; do not infer exactly-once remote execution from local idempotency keys.

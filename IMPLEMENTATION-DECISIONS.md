@@ -226,6 +226,8 @@ Hardcover write-back is opt-in and uses a mutation outbox with desired state, pr
 
 Cache private list data under its account scope. Accessible community lists may be followed where the provider permits; do not interpret API visibility as permission to mirror all users' data into a public service. This design operates on connected users' behalf in their self-hosted instance.
 
+The September 19, 2026 planning review reconfirmed that Hardcover documents `insert_list_book` and `delete_list_book` with `write:lists`. Use the [S08-03 implementation breakdown](IMPLEMENTATION-PLAN.md#hardcover-write-back-implementation-breakdown) for exact contract verification, minimal membership mutations and retry/conflict handling. The action catalog does not establish conditional-write or idempotency guarantees; those remain explicit qualification questions. [Published action inventory](https://github.com/hardcoverapp/hardcover-docs/blob/main/src/content/docs/api/GraphQL/Actions.mdx).
+
 ## D12 — Concrete technical foundation
 
 | Layer | Selection | Reason |
