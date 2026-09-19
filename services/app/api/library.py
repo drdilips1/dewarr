@@ -55,6 +55,7 @@ class AssetView(BaseModel):
     open_url: str
     match_revision: str | None = None
     collection: bool = False
+    collection_work_id: UUID | None = None
     contents: list["ContainedBookView"] = Field(default_factory=list)
 
 
@@ -250,9 +251,13 @@ async def assets(
                 ),
                 match_revision=match_revision,
                 collection=asset.containment is not None,
+                collection_work_id=roots.get(UUID(asset.containment["physical_work_id"]))
+                if asset.containment and asset.containment.get("physical_work_id")
+                else None,
                 contents=[
                     ContainedBookView(work_id=root, title=titles[root], verified=verified)
                     for root, verified in sorted(contents.get(asset.id, {}).items())
+                    if root in {roots[UUID(value)] for value in asset.containment["work_ids"]}
                 ]
                 if asset.containment
                 else [],

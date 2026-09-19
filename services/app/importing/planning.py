@@ -5,7 +5,7 @@ from typing import Any
 from uuid import UUID, uuid5
 
 from fastapi import HTTPException
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 from sqlalchemy import select
 
 from app.db.models import (
@@ -19,6 +19,8 @@ from app.db.models import (
 from app.domain.download_reviews import validate_inspection
 from app.domain.operations import transaction_lock
 from app.domain.work_graph import canonical_work, graph_lock
+from app.importing.collection_contents import ContainedWork
+from app.importing.collection_contents import freeze as freeze_contents
 from app.importing.grouping import current_grouping
 from app.importing.inspection import InspectedFile
 from app.importing.match_evidence import isbn_key
@@ -45,6 +47,14 @@ class GroupSelection(StrictModel):
     version_id: UUID
     full_content: bool
     match_revision: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
+    contained_work_ids: list[UUID] = Field(default_factory=list, max_length=100)
+    contents_confirmed: bool = False
+
+    @model_validator(mode="after")
+    def confirmed_contents(self):
+        if self.contained_work_ids and (not self.contents_confirmed or not self.full_content):
+            raise ValueError("Confirm the complete collection and every selected contained book")
+        return self
 
 
 class FreezeInput(StrictModel):
@@ -72,6 +82,7 @@ class FrozenDocument(StrictModel):
     version_revisions: dict[str, str] = Field(default_factory=dict)
     cover_sources: dict[str, str] = Field(default_factory=dict)
     matching_evidence: dict[str, GroupMatch] = Field(default_factory=dict)
+    collection_contents: dict[str, list[ContainedWork]] = Field(default_factory=dict)
 
 
 class FrozenPlanView(BaseModel):
@@ -123,7 +134,7 @@ async def freeze_plan(db, admin, inspection_id: UUID, body: FreezeInput):
         )
     observed = {group.key: group.model_dump() for group in grouping.groups}
     files = {file["path"]: file for file in row.snapshot["files"]}
-    groups, sidecars, versions, covers, matches = [], {}, {}, {}, {}
+    groups, sidecars, versions, covers, matches, collections = [], {}, {}, {}, {}, {}
     await graph_lock(db)
     for selection in body.selections:
         group = observed.get(selection.group_key)
@@ -137,6 +148,10 @@ async def freeze_plan(db, admin, inspection_id: UUID, body: FreezeInput):
         await validate_inspection(db, row.id, version=version, group=reviewed_group)
         if version.medium != group["medium"]:
             raise HTTPException(422, "Catalog version and inspected medium differ")
+        if selection.contained_work_ids:
+            collections[str(uuid5(row.id, selection.group_key))] = await freeze_contents(
+                db, selection.contained_work_ids, work.id
+            )
         if selection.match_revision:
             match = await match_group(db, row.snapshot, grouping_revision, reviewed_group)
             if (
@@ -220,6 +235,7 @@ async def freeze_plan(db, admin, inspection_id: UUID, body: FreezeInput):
         "version_revisions": versions,
         "cover_sources": covers,
         "matching_evidence": matches,
+        **({"collection_contents": collections} if collections else {}),
         "inspection_revision": row.snapshot["revision"],
         "grouping_revision": grouping_revision,
         "excluded_files": [file.model_dump() for file in grouping.excluded],

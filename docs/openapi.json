@@ -8673,6 +8673,18 @@
             "title": "Collection",
             "default": false
           },
+          "collection_work_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Collection Work Id"
+          },
           "contents": {
             "items": {
               "$ref": "#/components/schemas/ContainedBookView"
@@ -10100,6 +10112,39 @@
           "verified"
         ],
         "title": "ContainedBookView"
+      },
+      "ContainedWork": {
+        "properties": {
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Authors"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "work_id",
+          "title",
+          "authors",
+          "revision"
+        ],
+        "title": "ContainedWork"
       },
       "ContentsInput": {
         "properties": {
@@ -11702,6 +11747,16 @@
             },
             "type": "object",
             "title": "Matching Evidence"
+          },
+          "collection_contents": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/ContainedWork"
+              },
+              "type": "array"
+            },
+            "type": "object",
+            "title": "Collection Contents"
           }
         },
         "additionalProperties": false,
@@ -11892,6 +11947,20 @@
               }
             ],
             "title": "Match Revision"
+          },
+          "contained_work_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Contained Work Ids"
+          },
+          "contents_confirmed": {
+            "type": "boolean",
+            "title": "Contents Confirmed",
+            "default": false
           }
         },
         "additionalProperties": false,

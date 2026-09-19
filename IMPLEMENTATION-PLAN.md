@@ -8,7 +8,7 @@ The [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md) provides a concise
 
 For the existing workspace, use its [remaining development batches](DEVELOPMENT-ROADMAP.md#9-remaining-development-batches-from-the-current-checkpoint) alongside section 16. These batches map outstanding work to the stable packages below; they do not add scope or supersede stage acceptance gates.
 
-The [stage closure plan](#17-stage-closure-and-implementation-packets) defines the stage obligations. Its checkpoint narratives and sections 7–17 retain historical implementation guidance; the [current handoff](#18-current-development-handoff), refreshed against `2dcc455`, takes precedence for what to build next. Use it with the complete S00–S10 backlog; neither marks partially implemented stages complete.
+The [stage closure plan](#17-stage-closure-and-implementation-packets) defines the stage obligations. Its checkpoint narratives and sections 7–17 retain historical implementation guidance; the [current handoff](#18-current-development-handoff), including the collection qualification packet below, takes precedence for what to build next. Use it with the complete S00–S10 backlog and current implementation evidence; neither marks partially implemented stages complete.
 
 ## 1. Delivery strategy
 
@@ -924,3 +924,17 @@ Use [the roadmap](DEVELOPMENT-ROADMAP.md#9-remaining-development-batches-from-th
 For each milestone, assign an accountable owner and reviewer, estimate implementation/verification/integration access separately, and demonstrate its default path before advanced options. Record fixture verification, actual-service qualification and stage acceptance separately. If a capability cannot be qualified, name the failed or unavailable gate and retain useful unaffected browsing; do not declare a mandatory feature complete.
 
 Production v1 requires every FR-01–FR-36 and NFR-01–NFR-12 obligation, including discovery and ordinary usability. The release record includes all eight launch journeys, supported versions and filesystems, migrations, backup/restore rehearsal, dependency notices, user/operator guides and remaining optional limitations. S10 is separately scoped and cannot absorb unfinished v1 functionality. The full implementation objective remains open until its required stage outcomes are accepted.
+
+### Collection qualification packet
+
+This packet closes remaining S03-03, S04 collection/import and S06 coverage obligations; it does not add a second collection publisher. The existing [inventory review](docs/COLLECTION-CONTENTS.md) and [reviewed import](docs/COLLECTION-IMPORT.md) cover explicit complete-work attestation for one physical omnibus. Use their shared proof, correction and publication services as the baseline.
+
+| Step | Required implementation outcome | Acceptance evidence |
+|---|---|---|
+| Physical versus contained identity | Retain the independently verified omnibus edition while recording complete child works separately. An inventory-only contents correction must not invent edition evidence. | One backend item; no invented child versions; repeat physical import skipped; generic child ownership passes while uncorroborated exact/language/narrator and standalone requests remain wanted. |
+| Reviewed import lifecycle | Freeze reviewed child identities beside the inspected physical edition, then publish through existing naming, filesystem and destination services. | Both ebook and audio, immediate/delayed backend detection, unchanged source bytes, actual hardlinks, stale identity before/after publication and retry without duplicate publication. |
+| Unattended contents eligibility | Define admissible source/catalog/file corroboration separately from user-reviewed proof. Preserve unknown coverage and require focused review when complete contents cannot be established. | Misleading tracker titles, incomplete collections, extras, abridged children and conflicting recordings cannot produce false ownership. A provider or series title alone supplies no completeness proof. |
+| Shared acquisition and reconciliation | Connect qualifying omnibus coverage to existing per-target authority, reservations, import and inventory reconciliation. Preserve independent request reasons and physical-file deduplication. | Overlapping lists, already-owned children, changed grants, cancellation, repeated sync, invalidated file evidence and alternative standalone requests converge without duplicate effects or false satisfaction. |
+| Native backend qualification | Certify the declared ABS version and supported layouts with actual synthetic ebook/audio collections. Extend the supported-filesystem matrix. | Exactly one intended item, correct physical metadata, playback/file association, inventory refresh, correction/review, crash recovery and documented limits. Synthetic HTTP observations alone do not close this step. |
+
+Domain/import ownership leads the identity and lifecycle work; frontend ownership supplies focused review, source detail and progress; integration/release ownership certifies actual services. Assign a concrete owner and reviewer when taking a step into development. Keep FR-14, FR-21–FR-22 and FR-25–FR-30 traceable to their existing acceptance scenarios. The reviewed path is a useful increment, but full collection automation and S04/S06 acceptance require the remaining steps.

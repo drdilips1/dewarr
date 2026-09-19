@@ -15,7 +15,7 @@ async def already_owned(db, version_id, library_id):
             LibraryAsset.library_id == library_id,
             LibraryAsset.state == "present",
             LibraryAsset.full_content.is_(True),
-            LibraryAsset.match_status == "matched",
+            LibraryAsset.match_status.in_(["matched", "collection"]),
             Library.accessible.is_(True),
             Integration.enabled.is_(True),
         )

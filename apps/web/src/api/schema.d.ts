@@ -2733,6 +2733,8 @@ export interface components {
        * @default false
        */
       collection: boolean;
+      /** Collection Work Id */
+      collection_work_id?: string | null;
       /** Contents */
       contents?: components["schemas"]["ContainedBookView"][];
     };
@@ -3276,6 +3278,20 @@ export interface components {
       title: string;
       /** Verified */
       verified: boolean;
+    };
+    /** ContainedWork */
+    ContainedWork: {
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /** Title */
+      title: string;
+      /** Authors */
+      authors: string[];
+      /** Revision */
+      revision: string;
     };
     /** ContentsInput */
     ContentsInput: {
@@ -3844,6 +3860,10 @@ export interface components {
       matching_evidence?: {
         [key: string]: components["schemas"]["GroupMatch"];
       };
+      /** Collection Contents */
+      collection_contents?: {
+        [key: string]: components["schemas"]["ContainedWork"][];
+      };
     };
     /** FrozenPlanView */
     FrozenPlanView: {
@@ -3925,6 +3945,13 @@ export interface components {
       full_content: boolean;
       /** Match Revision */
       match_revision?: string | null;
+      /** Contained Work Ids */
+      contained_work_ids?: string[];
+      /**
+       * Contents Confirmed
+       * @default false
+       */
+      contents_confirmed: boolean;
     };
     /** GroupingContent */
     GroupingContent: {

@@ -6,6 +6,7 @@ import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
 import ImportExecution from "../components/ImportExecution";
 import GroupingEditor from "../components/GroupingEditor";
+import ImportCollectionContents from "../components/ImportCollectionContents";
 
 type Group = components["schemas"]["InspectedGroup"];
 type Selection = components["schemas"]["GroupSelection"];
@@ -23,6 +24,7 @@ function matchedSelection(match: CatalogMatch): Selection | null {
         version_id: candidate.version_id,
         match_revision: match.revision,
         full_content: false,
+        contents_confirmed: false,
       }
     : null;
 }
@@ -455,7 +457,14 @@ function Review({ inspection }: { inspection: Inspection }) {
               !settings.data ||
               !grouping.data ||
               editingGroups ||
-              !Object.keys(selections).length
+              !Object.keys(selections).length ||
+              Object.values(selections).some(
+                (selection) =>
+                  !!selection.contained_work_ids?.length &&
+                  (!selection.contents_confirmed ||
+                    !selection.full_content ||
+                    selection.contained_work_ids.length < 2),
+              )
             }
             onClick={() => save.mutate()}
           >
@@ -501,6 +510,15 @@ function Review({ inspection }: { inspection: Inspection }) {
                 {item.title} · {item.state}
               </strong>
               {item.reason && <span>{item.reason}</span>}
+              {!!frozen.data.document.collection_contents?.[item.group_id]
+                ?.length && (
+                <span>
+                  One collection containing:{" "}
+                  {frozen.data.document.collection_contents[item.group_id]
+                    .map((book) => book.title)
+                    .join(" · ")}
+                </span>
+              )}
               {(item.files || []).map((file) => (
                 <span key={file.source}>
                   {file.source} → {file.destination}
@@ -575,7 +593,14 @@ function GroupMatch({
             work_id: workId,
             version_id: version,
             full_content: complete,
+            contents_confirmed: false,
             match_revision: matchRevision,
+            ...(version === selection?.version_id && complete
+              ? {
+                  contained_work_ids: selection.contained_work_ids,
+                  contents_confirmed: selection.contents_confirmed,
+                }
+              : {}),
           }
         : null,
     );
@@ -790,6 +815,13 @@ function GroupMatch({
             document
           </label>
         </>
+      )}
+      {selection && (
+        <ImportCollectionContents
+          selection={selection}
+          disabled={disabled}
+          onChange={onChange}
+        />
       )}
     </article>
   );

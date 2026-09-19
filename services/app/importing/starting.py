@@ -21,6 +21,7 @@ from app.db.models import (
 )
 from app.domain.download_reviews import validate_inspection
 from app.domain.operations import transaction_lock
+from app.importing.collection_contents import verify as verify_contents
 from app.importing.destination_view import view as destination_view
 from app.importing.destinations import destination_configuration
 from app.importing.grouping import current_grouping
@@ -128,6 +129,8 @@ async def start_import(db, admin, plan_id: UUID, body: ImportInput, idempotency_
         if version_revision(version) != document["version_revisions"].get(str(version.id)):
             entry.message = "Catalog version changed; inspect its identity and create a fresh plan"
             continue
+        contents = document.get("collection_contents", {}).get(item["group_id"], [])
+        await verify_contents(db, contents)
         if await already_owned(db, version.id, destination.library_id):
             entry.state, entry.message = (
                 "skipped",
@@ -197,6 +200,7 @@ async def start_import(db, admin, plan_id: UUID, body: ImportInput, idempotency_
             "medium": item["medium"],
             "version_revision": version_revision(version),
             "cover_source": document.get("cover_sources", {}).get(item["group_id"]),
+            **({"collection_contents": contents} if contents else {}),
         }
         if item["medium"] == "ebook":
             main = {file["path"] for file in group["files"] if file.get("role", "media") == "media"}

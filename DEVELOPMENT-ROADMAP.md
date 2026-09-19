@@ -1,6 +1,6 @@
 # Product and development handoff
 
-September 18, 2026 · v1.9 product baseline · Execution handoff refreshed against committed revision `2dcc455`, including automatic and manual reviewed-pack preparation. The native AudiobookBay checkpoint adds bounded implementation evidence; actual-service qualification remains open. This guide is a plan, not a claim of completed functionality.
+September 18, 2026 · v1.9 product baseline · Execution handoff includes automatic/manual reviewed packs, native AudiobookBay and reviewed collection contents/import. Each has bounded implementation evidence; actual-service qualification remains open. This guide is a plan, not a claim of completed functionality.
 
 Build a self-hosted book discovery, curation and acquisition app above Audiobookshelf. The experience should feel familiar to a Seerr user: browse attractive shelves, open one book page, see what is already owned, inspect available versions and sources, and request missing media. The app also owns organizing its newly downloaded files so that Audiobookshelf can serve them correctly.
 
@@ -213,3 +213,5 @@ The release candidate must include a versioned build, supported service/filesyst
 Core v1 is accepted at S09 after FR-01–FR-36, NFR-01–NFR-12 and the full relevant AT-01–AT-30 scope pass. S10 has six separately scoped capabilities and five associated acceptance scenarios. Optional capabilities can remain disabled only where the PRD explicitly allows that; required sources, list automation and discovery cannot be relabeled optional to pass release review.
 
 The plan is ready for staged development without another product-preference decision. Compatibility, provider access and layout support remain evidence gates to resolve during implementation. This planning handoff does not mark the application complete.
+
+For collection work in batch 2, follow the [collection qualification packet](IMPLEMENTATION-PLAN.md#collection-qualification-packet). Separate-file packs produce independently recoverable books; an inseparable omnibus remains one physical item. Reviewed import now has its own bounded contract, while automatic contents evidence, constrained child versions and native backend qualification remain explicit development gates.

@@ -12,11 +12,11 @@ Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md), then u
 
 Delivery milestones are manual acquisition at S05, list automation at S07, complete discovery and curation at S08, and production v1 at S09. S10 contains separately scoped extensions. The documents describe required outcomes; [implementation status](docs/IMPLEMENTATION-STATUS.md) records what has actually been verified.
 
-The current planning handoff is refreshed against `2dcc455`. Follow the roadmap's [remaining development batches](DEVELOPMENT-ROADMAP.md#9-remaining-development-batches-from-the-current-checkpoint) for execution order. The checkpoint descriptions below record successive increments; their older statements about unfinished work do not override the current handoff.
+The current planning handoff includes reviewed packs and collection imports. Follow the roadmap's [remaining development batches](DEVELOPMENT-ROADMAP.md#9-remaining-development-batches-from-the-current-checkpoint) for execution order. The checkpoint descriptions below record successive increments; their older statements about unfinished work do not override the current handoff. Exact verification remains in implementation status.
 
 Native AudiobookBay now has [source search, metadata inspection and shared acquisition](docs/AUDIOBOOKBAY-INTEGRATION.md), including an explicit automatic-selection option for unknown seed counts. Actual public-host/qBittorrent certification and the full S06 stage remain open.
 
-Administrators can now [verify complete books in one library collection](docs/COLLECTION-CONTENTS.md). One observed ABS item supplies truthful shared ownership, with correction history and review when file evidence changes. Automatic omnibus acquisition/import remains pending.
+Administrators can now [verify complete books in one library collection](docs/COLLECTION-CONTENTS.md) or [freeze reviewed contents in an import plan](docs/COLLECTION-IMPORT.md). One confirmed ABS item supplies shared ownership, with correction history and review when file evidence changes. Unattended omnibus discovery/verification remains pending.
 
 Exact audiobook requests can now use [corroborated recording selection](docs/EXACT-VERSION-ACQUISITION.md): an explicit matching ISBN and full narrator credits qualify the candidate, frozen catalog evidence protects dispatch, and downloaded-file inspection still decides whether it matches. Generic constrained packs and broader version reconciliation remain open.
 

@@ -353,7 +353,12 @@ async def inventory_candidates(db, user, work_id):
     return (
         await db.execute(
             select(LibraryAsset, Version, coverage)
-            .outerjoin(Version, LibraryAsset.version_id == Version.id)
+            .outerjoin(
+                Version,
+                and_(
+                    LibraryAsset.version_id == Version.id, Version.work_id.in_(family_ids(work_id))
+                ),
+            )
             .join(Library)
             .join(Integration)
             .join(AssetContains)

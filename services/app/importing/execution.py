@@ -39,6 +39,7 @@ from app.domain import capacity, download_reviews
 from app.domain.identity import normalized
 from app.domain.inventory import apply_item
 from app.importing.backend import verify_backend
+from app.importing.collection_contents import verify as verify_contents
 from app.importing.covers import CoverError, fetch_cover
 from app.importing.destinations import destination_configuration
 from app.importing.filesystem import beneath, digest, directory
@@ -118,6 +119,7 @@ async def context(db, entry, token, *, lock=False):
     if conflicts:
         raise PublicationError("Resolve this catalog version's metadata conflict first")
     try:
+        await verify_contents(db, entry.expected_metadata.get("collection_contents", []), lock=lock)
         from app.importing.automatic import publication_authority
 
         if not entry.published_at:
@@ -508,6 +510,22 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                         if file.path in selected_paths and file.format in EBOOK
                     ]
                 current.asset_id, current.confirmed_at = asset.id, datetime.now(UTC)
+                contents = current.expected_metadata.get("collection_contents", [])
+                if contents:
+                    from app.domain.containment import review as accept_contents
+                    from app.domain.corrections import asset_state, revision
+
+                    try:
+                        await accept_contents(
+                            db,
+                            operation.owner_id,
+                            asset.id,
+                            [UUID(book["work_id"]) for book in contents],
+                            revision(await asset_state(db, asset, link)),
+                            physical_version=version,
+                        )
+                    except HTTPException as error:
+                        raise PublicationError(str(error.detail)) from error
                 if current.cover_export and current.cover_export["state"] == "prepared":
                     selected = item.cover_path == str(
                         PurePosixPath(current.configuration["destination"]["backend_path"])
@@ -539,6 +557,8 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                 from app.jobs.queue import enqueue
 
                 await enqueue(db, "acquisition.fulfillment", work_id=str(version.work_id))
+                for book in contents:
+                    await enqueue(db, "acquisition.fulfillment", work_id=book["work_id"])
                 db.add(
                     AuditEvent(
                         actor_id=operation.owner_id,

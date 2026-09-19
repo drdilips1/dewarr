@@ -115,8 +115,10 @@ export function LibraryAssets({
             <article className="activity-row library-copy" key={asset.id}>
               <div className="grow">
                 <h2>
-                  {asset.work_ids.length === 1 ? (
-                    <Link to={`/books/${asset.work_ids[0]}`}>
+                  {asset.collection_work_id || asset.work_ids.length === 1 ? (
+                    <Link
+                      to={`/books/${asset.collection_work_id || asset.work_ids[0]}`}
+                    >
                       {asset.title}
                     </Link>
                   ) : (
@@ -126,7 +128,7 @@ export function LibraryAssets({
                 <p>
                   {asset.medium === "audio" ? "Audiobook" : "Ebook"}
                   {asset.narrators.length
-                    ? ` · ${asset.narrators.join(", ")}`
+                    ? ` · ${asset.collection ? "Collection narrators: " : ""}${asset.narrators.join(", ")}`
                     : ""}{" "}
                   ·{" "}
                   {asset.formats

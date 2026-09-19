@@ -531,6 +531,49 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await expect(
     inspected.getByLabel("Include selected catalog covers in new imports"),
   ).toBeChecked();
+  const collectionSession = await (
+    await page.request.get("/api/auth/me")
+  ).json();
+  const collectionHeaders = {
+    Origin: "http://127.0.0.1:8001",
+    "X-CSRF-Token": collectionSession.csrf_token,
+  };
+  const collectionBooks: string[] = [];
+  for (const title of ["Imported Omnibus Alpha", "Imported Omnibus Beta"]) {
+    const created = await page.request.post("/api/catalog/works", {
+      headers: collectionHeaders,
+      data: { title, authors: ["Collection Writer"] },
+    });
+    expect(created.status()).toBe(201);
+    collectionBooks.push((await created.json()).id);
+  }
+  await inspected
+    .getByText("Books contained in this collection (optional)", { exact: true })
+    .click();
+  await inspected
+    .getByLabel("Find contained books", { exact: true })
+    .fill("Imported Omnibus");
+  for (const title of ["Imported Omnibus Alpha", "Imported Omnibus Beta"]) {
+    await inspected
+      .getByRole("checkbox", {
+        name: `${title} — Collection Writer`,
+        exact: true,
+      })
+      .check();
+  }
+  await expect(
+    inspected.getByRole("button", { name: "Save import plan", exact: true }),
+  ).toBeDisabled();
+  await inspected
+    .getByRole("checkbox", {
+      name: "I checked these files and every selected contained book is complete.",
+      exact: true,
+    })
+    .check();
+  await page.screenshot({
+    path: testInfo.outputPath("collection-import-review-mobile.png"),
+    fullPage: true,
+  });
   await inspected.getByRole("button", { name: "Save import plan" }).click();
   const savedPlan = page.getByRole("article", { name: "Saved import plan" });
   await expect(savedPlan).toContainText(
@@ -538,6 +581,8 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   );
   await page.reload();
   await expect(savedPlan).toContainText("book.epub → ebooks/");
+  await expect(savedPlan).toContainText("One collection containing:");
+  await expect(savedPlan).toContainText("Imported Omnibus Alpha");
   await expect(savedPlan).toContainText(
     "0 selected covers. Unavailable artwork is reported without blocking the book import.",
   );
@@ -618,11 +663,29 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     .getByRole("region", { name: "Import result" })
     .first();
   await expect(importResult).toContainText("Waiting for Audiobookshelf");
+  for (const id of collectionBooks) {
+    const work = await (
+      await page.request.get(`/api/catalog/works/${id}`)
+    ).json();
+    expect(work.availability.owned).toBe(false);
+  }
   await page.request.post("http://127.0.0.1:13379/fixture/scan");
   await importResult
     .getByRole("button", { name: "Retry library detection" })
     .click();
   await expect(importResult).toContainText("Available in Audiobookshelf");
+  for (const id of collectionBooks) {
+    const work = await (
+      await page.request.get(`/api/catalog/works/${id}`)
+    ).json();
+    expect(work.availability.owned).toBe(true);
+    expect(work.availability.in_collection).toBe(true);
+    const copies = await (
+      await page.request.get(`/api/library/assets?work_id=${id}`)
+    ).json();
+    expect(copies.total).toBe(1);
+    expect(copies.items[0].contents).toHaveLength(2);
+  }
   await page.reload();
   await expect(
     page.getByRole("region", { name: "Import result" }).first(),
@@ -3983,10 +4046,14 @@ test("reviewed omnibus contents retain one backend item and reversible ownership
     ids.push((await created.json()).id);
   }
   const prior = await (await page.request.get("/api/library/assets")).json();
+  const chosenIndex = prior.items.findIndex(
+    (item: { collection: boolean }) => !item.collection,
+  );
+  expect(chosenIndex).toBeGreaterThanOrEqual(0);
   await page.getByRole("link", { name: "My Library", exact: true }).click();
   await page
     .getByRole("button", { name: "Review collection contents", exact: true })
-    .first()
+    .nth(chosenIndex)
     .click();
   const confirm = page.getByRole("button", {
     name: "Confirm collection contents",
@@ -4009,21 +4076,22 @@ test("reviewed omnibus contents retain one backend item and reversible ownership
     .check();
   await confirm.click();
   await expect(
-    page.getByRole("list", { name: "Collection contents", exact: true }),
+    page
+      .getByRole("list", { name: "Collection contents", exact: true })
+      .filter({ hasText: titles[0] }),
   ).toContainText(titles[0]);
   await page.reload();
-  const contents = page.getByRole("list", {
-    name: "Collection contents",
-    exact: true,
-  });
+  const contents = page
+    .getByRole("list", { name: "Collection contents", exact: true })
+    .filter({ hasText: titles[0] });
   await expect(contents).toContainText(titles[1]);
   const after = await (await page.request.get("/api/library/assets")).json();
   expect(after.total).toBe(prior.total);
   const collection = after.items.find(
-    (item: { collection: boolean }) => item.collection,
+    (item: { id: string }) => item.id === prior.items[chosenIndex].id,
   );
   expect(collection.version_id).toBeNull();
-  expect(collection.open_url).toBe(prior.items[0].open_url);
+  expect(collection.open_url).toBe(prior.items[chosenIndex].open_url);
   await contents.getByRole("link", { name: titles[1], exact: true }).click();
   await expect(
     page.getByText("In collection · Open the shared library item below", {
@@ -4063,8 +4131,10 @@ test("reviewed omnibus contents retain one backend item and reversible ownership
   const restored = await (await page.request.get("/api/library/assets")).json();
   expect(restored.total).toBe(prior.total);
   expect(
-    restored.items.some((item: { collection: boolean }) => item.collection),
-  ).toBe(false);
+    restored.items.map((item: { collection: boolean }) => item.collection),
+  ).toEqual(
+    prior.items.map((item: { collection: boolean }) => item.collection),
+  );
   for (const id of ids) {
     const work = await (
       await page.request.get(`/api/catalog/works/${id}`)
