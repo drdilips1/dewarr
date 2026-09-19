@@ -6,7 +6,9 @@ import { fileURLToPath } from "node:url";
 test("restored-state operator review replaces navigation and blocks catalog access", async ({
   page,
 }) => {
-  test.setTimeout(180_000);
+  // The combined suite observes several populated provider lists on each review.
+  // Keep individual observation deadlines bounded while allowing all review stages.
+  test.setTimeout(300_000);
   const root = fileURLToPath(new URL("../../../", import.meta.url));
   const fixture = (mode: string) =>
     execFileSync("uv", ["run", "python", "scripts/e2e_recovery.py", mode], {
@@ -87,18 +89,26 @@ test("restored-state operator review replaces navigation and blocks catalog acce
       { timeout: 60_000 },
     );
     await page.getByLabel("Filter observations").selectOption("downloads");
+    const recoveredTransfer = page.locator(".recovery-findings > li").filter({
+      has: page.getByRole("heading", { name: "The Next Harbor", exact: true }),
+    });
     await expect(
-      page.getByText(
+      recoveredTransfer.getByText(
         "Current transfer identity and destination match the saved attempt",
         { exact: true },
       ),
     ).toBeVisible();
-    await page.getByText("Observed evidence", { exact: true }).first().click();
+    await recoveredTransfer
+      .getByText("Observed evidence", { exact: true })
+      .click();
     await expect(
       page.getByText('"saved_external_may_exist"', { exact: false }),
     ).toBeVisible();
     await page
-      .getByRole("checkbox", { name: /Select .* for recovery review/ })
+      .getByRole("checkbox", {
+        name: "Select The Next Harbor for recovery review",
+        exact: true,
+      })
       .check();
     await page
       .getByRole("button", { name: "Review selected transfers", exact: true })
@@ -109,7 +119,7 @@ test("restored-state operator review replaces navigation and blocks catalog acce
         exact: true,
       }),
     ).toBeVisible();
-    const evidence = root + "/.local/evidence/recovery-automation-ui";
+    const evidence = root + "/.local/evidence/recovery-access-ui";
     mkdirSync(evidence, { recursive: true });
     await page.screenshot({ path: evidence + "/review.png", fullPage: true });
     await page
@@ -438,6 +448,109 @@ test("restored-state operator review replaces navigation and blocks catalog acce
         await page.request.get("http://127.0.0.1:13379/fixture/recovery-stats")
       ).json(),
     ).toEqual(before);
+    fixture("access");
+    const automationScan = (
+      await (await page.request.get("/api/recovery")).json()
+    ).latest_scan.id;
+    await page
+      .getByRole("button", { name: "Run read-only checks", exact: true })
+      .click();
+    await expect
+      .poll(
+        async () =>
+          (await (await page.request.get("/api/recovery")).json()).latest_scan
+            .id,
+      )
+      .not.toBe(automationScan);
+    await expect(
+      page.getByRole("status").filter({ hasText: "Observation finished" }),
+    ).toBeVisible({ timeout: 60_000 });
+    await page.getByLabel("Filter observations").selectOption("review");
+    await page
+      .getByRole("button", {
+        name: "Review permissions for Access · reader",
+        exact: true,
+      })
+      .click();
+    await expect(
+      page.getByLabel("Account enabled", { exact: true }),
+    ).toBeDisabled();
+    await expect(
+      page.getByRole("combobox", { name: "Account role", exact: true }),
+    ).toBeDisabled();
+    await page
+      .getByRole("button", {
+        name: "Close permissions for Access · reader",
+        exact: true,
+      })
+      .click();
+    await page
+      .getByRole("button", {
+        name: "Review permissions for Access · recovery-member",
+        exact: true,
+      })
+      .click();
+    await page
+      .getByRole("combobox", { name: "Account role", exact: true })
+      .selectOption("viewer");
+    await expect(
+      page.getByLabel("Allow acquisition automation", { exact: true }),
+    ).not.toBeChecked();
+    await expect(
+      page.getByLabel("Allow acquisition automation", { exact: true }),
+    ).toBeDisabled();
+    await page.getByLabel("Account enabled", { exact: true }).uncheck();
+    for (const checkbox of await page
+      .getByRole("group", { name: "Saved library grants", exact: true })
+      .getByRole("checkbox")
+      .all())
+      await checkbox.uncheck();
+    await page
+      .getByRole("group", {
+        name: "Permissions for recovery-member",
+        exact: true,
+      })
+      .screenshot({ path: evidence + "/access-editor.png" });
+    await page
+      .getByRole("button", { name: "Preview permissions", exact: true })
+      .click();
+    await expect(
+      page.getByRole("heading", {
+        name: "Review account permissions",
+        exact: true,
+      }),
+    ).toBeFocused();
+    await page
+      .locator('section[aria-labelledby="access-review-title"]')
+      .screenshot({ path: evidence + "/access-review.png" });
+    await page
+      .getByRole("button", {
+        name: "Confirm reviewed permissions",
+        exact: true,
+      })
+      .click();
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: "Account permissions reviewed" }),
+    ).toBeVisible({ timeout: 30_000 });
+    expect(JSON.parse(fixture("access-check").toString())).toEqual({
+      active: false,
+      role: "viewer",
+      can_automate: false,
+      grants: 0,
+    });
+    expect((await page.request.get("/api/lists")).status()).toBe(423);
+    expect(
+      await (
+        await page.request.get("http://127.0.0.1:13379/fixture/recovery-stats")
+      ).json(),
+    ).toEqual(before);
+    expect(
+      await (
+        await page.request.get("http://127.0.0.1:13379/fixture/writeback")
+      ).json(),
+    ).toEqual(outboundBefore);
     await page.screenshot({ path: evidence + "/desktop.png", fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/lists");
@@ -475,6 +588,14 @@ test("restored-state operator review replaces navigation and blocks catalog acce
         .getByRole("status")
         .filter({ hasText: "Selected commands retired or automation paused" }),
     ).toBeVisible();
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: "Account permissions reviewed" }),
+    ).toBeVisible();
+    await page
+      .locator('section[aria-labelledby="access-review-title"]')
+      .screenshot({ path: evidence + "/access-mobile.png" });
     await page.getByLabel("Filter observations").selectOption("files");
     await expect(
       page.getByText("Publication journals", { exact: true }),

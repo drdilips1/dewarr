@@ -1,6 +1,6 @@
 # Product and development handoff
 
-September 19, 2026 · Product baseline v1.9 · Planning review against committed revision `54de572`.
+September 19, 2026 · Product baseline v1.9 · Planning review against committed revision `93a0dde`.
 
 Build a self-hosted book discovery, curation and acquisition app above Audiobookshelf. Browse a familiar Seerr-style catalog, see existing holdings, compare ebook editions and audiobook recordings, aggregate releases, and acquire missing media through manual requests or followed lists. Organize new downloads into verified library items while preserving the original torrent data.
 
@@ -168,9 +168,9 @@ Assign an accountable developer and reviewer at scheduling time. With one develo
 
 ## 9. Remaining development batches from the current checkpoint
 
-Committed baseline: `54de572`, schema 0044. Recorded increments include bounded catalog/inventory, acquisition/import, lists/series, discovery/curation, write-back and successive recovery safeguards. Consult implementation status for exact coverage; no blanket completion follows from this list.
+Committed baseline: `93a0dde`, schema 0044. Recorded increments include bounded catalog/inventory, acquisition/import, lists/series, discovery/curation, write-back and successive recovery safeguards. Consult implementation status for exact coverage; no blanket completion follows from this list.
 
-The current working tree also contains [saved automation review](docs/RECOVERY-AUTOMATION.md). Treat it as an in-progress increment until its evidence and revision are recorded. Preserve it while planning dependent work.
+The committed baseline includes [saved automation review](docs/RECOVERY-AUTOMATION.md). The [current account permission review](docs/RECOVERY-ACCESS.md) increment adds explicit permission confirmation and repair; measured results and its bounded acceptance scope are recorded in implementation status. Current connection/path configuration, unresolved effects and fresh wanted-work activation still precede controlled resume.
 
 | Workstream | Remaining outcome | Required demonstration |
 |---|---|---|
@@ -189,7 +189,7 @@ Recovery does not replace the broader product work. Earlier unmet stage prerequi
 For a fresh implementation, follow S00 → S01 → S02/S03 → S04 → S05 → S06 → S07 → S08 → S09. For this existing workspace:
 
 1. **Inventory current evidence.** Compare HEAD and working changes with implementation status. Preserve delivered subsets and attach every remaining assertion to its stable package.
-2. **Finish the active recovery increment.** Review its tests, UI and current-state guards before recording completion. Do not mistake a selective policy pause for a supported resume workflow.
+2. **Preserve and qualify current permission review.** Account roles, automation privileges and library grants use the implemented exact preview and acceptance flow. Do not mistake policy pause or local permission confirmation for a supported resume workflow.
 3. **Complete recovery authority and resume.** Preserve queue/approval fences; revalidate current access, routes and external effects; resolve or explicitly hold uncertain work; activate only freshly authorized wanted work; rehearse actual restore and resume.
 4. **Close source, version and automation gaps.** Run the shared acceptance story across qualified services and layouts, including policy changes and shared reasons. Use the existing acquisition/import services.
 5. **Finish the full product experience.** Review setup, catalog, versions/sources, recommendations, list curation/activation, collection review and repair on desktop and mobile.

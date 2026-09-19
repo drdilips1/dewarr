@@ -52,6 +52,7 @@ async def current_user(request: Request, db: Database) -> User:
             ("POST", "/api/recovery/list-reconciliations"),
             ("POST", "/api/recovery/outbound-reconciliations"),
             ("POST", "/api/recovery/command-reconciliations"),
+            ("POST", "/api/recovery/access-reconciliations"),
         }
         report_read = request.method == "GET" and bool(
             re.fullmatch(
@@ -60,12 +61,12 @@ async def current_user(request: Request, db: Database) -> User:
         )
         review_action = bool(
             re.fullmatch(
-                r"/api/recovery/(?:reconciliations|inventory-reconciliations|publication-reconciliations|list-reconciliations|outbound-reconciliations|command-reconciliations)/[0-9a-f-]{36}",
+                r"/api/recovery/(?:reconciliations|inventory-reconciliations|publication-reconciliations|list-reconciliations|outbound-reconciliations|command-reconciliations|access-reconciliations)/[0-9a-f-]{36}",
                 request.url.path,
             )
             and request.method == "GET"
             or re.fullmatch(
-                r"/api/recovery/(?:reconciliations|inventory-reconciliations|publication-reconciliations|list-reconciliations|outbound-reconciliations|command-reconciliations)/[0-9a-f-]{36}/accept",
+                r"/api/recovery/(?:reconciliations|inventory-reconciliations|publication-reconciliations|list-reconciliations|outbound-reconciliations|command-reconciliations|access-reconciliations)/[0-9a-f-]{36}/accept",
                 request.url.path,
             )
             and request.method == "POST"

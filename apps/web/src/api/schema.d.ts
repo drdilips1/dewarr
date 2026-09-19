@@ -532,6 +532,57 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/recovery/access-reconciliations": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Prepare Access Reconciliation */
+    post: operations["prepare_access_reconciliation_api_recovery_access_reconciliations_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/recovery/access-reconciliations/{identifier}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Access Reconciliation */
+    get: operations["get_access_reconciliation_api_recovery_access_reconciliations__identifier__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/recovery/access-reconciliations/{identifier}/accept": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Accept Access Reconciliation */
+    post: operations["accept_access_reconciliation_api_recovery_access_reconciliations__identifier__accept_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/activity": {
     parameters: {
       query?: never;
@@ -3310,6 +3361,114 @@ export interface components {
        * @default true
        */
       enabled: boolean;
+    };
+    /** AccessChoice */
+    AccessChoice: {
+      /**
+       * Finding Id
+       * Format: uuid
+       */
+      finding_id: string;
+      /** Active */
+      active: boolean;
+      /**
+       * Role
+       * @enum {string}
+       */
+      role: "admin" | "member" | "viewer";
+      /** Can Automate */
+      can_automate: boolean;
+      /** Library Ids */
+      library_ids: string[];
+    };
+    /** AccessItemView */
+    AccessItemView: {
+      /**
+       * Finding Id
+       * Format: uuid
+       */
+      finding_id: string;
+      /**
+       * User Id
+       * Format: uuid
+       */
+      user_id: string;
+      /** Username */
+      username: string;
+      /** Operator */
+      operator: boolean;
+      before: components["schemas"]["AccessStateView"];
+      after: components["schemas"]["AccessStateView"];
+      /** Libraries */
+      libraries: components["schemas"]["AccessLibraryView"][];
+    };
+    /** AccessLibraryView */
+    AccessLibraryView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Name */
+      name: string;
+    };
+    /** AccessReconciliationRequest */
+    AccessReconciliationRequest: {
+      /**
+       * Scan Id
+       * Format: uuid
+       */
+      scan_id: string;
+      /** Changes */
+      changes: components["schemas"]["AccessChoice"][];
+    };
+    /** AccessReconciliationView */
+    AccessReconciliationView: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Scan Id
+       * Format: uuid
+       */
+      scan_id: string;
+      /** Status */
+      status: string;
+      /** Message */
+      message: string;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /** Revision */
+      revision: string;
+      /**
+       * Expires At
+       * Format: date-time
+       */
+      expires_at: string;
+      /** Items */
+      items: components["schemas"]["AccessItemView"][];
+      /** Applied At */
+      applied_at: string | null;
+      /** Results */
+      results: {
+        [key: string]: unknown;
+      }[];
+    };
+    /** AccessStateView */
+    AccessStateView: {
+      /** Active */
+      active: boolean;
+      /** Role */
+      role: string;
+      /** Can Automate */
+      can_automate: boolean;
+      /** Library Ids */
+      library_ids: string[];
     };
     /** AccountInput */
     AccountInput: {
@@ -7028,6 +7187,8 @@ export interface components {
        */
       resume_available: boolean;
       latest_scan?: components["schemas"]["ScanView"] | null;
+      latest_access_reconciliation?:
+        components["schemas"]["AccessReconciliationView"] | null;
       latest_reconciliation?:
         components["schemas"]["ReconciliationView"] | null;
       latest_command_reconciliation?:
@@ -9590,6 +9751,109 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["CommandReconciliationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  prepare_access_reconciliation_api_recovery_access_reconciliations_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AccessReconciliationRequest"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AccessReconciliationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  get_access_reconciliation_api_recovery_access_reconciliations__identifier__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        identifier: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AccessReconciliationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  accept_access_reconciliation_api_recovery_access_reconciliations__identifier__accept_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        identifier: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReconciliationAcceptance"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AccessReconciliationView"];
         };
       };
       /** @description Validation Error */

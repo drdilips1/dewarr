@@ -1460,6 +1460,167 @@
         }
       }
     },
+    "/api/recovery/access-reconciliations": {
+      "post": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Prepare Access Reconciliation",
+        "operationId": "prepare_access_reconciliation_api_recovery_access_reconciliations_post",
+        "parameters": [
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccessReconciliationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recovery/access-reconciliations/{identifier}": {
+      "get": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Get Access Reconciliation",
+        "operationId": "get_access_reconciliation_api_recovery_access_reconciliations__identifier__get",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Identifier"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/recovery/access-reconciliations/{identifier}/accept": {
+      "post": {
+        "tags": [
+          "recovery"
+        ],
+        "summary": "Accept Access Reconciliation",
+        "operationId": "accept_access_reconciliation_api_recovery_access_reconciliations__identifier__accept_post",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Identifier"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReconciliationAcceptance"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessReconciliationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/activity": {
       "get": {
         "tags": [
@@ -10852,6 +11013,250 @@
           "base_url"
         ],
         "title": "ABSConnectionInput"
+      },
+      "AccessChoice": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Finding Id"
+          },
+          "active": {
+            "type": "boolean",
+            "title": "Active"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "member",
+              "viewer"
+            ],
+            "title": "Role"
+          },
+          "can_automate": {
+            "type": "boolean",
+            "title": "Can Automate"
+          },
+          "library_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 10000,
+            "title": "Library Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "finding_id",
+          "active",
+          "role",
+          "can_automate",
+          "library_ids"
+        ],
+        "title": "AccessChoice"
+      },
+      "AccessItemView": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Finding Id"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "User Id"
+          },
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "operator": {
+            "type": "boolean",
+            "title": "Operator"
+          },
+          "before": {
+            "$ref": "#/components/schemas/AccessStateView"
+          },
+          "after": {
+            "$ref": "#/components/schemas/AccessStateView"
+          },
+          "libraries": {
+            "items": {
+              "$ref": "#/components/schemas/AccessLibraryView"
+            },
+            "type": "array",
+            "title": "Libraries"
+          }
+        },
+        "type": "object",
+        "required": [
+          "finding_id",
+          "user_id",
+          "username",
+          "operator",
+          "before",
+          "after",
+          "libraries"
+        ],
+        "title": "AccessItemView"
+      },
+      "AccessLibraryView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "AccessLibraryView"
+      },
+      "AccessReconciliationRequest": {
+        "properties": {
+          "scan_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Scan Id"
+          },
+          "changes": {
+            "items": {
+              "$ref": "#/components/schemas/AccessChoice"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Changes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "scan_id",
+          "changes"
+        ],
+        "title": "AccessReconciliationRequest"
+      },
+      "AccessReconciliationView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "scan_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Scan Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AccessItemView"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "applied_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Applied At"
+          },
+          "results": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "scan_id",
+          "status",
+          "message",
+          "created_at",
+          "revision",
+          "expires_at",
+          "items",
+          "applied_at",
+          "results"
+        ],
+        "title": "AccessReconciliationView"
+      },
+      "AccessStateView": {
+        "properties": {
+          "active": {
+            "type": "boolean",
+            "title": "Active"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          },
+          "can_automate": {
+            "type": "boolean",
+            "title": "Can Automate"
+          },
+          "library_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Library Ids"
+          }
+        },
+        "type": "object",
+        "required": [
+          "active",
+          "role",
+          "can_automate",
+          "library_ids"
+        ],
+        "title": "AccessStateView"
       },
       "AccountInput": {
         "properties": {
@@ -20824,6 +21229,16 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ScanView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "latest_access_reconciliation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AccessReconciliationView"
               },
               {
                 "type": "null"

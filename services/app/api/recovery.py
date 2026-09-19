@@ -15,6 +15,7 @@ from app.db.models import (
     RecoveryQueueFence,
     RecoveryScan,
 )
+from app.domain.recovery_access import AccessChoice
 from app.recovery import active_restore, restore_pending
 
 router = APIRouter(prefix="/recovery", tags=["recovery"])
@@ -35,6 +36,7 @@ class RecoveryView(BaseModel):
     imports: dict[str, int]
     resume_available: bool = False
     latest_scan: "ScanView | None" = None
+    latest_access_reconciliation: "AccessReconciliationView | None" = None
     latest_reconciliation: "ReconciliationView | None" = None
     latest_command_reconciliation: "CommandReconciliationView | None" = None
     latest_outbound_reconciliation: "OutboundReconciliationView | None" = None
@@ -161,8 +163,25 @@ async def review(admin: Admin, db: Database):
         if checkpoint
         else None
     )
+    access_review = (
+        await db.scalar(
+            select(Operation)
+            .where(
+                Operation.kind == "recovery.access",
+                Operation.payload["checkpoint_id"].astext == str(checkpoint.id),
+                Operation.owner_id == admin.id,
+            )
+            .order_by(Operation.created_at.desc(), Operation.id.desc())
+            .limit(1)
+        )
+        if checkpoint
+        else None
+    )
     fence = await db.get(RecoveryQueueFence, checkpoint.id) if checkpoint else None
     return RecoveryView(
+        latest_access_reconciliation=access_reconciliation_view(access_review)
+        if access_review
+        else None,
         queue_fence=QueueFenceView(
             historical_jobs=fence.job_count,
             subjects=fence.subject_counts,
@@ -899,3 +918,102 @@ async def accept_command_reconciliation(
     )
     await db.commit()
     return command_reconciliation_view(operation)
+
+
+class AccessReconciliationRequest(BaseModel):
+    model_config = {"extra": "forbid"}
+    scan_id: UUID
+    changes: list[AccessChoice] = Field(min_length=1, max_length=100)
+
+
+class AccessStateView(BaseModel):
+    active: bool
+    role: str
+    can_automate: bool
+    library_ids: list[UUID]
+
+
+class AccessLibraryView(BaseModel):
+    id: UUID
+    name: str
+
+
+class AccessItemView(BaseModel):
+    finding_id: UUID
+    user_id: UUID
+    username: str
+    operator: bool
+    before: AccessStateView
+    after: AccessStateView
+    libraries: list[AccessLibraryView]
+
+
+class AccessReconciliationView(ReconciliationView):
+    items: list[AccessItemView]
+
+
+def access_reconciliation_view(operation):
+    return AccessReconciliationView(
+        id=operation.id,
+        scan_id=operation.payload["command"]["scan_id"],
+        status=operation.status,
+        message=operation.message,
+        created_at=operation.created_at,
+        revision=operation.payload["revision"],
+        expires_at=operation.payload["expires_at"],
+        items=[AccessItemView(**item) for item in operation.payload["items"]],
+        applied_at=operation.payload.get("applied_at"),
+        results=operation.payload.get("results", []),
+    )
+
+
+@router.post("/access-reconciliations", response_model=AccessReconciliationView, status_code=201)
+async def prepare_access_reconciliation(
+    body: AccessReconciliationRequest,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_access import prepare
+
+    operation = await prepare(
+        db, await checkpoint_for(db, admin), admin.id, body.scan_id, body.changes, idempotency_key
+    )
+    await db.commit()
+    return access_reconciliation_view(operation)
+
+
+@router.get("/access-reconciliations/{identifier}", response_model=AccessReconciliationView)
+async def get_access_reconciliation(identifier: UUID, admin: Admin, db: Database):
+    from app.domain.recovery_reconciliation import ACCESS_KIND, load
+
+    return access_reconciliation_view(
+        await load(db, identifier, await checkpoint_for(db, admin), admin.id, kind=ACCESS_KIND)
+    )
+
+
+@router.post(
+    "/access-reconciliations/{identifier}/accept",
+    response_model=AccessReconciliationView,
+    status_code=202,
+)
+async def accept_access_reconciliation(
+    identifier: UUID,
+    body: ReconciliationAcceptance,
+    admin: Admin,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.recovery_reconciliation import ACCESS_KIND, accept
+
+    operation = await accept(
+        db,
+        await checkpoint_for(db, admin),
+        admin.id,
+        identifier,
+        body.revision,
+        idempotency_key,
+        kind=ACCESS_KIND,
+    )
+    await db.commit()
+    return access_reconciliation_view(operation)

@@ -1,5 +1,8 @@
 # Book discovery app — planning workspace
 
+Current recovery work includes [account permission review](docs/RECOVERY-ACCESS.md): explicit role, automation and library-grant corrections while the restore pause remains active. See [implementation status](docs/IMPLEMENTATION-STATUS.md) for measured evidence and remaining full-PRD work.
+
+
 Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md), then use these development deliverables:
 
 [Durable restored-queue protection](docs/RECOVERY-QUEUE.md) prevents historical jobs and newly queued references to restored records from executing. [Saved-approval protection](docs/RECOVERY-APPROVALS.md) also prevents old selections and previews from authorizing new work. Deploy matching builds on schema 0044; controlled resume and fresh-authority activation remain pending. The planning scope and stage gates below remain unchanged.

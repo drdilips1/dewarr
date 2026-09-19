@@ -40,7 +40,16 @@ PUBLICATION_KIND = "recovery.publication"
 LIST_KIND = "recovery.lists"
 OUTBOUND_KIND = "recovery.outbound"
 COMMAND_KIND = "recovery.commands"
-REVIEW_KINDS = (KIND, INVENTORY_KIND, PUBLICATION_KIND, LIST_KIND, OUTBOUND_KIND, COMMAND_KIND)
+ACCESS_KIND = "recovery.access"
+REVIEW_KINDS = (
+    KIND,
+    INVENTORY_KIND,
+    PUBLICATION_KIND,
+    LIST_KIND,
+    OUTBOUND_KIND,
+    COMMAND_KIND,
+    ACCESS_KIND,
+)
 logger = logging.getLogger(__name__)
 
 
@@ -155,13 +164,19 @@ async def current_scan(db, scan_id, checkpoint_id, owner_id):
     return scan
 
 
-async def review_inputs(db, checkpoint, owner_id, scan_id, finding_ids, key, *, kind=KIND):
+async def review_inputs(
+    db, checkpoint, owner_id, scan_id, finding_ids, key, *, kind=KIND, extra_command=None
+):
     await transaction_lock(db, f"recovery:{checkpoint.id}")
     await require_checkpoint(db, checkpoint.id, owner_id)
     ordered = sorted(set(finding_ids))
     if len(ordered) != len(finding_ids) or not 1 <= len(ordered) <= 100:
         raise HTTPException(422, "Choose 1 to 100 distinct eligible findings")
-    command = {"scan_id": str(scan_id), "finding_ids": [str(i) for i in ordered]}
+    command = {
+        "scan_id": str(scan_id),
+        "finding_ids": [str(i) for i in ordered],
+        **(extra_command or {}),
+    }
     old = await db.scalar(
         select(Operation).where(Operation.owner_id == owner_id, Operation.idempotency_key == key)
     )

@@ -70,3 +70,12 @@ async def retire_restored_commands(operation_id: str) -> None:
     from app.domain.recovery_commands import run
 
     await run(UUID(operation_id))
+
+
+@tasks.task(
+    name="recovery.access", queue="recovery", retry=ShelfRetryStrategy(max_attempts=3, wait=60)
+)
+async def review_restored_access(operation_id: str) -> None:
+    from app.domain.recovery_access import run
+
+    await run(UUID(operation_id))

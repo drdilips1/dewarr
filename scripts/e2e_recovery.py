@@ -109,6 +109,26 @@ with psycopg.connect(url.replace("postgresql+psycopg://", "postgresql://")) as c
                 ),
             ),
         )
+    elif sys.argv[1:] == ["access"]:
+        connection.execute(
+            "INSERT INTO users(id,username,display_name,password_hash,role,active,can_automate) "
+            "SELECT '1f697152-2a51-4d49-9c1f-d5a8e5513723', 'recovery-member', "
+            "'Recovery member', u.password_hash, 'member', true, true "
+            "FROM users u JOIN restore_checkpoints r ON r.operator_id=u.id "
+            "WHERE r.id=%s AND r.active",
+            (checkpoint_id,),
+        )
+        connection.execute(
+            "INSERT INTO library_grants(user_id,library_id) "
+            "SELECT '1f697152-2a51-4d49-9c1f-d5a8e5513723', id FROM libraries LIMIT 1"
+        )
+    elif sys.argv[1:] == ["access-check"]:
+        row = connection.execute(
+            "SELECT active,role,can_automate, "
+            "(SELECT count(*) FROM library_grants g WHERE g.user_id=u.id) "
+            "FROM users u WHERE username='recovery-member'"
+        ).fetchone()
+        print(json.dumps(dict(zip(("active", "role", "can_automate", "grants"), row, strict=True))))
     elif sys.argv[1:] == ["commands"]:
         saved = connection.execute(
             "SELECT l.id, l.owner_id FROM book_lists l JOIN restore_checkpoints r "

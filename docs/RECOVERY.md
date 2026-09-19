@@ -4,6 +4,8 @@ This is a partial implementation of **S09-02 / FR-36 / AT-25**. It provides a ve
 
 Current schema 0044 also seals [saved approvals](RECOVERY-APPROVALS.md), preventing restored previews from authorizing new downloads, imports or list changes. This extends the historical queue boundary without enabling resume.
 
+[Account permission review](RECOVERY-ACCESS.md) now lets the operator confirm or repair roles, automation privileges and library grants before resume. It preserves wanted books and external files; current configuration and reactivation still need separate checks. The restricted registry now has eight explicit recovery tasks.
+
 ## What the bundle preserves
 
 | File | Contents |
