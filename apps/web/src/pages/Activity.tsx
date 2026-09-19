@@ -4,6 +4,7 @@ import { Check, Clock } from "lucide-react";
 import { api, result } from "../api/client";
 import Downloads from "./Downloads";
 import DownloadReviews from "./DownloadReviews";
+import ActivityRequests from "./ActivityRequests";
 import { Empty, Loading, Notice } from "../components";
 
 export default function Activity({
@@ -22,7 +23,10 @@ export default function Activity({
         ["queued", "running"].includes(item.status),
       )
         ? 2000
-        : false,
+        : 15000,
+    staleTime: 0,
+    gcTime: 0,
+    retry: false,
   });
   useEffect(() => {
     if (
@@ -70,10 +74,19 @@ export default function Activity({
         ) : null}
       </div>
       <Downloads canManage={canRequest} />
+      <ActivityRequests canManage={canRequest} />
       {admin && <DownloadReviews />}
       <Notice error={activity.error || probe.error} />
       {activity.isPending ? <Loading /> : null}
-      {activity.data?.length ? (
+      {activity.error && (
+        <button
+          disabled={activity.isFetching}
+          onClick={() => activity.refetch()}
+        >
+          Retry activity
+        </button>
+      )}
+      {!activity.error && activity.data?.length ? (
         <div className="activity-list">
           {activity.data.map((item) => (
             <article className="activity-row" key={item.id}>
@@ -138,7 +151,7 @@ export default function Activity({
             </article>
           ))}
         </div>
-      ) : !activity.isPending ? (
+      ) : !activity.isPending && !activity.error ? (
         <Empty title="Nothing in the queue">
           Your requests and background checks will appear here.
         </Empty>

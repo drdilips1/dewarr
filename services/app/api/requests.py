@@ -1,8 +1,9 @@
+from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Header, HTTPException, Query
 from pydantic import BaseModel, ConfigDict, Field
-from sqlalchemy import func, select
+from sqlalchemy import exists, func, select
 
 from app.api.dependencies import CurrentUser, Database, Member
 from app.api.operations import OperationView
@@ -47,6 +48,7 @@ class TargetView(BaseModel):
     state: str
     message: str
     source_artifact_id: UUID | None = None
+    next_action: Literal["none", "search", "selected-release", "downloads", "book"] = "none"
 
 
 class ReasonView(BaseModel):
@@ -62,6 +64,7 @@ class RequestView(BaseModel):
     id: UUID
     work_id: UUID
     work_title: str
+    can_open_book: bool = False
     specification: RequestSpec
     targets: list[TargetView]
     reasons: list[ReasonView]
@@ -116,12 +119,14 @@ async def view(db, user, intent):
     active = any(reason.active for reason in reasons)
     descriptions = []
     work_title = "Unavailable book"
+    can_open_book = False
     try:
         if user.role == "viewer":
             raise HTTPException(403, "Read-only account")
         work_title = (
             await validate_request(db, user, intent.work_id, spec, check_version_constraints=False)
         ).title
+        can_open_book = True
         for medium in ("ebook", "audio"):
             version_id = getattr(spec, medium + "_version_id")
             if version_id:
@@ -139,6 +144,7 @@ async def view(db, user, intent):
             if not active:
                 target.state, target.message = "cancelled", "No active request reasons"
             elif target.state == "wanted":
+                target.next_action = "search"
                 target.message = "Saved to wanted; choose a source release to continue"
                 selection = await db.scalar(
                     select(AcquisitionSelection)
@@ -153,6 +159,7 @@ async def view(db, user, intent):
                     )
                 )
                 if selection:
+                    target.next_action = "none"
                     target.message = (
                         "Acquisition pending; check download activity"
                         if selection.state == "committed"
@@ -160,7 +167,13 @@ async def view(db, user, intent):
                     )
                     if selection.owner_id == user.id:
                         target.source_artifact_id = selection.artifact_id
+                        target.next_action = (
+                            "downloads" if selection.state == "committed" else "selected-release"
+                        )
+            else:
+                target.next_action = "book"
     except HTTPException:
+        can_open_book = False
         targets = [
             TargetView(slot=slot, state="paused", message="Request access needs attention")
             for slot in spec.slots()
@@ -169,6 +182,7 @@ async def view(db, user, intent):
         id=intent.id,
         work_id=(await canonical_work(db, intent.work_id)).id,
         work_title=work_title,
+        can_open_book=can_open_book,
         specification=spec,
         release_policy=intent.release_policy,
         description="; ".join(
@@ -256,10 +270,20 @@ async def all_requests(
     user: CurrentUser,
     db: Database,
     work_id: UUID | None = None,
+    active_only: bool = False,
     offset: int = Query(default=0, ge=0),
     limit: int = Query(default=20, ge=1, le=100),
 ):
     where = [AcquisitionIntent.owner_id == user.id]
+    if active_only:
+        where.append(
+            exists(
+                select(AcquisitionReason.id).where(
+                    AcquisitionReason.intent_id == AcquisitionIntent.id,
+                    AcquisitionReason.active.is_(True),
+                )
+            )
+        )
     if work_id:
         where.append(AcquisitionIntent.work_id.in_(family_ids(work_id)))
     intents = (

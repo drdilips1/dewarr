@@ -7880,6 +7880,11 @@ export interface components {
       work_id: string;
       /** Work Title */
       work_title: string;
+      /**
+       * Can Open Book
+       * @default false
+       */
+      can_open_book: boolean;
       specification: components["schemas"]["RequestSpec"];
       /** Targets */
       targets: components["schemas"]["TargetView"][];
@@ -9013,6 +9018,13 @@ export interface components {
       message: string;
       /** Source Artifact Id */
       source_artifact_id?: string | null;
+      /**
+       * Next Action
+       * @default none
+       * @enum {string}
+       */
+      next_action:
+        "none" | "search" | "selected-release" | "downloads" | "book";
     };
     /** TorrentDescriptor */
     TorrentDescriptor: {
@@ -13906,6 +13918,7 @@ export interface operations {
     parameters: {
       query?: {
         work_id?: string | null;
+        active_only?: boolean;
         offset?: number;
         limit?: number;
       };

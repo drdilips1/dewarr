@@ -1,0 +1,180 @@
+import { expect, test } from "@playwright/test";
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+
+test("activity requests preserve independent reasons and route missing media to the saved request", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(60_000);
+  execFileSync("uv", ["run", "python", "scripts/e2e_auth_budget.py"], {
+    cwd: fileURLToPath(new URL("../../../", import.meta.url)),
+    stdio: "pipe",
+  });
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/");
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Your catalog" }),
+  ).toBeVisible();
+  const auth = await (await page.request.get("/api/auth/me")).json();
+  const headers = {
+    "X-CSRF-Token": auth.csrf_token,
+    Origin: "http://127.0.0.1:8001",
+  };
+  async function post(url: string, data: unknown) {
+    const response = await page.request.post(url, {
+      headers: { ...headers, "Idempotency-Key": crypto.randomUUID() },
+      data,
+    });
+    expect(response.ok(), await response.text()).toBe(true);
+    return response.json();
+  }
+  const work = await post("/api/catalog/works", {
+    title: "Activity Journey Alpha",
+    authors: ["Activity Author"],
+  });
+  const saved = await post("/api/requests", {
+    work_id: work.id,
+    specification: { mode: "audio" },
+  });
+  const list = await post("/api/lists", { name: "Activity follow list" });
+  // Entry creation returns a normal list response and does not activate automation.
+  const entry = await page.request.post(`/api/lists/${list.id}/entries`, {
+    headers,
+    data: { work_id: work.id },
+  });
+  expect(entry.ok()).toBe(true);
+  const listed = await post("/api/requests", {
+    work_id: work.id,
+    specification: { mode: "audio" },
+    reason: { list_id: list.id },
+  });
+  expect(listed.request.id).toBe(saved.request.id);
+  for (let i = 0; i < 10; i++) {
+    const extra = await post("/api/catalog/works", {
+      title: `Activity pagination ${i}`,
+      authors: [],
+    });
+    await post("/api/requests", {
+      work_id: extra.id,
+      specification: { mode: "ebook" },
+    });
+  }
+  const transfers = await (
+    await page.request.get("/api/acquisition/downloads")
+  ).json();
+  const inventory = await (
+    await page.request.get("/api/library/assets")
+  ).json();
+  const writes: string[] = [];
+  page.on("request", (request) => {
+    if (!["GET", "HEAD", "OPTIONS"].includes(request.method()))
+      writes.push(request.url());
+  });
+  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  const requests = page.getByRole("region", {
+    name: "Your media requests",
+    exact: true,
+  });
+  await expect(requests.getByRole("article")).toHaveCount(10);
+  await requests
+    .getByRole("button", { name: "Next requests", exact: true })
+    .click();
+  const card = requests.getByRole("article", {
+    name: "Activity Journey Alpha request",
+    exact: true,
+  });
+  await expect(card).toBeVisible();
+  await expect(card).toContainText("Audiobook · Wanted");
+  await card
+    .getByText("Saved requirements and download preferences", { exact: true })
+    .click();
+  await expect(card).toContainText("Effective request scope");
+  await card
+    .getByText("Saved requirements and download preferences", { exact: true })
+    .click();
+  expect(writes).toEqual([]);
+  await card
+    .getByRole("link", { name: "Choose a source release", exact: true })
+    .click();
+  await expect(page).toHaveURL(
+    new RegExp(`request=${saved.request.id}&slot=audio`),
+  );
+  await expect(
+    page.getByRole("region", { name: "Book download sources" }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  await requests
+    .getByRole("button", { name: "Next requests", exact: true })
+    .click();
+  await expect(card).toBeVisible();
+  await card.screenshot({
+    path: testInfo.outputPath("request-activity-desktop.png"),
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await card.screenshot({
+    path: testInfo.outputPath("request-activity-mobile.png"),
+  });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await card
+    .getByRole("button", { name: "Withdraw your request", exact: true })
+    .click();
+  await expect(
+    card.getByText("Your request · Withdrawn", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    card.getByRole("link", { name: "Choose a source release", exact: true }),
+  ).toBeVisible();
+  await card
+    .getByRole("button", { name: "Withdraw activity follow list", exact: true })
+    .click();
+  await expect(card).toHaveCount(0);
+  await requests
+    .getByRole("checkbox", { name: "Include withdrawn requests" })
+    .click();
+  await expect(
+    requests.getByRole("checkbox", { name: "Include withdrawn requests" }),
+  ).toBeChecked();
+  await requests
+    .getByRole("button", { name: "Next requests", exact: true })
+    .click();
+  await expect(card).toContainText("Audiobook · Cancelled");
+  await expect(
+    card.getByRole("link", { name: "Choose a source release", exact: true }),
+  ).toHaveCount(0);
+  await page.route("**/api/requests?*", (route) =>
+    route.fulfill({
+      status: 503,
+      json: { detail: "Synthetic request activity outage" },
+    }),
+  );
+  await expect(
+    requests.getByText("Synthetic request activity outage", { exact: true }),
+  ).toBeVisible({ timeout: 20_000 });
+  await expect(requests.getByRole("article")).toHaveCount(0);
+  await page.unroute("**/api/requests?*");
+  await requests.getByRole("button", { name: "Retry requests" }).click();
+  await expect(card).toBeVisible();
+  const after = await (
+    await page.request.get(`/api/requests/${saved.request.id}`)
+  ).json();
+  expect(
+    after.reasons.every((reason: { active: boolean }) => !reason.active),
+  ).toBe(true);
+  expect(
+    (await (await page.request.get("/api/acquisition/downloads")).json()).total,
+  ).toBe(transfers.total);
+  expect(
+    (await (await page.request.get("/api/library/assets")).json()).total,
+  ).toBe(inventory.total);
+  expect(errors).toEqual([]);
+});

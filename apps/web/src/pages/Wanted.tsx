@@ -8,6 +8,9 @@ import type { components } from "../api/schema";
 import { Notice } from "../components";
 import { Link } from "react-router-dom";
 import DownloadConstraints from "./DownloadConstraints";
+import RequestNextAction, {
+  requestTargetLabel,
+} from "../components/RequestNextAction";
 
 type Spec = components["schemas"]["RequestOptions"];
 export type WantedVersion = components["schemas"]["VersionView"];
@@ -289,26 +292,12 @@ export default function Wanted({
               {intent.targets.map((target) => (
                 <p key={target.slot}>
                   <strong>
-                    {label(target.slot)} · {stateLabel(target.state)}
+                    {label(target.slot)} · {requestTargetLabel(target)}
                   </strong>
                   <br />
                   <span className="muted">{target.message}</span>
-                  {target.state === "wanted" && (
-                    <>
-                      <br />
-                      <Link
-                        to={
-                          target.source_artifact_id
-                            ? `/sources/artifacts/${target.source_artifact_id}`
-                            : `/books/${workId}?tab=sources&request=${intent.id}&slot=${target.slot}`
-                        }
-                      >
-                        {target.source_artifact_id
-                          ? "View selected release"
-                          : "Choose a source release"}
-                      </Link>
-                    </>
-                  )}
+                  <br />
+                  <RequestNextAction request={intent} target={target} />
                 </p>
               ))}
               {intent.reasons.map((reason) => (

@@ -7394,6 +7394,16 @@
             }
           },
           {
+            "name": "active_only",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Active Only"
+            }
+          },
+          {
             "name": "offset",
             "in": "query",
             "required": false,
@@ -23369,6 +23379,11 @@
             "type": "string",
             "title": "Work Title"
           },
+          "can_open_book": {
+            "type": "boolean",
+            "title": "Can Open Book",
+            "default": false
+          },
           "specification": {
             "$ref": "#/components/schemas/RequestSpec"
           },
@@ -26352,6 +26367,18 @@
               }
             ],
             "title": "Source Artifact Id"
+          },
+          "next_action": {
+            "type": "string",
+            "enum": [
+              "none",
+              "search",
+              "selected-release",
+              "downloads",
+              "book"
+            ],
+            "title": "Next Action",
+            "default": "none"
           }
         },
         "type": "object",

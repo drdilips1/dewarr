@@ -1243,6 +1243,16 @@ nav a.active {
   flex-wrap: wrap;
   margin-bottom: 24px;
 }
+.request-progress-card {
+  margin-top: 16px;
+}
+.request-target {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.request-progress-card details {
+  margin: 16px 0;
+}
 .library-search {
   display: flex;
   align-items: end;
