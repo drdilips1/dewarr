@@ -79,6 +79,7 @@ jobs:
         with:
           node-version: "24.13.0"
       - run: uv sync --frozen
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - run: npm --prefix apps/web ci
       - run: npm --prefix apps/web run build
       - run: cd apps/web && npx playwright install --with-deps chromium
