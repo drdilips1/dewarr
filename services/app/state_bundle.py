@@ -132,8 +132,6 @@ def validate_bundle(root: Path) -> Manifest:
         _env_file=None,
         secret_key=None,
         secret_key_file=None,
-        bootstrap_token=None,
-        bootstrap_token_file=None,
         **config,
     )
     return manifest

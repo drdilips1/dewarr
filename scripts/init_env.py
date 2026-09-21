@@ -28,7 +28,6 @@ def create_secret(name, value):
 
 
 create_secret("app_key", base64.urlsafe_b64encode(secrets.token_bytes(32)).decode())
-create_secret("bootstrap_token", secrets.token_urlsafe(40))
 password = create_secret("postgres_password", secrets.token_urlsafe(32))
 prefix = "/run/secrets/" if args.mode == "compose" else str(secret_dir) + "/"
 db = (
@@ -40,8 +39,8 @@ with env.open("x") as file:
     os.chmod(env, 0o600)
     file.write(
         f"BOOK_DATABASE_URL={db}\nBOOK_PUBLIC_URL=http://localhost:8000\n"
-        f"BOOK_SECRET_KEY_FILE={prefix}app_key\nBOOK_BOOTSTRAP_TOKEN_FILE={prefix}bootstrap_token\n"
+        f"BOOK_SECRET_KEY_FILE={prefix}app_key\n"
         f"BOOK_COOKIE_SECURE=false\nBOOK_UID={os.getuid()}\nBOOK_GID={os.getgid()}\n"
     )
-print(f"Created .env for {args.mode}. Setup token: .local/secrets/bootstrap_token")
+print(f"Created .env for {args.mode}. Open Dewarr to create your first administrator account.")
 print("Keep .local/secrets/app_key with your database backups. No secrets were printed.")

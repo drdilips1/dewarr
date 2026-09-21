@@ -22,7 +22,6 @@ test("settings use compact controls and naming presets persist with planner prev
     .fill("browser test password");
   if (bootstrap) {
     await page.getByLabel("Your name").fill("Test Reader");
-    await page.getByLabel("Setup token").fill("browser-test-bootstrap-token");
     await page.getByRole("button", { name: "Create administrator" }).click();
     await expect(
       page.getByRole("heading", { name: "Let’s set up your library" }),

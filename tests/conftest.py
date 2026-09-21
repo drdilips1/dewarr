@@ -16,7 +16,6 @@ if TEST_DATABASE:
         )
     os.environ["BOOK_DATABASE_URL"] = TEST_DATABASE
 os.environ["BOOK_SECRET_KEY"] = Fernet.generate_key().decode()
-os.environ["BOOK_BOOTSTRAP_TOKEN"] = "test-only-bootstrap-token"
 os.environ["BOOK_PUBLIC_URL"] = "http://testserver"
 os.environ["BOOK_COOKIE_SECURE"] = "false"
 
@@ -69,7 +68,6 @@ async def admin(client):
             "username": "admin",
             "password": "a long test password",
             "display_name": "Test admin",
-            "bootstrap_token": "test-only-bootstrap-token",
         },
     )
     assert response.status_code == 201, response.text

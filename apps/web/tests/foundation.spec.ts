@@ -24,7 +24,6 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await page
     .getByLabel("Password", { exact: true })
     .fill("browser test password");
-  await page.getByLabel("Setup token").fill("browser-test-bootstrap-token");
   await page.getByRole("button", { name: "Create administrator" }).click();
   await page.getByRole("button", { name: "Skip setup", exact: true }).click();
   await page.getByRole("link", { name: "Catalog", exact: true }).click();

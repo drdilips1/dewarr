@@ -6,7 +6,6 @@ x-application: &application
   user: "${BOOK_UID:-1000}:${BOOK_GID:-1000}"
   secrets:
     - app_key
-    - bootstrap_token
   read_only: true
   tmpfs:
     - /tmp
@@ -68,7 +67,5 @@ volumes:
 secrets:
   app_key:
     file: .local/secrets/app_key
-  bootstrap_token:
-    file: .local/secrets/bootstrap_token
   postgres_password:
     file: .local/secrets/postgres_password

@@ -21,7 +21,6 @@ test("onboarding defers, resumes and completes once; settings show one focused s
     .fill("browser test password");
   if (bootstrap) {
     await page.getByLabel("Your name").fill("Test Reader");
-    await page.getByLabel("Setup token").fill("browser-test-bootstrap-token");
     await page.getByRole("button", { name: "Create administrator" }).click();
   } else {
     await page.getByRole("button", { name: "Sign in", exact: true }).click();

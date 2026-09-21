@@ -14,7 +14,6 @@ async def test_bootstrap_is_once_even_when_concurrent(client, database):
         "username": "admin",
         "password": "a long test password",
         "display_name": "Test admin",
-        "bootstrap_token": "test-only-bootstrap-token",
     }
     responses = await asyncio.gather(
         *[client.post("/api/auth/bootstrap", json=body) for _ in range(4)]
@@ -24,20 +23,22 @@ async def test_bootstrap_is_once_even_when_concurrent(client, database):
         assert await db.scalar(select(func.count()).select_from(User)) == 1
 
 
-async def test_setup_token_and_origin_required(client):
+async def test_first_account_requires_trusted_origin_without_a_setup_token(client):
     body = {
         "username": "admin",
         "password": "a long test password",
         "display_name": "Test admin",
-        "bootstrap_token": "incorrect-bootstrap-token",
     }
-    assert (await client.post("/api/auth/bootstrap", json=body)).status_code == 403
-    body["bootstrap_token"] = "test-only-bootstrap-token"
     assert (
         await client.post(
             "/api/auth/bootstrap", json=body, headers={"Origin": "https://untrusted.invalid"}
         )
     ).status_code == 403
+    response = await client.post("/api/auth/bootstrap", json=body)
+    assert response.status_code == 201
+    assert response.json()["user"]["role"] == "admin"
+    assert (await client.get("/api/auth/setup")).json() == {"needs_setup": False}
+    assert (await client.post("/api/auth/bootstrap", json=body)).status_code == 409
 
 
 async def test_session_csrf_and_revocation(client, admin):

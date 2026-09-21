@@ -7,7 +7,6 @@ test.beforeEach(async ({ page }) => {
       username: "reader",
       display_name: "Reader",
       password: "browser test password",
-      bootstrap_token: "browser-test-bootstrap-token",
     },
   });
   const login =

@@ -51,7 +51,6 @@ os.environ.update(
         "BOOK_ENV_FILE": "",
         "BOOK_DATABASE_URL": url,
         "BOOK_SECRET_KEY": Fernet.generate_key().decode(),
-        "BOOK_BOOTSTRAP_TOKEN": "browser-test-bootstrap-token",
         "BOOK_PUBLIC_URL": "http://127.0.0.1:8001",
         "BOOK_COOKIE_SECURE": "false",
         "BOOK_DOWNLOAD_DISPATCH_ENABLED": "true",

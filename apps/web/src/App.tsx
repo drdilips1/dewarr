@@ -100,7 +100,6 @@ function SignIn({ onSuccess }: { onSuccess: (auth: Auth) => void }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
-  const [token, setToken] = useState("");
   const mutation = useMutation({
     mutationFn: async () => {
       if (setup.data?.needs_setup)
@@ -110,7 +109,6 @@ function SignIn({ onSuccess }: { onSuccess: (auth: Auth) => void }) {
               username,
               password,
               display_name: displayName,
-              bootstrap_token: token,
             },
           }),
         );
@@ -203,21 +201,6 @@ function SignIn({ onSuccess }: { onSuccess: (auth: Auth) => void }) {
             maxLength={256}
           />
         </label>
-        {setup.data?.needs_setup ? (
-          <label>
-            Setup token
-            <input
-              type="password"
-              value={token}
-              onChange={(e) => setToken(e.target.value)}
-              required
-              minLength={16}
-            />
-            <small>
-              Use the setup token created when this instance was installed.
-            </small>
-          </label>
-        ) : null}
         <button
           className="primary"
           disabled={mutation.isPending || setup.isError}

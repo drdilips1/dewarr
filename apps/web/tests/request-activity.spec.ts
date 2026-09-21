@@ -19,7 +19,6 @@ test("activity requests preserve independent reasons and route missing media to 
     .fill("browser test password");
   if (await page.getByLabel("Your name").isVisible()) {
     await page.getByLabel("Your name").fill("Test Reader");
-    await page.getByLabel("Setup token").fill("browser-test-bootstrap-token");
     await page.getByRole("button", { name: "Create administrator" }).click();
     await page.getByRole("button", { name: "Skip setup", exact: true }).click();
   } else {

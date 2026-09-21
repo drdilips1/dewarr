@@ -20,3 +20,41 @@ playwright-report/
 # Local deployments and backups
 data/
 backups/
+
+# Internal planning and research stay local.
+/research/
+/*.md
+!/README.md
+/*.csv
+/docs/*.md
+!/docs/DOCKER.md
+!/docs/DEVELOPMENT.md
+!/docs/READING-ACCOUNTS.md
+!/docs/RECOVERY.md
+
+# Publish only reusable build, catalog, and test tools.
+/scripts/*.py
+!/scripts/init_env.py
+!/scripts/export_openapi.py
+!/scripts/dependency_notices.py
+!/scripts/build_discovery_catalog.py
+!/scripts/e2e_abs.py
+!/scripts/e2e_auth_budget.py
+!/scripts/e2e_recovery.py
+!/scripts/e2e_server.py
+!/scripts/e2e_worker.py
+/docs/images/downloads.png
+/docs/images/mobile.png
+
+# Credentials, database exports, and local reports.
+secrets/
+credentials.json
+service-account*.json
+*.pem
+*.key
+*.p12
+*.pfx
+*.dump
+*.backup
+*.log
+coverage/

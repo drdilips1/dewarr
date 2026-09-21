@@ -15,8 +15,6 @@ class Settings(BaseSettings):
     public_url: str = "http://localhost:8000"
     secret_key: SecretStr | None = None
     secret_key_file: Path | None = None
-    bootstrap_token: SecretStr | None = None
-    bootstrap_token_file: Path | None = None
     cookie_secure: bool = True
     session_hours: int = 168
     web_dist: Path = Path("apps/web/dist")
@@ -73,8 +71,6 @@ class Settings(BaseSettings):
     def load_secrets(self) -> "Settings":
         if self.secret_key_file:
             self.secret_key = SecretStr(self.secret_key_file.read_text().strip())
-        if self.bootstrap_token_file:
-            self.bootstrap_token = SecretStr(self.bootstrap_token_file.read_text().strip())
         if self.secret_key:
             Fernet(self.secret_key.get_secret_value().encode())
         return self

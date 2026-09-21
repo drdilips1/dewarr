@@ -2,6 +2,8 @@
 <h1 align="center">Dewarr</h1>
 <p align="center">Your reading lists, audiobook library, and downloads in one place.</p>
 
+![Dewarr For you page](docs/images/for-you.png)
+
 ## Features
 
 - **Audiobookshelf integration** — browse your library, see what you own, and import completed downloads into verified library folders.
@@ -29,7 +31,83 @@ python3 scripts/init_env.py --mode compose
 docker compose up -d
 ```
 
-Open [localhost:8000](http://localhost:8000). Create your administrator account using the setup token stored in `.local/secrets/bootstrap_token`.
+Open [localhost:8000](http://localhost:8000). Create your first administrator account directly on the welcome page. After that, only an administrator can add more users.
+
+The included `compose.yaml` runs Dewarr, its worker, and PostgreSQL:
+
+```yaml
+name: dewarr
+
+x-application: &application
+  image: ${DEWARR_IMAGE:-ghcr.io/logabell/dewarr:latest}
+  env_file: .env
+  user: "${BOOK_UID:-1000}:${BOOK_GID:-1000}"
+  secrets:
+    - app_key
+  read_only: true
+  tmpfs:
+    - /tmp
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+
+services:
+  postgres:
+    image: postgres:18.3-bookworm@sha256:80630f83606d8db77d30b3851b16a9f78be2d0d4dda6f7b82a1fdca5ebe3acba
+    environment:
+      POSTGRES_USER: book
+      POSTGRES_DB: book
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    volumes:
+      - postgres:/var/lib/postgresql
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U book -d book"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  migrate:
+    <<: *application
+    command: [alembic, upgrade, head]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api:
+    <<: *application
+    ports:
+      - "${DEWARR_BIND:-127.0.0.1}:${DEWARR_PORT:-8000}:8000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health/ready', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  worker:
+    <<: *application
+    command: [python, -m, app.jobs.worker]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+volumes:
+  postgres:
+
+secrets:
+  app_key:
+    file: .local/secrets/app_key
+  postgres_password:
+    file: .local/secrets/postgres_password
+```
 
 Then open **Settings**:
 
@@ -45,9 +123,6 @@ Dewarr runs an API/UI container, a background worker, and PostgreSQL. A short-li
 ## Screenshots
 
 Actual Dewarr UI captured with an isolated demo account. Connected services and library contents depend on your setup.
-
-### For you
-![Personalized discovery](docs/images/for-you.png)
 
 ### Browse books
 ![Browse discovery shelves](docs/images/browse.png)
@@ -65,13 +140,7 @@ Actual Dewarr UI captured with an isolated demo account. Connected services and 
 ### Library connections
 ![Audiobookshelf library settings](docs/images/library-settings.png)
 
-<details>
-<summary>Downloads and mobile</summary>
 
-![Download requests](docs/images/downloads.png)
-<img src="docs/images/mobile.png" width="320" alt="Dewarr on mobile">
-
-</details>
 
 ## Updates
 

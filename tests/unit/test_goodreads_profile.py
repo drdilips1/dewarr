@@ -8,13 +8,13 @@ from app.adapters.goodreads import DocumentResult
 @pytest.mark.parametrize(
     "value",
     [
-        "153017922",
-        "https://www.goodreads.com/user/show/153017922-logan-abell",
-        "https://www.goodreads.com/review/list/153017922?page=1&shelf=%23ALL%23",
+        "123456789",
+        "https://www.goodreads.com/user/show/123456789-sample-reader",
+        "https://www.goodreads.com/review/list/123456789?page=1&shelf=%23ALL%23",
     ],
 )
 def test_profile_variants(value):
-    assert profile.profile_input(value) == {"user_id": "153017922", "key": None, "selected": None}
+    assert profile.profile_input(value) == {"user_id": "123456789", "key": None, "selected": None}
 
 
 @pytest.mark.parametrize(

@@ -4971,8 +4971,6 @@ export interface components {
       username: string;
       /** Password */
       password: string;
-      /** Bootstrap Token */
-      bootstrap_token: string;
       /** Display Name */
       display_name: string;
     };

@@ -1,5 +1,4 @@
 import asyncio
-import hmac
 import secrets
 from datetime import UTC, datetime, timedelta
 from typing import Literal
@@ -30,7 +29,6 @@ class Credentials(BaseModel):
 
 
 class BootstrapInput(Credentials):
-    bootstrap_token: str = Field(min_length=16, max_length=300)
     display_name: str = Field(min_length=1, max_length=120)
 
 
@@ -127,11 +125,6 @@ async def setup_status(db: Database) -> SetupView:
 async def bootstrap(body: BootstrapInput, request: Request, response: Response, db: Database):
     require_origin(request)
     await enforce_auth_budget(db, "bootstrap")
-    configured = get_settings().bootstrap_token
-    if not configured or not hmac.compare_digest(
-        body.bootstrap_token, configured.get_secret_value()
-    ):
-        raise HTTPException(403, "The setup token is invalid")
     encoded = await asyncio.to_thread(hash_password, body.password)
     await db.execute(text("SELECT pg_advisory_xact_lock(720001)"))
     if await db.scalar(select(func.count()).select_from(User)):

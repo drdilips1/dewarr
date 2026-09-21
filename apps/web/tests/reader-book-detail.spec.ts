@@ -20,7 +20,6 @@ test("Discover opens a full book page with safe reviews and explicit actions", a
     await page
       .getByLabel("Password", { exact: true })
       .fill("browser test password");
-    await page.getByLabel("Setup token").fill("browser-test-bootstrap-token");
     await page.getByRole("button", { name: "Create administrator" }).click();
     await page.getByRole("button", { name: "Skip setup", exact: true }).click();
     await page.getByRole("link", { name: "My Library", exact: true }).click();

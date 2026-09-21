@@ -12,7 +12,7 @@ docker compose up -d
 docker compose ps
 ```
 
-Open http://localhost:8000. Read `.local/secrets/bootstrap_token` locally and use it to create the first administrator. There is no default login.
+Open http://localhost:8000. Create your first administrator account on the welcome page. No setup token or default login is needed. Once an account exists, public registration closes.
 
 The setup script creates random credentials and refuses to overwrite an existing `.env`. It uses Python's standard library. Keep `.env` and `.local/secrets` private.
 

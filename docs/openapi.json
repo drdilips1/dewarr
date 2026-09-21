@@ -15949,12 +15949,6 @@
             "minLength": 12,
             "title": "Password"
           },
-          "bootstrap_token": {
-            "type": "string",
-            "maxLength": 300,
-            "minLength": 16,
-            "title": "Bootstrap Token"
-          },
           "display_name": {
             "type": "string",
             "maxLength": 120,
@@ -15966,7 +15960,6 @@
         "required": [
           "username",
           "password",
-          "bootstrap_token",
           "display_name"
         ],
         "title": "BootstrapInput"

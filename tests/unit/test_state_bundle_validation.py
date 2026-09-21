@@ -100,7 +100,6 @@ def test_other_versions_are_not_silently_restored(bundle):
 
 def test_verification_does_not_load_unrelated_installation_key_files(bundle, monkeypatch):
     monkeypatch.setenv("BOOK_SECRET_KEY_FILE", "/missing/unrelated-key")
-    monkeypatch.setenv("BOOK_BOOTSTRAP_TOKEN_FILE", "/missing/unrelated-bootstrap")
     assert validate_bundle(bundle).schema_revision == SCHEMA
 
 

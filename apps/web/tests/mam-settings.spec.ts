@@ -8,7 +8,7 @@ test("MAM masks saved secrets and saves edited proxy before testing", async ({
   let connection = {
     configured: true,
     base_url: "https://www.myanonamouse.net",
-    proxy_url: "http://10.159.10.97:8888",
+    proxy_url: "http://192.0.2.10:8888",
     has_session: true,
     has_proxy_credentials: true,
     enabled: true,
