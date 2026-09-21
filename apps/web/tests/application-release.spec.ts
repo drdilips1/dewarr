@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 for (const state of ["update", "current", "offline", "unconfigured"]) {
   test(`sidebar release tracker: ${state}`, async ({ page }) => {
@@ -33,6 +33,12 @@ for (const state of ["update", "current", "offline", "unconfigured"]) {
                 ? "unconfigured"
                 : "checked",
         };
+      if (
+        new URL(route.request().url()).pathname.includes(
+          "/acquisition/preferences/",
+        )
+      )
+        data = { effective: { desired_media: "both" } };
       return route.fulfill({ json: data });
     });
     await page.goto("/settings");

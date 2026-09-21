@@ -59,6 +59,8 @@ Integration tests require a separate PostgreSQL database whose name ends in `_te
 BOOK_TEST_DATABASE_URL=postgresql+psycopg://book:example-password@localhost:5432/dewarr_test uv run pytest -q
 ```
 
+Install `ffmpeg` and PostgreSQL client tools matching your test server’s major version (`pg_dump` and `pg_restore` are used by restore tests).
+
 The URL above is an example; create the database and use your own local credentials. Tests clear their dedicated databases. Never use an installation database.
 
 Browser tests require a second database ending in `_browser_test`:
@@ -69,7 +71,7 @@ npx playwright install chromium
 BOOK_E2E_DATABASE_URL=postgresql+psycopg://book:example-password@localhost:5432/dewarr_browser_test npm run test:e2e
 ```
 
-The browser runner starts its own API, worker, and mock integration server. Fixtures use synthetic credentials. Do not add live tokens, personal reading lists, or private server addresses to fixtures.
+The browser runner starts its own API, worker, and mock integration server. Its foundation project creates the first account and synthetic connections before the browser journeys run. Goodreads collection pages use bundled snapshots; remote cover images use local responses, so tests do not depend on public services. Fixtures use synthetic credentials. Do not add live tokens, personal reading lists, or private server addresses to fixtures.
 
 ## API changes
 

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("MAM masks saved secrets and saves edited proxy before testing", async ({
   page,
@@ -70,6 +70,12 @@ test("MAM masks saved secrets and saves edited proxy before testing", async ({
         base_url: "",
         excluded_indexers: [],
       };
+    if (
+      new URL(route.request().url()).pathname.includes(
+        "/acquisition/preferences/",
+      )
+    )
+      data = { effective: { desired_media: "both" } };
     return route.fulfill({ json: data });
   });
   await page.goto("/settings#sources");

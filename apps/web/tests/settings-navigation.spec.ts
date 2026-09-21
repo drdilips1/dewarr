@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 for (const role of ["admin", "member", "viewer"]) {
   test(`${role}: focused settings, requests, queue, and log deep links`, async ({

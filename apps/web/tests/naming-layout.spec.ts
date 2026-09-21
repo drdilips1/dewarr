@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("naming lanes stay on one line and preserve independent format settings", async ({
   page,

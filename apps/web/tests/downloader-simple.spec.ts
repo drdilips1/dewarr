@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
@@ -21,7 +21,10 @@ test("qBittorrent setup only needs an address and category", async ({
   } else {
     await page.getByRole("button", { name: "Sign in", exact: true }).click();
   }
-  await page.goto("/catalog");
+  await expect(
+    page.getByRole("button", { name: "Sign out", exact: true }),
+  ).toBeVisible();
+  await page.goto("/library?view=saved");
   await expect(
     page.getByRole("button", { name: "Sign out", exact: true }),
   ).toBeVisible();

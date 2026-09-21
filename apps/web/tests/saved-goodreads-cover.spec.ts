@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("saved Goodreads covers survive refresh without metadata", async ({
   page,
@@ -46,6 +46,12 @@ test("saved Goodreads covers survive refresh without metadata", async ({
         body: '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="300"><rect width="200" height="300" fill="navy"/></svg>',
       });
     }
+    if (
+      new URL(route.request().url()).pathname.includes(
+        "/acquisition/preferences/",
+      )
+    )
+      data = { effective: { desired_media: "both" } };
     await route.fulfill({ json: data });
   });
   await page.goto("/discover?view=yours");

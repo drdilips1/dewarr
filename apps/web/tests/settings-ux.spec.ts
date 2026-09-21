@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
@@ -170,7 +170,7 @@ test("settings use compact controls and naming presets persist with planner prev
     exact: true,
   });
   await libraries
-    .getByRole("button", { name: "Connect Audiobookshelf", exact: true })
+    .getByRole("button", { name: "Add server", exact: true })
     .click();
   const connectionForm = libraries.locator("form").filter({
     has: page.getByRole("heading", { name: "Connect your Audiobookshelf" }),

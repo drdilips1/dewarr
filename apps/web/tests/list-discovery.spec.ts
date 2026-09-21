@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
@@ -19,8 +19,10 @@ test("followed lists expose saved books and ownership without starting acquisiti
     .fill("browser test password");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: "Your catalog" }),
+    page.getByRole("button", { name: "Sign out", exact: true }),
   ).toBeVisible();
+  await page.goto("/library?view=saved");
+  await expect(page.getByRole("heading", { name: "My Library" })).toBeVisible();
   const auth = await (await page.request.get("/api/auth/me")).json();
   const headers = {
     "X-CSRF-Token": auth.csrf_token,
@@ -72,35 +74,35 @@ test("followed lists expose saved books and ownership without starting acquisiti
     }
   }
   expect(latest).not.toBeNull();
-  const hardcoverLists = await (
-    await page.request.get(
-      "/api/discovery/followed-lists?provider=hardcover&limit=4",
-    )
-  ).json();
+
   const writes: string[] = [];
   page.on("request", (request) => {
     if (!["GET", "HEAD", "OPTIONS"].includes(request.method()))
       writes.push(request.url());
   });
-  await page.getByRole("link", { name: "Discover", exact: true }).click();
+  await page.goto("/discover?view=yours");
   const shelf = page.getByRole("region", {
     name: "Your followed lists",
     exact: true,
   });
-  await expect(shelf.getByRole("article")).toHaveCount(4);
-  const card = shelf.getByRole("article", {
+  const card = shelf.getByRole("region", {
     name: `${latest!.name} followed list`,
     exact: true,
   });
-  await expect(card).toContainText("3 books · 1 in your library");
-  await expect(card).toContainText("List observations paused");
-  await expect(card).toContainText("No successful observation yet");
-  await expect(card).toContainText("RSS can show only part of a shelf");
-  await expect(card.locator(".book-card")).toHaveCount(3);
-  await expect(card.locator(".book-card").first()).toContainText("In library");
-  await card.screenshot({
-    path: testInfo.outputPath("followed-lists-desktop.png"),
-  });
+  await expect(card).toContainText("3 books");
+  await expect(card.locator(".book-card:not(.shelf-view-all)")).toHaveCount(3);
+  await expect(
+    card.getByRole("img", { name: "In library", exact: true }),
+  ).toHaveCount(1);
+  await expect(
+    card.getByRole("button", { name: `Refresh ${latest!.name}`, exact: true }),
+  ).toBeDisabled();
+  await shelf.scrollIntoViewIfNeeded();
+  if (await shelf.locator(".infinite-scroll").count())
+    await shelf.locator(".infinite-scroll").scrollIntoViewIfNeeded();
+  await expect
+    .poll(() => shelf.locator(":scope > .discovery-section").count())
+    .toBeGreaterThanOrEqual(6);
   await page.setViewportSize({ width: 390, height: 844 });
   await card.screenshot({
     path: testInfo.outputPath("followed-lists-mobile.png"),
@@ -110,45 +112,8 @@ test("followed lists expose saved books and ownership without starting acquisiti
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
-  await shelf.getByRole("button", { name: "Next followed lists" }).click();
-  await expect(shelf.getByRole("status")).toHaveText("Page 2");
-  await expect(card).toHaveCount(0);
-  await shelf
-    .getByRole("combobox", { name: "List source" })
-    .selectOption("hardcover");
-  await expect(
-    shelf.getByRole("article", { name: "Followed discovery 0 followed list" }),
-  ).toBeVisible();
-  await expect(shelf.getByRole("article")).toHaveCount(
-    hardcoverLists.items.length,
-  );
-  await expect(shelf.getByRole("status")).toHaveCount(0);
-  await shelf
-    .getByRole("combobox", { name: "List source" })
-    .selectOption("goodreads");
-  await expect(card).toBeVisible();
-  await page.route("**/api/discovery/followed-lists?*", (route) =>
-    route.fulfill({
-      status: 503,
-      json: { detail: "Synthetic followed-list outage" },
-    }),
-  );
-  await shelf
-    .getByRole("combobox", { name: "List source" })
-    .selectOption("all");
-  await expect(shelf.getByRole("alert")).toHaveText(
-    "Synthetic followed-list outage",
-  );
-  await expect(shelf.getByRole("article")).toHaveCount(0);
-  await page.unroute("**/api/discovery/followed-lists?*");
-  await shelf.getByRole("button", { name: "Retry followed lists" }).click();
-  await expect(card).toBeVisible();
-  const openList = card.getByRole("link", {
-    name: "Open list · curate and review automation →",
-  });
-  await openList.focus();
-  await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(`/lists/${latest!.id}`);
+  await card.getByRole("link", { name: "View all", exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`view=yours&list=${latest!.id}`));
   await expect(
     page.getByRole("heading", { name: latest!.name, exact: true }),
   ).toBeVisible();

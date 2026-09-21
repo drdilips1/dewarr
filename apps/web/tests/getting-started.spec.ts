@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
@@ -93,7 +93,7 @@ test("onboarding defers, resumes and completes once; settings show one focused s
     ).toHaveCount(0);
   await page.goto("/settings#catalog");
   const catalog = page.getByRole("region", {
-    name: "Catalog & metadata",
+    name: "Metadata",
     exact: true,
   });
   await catalog
@@ -147,7 +147,7 @@ test("onboarding defers, resumes and completes once; settings show one focused s
   await expect(page).toHaveURL(/\/settings#naming$/);
   await expect(
     page
-      .getByRole("navigation", { name: "Settings sections" })
+      .getByRole("navigation", { name: "Settings categories" })
       .getByRole("link", { name: "File naming", exact: true }),
   ).toHaveAttribute("aria-current", "page");
   await expect(catalog).toHaveCount(0);
@@ -217,17 +217,17 @@ test("onboarding defers, resumes and completes once; settings show one focused s
   await page.getByRole("link", { name: "Settings", exact: true }).click();
   await expect(page.locator(".settings-section")).toHaveCount(1);
   await expect(
-    page.getByRole("region", { name: "Display", exact: true }),
+    page.getByRole("region", { name: "General", exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByRole("region", { name: "Catalog & metadata", exact: true }),
+    page.getByRole("region", { name: "Metadata", exact: true }),
   ).toHaveCount(0);
   await page
     .getByRole("navigation", { name: "Settings categories" })
     .getByRole("link", { name: "Metadata", exact: true })
     .click();
   await expect(
-    page.getByRole("region", { name: "Catalog & metadata", exact: true }),
+    page.getByRole("region", { name: "Metadata", exact: true }),
   ).toBeVisible();
   await expect(
     page.getByRole("button", { name: "Users & access" }),

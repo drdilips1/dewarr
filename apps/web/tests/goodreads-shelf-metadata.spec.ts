@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 for (const connected of [true, false]) {
   test(`Goodreads shelf resolves covers with Hardcover ${connected ? "connected" : "disabled"}`, async ({
@@ -38,7 +38,7 @@ for (const connected of [true, false]) {
         data = { order: [], hidden: [] };
       else if (path === "/api/discovery/collections")
         data = { items: [], total: 0 };
-      else if (path === "/api/discovery/followed-lists")
+      else if (path === "/api/lists/page")
         data = {
           items: [
             {
@@ -50,6 +50,13 @@ for (const connected of [true, false]) {
             },
           ],
           total: 1,
+        };
+      else if (path === `/api/lists/${listId}/subscription`)
+        data = {
+          provider: "goodreads",
+          enabled: true,
+          state: "idle",
+          generation: 1,
         };
       else if (path === `/api/lists/${listId}`)
         data = {
@@ -77,6 +84,12 @@ for (const connected of [true, false]) {
           },
         };
       }
+      if (
+        new URL(route.request().url()).pathname.includes(
+          "/acquisition/preferences/",
+        )
+      )
+        data = { effective: { desired_media: "both" } };
       await route.fulfill({ json: data });
     });
     await page.goto("/discover?view=yours");
@@ -97,8 +110,8 @@ for (const connected of [true, false]) {
       ).toBeVisible();
       expect(lookups).toBe(0);
     }
-    await shelf.getByRole("link", { name: "View all" }).click();
-    await expect(page).toHaveURL(`/lists/${listId}`);
+    await shelf.getByRole("link", { name: "View all", exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`view=yours&list=${listId}`));
     if (connected) {
       await expect(
         page.getByRole("img", { name: "Cover of Atmosphere: A Love Story" }),

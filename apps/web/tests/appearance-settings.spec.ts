@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("cover shapes persist while legacy overlay preferences cannot hide overlays", async ({
   page,
@@ -54,6 +54,12 @@ test("cover shapes persist while legacy overlay preferences cannot hide overlays
         has_more: false,
       };
     else if (path.includes("/cover")) return route.fulfill({ status: 404 });
+    if (
+      new URL(route.request().url()).pathname.includes(
+        "/acquisition/preferences/",
+      )
+    )
+      data = { effective: { desired_media: "both" } };
     return route.fulfill({ json: data });
   });
   await page.goto("/settings#display");

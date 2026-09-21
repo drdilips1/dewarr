@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("one library card shows both formats and uses the mixed-view cover preference", async ({
   page,
@@ -64,6 +64,12 @@ test("one library card shows both formats and uses the mixed-view cover preferen
         known_works: { ebook: work, audio: work },
       };
     }
+    if (
+      new URL(route.request().url()).pathname.includes(
+        "/acquisition/preferences/",
+      )
+    )
+      data = { effective: { desired_media: "both" } };
     return route.fulfill({ json: data });
   });
   await page.goto("/library");
@@ -111,7 +117,7 @@ test("one library card shows both formats and uses the mixed-view cover preferen
     /medium=audio$/,
   );
   await page.goto("/settings#display");
-  await page.getByRole("button", { name: "Restore display defaults" }).click();
+  await page.getByRole("button", { name: "Reset cover shapes" }).click();
   await page.goto("/library");
   await expect(card.locator(".cover-portrait")).toBeVisible();
   await page.screenshot({

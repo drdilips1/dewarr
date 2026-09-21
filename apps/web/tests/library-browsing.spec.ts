@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("library browsing searches books and preserves filters through navigation", async ({
   page,
@@ -32,6 +32,12 @@ test("library browsing searches books and preserves filters through navigation",
       data = [{ id: first.library_id, name: "My books" }];
     else if (url.pathname === "/api/library/books")
       data = { items: [first], total: 1, offset: 0, limit: 40 };
+    if (
+      new URL(route.request().url()).pathname.includes(
+        "/acquisition/preferences/",
+      )
+    )
+      data = { effective: { desired_media: "both" } };
     return route.fulfill({ json: data });
   });
   const writes: string[] = [];

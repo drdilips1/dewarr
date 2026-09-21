@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Page } from "./fixtures";
 
 const author = {
   external_id: "9",
@@ -108,13 +108,20 @@ async function fixtures(page: Page, role = "viewer") {
         json: { detail: "Request no longer available" },
       });
     else if (url.pathname.endsWith("/main-books")) data = null;
+    else if (url.pathname.endsWith("/requests"))
+      data = { items: [], total: 0, offset: 0, limit: 25 };
     else if (
       url.pathname === "/api/lists" ||
       url.pathname === "/api/acquisition/profiles" ||
-      url.pathname === "/api/library/libraries" ||
-      url.pathname.endsWith("/requests")
+      url.pathname === "/api/library/libraries"
     )
       data = [];
+    if (
+      new URL(route.request().url()).pathname.includes(
+        "/acquisition/preferences/",
+      )
+    )
+      data = { effective: { desired_media: "both" } };
     return route.fulfill({ json: data });
   });
 }
@@ -123,6 +130,11 @@ test("author links stay in app; biography tabs, pagination, and mobile work", as
   page,
 }, testInfo) => {
   await fixtures(page);
+  const authorPages: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/api/metadata/authors/"))
+      authorPages.push(request.url());
+  });
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/discover/books/hardcover/101");
@@ -131,7 +143,7 @@ test("author links stay in app; biography tabs, pagination, and mobile work", as
     .getByRole("link", { name: author.name });
   await expect(authorLink).toHaveAttribute("href", "/authors/hardcover/9");
   await page
-    .locator(".book-author-table tbody")
+    .locator(".author-line")
     .getByRole("link", { name: author.name })
     .click();
   await expect(page).toHaveURL(/\/authors\/hardcover\/9$/);
@@ -157,11 +169,13 @@ test("author links stay in app; biography tabs, pagination, and mobile work", as
     page.getByRole("tab", { name: "About the author" }),
   ).toHaveAttribute("aria-selected", "true");
   await page.getByRole("tab", { name: "Books", exact: true }).click();
-  await page.getByRole("button", { name: "Next", exact: true }).click();
-  await expect(
-    page.getByText("No books are available on this page.", { exact: false }),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Previous", exact: true }).click();
+  await page.locator(".entity-book-grid").scrollIntoViewIfNeeded();
+  await expect
+    .poll(() =>
+      authorPages.some((url) => new URL(url).searchParams.get("page") === "2"),
+    )
+    .toBe(true);
+  await expect(page.locator(".entity-book-grid .book-card")).toHaveCount(3);
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.locator(".entity-book-grid .book-card")).toHaveCount(3);
   await page.screenshot({
@@ -282,7 +296,7 @@ test("global search opens book details and legacy source menus return to search"
   const search = page.getByRole("textbox", { name: "Search books or authors" });
   await search.fill("Earthsea");
   await search.press("Enter");
-  await page.getByRole("link", { name: /A Wizard of Earthsea Ursula/ }).click();
+  await page.getByRole("link", { name: "View A Wizard of Earthsea" }).click();
   await expect(page).toHaveURL(/\/discover\/books\/hardcover\/101$/);
   await expect(
     page.getByRole("heading", { name: titles[0], exact: true }),

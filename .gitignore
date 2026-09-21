@@ -39,6 +39,7 @@ backups/
 !/scripts/dependency_notices.py
 !/scripts/build_discovery_catalog.py
 !/scripts/e2e_abs.py
+!/scripts/e2e_api.py
 !/scripts/e2e_auth_budget.py
 !/scripts/e2e_recovery.py
 !/scripts/e2e_server.py

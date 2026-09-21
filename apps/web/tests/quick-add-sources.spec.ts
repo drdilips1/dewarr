@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("Quick add follows defaults and format overrides; sources provide compact rows and complete details", async ({
   page,

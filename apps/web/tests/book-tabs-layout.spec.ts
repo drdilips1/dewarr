@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("editions paginate and reviews expand, sort and protect spoilers", async ({
   page,

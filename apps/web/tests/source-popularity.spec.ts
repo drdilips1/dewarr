@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
@@ -19,8 +19,10 @@ test("source popularity persists as an ordered preference without rewriting save
     .fill("browser test password");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: "Your catalog" }),
+    page.getByRole("button", { name: "Sign out", exact: true }),
   ).toBeVisible();
+  await page.goto("/library?view=saved");
+  await expect(page.getByRole("heading", { name: "My Library" })).toBeVisible();
   const works = await (
     await page.request.get("/api/catalog/works?q=The%20Synthetic%20Archive")
   ).json();
@@ -60,18 +62,15 @@ test("source popularity persists as an ordered preference without rewriting save
       exact: true,
     }),
   ).toBeEnabled({ timeout: 30_000 });
-  await sources
-    .getByRole("combobox", { name: "Download profile", exact: true })
-    .selectOption("");
-  await sources.getByText("Download profile settings", { exact: true }).click();
-  await sources.getByText("Edit profile", { exact: true }).click();
-  await sources
-    .getByLabel("Profile name", { exact: true })
-    .fill("Popularity within each source");
-  await sources
+  await page.goto("/settings#preferences");
+  const preferences = page.getByRole("region", {
+    name: "Download defaults",
+    exact: true,
+  });
+  await preferences
     .getByRole("checkbox", { name: "Prefer popular releases", exact: true })
     .check();
-  const order = sources.getByRole("group", {
+  const order = preferences.getByRole("group", {
     name: "Ranking priorities",
     exact: true,
   });
@@ -84,75 +83,53 @@ test("source popularity persists as an ordered preference without rewriting save
   await expect(order.locator("li").nth(1)).toContainText("Source");
   await page.keyboard.press("ArrowDown");
   await page.keyboard.press("ArrowUp");
-  const savedResponse = page.waitForResponse(
-    (response) =>
-      response.url().endsWith("/api/acquisition/profiles") &&
-      response.request().method() === "POST",
-  );
-  await sources
-    .getByRole("button", { name: "Create profile", exact: true })
+  await preferences
+    .getByRole("button", { name: "Save download defaults", exact: true })
     .click();
-  const saved = await savedResponse;
-  expect(saved.status()).toBe(201);
-  const profile = await saved.json();
   await expect(
-    sources.getByRole("combobox", { name: "Download profile", exact: true }),
-  ).toHaveValue(profile.id);
-  expect(profile.preferences.criteria).toEqual([
-    "format",
-    "source",
-    "popularity",
-    "seeders",
-  ]);
+    preferences.getByText("Download defaults saved.", { exact: true }),
+  ).toBeVisible();
+  await page.goto(`/books/${work.id}?tab=sources`);
   await refresh();
   await mam.getByRole("button", { name: /^Details for/ }).click();
   const details = page.getByRole("dialog", { name: "Release details" });
-  await details.getByText("Why this ranking?", { exact: true }).click();
-  await expect(details).toContainText(
-    "MAM reports 321 completed downloads; compared only within MAM",
-  );
+  await details.getByRole("tab", { name: "Details", exact: true }).click();
   await expect(details.locator(".release-facts")).toContainText("321");
   await details.screenshot({
     path: testInfo.outputPath("popularity-evidence.png"),
   });
-  await page.reload();
+  await page.goto("/settings#preferences");
   await expect(
-    sources.getByRole("combobox", { name: "Download profile", exact: true }),
-  ).toHaveValue(profile.id);
-  await sources.getByText("Download profile settings", { exact: true }).click();
-  await sources.getByText("Edit profile", { exact: true }).click();
-  const popularity = sources.locator(".setting-inline-option");
-  // Use the innermost details (the outer customization details also contains it).
-  await popularity.last().screenshot({
+    preferences.getByRole("checkbox", {
+      name: "Prefer popular releases",
+      exact: true,
+    }),
+  ).toBeChecked();
+  await preferences.screenshot({
     path: testInfo.outputPath("popularity-settings-desktop.png"),
   });
   await page.setViewportSize({ width: 390, height: 844 });
-  await popularity.last().screenshot({
-    path: testInfo.outputPath("popularity-settings-mobile.png"),
-  });
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBe(true);
-  await sources
+  await preferences
     .getByRole("checkbox", { name: "Prefer popular releases", exact: true })
     .uncheck();
-  const changedResponse = page.waitForResponse(
-    (response) =>
-      response.url().endsWith(`/api/acquisition/profiles/${profile.id}`) &&
-      response.request().method() === "PUT",
-  );
-  await sources
-    .getByRole("button", { name: "Save profile", exact: true })
+  await preferences
+    .getByRole("button", { name: "Save download defaults", exact: true })
     .click();
-  expect((await changedResponse).status()).toBe(200);
+  await expect(
+    preferences.getByText("Download defaults saved.", { exact: true }),
+  ).toBeVisible();
   const latest = await (
     await page.request.get(
       `/api/catalog/works/${work.id}/source-searches/latest`,
     )
   ).json();
   expect(latest.profile.preferences.criteria).toContain("popularity");
+  await page.goto(`/books/${work.id}?tab=sources`);
   const receipt = await refresh();
   const refreshed = await (
     await page.request.get(

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test.beforeEach(async ({ page }) => {
   const bootstrap = await page.request.post("/api/auth/bootstrap", {
@@ -112,7 +112,7 @@ test("awards, filtering, pinning and persisted layout form one discovery flow", 
   ).toBeVisible();
   await expect(
     page.getByRole("link", { name: "Connect Hardcover", exact: true }),
-  ).toBeVisible();
+  ).toHaveCount(0);
   expect(errors).toEqual([]);
 });
 
@@ -167,6 +167,12 @@ test("manual list preview is bounded and mobile navigation fits", async ({
 test("Goodreads cards open verified Hardcover details and lists navigation is consolidated", async ({
   page,
 }) => {
+  await page.route("https://**/*.{jpg,png}", (route) =>
+    route.fulfill({
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="300"><rect width="200" height="300"/></svg>',
+    }),
+  );
   const book = {
     provider: "hardcover",
     external_id: "42",
@@ -200,7 +206,7 @@ test("Goodreads cards open verified Hardcover details and lists navigation is co
   await page.route(/\/api\/metadata\/books\/hardcover\/42$/, (route) =>
     route.fulfill({ json: { book, work: null, stale: false } }),
   );
-  await page.goto("/discover");
+  await page.goto("/discover/collections/gr-list-19341");
   await expect(
     page
       .getByRole("navigation", { name: "Main navigation" })
@@ -215,7 +221,7 @@ test("Goodreads cards open verified Hardcover details and lists navigation is co
     name: "View Ender’s Game (Ender's Saga, #1)",
     exact: true,
   });
-  await expect(link.locator("img")).toHaveAttribute("src", /SY600/);
+  await expect(link.locator("..").locator(".book-cover img")).toBeVisible();
   await link.click();
   await expect(page).toHaveURL(/\/discover\/books\/hardcover\/42$/);
   await expect(
@@ -272,8 +278,11 @@ test("visible Goodreads cards replace thumbnails with Hardcover art", async ({
     exact: true,
   });
   await expect(card).toHaveAttribute("href", "/discover/books/hardcover/42");
-  await expect(card.locator("img")).toHaveAttribute(
+  await expect(card.locator("..").locator(".book-cover img")).toHaveAttribute(
     "src",
-    "https://assets.hardcover.app/discovery-test-cover.svg",
+    "/api/catalog/cover-image?url=" +
+      encodeURIComponent(
+        "https://assets.hardcover.app/discovery-test-cover.svg",
+      ),
   );
 });

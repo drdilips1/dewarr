@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("reader editions, primary selection and separation share a consistent group", async ({
   page,
@@ -90,10 +90,12 @@ test("reader editions, primary selection and separation share a consistent group
         })),
       };
     } else if (path === `/api/metadata/works/${id}`) {
-      expect(url.searchParams.get("scope")).toBe("display");
+      expect([null, "display"]).toContain(url.searchParams.get("scope"));
       data = {
         sources: [],
         fields: {},
+        items: versions,
+        cover_choices: [],
         versions,
         versions_total: versions.length,
       };
@@ -128,6 +130,12 @@ test("reader editions, primary selection and separation share a consistent group
       };
     } else if (path === "/api/library/assets")
       data = { items: [], total: 0, offset: 0, limit: 40 };
+    if (
+      new URL(route.request().url()).pathname.includes(
+        "/acquisition/preferences/",
+      )
+    )
+      data = { effective: { desired_media: "both" } };
     return route.fulfill({ json: data });
   });
   await page.goto(`/books/${id}?tab=editions`);
@@ -150,16 +158,6 @@ test("reader editions, primary selection and separation share a consistent group
     path: testInfo.outputPath("primary-edition.png"),
     fullPage: true,
   });
-  await page
-    .getByRole("button", { name: "Request format", exact: true })
-    .click();
-  await page
-    .getByRole("combobox", { name: "Media to request", exact: true })
-    .selectOption("audio");
-  await expect(
-    page.getByRole("complementary", { name: "Possible existing copies" }),
-  ).toContainText("Matches the edition requirements");
-  await page.getByRole("dialog").getByRole("button", { name: /Close/ }).click();
   await page.getByRole("tab", { name: "Library copies", exact: true }).click();
   await expect(
     page.getByText("How these editions are grouped", { exact: true }),

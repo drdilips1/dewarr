@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
@@ -19,8 +19,10 @@ test("release view sorting and filters compare every loaded result without chang
     .fill("browser test password");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: "Your catalog" }),
+    page.getByRole("button", { name: "Sign out", exact: true }),
   ).toBeVisible();
+  await page.goto("/library?view=saved");
+  await expect(page.getByRole("heading", { name: "My Library" })).toBeVisible();
   const works = await (
     await page.request.get("/api/catalog/works?q=The%20Synthetic%20Archive")
   ).json();
@@ -106,11 +108,10 @@ test("release view sorting and filters compare every loaded result without chang
   await comparison.getByLabel("Sort this view").selectOption("seeds");
   await expect(cards.first()).toHaveAttribute("aria-label", "Release 54");
   await expect(cards.first()).toContainText("#55");
-  await sources
-    .getByRole("button", { name: "Next releases", exact: true })
-    .click();
-  await expect(cards).toHaveCount(5);
-  await expect(cards.nth(3).locator(".release-seeds")).toHaveText("0");
+  await sources.locator(".infinite-scroll").scrollIntoViewIfNeeded();
+  await expect(cards).toHaveCount(55);
+  await expect(cards).toHaveCount(55);
+  await expect(cards.nth(53).locator(".release-seeds")).toHaveText("0");
   await expect(cards.last().locator(".release-seeds")).toHaveText("Unknown");
   await comparison
     .getByLabel("Filter title, author or narrator")
@@ -118,7 +119,7 @@ test("release view sorting and filters compare every loaded result without chang
   await expect(cards).toHaveCount(1);
   await expect(cards.first()).toHaveAttribute("aria-label", "Release 54");
   await expect(
-    sources.getByRole("button", { name: "Next releases", exact: true }),
+    sources.getByRole("button", { name: "Load more", exact: true }),
   ).toHaveCount(0);
   await comparison
     .getByLabel("Filter title, author or narrator")
@@ -134,9 +135,8 @@ test("release view sorting and filters compare every loaded result without chang
   await expect(cards.nth(2)).toHaveAttribute("aria-label", "Release 03");
   await comparison.getByLabel("Sort this view").selectOption("largest");
   await expect(cards.first()).toHaveAttribute("aria-label", "Release 54");
-  await sources
-    .getByRole("button", { name: "Next releases", exact: true })
-    .click();
+  await sources.locator(".infinite-scroll").scrollIntoViewIfNeeded();
+  await expect(cards).toHaveCount(55);
   await expect(cards.last()).toHaveAttribute("aria-label", "Release 00");
   await comparison.getByLabel("Result source").selectOption("prowlarr:10");
   await expect(cards).toHaveCount(1);

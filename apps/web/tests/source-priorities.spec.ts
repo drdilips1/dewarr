@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
@@ -19,8 +19,10 @@ test("individual indexer priorities load explicitly and retain saved choices thr
     .fill("browser test password");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: "Your catalog" }),
+    page.getByRole("button", { name: "Sign out", exact: true }),
   ).toBeVisible();
+  await page.goto("/library?view=saved");
+  await expect(page.getByRole("heading", { name: "My Library" })).toBeVisible();
   const works = await (
     await page.request.get("/api/catalog/works?q=The%20Synthetic%20Archive")
   ).json();
@@ -83,20 +85,11 @@ test("individual indexer priorities load explicitly and retain saved choices thr
       ],
     });
   });
-  await page.goto(`/books/${work.id}?tab=sources`);
-  const sources = page.getByRole("region", { name: "Book download sources" });
-  await expect(
-    sources.getByRole("button", {
-      name: "Refresh source results",
-      exact: true,
-    }),
-  ).toBeEnabled({ timeout: 30_000 });
-  await sources
-    .getByRole("combobox", { name: "Download profile", exact: true })
-    .selectOption("");
-  await sources
-    .getByText("Customize download preferences", { exact: true })
-    .click();
+  await page.goto("/settings#preferences");
+  const sources = page.getByRole("region", {
+    name: "Download defaults",
+    exact: true,
+  });
   const editor = sources.getByRole("region", {
     name: "Source preference editor",
   });
@@ -132,7 +125,7 @@ test("individual indexer priorities load explicitly and retain saved choices thr
     .getByRole("button", { name: "Add indexer priority", exact: true })
     .click();
   const rows = editor
-    .getByRole("group", { name: "Source preference", exact: true })
+    .getByRole("list", { name: "Source preference", exact: true })
     .locator("li > span");
   await expect(rows).toHaveText([
     "MAM",
@@ -142,59 +135,26 @@ test("individual indexer priorities load explicitly and retain saved choices thr
   ]);
   await editor
     .getByRole("button", {
-      name: "Move Shared indexer name · Prowlarr #8 up in Source preference",
+      name: "Reorder prowlarr:8 in Source preference",
       exact: true,
     })
-    .click();
+    .press("ArrowUp");
   await sources
-    .getByLabel("Profile name", { exact: true })
-    .fill("Individual tracker priorities");
-  const saving = page.waitForResponse(
-    (response) =>
-      response.url().endsWith("/api/acquisition/profiles") &&
-      response.request().method() === "POST",
-  );
-  await sources
-    .getByRole("button", { name: "Create profile", exact: true })
+    .getByRole("button", { name: "Save download defaults", exact: true })
     .click();
-  const response = await saving;
-  expect(response.status()).toBe(201);
-  const profile = await response.json();
-  expect(profile.preferences.source_order).toEqual([
+  await expect(
+    sources.getByText("Download defaults saved.", { exact: true }),
+  ).toBeVisible();
+  const savedDefaults = await (
+    await page.request.get("/api/acquisition/preferences/personal")
+  ).json();
+  expect(savedDefaults.effective.source_order).toEqual([
     "mam",
     "prowlarr:8",
     "prowlarr:7",
     "prowlarr",
   ]);
-  await expect(
-    sources.getByRole("combobox", { name: "Download profile", exact: true }),
-  ).toHaveValue(profile.id);
-  const refreshing = page.waitForResponse(
-    (value) =>
-      value.url().endsWith(`/api/catalog/works/${work.id}/source-searches`) &&
-      value.request().method() === "POST",
-  );
-  await sources
-    .getByRole("button", { name: "Refresh source results", exact: true })
-    .click();
-  const search = await refreshing;
-  expect(search.status()).toBe(202);
-  expect((await search.json()).profile.preferences.source_order).toEqual(
-    profile.preferences.source_order,
-  );
-  await expect(
-    sources.getByRole("button", {
-      name: "Refresh source results",
-      exact: true,
-    }),
-  ).toBeEnabled({ timeout: 30_000 });
   await page.reload();
-  await expect(
-    sources.getByRole("combobox", { name: "Download profile", exact: true }),
-  ).toHaveValue(profile.id);
-  await sources
-    .getByText("Customize download preferences", { exact: true })
-    .click();
   await expect(rows).toHaveText([
     "MAM",
     "Prowlarr indexer #8",
@@ -251,11 +211,11 @@ test("individual indexer priorities load explicitly and retain saved choices thr
     }),
   ).toBeDisabled();
   // Unsaved ordering changes must not alter persisted profile or search snapshots.
-  const saved = (
-    await (await page.request.get("/api/acquisition/profiles")).json()
-  ).find((value: { id: string }) => value.id === profile.id);
-  expect(saved.preferences.source_order).toEqual(
-    profile.preferences.source_order,
+  const saved = await (
+    await page.request.get("/api/acquisition/preferences/personal")
+  ).json();
+  expect(saved.effective.source_order).toEqual(
+    savedDefaults.effective.source_order,
   );
   await sources
     .getByRole("button", {

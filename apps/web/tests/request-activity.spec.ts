@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
@@ -87,10 +87,10 @@ test("activity requests preserve independent reasons and route missing media to 
     name: "Your media requests",
     exact: true,
   });
-  await expect(requests.locator("tbody > tr")).toHaveCount(10);
-  await requests
-    .getByRole("button", { name: "Next requests", exact: true })
-    .click();
+  await expect
+    .poll(() => requests.locator("tbody > tr").count())
+    .toBeGreaterThanOrEqual(10);
+  await requests.locator("tbody > tr").last().scrollIntoViewIfNeeded();
   const card = requests.getByRole("row", {
     name: "Activity Journey Alpha request",
     exact: true,
@@ -115,9 +115,7 @@ test("activity requests preserve independent reasons and route missing media to 
     page.getByRole("region", { name: "Book download sources" }),
   ).toBeVisible();
   await page.getByRole("link", { name: "Requests", exact: true }).click();
-  await requests
-    .getByRole("button", { name: "Next requests", exact: true })
-    .click();
+  await requests.locator("tbody > tr").last().scrollIntoViewIfNeeded();
   await expect(card).toBeVisible();
   await page.screenshot({
     path: testInfo.outputPath("request-activity-desktop.png"),
@@ -152,9 +150,7 @@ test("activity requests preserve independent reasons and route missing media to 
   await expect(
     requests.getByRole("checkbox", { name: "Include withdrawn requests" }),
   ).toBeChecked();
-  await requests
-    .getByRole("button", { name: "Next requests", exact: true })
-    .click();
+  await requests.locator("tbody > tr").last().scrollIntoViewIfNeeded();
   await expect(card).toContainText("Audiobook · Cancelled");
   await expect(
     card.getByRole("link", { name: "Choose a source release", exact: true }),
@@ -168,7 +164,8 @@ test("activity requests preserve independent reasons and route missing media to 
   await expect(
     requests.getByText("Synthetic request activity outage", { exact: true }),
   ).toBeVisible({ timeout: 20_000 });
-  await expect(requests.locator("tbody > tr")).toHaveCount(0);
+  // A failed refresh retains the last successful request list.
+  await expect(card).toBeVisible();
   await page.unroute("**/api/requests?*");
   await requests.getByRole("button", { name: "Retry requests" }).click();
   await expect(card).toBeVisible();

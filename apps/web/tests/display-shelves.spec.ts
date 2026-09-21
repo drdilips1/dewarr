@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("cover-led shelves, format overlays and persistent display preferences", async ({
   page,
@@ -71,6 +71,12 @@ test("cover-led shelves, format overlays and persistent display preferences", as
         items: [],
         total: 0,
       };
+    if (
+      new URL(route.request().url()).pathname.includes(
+        "/acquisition/preferences/",
+      )
+    )
+      data = { effective: { desired_media: "both" } };
     return route.fulfill({ json: data });
   });
   await page.goto("/discover");
@@ -90,7 +96,7 @@ test("cover-led shelves, format overlays and persistent display preferences", as
       nodes.map((node) => node.getBoundingClientRect().height),
     );
   expect(new Set(heights).size).toBe(1);
-  await shelf.getByRole("button", { name: "Next library page" }).click();
+  await shelf.getByRole("button", { name: "Scroll library forward" }).click();
   await expect
     .poll(() =>
       shelf.locator(".discovery-shelf").evaluate((node) => node.scrollLeft),

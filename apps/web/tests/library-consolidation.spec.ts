@@ -1,6 +1,6 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
-test("one bookshelf keeps filters and separates matching review", async ({
+test("one bookshelf preserves filters and redirects retired review navigation", async ({
   page,
 }) => {
   const requests: URL[] = [];
@@ -26,6 +26,12 @@ test("one bookshelf keeps filters and separates matching review", async ({
     )
       data = { items: [], total: 0 };
     if (url.pathname === "/api/catalog/works") data = { items: [], total: 80 };
+    if (
+      new URL(route.request().url()).pathname.includes(
+        "/acquisition/preferences/",
+      )
+    )
+      data = { effective: { desired_media: "both" } };
     await route.fulfill({ json: data });
   });
   await page.goto("/");
@@ -58,29 +64,12 @@ test("one bookshelf keeps filters and separates matching review", async ({
   await expect(
     page.getByRole("searchbox", { name: "Search your library" }),
   ).toHaveValue("Harbor");
-  await page.getByRole("link", { name: "Review", exact: true }).click();
-  await expect(
-    page.getByRole("heading", { name: "All caught up" }),
-  ).toBeVisible();
-  expect(
-    requests.some(
-      (url) =>
-        url.pathname === "/api/library/assets" &&
-        url.searchParams.get("needs_review") === "true",
-    ),
-  ).toBe(true);
-  await page.getByLabel("Review queue").selectOption("all");
-  await page.getByLabel("Inventory state").selectOption("missing-confirmed");
-  await expect(page).toHaveURL(/state=missing-confirmed/);
-  await page.goto("/library?view=copies&medium=ebook&offset=40");
-  await expect(page).toHaveURL(/\/review\?/);
-  await expect(page.getByLabel("Review queue")).toHaveValue("all");
-  await expect(
-    page.getByRole("combobox", { name: "Media", exact: true }),
-  ).toHaveValue("ebook");
-  await page.goto("/library?review=true");
-  await expect(page).toHaveURL(/\/review\?review=true/);
-  await expect(page.getByLabel("Review queue")).toHaveValue("matching");
+  // The retired review route now returns to the consolidated library.
+  await page.goto("/review");
+  await expect(page).toHaveURL(/\/library$/);
+  expect(requests.some((url) => url.pathname === "/api/library/books")).toBe(
+    true,
+  );
   await page.getByRole("link", { name: "My Library", exact: true }).click();
   await page
     .getByRole("link", { name: "All saved titles", exact: true })
@@ -88,14 +77,9 @@ test("one bookshelf keeps filters and separates matching review", async ({
   await expect(
     page.getByRole("button", { name: "Add a title", exact: true }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Next", exact: true }).click();
-  await expect(page).toHaveURL(/view=saved/);
-  await expect(page).toHaveURL(/offset=30/);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/library");
-  await expect(
-    page.getByRole("heading", { name: "Your bookshelf" }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "My Library" })).toBeVisible();
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("two media rows choose ABS folders and verify before activation", async ({
   page,
@@ -156,12 +156,12 @@ test("two media rows choose ABS folders and verify before activation", async ({
     exact: true,
   });
   await expect(defaultFolder).toBeChecked();
-  await expect(dialog.getByLabel("Book Search folder path")).toHaveCount(0);
+  await expect(dialog.getByLabel("Dewarr folder path")).toHaveCount(0);
   await expect(dialog.getByText("Audio only", { exact: true })).toHaveCount(0);
   await dialog.getByRole("radio", { name: "Other path", exact: true }).check();
-  await dialog.getByLabel("Book Search folder path").fill("/custom/ebooks");
+  await dialog.getByLabel("Dewarr folder path").fill("/custom/ebooks");
   await defaultFolder.check();
-  await expect(dialog.getByLabel("Book Search folder path")).toHaveCount(0);
+  await expect(dialog.getByLabel("Dewarr folder path")).toHaveCount(0);
   await expect(
     dialog.getByRole("button", { name: "Use this folder" }),
   ).toBeEnabled();
@@ -209,7 +209,7 @@ test("two media rows choose ABS folders and verify before activation", async ({
     dialog.getByRole("checkbox", { name: "Auto-organize downloads" }),
   ).not.toBeChecked();
   await dialog.getByRole("radio", { name: "Other path", exact: true }).check();
-  await expect(dialog.getByLabel("Book Search folder path")).toHaveValue(
+  await expect(dialog.getByLabel("Dewarr folder path")).toHaveValue(
     "/data/ebooks",
   );
   await dialog.screenshot({

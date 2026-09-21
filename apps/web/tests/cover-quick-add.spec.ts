@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("cover shortcuts acquire missing formats without navigating, including provider imports", async ({
   page,

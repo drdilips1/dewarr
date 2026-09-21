@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { execFileSync } from "node:child_process";
 import { mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -34,8 +34,7 @@ test("restored connections review credentials and downloader paths while keeping
       item.base_url === "http://127.0.0.1:13379/abs",
   );
   const downloader = downloaders.find(
-    (item: { base_url: string }) =>
-      item.base_url === "http://127.0.0.1:13379/qbit",
+    (item: { name: string }) => item.name === "Fixture qBittorrent",
   );
   expect(backend).toBeTruthy();
   expect(downloader).toBeTruthy();

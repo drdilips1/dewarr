@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
@@ -18,8 +18,10 @@ test("recent library additions show confirmed holdings and recover from shelf fa
     .fill("browser test password");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: "Your catalog" }),
+    page.getByRole("button", { name: "Sign out", exact: true }),
   ).toBeVisible();
+  await page.goto("/library?view=saved");
+  await expect(page.getByRole("heading", { name: "My Library" })).toBeVisible();
   const actual = await (
     await page.request.get("/api/discovery/library")
   ).json();
@@ -60,27 +62,21 @@ test("recent library additions show confirmed holdings and recover from shelf fa
     name: new RegExp(first.title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
   });
   await expect(
-    book.getByRole("img", { name: "In library", exact: true }),
+    book.locator("..").getByRole("img", { name: "In library", exact: true }),
   ).toBeVisible();
   await expect(shelf.getByText(/Library copy first observed/)).toHaveCount(0);
   await shelf.locator(".discovery-shelf").evaluate((element) => {
     element.scrollLeft = element.scrollWidth;
   });
-  await shelf
-    .getByRole("button", { name: "Next library page", exact: true })
-    .click();
-  await expect(shelf.getByRole("status")).toHaveAttribute(
-    "aria-label",
-    "Page 2",
-  );
+
+  await expect
+    .poll(() => queries.some((q) => q.get("page") === "2"))
+    .toBe(true);
   expect(queries.at(-1)?.get("page")).toBe("2");
   await shelf
     .getByRole("combobox", { name: "Show library additions" })
     .selectOption("audio");
-  await expect(shelf.getByRole("status")).toHaveAttribute(
-    "aria-label",
-    "Page 1",
-  );
+  await expect.poll(() => queries.at(-1)?.get("medium")).toBe("audio");
   expect(queries.at(-1)?.get("medium")).toBe("audio");
   for (const item of await shelf.locator(".book-card").all())
     await expect(
@@ -89,9 +85,7 @@ test("recent library additions show confirmed holdings and recover from shelf fa
   await shelf
     .getByRole("combobox", { name: "Show library additions" })
     .selectOption("ebook");
-  await expect(
-    shelf.getByRole("button", { name: "Next library page" }),
-  ).toBeEnabled();
+  await expect.poll(() => queries.at(-1)?.get("medium")).toBe("ebook");
   expect(queries.at(-1)?.get("medium")).toBe("ebook");
   for (const item of await shelf.locator(".book-card").all())
     await expect(

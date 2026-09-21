@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 const works = ["A Wizard of Earthsea", "The Tombs of Atuan"].map(
   (title, i) => ({
@@ -68,6 +68,12 @@ test("My Library browses owned authors and series, filters, and opens books", as
       return route.fulfill({ status: 404 });
     else if (url.pathname === "/api/library/books")
       data = { items: works, total: 2, offset: 0, limit: 40 };
+    if (
+      new URL(route.request().url()).pathname.includes(
+        "/acquisition/preferences/",
+      )
+    )
+      data = { effective: { desired_media: "both" } };
     return route.fulfill({ json: data });
   });
   await page.route("**/portrait.svg", (route) =>
@@ -111,10 +117,9 @@ test("My Library browses owned authors and series, filters, and opens books", as
     page.getByRole("heading", { name: "Ursula Le Guin", exact: true }),
   ).toBeVisible();
   await expect(page.locator(".book-grid .book-card")).toHaveCount(2);
-  await expect(page.locator(".book-grid .book-card").first()).toHaveAttribute(
-    "href",
-    "/books/book-0",
-  );
+  await expect(
+    page.locator(".book-grid .book-card .book-link-target").first(),
+  ).toHaveAttribute("href", "/books/book-0");
   await page.reload();
   await expect(page.locator(".book-grid .book-card")).toHaveCount(2);
   await page.getByRole("link", { name: "All authors", exact: true }).click();

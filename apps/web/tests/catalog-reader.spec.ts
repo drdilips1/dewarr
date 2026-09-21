@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 for (const unlinked of [false, true]) {
   test(`catalog reader details with ${unlinked ? "no provider binding" : "accepted source"}`, async ({
@@ -198,6 +198,12 @@ for (const unlinked of [false, true]) {
       else if (url.pathname === "/api/lists/page")
         data = { items: [{ id: "list", name: "Weekend reads" }], total: 1 };
       else if (url.pathname === "/api/acquisition/profiles") data = [];
+      if (
+        new URL(route.request().url()).pathname.includes(
+          "/acquisition/preferences/",
+        )
+      )
+        data = { effective: { desired_media: "both" } };
       return route.fulfill({ json: data });
     });
     await page.goto(`/books/${id}`);
@@ -219,7 +225,7 @@ for (const unlinked of [false, true]) {
     await expect(page.locator(".reader-facts")).toContainText("May 21, 2024");
     await expect(page.getByText(synopsis, { exact: true })).toBeVisible();
     await expect(
-      page.getByRole("link", { name: "Find on Goodreads" }),
+      page.getByRole("link", { name: "View on Goodreads" }),
     ).toBeVisible();
     await expect(
       page.getByRole("region", { name: "Library copies" }),
@@ -331,7 +337,7 @@ for (const unlinked of [false, true]) {
     detailsFail = true;
     await page.reload();
     await expect(page.locator(".reader-hero")).toContainText(
-      "Not confirmed in library",
+      "Saved in your catalog",
     );
     await expect(
       page.getByRole("button", { name: "Add to reading list", exact: true }),

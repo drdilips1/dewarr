@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("owned editions expose narrator, extra versions and separate files", async ({
   page,
@@ -80,6 +80,12 @@ test("owned editions expose narrator, extra versions and separate files", async 
       );
       data = { items, total: items.length, offset: 0, limit: 40 };
     }
+    if (
+      new URL(route.request().url()).pathname.includes(
+        "/acquisition/preferences/",
+      )
+    )
+      data = { effective: { desired_media: "both" } };
     return route.fulfill({ json: data });
   });
   await page.goto(`/books/${aliasId}?tab=library&format=audio#library-copies`);

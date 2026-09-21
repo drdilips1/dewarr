@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
@@ -29,6 +29,10 @@ test("Discover opens a full book page with safe reviews and explicit actions", a
       .getByLabel("Password", { exact: true })
       .fill("browser test password");
     await page.getByRole("button", { name: "Sign in", exact: true }).click();
+    await expect(
+      page.getByRole("button", { name: "Sign out", exact: true }),
+    ).toBeVisible();
+    await page.goto("/library?view=saved");
   }
   await expect(page.getByRole("heading", { name: "My Library" })).toBeVisible();
   await page.goto("/metadata");
