@@ -53,9 +53,6 @@ async def policy_fixture(client, admin, catalog, authorized, monkeypatch):
         ), 1
 
     monkeypatch.setattr(book_sources, "source_call", search)
-    # Tests advance ticks explicitly. A real minute boundary must not let the
-    # worker schedule a second policy pass before the test revokes authority.
-    monkeypatch.setattr(list_automation, "next_tick", lambda now: now + timedelta(hours=1))
     return {
         "list": shelf,
         "config": config,
@@ -198,8 +195,11 @@ async def test_pause_resume_previews_accumulated_additions_without_implicit_back
 
 @pytest.mark.parametrize("change", ["pause", "member", "permission", "list"])
 async def test_authority_loss_after_search_cannot_submit(
-    client, database, admin, policy_fixture, change
+    client, database, admin, policy_fixture, change, monkeypatch
 ):
+    # Tests advance ticks explicitly. A real minute boundary must not let the
+    # worker schedule a second policy pass before the test revokes authority.
+    monkeypatch.setattr(list_automation, "next_tick", lambda now: now + timedelta(hours=1))
     f = policy_fixture
     await add(client, f)
     saved = await activate(client, f, await preview(client, f, include_work_ids=[f["work"]]))
