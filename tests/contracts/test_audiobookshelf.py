@@ -200,7 +200,10 @@ async def test_inventory_repeated_sync_versions_and_companions(client, admin, da
     await sync(client, connection, fixture, "first-inventory")
     works = (await client.get("/api/catalog/works")).json()["items"]
     assert len(works) == 1
-    assert works[0]["availability"] == {
+    availability = works[0]["availability"]
+    assert {
+        key: availability[key] for key in ("owned", "ebook", "audio", "stale", "in_collection")
+    } == {
         "owned": True,
         "ebook": True,
         "audio": True,
@@ -210,11 +213,22 @@ async def test_inventory_repeated_sync_versions_and_companions(client, admin, da
     assert works[0]["publication_year"] is None  # Recording year is not the original work year.
     assets = (await client.get("/api/library/assets")).json()
     assert assets["total"] == 5
-    assert "/private/" not in json.dumps(assets)
+    # File paths are now an explicit part of the authenticated library-copy view.
+    assert "/private/" not in json.dumps(
+        [{key: value for key, value in item.items() if key != "files"} for item in assets["items"]]
+    )
     assert all(
         item["open_url"].startswith("https://books.test/abs/item/") for item in assets["items"]
     )
     audio_versions = {item["version_id"] for item in assets["items"] if item["medium"] == "audio"}
+    assert availability["audio_versions"] == 3
+    assert availability["ebook_versions"] == 1
+    assert availability["primary_audio_version_id"] in audio_versions
+    assert availability["primary_ebook_version_id"] in {
+        item["version_id"] for item in assets["items"] if item["medium"] == "ebook"
+    }
+    assert availability["audio_stale"] is False
+    assert availability["ebook_stale"] is False
     assert len(audio_versions) == 3  # Same narrator alone cannot establish the same recording.
     companion = next(
         a for a in assets["items"] if a["open_url"].endswith("/two") and a["medium"] == "ebook"

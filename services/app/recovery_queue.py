@@ -18,6 +18,10 @@ SUBJECT_ARGUMENTS = {
     "continuation_id": "import-continuation",
     "work_id": "work",
 }
+RESTORE_HELD_TASK_ARGUMENTS = {
+    # Discovery follows use a composite, non-UUID key and have no recovery activation yet.
+    "discovery.refresh": {"user_id", "collection_id", "generation"},
+}
 RECOVERY_TASKS = {
     "recovery.scan",
     "recovery.reconcile",
@@ -98,6 +102,8 @@ async def denial(db, job):
     ceiling = await db.scalar(select(func.max(RecoveryQueueFence.job_id_through)))
     if ceiling is None:
         return None
+    if job.task_name in RESTORE_HELD_TASK_ARGUMENTS:
+        return "Discovery tracking requires fresh recovery activation after restore"
     if not isinstance(job.id, int) or job.id <= ceiling:
         return "This job belongs to the restored queue and cannot be replayed"
     if job.task_name.startswith(("procrastinate.", "builtin:")):

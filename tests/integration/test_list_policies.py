@@ -53,6 +53,9 @@ async def policy_fixture(client, admin, catalog, authorized, monkeypatch):
         ), 1
 
     monkeypatch.setattr(book_sources, "source_call", search)
+    # Tests advance ticks explicitly. A real minute boundary must not let the
+    # worker schedule a second policy pass before the test revokes authority.
+    monkeypatch.setattr(list_automation, "next_tick", lambda now: now + timedelta(hours=1))
     return {
         "list": shelf,
         "config": config,
@@ -203,10 +206,12 @@ async def test_authority_loss_after_search_cannot_submit(
     await tick(database, saved)
     await tick(database, saved, worker=False, force_books=True)
     if change == "pause":
-        await client.post(
+        response = await client.post(
             f"/api/lists/{f['list']}/acquisition/pause",
             json={"expected_revision": saved["revision"]},
         )
+        assert response.status_code == 200, response.text
+        assert response.json()["active"] is False
     elif change == "member":
         await client.delete(f"/api/lists/{f['list']}/entries/{f['work']}")
     elif change == "list":

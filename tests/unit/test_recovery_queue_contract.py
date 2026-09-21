@@ -1,7 +1,12 @@
 import inspect
 
 from app.jobs.queue import get_queue, recovery_queue
-from app.recovery_queue import RECOVERY_TASKS, SUBJECT_ARGUMENTS, guard_job
+from app.recovery_queue import (
+    RECOVERY_TASKS,
+    RESTORE_HELD_TASK_ARGUMENTS,
+    SUBJECT_ARGUMENTS,
+    guard_job,
+)
 
 
 def test_worker_fence_covers_all_registered_record_arguments():
@@ -12,7 +17,11 @@ def test_worker_fence_covers_all_registered_record_arguments():
     for name, task in queue.tasks.items():
         if name in RECOVERY_TASKS or name.startswith(("procrastinate.", "builtin:")):
             continue
-        assert set(inspect.signature(task.func).parameters) <= allowed, name
+        parameters = set(inspect.signature(task.func).parameters)
+        if name in RESTORE_HELD_TASK_ARGUMENTS:
+            assert parameters == RESTORE_HELD_TASK_ARGUMENTS[name], name
+        else:
+            assert parameters <= allowed, name
 
 
 def test_builtin_cleanup_names_do_not_accumulate_across_queue_construction():

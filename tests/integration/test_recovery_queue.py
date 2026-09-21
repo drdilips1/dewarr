@@ -223,13 +223,12 @@ async def test_upgrade_seals_existing_paused_restore_and_blocks_loss_of_boundary
         fence = await db.get(RecoveryQueueFence, checkpoint)
         assert fence and fence.job_count == 1
         assert await db.get(RecoveryQueueSubject, (checkpoint, "operation", saved))
+    async with database() as db:
+        current_revision = await db.scalar(text("SELECT version_num FROM alembic_version"))
     rejected = await migrate("downgrade", "0042_recovery_scans")
     assert rejected.returncode != 0 and b"Restored approval boundaries require" in rejected.stderr
     async with database() as db:
-        assert (
-            await db.scalar(text("SELECT version_num FROM alembic_version"))
-            == "0046_goodreads_accounts"
-        )
+        assert await db.scalar(text("SELECT version_num FROM alembic_version")) == current_revision
 
 
 async def test_cleanup_and_unknown_record_reference_cannot_erase_or_bypass_history(
@@ -252,3 +251,29 @@ async def test_cleanup_and_unknown_record_reference_cannot_erase_or_bypass_histo
                 == "aborted"
             )
         assert await db.get(RecoveryQueueFence, checkpoint)
+
+
+async def test_discovery_refresh_is_held_after_restore(client, admin, database, monkeypatch):
+    checkpoint = await pause(database, admin)
+    async with database() as db, db.begin():
+        await seal(db, checkpoint)
+        job = await enqueue(
+            db, "discovery.refresh", user_id=admin["id"], collection_id="goodreads:42", generation=1
+        )
+    await close_fixture(database, checkpoint)
+    called = []
+
+    async def forbidden(**kwargs):
+        called.append(kwargs)
+
+    monkeypatch.setattr(get_queue().tasks["discovery.refresh"], "func", forbidden)
+    await drain()
+    assert not called
+    async with database() as db:
+        assert (
+            await db.scalar(
+                text("SELECT status::text FROM book_queue.procrastinate_jobs WHERE id=:id"),
+                {"id": job},
+            )
+            == "aborted"
+        )
