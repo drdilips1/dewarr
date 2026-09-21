@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-mystery-thriller-books-2012",
+  "kind": "award",
+  "title": "Mystery & Thriller",
+  "source_url": "https://www.goodreads.com/choiceawards/best-mystery-thriller-books-2012",
+  "year": 2012,
+  "category": "Mystery & Thriller",
+  "genres": [
+    "mystery"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:02.011978+00:00",
+  "books": [
+    {
+      "external_id": "12837725",
+      "title": "Gone Girl",
+      "authors": [
+        "Gillian Flynn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327596526l/12837725.jpg",
+      "rank": 1,
+      "votes": 27502,
+      "winner": true
+    },
+    {
+      "external_id": "11890813",
+      "title": "Celebrity in Death",
+      "authors": [
+        "J.D. Robb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1314741211l/11890813.jpg",
+      "rank": 2,
+      "votes": 6364,
+      "winner": false
+    },
+    {
+      "external_id": "12870486",
+      "title": "11th Hour",
+      "authors": [
+        "James  Patterson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389674756l/12870486.jpg",
+      "rank": 3,
+      "votes": 5243,
+      "winner": false
+    },
+    {
+      "external_id": "11367726",
+      "title": "Defending Jacob",
+      "authors": [
+        "William Landay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1329612158l/11367726.jpg",
+      "rank": 4,
+      "votes": 5196,
+      "winner": false
+    },
+    {
+      "external_id": "13513646",
+      "title": "The Beautiful Mystery",
+      "authors": [
+        "Louise Penny"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1334866061l/13513646.jpg",
+      "rank": 5,
+      "votes": 4242,
+      "winner": false
+    },
+    {
+      "external_id": "13390528",
+      "title": "The Fallen Angel",
+      "authors": [
+        "Daniel Silva"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1468408514l/13390528._SY600_.jpg",
+      "rank": 6,
+      "votes": 3734,
+      "winner": false
+    },
+    {
+      "external_id": "13112023",
+      "title": "One Breath Away",
+      "authors": [
+        "Heather Gudenkauf"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333763497l/13112023.jpg",
+      "rank": 7,
+      "votes": 3475,
+      "winner": false
+    },
+    {
+      "external_id": "13148921",
+      "title": "Bloodline",
+      "authors": [
+        "James Rollins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348523971l/13148921.jpg",
+      "rank": 8,
+      "votes": 3371,
+      "winner": false
+    },
+    {
+      "external_id": "13123877",
+      "title": "Broken Harbor",
+      "authors": [
+        "Tana French"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1330675374l/13123877.jpg",
+      "rank": 9,
+      "votes": 3362,
+      "winner": false
+    },
+    {
+      "external_id": "12405126",
+      "title": "The Limpopo Academy of Private Detection",
+      "authors": [
+        "Alexander McCall Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1334084966l/12405126.jpg",
+      "rank": 10,
+      "votes": 2904,
+      "winner": false
+    },
+    {
+      "external_id": "12849385",
+      "title": "The Innocent",
+      "authors": [
+        "David Baldacci"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1329854216l/12849385.jpg",
+      "rank": 11,
+      "votes": 2024,
+      "winner": false
+    },
+    {
+      "external_id": "12922320",
+      "title": "Criminal",
+      "authors": [
+        "Karin Slaughter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1334414049l/12922320.jpg",
+      "rank": 12,
+      "votes": 1948,
+      "winner": false
+    },
+    {
+      "external_id": "11165711",
+      "title": "Guilty Wives",
+      "authors": [
+        "James  Patterson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344266624l/11165711.jpg",
+      "rank": 13,
+      "votes": 1705,
+      "winner": false
+    },
+    {
+      "external_id": "11737271",
+      "title": "Stay Close",
+      "authors": [
+        "Harlan Coben"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347702195l/11737271.jpg",
+      "rank": 14,
+      "votes": 1670,
+      "winner": false
+    },
+    {
+      "external_id": "11889938",
+      "title": "Taken",
+      "authors": [
+        "Robert Crais"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1315773532l/11889938.jpg",
+      "rank": 15,
+      "votes": 1161,
+      "winner": false
+    },
+    {
+      "external_id": "13482355",
+      "title": "Frozen Heat",
+      "authors": [
+        "Richard Castle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1531631395l/13482355.jpg",
+      "rank": 16,
+      "votes": 909,
+      "winner": false
+    },
+    {
+      "external_id": "13117308",
+      "title": "Black List",
+      "authors": [
+        "Brad Thor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1339809055l/13117308.jpg",
+      "rank": 17,
+      "votes": 674,
+      "winner": false
+    },
+    {
+      "external_id": "13359069",
+      "title": "A Wanted Man",
+      "authors": [
+        "Lee Child"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1343634747l/13359069.jpg",
+      "rank": 18,
+      "votes": 454,
+      "winner": false
+    },
+    {
+      "external_id": "13330537",
+      "title": "Garment of Shadows",
+      "authors": [
+        "Laurie R. King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1335202568l/13330537.jpg",
+      "rank": 19,
+      "votes": 454,
+      "winner": false
+    },
+    {
+      "external_id": "13256064",
+      "title": "Phantom",
+      "authors": [
+        "Jo Nesbø"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333577303l/13256064.jpg",
+      "rank": 20,
+      "votes": 404,
+      "winner": false
+    }
+  ]
+}

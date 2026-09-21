@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-readers-favorite-historical-fiction-books-2025",
+  "kind": "award",
+  "title": "Historical Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-historical-fiction-books-2025",
+  "year": 2025,
+  "category": "Historical Fiction",
+  "genres": [
+    "historical-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:39:42.522646+00:00",
+  "books": [
+    {
+      "external_id": "220817728",
+      "title": "Atmosphere",
+      "authors": [
+        "Taylor Jenkins Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1730469032l/220817728._SY600_.jpg",
+      "rank": 1,
+      "votes": 254774,
+      "winner": true
+    },
+    {
+      "external_id": "214151202",
+      "title": "Broken Country",
+      "authors": [
+        "Clare Leslie Hall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741267777l/214151202._SY600_.jpg",
+      "rank": 2,
+      "votes": 97131,
+      "winner": false
+    },
+    {
+      "external_id": "222794853",
+      "title": "The First Witch of Boston",
+      "authors": [
+        "Andrea  Catalano"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1739452020l/222794853._SY600_.jpg",
+      "rank": 3,
+      "votes": 31832,
+      "winner": false
+    },
+    {
+      "external_id": "216052751",
+      "title": "The Book Club for Troublesome Women",
+      "authors": [
+        "Marie Bostwick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1721742075l/216052751.jpg",
+      "rank": 4,
+      "votes": 29825,
+      "winner": false
+    },
+    {
+      "external_id": "222850723",
+      "title": "The Secret Book Society",
+      "authors": [
+        "Madeline  Martin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1744912178l/222850723._SY600_.jpg",
+      "rank": 5,
+      "votes": 26208,
+      "winner": false
+    },
+    {
+      "external_id": "218674082",
+      "title": "The Amalfi Curse",
+      "authors": [
+        "Sarah Penner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1730816563l/218674082._SY600_.jpg",
+      "rank": 6,
+      "votes": 23681,
+      "winner": false
+    },
+    {
+      "external_id": "212806636",
+      "title": "Isola",
+      "authors": [
+        "Allegra Goodman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718997232l/212806636._SY600_.jpg",
+      "rank": 7,
+      "votes": 22871,
+      "winner": false
+    },
+    {
+      "external_id": "213618132",
+      "title": "Good Dirt",
+      "authors": [
+        "Charmaine Wilkerson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1721437195l/213618132._SY600_.jpg",
+      "rank": 8,
+      "votes": 22013,
+      "winner": false
+    },
+    {
+      "external_id": "211025454",
+      "title": "The Stolen Queen",
+      "authors": [
+        "Fiona  Davis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1713891819l/211025454._SY600_.jpg",
+      "rank": 9,
+      "votes": 17548,
+      "winner": false
+    },
+    {
+      "external_id": "217182446",
+      "title": "Strangers in Time",
+      "authors": [
+        "David Baldacci"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1723141649l/217182446._SY600_.jpg",
+      "rank": 10,
+      "votes": 16196,
+      "winner": false
+    },
+    {
+      "external_id": "220160204",
+      "title": "The Stolen Life of Colette Marceau",
+      "authors": [
+        "Kristin Harmel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1732758788l/220160204._SY600_.jpg",
+      "rank": 11,
+      "votes": 8289,
+      "winner": false
+    },
+    {
+      "external_id": "214152211",
+      "title": "The Bright Years",
+      "authors": [
+        "Sarah Damoff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1717697006l/214152211._SY600_.jpg",
+      "rank": 12,
+      "votes": 8176,
+      "winner": false
+    },
+    {
+      "external_id": "217388147",
+      "title": "The Hounding",
+      "authors": [
+        "Xenobe Purvis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1727253986l/217388147._SY600_.jpg",
+      "rank": 13,
+      "votes": 8036,
+      "winner": false
+    },
+    {
+      "external_id": "221251828",
+      "title": "Buckeye",
+      "authors": [
+        "Patrick Ryan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1733285810l/221251828._SY600_.jpg",
+      "rank": 14,
+      "votes": 7529,
+      "winner": false
+    },
+    {
+      "external_id": "212806648",
+      "title": "Junie",
+      "authors": [
+        "Erin Crosby Eckstine"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1737622429l/212806648._SY600_.jpg",
+      "rank": 15,
+      "votes": 6720,
+      "winner": false
+    },
+    {
+      "external_id": "223422252",
+      "title": "Homeseeking",
+      "authors": [
+        "Karissa Chen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1736422714l/223422252._SY600_.jpg",
+      "rank": 16,
+      "votes": 5772,
+      "winner": false
+    },
+    {
+      "external_id": "217045791",
+      "title": "The Lilac People",
+      "authors": [
+        "Milo Todd"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1722483278l/217045791._SY600_.jpg",
+      "rank": 17,
+      "votes": 5735,
+      "winner": false
+    },
+    {
+      "external_id": "218695909",
+      "title": "What Kind of Paradise",
+      "authors": [
+        "Janelle Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729121944l/218695909._SY600_.jpg",
+      "rank": 18,
+      "votes": 5290,
+      "winner": false
+    },
+    {
+      "external_id": "220239094",
+      "title": "The Lost Story of Eva Fuentes",
+      "authors": [
+        "Chanel Cleeton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1733947265l/220239094._SY600_.jpg",
+      "rank": 19,
+      "votes": 2282,
+      "winner": false
+    },
+    {
+      "external_id": "228347660",
+      "title": "Amity",
+      "authors": [
+        "Nathan  Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1744853155l/228347660._SY600_.jpg",
+      "rank": 20,
+      "votes": 1614,
+      "winner": false
+    }
+  ]
+}

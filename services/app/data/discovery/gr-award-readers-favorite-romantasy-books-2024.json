@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-readers-favorite-romantasy-books-2024",
+  "kind": "award",
+  "title": "Romantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-romantasy-books-2024",
+  "year": 2024,
+  "category": "Romantasy",
+  "genres": [
+    "fantasy",
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:40:32.605312+00:00",
+  "books": [
+    {
+      "external_id": "123211531",
+      "title": "House of Flame and Shadow",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1689843639l/123211531._SY600_.jpg",
+      "rank": 1,
+      "votes": 122895,
+      "winner": true
+    },
+    {
+      "external_id": "188563943",
+      "title": "Apprentice to the Villain",
+      "authors": [
+        "Hannah Nicole Maehrer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1713890689l/188563943._SY600_.jpg",
+      "rank": 2,
+      "votes": 56345,
+      "winner": false
+    },
+    {
+      "external_id": "212127083",
+      "title": "Quicksilver",
+      "authors": [
+        "Callie Hart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716303662l/212127083.jpg",
+      "rank": 3,
+      "votes": 49930,
+      "winner": false
+    },
+    {
+      "external_id": "210714656",
+      "title": "When the Moon Hatched",
+      "authors": [
+        "Sarah A. Parker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1712153006l/210714656._SY600_.jpg",
+      "rank": 4,
+      "votes": 48611,
+      "winner": false
+    },
+    {
+      "external_id": "217206125",
+      "title": "The Spellshop",
+      "authors": [
+        "Sarah Beth Durst"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1770064543l/217206125._SY600_.jpg",
+      "rank": 5,
+      "votes": 39760,
+      "winner": false
+    },
+    {
+      "external_id": "165940202",
+      "title": "A Fate Inked in Blood",
+      "authors": [
+        "Danielle L. Jensen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1690490514l/165940202._SY600_.jpg",
+      "rank": 6,
+      "votes": 35858,
+      "winner": false
+    },
+    {
+      "external_id": "204593914",
+      "title": "Phantasma",
+      "authors": [
+        "Kaylie Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1710664241l/204593914.jpg",
+      "rank": 7,
+      "votes": 32174,
+      "winner": false
+    },
+    {
+      "external_id": "211000011",
+      "title": "Restless Stars",
+      "authors": [
+        "Caroline Peckham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1713983144l/211000011._SY600_.jpg",
+      "rank": 8,
+      "votes": 22647,
+      "winner": false
+    },
+    {
+      "external_id": "195791703",
+      "title": "Born of Blood and Ash",
+      "authors": [
+        "Jennifer L. Armentrout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1710809266l/195791703._SY600_.jpg",
+      "rank": 9,
+      "votes": 19586,
+      "winner": false
+    },
+    {
+      "external_id": "112975207",
+      "title": "A Touch of Chaos",
+      "authors": [
+        "Scarlett St.  Clair"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1676322205l/112975207.jpg",
+      "rank": 10,
+      "votes": 18975,
+      "winner": false
+    },
+    {
+      "external_id": "196726166",
+      "title": "The Honey Witch",
+      "authors": [
+        "Sydney J. Shields"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1693440479l/196726166._SY600_.jpg",
+      "rank": 11,
+      "votes": 7790,
+      "winner": false
+    },
+    {
+      "external_id": "157981739",
+      "title": "Faebound",
+      "authors": [
+        "Saara El-Arifi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1695755226l/157981739._SY600_.jpg",
+      "rank": 12,
+      "votes": 7648,
+      "winner": false
+    },
+    {
+      "external_id": "174146852",
+      "title": "A Dark and Drowning Tide",
+      "authors": [
+        "Allison Saft"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1691225056l/174146852._SY600_.jpg",
+      "rank": 13,
+      "votes": 7246,
+      "winner": false
+    },
+    {
+      "external_id": "216595852",
+      "title": "Blood of Hercules",
+      "authors": [
+        "Jasmine Mas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1721243412l/216595852._SY600_.jpg",
+      "rank": 14,
+      "votes": 6264,
+      "winner": false
+    },
+    {
+      "external_id": "203579254",
+      "title": "The Games Gods Play",
+      "authors": [
+        "Abigail Owen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1712003863l/203579254._SY600_.jpg",
+      "rank": 15,
+      "votes": 6117,
+      "winner": false
+    },
+    {
+      "external_id": "199420141",
+      "title": "Gold",
+      "authors": [
+        "Raven Kennedy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1702044133l/199420141._SY600_.jpg",
+      "rank": 16,
+      "votes": 5617,
+      "winner": false
+    },
+    {
+      "external_id": "209779568",
+      "title": "The Veiled Kingdom",
+      "authors": [
+        "Holly Renee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1710870661l/209779568._SY600_.jpg",
+      "rank": 17,
+      "votes": 3388,
+      "winner": false
+    },
+    {
+      "external_id": "205477220",
+      "title": "A Crown This Cold and Heavy",
+      "authors": [
+        "Stacia Stark"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718699912l/205477220._SY600_.jpg",
+      "rank": 18,
+      "votes": 3168,
+      "winner": false
+    },
+    {
+      "external_id": "195430860",
+      "title": "Fate of the Sun King",
+      "authors": [
+        "Nisha J. Tuli"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1705078824l/195430860._SY600_.jpg",
+      "rank": 19,
+      "votes": 2882,
+      "winner": false
+    },
+    {
+      "external_id": "198797574",
+      "title": "A Promise of Peridot",
+      "authors": [
+        "Kate  Golden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1694180660l/198797574._SY600_.jpg",
+      "rank": 20,
+      "votes": 2404,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-readers-favorite-mystery-thriller-books-2025",
+  "kind": "award",
+  "title": "Mystery & Thriller",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-mystery-thriller-books-2025",
+  "year": 2025,
+  "category": "Mystery & Thriller",
+  "genres": [
+    "mystery"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:39:43.867149+00:00",
+  "books": [
+    {
+      "external_id": "220223963",
+      "title": "Not Quite Dead Yet",
+      "authors": [
+        "Holly  Jackson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1739418770l/220223963._SY600_.jpg",
+      "rank": 1,
+      "votes": 77149,
+      "winner": true
+    },
+    {
+      "external_id": "221733727",
+      "title": "The Tenant",
+      "authors": [
+        "Freida McFadden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1734361040l/221733727._SY600_.jpg",
+      "rank": 2,
+      "votes": 70021,
+      "winner": false
+    },
+    {
+      "external_id": "222292420",
+      "title": "The Impossible Fortune",
+      "authors": [
+        "Richard Osman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1744232177l/222292420._SY600_.jpg",
+      "rank": 3,
+      "votes": 65953,
+      "winner": false
+    },
+    {
+      "external_id": "211004123",
+      "title": "Beautiful Ugly",
+      "authors": [
+        "Alice Feeney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1722587059l/211004123._SY600_.jpg",
+      "rank": 4,
+      "votes": 50948,
+      "winner": false
+    },
+    {
+      "external_id": "219240806",
+      "title": "The Perfect Divorce",
+      "authors": [
+        "Jeneva Rose"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1737698473l/219240806._SY600_.jpg",
+      "rank": 5,
+      "votes": 48024,
+      "winner": false
+    },
+    {
+      "external_id": "215805853",
+      "title": "Vera Wong's Guide to Snooping (On a Dead Man)",
+      "authors": [
+        "Jesse Q. Sutanto"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1723038478l/215805853._SY600_.jpg",
+      "rank": 6,
+      "votes": 43105,
+      "winner": false
+    },
+    {
+      "external_id": "219833252",
+      "title": "King of Ashes",
+      "authors": [
+        "S.A. Cosby"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1732223678l/219833252._SY600_.jpg",
+      "rank": 7,
+      "votes": 42115,
+      "winner": false
+    },
+    {
+      "external_id": "223889699",
+      "title": "The Secret of Secrets",
+      "authors": [
+        "Dan    Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1761313537l/223889699._SY600_.jpg",
+      "rank": 8,
+      "votes": 40002,
+      "winner": false
+    },
+    {
+      "external_id": "220160814",
+      "title": "Don't Let Him In",
+      "authors": [
+        "Lisa Jewell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1730151826l/220160814._SY600_.jpg",
+      "rank": 9,
+      "votes": 37975,
+      "winner": false
+    },
+    {
+      "external_id": "221544394",
+      "title": "We Are All Guilty Here",
+      "authors": [
+        "Karin Slaughter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1776449135l/221544394._SY600_.jpg",
+      "rank": 10,
+      "votes": 34658,
+      "winner": false
+    },
+    {
+      "external_id": "216223604",
+      "title": "The Crash",
+      "authors": [
+        "Freida McFadden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1720712855l/216223604._SY600_.jpg",
+      "rank": 11,
+      "votes": 16868,
+      "winner": false
+    },
+    {
+      "external_id": "217213002",
+      "title": "The Missing Half",
+      "authors": [
+        "Ashley Flowers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1723815860l/217213002._SY600_.jpg",
+      "rank": 12,
+      "votes": 16504,
+      "winner": false
+    },
+    {
+      "external_id": "231819058",
+      "title": "The Intruder",
+      "authors": [
+        "Freida McFadden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1747844349l/231819058.jpg",
+      "rank": 13,
+      "votes": 14537,
+      "winner": false
+    },
+    {
+      "external_id": "220259184",
+      "title": "Heartwood",
+      "authors": [
+        "Amity Gaige"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742998309l/220259184._SY600_.jpg",
+      "rank": 14,
+      "votes": 13673,
+      "winner": false
+    },
+    {
+      "external_id": "218644981",
+      "title": "The Ghostwriter",
+      "authors": [
+        "Julie   Clark"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1728064211l/218644981._SY600_.jpg",
+      "rank": 15,
+      "votes": 13101,
+      "winner": false
+    },
+    {
+      "external_id": "212421066",
+      "title": "Famous Last Words",
+      "authors": [
+        "Gillian McAllister"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1726491569l/212421066.jpg",
+      "rank": 16,
+      "votes": 11258,
+      "winner": false
+    },
+    {
+      "external_id": "212375021",
+      "title": "You Killed Me First",
+      "authors": [
+        "John Marrs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1721654268l/212375021._SY600_.jpg",
+      "rank": 17,
+      "votes": 9594,
+      "winner": false
+    },
+    {
+      "external_id": "217387937",
+      "title": "Forget Me Not",
+      "authors": [
+        "Stacy Willingham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1730123356l/217387937._SY600_.jpg",
+      "rank": 18,
+      "votes": 8845,
+      "winner": false
+    },
+    {
+      "external_id": "219385951",
+      "title": "Gone Before Goodbye",
+      "authors": [
+        "Reese Witherspoon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1761313344l/219385951._SY600_.jpg",
+      "rank": 19,
+      "votes": 7280,
+      "winner": false
+    },
+    {
+      "external_id": "229004506",
+      "title": "The Widow",
+      "authors": [
+        "John Grisham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742957382l/229004506._SY600_.jpg",
+      "rank": 20,
+      "votes": 6586,
+      "winner": false
+    }
+  ]
+}

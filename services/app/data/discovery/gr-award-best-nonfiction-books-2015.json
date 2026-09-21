@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-nonfiction-books-2015",
+  "kind": "award",
+  "title": "Nonfiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-nonfiction-books-2015",
+  "year": 2015,
+  "category": "Nonfiction",
+  "genres": [
+    "non-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:40.698054+00:00",
+  "books": [
+    {
+      "external_id": "23453112",
+      "title": "Modern Romance",
+      "authors": [
+        "Aziz Ansari"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1432335014l/23453112.jpg",
+      "rank": 1,
+      "votes": 19895,
+      "winner": true
+    },
+    {
+      "external_id": "24019187",
+      "title": "Humans of New York",
+      "authors": [
+        "Brandon Stanton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430176879l/24019187.jpg",
+      "rank": 2,
+      "votes": 15536,
+      "winner": false
+    },
+    {
+      "external_id": "24453082",
+      "title": "Big Magic",
+      "authors": [
+        "Elizabeth Gilbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1451446242l/24453082.jpg",
+      "rank": 3,
+      "votes": 14717,
+      "winner": false
+    },
+    {
+      "external_id": "25489625",
+      "title": "Between the World and Me",
+      "authors": [
+        "Ta-Nehisi Coates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1451435027l/25489625._SY600_.jpg",
+      "rank": 4,
+      "votes": 14006,
+      "winner": false
+    },
+    {
+      "external_id": "22668844",
+      "title": "H Is for Hawk",
+      "authors": [
+        "Helen Macdonald"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1678754319l/22668844.jpg",
+      "rank": 5,
+      "votes": 11703,
+      "winner": false
+    },
+    {
+      "external_id": "24911006",
+      "title": "Missoula",
+      "authors": [
+        "Jon Krakauer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1491227618l/24911006._SY600_.jpg",
+      "rank": 6,
+      "votes": 11343,
+      "winner": false
+    },
+    {
+      "external_id": "23164968",
+      "title": "Pirate Hunters",
+      "authors": [
+        "Robert Kurson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1432123218l/23164968.jpg",
+      "rank": 7,
+      "votes": 7494,
+      "winner": false
+    },
+    {
+      "external_id": "22571552",
+      "title": "So You've Been Publicly Shamed",
+      "authors": [
+        "Jon Ronson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413749614l/22571552.jpg",
+      "rank": 8,
+      "votes": 7107,
+      "winner": false
+    },
+    {
+      "external_id": "23647129",
+      "title": "For the Love",
+      "authors": [
+        "Jen Hatmaker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1426296433l/23647129.jpg",
+      "rank": 9,
+      "votes": 6713,
+      "winner": false
+    },
+    {
+      "external_id": "23317538",
+      "title": "Rising Strong",
+      "authors": [
+        "Brené Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1641983383l/23317538._SY600_.jpg",
+      "rank": 10,
+      "votes": 5183,
+      "winner": false
+    },
+    {
+      "external_id": "13153693",
+      "title": "Ghettoside",
+      "authors": [
+        "Jill Leovy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417410395l/13153693.jpg",
+      "rank": 11,
+      "votes": 2658,
+      "winner": false
+    },
+    {
+      "external_id": "22208267",
+      "title": "Guantánamo Diary",
+      "authors": [
+        "Mohamedou Ould Slahi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1416775286l/22208267.jpg",
+      "rank": 12,
+      "votes": 1813,
+      "winner": false
+    },
+    {
+      "external_id": "22859551",
+      "title": "The Crossroads of Should and Must",
+      "authors": [
+        "Elle Luna"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1423486467l/22859551.jpg",
+      "rank": 13,
+      "votes": 1698,
+      "winner": false
+    },
+    {
+      "external_id": "20613724",
+      "title": "The Unspeakable",
+      "authors": [
+        "Meghan Daum"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403429207l/20613724.jpg",
+      "rank": 14,
+      "votes": 1527,
+      "winner": false
+    },
+    {
+      "external_id": "22889767",
+      "title": "Better Than Before",
+      "authors": [
+        "Gretchen Rubin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415588203l/22889767.jpg",
+      "rank": 15,
+      "votes": 1474,
+      "winner": false
+    },
+    {
+      "external_id": "22237163",
+      "title": "One of Us",
+      "authors": [
+        "Åsne Seierstad"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1420944739l/22237163.jpg",
+      "rank": 16,
+      "votes": 1309,
+      "winner": false
+    },
+    {
+      "external_id": "22875447",
+      "title": "Work Rules!",
+      "authors": [
+        "Laszlo Bock"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631743944l/22875447._SY600_.jpg",
+      "rank": 17,
+      "votes": 1033,
+      "winner": false
+    },
+    {
+      "external_id": "22245552",
+      "title": "Chasing the Scream",
+      "authors": [
+        "Johann Hari"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1416448118l/22245552.jpg",
+      "rank": 18,
+      "votes": 835,
+      "winner": false
+    },
+    {
+      "external_id": "23019295",
+      "title": "When to Rob a Bank",
+      "authors": [
+        "Steven D. Levitt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1428535442l/23019295.jpg",
+      "rank": 19,
+      "votes": 756,
+      "winner": false
+    },
+    {
+      "external_id": "22551809",
+      "title": "The Road to Character",
+      "authors": [
+        "David  Brooks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422216361l/22551809.jpg",
+      "rank": 20,
+      "votes": 743,
+      "winner": false
+    }
+  ]
+}

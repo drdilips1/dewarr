@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-mystery-thriller-books-2013",
+  "kind": "award",
+  "title": "Mystery & Thriller",
+  "source_url": "https://www.goodreads.com/choiceawards/best-mystery-thriller-books-2013",
+  "year": 2013,
+  "category": "Mystery & Thriller",
+  "genres": [
+    "mystery"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:32.316112+00:00",
+  "books": [
+    {
+      "external_id": "17212231",
+      "title": "Inferno",
+      "authors": [
+        "Dan    Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1534070896l/17212231.jpg",
+      "rank": 1,
+      "votes": 29132,
+      "winner": true
+    },
+    {
+      "external_id": "16160797",
+      "title": "The Cuckoo's Calling",
+      "authors": [
+        "Robert Galbraith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1540217136l/16160797.jpg",
+      "rank": 2,
+      "votes": 28836,
+      "winner": false
+    },
+    {
+      "external_id": "13596166",
+      "title": "Joyland",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348154483l/13596166.jpg",
+      "rank": 3,
+      "votes": 16723,
+      "winner": false
+    },
+    {
+      "external_id": "17167084",
+      "title": "How the Light Gets In",
+      "authors": [
+        "Louise Penny"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1364312402l/17167084.jpg",
+      "rank": 4,
+      "votes": 10247,
+      "winner": false
+    },
+    {
+      "external_id": "15806231",
+      "title": "Calculated in Death",
+      "authors": [
+        "J.D. Robb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1346079575l/15806231.jpg",
+      "rank": 5,
+      "votes": 10037,
+      "winner": false
+    },
+    {
+      "external_id": "10112885",
+      "title": "Night Film",
+      "authors": [
+        "Marisha Pessl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1363819140l/10112885.jpg",
+      "rank": 6,
+      "votes": 7893,
+      "winner": false
+    },
+    {
+      "external_id": "13642963",
+      "title": "Speaking from Among the Bones",
+      "authors": [
+        "Alan Bradley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344371922l/13642963.jpg",
+      "rank": 7,
+      "votes": 7091,
+      "winner": false
+    },
+    {
+      "external_id": "15776309",
+      "title": "Reconstructing Amelia",
+      "authors": [
+        "Kimberly McCreight"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1350193583l/15776309.jpg",
+      "rank": 8,
+      "votes": 6887,
+      "winner": false
+    },
+    {
+      "external_id": "18142329",
+      "title": "Police",
+      "authors": [
+        "Jo Nesbø"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1373049226l/18142329.jpg",
+      "rank": 9,
+      "votes": 6281,
+      "winner": false
+    },
+    {
+      "external_id": "15811568",
+      "title": "Six Years",
+      "authors": [
+        "Harlan Coben"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348406182l/15811568.jpg",
+      "rank": 10,
+      "votes": 6173,
+      "winner": false
+    },
+    {
+      "external_id": "16071767",
+      "title": "Unseen",
+      "authors": [
+        "Karin Slaughter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1361517437l/16071767.jpg",
+      "rank": 11,
+      "votes": 2866,
+      "winner": false
+    },
+    {
+      "external_id": "15811495",
+      "title": "Touch & Go",
+      "authors": [
+        "Lisa Gardner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348273633l/15811495.jpg",
+      "rank": 12,
+      "votes": 2754,
+      "winner": false
+    },
+    {
+      "external_id": "16150996",
+      "title": "Convicted",
+      "authors": [
+        "Aleatha Romig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1378036825l/16150996.jpg",
+      "rank": 13,
+      "votes": 2583,
+      "winner": false
+    },
+    {
+      "external_id": "15755201",
+      "title": "Suspect",
+      "authors": [
+        "Robert Crais"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1345131356l/15755201.jpg",
+      "rank": 14,
+      "votes": 2094,
+      "winner": false
+    },
+    {
+      "external_id": "15803059",
+      "title": "Ordinary Grace",
+      "authors": [
+        "William Kent Krueger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358264094l/15803059.jpg",
+      "rank": 15,
+      "votes": 2026,
+      "winner": false
+    },
+    {
+      "external_id": "15985392",
+      "title": "Threat Vector",
+      "authors": [
+        "Tom Clancy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1352225908l/15985392.jpg",
+      "rank": 16,
+      "votes": 2020,
+      "winner": false
+    },
+    {
+      "external_id": "17707605",
+      "title": "W is for Wasted",
+      "authors": [
+        "Sue Grafton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1367622462l/17707605.jpg",
+      "rank": 17,
+      "votes": 1007,
+      "winner": false
+    },
+    {
+      "external_id": "16131077",
+      "title": "The Shining Girls",
+      "authors": [
+        "Lauren Beukes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1352227705l/16131077.jpg",
+      "rank": 18,
+      "votes": 811,
+      "winner": false
+    },
+    {
+      "external_id": "17262159",
+      "title": "Never Go Back",
+      "authors": [
+        "Lee Child"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1467947214l/17262159.jpg",
+      "rank": 19,
+      "votes": 717,
+      "winner": false
+    },
+    {
+      "external_id": "16171291",
+      "title": "The Silent Wife",
+      "authors": [
+        "A.S.A. Harrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356094989l/16171291.jpg",
+      "rank": 20,
+      "votes": 690,
+      "winner": false
+    }
+  ]
+}

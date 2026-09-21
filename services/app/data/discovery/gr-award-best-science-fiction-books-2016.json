@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-science-fiction-books-2016",
+  "kind": "award",
+  "title": "Science Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-fiction-books-2016",
+  "year": 2016,
+  "category": "Science Fiction",
+  "genres": [
+    "science-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:05.387692+00:00",
+  "books": [
+    {
+      "external_id": "18966806",
+      "title": "Morning Star",
+      "authors": [
+        "Pierce Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461354277l/18966806.jpg",
+      "rank": 1,
+      "votes": 45353,
+      "winner": true
+    },
+    {
+      "external_id": "27833670",
+      "title": "Dark Matter",
+      "authors": [
+        "Blake Crouch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1472119680l/27833670._SY600_.jpg",
+      "rank": 2,
+      "votes": 31389,
+      "winner": false
+    },
+    {
+      "external_id": "25733885",
+      "title": "Bloodline",
+      "authors": [
+        "Claudia Gray"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509492076l/25733885.jpg",
+      "rank": 3,
+      "votes": 17405,
+      "winner": false
+    },
+    {
+      "external_id": "25859268",
+      "title": "The Long Cosmos",
+      "authors": [
+        "Terry Pratchett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1458942707l/25859268.jpg",
+      "rank": 4,
+      "votes": 14139,
+      "winner": false
+    },
+    {
+      "external_id": "25790952",
+      "title": "A Murder in Time",
+      "authors": [
+        "Julie McElwain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435193346l/25790952._SY600_.jpg",
+      "rank": 5,
+      "votes": 13673,
+      "winner": false
+    },
+    {
+      "external_id": "25733990",
+      "title": "Sleeping Giants",
+      "authors": [
+        "Sylvain Neuvel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459785141l/25733990.jpg",
+      "rank": 6,
+      "votes": 13178,
+      "winner": false
+    },
+    {
+      "external_id": "27245997",
+      "title": "The Last One",
+      "authors": [
+        "Alexandra Oliva"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1465634920l/27245997.jpg",
+      "rank": 7,
+      "votes": 11353,
+      "winner": false
+    },
+    {
+      "external_id": "26308512",
+      "title": "Lies, Damned Lies, and History",
+      "authors": [
+        "Jodi Taylor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441914928l/26308512._SY600_.jpg",
+      "rank": 8,
+      "votes": 8216,
+      "winner": false
+    },
+    {
+      "external_id": "23208397",
+      "title": "Underground Airlines",
+      "authors": [
+        "Ben H. Winters"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443732702l/23208397.jpg",
+      "rank": 9,
+      "votes": 7098,
+      "winner": false
+    },
+    {
+      "external_id": "25430566",
+      "title": "Crosstalk",
+      "authors": [
+        "Connie Willis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459112172l/25430566.jpg",
+      "rank": 10,
+      "votes": 6739,
+      "winner": false
+    },
+    {
+      "external_id": "25814184",
+      "title": "Gentleman Jole and the Red Queen",
+      "authors": [
+        "Lois McMaster Bujold"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439174908l/25814184._SY600_.jpg",
+      "rank": 11,
+      "votes": 2905,
+      "winner": false
+    },
+    {
+      "external_id": "25451264",
+      "title": "Death's End",
+      "authors": [
+        "Liu Cixin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430330507l/25451264.jpg",
+      "rank": 12,
+      "votes": 2695,
+      "winner": false
+    },
+    {
+      "external_id": "31667137",
+      "title": "Star Nomad",
+      "authors": [
+        "Lindsay Buroker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474869620l/31667137._SY600_.jpg",
+      "rank": 13,
+      "votes": 1659,
+      "winner": false
+    },
+    {
+      "external_id": "26114545",
+      "title": "Too Like the Lightning",
+      "authors": [
+        "Ada Palmer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443106959l/26114545.jpg",
+      "rank": 14,
+      "votes": 1475,
+      "winner": false
+    },
+    {
+      "external_id": "29475447",
+      "title": "A Closed and Common Orbit",
+      "authors": [
+        "Becky Chambers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1457598923l/29475447._SY600_.jpg",
+      "rank": 15,
+      "votes": 1391,
+      "winner": false
+    },
+    {
+      "external_id": "25828674",
+      "title": "Written in Fire",
+      "authors": [
+        "Marcus Sakey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445502665l/25828674.jpg",
+      "rank": 16,
+      "votes": 1267,
+      "winner": false
+    },
+    {
+      "external_id": "28439513",
+      "title": "A Night Without Stars",
+      "authors": [
+        "Peter F. Hamilton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453058057l/28439513.jpg",
+      "rank": 17,
+      "votes": 1108,
+      "winner": false
+    },
+    {
+      "external_id": "25329437",
+      "title": "Remanence",
+      "authors": [
+        "Jennifer Foehner Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1458444998l/25329437._SY600_.jpg",
+      "rank": 18,
+      "votes": 936,
+      "winner": false
+    },
+    {
+      "external_id": "27276118",
+      "title": "Ninefox Gambit",
+      "authors": [
+        "Yoon Ha Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445980134l/27276118._SY600_.jpg",
+      "rank": 19,
+      "votes": 552,
+      "winner": false
+    },
+    {
+      "external_id": "30806103",
+      "title": "Kill Process",
+      "authors": [
+        "William Hertling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1468513906l/30806103._SY600_.jpg",
+      "rank": 20,
+      "votes": 400,
+      "winner": false
+    }
+  ]
+}

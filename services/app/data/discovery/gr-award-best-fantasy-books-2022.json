@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-fantasy-books-2022",
+  "kind": "award",
+  "title": "Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fantasy-books-2022",
+  "year": 2022,
+  "category": "Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:39.691058+00:00",
+  "books": [
+    {
+      "external_id": "40132775",
+      "title": "House of Sky and Breath",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1633097753l/40132775._SY600_.jpg",
+      "rank": 1,
+      "votes": 105718,
+      "winner": true
+    },
+    {
+      "external_id": "57945316",
+      "title": "Babel",
+      "authors": [
+        "R.F. Kuang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677361825l/57945316._SY600_.jpg",
+      "rank": 2,
+      "votes": 62732,
+      "winner": false
+    },
+    {
+      "external_id": "60177373",
+      "title": "Fairy Tale",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1647789287l/60177373.jpg",
+      "rank": 3,
+      "votes": 60818,
+      "winner": false
+    },
+    {
+      "external_id": "59807955",
+      "title": "The Atlas Six",
+      "authors": [
+        "Olivie Blake"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1654481631l/59807955.jpg",
+      "rank": 4,
+      "votes": 57401,
+      "winner": false
+    },
+    {
+      "external_id": "58547540",
+      "title": "The War of Two Queens",
+      "authors": [
+        "Jennifer L. Armentrout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1635175424l/58547540.jpg",
+      "rank": 5,
+      "votes": 34791,
+      "winner": false
+    },
+    {
+      "external_id": "57789637",
+      "title": "Daughter of the Moon Goddess",
+      "authors": [
+        "Sue Lynn Tan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627686439l/57789637.jpg",
+      "rank": 6,
+      "votes": 33066,
+      "winner": false
+    },
+    {
+      "external_id": "60018635",
+      "title": "The Very Secret Society of Irregular Witches",
+      "authors": [
+        "Sangu Mandanna"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1643062993l/60018635.jpg",
+      "rank": 7,
+      "votes": 30599,
+      "winner": false
+    },
+    {
+      "external_id": "60314494",
+      "title": "Legends & Lattes",
+      "authors": [
+        "Travis Baldree"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1645402061l/60314494.jpg",
+      "rank": 8,
+      "votes": 26408,
+      "winner": false
+    },
+    {
+      "external_id": "23947089",
+      "title": "The Lost Metal",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1653582537l/23947089.jpg",
+      "rank": 9,
+      "votes": 21294,
+      "winner": false
+    },
+    {
+      "external_id": "59743340",
+      "title": "The Golden Enclaves",
+      "authors": [
+        "Naomi Novik"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1649027819l/59743340.jpg",
+      "rank": 10,
+      "votes": 19076,
+      "winner": false
+    },
+    {
+      "external_id": "58725016",
+      "title": "Elektra",
+      "authors": [
+        "Jennifer Saint"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1650240624l/58725016.jpg",
+      "rank": 11,
+      "votes": 6178,
+      "winner": false
+    },
+    {
+      "external_id": "57127277",
+      "title": "Kaikeyi",
+      "authors": [
+        "Vaishnavi Patel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1671146784l/57127277._SY600_.jpg",
+      "rank": 12,
+      "votes": 6145,
+      "winner": false
+    },
+    {
+      "external_id": "58724745",
+      "title": "The Book Eaters",
+      "authors": [
+        "Sunyi Dean"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1634139994l/58724745.jpg",
+      "rank": 13,
+      "votes": 6095,
+      "winner": false
+    },
+    {
+      "external_id": "58783802",
+      "title": "When Women Were Dragons",
+      "authors": [
+        "Kelly Barnhill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1636583955l/58783802.jpg",
+      "rank": 14,
+      "votes": 5573,
+      "winner": false
+    },
+    {
+      "external_id": "56179377",
+      "title": "Nettle & Bone",
+      "authors": [
+        "T. Kingfisher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1645110008l/56179377._SY600_.jpg",
+      "rank": 15,
+      "votes": 5293,
+      "winner": false
+    },
+    {
+      "external_id": "60399181",
+      "title": "The World We Make",
+      "authors": [
+        "N.K. Jemisin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1649700796l/60399181._SY600_.jpg",
+      "rank": 16,
+      "votes": 3974,
+      "winner": false
+    },
+    {
+      "external_id": "58132544",
+      "title": "A River Enchanted",
+      "authors": [
+        "Rebecca   Ross"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628605286l/58132544.jpg",
+      "rank": 17,
+      "votes": 3696,
+      "winner": false
+    },
+    {
+      "external_id": "60018639",
+      "title": "Thistlefoot",
+      "authors": [
+        "GennaRose Nethercott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1658241430l/60018639.jpg",
+      "rank": 18,
+      "votes": 3369,
+      "winner": false
+    },
+    {
+      "external_id": "58950705",
+      "title": "The Stardust Thief",
+      "authors": [
+        "Chelsea Abdullah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1636396304l/58950705.jpg",
+      "rank": 19,
+      "votes": 2987,
+      "winner": false
+    },
+    {
+      "external_id": "58725025",
+      "title": "Ordinary Monsters",
+      "authors": [
+        "J.M. Miro"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1634576127l/58725025.jpg",
+      "rank": 20,
+      "votes": 2156,
+      "winner": false
+    }
+  ]
+}

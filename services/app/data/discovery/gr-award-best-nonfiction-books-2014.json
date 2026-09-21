@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-nonfiction-books-2014",
+  "kind": "award",
+  "title": "Nonfiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-nonfiction-books-2014",
+  "year": 2014,
+  "category": "Nonfiction",
+  "genres": [
+    "non-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:11.008838+00:00",
+  "books": [
+    {
+      "external_id": "18170549",
+      "title": "The Opposite of Loneliness",
+      "authors": [
+        "Marina Keegan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404631857l/18170549.jpg",
+      "rank": 1,
+      "votes": 19793,
+      "winner": true
+    },
+    {
+      "external_id": "21413662",
+      "title": "What If?",
+      "authors": [
+        "Randall Munroe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1451351509l/21413662._SY600_.jpg",
+      "rank": 2,
+      "votes": 19656,
+      "winner": false
+    },
+    {
+      "external_id": "18077802",
+      "title": "The Underground Girls of Kabul",
+      "authors": [
+        "Jenny Nordberg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387054886l/18077802.jpg",
+      "rank": 3,
+      "votes": 13456,
+      "winner": false
+    },
+    {
+      "external_id": "18813642",
+      "title": "Bad Feminist",
+      "authors": [
+        "Roxane Gay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421292744l/18813642.jpg",
+      "rank": 4,
+      "votes": 13020,
+      "winner": false
+    },
+    {
+      "external_id": "17978489",
+      "title": "The Future of the Mind",
+      "authors": [
+        "Michio Kaku"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1371428466l/17978489.jpg",
+      "rank": 5,
+      "votes": 12318,
+      "winner": false
+    },
+    {
+      "external_id": "18667884",
+      "title": "One Nation",
+      "authors": [
+        "Ben Carson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408309119l/18667884.jpg",
+      "rank": 6,
+      "votes": 10344,
+      "winner": false
+    },
+    {
+      "external_id": "17910054",
+      "title": "The Sixth Extinction",
+      "authors": [
+        "Elizabeth Kolbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1372677697l/17910054.jpg",
+      "rank": 7,
+      "votes": 7363,
+      "winner": false
+    },
+    {
+      "external_id": "18505796",
+      "title": "10% Happier",
+      "authors": [
+        "Dan   Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1451446393l/18505796.jpg",
+      "rank": 8,
+      "votes": 6574,
+      "winner": false
+    },
+    {
+      "external_id": "18774981",
+      "title": "Waking Up",
+      "authors": [
+        "Sam Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415677308l/18774981.jpg",
+      "rank": 9,
+      "votes": 6200,
+      "winner": false
+    },
+    {
+      "external_id": "18528190",
+      "title": "Men Explain Things to Me",
+      "authors": [
+        "Rebecca Solnit"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1393447237l/18528190.jpg",
+      "rank": 10,
+      "votes": 5508,
+      "winner": false
+    },
+    {
+      "external_id": "20696006",
+      "title": "Being Mortal",
+      "authors": [
+        "Atul Gawande"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408324949l/20696006.jpg",
+      "rank": 11,
+      "votes": 3125,
+      "winner": false
+    },
+    {
+      "external_id": "21856367",
+      "title": "The Innovators",
+      "authors": [
+        "Walter Isaacson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410191571l/21856367.jpg",
+      "rank": 12,
+      "votes": 3098,
+      "winner": false
+    },
+    {
+      "external_id": "18213403",
+      "title": "No Place to Hide",
+      "authors": [
+        "Glenn Greenwald"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1383352779l/18213403.jpg",
+      "rank": 13,
+      "votes": 2831,
+      "winner": false
+    },
+    {
+      "external_id": "18774002",
+      "title": "The Tale of the Dueling Neurosurgeons",
+      "authors": [
+        "Sam Kean"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385349835l/18774002.jpg",
+      "rank": 14,
+      "votes": 2423,
+      "winner": false
+    },
+    {
+      "external_id": "17383921",
+      "title": "All Joy and No Fun",
+      "authors": [
+        "Jennifer Senior"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1392588477l/17383921.jpg",
+      "rank": 15,
+      "votes": 2265,
+      "winner": false
+    },
+    {
+      "external_id": "18505802",
+      "title": "Console Wars",
+      "authors": [
+        "Blake J. Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391419511l/18505802.jpg",
+      "rank": 16,
+      "votes": 1546,
+      "winner": false
+    },
+    {
+      "external_id": "17834864",
+      "title": "The Divide",
+      "authors": [
+        "Matt Taibbi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403165815l/17834864.jpg",
+      "rank": 17,
+      "votes": 1486,
+      "winner": false
+    },
+    {
+      "external_id": "21913812",
+      "title": "This Changes Everything",
+      "authors": [
+        "Naomi Klein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418103804l/21913812.jpg",
+      "rank": 18,
+      "votes": 1342,
+      "winner": false
+    },
+    {
+      "external_id": "17934655",
+      "title": "The Empathy Exams",
+      "authors": [
+        "Leslie Jamison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405924561l/17934655.jpg",
+      "rank": 19,
+      "votes": 910,
+      "winner": false
+    },
+    {
+      "external_id": "21480734",
+      "title": "Dataclysm",
+      "authors": [
+        "Christian Rudder"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1407763834l/21480734.jpg",
+      "rank": 20,
+      "votes": 422,
+      "winner": false
+    }
+  ]
+}

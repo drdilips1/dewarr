@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-mystery-thriller-books-2015",
+  "kind": "award",
+  "title": "Mystery & Thriller",
+  "source_url": "https://www.goodreads.com/choiceawards/best-mystery-thriller-books-2015",
+  "year": 2015,
+  "category": "Mystery & Thriller",
+  "genres": [
+    "mystery"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:30.525149+00:00",
+  "books": [
+    {
+      "external_id": "22557272",
+      "title": "The Girl on the Train",
+      "authors": [
+        "Paula Hawkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1748242265l/22557272._SY600_.jpg",
+      "rank": 1,
+      "votes": 106149,
+      "winner": true
+    },
+    {
+      "external_id": "23492589",
+      "title": "Finders Keepers",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1469092087l/23492589._SY600_.jpg",
+      "rank": 2,
+      "votes": 32451,
+      "winner": false
+    },
+    {
+      "external_id": "25735012",
+      "title": "Career of Evil",
+      "authors": [
+        "Robert Galbraith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1540217110l/25735012.jpg",
+      "rank": 3,
+      "votes": 28526,
+      "winner": false
+    },
+    {
+      "external_id": "22571696",
+      "title": "Obsession in Death",
+      "authors": [
+        "J.D. Robb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1406509523l/22571696.jpg",
+      "rank": 4,
+      "votes": 14586,
+      "winner": false
+    },
+    {
+      "external_id": "25465056",
+      "title": "Pretty Girls",
+      "authors": [
+        "Karin Slaughter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430519017l/25465056.jpg",
+      "rank": 5,
+      "votes": 12214,
+      "winner": false
+    },
+    {
+      "external_id": "25379213",
+      "title": "Marrow",
+      "authors": [
+        "Tarryn Fisher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430100052l/25379213.jpg",
+      "rank": 6,
+      "votes": 9871,
+      "winner": false
+    },
+    {
+      "external_id": "24586590",
+      "title": "The Nature of the Beast",
+      "authors": [
+        "Louise Penny"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1429532809l/24586590.jpg",
+      "rank": 7,
+      "votes": 9415,
+      "winner": false
+    },
+    {
+      "external_id": "23460947",
+      "title": "The English Spy",
+      "authors": [
+        "Daniel Silva"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1427066167l/23460947.jpg",
+      "rank": 8,
+      "votes": 8814,
+      "winner": false
+    },
+    {
+      "external_id": "21489683",
+      "title": "Die Again",
+      "authors": [
+        "Tess Gerritsen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395144977l/21489683.jpg",
+      "rank": 9,
+      "votes": 8003,
+      "winner": false
+    },
+    {
+      "external_id": "22571540",
+      "title": "The Stranger",
+      "authors": [
+        "Harlan Coben"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408564426l/22571540.jpg",
+      "rank": 10,
+      "votes": 7744,
+      "winner": false
+    },
+    {
+      "external_id": "21437200",
+      "title": "Mr. Kiss and Tell",
+      "authors": [
+        "Rob Thomas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405566768l/21437200.jpg",
+      "rank": 11,
+      "votes": 3393,
+      "winner": false
+    },
+    {
+      "external_id": "23153154",
+      "title": "Memory Man",
+      "authors": [
+        "David Baldacci"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421788503l/23153154.jpg",
+      "rank": 12,
+      "votes": 3098,
+      "winner": false
+    },
+    {
+      "external_id": "20892558",
+      "title": "Lamentation",
+      "authors": [
+        "C.J. Sansom"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415995877l/20892558.jpg",
+      "rank": 13,
+      "votes": 3056,
+      "winner": false
+    },
+    {
+      "external_id": "25074850",
+      "title": "The Girl in the Spider's Web",
+      "authors": [
+        "David Lagercrantz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1427843648l/25074850.jpg",
+      "rank": 14,
+      "votes": 2963,
+      "winner": false
+    },
+    {
+      "external_id": "20767918",
+      "title": "The Escape",
+      "authors": [
+        "David Baldacci"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404163742l/20767918.jpg",
+      "rank": 15,
+      "votes": 2906,
+      "winner": false
+    },
+    {
+      "external_id": "21936809",
+      "title": "The Kind Worth Killing",
+      "authors": [
+        "Peter  Swanson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417981750l/21936809.jpg",
+      "rank": 16,
+      "votes": 2875,
+      "winner": false
+    },
+    {
+      "external_id": "23281640",
+      "title": "Gathering Prey",
+      "authors": [
+        "John Sandford"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417985559l/23281640.jpg",
+      "rank": 17,
+      "votes": 2872,
+      "winner": false
+    },
+    {
+      "external_id": "23602561",
+      "title": "The Cartel",
+      "authors": [
+        "Don Winslow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1429552939l/23602561.jpg",
+      "rank": 18,
+      "votes": 2699,
+      "winner": false
+    },
+    {
+      "external_id": "21874813",
+      "title": "As Chimney Sweepers Come to Dust",
+      "authors": [
+        "Alan Bradley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1406214651l/21874813.jpg",
+      "rank": 19,
+      "votes": 2450,
+      "winner": false
+    },
+    {
+      "external_id": "22609317",
+      "title": "Luckiest Girl Alive",
+      "authors": [
+        "Jessica Knoll"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1425975301l/22609317.jpg",
+      "rank": 20,
+      "votes": 2015,
+      "winner": false
+    }
+  ]
+}

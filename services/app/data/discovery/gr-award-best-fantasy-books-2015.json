@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-fantasy-books-2015",
+  "kind": "award",
+  "title": "Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fantasy-books-2015",
+  "year": 2015,
+  "category": "Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:33.391808+00:00",
+  "books": [
+    {
+      "external_id": "22522808",
+      "title": "Trigger Warning",
+      "authors": [
+        "Neil Gaiman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415036119l/22522808.jpg",
+      "rank": 1,
+      "votes": 33681,
+      "winner": true
+    },
+    {
+      "external_id": "22055262",
+      "title": "A Darker Shade of Magic",
+      "authors": [
+        "V.E. Schwab"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1758833715l/22055262._SY600_.jpg",
+      "rank": 2,
+      "votes": 30530,
+      "winner": false
+    },
+    {
+      "external_id": "16065004",
+      "title": "Shadows of Self",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659900268l/16065004._SY600_.jpg",
+      "rank": 3,
+      "votes": 18171,
+      "winner": false
+    },
+    {
+      "external_id": "17333171",
+      "title": "Magic Shifts",
+      "authors": [
+        "Ilona Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414091260l/17333171.jpg",
+      "rank": 4,
+      "votes": 16527,
+      "winner": false
+    },
+    {
+      "external_id": "24876258",
+      "title": "The Aeronaut's Windlass",
+      "authors": [
+        "Jim  Butcher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1425415066l/24876258.jpg",
+      "rank": 5,
+      "votes": 13360,
+      "winner": false
+    },
+    {
+      "external_id": "23157777",
+      "title": "Fool's Quest",
+      "authors": [
+        "Robin Hobb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1420496252l/23157777.jpg",
+      "rank": 6,
+      "votes": 12690,
+      "winner": false
+    },
+    {
+      "external_id": "21457243",
+      "title": "Vision in Silver",
+      "authors": [
+        "Anne Bishop"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404354570l/21457243.jpg",
+      "rank": 7,
+      "votes": 12084,
+      "winner": false
+    },
+    {
+      "external_id": "22571699",
+      "title": "Dead Heat",
+      "authors": [
+        "Patricia Briggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1406232150l/22571699.jpg",
+      "rank": 8,
+      "votes": 11446,
+      "winner": false
+    },
+    {
+      "external_id": "12444297",
+      "title": "Burned",
+      "authors": [
+        "Karen Marie Moning"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1407503200l/12444297.jpg",
+      "rank": 9,
+      "votes": 10878,
+      "winner": false
+    },
+    {
+      "external_id": "19161852",
+      "title": "The Fifth Season",
+      "authors": [
+        "N.K. Jemisin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386803701l/19161852.jpg",
+      "rank": 10,
+      "votes": 8312,
+      "winner": false
+    },
+    {
+      "external_id": "22698568",
+      "title": "The Invasion of the Tearling",
+      "authors": [
+        "Erika Johansen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461864829l/22698568.jpg",
+      "rank": 11,
+      "votes": 4007,
+      "winner": false
+    },
+    {
+      "external_id": "23398677",
+      "title": "The Liar's Key",
+      "authors": [
+        "Mark  Lawrence"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1416424619l/23398677.jpg",
+      "rank": 12,
+      "votes": 3520,
+      "winner": false
+    },
+    {
+      "external_id": "22522805",
+      "title": "The Buried Giant",
+      "authors": [
+        "Kazuo Ishiguro"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1451444392l/22522805._SY600_.jpg",
+      "rank": 13,
+      "votes": 3424,
+      "winner": false
+    },
+    {
+      "external_id": "24435364",
+      "title": "Yield the Night",
+      "authors": [
+        "Annette Marie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422937423l/24435364.jpg",
+      "rank": 14,
+      "votes": 3184,
+      "winner": false
+    },
+    {
+      "external_id": "13630171",
+      "title": "The Skull Throne",
+      "authors": [
+        "Peter V. Brett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408637760l/13630171.jpg",
+      "rank": 15,
+      "votes": 3182,
+      "winner": false
+    },
+    {
+      "external_id": "17901125",
+      "title": "The Mime Order",
+      "authors": [
+        "Samantha Shannon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421696237l/17901125.jpg",
+      "rank": 16,
+      "votes": 2634,
+      "winner": false
+    },
+    {
+      "external_id": "20883847",
+      "title": "The Autumn Republic",
+      "authors": [
+        "Brian  McClellan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659901327l/20883847._SY600_.jpg",
+      "rank": 17,
+      "votes": 2093,
+      "winner": false
+    },
+    {
+      "external_id": "24969093",
+      "title": "Recurve",
+      "authors": [
+        "Shannon Mayer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1758921623l/24969093._SY600_.jpg",
+      "rank": 18,
+      "votes": 2019,
+      "winner": false
+    },
+    {
+      "external_id": "23431347",
+      "title": "Boundary Crossed",
+      "authors": [
+        "Melissa F. Olson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422375025l/23431347.jpg",
+      "rank": 19,
+      "votes": 1727,
+      "winner": false
+    },
+    {
+      "external_id": "22055280",
+      "title": "The Providence of Fire",
+      "authors": [
+        "Brian Staveley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405301050l/22055280.jpg",
+      "rank": 20,
+      "votes": 702,
+      "winner": false
+    }
+  ]
+}

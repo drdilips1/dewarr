@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-horror-books-2017",
+  "kind": "award",
+  "title": "Horror",
+  "source_url": "https://www.goodreads.com/choiceawards/best-horror-books-2017",
+  "year": 2017,
+  "category": "Horror",
+  "genres": [
+    "horror"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:36.570797+00:00",
+  "books": [
+    {
+      "external_id": "34466922",
+      "title": "Sleeping Beauties",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510335748l/34466922._SY600_.jpg",
+      "rank": 1,
+      "votes": 50519,
+      "winner": true
+    },
+    {
+      "external_id": "32796253",
+      "title": "Final Girls",
+      "authors": [
+        "Riley Sager"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1496658340l/32796253.jpg",
+      "rank": 2,
+      "votes": 16483,
+      "winner": false
+    },
+    {
+      "external_id": "23267873",
+      "title": "Prince Lestat and the Realms of Atlantis",
+      "authors": [
+        "Anne Rice"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470266560l/23267873.jpg",
+      "rank": 3,
+      "votes": 11276,
+      "winner": false
+    },
+    {
+      "external_id": "32905343",
+      "title": "Meddling Kids",
+      "authors": [
+        "Edgar Cantero"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1568849620l/32905343._SY600_.jpg",
+      "rank": 4,
+      "votes": 11191,
+      "winner": false
+    },
+    {
+      "external_id": "31554413",
+      "title": "The Boy on the Bridge",
+      "authors": [
+        "M.R. Carey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1484593600l/31554413._SY600_.jpg",
+      "rank": 5,
+      "votes": 10126,
+      "winner": false
+    },
+    {
+      "external_id": "32828538",
+      "title": "Lost Boy",
+      "authors": [
+        "Christina Henry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1505240721l/32828538._SY600_.jpg",
+      "rank": 6,
+      "votes": 10052,
+      "winner": false
+    },
+    {
+      "external_id": "32336166",
+      "title": "Full Wolf Moon",
+      "authors": [
+        "Lincoln Child"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1478661376l/32336166.jpg",
+      "rank": 7,
+      "votes": 9316,
+      "winner": false
+    },
+    {
+      "external_id": "31147267",
+      "title": "The Changeling",
+      "authors": [
+        "Victor LaValle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492886432l/31147267.jpg",
+      "rank": 8,
+      "votes": 7655,
+      "winner": false
+    },
+    {
+      "external_id": "32604351",
+      "title": "The Roses of May",
+      "authors": [
+        "Dot Hutchison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1488388475l/32604351._SY600_.jpg",
+      "rank": 9,
+      "votes": 7014,
+      "winner": false
+    },
+    {
+      "external_id": "31396389",
+      "title": "A Game of Ghosts",
+      "authors": [
+        "John Connolly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1490834743l/31396389._SY600_.jpg",
+      "rank": 10,
+      "votes": 5798,
+      "winner": false
+    },
+    {
+      "external_id": "29326301",
+      "title": "The Awakening",
+      "authors": [
+        "Amanda Stevens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1473601018l/29326301._SY600_.jpg",
+      "rank": 11,
+      "votes": 2965,
+      "winner": false
+    },
+    {
+      "external_id": "31183180",
+      "title": "Dusk or Dark or Dawn or Day",
+      "authors": [
+        "Seanan McGuire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1471562130l/31183180._SY600_.jpg",
+      "rank": 12,
+      "votes": 2677,
+      "winner": false
+    },
+    {
+      "external_id": "33574090",
+      "title": "What the Hell Did I Just Read",
+      "authors": [
+        "David  Wong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1488489522l/33574090.jpg",
+      "rank": 13,
+      "votes": 2586,
+      "winner": false
+    },
+    {
+      "external_id": "30780283",
+      "title": "White Tears",
+      "authors": [
+        "Hari Kunzru"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1473185233l/30780283.jpg",
+      "rank": 14,
+      "votes": 2044,
+      "winner": false
+    },
+    {
+      "external_id": "34066621",
+      "title": "Strange Weather",
+      "authors": [
+        "Joe  Hill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493845147l/34066621.jpg",
+      "rank": 15,
+      "votes": 1969,
+      "winner": false
+    },
+    {
+      "external_id": "31450774",
+      "title": "The Delirium Brief",
+      "authors": [
+        "Charles Stross"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474992508l/31450774.jpg",
+      "rank": 16,
+      "votes": 1243,
+      "winner": false
+    },
+    {
+      "external_id": "32051902",
+      "title": "The Kill Society",
+      "authors": [
+        "Richard Kadrey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1482094012l/32051902.jpg",
+      "rank": 17,
+      "votes": 1109,
+      "winner": false
+    },
+    {
+      "external_id": "31574739",
+      "title": "The Grip of It",
+      "authors": [
+        "Jac Jemc"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1497915798l/31574739._SY600_.jpg",
+      "rank": 18,
+      "votes": 786,
+      "winner": false
+    },
+    {
+      "external_id": "30221892",
+      "title": "A God in the Shed",
+      "authors": [
+        "J.-F. Dubeau"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493384909l/30221892.jpg",
+      "rank": 19,
+      "votes": 514,
+      "winner": false
+    },
+    {
+      "external_id": "32920015",
+      "title": "Bone White",
+      "authors": [
+        "Ronald Malfi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1480378494l/32920015.jpg",
+      "rank": 20,
+      "votes": 450,
+      "winner": false
+    }
+  ]
+}

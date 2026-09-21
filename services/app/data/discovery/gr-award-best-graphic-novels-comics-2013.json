@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-graphic-novels-comics-2013",
+  "kind": "award",
+  "title": "Graphic Novels & Comics",
+  "source_url": "https://www.goodreads.com/choiceawards/best-graphic-novels-comics-2013",
+  "year": 2013,
+  "category": "Graphic Novels & Comics",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:49.101034+00:00",
+  "books": [
+    {
+      "external_id": "15789361",
+      "title": "Beautiful Creatures",
+      "authors": [
+        "Kami Garcia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356453844l/15789361.jpg",
+      "rank": 1,
+      "votes": 12209,
+      "winner": true
+    },
+    {
+      "external_id": "16277248",
+      "title": "Avatar",
+      "authors": [
+        "Gene Luen Yang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1382513568l/16277248.jpg",
+      "rank": 2,
+      "votes": 11412,
+      "winner": false
+    },
+    {
+      "external_id": "16173578",
+      "title": "The Walking Dead, Vol. 18",
+      "authors": [
+        "Robert Kirkman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481431681l/16173578._SY600_.jpg",
+      "rank": 3,
+      "votes": 10299,
+      "winner": false
+    },
+    {
+      "external_id": "17131869",
+      "title": "Saga, Volume 2",
+      "authors": [
+        "Brian K. Vaughan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1486028954l/17131869._SY600_.jpg",
+      "rank": 4,
+      "votes": 6633,
+      "winner": false
+    },
+    {
+      "external_id": "15752115",
+      "title": "Batman, Volume 2",
+      "authors": [
+        "Scott Snyder"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1674320089l/15752115.jpg",
+      "rank": 5,
+      "votes": 6299,
+      "winner": false
+    },
+    {
+      "external_id": "13226217",
+      "title": "The Infernal Devices",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1370968747l/13226217.jpg",
+      "rank": 6,
+      "votes": 6076,
+      "winner": false
+    },
+    {
+      "external_id": "15791586",
+      "title": "Fables, Vol. 18",
+      "authors": [
+        "Bill Willingham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375405494l/15791586.jpg",
+      "rank": 7,
+      "votes": 4796,
+      "winner": false
+    },
+    {
+      "external_id": "16002136",
+      "title": "Hawkeye, Volume 1",
+      "authors": [
+        "Matt Fraction"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1525360660l/16002136._SY600_.jpg",
+      "rank": 8,
+      "votes": 4039,
+      "winner": false
+    },
+    {
+      "external_id": "13429614",
+      "title": "Calling Dr. Laura",
+      "authors": [
+        "Nicole J. Georges"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344716812l/13429614.jpg",
+      "rank": 9,
+      "votes": 3171,
+      "winner": false
+    },
+    {
+      "external_id": "10871925",
+      "title": "Kick-Ass 2",
+      "authors": [
+        "Mark Millar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1547788650l/10871925.jpg",
+      "rank": 10,
+      "votes": 3013,
+      "winner": false
+    },
+    {
+      "external_id": "15780174",
+      "title": "Wonder Woman, Volume 2",
+      "authors": [
+        "Brian Azzarello"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344004870l/15780174.jpg",
+      "rank": 11,
+      "votes": 1597,
+      "winner": false
+    },
+    {
+      "external_id": "17586834",
+      "title": "The Titan's Curse",
+      "authors": [
+        "Robert Venditti"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369968927l/17586834.jpg",
+      "rank": 12,
+      "votes": 1428,
+      "winner": false
+    },
+    {
+      "external_id": "15791600",
+      "title": "American Vampire, Vol. 5",
+      "authors": [
+        "Scott Snyder"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1365518491l/15791600.jpg",
+      "rank": 13,
+      "votes": 1350,
+      "winner": false
+    },
+    {
+      "external_id": "17261194",
+      "title": "Boxers & Saints",
+      "authors": [
+        "Gene Luen Yang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510859489l/17261194._SY600_.jpg",
+      "rank": 14,
+      "votes": 1185,
+      "winner": false
+    },
+    {
+      "external_id": "15984353",
+      "title": "Captain Marvel, Vol. 1",
+      "authors": [
+        "Kelly Sue DeConnick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1357824516l/15984353.jpg",
+      "rank": 15,
+      "votes": 1033,
+      "winner": false
+    },
+    {
+      "external_id": "15791566",
+      "title": "Chew, Vol. 6",
+      "authors": [
+        "John Layman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1368989313l/15791566.jpg",
+      "rank": 16,
+      "votes": 700,
+      "winner": false
+    },
+    {
+      "external_id": "17137619",
+      "title": "Sweet Tooth, Vol. 6",
+      "authors": [
+        "Jeff Lemire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1370220599l/17137619.jpg",
+      "rank": 17,
+      "votes": 588,
+      "winner": false
+    },
+    {
+      "external_id": "15842705",
+      "title": "Raven Girl",
+      "authors": [
+        "Audrey Niffenegger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1350959348l/15842705.jpg",
+      "rank": 18,
+      "votes": 558,
+      "winner": false
+    },
+    {
+      "external_id": "11476163",
+      "title": "Blue Bloods",
+      "authors": [
+        "Robert Venditti"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1360571577l/11476163.jpg",
+      "rank": 19,
+      "votes": 355,
+      "winner": false
+    },
+    {
+      "external_id": "17346698",
+      "title": "March",
+      "authors": [
+        "John             Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1360539808l/17346698.jpg",
+      "rank": 20,
+      "votes": 168,
+      "winner": false
+    }
+  ]
+}

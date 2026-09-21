@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-science-fiction-books-2022",
+  "kind": "award",
+  "title": "Science Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-fiction-books-2022",
+  "year": 2022,
+  "category": "Science Fiction",
+  "genres": [
+    "science-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:42.507961+00:00",
+  "books": [
+    {
+      "external_id": "58446227",
+      "title": "Sea of Tranquility",
+      "authors": [
+        "Emily St. John Mandel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1626710416l/58446227.jpg",
+      "rank": 1,
+      "votes": 59920,
+      "winner": true
+    },
+    {
+      "external_id": "54829360",
+      "title": "The Daughter of Doctor Moreau",
+      "authors": [
+        "Silvia Moreno-Garcia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642777183l/54829360.jpg",
+      "rank": 2,
+      "votes": 47544,
+      "winner": false
+    },
+    {
+      "external_id": "58662507",
+      "title": "Nona the Ninth",
+      "authors": [
+        "Tamsyn Muir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1643298298l/58662507.jpg",
+      "rank": 3,
+      "votes": 35767,
+      "winner": false
+    },
+    {
+      "external_id": "57850265",
+      "title": "How High We Go in the Dark",
+      "authors": [
+        "Sequoia Nagamatsu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627483822l/57850265.jpg",
+      "rank": 4,
+      "votes": 28152,
+      "winner": false
+    },
+    {
+      "external_id": "59838811",
+      "title": "Upgrade",
+      "authors": [
+        "Blake Crouch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1643994317l/59838811.jpg",
+      "rank": 5,
+      "votes": 28129,
+      "winner": false
+    },
+    {
+      "external_id": "58884736",
+      "title": "The Measure",
+      "authors": [
+        "Nikki Erlick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1656427584l/58884736._SY600_.jpg",
+      "rank": 6,
+      "votes": 24303,
+      "winner": false
+    },
+    {
+      "external_id": "28335699",
+      "title": "Leviathan Falls",
+      "authors": [
+        "James S.A. Corey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600283641l/28335699._SY600_.jpg",
+      "rank": 7,
+      "votes": 17491,
+      "winner": false
+    },
+    {
+      "external_id": "57693406",
+      "title": "The Kaiju Preservation Society",
+      "authors": [
+        "John Scalzi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1624897234l/57693406.jpg",
+      "rank": 8,
+      "votes": 15332,
+      "winner": false
+    },
+    {
+      "external_id": "57693184",
+      "title": "Dead Silence",
+      "authors": [
+        "S.A. Barnes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620942800l/57693184.jpg",
+      "rank": 9,
+      "votes": 14184,
+      "winner": false
+    },
+    {
+      "external_id": "56754734",
+      "title": "Hunt the Stars",
+      "authors": [
+        "Jessie Mihalik"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1626979714l/56754734.jpg",
+      "rank": 10,
+      "votes": 10708,
+      "winner": false
+    },
+    {
+      "external_id": "59808117",
+      "title": "Ocean's Echo",
+      "authors": [
+        "Everina Maxwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1651252377l/59808117.jpg",
+      "rank": 11,
+      "votes": 3899,
+      "winner": false
+    },
+    {
+      "external_id": "60035241",
+      "title": "Station Eternity",
+      "authors": [
+        "Mur Lafferty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1645389146l/60035241.jpg",
+      "rank": 12,
+      "votes": 3237,
+      "winner": false
+    },
+    {
+      "external_id": "59807968",
+      "title": "Leech",
+      "authors": [
+        "Hiron Ennes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1641921333l/59807968.jpg",
+      "rank": 13,
+      "votes": 3010,
+      "winner": false
+    },
+    {
+      "external_id": "59807970",
+      "title": "Self-Portrait with Nothing",
+      "authors": [
+        "Aimee Pokwatka"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642102082l/59807970.jpg",
+      "rank": 14,
+      "votes": 2744,
+      "winner": false
+    },
+    {
+      "external_id": "60522318",
+      "title": "Lost in Time",
+      "authors": [
+        "A.G. Riddle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1651062928l/60522318.jpg",
+      "rank": 15,
+      "votes": 2737,
+      "winner": false
+    },
+    {
+      "external_id": "58684535",
+      "title": "Atomic Anna",
+      "authors": [
+        "Rachel Barenbaum"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1643682020l/58684535.jpg",
+      "rank": 16,
+      "votes": 1782,
+      "winner": false
+    },
+    {
+      "external_id": "59808142",
+      "title": "The Genesis of Misery",
+      "authors": [
+        "Neon Yang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642001222l/59808142.jpg",
+      "rank": 17,
+      "votes": 1565,
+      "winner": false
+    },
+    {
+      "external_id": "57693457",
+      "title": "Mickey7",
+      "authors": [
+        "Edward Ashton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1636369192l/57693457.jpg",
+      "rank": 18,
+      "votes": 1480,
+      "winner": false
+    },
+    {
+      "external_id": "57771216",
+      "title": "Sleepwalk",
+      "authors": [
+        "Dan Chaon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1641778699l/57771216.jpg",
+      "rank": 19,
+      "votes": 1185,
+      "winner": false
+    },
+    {
+      "external_id": "60293362",
+      "title": "Primitives",
+      "authors": [
+        "Erich Krauss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1643834166l/60293362.jpg",
+      "rank": 20,
+      "votes": 855,
+      "winner": false
+    }
+  ]
+}

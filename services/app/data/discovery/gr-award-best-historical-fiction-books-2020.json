@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-historical-fiction-books-2020",
+  "kind": "award",
+  "title": "Historical Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-historical-fiction-books-2020",
+  "year": 2020,
+  "category": "Historical Fiction",
+  "genres": [
+    "historical-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:29.995292+00:00",
+  "books": [
+    {
+      "external_id": "51791252",
+      "title": "The Vanishing Half",
+      "authors": [
+        "Brit Bennett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1577090827l/51791252._SX318_SY475_.jpg",
+      "rank": 1,
+      "votes": 102626,
+      "winner": true
+    },
+    {
+      "external_id": "43557477",
+      "title": "The Jane Austen Society",
+      "authors": [
+        "Natalie Jenner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1568730506l/43557477.jpg",
+      "rank": 2,
+      "votes": 34021,
+      "winner": false
+    },
+    {
+      "external_id": "52698452",
+      "title": "The Book of Longings",
+      "authors": [
+        "Sue Monk Kidd"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1570801291l/52698452._SX318_SY475_.jpg",
+      "rank": 3,
+      "votes": 29643,
+      "winner": false
+    },
+    {
+      "external_id": "52762903",
+      "title": "The Book of Lost Names",
+      "authors": [
+        "Kristin Harmel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1573742414l/52762903.jpg",
+      "rank": 4,
+      "votes": 28661,
+      "winner": false
+    },
+    {
+      "external_id": "50607466",
+      "title": "The Henna Artist",
+      "authors": [
+        "Alka Joshi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1588690086l/50607466._SY600_.jpg",
+      "rank": 5,
+      "votes": 28222,
+      "winner": false
+    },
+    {
+      "external_id": "49239093",
+      "title": "The Evening and the Morning",
+      "authors": [
+        "Ken Follett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585140756l/49239093.jpg",
+      "rank": 6,
+      "votes": 26386,
+      "winner": false
+    },
+    {
+      "external_id": "45897568",
+      "title": "A Long Petal of the Sea",
+      "authors": [
+        "Isabel Allende"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600456282l/45897568._SY600_.jpg",
+      "rank": 7,
+      "votes": 22418,
+      "winner": false
+    },
+    {
+      "external_id": "50892349",
+      "title": "Magic Lessons",
+      "authors": [
+        "Alice Hoffman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1593355938l/50892349.jpg",
+      "rank": 8,
+      "votes": 22373,
+      "winner": false
+    },
+    {
+      "external_id": "53025903",
+      "title": "The Book of Lost Friends",
+      "authors": [
+        "Lisa Wingate"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1580790967l/53025903._SX318_SY475_.jpg",
+      "rank": 9,
+      "votes": 20094,
+      "winner": false
+    },
+    {
+      "external_id": "52722079",
+      "title": "The Pull of the Stars",
+      "authors": [
+        "Emma Donoghue"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1591030878l/52722079.jpg",
+      "rank": 10,
+      "votes": 18928,
+      "winner": false
+    },
+    {
+      "external_id": "48677123",
+      "title": "Hamnet",
+      "authors": [
+        "Maggie O'Farrell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1589286085l/48677123.jpg",
+      "rank": 11,
+      "votes": 9351,
+      "winner": false
+    },
+    {
+      "external_id": "45992717",
+      "title": "The Mirror & the Light",
+      "authors": [
+        "Hilary Mantel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1578295385l/45992717.jpg",
+      "rank": 12,
+      "votes": 8455,
+      "winner": false
+    },
+    {
+      "external_id": "50001299",
+      "title": "Where the Lost Wander",
+      "authors": [
+        "Amy Harmon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1570773240l/50001299._SX318_SY475_.jpg",
+      "rank": 13,
+      "votes": 7196,
+      "winner": false
+    },
+    {
+      "external_id": "51045613",
+      "title": "Deacon King Kong",
+      "authors": [
+        "James   McBride"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1570443527l/51045613.jpg",
+      "rank": 14,
+      "votes": 6248,
+      "winner": false
+    },
+    {
+      "external_id": "46206688",
+      "title": "The Night Watchman",
+      "authors": [
+        "Louise Erdrich"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1560805539l/46206688.jpg",
+      "rank": 15,
+      "votes": 5138,
+      "winner": false
+    },
+    {
+      "external_id": "50089336",
+      "title": "Code Name Hélène",
+      "authors": [
+        "Ariel Lawhon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1572993343l/50089336._SX318_SY475_.jpg",
+      "rank": 16,
+      "votes": 2465,
+      "winner": false
+    },
+    {
+      "external_id": "52597312",
+      "title": "Utopia Avenue",
+      "authors": [
+        "David  Mitchell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1591339054l/52597312._SY600_.jpg",
+      "rank": 17,
+      "votes": 1516,
+      "winner": false
+    },
+    {
+      "external_id": "48564330",
+      "title": "Betty",
+      "authors": [
+        "Tiffany   McDaniel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1572992238l/48564330.jpg",
+      "rank": 18,
+      "votes": 1351,
+      "winner": false
+    },
+    {
+      "external_id": "51253514",
+      "title": "The Paper Daughters of Chinatown",
+      "authors": [
+        "Heather B. Moore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1582080506l/51253514.jpg",
+      "rank": 19,
+      "votes": 1193,
+      "winner": false
+    },
+    {
+      "external_id": "52741293",
+      "title": "Shuggie Bain",
+      "authors": [
+        "Douglas   Stuart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602094778l/52741293._SY600_.jpg",
+      "rank": 20,
+      "votes": 956,
+      "winner": false
+    }
+  ]
+}

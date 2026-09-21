@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-food-cookbooks-2017",
+  "kind": "award",
+  "title": "Food & Cookbooks",
+  "source_url": "https://www.goodreads.com/choiceawards/best-food-cookbooks-2017",
+  "year": 2017,
+  "category": "Food & Cookbooks",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:45.399521+00:00",
+  "books": [
+    {
+      "external_id": "34016988",
+      "title": "The Pioneer Woman Cooks",
+      "authors": [
+        "Ree Drummond"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1496928385l/34016988._SY600_.jpg",
+      "rank": 1,
+      "votes": 23994,
+      "winner": true
+    },
+    {
+      "external_id": "35069206",
+      "title": "5 Ingredients – Quick & Easy Food",
+      "authors": [
+        "Jamie Oliver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500748295l/35069206.jpg",
+      "rank": 2,
+      "votes": 13295,
+      "winner": false
+    },
+    {
+      "external_id": "31423449",
+      "title": "Stirring Up Fun with Food",
+      "authors": [
+        "Sarah Michelle Gellar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492237242l/31423449._SY600_.jpg",
+      "rank": 3,
+      "votes": 12148,
+      "winner": false
+    },
+    {
+      "external_id": "32148009",
+      "title": "Give a Girl a Knife",
+      "authors": [
+        "Amy Thielen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483973107l/32148009._SY600_.jpg",
+      "rank": 4,
+      "votes": 11987,
+      "winner": false
+    },
+    {
+      "external_id": "31329547",
+      "title": "Whole New You",
+      "authors": [
+        "Tia Mowry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1471286020l/31329547._SY600_.jpg",
+      "rank": 5,
+      "votes": 10853,
+      "winner": false
+    },
+    {
+      "external_id": "34129998",
+      "title": "Smitten Kitchen Every Day",
+      "authors": [
+        "Deb Perelman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1495034106l/34129998._SY600_.jpg",
+      "rank": 6,
+      "votes": 10519,
+      "winner": false
+    },
+    {
+      "external_id": "32191664",
+      "title": "BraveTart",
+      "authors": [
+        "Stella Parks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479535573l/32191664._SY600_.jpg",
+      "rank": 7,
+      "votes": 7603,
+      "winner": false
+    },
+    {
+      "external_id": "29100223",
+      "title": "The Cooking Gene",
+      "authors": [
+        "Michael W. Twitty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456090357l/29100223.jpg",
+      "rank": 8,
+      "votes": 7475,
+      "winner": false
+    },
+    {
+      "external_id": "30760782",
+      "title": "Food, Health and Happiness",
+      "authors": [
+        "Oprah Winfrey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1478745657l/30760782._SY600_.jpg",
+      "rank": 9,
+      "votes": 7320,
+      "winner": false
+    },
+    {
+      "external_id": "30753841",
+      "title": "Salt, Fat, Acid, Heat",
+      "authors": [
+        "Samin Nosrat"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1599649084l/30753841._SY600_.jpg",
+      "rank": 10,
+      "votes": 5612,
+      "winner": false
+    },
+    {
+      "external_id": "31624473",
+      "title": "Cork Dork",
+      "authors": [
+        "Bianca Bosker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697557930l/31624473._SY600_.jpg",
+      "rank": 11,
+      "votes": 2600,
+      "winner": false
+    },
+    {
+      "external_id": "31915218",
+      "title": "Grocery",
+      "authors": [
+        "Michael Ruhlman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493496344l/31915218._SY600_.jpg",
+      "rank": 12,
+      "votes": 2211,
+      "winner": false
+    },
+    {
+      "external_id": "28814765",
+      "title": "The Wellness Mama Cookbook",
+      "authors": [
+        "Katie  Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1465669287l/28814765._SY600_.jpg",
+      "rank": 13,
+      "votes": 2199,
+      "winner": false
+    },
+    {
+      "external_id": "33516589",
+      "title": "Coming to My Senses",
+      "authors": [
+        "Alice Waters"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1494333642l/33516589.jpg",
+      "rank": 14,
+      "votes": 1674,
+      "winner": false
+    },
+    {
+      "external_id": "32894542",
+      "title": "Ready or Not!",
+      "authors": [
+        "Michelle Tam"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1488114340l/32894542._SY600_.jpg",
+      "rank": 15,
+      "votes": 1605,
+      "winner": false
+    },
+    {
+      "external_id": "31451086",
+      "title": "Love Real Food",
+      "authors": [
+        "Kathryne Taylor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1497011089l/31451086.jpg",
+      "rank": 16,
+      "votes": 1502,
+      "winner": false
+    },
+    {
+      "external_id": "29430845",
+      "title": "Eight Flavors",
+      "authors": [
+        "Sarah Lohman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476030628l/29430845.jpg",
+      "rank": 17,
+      "votes": 1254,
+      "winner": false
+    },
+    {
+      "external_id": "32714100",
+      "title": "A Really Big Lunch",
+      "authors": [
+        "Jim Harrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481113198l/32714100.jpg",
+      "rank": 18,
+      "votes": 984,
+      "winner": false
+    },
+    {
+      "external_id": "34063669",
+      "title": "Sweet",
+      "authors": [
+        "Yotam Ottolenghi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510017230l/34063669._SY600_.jpg",
+      "rank": 19,
+      "votes": 936,
+      "winner": false
+    },
+    {
+      "external_id": "33571767",
+      "title": "Half Baked Harvest Cookbook",
+      "authors": [
+        "Tieghan Gerard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1490021587l/33571767._SY600_.jpg",
+      "rank": 20,
+      "votes": 855,
+      "winner": false
+    }
+  ]
+}

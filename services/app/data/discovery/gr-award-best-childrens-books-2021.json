@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-childrens-books-2021",
+  "kind": "award",
+  "title": "Middle Grade & Children's",
+  "source_url": "https://www.goodreads.com/choiceawards/best-childrens-books-2021",
+  "year": 2021,
+  "category": "Middle Grade & Children's",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:22.892680+00:00",
+  "books": [
+    {
+      "external_id": "57094644",
+      "title": "Daughter of the Deep",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1622742517l/57094644.jpg",
+      "rank": 1,
+      "votes": 24836,
+      "winner": true
+    },
+    {
+      "external_id": "48914231",
+      "title": "Bridge of Souls",
+      "authors": [
+        "Victoria Schwab"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1580383620l/48914231.jpg",
+      "rank": 2,
+      "votes": 24368,
+      "winner": false
+    },
+    {
+      "external_id": "53327864",
+      "title": "Eyes that Kiss in the Corners",
+      "authors": [
+        "Joanna Ho"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1593216134l/53327864._SY600_.jpg",
+      "rank": 3,
+      "votes": 21560,
+      "winner": false
+    },
+    {
+      "external_id": "57143335",
+      "title": "Amari and the Night Brothers",
+      "authors": [
+        "B.B. Alston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1613879825l/57143335._SY600_.jpg",
+      "rank": 4,
+      "votes": 21390,
+      "winner": false
+    },
+    {
+      "external_id": "54458127",
+      "title": "Starfish",
+      "authors": [
+        "Lisa Fipps"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594348481l/54458127._SY600_.jpg",
+      "rank": 5,
+      "votes": 20031,
+      "winner": false
+    },
+    {
+      "external_id": "56922552",
+      "title": "Beasts and Beauty",
+      "authors": [
+        "Soman Chainani"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612738894l/56922552.jpg",
+      "rank": 6,
+      "votes": 16458,
+      "winner": false
+    },
+    {
+      "external_id": "49202861",
+      "title": "Alone",
+      "authors": [
+        "Megan E. Freeman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608477184l/49202861.jpg",
+      "rank": 7,
+      "votes": 11906,
+      "winner": false
+    },
+    {
+      "external_id": "52664722",
+      "title": "Ground Zero",
+      "authors": [
+        "Alan Gratz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1587404607l/52664722.jpg",
+      "rank": 8,
+      "votes": 9669,
+      "winner": false
+    },
+    {
+      "external_id": "36323801",
+      "title": "Aru Shah and the City of Gold",
+      "authors": [
+        "Roshani Chokshi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1592529359l/36323801._SY600_.jpg",
+      "rank": 9,
+      "votes": 6892,
+      "winner": false
+    },
+    {
+      "external_id": "44280835",
+      "title": "The Thirteenth Fairy",
+      "authors": [
+        "Melissa de la Cruz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1588140805l/44280835.jpg",
+      "rank": 10,
+      "votes": 6554,
+      "winner": false
+    },
+    {
+      "external_id": "53327892",
+      "title": "Red, White, and Whole",
+      "authors": [
+        "Rajani LaRocca"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601591991l/53327892.jpg",
+      "rank": 11,
+      "votes": 2447,
+      "winner": false
+    },
+    {
+      "external_id": "55277066",
+      "title": "Best Nerds Forever",
+      "authors": [
+        "James  Patterson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617707067l/55277066.jpg",
+      "rank": 12,
+      "votes": 2367,
+      "winner": false
+    },
+    {
+      "external_id": "55004097",
+      "title": "Ophie's Ghosts",
+      "authors": [
+        "Justina Ireland"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602878203l/55004097.jpg",
+      "rank": 13,
+      "votes": 2246,
+      "winner": false
+    },
+    {
+      "external_id": "53175322",
+      "title": "Root Magic",
+      "authors": [
+        "Eden Royce"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1593216726l/53175322.jpg",
+      "rank": 14,
+      "votes": 2064,
+      "winner": false
+    },
+    {
+      "external_id": "51591443",
+      "title": "A Wolf for a Spell",
+      "authors": [
+        "Karah Sutton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1581658043l/51591443.jpg",
+      "rank": 15,
+      "votes": 2057,
+      "winner": false
+    },
+    {
+      "external_id": "53441112",
+      "title": "Unplugged",
+      "authors": [
+        "Gordon Korman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1593217030l/53441112.jpg",
+      "rank": 16,
+      "votes": 1900,
+      "winner": false
+    },
+    {
+      "external_id": "43517256",
+      "title": "City of the Plague God",
+      "authors": [
+        "Sarwat Chadda"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1581959802l/43517256.jpg",
+      "rank": 17,
+      "votes": 1507,
+      "winner": false
+    },
+    {
+      "external_id": "54870170",
+      "title": "The Shape of Thunder",
+      "authors": [
+        "Jasmine Warga"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602883126l/54870170.jpg",
+      "rank": 18,
+      "votes": 1418,
+      "winner": false
+    },
+    {
+      "external_id": "55277625",
+      "title": "The Last Fallen Star",
+      "authors": [
+        "Graci Kim"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601319805l/55277625.jpg",
+      "rank": 19,
+      "votes": 1152,
+      "winner": false
+    },
+    {
+      "external_id": "58348225",
+      "title": "Where's My Joey?",
+      "authors": [
+        "Wendy Monica Winter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1764804356l/58348225._SY600_.jpg",
+      "rank": 20,
+      "votes": 1034,
+      "winner": false
+    }
+  ]
+}

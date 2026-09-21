@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-horror-books-2022",
+  "kind": "award",
+  "title": "Horror",
+  "source_url": "https://www.goodreads.com/choiceawards/best-horror-books-2022",
+  "year": 2022,
+  "category": "Horror",
+  "genres": [
+    "horror"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:43.836353+00:00",
+  "books": [
+    {
+      "external_id": "58724923",
+      "title": "Hidden Pictures",
+      "authors": [
+        "Jason Rekulak"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1635260162l/58724923.jpg",
+      "rank": 1,
+      "votes": 35457,
+      "winner": true
+    },
+    {
+      "external_id": "57840571",
+      "title": "The Hacienda",
+      "authors": [
+        "Isabel Cañas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1769548497l/57840571._SY600_.jpg",
+      "rank": 2,
+      "votes": 30799,
+      "winner": false
+    },
+    {
+      "external_id": "58724626",
+      "title": "What Moves the Dead",
+      "authors": [
+        "T. Kingfisher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1632936332l/58724626.jpg",
+      "rank": 3,
+      "votes": 26914,
+      "winner": false
+    },
+    {
+      "external_id": "59366265",
+      "title": "Gwendy's Final Task",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1651710894l/59366265.jpg",
+      "rank": 4,
+      "votes": 22244,
+      "winner": false
+    },
+    {
+      "external_id": "58966216",
+      "title": "Juniper & Thorn",
+      "authors": [
+        "Ava Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1636647300l/58966216.jpg",
+      "rank": 5,
+      "votes": 22109,
+      "winner": false
+    },
+    {
+      "external_id": "58724816",
+      "title": "Our Wives Under the Sea",
+      "authors": [
+        "Julia Armfield"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1636047905l/58724816.jpg",
+      "rank": 6,
+      "votes": 21096,
+      "winner": false
+    },
+    {
+      "external_id": "58438554",
+      "title": "The Children on the Hill",
+      "authors": [
+        "Jennifer  McMahon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1650470600l/58438554.jpg",
+      "rank": 7,
+      "votes": 17488,
+      "winner": false
+    },
+    {
+      "external_id": "60052118",
+      "title": "House of Hunger",
+      "authors": [
+        "Alexis  Henderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1649092164l/60052118.jpg",
+      "rank": 8,
+      "votes": 12457,
+      "winner": false
+    },
+    {
+      "external_id": "57926112",
+      "title": "The Violence",
+      "authors": [
+        "Delilah S. Dawson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627223541l/57926112.jpg",
+      "rank": 9,
+      "votes": 10479,
+      "winner": false
+    },
+    {
+      "external_id": "53620541",
+      "title": "Just Like Mother",
+      "authors": [
+        "Anne Heltzel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631903448l/53620541.jpg",
+      "rank": 10,
+      "votes": 9676,
+      "winner": false
+    },
+    {
+      "external_id": "53329296",
+      "title": "Manhunt",
+      "authors": [
+        "Gretchen Felker-Martin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1738431648l/53329296._SY600_.jpg",
+      "rank": 11,
+      "votes": 3534,
+      "winner": false
+    },
+    {
+      "external_id": "59746719",
+      "title": "Gallows Hill",
+      "authors": [
+        "Darcy Coates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1638536223l/59746719.jpg",
+      "rank": 12,
+      "votes": 3527,
+      "winner": false
+    },
+    {
+      "external_id": "59575958",
+      "title": "Small Angels",
+      "authors": [
+        "Lauren Owen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1645207449l/59575958.jpg",
+      "rank": 13,
+      "votes": 3379,
+      "winner": false
+    },
+    {
+      "external_id": "60209475",
+      "title": "We Spread",
+      "authors": [
+        "Iain Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644353572l/60209475.jpg",
+      "rank": 14,
+      "votes": 3253,
+      "winner": false
+    },
+    {
+      "external_id": "60097467",
+      "title": "Such Sharp Teeth",
+      "authors": [
+        "Rachel   Harrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1656346347l/60097467._SY600_.jpg",
+      "rank": 15,
+      "votes": 2953,
+      "winner": false
+    },
+    {
+      "external_id": "57693183",
+      "title": "Sundial",
+      "authors": [
+        "Catriona Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1643666795l/57693183._SY600_.jpg",
+      "rank": 16,
+      "votes": 2630,
+      "winner": false
+    },
+    {
+      "external_id": "58978299",
+      "title": "The Devil Takes You Home",
+      "authors": [
+        "Gabino Iglesias"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1637249741l/58978299.jpg",
+      "rank": 17,
+      "votes": 2621,
+      "winner": false
+    },
+    {
+      "external_id": "60652964",
+      "title": "White Horse",
+      "authors": [
+        "Erika T. Wurth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1652629156l/60652964.jpg",
+      "rank": 18,
+      "votes": 2548,
+      "winner": false
+    },
+    {
+      "external_id": "55959421",
+      "title": "The Cherry Robbers",
+      "authors": [
+        "Sarai Walker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1610146654l/55959421.jpg",
+      "rank": 19,
+      "votes": 2124,
+      "winner": false
+    },
+    {
+      "external_id": "58652649",
+      "title": "The Fervor",
+      "authors": [
+        "Alma Katsu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627510014l/58652649.jpg",
+      "rank": 20,
+      "votes": 1333,
+      "winner": false
+    }
+  ]
+}

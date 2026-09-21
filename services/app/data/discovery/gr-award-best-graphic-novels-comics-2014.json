@@ -1,0 +1,223 @@
+{
+  "id": "gr-award-best-graphic-novels-comics-2014",
+  "kind": "award",
+  "title": "Graphic Novels & Comics",
+  "source_url": "https://www.goodreads.com/choiceawards/best-graphic-novels-comics-2014",
+  "year": 2014,
+  "category": "Graphic Novels & Comics",
+  "genres": [],
+  "count": 19,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:19.585150+00:00",
+  "books": [
+    {
+      "external_id": "21532236",
+      "title": "Leaves on the Wind",
+      "authors": [
+        "Joss Whedon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443623630l/21532236.jpg",
+      "rank": 1,
+      "votes": 21796,
+      "winner": true
+    },
+    {
+      "external_id": "19358975",
+      "title": "Saga, Volume 3",
+      "authors": [
+        "Brian K. Vaughan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642320769l/19358975.jpg",
+      "rank": 2,
+      "votes": 17964,
+      "winner": false
+    },
+    {
+      "external_id": "18687079",
+      "title": "Avatar",
+      "authors": [
+        "Gene Luen Yang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1382378982l/18687079.jpg",
+      "rank": 3,
+      "votes": 17618,
+      "winner": false
+    },
+    {
+      "external_id": "18339834",
+      "title": "Batman, Volume 4",
+      "authors": [
+        "Scott Snyder"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1674320942l/18339834.jpg",
+      "rank": 4,
+      "votes": 11307,
+      "winner": false
+    },
+    {
+      "external_id": "19138879",
+      "title": "Attack on Titan",
+      "authors": [
+        "Hajime Isayama"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398033046l/19138879.jpg",
+      "rank": 5,
+      "votes": 11129,
+      "winner": false
+    },
+    {
+      "external_id": "16164271",
+      "title": "Locke & Key, Vol. 6",
+      "authors": [
+        "Joe  Hill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391443566l/16164271.jpg",
+      "rank": 6,
+      "votes": 8990,
+      "winner": false
+    },
+    {
+      "external_id": "21433253",
+      "title": "Pride & Prejudice",
+      "authors": [
+        "Stacy King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395616673l/21433253.jpg",
+      "rank": 7,
+      "votes": 8230,
+      "winner": false
+    },
+    {
+      "external_id": "18594409",
+      "title": "Can't We Talk about Something More Pleasant?",
+      "authors": [
+        "Roz Chast"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421087235l/18594409.jpg",
+      "rank": 8,
+      "votes": 7439,
+      "winner": false
+    },
+    {
+      "external_id": "20256612",
+      "title": "Tomboy",
+      "authors": [
+        "Liz Prince"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395769985l/20256612.jpg",
+      "rank": 9,
+      "votes": 7114,
+      "winner": false
+    },
+    {
+      "external_id": "19536001",
+      "title": "Sex Criminals, Vol. 1",
+      "authors": [
+        "Matt Fraction"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1396977214l/19536001.jpg",
+      "rank": 10,
+      "votes": 6431,
+      "winner": false
+    },
+    {
+      "external_id": "18373313",
+      "title": "Wonder Woman, Volume 4",
+      "authors": [
+        "Brian Azzarello"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1397610914l/18373313.jpg",
+      "rank": 11,
+      "votes": 3394,
+      "winner": false
+    },
+    {
+      "external_id": "20898019",
+      "title": "No Normal",
+      "authors": [
+        "G. Willow Wilson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413031883l/20898019.jpg",
+      "rank": 12,
+      "votes": 3176,
+      "winner": false
+    },
+    {
+      "external_id": "18659623",
+      "title": "Through the Woods",
+      "authors": [
+        "E.M. Carroll"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414845473l/18659623.jpg",
+      "rank": 13,
+      "votes": 2545,
+      "winner": false
+    },
+    {
+      "external_id": "20299683",
+      "title": "Rat Queens, Vol. 1",
+      "authors": [
+        "Kurtis J. Wiebe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1489284113l/20299683._SY600_.jpg",
+      "rank": 14,
+      "votes": 1774,
+      "winner": false
+    },
+    {
+      "external_id": "18465566",
+      "title": "This One Summer",
+      "authors": [
+        "Mariko Tamaki"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456895195l/18465566._SY600_.jpg",
+      "rank": 15,
+      "votes": 1257,
+      "winner": false
+    },
+    {
+      "external_id": "19536000",
+      "title": "Chew, Vol. 8",
+      "authors": [
+        "John Layman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398421588l/19536000.jpg",
+      "rank": 16,
+      "votes": 874,
+      "winner": false
+    },
+    {
+      "external_id": "20575446",
+      "title": "In Real Life",
+      "authors": [
+        "Cory Doctorow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391127564l/20575446.jpg",
+      "rank": 17,
+      "votes": 865,
+      "winner": false
+    },
+    {
+      "external_id": "18465601",
+      "title": "The Shadow Hero",
+      "authors": [
+        "Gene Luen Yang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1381948340l/18465601.jpg",
+      "rank": 18,
+      "votes": 864,
+      "winner": false
+    },
+    {
+      "external_id": "20638291",
+      "title": "Pretty Deadly, Vol. 1",
+      "authors": [
+        "Kelly Sue DeConnick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400007010l/20638291.jpg",
+      "rank": 19,
+      "votes": 530,
+      "winner": false
+    }
+  ]
+}

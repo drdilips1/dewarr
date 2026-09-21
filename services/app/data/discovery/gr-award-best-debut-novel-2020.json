@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-debut-novel-2020",
+  "kind": "award",
+  "title": "Debut Novel",
+  "source_url": "https://www.goodreads.com/choiceawards/best-debut-novel-2020",
+  "year": 2020,
+  "category": "Debut Novel",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:49.568353+00:00",
+  "books": [
+    {
+      "external_id": "43923951",
+      "title": "Such a Fun Age",
+      "authors": [
+        "Kiley Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1557181911l/43923951._SY600_.jpg",
+      "rank": 1,
+      "votes": 52450,
+      "winner": true
+    },
+    {
+      "external_id": "52339313",
+      "title": "Cemetery Boys",
+      "authors": [
+        "Aiden Thomas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594059624l/52339313._SY600_.jpg",
+      "rank": 2,
+      "votes": 51018,
+      "winner": false
+    },
+    {
+      "external_id": "44890081",
+      "title": "My Dark Vanessa",
+      "authors": [
+        "Kate Elizabeth Russell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1583447793l/44890081._SY600_.jpg",
+      "rank": 3,
+      "votes": 37502,
+      "winner": false
+    },
+    {
+      "external_id": "43557477",
+      "title": "The Jane Austen Society",
+      "authors": [
+        "Natalie Jenner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1568730506l/43557477.jpg",
+      "rank": 4,
+      "votes": 26032,
+      "winner": false
+    },
+    {
+      "external_id": "50214741",
+      "title": "The Girl with the Louding Voice",
+      "authors": [
+        "Abi Daré"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1581128232l/50214741.jpg",
+      "rank": 5,
+      "votes": 25143,
+      "winner": false
+    },
+    {
+      "external_id": "49789629",
+      "title": "The Year of the Witching",
+      "authors": [
+        "Alexis  Henderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1576699031l/49789629.jpg",
+      "rank": 6,
+      "votes": 23286,
+      "winner": false
+    },
+    {
+      "external_id": "53103895",
+      "title": "One to Watch",
+      "authors": [
+        "Kate Stayman-London"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1584401917l/53103895.jpg",
+      "rank": 7,
+      "votes": 22777,
+      "winner": false
+    },
+    {
+      "external_id": "41014401",
+      "title": "The Henna Artist",
+      "authors": [
+        "Alka Joshi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565206837l/41014401._SY600_.jpg",
+      "rank": 8,
+      "votes": 21646,
+      "winner": false
+    },
+    {
+      "external_id": "50706646",
+      "title": "The Bone Shard Daughter",
+      "authors": [
+        "Andrea Stewart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1586229099l/50706646.jpg",
+      "rank": 9,
+      "votes": 10900,
+      "winner": false
+    },
+    {
+      "external_id": "52377380",
+      "title": "Valentine",
+      "authors": [
+        "Elizabeth Wetmore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585661134l/52377380._SY600_.jpg",
+      "rank": 10,
+      "votes": 10055,
+      "winner": false
+    },
+    {
+      "external_id": "51792100",
+      "title": "A Burning",
+      "authors": [
+        "Megha Majumdar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1576019976l/51792100.jpg",
+      "rank": 11,
+      "votes": 4945,
+      "winner": false
+    },
+    {
+      "external_id": "51541496",
+      "title": "Luster",
+      "authors": [
+        "Raven Leilani"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1568668703l/51541496._SX318_SY475_.jpg",
+      "rank": 12,
+      "votes": 4093,
+      "winner": false
+    },
+    {
+      "external_id": "46263943",
+      "title": "Real Life",
+      "authors": [
+        "Brandon  Taylor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1563301717l/46263943.jpg",
+      "rank": 13,
+      "votes": 3571,
+      "winner": false
+    },
+    {
+      "external_id": "49758584",
+      "title": "You Deserve Each Other",
+      "authors": [
+        "Sarah Hogle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1578144091l/49758584._SY600_.jpg",
+      "rank": 14,
+      "votes": 3109,
+      "winner": false
+    },
+    {
+      "external_id": "48678117",
+      "title": "Winter Counts",
+      "authors": [
+        "David Heska Wanbli Weiden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1592246046l/48678117.jpg",
+      "rank": 15,
+      "votes": 2964,
+      "winner": false
+    },
+    {
+      "external_id": "45895362",
+      "title": "How Much of These Hills Is Gold",
+      "authors": [
+        "C Pam Zhang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566270729l/45895362.jpg",
+      "rank": 16,
+      "votes": 2857,
+      "winner": false
+    },
+    {
+      "external_id": "51171377",
+      "title": "Axiom's End",
+      "authors": [
+        "Lindsay  Ellis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1579072263l/51171377.jpg",
+      "rank": 17,
+      "votes": 2518,
+      "winner": false
+    },
+    {
+      "external_id": "50158128",
+      "title": "Raybearer",
+      "authors": [
+        "Jordan Ifueko"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1567330635l/50158128._SX318_SY475_.jpg",
+      "rank": 18,
+      "votes": 2100,
+      "winner": false
+    },
+    {
+      "external_id": "52741293",
+      "title": "Shuggie Bain",
+      "authors": [
+        "Douglas   Stuart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602094778l/52741293._SY600_.jpg",
+      "rank": 19,
+      "votes": 1161,
+      "winner": false
+    },
+    {
+      "external_id": "52378525",
+      "title": "The First Sister",
+      "authors": [
+        "Linden A. Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1584211465l/52378525.jpg",
+      "rank": 20,
+      "votes": 856,
+      "winner": false
+    }
+  ]
+}

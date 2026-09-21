@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-history-biography-books-2023",
+  "kind": "award",
+  "title": "History & Biography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-history-biography-books-2023",
+  "year": 2023,
+  "category": "History & Biography",
+  "genres": [
+    "biography",
+    "history"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:31.579667+00:00",
+  "books": [
+    {
+      "external_id": "61714633",
+      "title": "The Wager",
+      "authors": [
+        "David Grann"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659407155l/61714633.jpg",
+      "rank": 1,
+      "votes": 40132,
+      "winner": true
+    },
+    {
+      "external_id": "101160753",
+      "title": "The Six",
+      "authors": [
+        "Loren Grush"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686761136l/101160753.jpg",
+      "rank": 2,
+      "votes": 24315,
+      "winner": false
+    },
+    {
+      "external_id": "65214203",
+      "title": "Killing the Witches",
+      "authors": [
+        "Bill O'Reilly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675642559l/65214203.jpg",
+      "rank": 3,
+      "votes": 22698,
+      "winner": false
+    },
+    {
+      "external_id": "62039291",
+      "title": "King",
+      "authors": [
+        "Jonathan Eig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1710155592l/62039291._SY600_.jpg",
+      "rank": 4,
+      "votes": 19454,
+      "winner": false
+    },
+    {
+      "external_id": "61858962",
+      "title": "Valiant Women",
+      "authors": [
+        "Lena Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675526626l/61858962.jpg",
+      "rank": 5,
+      "votes": 17446,
+      "winner": false
+    },
+    {
+      "external_id": "55959466",
+      "title": "Black AF History",
+      "authors": [
+        "Michael Harriot"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1623377719l/55959466._SY600_.jpg",
+      "rank": 6,
+      "votes": 17288,
+      "winner": false
+    },
+    {
+      "external_id": "61423989",
+      "title": "A Fever in the Heartland",
+      "authors": [
+        "Timothy Egan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659417830l/61423989.jpg",
+      "rank": 7,
+      "votes": 14246,
+      "winner": false
+    },
+    {
+      "external_id": "122765395",
+      "title": "Elon Musk",
+      "authors": [
+        "Walter Isaacson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1692288251l/122765395._SY600_.jpg",
+      "rank": 8,
+      "votes": 13162,
+      "winner": false
+    },
+    {
+      "external_id": "61327450",
+      "title": "Pathogenesis",
+      "authors": [
+        "Jonathan     Kennedy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1656310837l/61327450.jpg",
+      "rank": 9,
+      "votes": 11244,
+      "winner": false
+    },
+    {
+      "external_id": "112975117",
+      "title": "Astor",
+      "authors": [
+        "Anderson Cooper"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684204469l/112975117.jpg",
+      "rank": 10,
+      "votes": 10435,
+      "winner": false
+    },
+    {
+      "external_id": "61965394",
+      "title": "The Earth Transformed",
+      "authors": [
+        "Peter Frankopan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677838656l/61965394._SY600_.jpg",
+      "rank": 11,
+      "votes": 3444,
+      "winner": false
+    },
+    {
+      "external_id": "62918681",
+      "title": "The Book of Charlie",
+      "authors": [
+        "David von Drehle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1682527920l/62918681.jpg",
+      "rank": 12,
+      "votes": 3353,
+      "winner": false
+    },
+    {
+      "external_id": "60098287",
+      "title": "Star Crossed",
+      "authors": [
+        "Heather Dune Macadam"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1657977372l/60098287.jpg",
+      "rank": 13,
+      "votes": 3247,
+      "winner": false
+    },
+    {
+      "external_id": "61272711",
+      "title": "Master Slave Husband Wife",
+      "authors": [
+        "Ilyon Woo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673499674l/61272711.jpg",
+      "rank": 14,
+      "votes": 3159,
+      "winner": false
+    },
+    {
+      "external_id": "63024187",
+      "title": "When Crack Was King",
+      "authors": [
+        "Donovan X. Ramsey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684815053l/63024187.jpg",
+      "rank": 15,
+      "votes": 2634,
+      "winner": false
+    },
+    {
+      "external_id": "60784360",
+      "title": "The Nazi Conspiracy",
+      "authors": [
+        "Brad Meltzer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1649929399l/60784360.jpg",
+      "rank": 16,
+      "votes": 2570,
+      "winner": false
+    },
+    {
+      "external_id": "61192830",
+      "title": "The Confidante",
+      "authors": [
+        "Christopher C. Gorham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1653945253l/61192830.jpg",
+      "rank": 17,
+      "votes": 2516,
+      "winner": false
+    },
+    {
+      "external_id": "62328661",
+      "title": "Rough Sleepers",
+      "authors": [
+        "Tracy Kidder"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1662576445l/62328661._SY600_.jpg",
+      "rank": 18,
+      "votes": 2142,
+      "winner": false
+    },
+    {
+      "external_id": "61420116",
+      "title": "There Will Be Fire",
+      "authors": [
+        "Rory Carroll"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1775554562l/61420116.jpg",
+      "rank": 19,
+      "votes": 1930,
+      "winner": false
+    },
+    {
+      "external_id": "149105520",
+      "title": "Going Infinite",
+      "authors": [
+        "Michael   Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684247487l/149105520.jpg",
+      "rank": 20,
+      "votes": 1602,
+      "winner": false
+    }
+  ]
+}

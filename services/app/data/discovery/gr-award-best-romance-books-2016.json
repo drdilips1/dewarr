@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-romance-books-2016",
+  "kind": "award",
+  "title": "Romance",
+  "source_url": "https://www.goodreads.com/choiceawards/best-romance-books-2016",
+  "year": 2016,
+  "category": "Romance",
+  "genres": [
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:03.998575+00:00",
+  "books": [
+    {
+      "external_id": "27276318",
+      "title": "It Ends with Us",
+      "authors": [
+        "Colleen Hoover"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470427525l/27276318._SY600_.jpg",
+      "rank": 1,
+      "votes": 59546,
+      "winner": true
+    },
+    {
+      "external_id": "24035804",
+      "title": "Storm and Silence",
+      "authors": [
+        "Robert Thier"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1448470535l/24035804._SY600_.jpg",
+      "rank": 2,
+      "votes": 44591,
+      "winner": false
+    },
+    {
+      "external_id": "26236956",
+      "title": "The Obsession",
+      "authors": [
+        "Nora Roberts"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1444838367l/26236956.jpg",
+      "rank": 3,
+      "votes": 27445,
+      "winner": false
+    },
+    {
+      "external_id": "25293695",
+      "title": "The Beast",
+      "authors": [
+        "J.R. Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1437025828l/25293695.jpg",
+      "rank": 4,
+      "votes": 25473,
+      "winner": false
+    },
+    {
+      "external_id": "17876897",
+      "title": "One with You",
+      "authors": [
+        "Sylvia Day"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1458742883l/17876897._SY600_.jpg",
+      "rank": 5,
+      "votes": 19423,
+      "winner": false
+    },
+    {
+      "external_id": "25657772",
+      "title": "Because of Miss Bridgerton",
+      "authors": [
+        "Julia Quinn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1480122942l/25657772.jpg",
+      "rank": 6,
+      "votes": 18617,
+      "winner": false
+    },
+    {
+      "external_id": "25810368",
+      "title": "Kings Rising",
+      "authors": [
+        "C.S. Pacat"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470556598l/25810368.jpg",
+      "rank": 7,
+      "votes": 17124,
+      "winner": false
+    },
+    {
+      "external_id": "29508471",
+      "title": "Paper Princess",
+      "authors": [
+        "Erin Watt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1457996156l/29508471._SY600_.jpg",
+      "rank": 8,
+      "votes": 13335,
+      "winner": false
+    },
+    {
+      "external_id": "27213238",
+      "title": "The Hating Game",
+      "authors": [
+        "Sally  Thorne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481566824l/27213238.jpg",
+      "rank": 9,
+      "votes": 10489,
+      "winner": false
+    },
+    {
+      "external_id": "32572872",
+      "title": "Beard Science",
+      "authors": [
+        "Penny Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476190818l/32572872._SY600_.jpg",
+      "rank": 10,
+      "votes": 9813,
+      "winner": false
+    },
+    {
+      "external_id": "28524443",
+      "title": "The Score",
+      "authors": [
+        "Elle Kennedy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493326544l/28524443.jpg",
+      "rank": 11,
+      "votes": 7210,
+      "winner": false
+    },
+    {
+      "external_id": "29852207",
+      "title": "The Wall of Winnipeg and Me",
+      "authors": [
+        "Mariana Zapata"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1478477058l/29852207._SY600_.jpg",
+      "rank": 12,
+      "votes": 6795,
+      "winner": false
+    },
+    {
+      "external_id": "27158834",
+      "title": "Born of Legend",
+      "authors": [
+        "Sherrilyn Kenyon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459724997l/27158834.jpg",
+      "rank": 13,
+      "votes": 5262,
+      "winner": false
+    },
+    {
+      "external_id": "25611416",
+      "title": "Beautiful Burn",
+      "authors": [
+        "Jamie McGuire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1452463523l/25611416._SY600_.jpg",
+      "rank": 14,
+      "votes": 4916,
+      "winner": false
+    },
+    {
+      "external_id": "29382691",
+      "title": "Stuck-Up Suit",
+      "authors": [
+        "Vi Keeland"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456966330l/29382691._SY600_.jpg",
+      "rank": 15,
+      "votes": 4586,
+      "winner": false
+    },
+    {
+      "external_id": "26252659",
+      "title": "Big Rock",
+      "authors": [
+        "Lauren Blakely"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441742244l/26252659._SY600_.jpg",
+      "rank": 16,
+      "votes": 4178,
+      "winner": false
+    },
+    {
+      "external_id": "27083865",
+      "title": "RoomHate",
+      "authors": [
+        "Penelope Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453991440l/27083865._SY600_.jpg",
+      "rank": 17,
+      "votes": 3524,
+      "winner": false
+    },
+    {
+      "external_id": "32766597",
+      "title": "Punk 57",
+      "authors": [
+        "Penelope Douglas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1477438958l/32766597._SY600_.jpg",
+      "rank": 18,
+      "votes": 1876,
+      "winner": false
+    },
+    {
+      "external_id": "31345271",
+      "title": "Blackwing Dragon",
+      "authors": [
+        "T.S. Joyce"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470263623l/31345271._SY600_.jpg",
+      "rank": 19,
+      "votes": 1806,
+      "winner": false
+    },
+    {
+      "external_id": "31154244",
+      "title": "Preppy",
+      "authors": [
+        "T.M. Frazier"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470021588l/31154244.jpg",
+      "rank": 20,
+      "votes": 1704,
+      "winner": false
+    }
+  ]
+}

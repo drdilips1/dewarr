@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-horror-books-2015",
+  "kind": "award",
+  "title": "Horror",
+  "source_url": "https://www.goodreads.com/choiceawards/best-horror-books-2015",
+  "year": 2015,
+  "category": "Horror",
+  "genres": [
+    "horror"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:37.646368+00:00",
+  "books": [
+    {
+      "external_id": "21538202",
+      "title": "Saint Odd",
+      "authors": [
+        "Dean Koontz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398802430l/21538202.jpg",
+      "rank": 1,
+      "votes": 17644,
+      "winner": true
+    },
+    {
+      "external_id": "23398606",
+      "title": "Alice",
+      "authors": [
+        "Christina Henry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1531783537l/23398606._SY600_.jpg",
+      "rank": 2,
+      "votes": 11845,
+      "winner": false
+    },
+    {
+      "external_id": "20454635",
+      "title": "The Last American Vampire",
+      "authors": [
+        "Seth Grahame-Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1407107369l/20454635.jpg",
+      "rank": 3,
+      "votes": 10336,
+      "winner": false
+    },
+    {
+      "external_id": "24499258",
+      "title": "Slade House",
+      "authors": [
+        "David  Mitchell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1626721882l/24499258._SY600_.jpg",
+      "rank": 4,
+      "votes": 9094,
+      "winner": false
+    },
+    {
+      "external_id": "23573808",
+      "title": "Thicker Than Blood",
+      "authors": [
+        "Madeline Sheehan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1416244740l/23573808.jpg",
+      "rank": 5,
+      "votes": 8333,
+      "winner": false
+    },
+    {
+      "external_id": "23553419",
+      "title": "The Ice Twins",
+      "authors": [
+        "S.K. Tremayne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415872674l/23553419.jpg",
+      "rank": 6,
+      "votes": 7259,
+      "winner": false
+    },
+    {
+      "external_id": "24040551",
+      "title": "The Night Sister",
+      "authors": [
+        "Jennifer  McMahon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1427845722l/24040551.jpg",
+      "rank": 7,
+      "votes": 6779,
+      "winner": false
+    },
+    {
+      "external_id": "24833801",
+      "title": "Follow You Home",
+      "authors": [
+        "Mark  Edwards"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430403863l/24833801.jpg",
+      "rank": 8,
+      "votes": 6285,
+      "winner": false
+    },
+    {
+      "external_id": "23019294",
+      "title": "A Head Full of Ghosts",
+      "authors": [
+        "Paul Tremblay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415678368l/23019294.jpg",
+      "rank": 9,
+      "votes": 5162,
+      "winner": false
+    },
+    {
+      "external_id": "23634011",
+      "title": "Rolling in the Deep",
+      "authors": [
+        "Mira Grant"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417291618l/23634011.jpg",
+      "rank": 10,
+      "votes": 4840,
+      "winner": false
+    },
+    {
+      "external_id": "23614038",
+      "title": "Twisted",
+      "authors": [
+        "Andrew E. Kaufman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424736750l/23614038.jpg",
+      "rank": 11,
+      "votes": 1843,
+      "winner": false
+    },
+    {
+      "external_id": "23014674",
+      "title": "The Scarlet Gospels",
+      "authors": [
+        "Clive Barker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1426127782l/23014674.jpg",
+      "rank": 12,
+      "votes": 1757,
+      "winner": false
+    },
+    {
+      "external_id": "26269034",
+      "title": "Suicide Forest",
+      "authors": [
+        "Jeremy Bates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442212400l/26269034._SY600_.jpg",
+      "rank": 13,
+      "votes": 1544,
+      "winner": false
+    },
+    {
+      "external_id": "25909020",
+      "title": "Abomination",
+      "authors": [
+        "Gary Whitta"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436991593l/25909020.jpg",
+      "rank": 14,
+      "votes": 1308,
+      "winner": false
+    },
+    {
+      "external_id": "24000506",
+      "title": "The Annihilation Score",
+      "authors": [
+        "Charles Stross"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1426160667l/24000506.jpg",
+      "rank": 15,
+      "votes": 1255,
+      "winner": false
+    },
+    {
+      "external_id": "25481524",
+      "title": "The Border",
+      "authors": [
+        "Robert McCammon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1434086226l/25481524._SY600_.jpg",
+      "rank": 16,
+      "votes": 1177,
+      "winner": false
+    },
+    {
+      "external_id": "23377679",
+      "title": "Blood Infernal",
+      "authors": [
+        "James Rollins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414730944l/23377679.jpg",
+      "rank": 17,
+      "votes": 993,
+      "winner": false
+    },
+    {
+      "external_id": "24156733",
+      "title": "Extinction Horizon",
+      "authors": [
+        "Nicholas Sansbury Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424016015l/24156733.jpg",
+      "rank": 18,
+      "votes": 896,
+      "winner": false
+    },
+    {
+      "external_id": "21412284",
+      "title": "The Deep",
+      "authors": [
+        "Nick Cutter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421037680l/21412284.jpg",
+      "rank": 19,
+      "votes": 835,
+      "winner": false
+    },
+    {
+      "external_id": "23341590",
+      "title": "Day Four",
+      "authors": [
+        "Sarah Lotz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414442388l/23341590.jpg",
+      "rank": 20,
+      "votes": 625,
+      "winner": false
+    }
+  ]
+}

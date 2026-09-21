@@ -1,0 +1,83 @@
+{
+  "checked_at": "2026-09-20T18:50:39.418442+00:00",
+  "years": {
+    "2025": {
+      "expected": 15,
+      "available": 15
+    },
+    "2024": {
+      "expected": 15,
+      "available": 15
+    },
+    "2023": {
+      "expected": 15,
+      "available": 15
+    },
+    "2022": {
+      "expected": 17,
+      "available": 17
+    },
+    "2021": {
+      "expected": 17,
+      "available": 17
+    },
+    "2020": {
+      "expected": 20,
+      "available": 20
+    },
+    "2019": {
+      "expected": 20,
+      "available": 20
+    },
+    "2018": {
+      "expected": 21,
+      "available": 21
+    },
+    "2017": {
+      "expected": 20,
+      "available": 20
+    },
+    "2016": {
+      "expected": 20,
+      "available": 20
+    },
+    "2015": {
+      "expected": 20,
+      "available": 20
+    },
+    "2014": {
+      "expected": 20,
+      "available": 20
+    },
+    "2013": {
+      "expected": 20,
+      "available": 20
+    },
+    "2012": {
+      "expected": 20,
+      "available": 20
+    },
+    "2011": {
+      "expected": 22,
+      "available": 22
+    },
+    "2010": {
+      "expected": null,
+      "available": 0
+    },
+    "2009": {
+      "expected": null,
+      "available": 0
+    }
+  },
+  "errors": [
+    {
+      "year": 2010,
+      "error": "Client error '404 Not Found' for url 'https://www.goodreads.com/choiceawards/best-books-2010'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+    },
+    {
+      "year": 2009,
+      "error": "Client error '404 Not Found' for url 'https://www.goodreads.com/choiceawards/best-books-2009'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404"
+    }
+  ]
+}

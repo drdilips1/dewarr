@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-romance-books-2022",
+  "kind": "award",
+  "title": "Romance",
+  "source_url": "https://www.goodreads.com/choiceawards/best-romance-books-2022",
+  "year": 2022,
+  "category": "Romance",
+  "genres": [
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:41.038939+00:00",
+  "books": [
+    {
+      "external_id": "58690308",
+      "title": "Book Lovers",
+      "authors": [
+        "Emily Henry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1638867089l/58690308.jpg",
+      "rank": 1,
+      "votes": 175857,
+      "winner": true
+    },
+    {
+      "external_id": "58346977",
+      "title": "Reminders of Him",
+      "authors": [
+        "Colleen Hoover"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627673847l/58346977.jpg",
+      "rank": 2,
+      "votes": 64550,
+      "winner": false
+    },
+    {
+      "external_id": "60393672",
+      "title": "It Starts with Us",
+      "authors": [
+        "Colleen Hoover"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644605295l/60393672._SY600_.jpg",
+      "rank": 3,
+      "votes": 62221,
+      "winner": false
+    },
+    {
+      "external_id": "59856881",
+      "title": "Love on the Brain",
+      "authors": [
+        "Ali Hazelwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642118320l/59856881.jpg",
+      "rank": 4,
+      "votes": 48628,
+      "winner": false
+    },
+    {
+      "external_id": "58014893",
+      "title": "Every Summer After",
+      "authors": [
+        "Carley Fortune"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630101647l/58014893.jpg",
+      "rank": 5,
+      "votes": 40868,
+      "winner": false
+    },
+    {
+      "external_id": "60156155",
+      "title": "Things We Never Got Over",
+      "authors": [
+        "Lucy Score"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1669676108l/60156155._SY600_.jpg",
+      "rank": 6,
+      "votes": 38940,
+      "winner": false
+    },
+    {
+      "external_id": "54756850",
+      "title": "Delilah Green Doesn't Care",
+      "authors": [
+        "Ashley Herring Blake"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1643753957l/54756850._SY600_.jpg",
+      "rank": 7,
+      "votes": 37934,
+      "winner": false
+    },
+    {
+      "external_id": "62056935",
+      "title": "Twisted Hate",
+      "authors": [
+        "Ana Huang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1661221520l/62056935.jpg",
+      "rank": 8,
+      "votes": 35508,
+      "winner": false
+    },
+    {
+      "external_id": "60476301",
+      "title": "Terms and Conditions",
+      "authors": [
+        "Lauren Asher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1645560667l/60476301._SY600_.jpg",
+      "rank": 9,
+      "votes": 27636,
+      "winner": false
+    },
+    {
+      "external_id": "58283080",
+      "title": "Hook, Line, and Sinker",
+      "authors": [
+        "Tessa Bailey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627068858l/58283080.jpg",
+      "rank": 10,
+      "votes": 26240,
+      "winner": false
+    },
+    {
+      "external_id": "58684524",
+      "title": "Part of Your World",
+      "authors": [
+        "Abby Jimenez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1634649284l/58684524.jpg",
+      "rank": 11,
+      "votes": 9924,
+      "winner": false
+    },
+    {
+      "external_id": "59232998",
+      "title": "You Made a Fool of Death with Your Beauty",
+      "authors": [
+        "Akwaeke Emezi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1651419815l/59232998.jpg",
+      "rank": 12,
+      "votes": 8770,
+      "winner": false
+    },
+    {
+      "external_id": "57661359",
+      "title": "Electric Idol",
+      "authors": [
+        "Katee Robert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1629300986l/57661359.jpg",
+      "rank": 13,
+      "votes": 8203,
+      "winner": false
+    },
+    {
+      "external_id": "58724801",
+      "title": "The Bodyguard",
+      "authors": [
+        "Katherine Center"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1637059607l/58724801.jpg",
+      "rank": 14,
+      "votes": 7740,
+      "winner": false
+    },
+    {
+      "external_id": "60114057",
+      "title": "The American Roommate Experiment",
+      "authors": [
+        "Elena  Armas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1660147951l/60114057.jpg",
+      "rank": 15,
+      "votes": 5335,
+      "winner": false
+    },
+    {
+      "external_id": "58065414",
+      "title": "Funny You Should Ask",
+      "authors": [
+        "Elissa Sussman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1671712456l/58065414._SY600_.jpg",
+      "rank": 16,
+      "votes": 5123,
+      "winner": false
+    },
+    {
+      "external_id": "59314703",
+      "title": "Thank You for Listening",
+      "authors": [
+        "Julia  Whelan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1652105760l/59314703.jpg",
+      "rank": 17,
+      "votes": 4390,
+      "winner": false
+    },
+    {
+      "external_id": "59949720",
+      "title": "The Kiss Curse",
+      "authors": [
+        "Erin Sterling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1647103771l/59949720.jpg",
+      "rank": 18,
+      "votes": 4088,
+      "winner": false
+    },
+    {
+      "external_id": "57007401",
+      "title": "Dating Dr. Dil",
+      "authors": [
+        "Nisha Sharma"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642405300l/57007401.jpg",
+      "rank": 19,
+      "votes": 3180,
+      "winner": false
+    },
+    {
+      "external_id": "55506996",
+      "title": "The Wedding Crasher",
+      "authors": [
+        "Mia Sosa"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627893250l/55506996.jpg",
+      "rank": 20,
+      "votes": 1723,
+      "winner": false
+    }
+  ]
+}

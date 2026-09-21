@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-horror-books-2014",
+  "kind": "award",
+  "title": "Horror",
+  "source_url": "https://www.goodreads.com/choiceawards/best-horror-books-2014",
+  "year": 2014,
+  "category": "Horror",
+  "genres": [
+    "horror"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:08.300184+00:00",
+  "books": [
+    {
+      "external_id": "21412673",
+      "title": "Prince Lestat",
+      "authors": [
+        "Anne Rice"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394635385l/21412673.jpg",
+      "rank": 1,
+      "votes": 21909,
+      "winner": true
+    },
+    {
+      "external_id": "17235026",
+      "title": "The Girl with All the Gifts",
+      "authors": [
+        "M.R. Carey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403033579l/17235026.jpg",
+      "rank": 2,
+      "votes": 19786,
+      "winner": false
+    },
+    {
+      "external_id": "18773627",
+      "title": "The City",
+      "authors": [
+        "Dean Koontz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1399410401l/18773627.jpg",
+      "rank": 3,
+      "votes": 19682,
+      "winner": false
+    },
+    {
+      "external_id": "18007535",
+      "title": "The Winter People",
+      "authors": [
+        "Jennifer  McMahon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1377582922l/18007535.jpg",
+      "rank": 4,
+      "votes": 14256,
+      "winner": false
+    },
+    {
+      "external_id": "18498558",
+      "title": "Bird Box",
+      "authors": [
+        "Josh Malerman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1383949470l/18498558.jpg",
+      "rank": 5,
+      "votes": 8420,
+      "winner": false
+    },
+    {
+      "external_id": "18144171",
+      "title": "The Wolf in Winter",
+      "authors": [
+        "John Connolly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415006181l/18144171.jpg",
+      "rank": 6,
+      "votes": 8162,
+      "winner": false
+    },
+    {
+      "external_id": "19433029",
+      "title": "Code Zero",
+      "authors": [
+        "Jonathan Maberry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386924358l/19433029.jpg",
+      "rank": 7,
+      "votes": 7864,
+      "winner": false
+    },
+    {
+      "external_id": "18089930",
+      "title": "Innocent Blood",
+      "authors": [
+        "James Rollins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375677202l/18089930.jpg",
+      "rank": 8,
+      "votes": 7315,
+      "winner": false
+    },
+    {
+      "external_id": "8087710",
+      "title": "Pandemic",
+      "authors": [
+        "Scott Sigler"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1377968309l/8087710.jpg",
+      "rank": 9,
+      "votes": 6656,
+      "winner": false
+    },
+    {
+      "external_id": "18775169",
+      "title": "Monster Hunter Nemesis",
+      "authors": [
+        "Larry Correia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1384160165l/18775169.jpg",
+      "rank": 10,
+      "votes": 5800,
+      "winner": false
+    },
+    {
+      "external_id": "18114136",
+      "title": "Silence for the Dead",
+      "authors": [
+        "Simone St. James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1396228222l/18114136.jpg",
+      "rank": 11,
+      "votes": 2257,
+      "winner": false
+    },
+    {
+      "external_id": "22892496",
+      "title": "Dust to Dust",
+      "authors": [
+        "Karina Halle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602890090l/22892496._SY600_.jpg",
+      "rank": 12,
+      "votes": 2207,
+      "winner": false
+    },
+    {
+      "external_id": "20423680",
+      "title": "The Last Town",
+      "authors": [
+        "Blake Crouch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1399508172l/20423680.jpg",
+      "rank": 13,
+      "votes": 2094,
+      "winner": false
+    },
+    {
+      "external_id": "13129925",
+      "title": "Horrorstör",
+      "authors": [
+        "Grady Hendrix"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414314217l/13129925.jpg",
+      "rank": 14,
+      "votes": 2084,
+      "winner": false
+    },
+    {
+      "external_id": "19485109",
+      "title": "The Purge of Babylon",
+      "authors": [
+        "Sam Sisavath"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395513160l/19485109.jpg",
+      "rank": 15,
+      "votes": 1574,
+      "winner": false
+    },
+    {
+      "external_id": "20706269",
+      "title": "Broken Monsters",
+      "authors": [
+        "Lauren Beukes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394562848l/20706269.jpg",
+      "rank": 16,
+      "votes": 1422,
+      "winner": false
+    },
+    {
+      "external_id": "19346407",
+      "title": "The Getaway God",
+      "authors": [
+        "Richard Kadrey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395621948l/19346407.jpg",
+      "rank": 17,
+      "votes": 1349,
+      "winner": false
+    },
+    {
+      "external_id": "18211295",
+      "title": "The Rhesus Chart",
+      "authors": [
+        "Charles Stross"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1383475235l/18211295.jpg",
+      "rank": 18,
+      "votes": 1349,
+      "winner": false
+    },
+    {
+      "external_id": "17571466",
+      "title": "The Troop",
+      "authors": [
+        "Nick Cutter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1397768496l/17571466.jpg",
+      "rank": 19,
+      "votes": 978,
+      "winner": false
+    },
+    {
+      "external_id": "18453110",
+      "title": "The Three",
+      "authors": [
+        "Sarah Lotz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1379897631l/18453110.jpg",
+      "rank": 20,
+      "votes": 944,
+      "winner": false
+    }
+  ]
+}

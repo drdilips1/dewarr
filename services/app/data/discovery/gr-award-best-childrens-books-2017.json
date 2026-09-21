@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-childrens-books-2017",
+  "kind": "award",
+  "title": "Middle Grade & Children's",
+  "source_url": "https://www.goodreads.com/choiceawards/best-childrens-books-2017",
+  "year": 2017,
+  "category": "Middle Grade & Children's",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:53.948831+00:00",
+  "books": [
+    {
+      "external_id": "28006120",
+      "title": "The Ship of the Dead",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493178281l/28006120.jpg",
+      "rank": 1,
+      "votes": 34516,
+      "winner": true
+    },
+    {
+      "external_id": "30145666",
+      "title": "The Dark Prophecy",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1692084529l/30145666.jpg",
+      "rank": 2,
+      "votes": 23851,
+      "winner": false
+    },
+    {
+      "external_id": "30145677",
+      "title": "Beauty and the Beast",
+      "authors": [
+        "Jennifer Donnelly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1482873009l/30145677.jpg",
+      "rank": 3,
+      "votes": 17338,
+      "winner": false
+    },
+    {
+      "external_id": "32940857",
+      "title": "Worlds Collide",
+      "authors": [
+        "Chris Colfer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492570739l/32940857.jpg",
+      "rank": 4,
+      "votes": 12679,
+      "winner": false
+    },
+    {
+      "external_id": "30312547",
+      "title": "Amina's Voice",
+      "authors": [
+        "Hena Khan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1478818044l/30312547._SY600_.jpg",
+      "rank": 5,
+      "votes": 12151,
+      "winner": false
+    },
+    {
+      "external_id": "33282947",
+      "title": "See You in the Cosmos",
+      "authors": [
+        "Jack Cheng"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481081985l/33282947.jpg",
+      "rank": 6,
+      "votes": 9726,
+      "winner": false
+    },
+    {
+      "external_id": "32623542",
+      "title": "Beyond the Bright Sea",
+      "authors": [
+        "Lauren Wolk"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483641021l/32623542._SY600_.jpg",
+      "rank": 7,
+      "votes": 7397,
+      "winner": false
+    },
+    {
+      "external_id": "29563587",
+      "title": "Dragonwatch",
+      "authors": [
+        "Brandon Mull"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1472913234l/29563587._SY600_.jpg",
+      "rank": 8,
+      "votes": 6811,
+      "winner": false
+    },
+    {
+      "external_id": "27242442",
+      "title": "Star-Crossed",
+      "authors": [
+        "Barbara Dee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1489312283l/27242442._SY600_.jpg",
+      "rank": 9,
+      "votes": 6101,
+      "winner": false
+    },
+    {
+      "external_id": "33386034",
+      "title": "Rise of the Isle of the Lost",
+      "authors": [
+        "Melissa de la Cruz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1486516637l/33386034.jpg",
+      "rank": 10,
+      "votes": 5823,
+      "winner": false
+    },
+    {
+      "external_id": "31213737",
+      "title": "The Goldfish Boy",
+      "authors": [
+        "Lisa   Thompson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1469718041l/31213737.jpg",
+      "rank": 11,
+      "votes": 2899,
+      "winner": false
+    },
+    {
+      "external_id": "30758586",
+      "title": "Flying Lessons & Other Stories",
+      "authors": [
+        "Ellen Oh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1467002252l/30758586.jpg",
+      "rank": 12,
+      "votes": 2311,
+      "winner": false
+    },
+    {
+      "external_id": "32711417",
+      "title": "Quests for Glory",
+      "authors": [
+        "Soman Chainani"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1488534027l/32711417.jpg",
+      "rank": 13,
+      "votes": 2095,
+      "winner": false
+    },
+    {
+      "external_id": "33158525",
+      "title": "Wishtree",
+      "authors": [
+        "Katherine Applegate"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1484246579l/33158525._SY600_.jpg",
+      "rank": 14,
+      "votes": 1748,
+      "winner": false
+    },
+    {
+      "external_id": "30254963",
+      "title": "Talons of Power",
+      "authors": [
+        "Tui T. Sutherland"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1475992932l/30254963.jpg",
+      "rank": 15,
+      "votes": 1742,
+      "winner": false
+    },
+    {
+      "external_id": "30037871",
+      "title": "The Ethan I Was Before",
+      "authors": [
+        "Ali Standish"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1469210259l/30037871._SY600_.jpg",
+      "rank": 16,
+      "votes": 1724,
+      "winner": false
+    },
+    {
+      "external_id": "30037873",
+      "title": "The Someday Birds",
+      "authors": [
+        "Sally J. Pla"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1467822821l/30037873._SY600_.jpg",
+      "rank": 17,
+      "votes": 1721,
+      "winner": false
+    },
+    {
+      "external_id": "33785205",
+      "title": "The Empty Grave",
+      "authors": [
+        "Jonathan Stroud"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1495569051l/33785205.jpg",
+      "rank": 18,
+      "votes": 1224,
+      "winner": false
+    },
+    {
+      "external_id": "33865643",
+      "title": "The War I Finally Won",
+      "authors": [
+        "Kimberly Brubaker Bradley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498909398l/33865643._SY600_.jpg",
+      "rank": 19,
+      "votes": 1142,
+      "winner": false
+    },
+    {
+      "external_id": "31145091",
+      "title": "I Love You, Michael Collins",
+      "authors": [
+        "Lauren Baratz-Logsted"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1497304771l/31145091.jpg",
+      "rank": 20,
+      "votes": 599,
+      "winner": false
+    }
+  ]
+}

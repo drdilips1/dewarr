@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-humor-books-2019",
+  "kind": "award",
+  "title": "Humor",
+  "source_url": "https://www.goodreads.com/choiceawards/best-humor-books-2019",
+  "year": 2019,
+  "category": "Humor",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:08.702019+00:00",
+  "books": [
+    {
+      "external_id": "44600621",
+      "title": "Dear Girls",
+      "authors": [
+        "Ali Wong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553635552l/44600621.jpg",
+      "rank": 1,
+      "votes": 41454,
+      "winner": true
+    },
+    {
+      "external_id": "43885930",
+      "title": "Life Will Be the Death of Me",
+      "authors": [
+        "Chelsea Handler"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552494925l/43885930.jpg",
+      "rank": 2,
+      "votes": 17229,
+      "winner": false
+    },
+    {
+      "external_id": "42060068",
+      "title": "William Shakespeare's Much Ado About Mean Girls",
+      "authors": [
+        "Ian Doescher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550263993l/42060068.jpg",
+      "rank": 3,
+      "votes": 13978,
+      "winner": false
+    },
+    {
+      "external_id": "43263670",
+      "title": "Do You Mind If I Cancel?",
+      "authors": [
+        "Gary Janetti"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1563766567l/43263670.jpg",
+      "rank": 4,
+      "votes": 12900,
+      "winner": false
+    },
+    {
+      "external_id": "40983137",
+      "title": "Southern Lady Code",
+      "authors": [
+        "Helen Ellis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1541293041l/40983137.jpg",
+      "rank": 5,
+      "votes": 11423,
+      "winner": false
+    },
+    {
+      "external_id": "41188319",
+      "title": "The Field Guide to Dumb Birds of North America",
+      "authors": [
+        "Matt Kracht"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1538448702l/41188319.jpg",
+      "rank": 6,
+      "votes": 10347,
+      "winner": false
+    },
+    {
+      "external_id": "41429806",
+      "title": "Riding the Elephant",
+      "authors": [
+        "Craig Ferguson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1544824578l/41429806._SY600_.jpg",
+      "rank": 7,
+      "votes": 9402,
+      "winner": false
+    },
+    {
+      "external_id": "42506471",
+      "title": "Hope Rides Again",
+      "authors": [
+        "Andrew Shaffer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552095119l/42506471._SY600_.jpg",
+      "rank": 8,
+      "votes": 8649,
+      "winner": false
+    },
+    {
+      "external_id": "43908975",
+      "title": "Small Doses",
+      "authors": [
+        "Amanda Seales"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1570279277l/43908975.jpg",
+      "rank": 9,
+      "votes": 8601,
+      "winner": false
+    },
+    {
+      "external_id": "44419612",
+      "title": "A Woman First",
+      "authors": [
+        "Selina Meyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552445244l/44419612._SY600_.jpg",
+      "rank": 10,
+      "votes": 7314,
+      "winner": false
+    },
+    {
+      "external_id": "45181834",
+      "title": "Twas the Nightshift before Christmas",
+      "authors": [
+        "Adam Kay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1609263944l/45181834._SY600_.jpg",
+      "rank": 11,
+      "votes": 3124,
+      "winner": false
+    },
+    {
+      "external_id": "43615787",
+      "title": "Good Things Happen to People You Hate",
+      "authors": [
+        "Rebecca Fishbein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566880724l/43615787.jpg",
+      "rank": 12,
+      "votes": 2985,
+      "winner": false
+    },
+    {
+      "external_id": "41940280",
+      "title": "Mr. Know-It-All",
+      "authors": [
+        "John   Waters"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555732338l/41940280.jpg",
+      "rank": 13,
+      "votes": 2843,
+      "winner": false
+    },
+    {
+      "external_id": "44527315",
+      "title": "Effin' Birds",
+      "authors": [
+        "Aaron  Reynolds"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556935585l/44527315.jpg",
+      "rank": 14,
+      "votes": 2396,
+      "winner": false
+    },
+    {
+      "external_id": "34315901",
+      "title": "Baby, Don't Hurt Me",
+      "authors": [
+        "Chris Kattan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554340196l/34315901.jpg",
+      "rank": 15,
+      "votes": 2218,
+      "winner": false
+    },
+    {
+      "external_id": "40819522",
+      "title": "Brilliant, Brilliant, Brilliant Brilliant Brilliant",
+      "authors": [
+        "Joel Golby"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1551400257l/40819522.jpg",
+      "rank": 16,
+      "votes": 1909,
+      "winner": false
+    },
+    {
+      "external_id": "44908180",
+      "title": "Medallion Status",
+      "authors": [
+        "John Hodgman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1559229924l/44908180.jpg",
+      "rank": 17,
+      "votes": 1681,
+      "winner": false
+    },
+    {
+      "external_id": "43309518",
+      "title": "Nice Try",
+      "authors": [
+        "Josh Gondelman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562055068l/43309518.jpg",
+      "rank": 18,
+      "votes": 1625,
+      "winner": false
+    },
+    {
+      "external_id": "44064563",
+      "title": "When Life Gives You Pears",
+      "authors": [
+        "Jeannie Gaffigan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565060593l/44064563.jpg",
+      "rank": 19,
+      "votes": 1623,
+      "winner": false
+    },
+    {
+      "external_id": "42046110",
+      "title": "Someone Who Will Love You in All Your Damaged Glory",
+      "authors": [
+        "Raphael Bob-Waksberg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556205572l/42046110.jpg",
+      "rank": 20,
+      "votes": 997,
+      "winner": false
+    }
+  ]
+}

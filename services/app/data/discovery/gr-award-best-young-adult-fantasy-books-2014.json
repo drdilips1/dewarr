@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-young-adult-fantasy-books-2014",
+  "kind": "award",
+  "title": "Young Adult Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fantasy-books-2014",
+  "year": 2014,
+  "category": "Young Adult Fantasy",
+  "genres": [
+    "fantasy",
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:25.049448+00:00",
+  "books": [
+    {
+      "external_id": "8755785",
+      "title": "City of Heavenly Fire",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460477794l/8755785.jpg",
+      "rank": 1,
+      "votes": 53247,
+      "winner": true
+    },
+    {
+      "external_id": "12396528",
+      "title": "Hollow City",
+      "authors": [
+        "Ransom Riggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1472783500l/12396528._SY600_.jpg",
+      "rank": 2,
+      "votes": 27851,
+      "winner": false
+    },
+    {
+      "external_id": "13206828",
+      "title": "Cress",
+      "authors": [
+        "Marissa Meyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470057005l/13206828._SY600_.jpg",
+      "rank": 3,
+      "votes": 25979,
+      "winner": false
+    },
+    {
+      "external_id": "18635016",
+      "title": "The One",
+      "authors": [
+        "Kiera Cass"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1699307836l/18635016.jpg",
+      "rank": 4,
+      "votes": 23988,
+      "winner": false
+    },
+    {
+      "external_id": "20613470",
+      "title": "Heir of Fire",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460846511l/20613470.jpg",
+      "rank": 5,
+      "votes": 21935,
+      "winner": false
+    },
+    {
+      "external_id": "18126198",
+      "title": "Four",
+      "authors": [
+        "Veronica Roth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1393687572l/18126198.jpg",
+      "rank": 6,
+      "votes": 20929,
+      "winner": false
+    },
+    {
+      "external_id": "8709524",
+      "title": "Silver Shadows",
+      "authors": [
+        "Richelle Mead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389304070l/8709524.jpg",
+      "rank": 7,
+      "votes": 18174,
+      "winner": false
+    },
+    {
+      "external_id": "13618440",
+      "title": "Dreams of Gods & Monsters",
+      "authors": [
+        "Laini Taylor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461353810l/13618440.jpg",
+      "rank": 8,
+      "votes": 15821,
+      "winner": false
+    },
+    {
+      "external_id": "13188676",
+      "title": "Ignite Me",
+      "authors": [
+        "Tahereh Mafi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375972497l/13188676._SY600_.jpg",
+      "rank": 9,
+      "votes": 14504,
+      "winner": false
+    },
+    {
+      "external_id": "15839976",
+      "title": "Red Rising",
+      "authors": [
+        "Pierce Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461354651l/15839976._SY600_.jpg",
+      "rank": 10,
+      "votes": 10831,
+      "winner": false
+    },
+    {
+      "external_id": "17455585",
+      "title": "White Hot Kiss",
+      "authors": [
+        "Jennifer L. Armentrout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1377784515l/17455585.jpg",
+      "rank": 11,
+      "votes": 5873,
+      "winner": false
+    },
+    {
+      "external_id": "13644055",
+      "title": "Opposition",
+      "authors": [
+        "Jennifer L. Armentrout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398694101l/13644055.jpg",
+      "rank": 12,
+      "votes": 4260,
+      "winner": false
+    },
+    {
+      "external_id": "20821111",
+      "title": "The Young Elites",
+      "authors": [
+        "Marie Lu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1407318399l/20821111.jpg",
+      "rank": 13,
+      "votes": 4187,
+      "winner": false
+    },
+    {
+      "external_id": "18166936",
+      "title": "The Strange and Beautiful Sorrows of Ava Lavender",
+      "authors": [
+        "Leslye Walton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1397110326l/18166936.jpg",
+      "rank": 14,
+      "votes": 3787,
+      "winner": false
+    },
+    {
+      "external_id": "13138635",
+      "title": "These Broken Stars",
+      "authors": [
+        "Amie Kaufman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1383578978l/13138635.jpg",
+      "rank": 15,
+      "votes": 3680,
+      "winner": false
+    },
+    {
+      "external_id": "17378508",
+      "title": "Blue Lily, Lily Blue",
+      "authors": [
+        "Maggie Stiefvater"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1477103826l/17378508.jpg",
+      "rank": 16,
+      "votes": 3439,
+      "winner": false
+    },
+    {
+      "external_id": "16069030",
+      "title": "The Winner's Curse",
+      "authors": [
+        "Marie Rutkoski"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1377023523l/16069030.jpg",
+      "rank": 17,
+      "votes": 2402,
+      "winner": false
+    },
+    {
+      "external_id": "16429619",
+      "title": "The Kiss of Deception",
+      "authors": [
+        "Mary E. Pearson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389804901l/16429619.jpg",
+      "rank": 18,
+      "votes": 2279,
+      "winner": false
+    },
+    {
+      "external_id": "14061957",
+      "title": "Ruin and Rising",
+      "authors": [
+        "Leigh Bardugo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1392398530l/14061957.jpg",
+      "rank": 19,
+      "votes": 1955,
+      "winner": false
+    },
+    {
+      "external_id": "16131484",
+      "title": "The Infinite Sea",
+      "authors": [
+        "Rick Yancey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395351812l/16131484.jpg",
+      "rank": 20,
+      "votes": 1916,
+      "winner": false
+    }
+  ]
+}

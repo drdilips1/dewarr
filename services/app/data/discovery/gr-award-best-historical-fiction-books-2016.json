@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-historical-fiction-books-2016",
+  "kind": "award",
+  "title": "Historical Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-historical-fiction-books-2016",
+  "year": 2016,
+  "category": "Historical Fiction",
+  "genres": [
+    "historical-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:01.147499+00:00",
+  "books": [
+    {
+      "external_id": "30555488",
+      "title": "The Underground Railroad",
+      "authors": [
+        "Colson Whitehead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493178362l/30555488.jpg",
+      "rank": 1,
+      "votes": 24175,
+      "winner": true
+    },
+    {
+      "external_id": "25893693",
+      "title": "Lilac Girls",
+      "authors": [
+        "Martha Hall Kelly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462850258l/25893693.jpg",
+      "rank": 2,
+      "votes": 23991,
+      "winner": false
+    },
+    {
+      "external_id": "25817162",
+      "title": "America's First Daughter",
+      "authors": [
+        "Stephanie Dray"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459542134l/25817162._SY600_.jpg",
+      "rank": 3,
+      "votes": 16608,
+      "winner": false
+    },
+    {
+      "external_id": "29430012",
+      "title": "A Gentleman in Moscow",
+      "authors": [
+        "Amor Towles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459524472l/29430012.jpg",
+      "rank": 4,
+      "votes": 15260,
+      "winner": false
+    },
+    {
+      "external_id": "28449257",
+      "title": "The Wonder",
+      "authors": [
+        "Emma Donoghue"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1463229441l/28449257.jpg",
+      "rank": 5,
+      "votes": 15193,
+      "winner": false
+    },
+    {
+      "external_id": "27071490",
+      "title": "Homegoing",
+      "authors": [
+        "Yaa Gyasi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1448108591l/27071490.jpg",
+      "rank": 6,
+      "votes": 15016,
+      "winner": false
+    },
+    {
+      "external_id": "28251813",
+      "title": "Three Sisters, Three Queens",
+      "authors": [
+        "Philippa Gregory"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460481807l/28251813._SY600_.jpg",
+      "rank": 7,
+      "votes": 13209,
+      "winner": false
+    },
+    {
+      "external_id": "25776122",
+      "title": "The Summer Before the War",
+      "authors": [
+        "Helen Simonson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1657980012l/25776122._SY600_.jpg",
+      "rank": 8,
+      "votes": 13142,
+      "winner": false
+    },
+    {
+      "external_id": "25279165",
+      "title": "The Swans of Fifth Avenue",
+      "authors": [
+        "Melanie Benjamin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1431898319l/25279165.jpg",
+      "rank": 9,
+      "votes": 10579,
+      "winner": false
+    },
+    {
+      "external_id": "17912498",
+      "title": "The Queen of the Night",
+      "authors": [
+        "Alexander Chee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460425080l/17912498.jpg",
+      "rank": 10,
+      "votes": 6241,
+      "winner": false
+    },
+    {
+      "external_id": "28363972",
+      "title": "The Last Days of Night",
+      "authors": [
+        "Graham Moore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470731930l/28363972._SY600_.jpg",
+      "rank": 11,
+      "votes": 4501,
+      "winner": false
+    },
+    {
+      "external_id": "25577005",
+      "title": "The Moon in the Palace",
+      "authors": [
+        "Weina Dai Randel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445892524l/25577005.jpg",
+      "rank": 12,
+      "votes": 3861,
+      "winner": false
+    },
+    {
+      "external_id": "27917957",
+      "title": "To The Bright Edge of the World",
+      "authors": [
+        "Eowyn Ivey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1465576791l/27917957.jpg",
+      "rank": 13,
+      "votes": 3603,
+      "winner": false
+    },
+    {
+      "external_id": "25813937",
+      "title": "Glory Over Everything",
+      "authors": [
+        "Kathleen Grissom"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1444246918l/25813937._SY600_.jpg",
+      "rank": 14,
+      "votes": 3416,
+      "winner": false
+    },
+    {
+      "external_id": "25666046",
+      "title": "The North Water",
+      "authors": [
+        "Ian McGuire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456351800l/25666046._SY600_.jpg",
+      "rank": 15,
+      "votes": 2278,
+      "winner": false
+    },
+    {
+      "external_id": "25817493",
+      "title": "News of the World",
+      "authors": [
+        "Paulette Jiles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1440342988l/25817493.jpg",
+      "rank": 16,
+      "votes": 1936,
+      "winner": false
+    },
+    {
+      "external_id": "27876415",
+      "title": "Do Not Say We Have Nothing",
+      "authors": [
+        "Madeleine Thien"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459112596l/27876415.jpg",
+      "rank": 17,
+      "votes": 1727,
+      "winner": false
+    },
+    {
+      "external_id": "25894024",
+      "title": "Modern Girls",
+      "authors": [
+        "Jennifer S. Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439980602l/25894024.jpg",
+      "rank": 18,
+      "votes": 1562,
+      "winner": false
+    },
+    {
+      "external_id": "25763894",
+      "title": "Green Island",
+      "authors": [
+        "Shawna Yang Ryan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445790070l/25763894.jpg",
+      "rank": 19,
+      "votes": 1429,
+      "winner": false
+    },
+    {
+      "external_id": "25663717",
+      "title": "The Two-Family House",
+      "authors": [
+        "Lynda Cohen Loigman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479207044l/25663717._SY600_.jpg",
+      "rank": 20,
+      "votes": 1387,
+      "winner": false
+    }
+  ]
+}

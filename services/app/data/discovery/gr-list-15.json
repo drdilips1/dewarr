@@ -1,0 +1,1116 @@
+{
+  "id": "gr-list-15",
+  "kind": "listopia",
+  "title": "Best Historical Fiction",
+  "source_url": "https://www.goodreads.com/list/show/15",
+  "year": null,
+  "category": null,
+  "genres": [
+    "historical-fiction"
+  ],
+  "count": 8244,
+  "coverage": "partial",
+  "updated_at": "2026-09-20T19:04:35.850864+00:00",
+  "books": [
+    {
+      "external_id": "929",
+      "title": "Memoirs of a Geisha",
+      "authors": [
+        "Arthur Golden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1409595968i/929._SY600_.jpg",
+      "rank": 1,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "18405",
+      "title": "Gone with the Wind",
+      "authors": [
+        "Margaret Mitchell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1551144577i/18405._SY600_.jpg",
+      "rank": 2,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "5043",
+      "title": "The Pillars of the Earth (Kingsbridge, #1)",
+      "authors": [
+        "Ken Follett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1576956100i/5043._SY600_.jpg",
+      "rank": 3,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "19063",
+      "title": "The Book Thief",
+      "authors": [
+        "Markus Zusak"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522157426i/19063._SY600_.jpg",
+      "rank": 4,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "37470",
+      "title": "The Other Boleyn Girl (The Plantagenet and Tudor Novels, #9)",
+      "authors": [
+        "Philippa Gregory"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355932638i/37470._SY600_.jpg",
+      "rank": 5,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4989",
+      "title": "The Red Tent",
+      "authors": [
+        "Anita Diamant"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405739117i/4989._SY600_.jpg",
+      "rank": 6,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1953",
+      "title": "A Tale of Two Cities",
+      "authors": [
+        "Charles Dickens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344922523i/1953._SY600_.jpg",
+      "rank": 7,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2865",
+      "title": "Girl with a Pearl Earring",
+      "authors": [
+        "Tracy Chevalier"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327197580i/2865._SY600_.jpg",
+      "rank": 8,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "52382796",
+      "title": "Shōgun (Asian Saga, #1)",
+      "authors": [
+        "James Clavell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1704385704i/52382796._SY600_.jpg",
+      "rank": 9,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3412",
+      "title": "The Thorn Birds",
+      "authors": [
+        "Colleen McCullough"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1548530867i/3412._SY600_.jpg",
+      "rank": 10,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "40611463",
+      "title": "The Clan of the Cave Bear (Earth's Children, #1)",
+      "authors": [
+        "Jean M. Auel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1760432374i/40611463._SY600_.jpg",
+      "rank": 11,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "119073",
+      "title": "The Name of the Rose",
+      "authors": [
+        "Umberto Eco"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415375471i/119073._SY600_.jpg",
+      "rank": 12,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "5064",
+      "title": "World Without End (Kingsbridge, #2)",
+      "authors": [
+        "Ken Follett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509545511i/5064._SY600_.jpg",
+      "rank": 13,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "40873273",
+      "title": "Snow Flower and the Secret Fan",
+      "authors": [
+        "Lisa See"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1532005164i/40873273._SY600_.jpg",
+      "rank": 14,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "11486",
+      "title": "The Color Purple (The Color Purple, #1)",
+      "authors": [
+        "Alice Walker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556348375i/11486._SY600_.jpg",
+      "rank": 15,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "10692",
+      "title": "The Historian",
+      "authors": [
+        "Elizabeth Kostova"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1338298031i/10692._SY600_.jpg",
+      "rank": 16,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "256008",
+      "title": "Lonesome Dove (Lonesome Dove, #1)",
+      "authors": [
+        "Larry McMurtry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1559668037i/256008._SY600_.jpg",
+      "rank": 17,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "5364",
+      "title": "Dragonfly in Amber (Outlander, #2)",
+      "authors": [
+        "Diana Gabaldon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456114344i/5364._SY600_.jpg",
+      "rank": 18,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1232",
+      "title": "The Shadow of the Wind (The Cemetery of Forgotten Books, #1)",
+      "authors": [
+        "Carlos Ruiz Zafón"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628791882i/1232._SY600_.jpg",
+      "rank": 19,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "39832183",
+      "title": "The Guernsey Literary and Potato Peel Pie Society",
+      "authors": [
+        "Mary Ann Shaffer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529026760i/39832183._SY600_.jpg",
+      "rank": 20,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "12296",
+      "title": "The Scarlet Letter",
+      "authors": [
+        "Nathaniel Hawthorne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404810944i/12296._SY600_.jpg",
+      "rank": 21,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "10920",
+      "title": "Cold Mountain",
+      "authors": [
+        "Charles Frazier"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442416348i/10920._SY600_.jpg",
+      "rank": 22,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "546018",
+      "title": "Roots: The Saga of an American Family",
+      "authors": [
+        "Alex Haley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1329398936i/546018._SY600_.jpg",
+      "rank": 23,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7190",
+      "title": "The Three Musketeers",
+      "authors": [
+        "Alexandre Dumas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630475503i/7190._SY600_.jpg",
+      "rank": 24,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "18143977",
+      "title": "All the Light We Cannot See",
+      "authors": [
+        "Anthony Doerr"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1451445646i/18143977._SY600_.jpg",
+      "rank": 25,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "18765",
+      "title": "I, Claudius (Claudius, #1)",
+      "authors": [
+        "Robert Graves"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1657550972i/18765._SY600_.jpg",
+      "rank": 26,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "320",
+      "title": "One Hundred Years of Solitude",
+      "authors": [
+        "Gabriel García Márquez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327881361i/320._SY600_.jpg",
+      "rank": 27,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6867",
+      "title": "Atonement",
+      "authors": [
+        "Ian McEwan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1773518365i/6867._SY600_.jpg",
+      "rank": 28,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "10964",
+      "title": "Outlander (Outlander, #1)",
+      "authors": [
+        "Diana Gabaldon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659086907i/10964._SY600_.jpg",
+      "rank": 29,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4965",
+      "title": "Year of Wonders",
+      "authors": [
+        "Geraldine Brooks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1678314640i/4965._SY600_.jpg",
+      "rank": 30,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "556602",
+      "title": "Sarah's Key",
+      "authors": [
+        "Tatiana de Rosnay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1438863728i/556602._SY600_.jpg",
+      "rank": 31,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "10988",
+      "title": "Drums of Autumn (Outlander, #4)",
+      "authors": [
+        "Diana Gabaldon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500688941i/10988._SY600_.jpg",
+      "rank": 32,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "17250",
+      "title": "The Crucible",
+      "authors": [
+        "Arthur Miller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1547467608i/17250._SY600_.jpg",
+      "rank": 33,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "682804",
+      "title": "The Killer Angels (The Civil War Trilogy, #2)",
+      "authors": [
+        "Michael Shaara"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355371689i/682804._SY600_.jpg",
+      "rank": 34,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "40024",
+      "title": "The Alienist (Dr. Laszlo Kreizler, #1)",
+      "authors": [
+        "Caleb Carr"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388256626i/40024._SY600_.jpg",
+      "rank": 35,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "18144590",
+      "title": "The Alchemist",
+      "authors": [
+        "Paulo Coelho"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1654371463i/18144590._SY600_.jpg",
+      "rank": 36,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "10967",
+      "title": "The Fiery Cross (Outlander, #5)",
+      "authors": [
+        "Diana Gabaldon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1407366842i/10967._SY600_.jpg",
+      "rank": 37,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "39999",
+      "title": "The Boy in the Striped Pajamas",
+      "authors": [
+        "John Boyne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366228171i/39999._SY600_.jpg",
+      "rank": 38,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "10965",
+      "title": "A Breath of Snow and Ashes (Outlander, #6)",
+      "authors": [
+        "Diana Gabaldon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1734099153i/10965._SY600_.jpg",
+      "rank": 39,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7315573",
+      "title": "Fall of Giants (The Century Trilogy, #1)",
+      "authors": [
+        "Ken Follett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470384630i/7315573._SY600_.jpg",
+      "rank": 40,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6952",
+      "title": "Like Water for Chocolate",
+      "authors": [
+        "Laura Esquivel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550721459i/6952._SY600_.jpg",
+      "rank": 41,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "343",
+      "title": "Perfume: The Story of a Murderer",
+      "authors": [
+        "Patrick Süskind"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1409112276i/343._SY600_.jpg",
+      "rank": 42,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "11713",
+      "title": "The English Patient",
+      "authors": [
+        "Michael Ondaatje"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320527907i/11713._SY600_.jpg",
+      "rank": 43,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "33609",
+      "title": "Katherine",
+      "authors": [
+        "Anya Seton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436406825i/33609._SY600_.jpg",
+      "rank": 44,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "703292",
+      "title": "The Witch of Blackbird Pond",
+      "authors": [
+        "Elizabeth George Speare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1345499790i/703292._SY600_.jpg",
+      "rank": 45,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "321552",
+      "title": "The Agony and the Ecstasy",
+      "authors": [
+        "Irving Stone"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327879079i/321552._SY600_.jpg",
+      "rank": 46,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "41044096",
+      "title": "Island of the Blue Dolphins",
+      "authors": [
+        "Scott O'Dell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1533405446i/41044096._SY600_.jpg",
+      "rank": 47,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "9375",
+      "title": "Fried Green Tomatoes at the Whistle Stop Cafe",
+      "authors": [
+        "Fannie Flagg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1165961740i/9375._SY600_.jpg",
+      "rank": 48,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "119829",
+      "title": "The Sunne in Splendour",
+      "authors": [
+        "Sharon Kay Penman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1361649213i/119829._SY600_.jpg",
+      "rank": 49,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "136116",
+      "title": "The Scarlet Pimpernel",
+      "authors": [
+        "Emmuska Orczy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1406764899i/136116._SY600_.jpg",
+      "rank": 50,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "77449",
+      "title": "Here Be Dragons (Welsh Princes, #1)",
+      "authors": [
+        "Sharon Kay Penman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1448657042i/77449._SY600_.jpg",
+      "rank": 51,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6101138",
+      "title": "Wolf Hall (Thomas Cromwell, #1)",
+      "authors": [
+        "Hilary Mantel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627203575i/6101138._SY600_.jpg",
+      "rank": 52,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "9712",
+      "title": "Love in the Time of Cholera",
+      "authors": [
+        "Gabriel García Márquez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644691354i/9712._SY600_.jpg",
+      "rank": 53,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "252499",
+      "title": "The Queen's Fool (The Plantagenet and Tudor Novels, #13)",
+      "authors": [
+        "Philippa Gregory"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1399204116i/252499._SY600_.jpg",
+      "rank": 54,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "16180",
+      "title": "The Boleyn Inheritance (The Plantagenet and Tudor Novels, #10)",
+      "authors": [
+        "Philippa Gregory"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1409318443i/16180._SY600_.jpg",
+      "rank": 55,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "9328",
+      "title": "The House of the Spirits",
+      "authors": [
+        "Isabel Allende"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1621672028i/9328._SY600_.jpg",
+      "rank": 56,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "27252",
+      "title": "Pope Joan",
+      "authors": [
+        "Donna Woolfolk Cross"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386912604i/27252._SY600_.jpg",
+      "rank": 57,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "21853621",
+      "title": "The Nightingale",
+      "authors": [
+        "Kristin Hannah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1681839850i/21853621._SY600_.jpg",
+      "rank": 58,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3273",
+      "title": "Moloka'i (Moloka'i, #1)",
+      "authors": [
+        "Alan Brennert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441920261i/3273._SY600_.jpg",
+      "rank": 59,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "17165596",
+      "title": "The Kite Runner",
+      "authors": [
+        "Khaled Hosseini"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1541428344i/17165596._SY600_.jpg",
+      "rank": 60,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1853145",
+      "title": "Sarum: The Novel of England",
+      "authors": [
+        "Edward Rutherfurd"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415831399i/1853145._SY600_.jpg",
+      "rank": 61,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "16527",
+      "title": "Daughter of Fortune",
+      "authors": [
+        "Isabel Allende"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1299666780i/16527._SY600_.jpg",
+      "rank": 62,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "41014505",
+      "title": "The Bronze Horseman (The Bronze Horseman, #1)",
+      "authors": [
+        "Paullina Simons"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1533054822i/41014505._SY600_.jpg",
+      "rank": 63,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "42933",
+      "title": "Tai-Pan (Asian Saga, #2)",
+      "authors": [
+        "James Clavell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1577989362i/42933._SY600_.jpg",
+      "rank": 64,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "72579",
+      "title": "Alias Grace",
+      "authors": [
+        "Margaret Atwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1298545436i/72579._SY600_.jpg",
+      "rank": 65,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "133430",
+      "title": "Centennial",
+      "authors": [
+        "James A. Michener"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348125094i/133430._SY600_.jpg",
+      "rank": 66,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6440",
+      "title": "Ivanhoe",
+      "authors": [
+        "Walter  Scott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1715643510i/6440._SY600_.jpg",
+      "rank": 67,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "12658",
+      "title": "Hawaii",
+      "authors": [
+        "James A. Michener"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415585664i/12658._SY600_.jpg",
+      "rank": 68,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "40440",
+      "title": "The Thirteenth Tale",
+      "authors": [
+        "Diane Setterfield"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1346267826i/40440._SY600_.jpg",
+      "rank": 69,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "480570",
+      "title": "The First Man in Rome (Masters of Rome, #1)",
+      "authors": [
+        "Colleen McCullough"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388211466i/480570._SY600_.jpg",
+      "rank": 70,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "481446",
+      "title": "Nefertiti",
+      "authors": [
+        "Michelle    Moran"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320449831i/481446._SY600_.jpg",
+      "rank": 71,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "28078",
+      "title": "The Birth of Venus",
+      "authors": [
+        "Sarah Dunant"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1423923989i/28078._SY600_.jpg",
+      "rank": 72,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "159178",
+      "title": "North and South (North and South, #1)",
+      "authors": [
+        "John Jakes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390174619i/159178._SY600_.jpg",
+      "rank": 73,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "41219",
+      "title": "Possession",
+      "authors": [
+        "A.S. Byatt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391124124i/41219._SY600_.jpg",
+      "rank": 74,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "33512",
+      "title": "One Thousand White Women: The Journals of May Dodd (One Thousand White Women, #1)",
+      "authors": [
+        "Jim Fergus"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389821957i/33512._SY600_.jpg",
+      "rank": 75,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "5368",
+      "title": "Forever Amber",
+      "authors": [
+        "Kathleen Winsor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1350464965i/5368._SY600_.jpg",
+      "rank": 76,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "56034",
+      "title": "The French Lieutenant’s Woman",
+      "authors": [
+        "John Fowles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1466630905i/56034._SY600_.jpg",
+      "rank": 77,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3407877",
+      "title": "The Forgotten Garden",
+      "authors": [
+        "Kate Morton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1547843777i/3407877._SY600_.jpg",
+      "rank": 78,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "68527",
+      "title": "The Last Kingdom (The Saxon Stories, #1)",
+      "authors": [
+        "Bernard Cornwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1407107780i/68527._SY600_.jpg",
+      "rank": 79,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4687",
+      "title": "The Cider House Rules",
+      "authors": [
+        "John Irving"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327962519i/4687._SY600_.jpg",
+      "rank": 80,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6149",
+      "title": "Beloved",
+      "authors": [
+        "Toni Morrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1722944318i/6149._SY600_.jpg",
+      "rank": 81,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "92160",
+      "title": "London",
+      "authors": [
+        "Edward Rutherfurd"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320450619l/92160._SX50_SY75_.jpg",
+      "rank": 82,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "241019484",
+      "title": "Shadow Of The Moor",
+      "authors": [
+        "Michael Nash-Whitmore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1756649590i/241019484._SY600_.jpg",
+      "rank": 83,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "24520",
+      "title": "The Complete Aubrey/Maturin Novels (5 Volumes)",
+      "authors": [
+        "Patrick O'Brian"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388325762i/24520._SY600_.jpg",
+      "rank": 84,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "106264",
+      "title": "Sarah, Plain and Tall (Sarah, Plain and Tall, #1)",
+      "authors": [
+        "Patricia MacLachlan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327254558i/106264._SY600_.jpg",
+      "rank": 85,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "10222",
+      "title": "The Far Pavilions",
+      "authors": [
+        "M.M. Kaye"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403391799i/10222._SY600_.jpg",
+      "rank": 86,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1379961",
+      "title": "People of the Book",
+      "authors": [
+        "Geraldine Brooks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442955497i/1379961._SY600_.jpg",
+      "rank": 87,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1305",
+      "title": "Gates of Fire",
+      "authors": [
+        "Steven Pressfield"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386924869i/1305._SY600_.jpg",
+      "rank": 88,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6837103",
+      "title": "The Kitchen House",
+      "authors": [
+        "Kathleen Grissom"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1463229128i/6837103._SY600_.jpg",
+      "rank": 89,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "880",
+      "title": "Pompeii",
+      "authors": [
+        "Robert   Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388189565i/880._SY600_.jpg",
+      "rank": 90,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13529",
+      "title": "March",
+      "authors": [
+        "Geraldine Brooks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327935441i/13529._SY600_.jpg",
+      "rank": 91,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "8716",
+      "title": "Lincoln",
+      "authors": [
+        "Gore Vidal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403185993i/8716._SY600_.jpg",
+      "rank": 92,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2832909",
+      "title": "An Echo in the Bone (Outlander, #7)",
+      "authors": [
+        "Diana Gabaldon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1370918297i/2832909._SY600_.jpg",
+      "rank": 93,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "37781",
+      "title": "Things Fall Apart (The African Trilogy, #1)",
+      "authors": [
+        "Chinua Achebe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1708114013i/37781._SY600_.jpg",
+      "rank": 94,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "12657",
+      "title": "The Source",
+      "authors": [
+        "James A. Michener"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1412531751i/12657._SY600_.jpg",
+      "rank": 95,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "43841",
+      "title": "When Christ and His Saints Slept (Plantagenets #1; Henry II and Eleanor of Aquitaine, #1)",
+      "authors": [
+        "Sharon Kay Penman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333577582i/43841._SY600_.jpg",
+      "rank": 96,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "40200",
+      "title": "The Crimson Petal and the White",
+      "authors": [
+        "Michel Faber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408937589i/40200._SY600_.jpg",
+      "rank": 97,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "82192",
+      "title": "The Crystal Cave (Arthurian Saga, #1)",
+      "authors": [
+        "Mary  Stewart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439344566i/82192._SY600_.jpg",
+      "rank": 98,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "112077",
+      "title": "The Game of Kings (The Lymond Chronicles, #1)",
+      "authors": [
+        "Dorothy Dunnett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1342486295i/112077._SY600_.jpg",
+      "rank": 99,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3591262",
+      "title": "Cutting for Stone",
+      "authors": [
+        "Abraham   Verghese"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553715166i/3591262._SY600_.jpg",
+      "rank": 100,
+      "votes": null,
+      "winner": false
+    }
+  ]
+}

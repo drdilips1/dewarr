@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-childrens-books-2015",
+  "kind": "award",
+  "title": "Middle Grade & Children's",
+  "source_url": "https://www.goodreads.com/choiceawards/best-childrens-books-2015",
+  "year": 2015,
+  "category": "Middle Grade & Children's",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:55.190886+00:00",
+  "books": [
+    {
+      "external_id": "15724396",
+      "title": "The Sword of Summer",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1434701340l/15724396.jpg",
+      "rank": 1,
+      "votes": 43363,
+      "winner": true
+    },
+    {
+      "external_id": "18004320",
+      "title": "The Last Ever After",
+      "authors": [
+        "Soman Chainani"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421947451l/18004320.jpg",
+      "rank": 2,
+      "votes": 10949,
+      "winner": false
+    },
+    {
+      "external_id": "23657459",
+      "title": "Beyond the Kingdoms",
+      "authors": [
+        "Chris Colfer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1428758972l/23657459.jpg",
+      "rank": 3,
+      "votes": 10333,
+      "winner": false
+    },
+    {
+      "external_id": "23507745",
+      "title": "Serafina and the Black Cloak",
+      "authors": [
+        "Robert  Beatty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1420158894l/23507745.jpg",
+      "rank": 4,
+      "votes": 10320,
+      "winner": false
+    },
+    {
+      "external_id": "24612624",
+      "title": "Melissa",
+      "authors": [
+        "Alex  Gino"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1672689974l/24612624._SY600_.jpg",
+      "rank": 5,
+      "votes": 7581,
+      "winner": false
+    },
+    {
+      "external_id": "23197620",
+      "title": "The Isle of the Lost",
+      "authors": [
+        "Melissa de la Cruz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1420692497l/23197620.jpg",
+      "rank": 6,
+      "votes": 7540,
+      "winner": false
+    },
+    {
+      "external_id": "23399197",
+      "title": "A Handful of Stars",
+      "authors": [
+        "Cynthia Lord"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1419320928l/23399197.jpg",
+      "rank": 7,
+      "votes": 6042,
+      "winner": false
+    },
+    {
+      "external_id": "24396876",
+      "title": "The Thing About Jellyfish",
+      "authors": [
+        "Ali Benjamin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439121354l/24396876._SY600_.jpg",
+      "rank": 8,
+      "votes": 5994,
+      "winner": false
+    },
+    {
+      "external_id": "20912424",
+      "title": "The War That Saved My Life",
+      "authors": [
+        "Kimberly Brubaker Bradley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453342842l/20912424._SY600_.jpg",
+      "rank": 9,
+      "votes": 5299,
+      "winner": false
+    },
+    {
+      "external_id": "22402972",
+      "title": "Fish in a Tree",
+      "authors": [
+        "Lynda Mullaly Hunt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403181554l/22402972.jpg",
+      "rank": 10,
+      "votes": 5098,
+      "winner": false
+    },
+    {
+      "external_id": "22693811",
+      "title": "The Penderwicks in Spring",
+      "authors": [
+        "Jeanne Birdsall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1407711827l/22693811.jpg",
+      "rank": 11,
+      "votes": 2522,
+      "winner": false
+    },
+    {
+      "external_id": "23615709",
+      "title": "Goodbye Stranger",
+      "authors": [
+        "Rebecca Stead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439670673l/23615709._SY600_.jpg",
+      "rank": 12,
+      "votes": 2470,
+      "winner": false
+    },
+    {
+      "external_id": "22749539",
+      "title": "Echo",
+      "authors": [
+        "Pam Muñoz Ryan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460587774l/22749539.jpg",
+      "rank": 13,
+      "votes": 2425,
+      "winner": false
+    },
+    {
+      "external_id": "20759572",
+      "title": "Rogue Knight",
+      "authors": [
+        "Brandon Mull"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1416444239l/20759572.jpg",
+      "rank": 14,
+      "votes": 1938,
+      "winner": false
+    },
+    {
+      "external_id": "23566909",
+      "title": "The Marvels",
+      "authors": [
+        "Brian Selznick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453389120l/23566909.jpg",
+      "rank": 15,
+      "votes": 1901,
+      "winner": false
+    },
+    {
+      "external_id": "22571259",
+      "title": "The Honest Truth",
+      "authors": [
+        "Dan Gemeinhart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403803946l/22571259.jpg",
+      "rank": 16,
+      "votes": 1774,
+      "winner": false
+    },
+    {
+      "external_id": "13612962",
+      "title": "The Copper Gauntlet",
+      "authors": [
+        "Holly Black"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1526297061l/13612962.jpg",
+      "rank": 17,
+      "votes": 1621,
+      "winner": false
+    },
+    {
+      "external_id": "18114578",
+      "title": "The Evertree",
+      "authors": [
+        "Marie Lu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417892131l/18114578.jpg",
+      "rank": 18,
+      "votes": 1502,
+      "winner": false
+    },
+    {
+      "external_id": "23310699",
+      "title": "Crenshaw",
+      "authors": [
+        "Katherine Applegate"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1475972698l/23310699.jpg",
+      "rank": 19,
+      "votes": 1447,
+      "winner": false
+    },
+    {
+      "external_id": "24397043",
+      "title": "The Hollow Boy",
+      "authors": [
+        "Jonathan Stroud"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1429031246l/24397043.jpg",
+      "rank": 20,
+      "votes": 1171,
+      "winner": false
+    }
+  ]
+}

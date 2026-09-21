@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-food-cookbooks-2012",
+  "kind": "award",
+  "title": "Food & Cookbooks",
+  "source_url": "https://www.goodreads.com/choiceawards/best-food-cookbooks-2012",
+  "year": 2012,
+  "category": "Food & Cookbooks",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:16.086957+00:00",
+  "books": [
+    {
+      "external_id": "12072362",
+      "title": "The Pioneer Woman Cooks",
+      "authors": [
+        "Ree Drummond"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344712745l/12072362.jpg",
+      "rank": 1,
+      "votes": 7977,
+      "winner": true
+    },
+    {
+      "external_id": "12519893",
+      "title": "The Homemade Pantry",
+      "authors": [
+        "Alana Chernila"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333576869l/12519893.jpg",
+      "rank": 2,
+      "votes": 2888,
+      "winner": false
+    },
+    {
+      "external_id": "12294541",
+      "title": "Paris, My Sweet",
+      "authors": [
+        "Amy Thomas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1326948965l/12294541.jpg",
+      "rank": 3,
+      "votes": 2755,
+      "winner": false
+    },
+    {
+      "external_id": "12986251",
+      "title": "Joy the Baker Cookbook",
+      "authors": [
+        "Joy  Wilson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1321981185l/12986251.jpg",
+      "rank": 4,
+      "votes": 2438,
+      "winner": false
+    },
+    {
+      "external_id": "13237773",
+      "title": "Food in Jars",
+      "authors": [
+        "Marisa McClellan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344689525l/13237773.jpg",
+      "rank": 5,
+      "votes": 1983,
+      "winner": false
+    },
+    {
+      "external_id": "13202092",
+      "title": "Eat & Run",
+      "authors": [
+        "Scott Jurek"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344746039l/13202092.jpg",
+      "rank": 6,
+      "votes": 1923,
+      "winner": false
+    },
+    {
+      "external_id": "12603330",
+      "title": "Chloe's Kitchen",
+      "authors": [
+        "Chloe Coscarelli"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1326554173l/12603330.jpg",
+      "rank": 7,
+      "votes": 1876,
+      "winner": false
+    },
+    {
+      "external_id": "13012708",
+      "title": "French Kids Eat Everything",
+      "authors": [
+        "Karen Le Billon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347943861l/13012708.jpg",
+      "rank": 8,
+      "votes": 1849,
+      "winner": false
+    },
+    {
+      "external_id": "13273545",
+      "title": "The Good Food Revolution",
+      "authors": [
+        "Will  Allen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1346099269l/13273545.jpg",
+      "rank": 9,
+      "votes": 1635,
+      "winner": false
+    },
+    {
+      "external_id": "13043698",
+      "title": "Dinner",
+      "authors": [
+        "Jenny Rosenstrach"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347441124l/13043698.jpg",
+      "rank": 10,
+      "votes": 1499,
+      "winner": false
+    },
+    {
+      "external_id": "13551147",
+      "title": "My Berlin Kitchen",
+      "authors": [
+        "Luisa Weiss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333826819l/13551147.jpg",
+      "rank": 11,
+      "votes": 983,
+      "winner": false
+    },
+    {
+      "external_id": "13586810",
+      "title": "Practical Paleo",
+      "authors": [
+        "Diane Sanfilippo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1401055447l/13586810.jpg",
+      "rank": 12,
+      "votes": 895,
+      "winner": false
+    },
+    {
+      "external_id": "13193855",
+      "title": "It Starts with Food",
+      "authors": [
+        "Dallas Hartwig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1364140054l/13193855.jpg",
+      "rank": 13,
+      "votes": 752,
+      "winner": false
+    },
+    {
+      "external_id": "13547854",
+      "title": "The American Way of Eating",
+      "authors": [
+        "Tracie McMillan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344662805l/13547854.jpg",
+      "rank": 14,
+      "votes": 681,
+      "winner": false
+    },
+    {
+      "external_id": "13331199",
+      "title": "The Smitten Kitchen Cookbook",
+      "authors": [
+        "Deb Perelman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336228481l/13331199.jpg",
+      "rank": 15,
+      "votes": 661,
+      "winner": false
+    },
+    {
+      "external_id": "13598307",
+      "title": "The Art of Fermentation",
+      "authors": [
+        "Sandor Ellix Katz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1334185796l/13598307.jpg",
+      "rank": 16,
+      "votes": 487,
+      "winner": false
+    },
+    {
+      "external_id": "13329738",
+      "title": "A Feast of Ice and Fire",
+      "authors": [
+        "Chelsea Monroe-Cassel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331690698l/13329738.jpg",
+      "rank": 17,
+      "votes": 431,
+      "winner": false
+    },
+    {
+      "external_id": "14556629",
+      "title": "Forks Over Knives—The Cookbook",
+      "authors": [
+        "Del Sroufe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1353510137l/14556629.jpg",
+      "rank": 18,
+      "votes": 287,
+      "winner": false
+    },
+    {
+      "external_id": "15895557",
+      "title": "Savoring the Seasons with Our Best Bites",
+      "authors": [
+        "Sara Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347652757l/15895557.jpg",
+      "rank": 19,
+      "votes": 201,
+      "winner": false
+    },
+    {
+      "external_id": "13506703",
+      "title": "The Back in the Day Bakery Cookbook",
+      "authors": [
+        "Cheryl Day"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331403549l/13506703.jpg",
+      "rank": 20,
+      "votes": 195,
+      "winner": false
+    }
+  ]
+}

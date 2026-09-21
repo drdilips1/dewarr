@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-romance-books-2020",
+  "kind": "award",
+  "title": "Romance",
+  "source_url": "https://www.goodreads.com/choiceawards/best-romance-books-2020",
+  "year": 2020,
+  "category": "Romance",
+  "genres": [
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:32.953505+00:00",
+  "books": [
+    {
+      "external_id": "52861201",
+      "title": "From Blood and Ash",
+      "authors": [
+        "Jennifer L. Armentrout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1588843906l/52861201._SY600_.jpg",
+      "rank": 1,
+      "votes": 70896,
+      "winner": true
+    },
+    {
+      "external_id": "52867387",
+      "title": "Beach Read",
+      "authors": [
+        "Emily Henry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1589881197l/52867387._SY600_.jpg",
+      "rank": 2,
+      "votes": 60124,
+      "winner": false
+    },
+    {
+      "external_id": "50093704",
+      "title": "In Five Years",
+      "authors": [
+        "Rebecca Serle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1586399012l/50093704._SY600_.jpg",
+      "rank": 3,
+      "votes": 37342,
+      "winner": false
+    },
+    {
+      "external_id": "44582454",
+      "title": "Regretting You",
+      "authors": [
+        "Colleen Hoover"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1760993353l/44582454._SY600_.jpg",
+      "rank": 4,
+      "votes": 35856,
+      "winner": false
+    },
+    {
+      "external_id": "50225678",
+      "title": "Boyfriend Material",
+      "authors": [
+        "Alexis  Hall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1575987260l/50225678.jpg",
+      "rank": 5,
+      "votes": 33502,
+      "winner": false
+    },
+    {
+      "external_id": "52090948",
+      "title": "Take a Hint, Dani Brown",
+      "authors": [
+        "Talia Hibbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1592943641l/52090948._SY600_.jpg",
+      "rank": 6,
+      "votes": 26958,
+      "winner": false
+    },
+    {
+      "external_id": "53103895",
+      "title": "One to Watch",
+      "authors": [
+        "Kate Stayman-London"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1584401917l/53103895.jpg",
+      "rank": 7,
+      "votes": 24301,
+      "winner": false
+    },
+    {
+      "external_id": "52539131",
+      "title": "The Happy Ever After Playlist",
+      "authors": [
+        "Abby Jimenez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1583200162l/52539131._SX318_SY475_.jpg",
+      "rank": 8,
+      "votes": 18244,
+      "winner": false
+    },
+    {
+      "external_id": "48842183",
+      "title": "The Switch",
+      "authors": [
+        "Beth O'Leary"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585639107l/48842183.jpg",
+      "rank": 9,
+      "votes": 17210,
+      "winner": false
+    },
+    {
+      "external_id": "52585101",
+      "title": "You Had Me at Hola",
+      "authors": [
+        "Alexis Daria"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1586533869l/52585101.jpg",
+      "rank": 10,
+      "votes": 14666,
+      "winner": false
+    },
+    {
+      "external_id": "46225061",
+      "title": "The Two Lives of Lydia Bird",
+      "authors": [
+        "Josie Silver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1583446296l/46225061._SY600_.jpg",
+      "rank": 11,
+      "votes": 7069,
+      "winner": false
+    },
+    {
+      "external_id": "49099926",
+      "title": "Party of Two",
+      "authors": [
+        "Jasmine Guillory"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1580140214l/49099926._SY600_.jpg",
+      "rank": 12,
+      "votes": 6211,
+      "winner": false
+    },
+    {
+      "external_id": "49202118",
+      "title": "A Rogue of One's Own",
+      "authors": [
+        "Evie Dunmore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1578931679l/49202118.jpg",
+      "rank": 13,
+      "votes": 6005,
+      "winner": false
+    },
+    {
+      "external_id": "50892287",
+      "title": "In a Holidaze",
+      "authors": [
+        "Christina Lauren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601590329l/50892287._SY600_.jpg",
+      "rank": 14,
+      "votes": 5713,
+      "winner": false
+    },
+    {
+      "external_id": "50496840",
+      "title": "Emerald Blaze",
+      "authors": [
+        "Ilona Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1597017672l/50496840.jpg",
+      "rank": 15,
+      "votes": 4913,
+      "winner": false
+    },
+    {
+      "external_id": "52915426",
+      "title": "Something to Talk About",
+      "authors": [
+        "Meryl Wilsner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1589963301l/52915426._SY600_.jpg",
+      "rank": 16,
+      "votes": 4631,
+      "winner": false
+    },
+    {
+      "external_id": "52226559",
+      "title": "Sweet Temptation",
+      "authors": [
+        "Cora Reilly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1759604335l/52226559._SY600_.jpg",
+      "rank": 17,
+      "votes": 3643,
+      "winner": false
+    },
+    {
+      "external_id": "54467737",
+      "title": "Hands Down",
+      "authors": [
+        "Mariana Zapata"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594433634l/54467737._SY600_.jpg",
+      "rank": 18,
+      "votes": 2892,
+      "winner": false
+    },
+    {
+      "external_id": "49758584",
+      "title": "You Deserve Each Other",
+      "authors": [
+        "Sarah Hogle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1578144091l/49758584._SY600_.jpg",
+      "rank": 19,
+      "votes": 2139,
+      "winner": false
+    },
+    {
+      "external_id": "50496918",
+      "title": "Spoiler Alert",
+      "authors": [
+        "Olivia Dade"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1584239588l/50496918.jpg",
+      "rank": 20,
+      "votes": 1884,
+      "winner": false
+    }
+  ]
+}

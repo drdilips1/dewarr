@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-young-adult-fiction-books-2011",
+  "kind": "award",
+  "title": "Young Adult Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fiction-books-2011",
+  "year": 2011,
+  "category": "Young Adult Fiction",
+  "genres": [
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:48:17.140690+00:00",
+  "books": [
+    {
+      "external_id": "8492825",
+      "title": "Where She Went",
+      "authors": [
+        "Gayle Forman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347810457l/8492825.jpg",
+      "rank": 1,
+      "votes": 4221,
+      "winner": true
+    },
+    {
+      "external_id": "9961796",
+      "title": "Lola and the Boy Next Door",
+      "authors": [
+        "Stephanie Perkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358271832l/9961796.jpg",
+      "rank": 2,
+      "votes": 3352,
+      "winner": false
+    },
+    {
+      "external_id": "8492856",
+      "title": "What Happened to Goodbye",
+      "authors": [
+        "Sarah Dessen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1528211143l/8492856._SY600_.jpg",
+      "rank": 3,
+      "votes": 3181,
+      "winner": false
+    },
+    {
+      "external_id": "9464733",
+      "title": "Beauty Queens",
+      "authors": [
+        "Libba Bray"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1289410187l/9464733.jpg",
+      "rank": 4,
+      "votes": 2941,
+      "winner": false
+    },
+    {
+      "external_id": "8662836",
+      "title": "Chain Reaction",
+      "authors": [
+        "Simone Elkeles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562571813l/8662836.jpg",
+      "rank": 5,
+      "votes": 2657,
+      "winner": false
+    },
+    {
+      "external_id": "7824322",
+      "title": "Between Shades of Gray",
+      "authors": [
+        "Ruta Sepetys"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327873479l/7824322.jpg",
+      "rank": 6,
+      "votes": 2337,
+      "winner": false
+    },
+    {
+      "external_id": "9462775",
+      "title": "The Last Little Blue Envelope",
+      "authors": [
+        "Maureen Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1288297853l/9462775.jpg",
+      "rank": 7,
+      "votes": 2325,
+      "winner": false
+    },
+    {
+      "external_id": "8928054",
+      "title": "Shine",
+      "authors": [
+        "Lauren Myracle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1294346503l/8928054.jpg",
+      "rank": 8,
+      "votes": 2295,
+      "winner": false
+    },
+    {
+      "external_id": "10327303",
+      "title": "Uncommon Criminals",
+      "authors": [
+        "Ally Carter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1298155996l/10327303.jpg",
+      "rank": 9,
+      "votes": 2254,
+      "winner": false
+    },
+    {
+      "external_id": "9893331",
+      "title": "Twisted",
+      "authors": [
+        "Sara Shepard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1316975768l/9893331.jpg",
+      "rank": 10,
+      "votes": 1700,
+      "winner": false
+    },
+    {
+      "external_id": "9917945",
+      "title": "Perfect",
+      "authors": [
+        "Ellen Hopkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1296179689l/9917945.jpg",
+      "rank": 11,
+      "votes": 890,
+      "winner": false
+    },
+    {
+      "external_id": "8680278",
+      "title": "We'll Always Have Summer",
+      "authors": [
+        "Jenny Han"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327054226l/8680278.jpg",
+      "rank": 12,
+      "votes": 753,
+      "winner": false
+    },
+    {
+      "external_id": "11505797",
+      "title": "Beautiful Disaster",
+      "authors": [
+        "Jamie McGuire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358259032l/11505797.jpg",
+      "rank": 13,
+      "votes": 486,
+      "winner": false
+    },
+    {
+      "external_id": "9470371",
+      "title": "Love Story",
+      "authors": [
+        "Jennifer Echols"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1305684651l/9470371.jpg",
+      "rank": 14,
+      "votes": 410,
+      "winner": false
+    },
+    {
+      "external_id": "10801027",
+      "title": "Cross My Heart",
+      "authors": [
+        "Katie Klein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327886049l/10801027.jpg",
+      "rank": 15,
+      "votes": 262,
+      "winner": false
+    },
+    {
+      "external_id": "8013391",
+      "title": "Real Live Boyfriends",
+      "authors": [
+        "E. Lockhart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320493325l/8013391.jpg",
+      "rank": 16,
+      "votes": 258,
+      "winner": false
+    },
+    {
+      "external_id": "9415966",
+      "title": "Spoiled",
+      "authors": [
+        "Heather Cocks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327879074l/9415966.jpg",
+      "rank": 17,
+      "votes": 231,
+      "winner": false
+    },
+    {
+      "external_id": "8354134",
+      "title": "The Running Dream",
+      "authors": [
+        "Wendelin Van Draanen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333577959l/8354134.jpg",
+      "rank": 18,
+      "votes": 176,
+      "winner": false
+    },
+    {
+      "external_id": "11561469",
+      "title": "Reason to Breathe",
+      "authors": [
+        "Rebecca    Donovan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1329013365l/11561469.jpg",
+      "rank": 19,
+      "votes": 130,
+      "winner": false
+    },
+    {
+      "external_id": "11096647",
+      "title": "Flat-Out Love",
+      "authors": [
+        "Jessica Park"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1302831167l/11096647.jpg",
+      "rank": 20,
+      "votes": 125,
+      "winner": false
+    }
+  ]
+}

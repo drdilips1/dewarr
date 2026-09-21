@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-memoir-autobiography-books-2012",
+  "kind": "award",
+  "title": "Memoir & Autobiography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-memoir-autobiography-books-2012",
+  "year": 2012,
+  "category": "Memoir & Autobiography",
+  "genres": [
+    "biography"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:11.920159+00:00",
+  "books": [
+    {
+      "external_id": "12262741",
+      "title": "Wild",
+      "authors": [
+        "Cheryl Strayed"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453189881l/12262741._SY600_.jpg",
+      "rank": 1,
+      "votes": 8207,
+      "winner": true
+    },
+    {
+      "external_id": "12958655",
+      "title": "Paris in Love",
+      "authors": [
+        "Eloisa James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328140929l/12958655.jpg",
+      "rank": 2,
+      "votes": 4308,
+      "winner": false
+    },
+    {
+      "external_id": "13414676",
+      "title": "The End of Your Life Book Club",
+      "authors": [
+        "Will Schwalbe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333576665l/13414676.jpg",
+      "rank": 3,
+      "votes": 3677,
+      "winner": false
+    },
+    {
+      "external_id": "15814872",
+      "title": "No Easy Day",
+      "authors": [
+        "Mark Owen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1345815909l/15814872.jpg",
+      "rank": 4,
+      "votes": 3255,
+      "winner": false
+    },
+    {
+      "external_id": "13230263",
+      "title": "Mrs. Kennedy and Me",
+      "authors": [
+        "Clint Hill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333714646l/13230263.jpg",
+      "rank": 5,
+      "votes": 2989,
+      "winner": false
+    },
+    {
+      "external_id": "13529055",
+      "title": "Mortality",
+      "authors": [
+        "Christopher Hitchens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1337177391l/13529055.jpg",
+      "rank": 6,
+      "votes": 2858,
+      "winner": false
+    },
+    {
+      "external_id": "12475019",
+      "title": "Some Assembly Required",
+      "authors": [
+        "Anne Lamott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1325716296l/12475019.jpg",
+      "rank": 7,
+      "votes": 2847,
+      "winner": false
+    },
+    {
+      "external_id": "13532186",
+      "title": "Joseph Anton",
+      "authors": [
+        "Salman Rushdie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1345767745l/13532186.jpg",
+      "rank": 8,
+      "votes": 2333,
+      "winner": false
+    },
+    {
+      "external_id": "13069213",
+      "title": "Yes, Chef",
+      "authors": [
+        "Marcus Samuelsson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1329368167l/13069213.jpg",
+      "rank": 9,
+      "votes": 2265,
+      "winner": false
+    },
+    {
+      "external_id": "13096280",
+      "title": "Prague Winter",
+      "authors": [
+        "Madeleine K. Albright"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331740855l/13096280.jpg",
+      "rank": 10,
+      "votes": 2226,
+      "winner": false
+    },
+    {
+      "external_id": "13513092",
+      "title": "Life After Death",
+      "authors": [
+        "Damien Echols"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1340468446l/13513092.jpg",
+      "rank": 11,
+      "votes": 1499,
+      "winner": false
+    },
+    {
+      "external_id": "12453610",
+      "title": "January First",
+      "authors": [
+        "Michael Schofield"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1360096723l/12453610.jpg",
+      "rank": 12,
+      "votes": 1226,
+      "winner": false
+    },
+    {
+      "external_id": "11922297",
+      "title": "Heaven Is Here",
+      "authors": [
+        "Stephanie Nielson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442969790l/11922297._SY600_.jpg",
+      "rank": 13,
+      "votes": 1056,
+      "winner": false
+    },
+    {
+      "external_id": "13547241",
+      "title": "Unorthodox",
+      "authors": [
+        "Deborah Feldman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336676500l/13547241.jpg",
+      "rank": 14,
+      "votes": 981,
+      "winner": false
+    },
+    {
+      "external_id": "12265209",
+      "title": "Revolution 2.0",
+      "authors": [
+        "Wael Ghonim"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1324310175l/12265209.jpg",
+      "rank": 15,
+      "votes": 515,
+      "winner": false
+    },
+    {
+      "external_id": "13586786",
+      "title": "Waging Heavy Peace",
+      "authors": [
+        "Neil Young"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1339252753l/13586786.jpg",
+      "rank": 16,
+      "votes": 284,
+      "winner": false
+    },
+    {
+      "external_id": "11995710",
+      "title": "Bloom",
+      "authors": [
+        "Kelle Hampton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1314477530l/11995710.jpg",
+      "rank": 17,
+      "votes": 212,
+      "winner": false
+    },
+    {
+      "external_id": "13202093",
+      "title": "When We Were the Kennedys",
+      "authors": [
+        "Monica Wood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344670940l/13202093.jpg",
+      "rank": 18,
+      "votes": 200,
+      "winner": false
+    },
+    {
+      "external_id": "12752313",
+      "title": "Lots of Candles, Plenty of Cake",
+      "authors": [
+        "Anna Quindlen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1330649974l/12752313.jpg",
+      "rank": 19,
+      "votes": 177,
+      "winner": false
+    },
+    {
+      "external_id": "12917507",
+      "title": "My Cross to Bear",
+      "authors": [
+        "Gregg Allman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1330899625l/12917507.jpg",
+      "rank": 20,
+      "votes": 84,
+      "winner": false
+    }
+  ]
+}

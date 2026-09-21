@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-fiction-books-2014",
+  "kind": "award",
+  "title": "Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fiction-books-2014",
+  "year": 2014,
+  "category": "Fiction",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:59.554443+00:00",
+  "books": [
+    {
+      "external_id": "18081809",
+      "title": "Landline",
+      "authors": [
+        "Rainbow Rowell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1499378092l/18081809.jpg",
+      "rank": 1,
+      "votes": 46154,
+      "winner": true
+    },
+    {
+      "external_id": "19486412",
+      "title": "Big Little Lies",
+      "authors": [
+        "Liane Moriarty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594851437l/19486412._SY600_.jpg",
+      "rank": 2,
+      "votes": 32853,
+      "winner": false
+    },
+    {
+      "external_id": "18293427",
+      "title": "The Storied Life of A.J. Fikry",
+      "authors": [
+        "Gabrielle Zevin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404582137l/18293427.jpg",
+      "rank": 3,
+      "votes": 19818,
+      "winner": false
+    },
+    {
+      "external_id": "18693716",
+      "title": "One Plus One",
+      "authors": [
+        "Jojo Moyes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403185695l/18693716.jpg",
+      "rank": 4,
+      "votes": 18757,
+      "winner": false
+    },
+    {
+      "external_id": "18816603",
+      "title": "Leaving Time",
+      "authors": [
+        "Jodi Picoult"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394487223l/18816603.jpg",
+      "rank": 5,
+      "votes": 17637,
+      "winner": false
+    },
+    {
+      "external_id": "20819685",
+      "title": "The Bone Clocks",
+      "authors": [
+        "David  Mitchell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398205538l/20819685.jpg",
+      "rank": 6,
+      "votes": 16431,
+      "winner": false
+    },
+    {
+      "external_id": "19288239",
+      "title": "Colorless Tsukuru Tazaki and His Years of Pilgrimage",
+      "authors": [
+        "Haruki Murakami"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1409000450l/19288239.jpg",
+      "rank": 7,
+      "votes": 15476,
+      "winner": false
+    },
+    {
+      "external_id": "22642472",
+      "title": "Stone Mattress",
+      "authors": [
+        "Margaret Atwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404769155l/22642472.jpg",
+      "rank": 8,
+      "votes": 13754,
+      "winner": false
+    },
+    {
+      "external_id": "20170404",
+      "title": "Station Eleven",
+      "authors": [
+        "Emily St. John Mandel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1680459872l/20170404._SY600_.jpg",
+      "rank": 9,
+      "votes": 11608,
+      "winner": false
+    },
+    {
+      "external_id": "18505784",
+      "title": "The Pearl That Broke Its Shell",
+      "authors": [
+        "Nadia Hashimi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1384543130l/18505784.jpg",
+      "rank": 10,
+      "votes": 8002,
+      "winner": false
+    },
+    {
+      "external_id": "18513565",
+      "title": "Lila",
+      "authors": [
+        "Marilynne Robinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395271423l/18513565.jpg",
+      "rank": 11,
+      "votes": 4104,
+      "winner": false
+    },
+    {
+      "external_id": "13481275",
+      "title": "Lost Lake",
+      "authors": [
+        "Sarah Addison Allen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1455574760l/13481275._SY600_.jpg",
+      "rank": 12,
+      "votes": 4089,
+      "winner": false
+    },
+    {
+      "external_id": "18465852",
+      "title": "The Book of Unknown Americans",
+      "authors": [
+        "Cristina Henríquez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413655729l/18465852.jpg",
+      "rank": 13,
+      "votes": 3885,
+      "winner": false
+    },
+    {
+      "external_id": "18114068",
+      "title": "Redeployment",
+      "authors": [
+        "Phil Klay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417987993l/18114068.jpg",
+      "rank": 14,
+      "votes": 3204,
+      "winner": false
+    },
+    {
+      "external_id": "18467818",
+      "title": "An Untamed State",
+      "authors": [
+        "Roxane Gay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395145925l/18467818.jpg",
+      "rank": 15,
+      "votes": 2671,
+      "winner": false
+    },
+    {
+      "external_id": "18507827",
+      "title": "The Sleepwalker's Guide to Dancing",
+      "authors": [
+        "Mira Jacob"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403176148l/18507827.jpg",
+      "rank": 16,
+      "votes": 2621,
+      "winner": false
+    },
+    {
+      "external_id": "21965107",
+      "title": "The Children Act",
+      "authors": [
+        "Ian McEwan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1787326545l/21965107._SY600_.jpg",
+      "rank": 17,
+      "votes": 2591,
+      "winner": false
+    },
+    {
+      "external_id": "17884042",
+      "title": "Still Life with Bread Crumbs",
+      "authors": [
+        "Anna Quindlen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403168088l/17884042.jpg",
+      "rank": 18,
+      "votes": 2318,
+      "winner": false
+    },
+    {
+      "external_id": "18090147",
+      "title": "The Enchanted",
+      "authors": [
+        "Rene Denfeld"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1373991244l/18090147.jpg",
+      "rank": 19,
+      "votes": 2224,
+      "winner": false
+    },
+    {
+      "external_id": "19322249",
+      "title": "Tigerman",
+      "authors": [
+        "Nick Harkaway"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395753349l/19322249.jpg",
+      "rank": 20,
+      "votes": 1677,
+      "winner": false
+    }
+  ]
+}

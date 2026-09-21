@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-science-technology-books-2018",
+  "kind": "award",
+  "title": "Science & Technology",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-technology-books-2018",
+  "year": 2018,
+  "category": "Science & Technology",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:12.033909+00:00",
+  "books": [
+    {
+      "external_id": "35820369",
+      "title": "The Rise and Fall of the Dinosaurs",
+      "authors": [
+        "Steve Brusatte"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1515529573l/35820369._SY600_.jpg",
+      "rank": 1,
+      "votes": 19050,
+      "winner": true
+    },
+    {
+      "external_id": "40277241",
+      "title": "Brief Answers to the Big Questions",
+      "authors": [
+        "Stephen W. Hawking"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1536862019l/40277241.jpg",
+      "rank": 2,
+      "votes": 13783,
+      "winner": false
+    },
+    {
+      "external_id": "36391536",
+      "title": "She Has Her Mother's Laugh",
+      "authors": [
+        "Carl Zimmer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742995641l/36391536._SY600_.jpg",
+      "rank": 3,
+      "votes": 12026,
+      "winner": false
+    },
+    {
+      "external_id": "35953464",
+      "title": "Broad Band",
+      "authors": [
+        "Claire L.  Evans"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1515473816l/35953464._SY600_.jpg",
+      "rank": 4,
+      "votes": 10651,
+      "winner": false
+    },
+    {
+      "external_id": "36710811",
+      "title": "How to Change Your Mind",
+      "authors": [
+        "Michael Pollan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522586374l/36710811.jpg",
+      "rank": 5,
+      "votes": 10021,
+      "winner": false
+    },
+    {
+      "external_id": "36739330",
+      "title": "Spying on Whales",
+      "authors": [
+        "Nick Pyenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1516122268l/36739330.jpg",
+      "rank": 6,
+      "votes": 9510,
+      "winner": false
+    },
+    {
+      "external_id": "36407347",
+      "title": "The Future of Humanity",
+      "authors": [
+        "Michio Kaku"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1538994537l/36407347._SY600_.jpg",
+      "rank": 7,
+      "votes": 9127,
+      "winner": false
+    },
+    {
+      "external_id": "35412097",
+      "title": "When",
+      "authors": [
+        "Daniel H. Pink"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1502223427l/35412097._SY600_.jpg",
+      "rank": 8,
+      "votes": 9118,
+      "winner": false
+    },
+    {
+      "external_id": "36442813",
+      "title": "The Order of Time",
+      "authors": [
+        "Carlo Rovelli"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1516424407l/36442813._SY600_.jpg",
+      "rank": 9,
+      "votes": 8538,
+      "winner": false
+    },
+    {
+      "external_id": "38589832",
+      "title": "Accessory to War",
+      "authors": [
+        "Neil deGrasse Tyson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1524256235l/38589832.jpg",
+      "rank": 10,
+      "votes": 7355,
+      "winner": false
+    },
+    {
+      "external_id": "35604796",
+      "title": "What Is Real?",
+      "authors": [
+        "Adam  Becker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500753932l/35604796.jpg",
+      "rank": 11,
+      "votes": 2135,
+      "winner": false
+    },
+    {
+      "external_id": "36205015",
+      "title": "The Space Barons",
+      "authors": [
+        "Christian Davenport"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510381441l/36205015.jpg",
+      "rank": 12,
+      "votes": 2036,
+      "winner": false
+    },
+    {
+      "external_id": "38749668",
+      "title": "The Sawbones Book",
+      "authors": [
+        "Justin McElroy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1538915354l/38749668._SY600_.jpg",
+      "rank": 13,
+      "votes": 1976,
+      "winner": false
+    },
+    {
+      "external_id": "36341728",
+      "title": "Lost in Math",
+      "authors": [
+        "Sabine Hossenfelder"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518093529l/36341728._SY600_.jpg",
+      "rank": 14,
+      "votes": 1922,
+      "winner": false
+    },
+    {
+      "external_id": "35876360",
+      "title": "The Big Ones",
+      "authors": [
+        "Lucy    Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509694234l/35876360._SY600_.jpg",
+      "rank": 15,
+      "votes": 1691,
+      "winner": false
+    },
+    {
+      "external_id": "39026990",
+      "title": "How to Invent Everything",
+      "authors": [
+        "Ryan North"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529337641l/39026990.jpg",
+      "rank": 16,
+      "votes": 1461,
+      "winner": false
+    },
+    {
+      "external_id": "36722606",
+      "title": "Taming the Sun",
+      "authors": [
+        "Varun Sivaram"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1521657819l/36722606._SY600_.jpg",
+      "rank": 17,
+      "votes": 1430,
+      "winner": false
+    },
+    {
+      "external_id": "35749414",
+      "title": "Who We Are and How We Got Here",
+      "authors": [
+        "David  Reich"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510351877l/35749414._SY600_.jpg",
+      "rank": 18,
+      "votes": 1375,
+      "winner": false
+    },
+    {
+      "external_id": "34762552",
+      "title": "Algorithms of Oppression",
+      "authors": [
+        "Safiya Umoja Noble"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492944248l/34762552.jpg",
+      "rank": 19,
+      "votes": 1098,
+      "winner": false
+    },
+    {
+      "external_id": "36373639",
+      "title": "The Tangled Tree",
+      "authors": [
+        "David Quammen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529161058l/36373639._SY600_.jpg",
+      "rank": 20,
+      "votes": 658,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-readers-favorite-romance-books-2024",
+  "kind": "award",
+  "title": "Romance",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-romance-books-2024",
+  "year": 2024,
+  "category": "Romance",
+  "genres": [
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:40:31.217920+00:00",
+  "books": [
+    {
+      "external_id": "194803835",
+      "title": "Funny Story",
+      "authors": [
+        "Emily Henry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1717213921l/194803835._SY600_.jpg",
+      "rank": 1,
+      "votes": 179349,
+      "winner": true
+    },
+    {
+      "external_id": "195820804",
+      "title": "Just for the Summer",
+      "authors": [
+        "Abby Jimenez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1730397518l/195820804._SY600_.jpg",
+      "rank": 2,
+      "votes": 140786,
+      "winner": false
+    },
+    {
+      "external_id": "181350327",
+      "title": "Bride",
+      "authors": [
+        "Ali Hazelwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1688418360l/181350327.jpg",
+      "rank": 3,
+      "votes": 99290,
+      "winner": false
+    },
+    {
+      "external_id": "127611580",
+      "title": "Leather & Lark",
+      "authors": [
+        "Brynne Weaver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1737671145l/127611580._SY600_.jpg",
+      "rank": 4,
+      "votes": 41321,
+      "winner": false
+    },
+    {
+      "external_id": "215192073",
+      "title": "Play Along",
+      "authors": [
+        "Liz Tomforde"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1719270037l/215192073._SY600_.jpg",
+      "rank": 5,
+      "votes": 40988,
+      "winner": false
+    },
+    {
+      "external_id": "175399563",
+      "title": "King of Sloth",
+      "authors": [
+        "Ana Huang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1702763723l/175399563._SY600_.jpg",
+      "rank": 6,
+      "votes": 39476,
+      "winner": false
+    },
+    {
+      "external_id": "195645746",
+      "title": "Wild Love",
+      "authors": [
+        "Elsie Silver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1706143801l/195645746.jpg",
+      "rank": 7,
+      "votes": 34992,
+      "winner": false
+    },
+    {
+      "external_id": "210163133",
+      "title": "The Cinnamon Bun Book Store",
+      "authors": [
+        "Laurie Gilmore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1725538198l/210163133._SY600_.jpg",
+      "rank": 8,
+      "votes": 33652,
+      "winner": false
+    },
+    {
+      "external_id": "199797582",
+      "title": "The Paradise Problem",
+      "authors": [
+        "Christina Lauren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697744363l/199797582._SY600_.jpg",
+      "rank": 9,
+      "votes": 32715,
+      "winner": false
+    },
+    {
+      "external_id": "197639422",
+      "title": "This Summer Will Be Different",
+      "authors": [
+        "Carley Fortune"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697498675l/197639422._SY600_.jpg",
+      "rank": 10,
+      "votes": 29357,
+      "winner": false
+    },
+    {
+      "external_id": "199440249",
+      "title": "The Pairing",
+      "authors": [
+        "Casey McQuiston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1705592447l/199440249._SY600_.jpg",
+      "rank": 11,
+      "votes": 11640,
+      "winner": false
+    },
+    {
+      "external_id": "199798652",
+      "title": "Daydream",
+      "authors": [
+        "Hannah  Grace"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1749069286l/199798652._SY600_.jpg",
+      "rank": 12,
+      "votes": 11560,
+      "winner": false
+    },
+    {
+      "external_id": "195790586",
+      "title": "The Rom-Commers",
+      "authors": [
+        "Katherine Center"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1698261813l/195790586._SY600_.jpg",
+      "rank": 13,
+      "votes": 10607,
+      "winner": false
+    },
+    {
+      "external_id": "198972014",
+      "title": "Not in Love",
+      "authors": [
+        "Ali Hazelwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1696429894l/198972014._SY600_.jpg",
+      "rank": 14,
+      "votes": 10380,
+      "winner": false
+    },
+    {
+      "external_id": "182761439",
+      "title": "This Could Be Us",
+      "authors": [
+        "Kennedy Ryan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1701270523l/182761439._SY600_.jpg",
+      "rank": 15,
+      "votes": 7742,
+      "winner": false
+    },
+    {
+      "external_id": "195532965",
+      "title": "Swift and Saddled",
+      "authors": [
+        "Lyla Sage"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1693114168l/195532965._SY600_.jpg",
+      "rank": 16,
+      "votes": 6751,
+      "winner": false
+    },
+    {
+      "external_id": "173404023",
+      "title": "A Love Song for Ricki Wilde",
+      "authors": [
+        "Tia Williams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1688215621l/173404023.jpg",
+      "rank": 17,
+      "votes": 6038,
+      "winner": false
+    },
+    {
+      "external_id": "212432167",
+      "title": "How to End a Love Story",
+      "authors": [
+        "Yulin Kuang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1714579180l/212432167._SY600_.jpg",
+      "rank": 18,
+      "votes": 5856,
+      "winner": false
+    },
+    {
+      "external_id": "199928276",
+      "title": "The Love of My Afterlife",
+      "authors": [
+        "Kirsty Greenwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1719926192l/199928276._SY600_.jpg",
+      "rank": 19,
+      "votes": 5488,
+      "winner": false
+    },
+    {
+      "external_id": "197144545",
+      "title": "Lies and Weddings",
+      "authors": [
+        "Kevin Kwan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1692845844l/197144545._SY600_.jpg",
+      "rank": 20,
+      "votes": 4979,
+      "winner": false
+    }
+  ]
+}

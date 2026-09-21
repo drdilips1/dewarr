@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-mystery-thriller-books-2016",
+  "kind": "award",
+  "title": "Mystery & Thriller",
+  "source_url": "https://www.goodreads.com/choiceawards/best-mystery-thriller-books-2016",
+  "year": 2016,
+  "category": "Mystery & Thriller",
+  "genres": [
+    "mystery"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:59.696301+00:00",
+  "books": [
+    {
+      "external_id": "25526965",
+      "title": "End of Watch",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511289068l/25526965._SY600_.jpg",
+      "rank": 1,
+      "votes": 42382,
+      "winner": true
+    },
+    {
+      "external_id": "28220985",
+      "title": "A Great Reckoning",
+      "authors": [
+        "Louise Penny"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1457914582l/28220985.jpg",
+      "rank": 2,
+      "votes": 23038,
+      "winner": false
+    },
+    {
+      "external_id": "28187230",
+      "title": "The Woman in Cabin 10",
+      "authors": [
+        "Ruth Ware"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1465878007l/28187230._SY600_.jpg",
+      "rank": 3,
+      "votes": 21621,
+      "winner": false
+    },
+    {
+      "external_id": "25337081",
+      "title": "Brotherhood in Death",
+      "authors": [
+        "J.D. Robb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439226052l/25337081.jpg",
+      "rank": 4,
+      "votes": 20475,
+      "winner": false
+    },
+    {
+      "external_id": "29437949",
+      "title": "Behind Closed Doors",
+      "authors": [
+        "B.A. Paris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1458854462l/29437949.jpg",
+      "rank": 5,
+      "votes": 18764,
+      "winner": false
+    },
+    {
+      "external_id": "26245850",
+      "title": "Before the Fall",
+      "authors": [
+        "Noah Hawley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462515889l/26245850._SY600_.jpg",
+      "rank": 6,
+      "votes": 17496,
+      "winner": false
+    },
+    {
+      "external_id": "29430013",
+      "title": "The Trespasser",
+      "authors": [
+        "Tana French"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462998307l/29430013.jpg",
+      "rank": 7,
+      "votes": 17201,
+      "winner": false
+    },
+    {
+      "external_id": "27276324",
+      "title": "All the Missing Girls",
+      "authors": [
+        "Megan Miranda"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1466946543l/27276324._SY600_.jpg",
+      "rank": 8,
+      "votes": 16683,
+      "winner": false
+    },
+    {
+      "external_id": "26109394",
+      "title": "Fool Me Once",
+      "authors": [
+        "Harlan Coben"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443190440l/26109394.jpg",
+      "rank": 9,
+      "votes": 15308,
+      "winner": false
+    },
+    {
+      "external_id": "28815474",
+      "title": "The Couple Next Door",
+      "authors": [
+        "Shari Lapena"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1471502242l/28815474._SY600_.jpg",
+      "rank": 10,
+      "votes": 13620,
+      "winner": false
+    },
+    {
+      "external_id": "26245853",
+      "title": "The Last Mile",
+      "authors": [
+        "David Baldacci"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1450227326l/26245853.jpg",
+      "rank": 11,
+      "votes": 5801,
+      "winner": false
+    },
+    {
+      "external_id": "27213121",
+      "title": "The Black Widow",
+      "authors": [
+        "Daniel Silva"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460313822l/27213121.jpg",
+      "rank": 12,
+      "votes": 5477,
+      "winner": false
+    },
+    {
+      "external_id": "25734248",
+      "title": "The Widow",
+      "authors": [
+        "Fiona Barton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1449178687l/25734248.jpg",
+      "rank": 13,
+      "votes": 4706,
+      "winner": false
+    },
+    {
+      "external_id": "27276292",
+      "title": "The Vanishing Year",
+      "authors": [
+        "Kate Moretti"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474824952l/27276292._SY600_.jpg",
+      "rank": 14,
+      "votes": 2938,
+      "winner": false
+    },
+    {
+      "external_id": "28721136",
+      "title": "The Girl In The Ice",
+      "authors": [
+        "Robert Bryndza"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453800927l/28721136.jpg",
+      "rank": 15,
+      "votes": 2846,
+      "winner": false
+    },
+    {
+      "external_id": "28374062",
+      "title": "The Kept Woman",
+      "authors": [
+        "Karin Slaughter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462032117l/28374062.jpg",
+      "rank": 16,
+      "votes": 2191,
+      "winner": false
+    },
+    {
+      "external_id": "28090846",
+      "title": "Into the Light",
+      "authors": [
+        "Aleatha Romig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1457742067l/28090846.jpg",
+      "rank": 17,
+      "votes": 1930,
+      "winner": false
+    },
+    {
+      "external_id": "30221492",
+      "title": "Play Dead",
+      "authors": [
+        "Angela Marsons"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1463562458l/30221492.jpg",
+      "rank": 18,
+      "votes": 1911,
+      "winner": false
+    },
+    {
+      "external_id": "28503798",
+      "title": "The Queen's Accomplice",
+      "authors": [
+        "Susan Elia MacNeal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460909518l/28503798.jpg",
+      "rank": 19,
+      "votes": 1261,
+      "winner": false
+    },
+    {
+      "external_id": "26883206",
+      "title": "Redemption Road",
+      "authors": [
+        "John  Hart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1452743616l/26883206.jpg",
+      "rank": 20,
+      "votes": 941,
+      "winner": false
+    }
+  ]
+}

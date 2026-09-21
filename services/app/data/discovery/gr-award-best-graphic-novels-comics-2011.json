@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-graphic-novels-comics-2011",
+  "kind": "award",
+  "title": "Graphic Novels & Comics",
+  "source_url": "https://www.goodreads.com/choiceawards/best-graphic-novels-comics-2011",
+  "year": 2011,
+  "category": "Graphic Novels & Comics",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:48:22.885285+00:00",
+  "books": [
+    {
+      "external_id": "8643220",
+      "title": "Vampire Academy",
+      "authors": [
+        "Leigh Dragoon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331468259l/8643220.jpg",
+      "rank": 1,
+      "votes": 4898,
+      "winner": true
+    },
+    {
+      "external_id": "9792887",
+      "title": "Buffy the Vampire Slayer",
+      "authors": [
+        "Joss Whedon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331237984l/9792887.jpg",
+      "rank": 2,
+      "votes": 3529,
+      "winner": false
+    },
+    {
+      "external_id": "10822174",
+      "title": "The Walking Dead, Vol. 14",
+      "authors": [
+        "Robert Kirkman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327883131l/10822174.jpg",
+      "rank": 3,
+      "votes": 2646,
+      "winner": false
+    },
+    {
+      "external_id": "11450360",
+      "title": "Twilight",
+      "authors": [
+        "Young Kim"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327891963l/11450360.jpg",
+      "rank": 4,
+      "votes": 2410,
+      "winner": false
+    },
+    {
+      "external_id": "10767466",
+      "title": "Hark! A Vagrant",
+      "authors": [
+        "Kate Beaton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327877328l/10767466.jpg",
+      "rank": 5,
+      "votes": 1975,
+      "winner": false
+    },
+    {
+      "external_id": "9260507",
+      "title": "5 Very Good Reasons to Punch a Dolphin in the Mouth and Other...",
+      "authors": [
+        "Matthew Inman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1309685137l/9260507.jpg",
+      "rank": 6,
+      "votes": 1950,
+      "winner": false
+    },
+    {
+      "external_id": "8712359",
+      "title": "The Dark-Hunters, Vol. 4",
+      "authors": [
+        "Joshua Hale Fialkov"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1406736932l/8712359.jpg",
+      "rank": 7,
+      "votes": 1770,
+      "winner": false
+    },
+    {
+      "external_id": "9615347",
+      "title": "Anya's Ghost",
+      "authors": [
+        "Vera Brosgol"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1316739317l/9615347.jpg",
+      "rank": 8,
+      "votes": 1574,
+      "winner": false
+    },
+    {
+      "external_id": "10138607",
+      "title": "Habibi",
+      "authors": [
+        "Craig Thompson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327899014l/10138607.jpg",
+      "rank": 9,
+      "votes": 1081,
+      "winner": false
+    },
+    {
+      "external_id": "9674335",
+      "title": "Locke & Key, Vol. 4",
+      "authors": [
+        "Joe  Hill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1377306592l/9674335.jpg",
+      "rank": 10,
+      "votes": 978,
+      "winner": false
+    },
+    {
+      "external_id": "9532901",
+      "title": "Blood Work",
+      "authors": [
+        "Kim Harrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442287254l/9532901._SY600_.jpg",
+      "rank": 11,
+      "votes": 549,
+      "winner": false
+    },
+    {
+      "external_id": "8601702",
+      "title": "Fables, Vol. 15",
+      "authors": [
+        "Bill Willingham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375396417l/8601702.jpg",
+      "rank": 12,
+      "votes": 523,
+      "winner": false
+    },
+    {
+      "external_id": "8477057",
+      "title": "Daytripper",
+      "authors": [
+        "Fábio Moon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327876816l/8477057.jpg",
+      "rank": 13,
+      "votes": 342,
+      "winner": false
+    },
+    {
+      "external_id": "8560639",
+      "title": "The Unwritten, Vol. 3",
+      "authors": [
+        "Mike Carey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347348450l/8560639.jpg",
+      "rank": 14,
+      "votes": 289,
+      "winner": false
+    },
+    {
+      "external_id": "9630403",
+      "title": "Level Up",
+      "authors": [
+        "Gene Luen Yang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327944177l/9630403.jpg",
+      "rank": 15,
+      "votes": 256,
+      "winner": false
+    },
+    {
+      "external_id": "11369933",
+      "title": "Deadly Storm",
+      "authors": [
+        "Brian Michael Bendis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1305759463l/11369933.jpg",
+      "rank": 16,
+      "votes": 244,
+      "winner": false
+    },
+    {
+      "external_id": "10537195",
+      "title": "The Last Council",
+      "authors": [
+        "Kazu Kibuishi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422047373l/10537195.jpg",
+      "rank": 17,
+      "votes": 166,
+      "winner": false
+    },
+    {
+      "external_id": "8793349",
+      "title": "Mister Wonderful",
+      "authors": [
+        "Daniel Clowes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327878205l/8793349.jpg",
+      "rank": 18,
+      "votes": 117,
+      "winner": false
+    },
+    {
+      "external_id": "8569434",
+      "title": "Scalped, Vol. 7",
+      "authors": [
+        "Jason Aaron"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1740804289l/8569434.jpg",
+      "rank": 19,
+      "votes": 72,
+      "winner": false
+    },
+    {
+      "external_id": "9304081",
+      "title": "Harbor Moon",
+      "authors": [
+        "Ryan Colucci"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1285563504l/9304081.jpg",
+      "rank": 20,
+      "votes": 43,
+      "winner": false
+    }
+  ]
+}

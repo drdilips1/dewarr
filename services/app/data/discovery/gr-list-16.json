@@ -1,0 +1,1116 @@
+{
+  "id": "gr-list-16",
+  "kind": "listopia",
+  "title": "Best Books of the 19th Century",
+  "source_url": "https://www.goodreads.com/list/show/16",
+  "year": null,
+  "category": null,
+  "genres": [
+    "classics"
+  ],
+  "count": 1744,
+  "coverage": "partial",
+  "updated_at": "2026-09-20T19:04:39.182845+00:00",
+  "books": [
+    {
+      "external_id": "1885",
+      "title": "Pride and Prejudice",
+      "authors": [
+        "Jane Austen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320399351i/1885._SY600_.jpg",
+      "rank": 1,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "10210",
+      "title": "Jane Eyre",
+      "authors": [
+        "Charlotte Brontë"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1557343311i/10210._SY600_.jpg",
+      "rank": 2,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "5297",
+      "title": "The Picture of Dorian Gray",
+      "authors": [
+        "Oscar Wilde"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546103428i/5297._SY600_.jpg",
+      "rank": 3,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6185",
+      "title": "Wuthering Heights",
+      "authors": [
+        "Emily Brontë"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388212715i/6185._SY600_.jpg",
+      "rank": 4,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7144",
+      "title": "Crime and Punishment",
+      "authors": [
+        "Fyodor Dostoevsky"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1382846449i/7144._SY600_.jpg",
+      "rank": 5,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "35031085",
+      "title": "Frankenstein",
+      "authors": [
+        "Mary Wollstonecraft Shelley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631088473i/35031085._SY600_.jpg",
+      "rank": 6,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7126",
+      "title": "The Count of Monte Cristo",
+      "authors": [
+        "Alexandre Dumas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1724863997i/7126._SY600_.jpg",
+      "rank": 7,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "24213",
+      "title": "Alice’s Adventures in Wonderland / Through the Looking-Glass",
+      "authors": [
+        "Lewis Carroll"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630487234i/24213._SY600_.jpg",
+      "rank": 8,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "17245",
+      "title": "Dracula",
+      "authors": [
+        "Bram Stoker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387151694i/17245._SY600_.jpg",
+      "rank": 9,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1934",
+      "title": "Little Women (Little Women, #1)",
+      "authors": [
+        "Louisa May Alcott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562690475i/1934._SY600_.jpg",
+      "rank": 10,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6969",
+      "title": "Emma",
+      "authors": [
+        "Jane Austen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1373627931i/6969._SY600_.jpg",
+      "rank": 11,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "24280",
+      "title": "Les Misérables",
+      "authors": [
+        "Victor Hugo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1411852091i/24280._SY600_.jpg",
+      "rank": 12,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "15823480",
+      "title": "Anna Karenina",
+      "authors": [
+        "Leo Tolstoy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546091617i/15823480._SY600_.jpg",
+      "rank": 13,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2156",
+      "title": "Persuasion",
+      "authors": [
+        "Jane Austen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385172413i/2156._SY600_.jpg",
+      "rank": 14,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2956",
+      "title": "The Adventures of Huckleberry Finn (Adventures of Tom and Huck, #2)",
+      "authors": [
+        "Mark Twain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546096879i/2956._SY600_.jpg",
+      "rank": 15,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "14935",
+      "title": "Sense and Sensibility",
+      "authors": [
+        "Jane Austen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1397245675i/14935._SY600_.jpg",
+      "rank": 16,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1953",
+      "title": "A Tale of Two Cities",
+      "authors": [
+        "Charles Dickens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344922523i/1953._SY600_.jpg",
+      "rank": 17,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2623",
+      "title": "Great Expectations",
+      "authors": [
+        "Charles Dickens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631687432i/2623._SY600_.jpg",
+      "rank": 18,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "5326",
+      "title": "A Christmas Carol",
+      "authors": [
+        "Charles Dickens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1406512317i/5326._SY600_.jpg",
+      "rank": 19,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4934",
+      "title": "The Brothers Karamazov",
+      "authors": [
+        "Fyodor Dostoevsky"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1427728126i/4934._SY600_.jpg",
+      "rank": 20,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "656",
+      "title": "War and Peace",
+      "authors": [
+        "Leo Tolstoy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413215930i/656._SY600_.jpg",
+      "rank": 21,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3590",
+      "title": "The Adventures of Sherlock Holmes (Sherlock Holmes, #3)",
+      "authors": [
+        "Arthur Conan Doyle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1164045516i/3590._SY600_.jpg",
+      "rank": 22,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "92303",
+      "title": "The Importance of Being Earnest",
+      "authors": [
+        "Oscar Wilde"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1298438452i/92303._SY600_.jpg",
+      "rank": 23,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "153747",
+      "title": "Moby-Dick or, The Whale",
+      "authors": [
+        "Herman Melville"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327940656i/153747._SY600_.jpg",
+      "rank": 24,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "24583",
+      "title": "The Adventures of Tom Sawyer",
+      "authors": [
+        "Mark Twain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404811979i/24583._SY600_.jpg",
+      "rank": 25,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2175",
+      "title": "Madame Bovary",
+      "authors": [
+        "Gustave Flaubert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741368185i/2175._SY600_.jpg",
+      "rank": 26,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "295",
+      "title": "Treasure Island",
+      "authors": [
+        "Robert Louis Stevenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1485248909i/295._SY600_.jpg",
+      "rank": 27,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "32261",
+      "title": "Tess of the D’Urbervilles",
+      "authors": [
+        "Thomas Hardy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1633063778i/32261._SY600_.jpg",
+      "rank": 28,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "12296",
+      "title": "The Scarlet Letter",
+      "authors": [
+        "Nathaniel Hawthorne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404810944i/12296._SY600_.jpg",
+      "rank": 29,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7190",
+      "title": "The Three Musketeers",
+      "authors": [
+        "Alexandre Dumas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630475503i/7190._SY600_.jpg",
+      "rank": 30,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "50398",
+      "title": "Northanger Abbey",
+      "authors": [
+        "Jane Austen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388201718i/50398._SY600_.jpg",
+      "rank": 31,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "156538",
+      "title": "North and South",
+      "authors": [
+        "Elizabeth Gaskell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1699604581i/156538._SY600_.jpg",
+      "rank": 32,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "58696",
+      "title": "David Copperfield",
+      "authors": [
+        "Charles Dickens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461452762i/58696._SY600_.jpg",
+      "rank": 33,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "45032",
+      "title": "Mansfield Park",
+      "authors": [
+        "Jane Austen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1397063295i/45032._SY600_.jpg",
+      "rank": 34,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "51496",
+      "title": "Dr. Jekyll and Mr. Hyde",
+      "authors": [
+        "Robert Louis Stevenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1318116526i/51496._SY600_.jpg",
+      "rank": 35,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "18254",
+      "title": "Oliver Twist",
+      "authors": [
+        "Charles Dickens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327868529i/18254._SY600_.jpg",
+      "rank": 36,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2493",
+      "title": "The Time Machine",
+      "authors": [
+        "H.G. Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327942880i/2493._SY600_.jpg",
+      "rank": 37,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "102868",
+      "title": "A Study in Scarlet (Sherlock Holmes, #1)",
+      "authors": [
+        "Arthur Conan Doyle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1519031842i/102868._SY600_.jpg",
+      "rank": 38,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "19089",
+      "title": "Middlemarch",
+      "authors": [
+        "George Eliot"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1568307771i/19089._SY600_.jpg",
+      "rank": 39,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "22917",
+      "title": "The Complete Grimm's Fairy Tales",
+      "authors": [
+        "Jacob Grimm"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369540060i/22917._SY600_.jpg",
+      "rank": 40,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "391729",
+      "title": "The Tell-Tale Heart and Other Writings",
+      "authors": [
+        "Edgar Allan Poe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697731059i/391729._SY600_.jpg",
+      "rank": 41,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "236093",
+      "title": "The Wonderful Wizard of Oz (Oz, #1)",
+      "authors": [
+        "L. Frank Baum"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398003737i/236093._SY600_.jpg",
+      "rank": 42,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "31242",
+      "title": "Bleak House",
+      "authors": [
+        "Charles Dickens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1280113147i/31242._SY600_.jpg",
+      "rank": 43,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "12505",
+      "title": "The Idiot",
+      "authors": [
+        "Fyodor Dostoevsky"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1657539107i/12505._SY600_.jpg",
+      "rank": 44,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "5890",
+      "title": "The Woman in White",
+      "authors": [
+        "Wilkie Collins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1295661017i/5890._SY600_.jpg",
+      "rank": 45,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "30597",
+      "title": "The Hunchback of Notre-Dame",
+      "authors": [
+        "Victor Hugo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388342667i/30597._SY600_.jpg",
+      "rank": 46,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "22463",
+      "title": "The Origin of Species",
+      "authors": [
+        "Charles Darwin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1298417570i/22463._SY600_.jpg",
+      "rank": 47,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "8909",
+      "title": "The War of the Worlds",
+      "authors": [
+        "H.G. Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320391644i/8909._SY600_.jpg",
+      "rank": 48,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "14706",
+      "title": "Faust, First Part",
+      "authors": [
+        "Johann Wolfgang von Goethe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435405022i/14706._SY600_.jpg",
+      "rank": 49,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "27494",
+      "title": "Leaves of Grass",
+      "authors": [
+        "Walt Whitman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418012204i/27494._SY600_.jpg",
+      "rank": 50,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "5797",
+      "title": "Vanity Fair",
+      "authors": [
+        "William Makepeace Thackeray"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344386439i/5797._SY600_.jpg",
+      "rank": 51,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "33507",
+      "title": "Twenty Thousand Leagues Under the Sea",
+      "authors": [
+        "Jules Verne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1494979127i/33507._SY600_.jpg",
+      "rank": 52,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "46306",
+      "title": "The Complete Fairy Tales",
+      "authors": [
+        "Hans Christian Andersen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385233181i/46306._SY600_.jpg",
+      "rank": 53,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "46787",
+      "title": "Uncle Tom’s Cabin",
+      "authors": [
+        "Harriet Beecher Stowe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414349231i/46787._SY600_.jpg",
+      "rank": 54,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "54479",
+      "title": "Around the World in Eighty Days",
+      "authors": [
+        "Jules Verne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684014860i/54479._SY600_.jpg",
+      "rank": 55,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "337113",
+      "title": "The Tenant of Wildfell Hall",
+      "authors": [
+        "Anne Brontë"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479652419i/337113._SY600_.jpg",
+      "rank": 56,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "31463",
+      "title": "Far From the Madding Crowd",
+      "authors": [
+        "Thomas Hardy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631259654i/31463._SY600_.jpg",
+      "rank": 57,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3685",
+      "title": "Black Beauty",
+      "authors": [
+        "Anna Sewell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1578265482i/3685._SY600_.jpg",
+      "rank": 58,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "37793",
+      "title": "A Doll's House",
+      "authors": [
+        "Henrik Ibsen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1660268136i/37793._SY600_.jpg",
+      "rank": 59,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "17876",
+      "title": "Notes from Underground, White Nights, The Dream of a Ridiculous Man, and Selections from The House of the Dead",
+      "authors": [
+        "Fyodor Dostoevsky"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1411241656i/17876._SY600_.jpg",
+      "rank": 60,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "93",
+      "title": "Heidi (Heidi, #1-2)",
+      "authors": [
+        "Johanna Spyri"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388462714i/93._SY600_.jpg",
+      "rank": 60,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "58345",
+      "title": "The Awakening",
+      "authors": [
+        "Kate Chopin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1170507247i/58345._SY600_.jpg",
+      "rank": 62,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6138",
+      "title": "The Moonstone",
+      "authors": [
+        "Wilkie Collins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403192382i/6138._SY600_.jpg",
+      "rank": 63,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4900",
+      "title": "Heart of Darkness",
+      "authors": [
+        "Joseph Conrad"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1392799983i/4900._SY600_.jpg",
+      "rank": 64,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "16902",
+      "title": "Walden or, Life in the Woods",
+      "authors": [
+        "Henry David Thoreau"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630470982i/16902._SY600_.jpg",
+      "rank": 65,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "30474",
+      "title": "The Communist Manifesto",
+      "authors": [
+        "Karl Marx"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1740105815i/30474._SY600_.jpg",
+      "rank": 66,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "31173",
+      "title": "Villette",
+      "authors": [
+        "Charlotte Brontë"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320412741i/31173._SY600_.jpg",
+      "rank": 67,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "112204",
+      "title": "The Complete Poems of Emily Dickinson",
+      "authors": [
+        "Emily Dickinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549999503i/112204._SY600_.jpg",
+      "rank": 68,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "41684",
+      "title": "The Jungle Books",
+      "authors": [
+        "Rudyard Kipling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349066474i/41684._SY600_.jpg",
+      "rank": 69,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "203220",
+      "title": "Les Fleurs du Mal",
+      "authors": [
+        "Charles Baudelaire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388667125i/203220._SY600_.jpg",
+      "rank": 70,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "286957",
+      "title": "The Yellow Wall-Paper",
+      "authors": [
+        "Charlotte Perkins Gilman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1746311262i/286957._SY600_.jpg",
+      "rank": 71,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "608474",
+      "title": "The Sign of Four (Sherlock Holmes, #2)",
+      "authors": [
+        "Arthur Conan Doyle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1739306203i/608474._SY600_.jpg",
+      "rank": 72,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "14662",
+      "title": "The Red and the Black",
+      "authors": [
+        "Stendhal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1635011110i/14662._SY600_.jpg",
+      "rank": 73,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "32829",
+      "title": "Journey to the Center of the Earth",
+      "authors": [
+        "Jules Verne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389754903i/32829._SY600_.jpg",
+      "rank": 74,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6440",
+      "title": "Ivanhoe",
+      "authors": [
+        "Walter  Scott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1715643510i/6440._SY600_.jpg",
+      "rank": 75,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "12948",
+      "title": "The Turn of the Screw",
+      "authors": [
+        "Henry James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1567172392i/12948._SY600_.jpg",
+      "rank": 76,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "28381",
+      "title": "Dead Souls",
+      "authors": [
+        "Nikolai Gogol"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387201057i/28381._SY600_.jpg",
+      "rank": 77,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "62446",
+      "title": "The Prince and the Pauper",
+      "authors": [
+        "Mark Twain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1778227679i/62446._SY600_.jpg",
+      "rank": 78,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "162898",
+      "title": "A Connecticut Yankee in King Arthur's Court",
+      "authors": [
+        "Mark Twain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348239402i/162898._SY600_.jpg",
+      "rank": 79,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "383206",
+      "title": "Wives and Daughters",
+      "authors": [
+        "Elizabeth Gaskell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348267609i/383206._SY600_.jpg",
+      "rank": 80,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "29981",
+      "title": "The Island of Dr. Moreau",
+      "authors": [
+        "H.G. Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1767304113i/29981._SY600_.jpg",
+      "rank": 81,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "264",
+      "title": "The Portrait of a Lady",
+      "authors": [
+        "Henry James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1502148606i/264._SY600_.jpg",
+      "rank": 82,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "17184",
+      "title": "The Invisible Man",
+      "authors": [
+        "H.G. Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630661776i/17184._SY600_.jpg",
+      "rank": 83,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "56759",
+      "title": "The Mayor of Casterbridge",
+      "authors": [
+        "Thomas Hardy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388276915i/56759._SY600_.jpg",
+      "rank": 84,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "59145",
+      "title": "Père Goriot",
+      "authors": [
+        "Honoré de Balzac"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389768126i/59145._SY600_.jpg",
+      "rank": 85,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "19117",
+      "title": "Fathers and Sons",
+      "authors": [
+        "Ivan Turgenev"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390793535i/19117._SY600_.jpg",
+      "rank": 86,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4921",
+      "title": "Three Men in a Boat (Three Men, #1)",
+      "authors": [
+        "Jerome K. Jerome"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1699561681i/4921._SY600_.jpg",
+      "rank": 87,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "18386",
+      "title": "The Death of Ivan Ilych",
+      "authors": [
+        "Leo Tolstoy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1663546974i/18386._SY600_.jpg",
+      "rank": 88,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "31250",
+      "title": "Little Dorrit",
+      "authors": [
+        "Charles Dickens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1496619146i/31250._SY600_.jpg",
+      "rank": 89,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "27822",
+      "title": "Eugene Onegin",
+      "authors": [
+        "Alexander Pushkin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388373138i/27822._SY600_.jpg",
+      "rank": 90,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "31244",
+      "title": "Our Mutual Friend",
+      "authors": [
+        "Charles Dickens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403189244i/31244._SY600_.jpg",
+      "rank": 91,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "194179",
+      "title": "The Strange Case of Dr Jekyll and Mr Hyde & Weir of Hermiston",
+      "authors": [
+        "Robert Louis Stevenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1172589119i/194179._SY600_.jpg",
+      "rank": 92,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "180617",
+      "title": "Pinocchio",
+      "authors": [
+        "Carlo Collodi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327938097i/180617._SY600_.jpg",
+      "rank": 93,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "51893",
+      "title": "Thus Spoke Zarathustra",
+      "authors": [
+        "Friedrich Nietzsche"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1650680683i/51893._SY600_.jpg",
+      "rank": 94,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "28407",
+      "title": "Germinal",
+      "authors": [
+        "Émile Zola"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628462562i/28407._SY600_.jpg",
+      "rank": 95,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "132391",
+      "title": "The Little Mermaid",
+      "authors": [
+        "Hans Christian Andersen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1309204955i/132391._SY600_.jpg",
+      "rank": 96,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "20564",
+      "title": "The Mill on the Floss",
+      "authors": [
+        "George Eliot"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628463066i/20564._SY600_.jpg",
+      "rank": 97,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "298230",
+      "title": "Agnes Grey",
+      "authors": [
+        "Anne Brontë"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677887628i/298230._SY600_.jpg",
+      "rank": 98,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "32650",
+      "title": "The Return of the Native",
+      "authors": [
+        "Thomas Hardy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403182613i/32650._SY600_.jpg",
+      "rank": 99,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "182381",
+      "title": "Cranford",
+      "authors": [
+        "Elizabeth Gaskell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375746052i/182381._SY600_.jpg",
+      "rank": 100,
+      "votes": null,
+      "winner": false
+    }
+  ]
+}

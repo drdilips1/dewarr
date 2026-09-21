@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-readers-favorite-history-bio-books-2024",
+  "kind": "award",
+  "title": "History & Biography",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-history-bio-books-2024",
+  "year": 2024,
+  "category": "History & Biography",
+  "genres": [
+    "biography",
+    "history"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:10.533433+00:00",
+  "books": [
+    {
+      "external_id": "201751300",
+      "title": "The Bookshop",
+      "authors": [
+        "Evan Friss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1705935887l/201751300._SY600_.jpg",
+      "rank": 1,
+      "votes": 38847,
+      "winner": true
+    },
+    {
+      "external_id": "203956674",
+      "title": "The Small and the Mighty",
+      "authors": [
+        "Sharon McMahon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1711238684l/203956674._SY600_.jpg",
+      "rank": 2,
+      "votes": 31360,
+      "winner": false
+    },
+    {
+      "external_id": "195608683",
+      "title": "The Demon of Unrest",
+      "authors": [
+        "Erik Larson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697649165l/195608683._SY600_.jpg",
+      "rank": 3,
+      "votes": 26235,
+      "winner": false
+    },
+    {
+      "external_id": "208580608",
+      "title": "The Elements of Marie Curie",
+      "authors": [
+        "Dava Sobel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716500981l/208580608._SY600_.jpg",
+      "rank": 4,
+      "votes": 21644,
+      "winner": false
+    },
+    {
+      "external_id": "207567691",
+      "title": "American Scary",
+      "authors": [
+        "Jeremy Dauber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716539167l/207567691._SY600_.jpg",
+      "rank": 5,
+      "votes": 18934,
+      "winner": false
+    },
+    {
+      "external_id": "195791072",
+      "title": "Women in the Valley of the Kings",
+      "authors": [
+        "Kathleen Sheppard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1701710361l/195791072._SY600_.jpg",
+      "rank": 6,
+      "votes": 17443,
+      "winner": false
+    },
+    {
+      "external_id": "204927599",
+      "title": "Nexus",
+      "authors": [
+        "Yuval Noah Harari"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1709986452l/204927599._SY600_.jpg",
+      "rank": 7,
+      "votes": 17400,
+      "winner": false
+    },
+    {
+      "external_id": "201626940",
+      "title": "Ask Not",
+      "authors": [
+        "Maureen Callahan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1703798479l/201626940._SY600_.jpg",
+      "rank": 8,
+      "votes": 16640,
+      "winner": false
+    },
+    {
+      "external_id": "199798785",
+      "title": "Challenger",
+      "authors": [
+        "Adam Higginbotham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1702238441l/199798785._SY600_.jpg",
+      "rank": 9,
+      "votes": 12631,
+      "winner": false
+    },
+    {
+      "external_id": "62315849",
+      "title": "The Lost Tomb",
+      "authors": [
+        "Douglas Preston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1665472835l/62315849.jpg",
+      "rank": 10,
+      "votes": 11334,
+      "winner": false
+    },
+    {
+      "external_id": "198563695",
+      "title": "When Women Ran Fifth Avenue",
+      "authors": [
+        "Julie Satow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1706020635l/198563695._SY600_.jpg",
+      "rank": 11,
+      "votes": 4309,
+      "winner": false
+    },
+    {
+      "external_id": "177188695",
+      "title": "Not Your China Doll",
+      "authors": [
+        "Katie Gee Salisbury"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1693421599l/177188695._SY600_.jpg",
+      "rank": 12,
+      "votes": 4230,
+      "winner": false
+    },
+    {
+      "external_id": "145624993",
+      "title": "Madness",
+      "authors": [
+        "Antonia Hylton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1700681997l/145624993._SY600_.jpg",
+      "rank": 13,
+      "votes": 3777,
+      "winner": false
+    },
+    {
+      "external_id": "199393033",
+      "title": "By the Fire We Carry",
+      "authors": [
+        "Rebecca Nagle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718899849l/199393033._SY600_.jpg",
+      "rank": 14,
+      "votes": 3472,
+      "winner": false
+    },
+    {
+      "external_id": "198493808",
+      "title": "The Situation Room",
+      "authors": [
+        "George  Stephanopoulos"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1699480531l/198493808._SY600_.jpg",
+      "rank": 15,
+      "votes": 3051,
+      "winner": false
+    },
+    {
+      "external_id": "191746386",
+      "title": "The Wide Wide Sea",
+      "authors": [
+        "Hampton Sides"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1694286652l/191746386.jpg",
+      "rank": 16,
+      "votes": 2572,
+      "winner": false
+    },
+    {
+      "external_id": "199797834",
+      "title": "When the Sea Came Alive",
+      "authors": [
+        "Garrett M. Graff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1711030488l/199797834._SY600_.jpg",
+      "rank": 17,
+      "votes": 2450,
+      "winner": false
+    },
+    {
+      "external_id": "203767605",
+      "title": "The Siege",
+      "authors": [
+        "Ben Macintyre"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716297042l/203767605._SY600_.jpg",
+      "rank": 18,
+      "votes": 2166,
+      "winner": false
+    },
+    {
+      "external_id": "145624514",
+      "title": "Everyone Who Is Gone Is Here",
+      "authors": [
+        "Jonathan Blitzer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697736195l/145624514._SY600_.jpg",
+      "rank": 19,
+      "votes": 2040,
+      "winner": false
+    },
+    {
+      "external_id": "210246743",
+      "title": "Eden Undone",
+      "authors": [
+        "Abbott Kahler"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1714413521l/210246743._SY600_.jpg",
+      "rank": 20,
+      "votes": 1591,
+      "winner": false
+    }
+  ]
+}

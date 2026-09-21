@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-paranormal-fantasy-books-2013",
+  "kind": "award",
+  "title": "Paranormal Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-paranormal-fantasy-books-2013",
+  "year": 2013,
+  "category": "Paranormal Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:36.343949+00:00",
+  "books": [
+    {
+      "external_id": "12216302",
+      "title": "Cold Days",
+      "authors": [
+        "Jim  Butcher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1661017900l/12216302._SY600_.jpg",
+      "rank": 1,
+      "votes": 16666,
+      "winner": true
+    },
+    {
+      "external_id": "17199504",
+      "title": "The Bone Season",
+      "authors": [
+        "Samantha Shannon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1516752880l/17199504._SY600_.jpg",
+      "rank": 2,
+      "votes": 11047,
+      "winner": false
+    },
+    {
+      "external_id": "15767586",
+      "title": "Styxx",
+      "authors": [
+        "Sherrilyn Kenyon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1359269406l/15767586.jpg",
+      "rank": 3,
+      "votes": 10579,
+      "winner": false
+    },
+    {
+      "external_id": "13241659",
+      "title": "Ever After",
+      "authors": [
+        "Kim Harrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1345396768l/13241659.jpg",
+      "rank": 4,
+      "votes": 9877,
+      "winner": false
+    },
+    {
+      "external_id": "13413589",
+      "title": "Frost Burned",
+      "authors": [
+        "Patricia Briggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344299919l/13413589.jpg",
+      "rank": 5,
+      "votes": 9434,
+      "winner": false
+    },
+    {
+      "external_id": "11544421",
+      "title": "Magic Rises",
+      "authors": [
+        "Ilona Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1359571572l/11544421.jpg",
+      "rank": 6,
+      "votes": 8672,
+      "winner": false
+    },
+    {
+      "external_id": "15813668",
+      "title": "Fifth Grave Past the Light",
+      "authors": [
+        "Darynda Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355718001l/15813668.jpg",
+      "rank": 7,
+      "votes": 8633,
+      "winner": false
+    },
+    {
+      "external_id": "16101040",
+      "title": "Omens",
+      "authors": [
+        "Kelley Armstrong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351111087l/16101040.jpg",
+      "rank": 8,
+      "votes": 7346,
+      "winner": false
+    },
+    {
+      "external_id": "16071748",
+      "title": "Hunted",
+      "authors": [
+        "Kevin Hearne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1660271606l/16071748._SY600_.jpg",
+      "rank": 9,
+      "votes": 6252,
+      "winner": false
+    },
+    {
+      "external_id": "15711341",
+      "title": "Written in Red",
+      "authors": [
+        "Anne Bishop"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1411439502l/15711341.jpg",
+      "rank": 10,
+      "votes": 6060,
+      "winner": false
+    },
+    {
+      "external_id": "12958034",
+      "title": "House Rules",
+      "authors": [
+        "Chloe Neill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435104419l/12958034._SY600_.jpg",
+      "rank": 11,
+      "votes": 2756,
+      "winner": false
+    },
+    {
+      "external_id": "15985348",
+      "title": "Dead Ever After",
+      "authors": [
+        "Charlaine Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1352158186l/15985348.jpg",
+      "rank": 12,
+      "votes": 2143,
+      "winner": false
+    },
+    {
+      "external_id": "13477883",
+      "title": "Gameboard of the Gods",
+      "authors": [
+        "Richelle Mead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1361308921l/13477883.jpg",
+      "rank": 13,
+      "votes": 1958,
+      "winner": false
+    },
+    {
+      "external_id": "10184403",
+      "title": "Chimes at Midnight",
+      "authors": [
+        "Seanan McGuire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1363206331l/10184403.jpg",
+      "rank": 14,
+      "votes": 1262,
+      "winner": false
+    },
+    {
+      "external_id": "16130369",
+      "title": "Heart of Venom",
+      "authors": [
+        "Jennifer Estep"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1359050337l/16130369.jpg",
+      "rank": 15,
+      "votes": 972,
+      "winner": false
+    },
+    {
+      "external_id": "15985372",
+      "title": "Affliction",
+      "authors": [
+        "Laurell K. Hamilton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1350942756l/15985372.jpg",
+      "rank": 16,
+      "votes": 663,
+      "winner": false
+    },
+    {
+      "external_id": "10331050",
+      "title": "Touch of the Demon",
+      "authors": [
+        "Diana Rowland"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1382757221l/10331050.jpg",
+      "rank": 17,
+      "votes": 656,
+      "winner": false
+    },
+    {
+      "external_id": "15732001",
+      "title": "Blood Trade",
+      "authors": [
+        "Faith Hunter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1354157936l/15732001.jpg",
+      "rank": 18,
+      "votes": 589,
+      "winner": false
+    },
+    {
+      "external_id": "12119496",
+      "title": "Steel's Edge",
+      "authors": [
+        "Ilona Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1341723527l/12119496.jpg",
+      "rank": 19,
+      "votes": 572,
+      "winner": false
+    },
+    {
+      "external_id": "12528745",
+      "title": "Tempt the Stars",
+      "authors": [
+        "Karen Chance"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1380231853l/12528745.jpg",
+      "rank": 20,
+      "votes": 301,
+      "winner": false
+    }
+  ]
+}

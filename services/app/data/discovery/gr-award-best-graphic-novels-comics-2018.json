@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-graphic-novels-comics-2018",
+  "kind": "award",
+  "title": "Graphic Novels & Comics",
+  "source_url": "https://www.goodreads.com/choiceawards/best-graphic-novels-comics-2018",
+  "year": 2018,
+  "category": "Graphic Novels & Comics",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:15.143184+00:00",
+  "books": [
+    {
+      "external_id": "35924705",
+      "title": "Herding Cats",
+      "authors": [
+        "Sarah Andersen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522799608l/35924705._SY600_.jpg",
+      "rank": 1,
+      "votes": 34322,
+      "winner": true
+    },
+    {
+      "external_id": "36374390",
+      "title": "Little Moments of Love",
+      "authors": [
+        "Catana Chetwynd"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1514577927l/36374390.jpg",
+      "rank": 2,
+      "votes": 27342,
+      "winner": false
+    },
+    {
+      "external_id": "43307890",
+      "title": "Saga, Volume 8",
+      "authors": [
+        "Brian K. Vaughan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545625018l/43307890.jpg",
+      "rank": 3,
+      "votes": 25261,
+      "winner": false
+    },
+    {
+      "external_id": "34849019",
+      "title": "Mecca",
+      "authors": [
+        "G. Willow Wilson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1512769116l/34849019._SY600_.jpg",
+      "rank": 4,
+      "votes": 18504,
+      "winner": false
+    },
+    {
+      "external_id": "34506912",
+      "title": "The Prince and the Dressmaker",
+      "authors": [
+        "Jen Wang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1654041362l/34506912._SY600_.jpg",
+      "rank": 5,
+      "votes": 15479,
+      "winner": false
+    },
+    {
+      "external_id": "35989512",
+      "title": "Paper Girls, Volume 4",
+      "authors": [
+        "Brian K. Vaughan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1657006814l/35989512.jpg",
+      "rank": 6,
+      "votes": 11927,
+      "winner": false
+    },
+    {
+      "external_id": "35684941",
+      "title": "The Adventure Zone Vol.1",
+      "authors": [
+        "Clint McElroy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507691828l/35684941.jpg",
+      "rank": 7,
+      "votes": 11536,
+      "winner": false
+    },
+    {
+      "external_id": "34506937",
+      "title": "Brazen",
+      "authors": [
+        "Pénélope Bagieu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500773758l/34506937.jpg",
+      "rank": 8,
+      "votes": 9325,
+      "winner": false
+    },
+    {
+      "external_id": "36373825",
+      "title": "Fence, Vol. 1",
+      "authors": [
+        "C.S. Pacat"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1542803403l/36373825._SY600_.jpg",
+      "rank": 9,
+      "votes": 8664,
+      "winner": false
+    },
+    {
+      "external_id": "35758072",
+      "title": "Am I There Yet? The Loop-de-Loop, Zigzagging Journey to Adult...",
+      "authors": [
+        "Mari Andrew"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1513999588l/35758072.jpg",
+      "rank": 10,
+      "votes": 8429,
+      "winner": false
+    },
+    {
+      "external_id": "30623067",
+      "title": "Be Prepared",
+      "authors": [
+        "Vera Brosgol"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1503338056l/30623067.jpg",
+      "rank": 11,
+      "votes": 3584,
+      "winner": false
+    },
+    {
+      "external_id": "36963204",
+      "title": "Bingo Love",
+      "authors": [
+        "Tee Franklin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1514739846l/36963204._SY600_.jpg",
+      "rank": 12,
+      "votes": 3395,
+      "winner": false
+    },
+    {
+      "external_id": "34930815",
+      "title": "Gone Rogue",
+      "authors": [
+        "Marissa Meyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1494468777l/34930815.jpg",
+      "rank": 13,
+      "votes": 3196,
+      "winner": false
+    },
+    {
+      "external_id": "37534577",
+      "title": "Check, Please! Book 1",
+      "authors": [
+        "Ngozi Ukazu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1589341298l/37534577._SY600_.jpg",
+      "rank": 14,
+      "votes": 2947,
+      "winner": false
+    },
+    {
+      "external_id": "37533587",
+      "title": "Sabrina",
+      "authors": [
+        "Nick Drnaso"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1513309376l/37533587._SY600_.jpg",
+      "rank": 15,
+      "votes": 2891,
+      "winner": false
+    },
+    {
+      "external_id": "35651693",
+      "title": "The Wicked + The Divine, Vol. 6",
+      "authors": [
+        "Kieron Gillen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1782869249l/35651693.jpg",
+      "rank": 16,
+      "votes": 2818,
+      "winner": false
+    },
+    {
+      "external_id": "37491890",
+      "title": "Monstress, Volume 3",
+      "authors": [
+        "Marjorie M. Liu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729116958l/37491890.jpg",
+      "rank": 17,
+      "votes": 2397,
+      "winner": false
+    },
+    {
+      "external_id": "37822649",
+      "title": "Hey, Kiddo",
+      "authors": [
+        "Jarrett J. Krosoczka"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529196460l/37822649.jpg",
+      "rank": 18,
+      "votes": 1567,
+      "winner": false
+    },
+    {
+      "external_id": "34954925",
+      "title": "Black Hammer, Vol. 2",
+      "authors": [
+        "Jeff Lemire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1539824654l/34954925._SY600_.jpg",
+      "rank": 19,
+      "votes": 1475,
+      "winner": false
+    },
+    {
+      "external_id": "34849021",
+      "title": "Black Bolt, Vol. 1",
+      "authors": [
+        "Saladin Ahmed"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1525111221l/34849021._SY600_.jpg",
+      "rank": 20,
+      "votes": 1459,
+      "winner": false
+    }
+  ]
+}

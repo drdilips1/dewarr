@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-readers-favorite-debut-novel-2025",
+  "kind": "award",
+  "title": "Debut Novel",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-debut-novel-2025",
+  "year": 2025,
+  "category": "Debut Novel",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:39:51.953232+00:00",
+  "books": [
+    {
+      "external_id": "222490389",
+      "title": "Alchemised",
+      "authors": [
+        "SenLinYu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1737131981l/222490389._SY600_.jpg",
+      "rank": 1,
+      "votes": 165184,
+      "winner": true
+    },
+    {
+      "external_id": "217245618",
+      "title": "The Names",
+      "authors": [
+        "Florence Knapp"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1746106001l/217245618._SY600_.jpg",
+      "rank": 2,
+      "votes": 52001,
+      "winner": false
+    },
+    {
+      "external_id": "223001257",
+      "title": "The Correspondent",
+      "authors": [
+        "Virginia      Evans"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1735235942l/223001257._SY600_.jpg",
+      "rank": 3,
+      "votes": 49050,
+      "winner": false
+    },
+    {
+      "external_id": "214152211",
+      "title": "The Bright Years",
+      "authors": [
+        "Sarah Damoff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1717697006l/214152211._SY600_.jpg",
+      "rank": 4,
+      "votes": 25827,
+      "winner": false
+    },
+    {
+      "external_id": "213075628",
+      "title": "When the Tides Held the Moon",
+      "authors": [
+        "Venessa Vida Kelley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1736287500l/213075628._SY600_.jpg",
+      "rank": 5,
+      "votes": 25645,
+      "winner": false
+    },
+    {
+      "external_id": "219848293",
+      "title": "A Resistance of Witches",
+      "authors": [
+        "Morgan   Ryan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1731288127l/219848293.jpg",
+      "rank": 6,
+      "votes": 23502,
+      "winner": false
+    },
+    {
+      "external_id": "222376716",
+      "title": "The Irish Goodbye",
+      "authors": [
+        "Heather Aimee O'Neill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1759195606l/222376716._SY600_.jpg",
+      "rank": 7,
+      "votes": 19454,
+      "winner": false
+    },
+    {
+      "external_id": "212806648",
+      "title": "Junie",
+      "authors": [
+        "Erin Crosby Eckstine"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1737622429l/212806648._SY600_.jpg",
+      "rank": 8,
+      "votes": 16369,
+      "winner": false
+    },
+    {
+      "external_id": "223422252",
+      "title": "Homeseeking",
+      "authors": [
+        "Karissa Chen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1736422714l/223422252._SY600_.jpg",
+      "rank": 9,
+      "votes": 13027,
+      "winner": false
+    },
+    {
+      "external_id": "217045791",
+      "title": "The Lilac People",
+      "authors": [
+        "Milo Todd"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1722483278l/217045791._SY600_.jpg",
+      "rank": 10,
+      "votes": 12897,
+      "winner": false
+    },
+    {
+      "external_id": "215570667",
+      "title": "Finding Grace",
+      "authors": [
+        "Loretta Rothschild"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1736178352l/215570667._SY600_.jpg",
+      "rank": 11,
+      "votes": 6182,
+      "winner": false
+    },
+    {
+      "external_id": "220161226",
+      "title": "Aftertaste",
+      "authors": [
+        "Daria  Lavelle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1730746345l/220161226._SY600_.jpg",
+      "rank": 12,
+      "votes": 6144,
+      "winner": false
+    },
+    {
+      "external_id": "220161203",
+      "title": "A Family Matter",
+      "authors": [
+        "Claire   Lynch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1754234338l/220161203._SY600_.jpg",
+      "rank": 13,
+      "votes": 5095,
+      "winner": false
+    },
+    {
+      "external_id": "221473262",
+      "title": "Loved One",
+      "authors": [
+        "Aisha Muharrar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1733285753l/221473262._SY600_.jpg",
+      "rank": 14,
+      "votes": 4972,
+      "winner": false
+    },
+    {
+      "external_id": "217311813",
+      "title": "Woodworking",
+      "authors": [
+        "Emily St. James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1731853863l/217311813._SY600_.jpg",
+      "rank": 15,
+      "votes": 4437,
+      "winner": false
+    },
+    {
+      "external_id": "217387630",
+      "title": "The Witch's Orchard",
+      "authors": [
+        "Archer Sullivan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1733430253l/217387630._SY600_.jpg",
+      "rank": 16,
+      "votes": 3537,
+      "winner": false
+    },
+    {
+      "external_id": "216522711",
+      "title": "The Eights",
+      "authors": [
+        "Joanna  Miller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1721764283l/216522711._SY600_.jpg",
+      "rank": 17,
+      "votes": 2990,
+      "winner": false
+    },
+    {
+      "external_id": "223614634",
+      "title": "The Merge",
+      "authors": [
+        "Grace          Walker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1743149009l/223614634._SY600_.jpg",
+      "rank": 18,
+      "votes": 2764,
+      "winner": false
+    },
+    {
+      "external_id": "219743601",
+      "title": "Dominion",
+      "authors": [
+        "Addie E. Citchens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1735251466l/219743601._SY600_.jpg",
+      "rank": 19,
+      "votes": 2712,
+      "winner": false
+    },
+    {
+      "external_id": "217245582",
+      "title": "The Original Daughter",
+      "authors": [
+        "Jemimah Wei"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1723471651l/217245582._SY600_.jpg",
+      "rank": 20,
+      "votes": 1817,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-horror-books-2016",
+  "kind": "award",
+  "title": "Horror",
+  "source_url": "https://www.goodreads.com/choiceawards/best-horror-books-2016",
+  "year": 2016,
+  "category": "Horror",
+  "genres": [
+    "horror"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:06.822379+00:00",
+  "books": [
+    {
+      "external_id": "25816688",
+      "title": "The Fireman",
+      "authors": [
+        "Joe  Hill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1469316385l/25816688.jpg",
+      "rank": 1,
+      "votes": 23289,
+      "winner": true
+    },
+    {
+      "external_id": "27383717",
+      "title": "The Butterfly Garden",
+      "authors": [
+        "Dot Hutchison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456966991l/27383717.jpg",
+      "rank": 2,
+      "votes": 21871,
+      "winner": false
+    },
+    {
+      "external_id": "26891429",
+      "title": "The City of Mirrors",
+      "authors": [
+        "Justin Cronin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1447866792l/26891429.jpg",
+      "rank": 3,
+      "votes": 20722,
+      "winner": false
+    },
+    {
+      "external_id": "27276336",
+      "title": "Ink and Bone",
+      "authors": [
+        "Lisa Unger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464907792l/27276336._SY600_.jpg",
+      "rank": 4,
+      "votes": 17421,
+      "winner": false
+    },
+    {
+      "external_id": "23629836",
+      "title": "Over Your Dead Body",
+      "authors": [
+        "Dan Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445446630l/23629836.jpg",
+      "rank": 5,
+      "votes": 6779,
+      "winner": false
+    },
+    {
+      "external_id": "26118005",
+      "title": "My Best Friend's Exorcism",
+      "authors": [
+        "Grady Hendrix"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456208235l/26118005.jpg",
+      "rank": 6,
+      "votes": 6678,
+      "winner": false
+    },
+    {
+      "external_id": "26030697",
+      "title": "Fellside",
+      "authors": [
+        "M.R. Carey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1447360065l/26030697.jpg",
+      "rank": 7,
+      "votes": 6147,
+      "winner": false
+    },
+    {
+      "external_id": "25142937",
+      "title": "Lovecraft Country",
+      "authors": [
+        "Matt Ruff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1426364617l/25142937.jpg",
+      "rank": 8,
+      "votes": 5881,
+      "winner": false
+    },
+    {
+      "external_id": "25930352",
+      "title": "A Time of Torment",
+      "authors": [
+        "John Connolly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1452848988l/25930352.jpg",
+      "rank": 9,
+      "votes": 5042,
+      "winner": false
+    },
+    {
+      "external_id": "32593030",
+      "title": "Wicked Little Words",
+      "authors": [
+        "Stevie J. Cole"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476252824l/32593030._SY600_.jpg",
+      "rank": 10,
+      "votes": 3402,
+      "winner": false
+    },
+    {
+      "external_id": "23719481",
+      "title": "Mr. Splitfoot",
+      "authors": [
+        "Samantha Hunt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421139941l/23719481.jpg",
+      "rank": 11,
+      "votes": 2909,
+      "winner": false
+    },
+    {
+      "external_id": "26154355",
+      "title": "The Visitor",
+      "authors": [
+        "Amanda Stevens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441273013l/26154355.jpg",
+      "rank": 12,
+      "votes": 2699,
+      "winner": false
+    },
+    {
+      "external_id": "26883558",
+      "title": "The Ballad of Black Tom",
+      "authors": [
+        "Victor LaValle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1447086249l/26883558.jpg",
+      "rank": 13,
+      "votes": 2554,
+      "winner": false
+    },
+    {
+      "external_id": "24997064",
+      "title": "The Nightmare Stacks",
+      "authors": [
+        "Charles Stross"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1448811411l/24997064._SY600_.jpg",
+      "rank": 14,
+      "votes": 1936,
+      "winner": false
+    },
+    {
+      "external_id": "21400082",
+      "title": "Kill Switch",
+      "authors": [
+        "Jonathan Maberry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1429224558l/21400082.jpg",
+      "rank": 15,
+      "votes": 1677,
+      "winner": false
+    },
+    {
+      "external_id": "27276237",
+      "title": "Grunge",
+      "authors": [
+        "Larry Correia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1463591628l/27276237.jpg",
+      "rank": 16,
+      "votes": 1203,
+      "winner": false
+    },
+    {
+      "external_id": "29104144",
+      "title": "Extinction End",
+      "authors": [
+        "Nicholas Sansbury Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1455573447l/29104144._SY600_.jpg",
+      "rank": 17,
+      "votes": 1114,
+      "winner": false
+    },
+    {
+      "external_id": "32198636",
+      "title": "24690",
+      "authors": [
+        "A.A. Dark"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474807630l/32198636._SY600_.jpg",
+      "rank": 18,
+      "votes": 1042,
+      "winner": false
+    },
+    {
+      "external_id": "28765598",
+      "title": "The Last Days of Jack Sparks",
+      "authors": [
+        "Jason Arnopp"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453862179l/28765598._SY600_.jpg",
+      "rank": 19,
+      "votes": 762,
+      "winner": false
+    },
+    {
+      "external_id": "27064358",
+      "title": "Disappearance at Devil's Rock",
+      "authors": [
+        "Paul Tremblay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464530350l/27064358._SY600_.jpg",
+      "rank": 20,
+      "votes": 584,
+      "winner": false
+    }
+  ]
+}

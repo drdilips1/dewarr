@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-food-cookbooks-2020",
+  "kind": "award",
+  "title": "Food & Cookbooks",
+  "source_url": "https://www.goodreads.com/choiceawards/best-food-cookbooks-2020",
+  "year": 2020,
+  "category": "Food & Cookbooks",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:44.649466+00:00",
+  "books": [
+    {
+      "external_id": "51154724",
+      "title": "Modern Comfort Food",
+      "authors": [
+        "Ina Garten"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1590794868l/51154724.jpg",
+      "rank": 1,
+      "votes": 27866,
+      "winner": true
+    },
+    {
+      "external_id": "50998947",
+      "title": "Gordon Ramsay Quick and Delicious",
+      "authors": [
+        "Gordon Ramsay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1583201594l/50998947.jpg",
+      "rank": 2,
+      "votes": 25901,
+      "winner": false
+    },
+    {
+      "external_id": "53064545",
+      "title": "Magnolia Table",
+      "authors": [
+        "Joanna Gaines"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585631208l/53064545._SX318_SY475_.jpg",
+      "rank": 3,
+      "votes": 21885,
+      "winner": false
+    },
+    {
+      "external_id": "50998813",
+      "title": "100 Cookies",
+      "authors": [
+        "Sarah Kieffer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1586241615l/50998813._SY600_.jpg",
+      "rank": 4,
+      "votes": 18419,
+      "winner": false
+    },
+    {
+      "external_id": "51700803",
+      "title": "Eat a Peach",
+      "authors": [
+        "David Chang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1582084217l/51700803.jpg",
+      "rank": 5,
+      "votes": 18162,
+      "winner": false
+    },
+    {
+      "external_id": "51620141",
+      "title": "Outlander Kitchen",
+      "authors": [
+        "Theresa Carle-Sanders"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1568949597l/51620141._SY600_.jpg",
+      "rank": 6,
+      "votes": 17153,
+      "winner": false
+    },
+    {
+      "external_id": "51601913",
+      "title": "Evolving Vegan",
+      "authors": [
+        "Mena Massoud"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1599399846l/51601913._SY600_.jpg",
+      "rank": 7,
+      "votes": 11675,
+      "winner": false
+    },
+    {
+      "external_id": "50669534",
+      "title": "Ottolenghi Flavor",
+      "authors": [
+        "Yotam Ottolenghi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1590445957l/50669534.jpg",
+      "rank": 8,
+      "votes": 11473,
+      "winner": false
+    },
+    {
+      "external_id": "44781454",
+      "title": "Frontier Follies",
+      "authors": [
+        "Ree Drummond"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1597694062l/44781454.jpg",
+      "rank": 9,
+      "votes": 11321,
+      "winner": false
+    },
+    {
+      "external_id": "45895070",
+      "title": "Vegetable Kingdom",
+      "authors": [
+        "Bryant Terry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1574014883l/45895070._SY600_.jpg",
+      "rank": 10,
+      "votes": 9514,
+      "winner": false
+    },
+    {
+      "external_id": "52843246",
+      "title": "Wine Girl",
+      "authors": [
+        "Victoria James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1567978224l/52843246._SX318_SY475_.jpg",
+      "rank": 11,
+      "votes": 3120,
+      "winner": false
+    },
+    {
+      "external_id": "43261128",
+      "title": "The Defined Dish",
+      "authors": [
+        "Alex Snodgrass"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562897728l/43261128._SY600_.jpg",
+      "rank": 12,
+      "votes": 3054,
+      "winner": false
+    },
+    {
+      "external_id": "50165539",
+      "title": "The Honeysuckle Cookbook",
+      "authors": [
+        "Dzung Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585191305l/50165539._SY600_.jpg",
+      "rank": 13,
+      "votes": 2873,
+      "winner": false
+    },
+    {
+      "external_id": "50437277",
+      "title": "True Comfort",
+      "authors": [
+        "Kristin Cavallari"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1589825993l/50437277._SY600_.jpg",
+      "rank": 14,
+      "votes": 2817,
+      "winner": false
+    },
+    {
+      "external_id": "48983247",
+      "title": "Dirt",
+      "authors": [
+        "Bill Buford"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585191036l/48983247.jpg",
+      "rank": 15,
+      "votes": 2716,
+      "winner": false
+    },
+    {
+      "external_id": "49814631",
+      "title": "Skinnytaste Meal Prep",
+      "authors": [
+        "Gina Homolka"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1592246344l/49814631._SY600_.jpg",
+      "rank": 16,
+      "votes": 2278,
+      "winner": false
+    },
+    {
+      "external_id": "52028349",
+      "title": "Dessert Person",
+      "authors": [
+        "Claire Saffitz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1588215952l/52028349.jpg",
+      "rank": 17,
+      "votes": 2114,
+      "winner": false
+    },
+    {
+      "external_id": "53370248",
+      "title": "Oh She Glows for Dinner",
+      "authors": [
+        "Angela  Liddon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1596428732l/53370248._SY600_.jpg",
+      "rank": 18,
+      "votes": 1104,
+      "winner": false
+    },
+    {
+      "external_id": "51644251",
+      "title": "Nourish Me Home",
+      "authors": [
+        "Cortney Burns"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1569298103l/51644251._SX318_SY475_.jpg",
+      "rank": 19,
+      "votes": 961,
+      "winner": false
+    },
+    {
+      "external_id": "52520675",
+      "title": "Falastin",
+      "authors": [
+        "Sami Tamimi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1576625061l/52520675._SX318_SY475_.jpg",
+      "rank": 20,
+      "votes": 830,
+      "winner": false
+    }
+  ]
+}

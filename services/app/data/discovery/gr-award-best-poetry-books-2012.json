@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-poetry-books-2012",
+  "kind": "award",
+  "title": "Poetry",
+  "source_url": "https://www.goodreads.com/choiceawards/best-poetry-books-2012",
+  "year": 2012,
+  "category": "Poetry",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:20.799349+00:00",
+  "books": [
+    {
+      "external_id": "13588404",
+      "title": "A Thousand Mornings",
+      "authors": [
+        "Mary Oliver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1345433150l/13588404.jpg",
+      "rank": 1,
+      "votes": 5520,
+      "winner": true
+    },
+    {
+      "external_id": "11737010",
+      "title": "Alien vs. Predator",
+      "authors": [
+        "Michael  Robbins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336000197l/11737010.jpg",
+      "rank": 2,
+      "votes": 1333,
+      "winner": false
+    },
+    {
+      "external_id": "12924640",
+      "title": "Love, an Index",
+      "authors": [
+        "Rebecca Lindenberg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344693122l/12924640.jpg",
+      "rank": 3,
+      "votes": 1193,
+      "winner": false
+    },
+    {
+      "external_id": "13123245",
+      "title": "B",
+      "authors": [
+        "Sarah Kay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327437821l/13123245.jpg",
+      "rank": 4,
+      "votes": 1012,
+      "winner": false
+    },
+    {
+      "external_id": "13508406",
+      "title": "The Unwords",
+      "authors": [
+        "Non Nomen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1330722793l/13508406.jpg",
+      "rank": 5,
+      "votes": 851,
+      "winner": false
+    },
+    {
+      "external_id": "13220873",
+      "title": "Slow Lightning (Volume 106)",
+      "authors": [
+        "Eduardo C. Corral"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344668220l/13220873.jpg",
+      "rank": 6,
+      "votes": 801,
+      "winner": false
+    },
+    {
+      "external_id": "13429607",
+      "title": "Thrall",
+      "authors": [
+        "Natasha Trethewey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351404107l/13429607.jpg",
+      "rank": 7,
+      "votes": 778,
+      "winner": false
+    },
+    {
+      "external_id": "13427909",
+      "title": "A Beautiful Marsupial Afternoon",
+      "authors": [
+        "C.A.  Conrad"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348710790l/13427909.jpg",
+      "rank": 8,
+      "votes": 693,
+      "winner": false
+    },
+    {
+      "external_id": "12510877",
+      "title": "Useless Landscape, or A Guide for Boys",
+      "authors": [
+        "D.A. Powell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1316640011l/12510877.jpg",
+      "rank": 9,
+      "votes": 678,
+      "winner": false
+    },
+    {
+      "external_id": "13366931",
+      "title": "Goat In The Snow",
+      "authors": [
+        "Emily Pettit"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1325616051l/13366931.jpg",
+      "rank": 10,
+      "votes": 610,
+      "winner": false
+    },
+    {
+      "external_id": "13061195",
+      "title": "This Can't Be Life",
+      "authors": [
+        "Dana Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1321334233l/13061195.jpg",
+      "rank": 11,
+      "votes": 389,
+      "winner": false
+    },
+    {
+      "external_id": "12585315",
+      "title": "Almost Invisible",
+      "authors": [
+        "Mark Strand"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333577283l/12585315.jpg",
+      "rank": 12,
+      "votes": 311,
+      "winner": false
+    },
+    {
+      "external_id": "13335441",
+      "title": "The Oregon Trail Is the Oregon Trail",
+      "authors": [
+        "Gregory Sherl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1325173885l/13335441.jpg",
+      "rank": 13,
+      "votes": 295,
+      "winner": false
+    },
+    {
+      "external_id": "13236888",
+      "title": "Snowflake",
+      "authors": [
+        "Eileen Myles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348708361l/13236888.jpg",
+      "rank": 14,
+      "votes": 251,
+      "winner": false
+    },
+    {
+      "external_id": "13604108",
+      "title": "Fabric",
+      "authors": [
+        "Jessica  Bell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1334564803l/13604108.jpg",
+      "rank": 15,
+      "votes": 236,
+      "winner": false
+    },
+    {
+      "external_id": "13497896",
+      "title": "Fjords Vol.1",
+      "authors": [
+        "Zachary Schomburg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1330039497l/13497896.jpg",
+      "rank": 16,
+      "votes": 227,
+      "winner": false
+    },
+    {
+      "external_id": "13152144",
+      "title": "Dispatch from the Future",
+      "authors": [
+        "Leigh Stein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344369705l/13152144.jpg",
+      "rank": 17,
+      "votes": 170,
+      "winner": false
+    },
+    {
+      "external_id": "13530012",
+      "title": "October Mourning",
+      "authors": [
+        "Lesléa Newman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331488166l/13530012.jpg",
+      "rank": 18,
+      "votes": 154,
+      "winner": false
+    },
+    {
+      "external_id": "15764183",
+      "title": "Out of True",
+      "authors": [
+        "Amy Durant"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1342931723l/15764183.jpg",
+      "rank": 19,
+      "votes": 122,
+      "winner": false
+    },
+    {
+      "external_id": "13707574",
+      "title": "Mayakovsky's Revolver",
+      "authors": [
+        "Matthew Dickman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347033936l/13707574.jpg",
+      "rank": 20,
+      "votes": 52,
+      "winner": false
+    }
+  ]
+}

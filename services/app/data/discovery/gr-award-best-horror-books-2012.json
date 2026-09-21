@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-horror-books-2012",
+  "kind": "award",
+  "title": "Horror",
+  "source_url": "https://www.goodreads.com/choiceawards/best-horror-books-2012",
+  "year": 2012,
+  "category": "Horror",
+  "genres": [
+    "horror"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:10.594930+00:00",
+  "books": [
+    {
+      "external_id": "13281368",
+      "title": "The Twelve",
+      "authors": [
+        "Justin Cronin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331230956l/13281368.jpg",
+      "rank": 1,
+      "votes": 7414,
+      "winner": true
+    },
+    {
+      "external_id": "13154933",
+      "title": "Odd Apocalypse",
+      "authors": [
+        "Dean Koontz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388662957l/13154933.jpg",
+      "rank": 2,
+      "votes": 6549,
+      "winner": false
+    },
+    {
+      "external_id": "13442031",
+      "title": "On Demon Wings",
+      "authors": [
+        "Karina Halle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602889504l/13442031._SY600_.jpg",
+      "rank": 3,
+      "votes": 3945,
+      "winner": false
+    },
+    {
+      "external_id": "11806716",
+      "title": "Blackout",
+      "authors": [
+        "Mira Grant"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1317680509l/11806716.jpg",
+      "rank": 4,
+      "votes": 3909,
+      "winner": false
+    },
+    {
+      "external_id": "12099550",
+      "title": "Nocturnal",
+      "authors": [
+        "Scott Sigler"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333576552l/12099550.jpg",
+      "rank": 5,
+      "votes": 3614,
+      "winner": false
+    },
+    {
+      "external_id": "12924261",
+      "title": "This Book Is Full of Spiders",
+      "authors": [
+        "David  Wong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1365496944l/12924261.jpg",
+      "rank": 6,
+      "votes": 2632,
+      "winner": false
+    },
+    {
+      "external_id": "11956929",
+      "title": "Stay Awake",
+      "authors": [
+        "Dan Chaon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320476190l/11956929.jpg",
+      "rank": 7,
+      "votes": 2200,
+      "winner": false
+    },
+    {
+      "external_id": "12173462",
+      "title": "White Horse",
+      "authors": [
+        "Alex Adams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1326018441l/12173462.jpg",
+      "rank": 8,
+      "votes": 1843,
+      "winner": false
+    },
+    {
+      "external_id": "12695591",
+      "title": "Red, White, and Blood",
+      "authors": [
+        "Christopher Farnsworth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327539228l/12695591.jpg",
+      "rank": 9,
+      "votes": 1759,
+      "winner": false
+    },
+    {
+      "external_id": "11641612",
+      "title": "Edge of Dark Water",
+      "authors": [
+        "Joe R. Lansdale"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742736552l/11641612._SY600_.jpg",
+      "rank": 10,
+      "votes": 1508,
+      "winner": false
+    },
+    {
+      "external_id": "12981174",
+      "title": "Talulla Rising",
+      "authors": [
+        "Glen Duncan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1339696875l/12981174.jpg",
+      "rank": 11,
+      "votes": 1016,
+      "winner": false
+    },
+    {
+      "external_id": "15884474",
+      "title": "Alive in a Dead World",
+      "authors": [
+        "Mark Tufo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351372159l/15884474.jpg",
+      "rank": 12,
+      "votes": 974,
+      "winner": false
+    },
+    {
+      "external_id": "15062217",
+      "title": "14",
+      "authors": [
+        "Peter Clines"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1338999953l/15062217.jpg",
+      "rank": 13,
+      "votes": 761,
+      "winner": false
+    },
+    {
+      "external_id": "12024990",
+      "title": "Assassin's Code",
+      "authors": [
+        "Jonathan Maberry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1312479246l/12024990.jpg",
+      "rank": 14,
+      "votes": 697,
+      "winner": false
+    },
+    {
+      "external_id": "13051355",
+      "title": "Monster Hunter Legion",
+      "authors": [
+        "Larry Correia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1325733030l/13051355.jpg",
+      "rank": 15,
+      "votes": 651,
+      "winner": false
+    },
+    {
+      "external_id": "12944651",
+      "title": "Blackbirds",
+      "authors": [
+        "Chuck Wendig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1334862930l/12944651.jpg",
+      "rank": 16,
+      "votes": 404,
+      "winner": false
+    },
+    {
+      "external_id": "15773951",
+      "title": "I, Zombie",
+      "authors": [
+        "Hugh Howey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1343452279l/15773951.jpg",
+      "rank": 17,
+      "votes": 301,
+      "winner": false
+    },
+    {
+      "external_id": "13528381",
+      "title": "Breed",
+      "authors": [
+        "Chase Novak"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1346961923l/13528381.jpg",
+      "rank": 18,
+      "votes": 215,
+      "winner": false
+    },
+    {
+      "external_id": "13606988",
+      "title": "The Void",
+      "authors": [
+        "Brett J. Talley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1334750262l/13606988.jpg",
+      "rank": 19,
+      "votes": 87,
+      "winner": false
+    },
+    {
+      "external_id": "13279700",
+      "title": "The Croning",
+      "authors": [
+        "Laird Barron"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1341221733l/13279700.jpg",
+      "rank": 20,
+      "votes": 48,
+      "winner": false
+    }
+  ]
+}

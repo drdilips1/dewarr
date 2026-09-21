@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-nonfiction-books-2011",
+  "kind": "award",
+  "title": "Nonfiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-nonfiction-books-2011",
+  "year": 2011,
+  "category": "Nonfiction",
+  "genres": [
+    "non-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:48:10.078862+00:00",
+  "books": [
+    {
+      "external_id": "8535464",
+      "title": "The Geeks Shall Inherit the Earth",
+      "authors": [
+        "Alexandra Robbins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1298658526l/8535464.jpg",
+      "rank": 1,
+      "votes": 4110,
+      "winner": true
+    },
+    {
+      "external_id": "8565083",
+      "title": "Cinderella Ate My Daughter",
+      "authors": [
+        "Peggy Orenstein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1279214118l/8565083.jpg",
+      "rank": 2,
+      "votes": 2831,
+      "winner": false
+    },
+    {
+      "external_id": "10283787",
+      "title": "It Gets Better",
+      "authors": [
+        "Dan Savage"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347712535l/10283787.jpg",
+      "rank": 3,
+      "votes": 2049,
+      "winner": false
+    },
+    {
+      "external_id": "9378733",
+      "title": "The Psychopath Test",
+      "authors": [
+        "Jon Ronson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1307825196l/9378733.jpg",
+      "rank": 4,
+      "votes": 1832,
+      "winner": false
+    },
+    {
+      "external_id": "6346975",
+      "title": "Moonwalking with Einstein",
+      "authors": [
+        "Joshua Foer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630575238l/6346975._SY600_.jpg",
+      "rank": 5,
+      "votes": 1596,
+      "winner": false
+    },
+    {
+      "external_id": "11151351",
+      "title": "Three Cups of Deceit",
+      "authors": [
+        "Jon Krakauer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1303177098l/11151351.jpg",
+      "rank": 6,
+      "votes": 963,
+      "winner": false
+    },
+    {
+      "external_id": "9534444",
+      "title": "Boomerang",
+      "authors": [
+        "Michael   Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1317447519l/9534444.jpg",
+      "rank": 7,
+      "votes": 729,
+      "winner": false
+    },
+    {
+      "external_id": "10081832",
+      "title": "Supergods",
+      "authors": [
+        "Grant Morrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327885368l/10081832.jpg",
+      "rank": 8,
+      "votes": 725,
+      "winner": false
+    },
+    {
+      "external_id": "9628743",
+      "title": "The Social Animal",
+      "authors": [
+        "David  Brooks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348711254l/9628743.jpg",
+      "rank": 9,
+      "votes": 660,
+      "winner": false
+    },
+    {
+      "external_id": "10782350",
+      "title": "Think",
+      "authors": [
+        "Lisa Bloom"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442893650l/10782350._SY600_.jpg",
+      "rank": 10,
+      "votes": 547,
+      "winner": false
+    },
+    {
+      "external_id": "8884400",
+      "title": "The Most Human Human",
+      "authors": [
+        "Brian  Christian"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1295465264l/8884400.jpg",
+      "rank": 11,
+      "votes": 342,
+      "winner": false
+    },
+    {
+      "external_id": "8701960",
+      "title": "The Information",
+      "authors": [
+        "James Gleick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348046486l/8701960.jpg",
+      "rank": 12,
+      "votes": 287,
+      "winner": false
+    },
+    {
+      "external_id": "11256979",
+      "title": "The Magic of Reality",
+      "authors": [
+        "Richard Dawkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327883246l/11256979.jpg",
+      "rank": 13,
+      "votes": 214,
+      "winner": false
+    },
+    {
+      "external_id": "10368067",
+      "title": "Poke the Box",
+      "authors": [
+        "Seth Godin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347742814l/10368067.jpg",
+      "rank": 14,
+      "votes": 178,
+      "winner": false
+    },
+    {
+      "external_id": "7841446",
+      "title": "In the Plex",
+      "authors": [
+        "Steven Levy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442810207l/7841446._SY600_.jpg",
+      "rank": 15,
+      "votes": 152,
+      "winner": false
+    },
+    {
+      "external_id": "10021420",
+      "title": "Sex on the Moon",
+      "authors": [
+        "Ben Mezrich"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320558894l/10021420.jpg",
+      "rank": 16,
+      "votes": 130,
+      "winner": false
+    },
+    {
+      "external_id": "9319468",
+      "title": "Kingpin",
+      "authors": [
+        "Kevin Poulsen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320477825l/9319468.jpg",
+      "rank": 17,
+      "votes": 123,
+      "winner": false
+    },
+    {
+      "external_id": "10091466",
+      "title": "Inside Scientology",
+      "authors": [
+        "Janet Reitman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442818206l/10091466._SY600_.jpg",
+      "rank": 18,
+      "votes": 88,
+      "winner": false
+    },
+    {
+      "external_id": "10596103",
+      "title": "The Filter Bubble",
+      "authors": [
+        "Eli Pariser"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347827305l/10596103.jpg",
+      "rank": 19,
+      "votes": 65,
+      "winner": false
+    },
+    {
+      "external_id": "9827912",
+      "title": "Incognito",
+      "authors": [
+        "David Eagleman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348669116l/9827912.jpg",
+      "rank": 20,
+      "votes": 63,
+      "winner": false
+    }
+  ]
+}

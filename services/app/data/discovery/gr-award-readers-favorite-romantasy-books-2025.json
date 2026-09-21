@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-readers-favorite-romantasy-books-2025",
+  "kind": "award",
+  "title": "Romantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-romantasy-books-2025",
+  "year": 2025,
+  "category": "Romantasy",
+  "genres": [
+    "fantasy",
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:39:46.576288+00:00",
+  "books": [
+    {
+      "external_id": "209439446",
+      "title": "Onyx Storm",
+      "authors": [
+        "Rebecca Yarros"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1766329694l/209439446._SY600_.jpg",
+      "rank": 1,
+      "votes": 298565,
+      "winner": true
+    },
+    {
+      "external_id": "222490389",
+      "title": "Alchemised",
+      "authors": [
+        "SenLinYu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1737131981l/222490389._SY600_.jpg",
+      "rank": 2,
+      "votes": 86230,
+      "winner": false
+    },
+    {
+      "external_id": "218126170",
+      "title": "The Knight and the Moth",
+      "authors": [
+        "Rachel Gillig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1768800058l/218126170._SY600_.jpg",
+      "rank": 3,
+      "votes": 69786,
+      "winner": false
+    },
+    {
+      "external_id": "228256271",
+      "title": "Mate",
+      "authors": [
+        "Ali Hazelwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1761312608l/228256271._SY600_.jpg",
+      "rank": 4,
+      "votes": 56473,
+      "winner": false
+    },
+    {
+      "external_id": "217171544",
+      "title": "Shield of Sparrows",
+      "authors": [
+        "Devney Perry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1733692549l/217171544._SY600_.jpg",
+      "rank": 5,
+      "votes": 56360,
+      "winner": false
+    },
+    {
+      "external_id": "182484370",
+      "title": "A Witch's Guide to Magical Innkeeping",
+      "authors": [
+        "Sangu Mandanna"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1688419503l/182484370._SY600_.jpg",
+      "rank": 6,
+      "votes": 52188,
+      "winner": false
+    },
+    {
+      "external_id": "220892644",
+      "title": "Accomplice to the Villain",
+      "authors": [
+        "Hannah Nicole Maehrer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1733486325l/220892644._SY600_.jpg",
+      "rank": 7,
+      "votes": 40916,
+      "winner": false
+    },
+    {
+      "external_id": "211721797",
+      "title": "Emily Wilde's Compendium of Lost Tales",
+      "authors": [
+        "Heather Fawcett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1713630691l/211721797._SY600_.jpg",
+      "rank": 8,
+      "votes": 30460,
+      "winner": false
+    },
+    {
+      "external_id": "217182344",
+      "title": "Enchantra",
+      "authors": [
+        "Kaylie Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1725035983l/217182344._SY600_.jpg",
+      "rank": 9,
+      "votes": 22884,
+      "winner": false
+    },
+    {
+      "external_id": "222376906",
+      "title": "Wild Reverence",
+      "authors": [
+        "Rebecca   Ross"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1737937394l/222376906._SY600_.jpg",
+      "rank": 10,
+      "votes": 21201,
+      "winner": false
+    },
+    {
+      "external_id": "217245572",
+      "title": "Silver Elite",
+      "authors": [
+        "Dani Francis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1728609987l/217245572._SY600_.jpg",
+      "rank": 11,
+      "votes": 9881,
+      "winner": false
+    },
+    {
+      "external_id": "210134467",
+      "title": "The Songbird & the Heart of Stone",
+      "authors": [
+        "Carissa Broadbent"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1712408400l/210134467._SY600_.jpg",
+      "rank": 12,
+      "votes": 9166,
+      "winner": false
+    },
+    {
+      "external_id": "234443354",
+      "title": "Dire Bound",
+      "authors": [
+        "Sable Sorensen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1747707392l/234443354._SY600_.jpg",
+      "rank": 13,
+      "votes": 8263,
+      "winner": false
+    },
+    {
+      "external_id": "219848373",
+      "title": "The Irresistible Urge to Fall for Your Enemy",
+      "authors": [
+        "Brigitte Knightley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1731510442l/219848373._SY600_.jpg",
+      "rank": 14,
+      "votes": 7251,
+      "winner": false
+    },
+    {
+      "external_id": "219578789",
+      "title": "Bonds of Hercules",
+      "authors": [
+        "Jasmine Mas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729799902l/219578789._SY600_.jpg",
+      "rank": 15,
+      "votes": 6570,
+      "winner": false
+    },
+    {
+      "external_id": "221179254",
+      "title": "Rose in Chains",
+      "authors": [
+        "Julie  Soto"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1789863139l/221179254._SY600_.jpg",
+      "rank": 16,
+      "votes": 6304,
+      "winner": false
+    },
+    {
+      "external_id": "211642122",
+      "title": "Immortal",
+      "authors": [
+        "Sue Lynn Tan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1723043112l/211642122._SY600_.jpg",
+      "rank": 17,
+      "votes": 6208,
+      "winner": false
+    },
+    {
+      "external_id": "234041215",
+      "title": "On Wings of Blood",
+      "authors": [
+        "Briar Boleyn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1750975124l/234041215._SY600_.jpg",
+      "rank": 18,
+      "votes": 3655,
+      "winner": false
+    },
+    {
+      "external_id": "228691503",
+      "title": "The Wrath of the Fallen",
+      "authors": [
+        "Amber V. Nicole"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1743342426l/228691503._SY600_.jpg",
+      "rank": 19,
+      "votes": 3332,
+      "winner": false
+    },
+    {
+      "external_id": "224057573",
+      "title": "Our Vicious Oaths",
+      "authors": [
+        "N.E. Davenport"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1740436790l/224057573._SY600_.jpg",
+      "rank": 20,
+      "votes": 2515,
+      "winner": false
+    }
+  ]
+}

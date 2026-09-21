@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-history-biography-books-2012",
+  "kind": "award",
+  "title": "History & Biography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-history-biography-books-2012",
+  "year": 2012,
+  "category": "History & Biography",
+  "genres": [
+    "biography",
+    "history"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:13.330724+00:00",
+  "books": [
+    {
+      "external_id": "12722468",
+      "title": "Elizabeth the Queen",
+      "authors": [
+        "Sally Bedell Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1324343095l/12722468.jpg",
+      "rank": 1,
+      "votes": 6507,
+      "winner": true
+    },
+    {
+      "external_id": "12953608",
+      "title": "Drift",
+      "authors": [
+        "Rachel Maddow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333576575l/12953608.jpg",
+      "rank": 2,
+      "votes": 4313,
+      "winner": false
+    },
+    {
+      "external_id": "13538641",
+      "title": "Killing Kennedy",
+      "authors": [
+        "Bill O'Reilly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1337689366l/13538641.jpg",
+      "rank": 3,
+      "votes": 4280,
+      "winner": false
+    },
+    {
+      "external_id": "13531538",
+      "title": "Dearie",
+      "authors": [
+        "Bob Spitz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344371053l/13531538.jpg",
+      "rank": 4,
+      "votes": 2802,
+      "winner": false
+    },
+    {
+      "external_id": "11797365",
+      "title": "Escape from Camp 14",
+      "authors": [
+        "Blaine Harden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347954566l/11797365.jpg",
+      "rank": 5,
+      "votes": 2493,
+      "winner": false
+    },
+    {
+      "external_id": "12878300",
+      "title": "Fearless",
+      "authors": [
+        "Eric Blehm"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351386173l/12878300.jpg",
+      "rank": 6,
+      "votes": 2183,
+      "winner": false
+    },
+    {
+      "external_id": "13330922",
+      "title": "The Black Count",
+      "authors": [
+        "Tom Reiss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1337693786l/13330922.jpg",
+      "rank": 7,
+      "votes": 1972,
+      "winner": false
+    },
+    {
+      "external_id": "13533740",
+      "title": "Thomas Jefferson",
+      "authors": [
+        "Jon Meacham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1342043615l/13533740.jpg",
+      "rank": 8,
+      "votes": 1875,
+      "winner": false
+    },
+    {
+      "external_id": "12933641",
+      "title": "The Woman Who Wasn't There",
+      "authors": [
+        "Robin Gaby Fisher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344392070l/12933641.jpg",
+      "rank": 9,
+      "votes": 1780,
+      "winner": false
+    },
+    {
+      "external_id": "13589124",
+      "title": "Every Love Story Is a Ghost Story",
+      "authors": [
+        "D.T. Max"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1420920315l/13589124.jpg",
+      "rank": 10,
+      "votes": 1662,
+      "winner": false
+    },
+    {
+      "external_id": "13049569",
+      "title": "The Passage of Power",
+      "authors": [
+        "Robert A. Caro"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565686865l/13049569.jpg",
+      "rank": 11,
+      "votes": 988,
+      "winner": false
+    },
+    {
+      "external_id": "13154929",
+      "title": "Double Cross",
+      "authors": [
+        "Ben Macintyre"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333576890l/13154929.jpg",
+      "rank": 12,
+      "votes": 709,
+      "winner": false
+    },
+    {
+      "external_id": "13050383",
+      "title": "Midnight in Peking",
+      "authors": [
+        "Paul   French"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1564664050l/13050383._SY600_.jpg",
+      "rank": 13,
+      "votes": 693,
+      "winner": false
+    },
+    {
+      "external_id": "12369449",
+      "title": "The Man Who Quit Money",
+      "authors": [
+        "Mark Sundeen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436543040l/12369449._SY600_.jpg",
+      "rank": 14,
+      "votes": 653,
+      "winner": false
+    },
+    {
+      "external_id": "13154560",
+      "title": "Manhunt",
+      "authors": [
+        "Peter L. Bergen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333577268l/13154560.jpg",
+      "rank": 15,
+      "votes": 232,
+      "winner": false
+    },
+    {
+      "external_id": "12410640",
+      "title": "The Presidents Club",
+      "authors": [
+        "Nancy Gibbs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344400517l/12410640.jpg",
+      "rank": 16,
+      "votes": 160,
+      "winner": false
+    },
+    {
+      "external_id": "13528287",
+      "title": "The Second World War",
+      "authors": [
+        "Antony Beevor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1338581873l/13528287.jpg",
+      "rank": 17,
+      "votes": 129,
+      "winner": false
+    },
+    {
+      "external_id": "13155934",
+      "title": "Enemies",
+      "authors": [
+        "Tim Weiner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333579847l/13155934.jpg",
+      "rank": 18,
+      "votes": 115,
+      "winner": false
+    },
+    {
+      "external_id": "13264225",
+      "title": "Cronkite",
+      "authors": [
+        "Douglas Brinkley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1338317433l/13264225.jpg",
+      "rank": 19,
+      "votes": 86,
+      "winner": false
+    },
+    {
+      "external_id": "11797348",
+      "title": "Roger Williams and the Creation of the American Soul",
+      "authors": [
+        "John M. Barry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320716933l/11797348.jpg",
+      "rank": 20,
+      "votes": 55,
+      "winner": false
+    }
+  ]
+}

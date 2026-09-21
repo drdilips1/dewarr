@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-humor-books-2020",
+  "kind": "award",
+  "title": "Humor",
+  "source_url": "https://www.goodreads.com/choiceawards/best-humor-books-2020",
+  "year": 2020,
+  "category": "Humor",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:37.129883+00:00",
+  "books": [
+    {
+      "external_id": "44890112",
+      "title": "Strange Planet",
+      "authors": [
+        "Nathan W. Pyle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556745170l/44890112._SY600_.jpg",
+      "rank": 1,
+      "votes": 45156,
+      "winner": true
+    },
+    {
+      "external_id": "49960031",
+      "title": "Wow, No Thank You.",
+      "authors": [
+        "Samantha Irby"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566239899l/49960031.jpg",
+      "rank": 2,
+      "votes": 32461,
+      "winner": false
+    },
+    {
+      "external_id": "51323365",
+      "title": "Solutions and Other Problems",
+      "authors": [
+        "Allie Brosh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1593942262l/51323365.jpg",
+      "rank": 3,
+      "votes": 27674,
+      "winner": false
+    },
+    {
+      "external_id": "48989372",
+      "title": "A Very Punchable Face",
+      "authors": [
+        "Colin Jost"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585145237l/48989372.jpg",
+      "rank": 4,
+      "votes": 23034,
+      "winner": false
+    },
+    {
+      "external_id": "51700301",
+      "title": "The Office",
+      "authors": [
+        "Andy Greene"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585413349l/51700301._SY600_.jpg",
+      "rank": 5,
+      "votes": 20099,
+      "winner": false
+    },
+    {
+      "external_id": "52180973",
+      "title": "Trixie and Katya's Guide to Modern Womanhood",
+      "authors": [
+        "Trixie Mattel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1572499535l/52180973.jpg",
+      "rank": 6,
+      "votes": 19683,
+      "winner": false
+    },
+    {
+      "external_id": "43822700",
+      "title": "F*ck Your Diet",
+      "authors": [
+        "Chloé Hilliard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1577016020l/43822700.jpg",
+      "rank": 7,
+      "votes": 16176,
+      "winner": false
+    },
+    {
+      "external_id": "50722115",
+      "title": "Is This Anything?",
+      "authors": [
+        "Jerry Seinfeld"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1593942587l/50722115.jpg",
+      "rank": 8,
+      "votes": 13084,
+      "winner": false
+    },
+    {
+      "external_id": "52894214",
+      "title": "The New One",
+      "authors": [
+        "Mike Birbiglia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571127808l/52894214._SX318_SY475_.jpg",
+      "rank": 9,
+      "votes": 7386,
+      "winner": false
+    },
+    {
+      "external_id": "50130587",
+      "title": "Becoming Duchess Goldblatt",
+      "authors": [
+        "Duchess Goldblatt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1568057059l/50130587.jpg",
+      "rank": 10,
+      "votes": 6931,
+      "winner": false
+    },
+    {
+      "external_id": "52216445",
+      "title": "Shakespeare for Squirrels",
+      "authors": [
+        "Christopher Moore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1573836756l/52216445._SX318_SY475_.jpg",
+      "rank": 11,
+      "votes": 3131,
+      "winner": false
+    },
+    {
+      "external_id": "48590973",
+      "title": "#VERYFAT #VERYBRAVE",
+      "authors": [
+        "Nicole Byer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1573919103l/48590973.jpg",
+      "rank": 12,
+      "votes": 2730,
+      "winner": false
+    },
+    {
+      "external_id": "51952357",
+      "title": "Overstated",
+      "authors": [
+        "Colin Quinn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1595209681l/51952357.jpg",
+      "rank": 13,
+      "votes": 2222,
+      "winner": false
+    },
+    {
+      "external_id": "50998099",
+      "title": "Shit, Actually",
+      "authors": [
+        "Lindy West"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1610496421l/50998099._SY600_.jpg",
+      "rank": 14,
+      "votes": 1936,
+      "winner": false
+    },
+    {
+      "external_id": "50699224",
+      "title": "Squeeze Me",
+      "authors": [
+        "Carl Hiaasen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1586833725l/50699224.jpg",
+      "rank": 15,
+      "votes": 1816,
+      "winner": false
+    },
+    {
+      "external_id": "51179533",
+      "title": "You're Doing Great!",
+      "authors": [
+        "Tom Papa"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1569898142l/51179533._SX318_SY475_.jpg",
+      "rank": 16,
+      "votes": 1671,
+      "winner": false
+    },
+    {
+      "external_id": "48995022",
+      "title": "God-Level Knowledge Darts",
+      "authors": [
+        "Desus"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1580145621l/48995022.jpg",
+      "rank": 17,
+      "votes": 1419,
+      "winner": false
+    },
+    {
+      "external_id": "52090855",
+      "title": "This Is Major",
+      "authors": [
+        "Shayla Lawson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1577249471l/52090855.jpg",
+      "rank": 18,
+      "votes": 1387,
+      "winner": false
+    },
+    {
+      "external_id": "51736714",
+      "title": "Born to Be Public",
+      "authors": [
+        "Greg Mania"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1582651285l/51736714.jpg",
+      "rank": 19,
+      "votes": 1131,
+      "winner": false
+    },
+    {
+      "external_id": "51100577",
+      "title": "Make Russia Great Again",
+      "authors": [
+        "Christopher Buckley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1593356304l/51100577.jpg",
+      "rank": 20,
+      "votes": 610,
+      "winner": false
+    }
+  ]
+}

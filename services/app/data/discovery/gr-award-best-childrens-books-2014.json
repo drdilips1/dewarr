@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-childrens-books-2014",
+  "kind": "award",
+  "title": "Middle Grade & Children's",
+  "source_url": "https://www.goodreads.com/choiceawards/best-childrens-books-2014",
+  "year": 2014,
+  "category": "Middle Grade & Children's",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:26.488394+00:00",
+  "books": [
+    {
+      "external_id": "18705209",
+      "title": "The Blood of Olympus",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201441l/18705209._SY600_.jpg",
+      "rank": 1,
+      "votes": 63219,
+      "winner": true
+    },
+    {
+      "external_id": "21535019",
+      "title": "The Long Haul",
+      "authors": [
+        "Jeff Kinney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1609096272l/21535019._SY600_.jpg",
+      "rank": 2,
+      "votes": 18042,
+      "winner": false
+    },
+    {
+      "external_id": "20578940",
+      "title": "The Iron Trial",
+      "authors": [
+        "Holly Black"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1526511151l/20578940._SY600_.jpg",
+      "rank": 3,
+      "votes": 15412,
+      "winner": false
+    },
+    {
+      "external_id": "18225810",
+      "title": "Sisters",
+      "authors": [
+        "Raina Telgemeier"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1411022689l/18225810.jpg",
+      "rank": 4,
+      "votes": 10904,
+      "winner": false
+    },
+    {
+      "external_id": "20706320",
+      "title": "A Grimm Warning",
+      "authors": [
+        "Chris Colfer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391709728l/20706320.jpg",
+      "rank": 5,
+      "votes": 9171,
+      "winner": false
+    },
+    {
+      "external_id": "20821284",
+      "title": "Brown Girl Dreaming",
+      "authors": [
+        "Jacqueline Woodson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424308405l/20821284.jpg",
+      "rank": 6,
+      "votes": 8110,
+      "winner": false
+    },
+    {
+      "external_id": "18172465",
+      "title": "A World Without Princes",
+      "authors": [
+        "Soman Chainani"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1379015944l/18172465.jpg",
+      "rank": 7,
+      "votes": 7965,
+      "winner": false
+    },
+    {
+      "external_id": "17667561",
+      "title": "The Shadow Throne",
+      "authors": [
+        "Jennifer A. Nielsen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395418016l/17667561.jpg",
+      "rank": 8,
+      "votes": 6959,
+      "winner": false
+    },
+    {
+      "external_id": "18689810",
+      "title": "Tales from a Not-So-Glam TV Star",
+      "authors": [
+        "Rachel Renée Russell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391643881l/18689810.jpg",
+      "rank": 9,
+      "votes": 5466,
+      "winner": false
+    },
+    {
+      "external_id": "18222556",
+      "title": "A Snicker of Magic",
+      "authors": [
+        "Natalie Lloyd"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1384382716l/18222556.jpg",
+      "rank": 10,
+      "votes": 4540,
+      "winner": false
+    },
+    {
+      "external_id": "20701984",
+      "title": "El Deafo",
+      "authors": [
+        "Cece Bell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1423770455l/20701984.jpg",
+      "rank": 11,
+      "votes": 2019,
+      "winner": false
+    },
+    {
+      "external_id": "18049017",
+      "title": "Sky Raiders",
+      "authors": [
+        "Brandon Mull"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421828643l/18049017.jpg",
+      "rank": 12,
+      "votes": 1866,
+      "winner": false
+    },
+    {
+      "external_id": "20172134",
+      "title": "Nightmares!",
+      "authors": [
+        "Jason Segel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1473464700l/20172134._SY600_.jpg",
+      "rank": 13,
+      "votes": 1546,
+      "winner": false
+    },
+    {
+      "external_id": "16280882",
+      "title": "Countdown",
+      "authors": [
+        "Natalie Standiford"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389053614l/16280882.jpg",
+      "rank": 14,
+      "votes": 1413,
+      "winner": false
+    },
+    {
+      "external_id": "18405537",
+      "title": "The Night Gardener",
+      "authors": [
+        "Jonathan Auxier"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1411447390l/18405537.jpg",
+      "rank": 15,
+      "votes": 1268,
+      "winner": false
+    },
+    {
+      "external_id": "19156898",
+      "title": "The Fourteenth Goldfish",
+      "authors": [
+        "Jennifer L. Holm"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386092727l/19156898.jpg",
+      "rank": 16,
+      "votes": 1170,
+      "winner": false
+    },
+    {
+      "external_id": "14059024",
+      "title": "The Whispering Skull",
+      "authors": [
+        "Jonathan Stroud"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1401303893l/14059024.jpg",
+      "rank": 17,
+      "votes": 1150,
+      "winner": false
+    },
+    {
+      "external_id": "18263725",
+      "title": "The Crossover",
+      "authors": [
+        "Kwame Alexander"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390427593l/18263725.jpg",
+      "rank": 18,
+      "votes": 923,
+      "winner": false
+    },
+    {
+      "external_id": "18225037",
+      "title": "Absolutely Almost",
+      "authors": [
+        "Lisa Graff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385355766l/18225037.jpg",
+      "rank": 19,
+      "votes": 721,
+      "winner": false
+    },
+    {
+      "external_id": "17846771",
+      "title": "The Boundless",
+      "authors": [
+        "Kenneth Oppel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1371578949l/17846771.jpg",
+      "rank": 20,
+      "votes": 537,
+      "winner": false
+    }
+  ]
+}

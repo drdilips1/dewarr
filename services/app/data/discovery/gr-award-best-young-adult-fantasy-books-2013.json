@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-young-adult-fantasy-books-2013",
+  "kind": "award",
+  "title": "Young Adult Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fantasy-books-2013",
+  "year": 2013,
+  "category": "Young Adult Fantasy",
+  "genres": [
+    "fantasy",
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:54.846286+00:00",
+  "books": [
+    {
+      "external_id": "17383918",
+      "title": "Allegiant",
+      "authors": [
+        "Veronica Roth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1618526304l/17383918._SY600_.jpg",
+      "rank": 1,
+      "votes": 36157,
+      "winner": true
+    },
+    {
+      "external_id": "18335634",
+      "title": "Clockwork Princess",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436788488l/18335634._SY600_.jpg",
+      "rank": 2,
+      "votes": 34727,
+      "winner": false
+    },
+    {
+      "external_id": "8709526",
+      "title": "The Indigo Spell",
+      "authors": [
+        "Richelle Mead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1588127441l/8709526._SY600_.jpg",
+      "rank": 3,
+      "votes": 12523,
+      "winner": false
+    },
+    {
+      "external_id": "13362536",
+      "title": "Opal",
+      "authors": [
+        "Jennifer L. Armentrout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553011318l/13362536.jpg",
+      "rank": 4,
+      "votes": 12504,
+      "winner": false
+    },
+    {
+      "external_id": "13206760",
+      "title": "Scarlet",
+      "authors": [
+        "Marissa Meyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470056982l/13206760._SY600_.jpg",
+      "rank": 5,
+      "votes": 11103,
+      "winner": false
+    },
+    {
+      "external_id": "17182126",
+      "title": "Steelheart",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1660269968l/17182126._SY600_.jpg",
+      "rank": 6,
+      "votes": 10401,
+      "winner": false
+    },
+    {
+      "external_id": "16101128",
+      "title": "The 5th Wave",
+      "authors": [
+        "Rick Yancey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1359853842l/16101128.jpg",
+      "rank": 7,
+      "votes": 10218,
+      "winner": false
+    },
+    {
+      "external_id": "16248068",
+      "title": "The Elite",
+      "authors": [
+        "Kiera Cass"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391454595l/16248068.jpg",
+      "rank": 8,
+      "votes": 9250,
+      "winner": false
+    },
+    {
+      "external_id": "17167166",
+      "title": "Crown of Midnight",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391580481l/17167166.jpg",
+      "rank": 9,
+      "votes": 7812,
+      "winner": false
+    },
+    {
+      "external_id": "13414446",
+      "title": "Prodigy",
+      "authors": [
+        "Marie Lu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336254717l/13414446.jpg",
+      "rank": 10,
+      "votes": 6920,
+      "winner": false
+    },
+    {
+      "external_id": "13104080",
+      "title": "Unravel Me",
+      "authors": [
+        "Tahereh Mafi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1340287622l/13104080.jpg",
+      "rank": 11,
+      "votes": 3520,
+      "winner": false
+    },
+    {
+      "external_id": "9593913",
+      "title": "Requiem",
+      "authors": [
+        "Lauren Oliver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1340992438l/9593913.jpg",
+      "rank": 12,
+      "votes": 3397,
+      "winner": false
+    },
+    {
+      "external_id": "10576365",
+      "title": "The Darkest Minds",
+      "authors": [
+        "Alexandra Bracken"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1343178841l/10576365.jpg",
+      "rank": 13,
+      "votes": 2786,
+      "winner": false
+    },
+    {
+      "external_id": "8811139",
+      "title": "Light",
+      "authors": [
+        "Michael  Grant"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331533067l/8811139.jpg",
+      "rank": 14,
+      "votes": 2331,
+      "winner": false
+    },
+    {
+      "external_id": "13253276",
+      "title": "Through the Ever Night",
+      "authors": [
+        "Veronica Rossi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1340892848l/13253276.jpg",
+      "rank": 15,
+      "votes": 2085,
+      "winner": false
+    },
+    {
+      "external_id": "17347389",
+      "title": "The Dream Thieves",
+      "authors": [
+        "Maggie Stiefvater"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1477103777l/17347389.jpg",
+      "rank": 16,
+      "votes": 1519,
+      "winner": false
+    },
+    {
+      "external_id": "10874177",
+      "title": "Etiquette & Espionage",
+      "authors": [
+        "Gail Carriger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331952557l/10874177.jpg",
+      "rank": 17,
+      "votes": 1186,
+      "winner": false
+    },
+    {
+      "external_id": "14061955",
+      "title": "Siege and Storm",
+      "authors": [
+        "Leigh Bardugo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362166252l/14061955.jpg",
+      "rank": 18,
+      "votes": 966,
+      "winner": false
+    },
+    {
+      "external_id": "10137823",
+      "title": "The Rithmatist",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659904014l/10137823._SY600_.jpg",
+      "rank": 19,
+      "votes": 933,
+      "winner": false
+    },
+    {
+      "external_id": "15861491",
+      "title": "The Fall of Five",
+      "authors": [
+        "Pittacus Lore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375365364l/15861491.jpg",
+      "rank": 20,
+      "votes": 695,
+      "winner": false
+    }
+  ]
+}

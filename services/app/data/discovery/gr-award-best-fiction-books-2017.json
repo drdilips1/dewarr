@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-fiction-books-2017",
+  "kind": "award",
+  "title": "Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fiction-books-2017",
+  "year": 2017,
+  "category": "Fiction",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:27.702635+00:00",
+  "books": [
+    {
+      "external_id": "34273236",
+      "title": "Little Fires Everywhere",
+      "authors": [
+        "Celeste Ng"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522684533l/34273236._SY600_.jpg",
+      "rank": 1,
+      "votes": 39077,
+      "winner": true
+    },
+    {
+      "external_id": "31443394",
+      "title": "Beartown",
+      "authors": [
+        "Fredrik Backman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1525349525l/31443394._SY600_.jpg",
+      "rank": 2,
+      "votes": 38268,
+      "winner": false
+    },
+    {
+      "external_id": "31434883",
+      "title": "Eleanor Oliphant Is Completely Fine",
+      "authors": [
+        "Gail Honeyman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493724347l/31434883.jpg",
+      "rank": 3,
+      "votes": 32156,
+      "winner": false
+    },
+    {
+      "external_id": "30688763",
+      "title": "My Not So Perfect Life",
+      "authors": [
+        "Sophie Kinsella"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498911887l/30688763._SY600_.jpg",
+      "rank": 4,
+      "votes": 29693,
+      "winner": false
+    },
+    {
+      "external_id": "33828743",
+      "title": "The Keeper of Lost Things",
+      "authors": [
+        "Ruth Hogan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1485970925l/33828743._SY600_.jpg",
+      "rank": 5,
+      "votes": 27618,
+      "winner": false
+    },
+    {
+      "external_id": "30688435",
+      "title": "Exit West",
+      "authors": [
+        "Mohsin Hamid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1477324680l/30688435._SY600_.jpg",
+      "rank": 6,
+      "votes": 19249,
+      "winner": false
+    },
+    {
+      "external_id": "32920226",
+      "title": "Sing, Unburied, Sing",
+      "authors": [
+        "Jesmyn Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1499340866l/32920226._SY600_.jpg",
+      "rank": 7,
+      "votes": 16272,
+      "winner": false
+    },
+    {
+      "external_id": "29864343",
+      "title": "Rich People Problems",
+      "authors": [
+        "Kevin Kwan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493727003l/29864343._SY600_.jpg",
+      "rank": 8,
+      "votes": 15580,
+      "winner": false
+    },
+    {
+      "external_id": "32498122",
+      "title": "The Identicals",
+      "authors": [
+        "Elin Hilderbrand"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479870286l/32498122.jpg",
+      "rank": 9,
+      "votes": 13708,
+      "winner": false
+    },
+    {
+      "external_id": "32080126",
+      "title": "Anything Is Possible",
+      "authors": [
+        "Elizabeth Strout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479326752l/32080126.jpg",
+      "rank": 10,
+      "votes": 11178,
+      "winner": false
+    },
+    {
+      "external_id": "30358505",
+      "title": "The Refugees",
+      "authors": [
+        "Viet Thanh Nguyen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470284522l/30358505.jpg",
+      "rank": 11,
+      "votes": 4106,
+      "winner": false
+    },
+    {
+      "external_id": "28820997",
+      "title": "This Is How It Always Is",
+      "authors": [
+        "Laurie Frankel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1592465418l/28820997._SY600_.jpg",
+      "rank": 12,
+      "votes": 3710,
+      "winner": false
+    },
+    {
+      "external_id": "30753987",
+      "title": "The Leavers",
+      "authors": [
+        "Lisa Ko"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1618633434l/30753987.jpg",
+      "rank": 13,
+      "votes": 3020,
+      "winner": false
+    },
+    {
+      "external_id": "31522415",
+      "title": "What It Means When a Man Falls from the Sky",
+      "authors": [
+        "Lesley Nneka Arimah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474622115l/31522415.jpg",
+      "rank": 14,
+      "votes": 2665,
+      "winner": false
+    },
+    {
+      "external_id": "34139539",
+      "title": "The Ministry of Utmost Happiness",
+      "authors": [
+        "Arundhati Roy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1487215544l/34139539.jpg",
+      "rank": 15,
+      "votes": 2253,
+      "winner": false
+    },
+    {
+      "external_id": "33621427",
+      "title": "Home Fire",
+      "authors": [
+        "Kamila Shamsie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1587378360l/33621427.jpg",
+      "rank": 16,
+      "votes": 2180,
+      "winner": false
+    },
+    {
+      "external_id": "32600726",
+      "title": "The Almost Sisters",
+      "authors": [
+        "Joshilyn Jackson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1487958944l/32600726._SY600_.jpg",
+      "rank": 17,
+      "votes": 2152,
+      "winner": false
+    },
+    {
+      "external_id": "33916024",
+      "title": "Sourdough",
+      "authors": [
+        "Robin Sloan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1490804609l/33916024.jpg",
+      "rank": 18,
+      "votes": 1635,
+      "winner": false
+    },
+    {
+      "external_id": "33572350",
+      "title": "My Absolute Darling",
+      "authors": [
+        "Gabriel Tallent"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498911183l/33572350._SY600_.jpg",
+      "rank": 19,
+      "votes": 1420,
+      "winner": false
+    },
+    {
+      "external_id": "33590214",
+      "title": "Young Jane Young",
+      "authors": [
+        "Gabrielle Zevin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1490731852l/33590214.jpg",
+      "rank": 20,
+      "votes": 831,
+      "winner": false
+    }
+  ]
+}

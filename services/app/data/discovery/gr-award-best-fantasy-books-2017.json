@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-fantasy-books-2017",
+  "kind": "award",
+  "title": "Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fantasy-books-2017",
+  "year": 2017,
+  "category": "Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:31.991240+00:00",
+  "books": [
+    {
+      "external_id": "29363501",
+      "title": "Fantastic Beasts and Where to Find Them",
+      "authors": [
+        "J.K. Rowling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481542648l/29363501._SY600_.jpg",
+      "rank": 1,
+      "votes": 92611,
+      "winner": true
+    },
+    {
+      "external_id": "30809689",
+      "title": "Norse Mythology",
+      "authors": [
+        "Neil Gaiman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1656684690l/30809689._SY600_.jpg",
+      "rank": 2,
+      "votes": 54591,
+      "winner": false
+    },
+    {
+      "external_id": "29939230",
+      "title": "A Conjuring of Light",
+      "authors": [
+        "V.E. Schwab"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1758323297l/29939230._SY600_.jpg",
+      "rank": 3,
+      "votes": 50134,
+      "winner": false
+    },
+    {
+      "external_id": "25489134",
+      "title": "The Bear and the Nightingale",
+      "authors": [
+        "Katherine Arden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611440212l/25489134._SY600_.jpg",
+      "rank": 4,
+      "votes": 24505,
+      "winner": false
+    },
+    {
+      "external_id": "34002132",
+      "title": "Oathbringer",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1654573897l/34002132._SY600_.jpg",
+      "rank": 5,
+      "votes": 23979,
+      "winner": false
+    },
+    {
+      "external_id": "33541526",
+      "title": "One Fell Sweep",
+      "authors": [
+        "Ilona Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1482356004l/33541526._SY600_.jpg",
+      "rank": 6,
+      "votes": 16490,
+      "winner": false
+    },
+    {
+      "external_id": "23401438",
+      "title": "Feversong",
+      "authors": [
+        "Karen Marie Moning"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1458832493l/23401438.jpg",
+      "rank": 7,
+      "votes": 15136,
+      "winner": false
+    },
+    {
+      "external_id": "30688013",
+      "title": "Assassin's Fate",
+      "authors": [
+        "Robin Hobb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492869860l/30688013.jpg",
+      "rank": 8,
+      "votes": 14612,
+      "winner": false
+    },
+    {
+      "external_id": "31817749",
+      "title": "The Stone Sky",
+      "authors": [
+        "N.K. Jemisin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1478547421l/31817749._SY600_.jpg",
+      "rank": 9,
+      "votes": 13885,
+      "winner": false
+    },
+    {
+      "external_id": "26542535",
+      "title": "The Fate of the Tearling",
+      "authors": [
+        "Erika Johansen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1457039636l/26542535.jpg",
+      "rank": 10,
+      "votes": 13450,
+      "winner": false
+    },
+    {
+      "external_id": "22062213",
+      "title": "Etched in Bone",
+      "authors": [
+        "Anne Bishop"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1466702225l/22062213.jpg",
+      "rank": 11,
+      "votes": 5602,
+      "winner": false
+    },
+    {
+      "external_id": "25895524",
+      "title": "Red Sister",
+      "authors": [
+        "Mark  Lawrence"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627762558l/25895524._SY600_.jpg",
+      "rank": 12,
+      "votes": 5230,
+      "winner": false
+    },
+    {
+      "external_id": "24154742",
+      "title": "Eleventh Grave in Moonlight",
+      "authors": [
+        "Darynda Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483174337l/24154742._SY600_.jpg",
+      "rank": 13,
+      "votes": 4749,
+      "winner": false
+    },
+    {
+      "external_id": "30687916",
+      "title": "Silence Fallen",
+      "authors": [
+        "Patricia Briggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1468500884l/30687916.jpg",
+      "rank": 14,
+      "votes": 3391,
+      "winner": false
+    },
+    {
+      "external_id": "30841984",
+      "title": "Kings of the Wyld",
+      "authors": [
+        "Nicholas Eames"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1477027207l/30841984.jpg",
+      "rank": 15,
+      "votes": 1995,
+      "winner": false
+    },
+    {
+      "external_id": "31159601",
+      "title": "The Witchwood Crown",
+      "authors": [
+        "Tad Williams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1487523870l/31159601._SY600_.jpg",
+      "rank": 16,
+      "votes": 1684,
+      "winner": false
+    },
+    {
+      "external_id": "28811016",
+      "title": "Sins of Empire",
+      "authors": [
+        "Brian  McClellan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1472056794l/28811016.jpg",
+      "rank": 17,
+      "votes": 1621,
+      "winner": false
+    },
+    {
+      "external_id": "34040263",
+      "title": "The Land",
+      "authors": [
+        "Aleron Kong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1485663049l/34040263._SY600_.jpg",
+      "rank": 18,
+      "votes": 1561,
+      "winner": false
+    },
+    {
+      "external_id": "32337902",
+      "title": "Age of Swords",
+      "authors": [
+        "Michael J. Sullivan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481987017l/32337902.jpg",
+      "rank": 19,
+      "votes": 1248,
+      "winner": false
+    },
+    {
+      "external_id": "31522139",
+      "title": "City of Miracles",
+      "authors": [
+        "Robert Jackson Bennett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479836869l/31522139._SY600_.jpg",
+      "rank": 20,
+      "votes": 874,
+      "winner": false
+    }
+  ]
+}

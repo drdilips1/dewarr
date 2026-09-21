@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-readers-favorite-ya-fiction-books-2024",
+  "kind": "award",
+  "title": "Young Adult Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-ya-fiction-books-2024",
+  "year": 2024,
+  "category": "Young Adult Fiction",
+  "genres": [
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:06.335412+00:00",
+  "books": [
+    {
+      "external_id": "125045190",
+      "title": "Heartstopper",
+      "authors": [
+        "Alice Oseman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1695915526l/125045190._SY600_.jpg",
+      "rank": 1,
+      "votes": 81335,
+      "winner": true
+    },
+    {
+      "external_id": "182484360",
+      "title": "The Reappearance of Rachel Price",
+      "authors": [
+        "Holly  Jackson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1692547104l/182484360._SY600_.jpg",
+      "rank": 2,
+      "votes": 56071,
+      "winner": false
+    },
+    {
+      "external_id": "207293948",
+      "title": "Nothing Like the Movies",
+      "authors": [
+        "Lynn Painter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1707242121l/207293948.jpg",
+      "rank": 3,
+      "votes": 38241,
+      "winner": false
+    },
+    {
+      "external_id": "197392670",
+      "title": "The Grandest Game",
+      "authors": [
+        "Jennifer Lynn Barnes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697487477l/197392670._SY600_.jpg",
+      "rank": 4,
+      "votes": 34710,
+      "winner": false
+    },
+    {
+      "external_id": "207973376",
+      "title": "If Only I Had Told Her",
+      "authors": [
+        "Laura Nowlin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1712171056l/207973376._SY600_.jpg",
+      "rank": 5,
+      "votes": 28990,
+      "winner": false
+    },
+    {
+      "external_id": "60197314",
+      "title": "Betting on You",
+      "authors": [
+        "Lynn Painter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675615468l/60197314.jpg",
+      "rank": 6,
+      "votes": 25253,
+      "winner": false
+    },
+    {
+      "external_id": "61484909",
+      "title": "Where Sleeping Girls Lie",
+      "authors": [
+        "Faridah Àbíké-Íyímídé"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1685993148l/61484909.jpg",
+      "rank": 7,
+      "votes": 24048,
+      "winner": false
+    },
+    {
+      "external_id": "123429195",
+      "title": "That's Not My Name",
+      "authors": [
+        "Megan Lally"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1717940704l/123429195._SY600_.jpg",
+      "rank": 8,
+      "votes": 21617,
+      "winner": false
+    },
+    {
+      "external_id": "161184313",
+      "title": "A Thousand Broken Pieces",
+      "authors": [
+        "Tillie Cole"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1692391901l/161184313._SY600_.jpg",
+      "rank": 9,
+      "votes": 21254,
+      "winner": false
+    },
+    {
+      "external_id": "61885131",
+      "title": "Gwen & Art Are Not in Love",
+      "authors": [
+        "Lex Croucher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1665319037l/61885131._SY600_.jpg",
+      "rank": 10,
+      "votes": 17830,
+      "winner": false
+    },
+    {
+      "external_id": "160047094",
+      "title": "Dungeons and Drama",
+      "authors": [
+        "Kristy Boyce"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686319839l/160047094.jpg",
+      "rank": 11,
+      "votes": 7510,
+      "winner": false
+    },
+    {
+      "external_id": "124932739",
+      "title": "I Hope This Doesn't Find You",
+      "authors": [
+        "Ann Liang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1688093952l/124932739.jpg",
+      "rank": 12,
+      "votes": 7381,
+      "winner": false
+    },
+    {
+      "external_id": "213092742",
+      "title": "A Crane Among Wolves",
+      "authors": [
+        "June Hur"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1715871078l/213092742._SY600_.jpg",
+      "rank": 13,
+      "votes": 6249,
+      "winner": false
+    },
+    {
+      "external_id": "111673641",
+      "title": "Most Ardently",
+      "authors": [
+        "Gabe Cole Novoa"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684570364l/111673641.jpg",
+      "rank": 14,
+      "votes": 5615,
+      "winner": false
+    },
+    {
+      "external_id": "181110014",
+      "title": "Icarus",
+      "authors": [
+        "K. Ancrum"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1687802286l/181110014._SY600_.jpg",
+      "rank": 15,
+      "votes": 4111,
+      "winner": false
+    },
+    {
+      "external_id": "199793628",
+      "title": "Death at Morning House",
+      "authors": [
+        "Maureen Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1709324711l/199793628._SY600_.jpg",
+      "rank": 16,
+      "votes": 3894,
+      "winner": false
+    },
+    {
+      "external_id": "203820262",
+      "title": "When the World Tips Over",
+      "authors": [
+        "Jandy Nelson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1709850279l/203820262.jpg",
+      "rank": 17,
+      "votes": 3028,
+      "winner": false
+    },
+    {
+      "external_id": "200982340",
+      "title": "A Bánh Mì for Two",
+      "authors": [
+        "Trinity  Nguyen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1706681302l/200982340._SY600_.jpg",
+      "rank": 18,
+      "votes": 2610,
+      "winner": false
+    },
+    {
+      "external_id": "201102406",
+      "title": "Under the Surface",
+      "authors": [
+        "Diana Urban"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1698721652l/201102406._SY600_.jpg",
+      "rank": 19,
+      "votes": 1616,
+      "winner": false
+    },
+    {
+      "external_id": "180725527",
+      "title": "Thirsty",
+      "authors": [
+        "Jas Hammonds"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1703023267l/180725527._SY600_.jpg",
+      "rank": 20,
+      "votes": 946,
+      "winner": false
+    }
+  ]
+}

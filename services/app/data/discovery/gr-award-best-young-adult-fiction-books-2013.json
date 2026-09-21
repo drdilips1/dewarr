@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-young-adult-fiction-books-2013",
+  "kind": "award",
+  "title": "Young Adult Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fiction-books-2013",
+  "year": 2013,
+  "category": "Young Adult Fiction",
+  "genres": [
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:53.437069+00:00",
+  "books": [
+    {
+      "external_id": "15745753",
+      "title": "Eleanor & Park",
+      "authors": [
+        "Rainbow Rowell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1341952742l/15745753.jpg",
+      "rank": 1,
+      "votes": 21818,
+      "winner": true
+    },
+    {
+      "external_id": "16068905",
+      "title": "Fangirl",
+      "authors": [
+        "Rainbow Rowell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355886270l/16068905.jpg",
+      "rank": 2,
+      "votes": 17124,
+      "winner": false
+    },
+    {
+      "external_id": "13561164",
+      "title": "Dare You To",
+      "authors": [
+        "Katie McGarry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1354200468l/13561164.jpg",
+      "rank": 3,
+      "votes": 16230,
+      "winner": false
+    },
+    {
+      "external_id": "13580951",
+      "title": "United We Spy",
+      "authors": [
+        "Ally Carter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1368559827l/13580951.jpg",
+      "rank": 4,
+      "votes": 7640,
+      "winner": false
+    },
+    {
+      "external_id": "16101126",
+      "title": "The Moon and More",
+      "authors": [
+        "Sarah Dessen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1426912781l/16101126.jpg",
+      "rank": 5,
+      "votes": 7482,
+      "winner": false
+    },
+    {
+      "external_id": "12842115",
+      "title": "Just One Day",
+      "authors": [
+        "Gayle Forman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348674290l/12842115.jpg",
+      "rank": 6,
+      "votes": 7109,
+      "winner": false
+    },
+    {
+      "external_id": "17237214",
+      "title": "Two Boys Kissing",
+      "authors": [
+        "David Levithan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1364194940l/17237214.jpg",
+      "rank": 7,
+      "votes": 7003,
+      "winner": false
+    },
+    {
+      "external_id": "11178225",
+      "title": "Out of the Easy",
+      "authors": [
+        "Ruta Sepetys"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1339784547l/11178225.jpg",
+      "rank": 8,
+      "votes": 5867,
+      "winner": false
+    },
+    {
+      "external_id": "14813667",
+      "title": "Ali's Pretty Little Lies",
+      "authors": [
+        "Sara Shepard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351597124l/14813667.jpg",
+      "rank": 9,
+      "votes": 5632,
+      "winner": false
+    },
+    {
+      "external_id": "13580928",
+      "title": "Perfect Scoundrels",
+      "authors": [
+        "Ally Carter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1340716595l/13580928.jpg",
+      "rank": 10,
+      "votes": 5538,
+      "winner": false
+    },
+    {
+      "external_id": "15793231",
+      "title": "If You Find Me",
+      "authors": [
+        "Emily  Murdoch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369597694l/15793231.jpg",
+      "rank": 11,
+      "votes": 2565,
+      "winner": false
+    },
+    {
+      "external_id": "15790873",
+      "title": "This Is What Happy Looks Like",
+      "authors": [
+        "Jennifer E. Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344444283l/15790873.jpg",
+      "rank": 12,
+      "votes": 2236,
+      "winner": false
+    },
+    {
+      "external_id": "15283043",
+      "title": "The Distance Between Us",
+      "authors": [
+        "Kasie West"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358144875l/15283043.jpg",
+      "rank": 13,
+      "votes": 2066,
+      "winner": false
+    },
+    {
+      "external_id": "15790833",
+      "title": "Game",
+      "authors": [
+        "Barry Lyga"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366557615l/15790833.jpg",
+      "rank": 14,
+      "votes": 1828,
+      "winner": false
+    },
+    {
+      "external_id": "17262236",
+      "title": "Rose Under Fire",
+      "authors": [
+        "Elizabeth Wein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1368219053l/17262236.jpg",
+      "rank": 15,
+      "votes": 1511,
+      "winner": false
+    },
+    {
+      "external_id": "13065327",
+      "title": "Wild Cards",
+      "authors": [
+        "Simone Elkeles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1420836321l/13065327.jpg",
+      "rank": 16,
+      "votes": 869,
+      "winner": false
+    },
+    {
+      "external_id": "13477676",
+      "title": "Forgive Me, Leonard Peacock",
+      "authors": [
+        "Matthew Quick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1370282544l/13477676.jpg",
+      "rank": 17,
+      "votes": 587,
+      "winner": false
+    },
+    {
+      "external_id": "13522285",
+      "title": "The Beginning of Everything",
+      "authors": [
+        "Robyn Schneider"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366395005l/13522285.jpg",
+      "rank": 18,
+      "votes": 435,
+      "winner": false
+    },
+    {
+      "external_id": "15826648",
+      "title": "Where the Stars Still Shine",
+      "authors": [
+        "Trish Doller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1361985398l/15826648.jpg",
+      "rank": 19,
+      "votes": 326,
+      "winner": false
+    },
+    {
+      "external_id": "12578313",
+      "title": "Golden",
+      "authors": [
+        "Jessi Kirby"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347856320l/12578313.jpg",
+      "rank": 20,
+      "votes": 324,
+      "winner": false
+    }
+  ]
+}

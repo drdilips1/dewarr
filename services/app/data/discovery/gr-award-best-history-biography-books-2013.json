@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-history-biography-books-2013",
+  "kind": "award",
+  "title": "History & Biography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-history-biography-books-2013",
+  "year": 2013,
+  "category": "History & Biography",
+  "genres": [
+    "biography",
+    "history"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:43.468679+00:00",
+  "books": [
+    {
+      "external_id": "17262134",
+      "title": "Jim Henson",
+      "authors": [
+        "Brian Jay Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1371228242l/17262134.jpg",
+      "rank": 1,
+      "votes": 16105,
+      "winner": true
+    },
+    {
+      "external_id": "15801668",
+      "title": "The Girls of Atomic City",
+      "authors": [
+        "Denise Kiernan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1352912866l/15801668.jpg",
+      "rank": 2,
+      "votes": 6847,
+      "winner": false
+    },
+    {
+      "external_id": "17704903",
+      "title": "Empty Mansions",
+      "authors": [
+        "Bill Dedman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1367929741l/17704903.jpg",
+      "rank": 3,
+      "votes": 6381,
+      "winner": false
+    },
+    {
+      "external_id": "17262366",
+      "title": "One Summer",
+      "authors": [
+        "Bill  Bryson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1380292864l/17262366.jpg",
+      "rank": 4,
+      "votes": 6053,
+      "winner": false
+    },
+    {
+      "external_id": "16158542",
+      "title": "The Boys in the Boat",
+      "authors": [
+        "Daniel James Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1354683116l/16158542.jpg",
+      "rank": 5,
+      "votes": 3492,
+      "winner": false
+    },
+    {
+      "external_id": "15796712",
+      "title": "Eighty Days",
+      "authors": [
+        "Matthew Goodman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351213499l/15796712.jpg",
+      "rank": 6,
+      "votes": 3244,
+      "winner": false
+    },
+    {
+      "external_id": "16130503",
+      "title": "Manson",
+      "authors": [
+        "Jeff Guinn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369085832l/16130503.jpg",
+      "rank": 7,
+      "votes": 3222,
+      "winner": false
+    },
+    {
+      "external_id": "16248142",
+      "title": "Frozen in Time",
+      "authors": [
+        "Mitchell Zuckoff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1359983316l/16248142.jpg",
+      "rank": 8,
+      "votes": 3066,
+      "winner": false
+    },
+    {
+      "external_id": "15814204",
+      "title": "Dirty Wars",
+      "authors": [
+        "Jeremy Scahill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1397271077l/15814204.jpg",
+      "rank": 9,
+      "votes": 2633,
+      "winner": false
+    },
+    {
+      "external_id": "16044941",
+      "title": "The Guns at Last Light",
+      "authors": [
+        "Rick Atkinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435169033l/16044941._SY600_.jpg",
+      "rank": 10,
+      "votes": 2488,
+      "winner": false
+    },
+    {
+      "external_id": "15808816",
+      "title": "A Higher Call",
+      "authors": [
+        "Adam Makos"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1350889524l/15808816.jpg",
+      "rank": 11,
+      "votes": 1285,
+      "winner": false
+    },
+    {
+      "external_id": "16158546",
+      "title": "Bunker Hill",
+      "authors": [
+        "Nathaniel Philbrick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1573487749l/16158546.jpg",
+      "rank": 12,
+      "votes": 1193,
+      "winner": false
+    },
+    {
+      "external_id": "16240783",
+      "title": "The Riddle of the Labyrinth",
+      "authors": [
+        "Margalit Fox"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387149271l/16240783.jpg",
+      "rank": 13,
+      "votes": 837,
+      "winner": false
+    },
+    {
+      "external_id": "16059322",
+      "title": "The Unwinding",
+      "authors": [
+        "George Packer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356403587l/16059322.jpg",
+      "rank": 14,
+      "votes": 772,
+      "winner": false
+    },
+    {
+      "external_id": "16071731",
+      "title": "The Skies Belong to Us",
+      "authors": [
+        "Brendan I. Koerner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358131700l/16071731.jpg",
+      "rank": 15,
+      "votes": 771,
+      "winner": false
+    },
+    {
+      "external_id": "17568801",
+      "title": "Zealot",
+      "authors": [
+        "Reza Aslan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1367929567l/17568801.jpg",
+      "rank": 16,
+      "votes": 750,
+      "winner": false
+    },
+    {
+      "external_id": "16131193",
+      "title": "The Astronaut Wives Club",
+      "authors": [
+        "Lily Koppel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1352436564l/16131193.jpg",
+      "rank": 17,
+      "votes": 683,
+      "winner": false
+    },
+    {
+      "external_id": "17286958",
+      "title": "Killing Jesus",
+      "authors": [
+        "Bill O'Reilly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1361640009l/17286958.jpg",
+      "rank": 18,
+      "votes": 582,
+      "winner": false
+    },
+    {
+      "external_id": "18238043",
+      "title": "Salinger",
+      "authors": [
+        "David Shields"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1374632251l/18238043.jpg",
+      "rank": 19,
+      "votes": 564,
+      "winner": false
+    },
+    {
+      "external_id": "17262206",
+      "title": "Lawrence in Arabia",
+      "authors": [
+        "Scott Anderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1363837257l/17262206.jpg",
+      "rank": 20,
+      "votes": 289,
+      "winner": false
+    }
+  ]
+}

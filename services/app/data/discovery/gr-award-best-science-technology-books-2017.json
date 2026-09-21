@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-science-technology-books-2017",
+  "kind": "award",
+  "title": "Science & Technology",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-technology-books-2017",
+  "year": 2017,
+  "category": "Science & Technology",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:43.921483+00:00",
+  "books": [
+    {
+      "external_id": "32191710",
+      "title": "Astrophysics for People in a Hurry",
+      "authors": [
+        "Neil deGrasse Tyson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562761669l/32191710._SY600_.jpg",
+      "rank": 1,
+      "votes": 42173,
+      "winner": true
+    },
+    {
+      "external_id": "31869108",
+      "title": "Inferior",
+      "authors": [
+        "Angela Saini"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483642947l/31869108._SY600_.jpg",
+      "rank": 2,
+      "votes": 9945,
+      "winner": false
+    },
+    {
+      "external_id": "28512671",
+      "title": "Everybody Lies",
+      "authors": [
+        "Seth Stephens-Davidowitz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1489069766l/28512671._SY600_.jpg",
+      "rank": 3,
+      "votes": 8766,
+      "winner": false
+    },
+    {
+      "external_id": "31625636",
+      "title": "We Have No Idea",
+      "authors": [
+        "Jorge Cham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1478010350l/31625636.jpg",
+      "rank": 4,
+      "votes": 8511,
+      "winner": false
+    },
+    {
+      "external_id": "30231729",
+      "title": "The Death and Life of the Great Lakes",
+      "authors": [
+        "Dan Egan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1484653629l/30231729.jpg",
+      "rank": 5,
+      "votes": 8262,
+      "winner": false
+    },
+    {
+      "external_id": "28116739",
+      "title": "Other Minds",
+      "authors": [
+        "Peter Godfrey-Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1606353700l/28116739._SY600_.jpg",
+      "rank": 6,
+      "votes": 7638,
+      "winner": false
+    },
+    {
+      "external_id": "29889716",
+      "title": "The Case Against Sugar",
+      "authors": [
+        "Gary Taubes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1564576984l/29889716._SY600_.jpg",
+      "rank": 7,
+      "votes": 7097,
+      "winner": false
+    },
+    {
+      "external_id": "28110850",
+      "title": "Cannibalism",
+      "authors": [
+        "Bill Schutt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460305295l/28110850.jpg",
+      "rank": 8,
+      "votes": 6981,
+      "winner": false
+    },
+    {
+      "external_id": "30231812",
+      "title": "The Nature Fix",
+      "authors": [
+        "Florence  Williams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1469206385l/30231812.jpg",
+      "rank": 9,
+      "votes": 5736,
+      "winner": false
+    },
+    {
+      "external_id": "30901608",
+      "title": "Hit Makers",
+      "authors": [
+        "Derek   Thompson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481645075l/30901608._SY600_.jpg",
+      "rank": 10,
+      "votes": 5588,
+      "winner": false
+    },
+    {
+      "external_id": "31170723",
+      "title": "Behave",
+      "authors": [
+        "Robert M. Sapolsky"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1517732866l/31170723._SY600_.jpg",
+      "rank": 11,
+      "votes": 2003,
+      "winner": false
+    },
+    {
+      "external_id": "31751591",
+      "title": "Barking Up the Wrong Tree",
+      "authors": [
+        "Eric Barker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1489173624l/31751591.jpg",
+      "rank": 12,
+      "votes": 1679,
+      "winner": false
+    },
+    {
+      "external_id": "30962055",
+      "title": "Irresistible",
+      "authors": [
+        "Adam Alter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479719623l/30962055.jpg",
+      "rank": 13,
+      "votes": 1398,
+      "winner": false
+    },
+    {
+      "external_id": "30213950",
+      "title": "Pandora's Lab",
+      "authors": [
+        "Paul A. Offit"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1484839819l/30213950._SY600_.jpg",
+      "rank": 14,
+      "votes": 1119,
+      "winner": false
+    },
+    {
+      "external_id": "30753821",
+      "title": "The Greatest Story Ever Told—So Far",
+      "authors": [
+        "Lawrence M. Krauss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1471809324l/30753821.jpg",
+      "rank": 15,
+      "votes": 959,
+      "winner": false
+    },
+    {
+      "external_id": "30971755",
+      "title": "A Crack in Creation",
+      "authors": [
+        "Jennifer A. Doudna"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474820838l/30971755._SY600_.jpg",
+      "rank": 16,
+      "votes": 892,
+      "winner": false
+    },
+    {
+      "external_id": "28450775",
+      "title": "Whiplash",
+      "authors": [
+        "Joichi Ito"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1465763059l/28450775.jpg",
+      "rank": 17,
+      "votes": 766,
+      "winner": false
+    },
+    {
+      "external_id": "34490192",
+      "title": "Soonish",
+      "authors": [
+        "Kelly Weinersmith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1488834408l/34490192.jpg",
+      "rank": 18,
+      "votes": 758,
+      "winner": false
+    },
+    {
+      "external_id": "32940866",
+      "title": "Caesar's Last Breath",
+      "authors": [
+        "Sam Kean"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1485705116l/32940866._SY600_.jpg",
+      "rank": 19,
+      "votes": 519,
+      "winner": false
+    },
+    {
+      "external_id": "34274957",
+      "title": "Life 3.0",
+      "authors": [
+        "Max Tegmark"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498857371l/34274957.jpg",
+      "rank": 20,
+      "votes": 498,
+      "winner": false
+    }
+  ]
+}

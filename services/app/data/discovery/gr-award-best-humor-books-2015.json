@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-humor-books-2015",
+  "kind": "award",
+  "title": "Humor",
+  "source_url": "https://www.goodreads.com/choiceawards/best-humor-books-2015",
+  "year": 2015,
+  "category": "Humor",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:39.231365+00:00",
+  "books": [
+    {
+      "external_id": "22716447",
+      "title": "Why Not Me?",
+      "authors": [
+        "Mindy Kaling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442548684l/22716447._SY600_.jpg",
+      "rank": 1,
+      "votes": 32224,
+      "winner": true
+    },
+    {
+      "external_id": "23705512",
+      "title": "You're Never Weird on the Internet",
+      "authors": [
+        "Felicia Day"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1440565049l/23705512._SY600_.jpg",
+      "rank": 2,
+      "votes": 27250,
+      "winner": false
+    },
+    {
+      "external_id": "23848559",
+      "title": "Furiously Happy",
+      "authors": [
+        "Jenny  Lawson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523830369l/23848559.jpg",
+      "rank": 3,
+      "votes": 23915,
+      "winner": false
+    },
+    {
+      "external_id": "25246752",
+      "title": "Binge",
+      "authors": [
+        "Tyler Oakley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439787297l/25246752.jpg",
+      "rank": 4,
+      "votes": 9652,
+      "winner": false
+    },
+    {
+      "external_id": "23492688",
+      "title": "Yes, My Accent Is Real",
+      "authors": [
+        "Kunal Nayyar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435345686l/23492688._SY600_.jpg",
+      "rank": 5,
+      "votes": 9592,
+      "winner": false
+    },
+    {
+      "external_id": "22926684",
+      "title": "The Fangirl's Guide to the Galaxy",
+      "authors": [
+        "Sam Maggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1416432620l/22926684.jpg",
+      "rank": 6,
+      "votes": 9346,
+      "winner": false
+    },
+    {
+      "external_id": "22886110",
+      "title": "I Hate Myselfie",
+      "authors": [
+        "Shane Dawson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1425975299l/22886110.jpg",
+      "rank": 7,
+      "votes": 9227,
+      "winner": false
+    },
+    {
+      "external_id": "25489156",
+      "title": "The Amazing Book is Not on Fire",
+      "authors": [
+        "Daniel  Howell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442842698l/25489156.jpg",
+      "rank": 8,
+      "votes": 9117,
+      "winner": false
+    },
+    {
+      "external_id": "22934474",
+      "title": "Fat Girl Walking",
+      "authors": [
+        "Brittany Gibbons"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1419361831l/22934474.jpg",
+      "rank": 9,
+      "votes": 8263,
+      "winner": false
+    },
+    {
+      "external_id": "24885622",
+      "title": "Selp-Helf",
+      "authors": [
+        "Miranda Sings"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1437370132l/24885622._SY600_.jpg",
+      "rank": 10,
+      "votes": 6696,
+      "winner": false
+    },
+    {
+      "external_id": "21822422",
+      "title": "We Should Hang Out Sometime",
+      "authors": [
+        "Josh Sundquist"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1396376042l/21822422.jpg",
+      "rank": 11,
+      "votes": 3839,
+      "winner": false
+    },
+    {
+      "external_id": "23281915",
+      "title": "You Deserve a Drink",
+      "authors": [
+        "Mamrie Hart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418147021l/23281915.jpg",
+      "rank": 12,
+      "votes": 3339,
+      "winner": false
+    },
+    {
+      "external_id": "23398854",
+      "title": "I Regret Nothing",
+      "authors": [
+        "Jen Lancaster"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421531010l/23398854.jpg",
+      "rank": 13,
+      "votes": 2047,
+      "winner": false
+    },
+    {
+      "external_id": "17571672",
+      "title": "Silver Screen Fiend",
+      "authors": [
+        "Patton Oswalt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421037654l/17571672.jpg",
+      "rank": 14,
+      "votes": 2004,
+      "winner": false
+    },
+    {
+      "external_id": "22609614",
+      "title": "Has Anyone Seen My Pants?",
+      "authors": [
+        "Sarah Colonna"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1427674943l/22609614.jpg",
+      "rank": 15,
+      "votes": 1383,
+      "winner": false
+    },
+    {
+      "external_id": "23399025",
+      "title": "The Seven Good Years",
+      "authors": [
+        "Etgar Keret"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1429627900l/23399025.jpg",
+      "rank": 16,
+      "votes": 1242,
+      "winner": false
+    },
+    {
+      "external_id": "23604325",
+      "title": "Gumption",
+      "authors": [
+        "Nick Offerman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1420787867l/23604325.jpg",
+      "rank": 17,
+      "votes": 1170,
+      "winner": false
+    },
+    {
+      "external_id": "25716705",
+      "title": "This Book Loves You",
+      "authors": [
+        "PewDiePie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1437919027l/25716705._SY600_.jpg",
+      "rank": 18,
+      "votes": 981,
+      "winner": false
+    },
+    {
+      "external_id": "21412229",
+      "title": "The Misadventures of Awkward Black Girl",
+      "authors": [
+        "Issa Rae"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1423486103l/21412229.jpg",
+      "rank": 19,
+      "votes": 857,
+      "winner": false
+    },
+    {
+      "external_id": "23884396",
+      "title": "Sick in the Head",
+      "authors": [
+        "Judd Apatow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1429736762l/23884396.jpg",
+      "rank": 20,
+      "votes": 812,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-nonfiction-books-2013",
+  "kind": "award",
+  "title": "Nonfiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-nonfiction-books-2013",
+  "year": 2013,
+  "category": "Nonfiction",
+  "genres": [
+    "non-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:44.899428+00:00",
+  "books": [
+    {
+      "external_id": "16056498",
+      "title": "The Autistic Brain",
+      "authors": [
+        "Temple Grandin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355892997l/16056498.jpg",
+      "rank": 1,
+      "votes": 9280,
+      "winner": true
+    },
+    {
+      "external_id": "13615414",
+      "title": "Gulp",
+      "authors": [
+        "Mary Roach"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1352232547l/13615414.jpg",
+      "rank": 2,
+      "votes": 7929,
+      "winner": false
+    },
+    {
+      "external_id": "16071764",
+      "title": "Lean In",
+      "authors": [
+        "Sheryl Sandberg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630483761l/16071764._SY600_.jpg",
+      "rank": 3,
+      "votes": 7531,
+      "winner": false
+    },
+    {
+      "external_id": "15751404",
+      "title": "David and Goliath",
+      "authors": [
+        "Malcolm Gladwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391813567l/15751404.jpg",
+      "rank": 4,
+      "votes": 6763,
+      "winner": false
+    },
+    {
+      "external_id": "15811520",
+      "title": "Detroit",
+      "authors": [
+        "Charlie LeDuff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1350363602l/15811520.jpg",
+      "rank": 5,
+      "votes": 4766,
+      "winner": false
+    },
+    {
+      "external_id": "15795155",
+      "title": "Bad Pharma",
+      "authors": [
+        "Ben Goldacre"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358558459l/15795155.jpg",
+      "rank": 6,
+      "votes": 4635,
+      "winner": false
+    },
+    {
+      "external_id": "16101100",
+      "title": "American Savage",
+      "authors": [
+        "Dan Savage"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1353100051l/16101100.jpg",
+      "rank": 7,
+      "votes": 4259,
+      "winner": false
+    },
+    {
+      "external_id": "17704902",
+      "title": "Five Days at Memorial",
+      "authors": [
+        "Sheri Fink"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1380120962l/17704902.jpg",
+      "rank": 8,
+      "votes": 4133,
+      "winner": false
+    },
+    {
+      "external_id": "16142053",
+      "title": "Going Clear",
+      "authors": [
+        "Lawrence Wright"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358119149l/16142053.jpg",
+      "rank": 9,
+      "votes": 3702,
+      "winner": false
+    },
+    {
+      "external_id": "15801967",
+      "title": "Contagious",
+      "authors": [
+        "Jonah Berger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1376783352l/15801967.jpg",
+      "rank": 10,
+      "votes": 3650,
+      "winner": false
+    },
+    {
+      "external_id": "15766601",
+      "title": "The World Until Yesterday",
+      "authors": [
+        "Jared Diamond"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461046572l/15766601.jpg",
+      "rank": 11,
+      "votes": 1661,
+      "winner": false
+    },
+    {
+      "external_id": "17249189",
+      "title": "Start.",
+      "authors": [
+        "Jon Acuff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1361749538l/17249189.jpg",
+      "rank": 12,
+      "votes": 1373,
+      "winner": false
+    },
+    {
+      "external_id": "16248146",
+      "title": "Lost Girls",
+      "authors": [
+        "Robert Kolker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369820015l/16248146.jpg",
+      "rank": 13,
+      "votes": 1213,
+      "winner": false
+    },
+    {
+      "external_id": "16241137",
+      "title": "The Examined Life",
+      "authors": [
+        "Stephen Grosz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1614797377l/16241137.jpg",
+      "rank": 14,
+      "votes": 824,
+      "winner": false
+    },
+    {
+      "external_id": "13593553",
+      "title": "To Sell is Human",
+      "authors": [
+        "Daniel H. Pink"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630673757l/13593553._SY600_.jpg",
+      "rank": 15,
+      "votes": 550,
+      "winner": false
+    },
+    {
+      "external_id": "15805442",
+      "title": "Mastermind",
+      "authors": [
+        "Maria Konnikova"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355094882l/15805442.jpg",
+      "rank": 16,
+      "votes": 521,
+      "winner": false
+    },
+    {
+      "external_id": "16130128",
+      "title": "I Wear the Black Hat",
+      "authors": [
+        "Chuck Klosterman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404193074l/16130128.jpg",
+      "rank": 17,
+      "votes": 485,
+      "winner": false
+    },
+    {
+      "external_id": "14889679",
+      "title": "The Good Nurse",
+      "authors": [
+        "Charles Graeber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1359388996l/14889679.jpg",
+      "rank": 18,
+      "votes": 477,
+      "winner": false
+    },
+    {
+      "external_id": "15798078",
+      "title": "Decisive",
+      "authors": [
+        "Chip Heath"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351213453l/15798078.jpg",
+      "rank": 19,
+      "votes": 433,
+      "winner": false
+    },
+    {
+      "external_id": "16158498",
+      "title": "Give and Take",
+      "authors": [
+        "Adam M. Grant"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356136579l/16158498.jpg",
+      "rank": 20,
+      "votes": 145,
+      "winner": false
+    }
+  ]
+}

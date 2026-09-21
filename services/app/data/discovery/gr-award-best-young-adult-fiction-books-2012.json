@@ -1,0 +1,225 @@
+{
+  "id": "gr-award-best-young-adult-fiction-books-2012",
+  "kind": "award",
+  "title": "Young Adult Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fiction-books-2012",
+  "year": 2012,
+  "category": "Young Adult Fiction",
+  "genres": [
+    "young-adult"
+  ],
+  "count": 19,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:23.597104+00:00",
+  "books": [
+    {
+      "external_id": "11870085",
+      "title": "The Fault in Our Stars",
+      "authors": [
+        "John  Green"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1660273739l/11870085._SY600_.jpg",
+      "rank": 1,
+      "votes": 37438,
+      "winner": true
+    },
+    {
+      "external_id": "14759983",
+      "title": "Easy",
+      "authors": [
+        "Tammara Webber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1342983357l/14759983.jpg",
+      "rank": 2,
+      "votes": 8890,
+      "winner": false
+    },
+    {
+      "external_id": "15803858",
+      "title": "Slammed",
+      "authors": [
+        "Colleen Hoover"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344611361l/15803858.jpg",
+      "rank": 3,
+      "votes": 6495,
+      "winner": false
+    },
+    {
+      "external_id": "10560331",
+      "title": "Out of Sight, Out of Time",
+      "authors": [
+        "Ally Carter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1314135923l/10560331.jpg",
+      "rank": 4,
+      "votes": 5620,
+      "winner": false
+    },
+    {
+      "external_id": "10194514",
+      "title": "Pushing the Limits",
+      "authors": [
+        "Katie McGarry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1322770025l/10194514.jpg",
+      "rank": 5,
+      "votes": 4013,
+      "winner": false
+    },
+    {
+      "external_id": "12851538",
+      "title": "Code Name Verity",
+      "authors": [
+        "Elizabeth Wein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1337032835l/12851538.jpg",
+      "rank": 6,
+      "votes": 3513,
+      "winner": false
+    },
+    {
+      "external_id": "10798416",
+      "title": "The Statistical Probability of Love at First Sight",
+      "authors": [
+        "Jennifer E. Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555263390l/10798416._SY600_.jpg",
+      "rank": 7,
+      "votes": 3061,
+      "winner": false
+    },
+    {
+      "external_id": "12294652",
+      "title": "My Life Next Door",
+      "authors": [
+        "Huntley Fitzpatrick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394240144l/12294652.jpg",
+      "rank": 8,
+      "votes": 2388,
+      "winner": false
+    },
+    {
+      "external_id": "13628209",
+      "title": "The Boy Who Sneaks in My Bedroom Window",
+      "authors": [
+        "Kirsty Moseley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1613183519l/13628209.jpg",
+      "rank": 9,
+      "votes": 2274,
+      "winner": false
+    },
+    {
+      "external_id": "9888775",
+      "title": "Catching Jordan",
+      "authors": [
+        "Miranda Kenneally"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327875803l/9888775.jpg",
+      "rank": 10,
+      "votes": 1417,
+      "winner": false
+    },
+    {
+      "external_id": "15864129",
+      "title": "Crash",
+      "authors": [
+        "Nicole  Williams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1346238259l/15864129.jpg",
+      "rank": 11,
+      "votes": 1285,
+      "winner": false
+    },
+    {
+      "external_id": "15852521",
+      "title": "The Vincent Brothers",
+      "authors": [
+        "Abbi Glines"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1346088746l/15852521.jpg",
+      "rank": 12,
+      "votes": 967,
+      "winner": false
+    },
+    {
+      "external_id": "12924297",
+      "title": "Never Fall Down",
+      "authors": [
+        "Patricia McCormick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1330649356l/12924297.jpg",
+      "rank": 13,
+      "votes": 775,
+      "winner": false
+    },
+    {
+      "external_id": "13636392",
+      "title": "Because of Low",
+      "authors": [
+        "Abbi Glines"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336317728l/13636392.jpg",
+      "rank": 14,
+      "votes": 766,
+      "winner": false
+    },
+    {
+      "external_id": "15818969",
+      "title": "The Sea of Tranquility",
+      "authors": [
+        "Katja Millay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1346625115l/15818969.jpg",
+      "rank": 15,
+      "votes": 650,
+      "winner": false
+    },
+    {
+      "external_id": "7766027",
+      "title": "I Hunt Killers",
+      "authors": [
+        "Barry Lyga"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333289403l/7766027.jpg",
+      "rank": 16,
+      "votes": 379,
+      "winner": false
+    },
+    {
+      "external_id": "11133791",
+      "title": "Tilt",
+      "authors": [
+        "Ellen Hopkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1346263814l/11133791.jpg",
+      "rank": 17,
+      "votes": 276,
+      "winner": false
+    },
+    {
+      "external_id": "11595276",
+      "title": "The Miseducation of Cameron Post",
+      "authors": [
+        "Emily M. Danforth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1309190566l/11595276.jpg",
+      "rank": 18,
+      "votes": 196,
+      "winner": false
+    },
+    {
+      "external_id": "9403947",
+      "title": "Something like Normal",
+      "authors": [
+        "Trish Doller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336837143l/9403947.jpg",
+      "rank": 19,
+      "votes": 161,
+      "winner": false
+    }
+  ]
+}

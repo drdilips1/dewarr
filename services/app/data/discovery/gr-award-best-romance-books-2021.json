@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-romance-books-2021",
+  "kind": "award",
+  "title": "Romance",
+  "source_url": "https://www.goodreads.com/choiceawards/best-romance-books-2021",
+  "year": 2021,
+  "category": "Romance",
+  "genres": [
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:06.052510+00:00",
+  "books": [
+    {
+      "external_id": "54985743",
+      "title": "People We Meet on Vacation",
+      "authors": [
+        "Emily Henry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1748450140l/54985743._SY600_.jpg",
+      "rank": 1,
+      "votes": 88755,
+      "winner": true
+    },
+    {
+      "external_id": "56732449",
+      "title": "The Love Hypothesis",
+      "authors": [
+        "Ali Hazelwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1747519081l/56732449._SY600_.jpg",
+      "rank": 2,
+      "votes": 88192,
+      "winner": false
+    },
+    {
+      "external_id": "54860443",
+      "title": "One Last Stop",
+      "authors": [
+        "Casey McQuiston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598019346l/54860443.jpg",
+      "rank": 3,
+      "votes": 54845,
+      "winner": false
+    },
+    {
+      "external_id": "57190892",
+      "title": "The Spanish Love Deception",
+      "authors": [
+        "Elena  Armas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1614122544l/57190892._SY600_.jpg",
+      "rank": 4,
+      "votes": 40504,
+      "winner": false
+    },
+    {
+      "external_id": "53914936",
+      "title": "Act Your Age, Eve Brown",
+      "authors": [
+        "Talia Hibbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598543092l/53914936.jpg",
+      "rank": 5,
+      "votes": 22992,
+      "winner": false
+    },
+    {
+      "external_id": "56554626",
+      "title": "The Ex Hex",
+      "authors": [
+        "Erin Sterling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1619305366l/56554626.jpg",
+      "rank": 6,
+      "votes": 22140,
+      "winner": false
+    },
+    {
+      "external_id": "54659771",
+      "title": "Neon Gods",
+      "authors": [
+        "Katee Robert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1736519119l/54659771._SY600_.jpg",
+      "rank": 7,
+      "votes": 22046,
+      "winner": false
+    },
+    {
+      "external_id": "58235157",
+      "title": "Seven Days in June",
+      "authors": [
+        "Tia Williams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1622563621l/58235157._SY600_.jpg",
+      "rank": 8,
+      "votes": 20052,
+      "winner": false
+    },
+    {
+      "external_id": "55659629",
+      "title": "It Happened One Summer",
+      "authors": [
+        "Tessa Bailey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1604991895l/55659629.jpg",
+      "rank": 9,
+      "votes": 19674,
+      "winner": false
+    },
+    {
+      "external_id": "55692620",
+      "title": "The Soulmate Equation",
+      "authors": [
+        "Christina Lauren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1689441410l/55692620._SY600_.jpg",
+      "rank": 10,
+      "votes": 19337,
+      "winner": false
+    },
+    {
+      "external_id": "50052386",
+      "title": "The Heart Principle",
+      "authors": [
+        "Helen  Hoang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628154285l/50052386._SY600_.jpg",
+      "rank": 11,
+      "votes": 6919,
+      "winner": false
+    },
+    {
+      "external_id": "56293873",
+      "title": "The Road Trip",
+      "authors": [
+        "Beth O'Leary"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612889142l/56293873.jpg",
+      "rank": 12,
+      "votes": 6303,
+      "winner": false
+    },
+    {
+      "external_id": "56898248",
+      "title": "The Charm Offensive",
+      "authors": [
+        "Alison Cochrun"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628703464l/56898248.jpg",
+      "rank": 13,
+      "votes": 4689,
+      "winner": false
+    },
+    {
+      "external_id": "54896882",
+      "title": "Life's Too Short",
+      "authors": [
+        "Abby Jimenez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617718207l/54896882.jpg",
+      "rank": 14,
+      "votes": 4231,
+      "winner": false
+    },
+    {
+      "external_id": "45553600",
+      "title": "Second First Impressions",
+      "authors": [
+        "Sally  Thorne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617153142l/45553600._SY600_.jpg",
+      "rank": 15,
+      "votes": 3166,
+      "winner": false
+    },
+    {
+      "external_id": "53382168",
+      "title": "The Ex Talk",
+      "authors": [
+        "Rachel Lynn Solomon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1590351351l/53382168.jpg",
+      "rank": 16,
+      "votes": 2954,
+      "winner": false
+    },
+    {
+      "external_id": "55904454",
+      "title": "While We Were Dating",
+      "authors": [
+        "Jasmine Guillory"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612384542l/55904454._SY600_.jpg",
+      "rank": 17,
+      "votes": 2682,
+      "winner": false
+    },
+    {
+      "external_id": "54326395",
+      "title": "The Dating Plan",
+      "authors": [
+        "Sara Desai"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1595387142l/54326395.jpg",
+      "rank": 18,
+      "votes": 2202,
+      "winner": false
+    },
+    {
+      "external_id": "54304013",
+      "title": "Shipped",
+      "authors": [
+        "Angie Hockman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1609080728l/54304013.jpg",
+      "rank": 19,
+      "votes": 2095,
+      "winner": false
+    },
+    {
+      "external_id": "52057698",
+      "title": "How to Fail at Flirting",
+      "authors": [
+        "Denise  Williams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1637199152l/52057698._SY600_.jpg",
+      "rank": 20,
+      "votes": 2080,
+      "winner": false
+    }
+  ]
+}

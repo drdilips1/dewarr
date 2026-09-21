@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-readers-favorite-memoir-books-2024",
+  "kind": "award",
+  "title": "Memoir",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-memoir-books-2024",
+  "year": 2024,
+  "category": "Memoir",
+  "genres": [
+    "biography"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:09.220590+00:00",
+  "books": [
+    {
+      "external_id": "207298106",
+      "title": "The Third Gilmore Girl",
+      "authors": [
+        "Kelly  Bishop"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1758744253l/207298106._SY600_.jpg",
+      "rank": 1,
+      "votes": 80050,
+      "winner": true
+    },
+    {
+      "external_id": "176443093",
+      "title": "Sociopath",
+      "authors": [
+        "Patric Gagne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1710615468l/176443093._SY600_.jpg",
+      "rank": 2,
+      "votes": 29641,
+      "winner": false
+    },
+    {
+      "external_id": "204905217",
+      "title": "From Here to the Great Unknown",
+      "authors": [
+        "Lisa Marie Presley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1730396480l/204905217._SY600_.jpg",
+      "rank": 3,
+      "votes": 25638,
+      "winner": false
+    },
+    {
+      "external_id": "195791316",
+      "title": "Loud",
+      "authors": [
+        "Drew Afualo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1708137417l/195791316.jpg",
+      "rank": 4,
+      "votes": 24899,
+      "winner": false
+    },
+    {
+      "external_id": "181109983",
+      "title": "The House of Hidden Meanings",
+      "authors": [
+        "RuPaul"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1696430249l/181109983._SY600_.jpg",
+      "rank": 5,
+      "votes": 24283,
+      "winner": false
+    },
+    {
+      "external_id": "209192698",
+      "title": "Be Ready When the Luck Happens",
+      "authors": [
+        "Ina Garten"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718043057l/209192698._SY600_.jpg",
+      "rank": 6,
+      "votes": 22772,
+      "winner": false
+    },
+    {
+      "external_id": "199344846",
+      "title": "Knife",
+      "authors": [
+        "Salman Rushdie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697452251l/199344846._SY600_.jpg",
+      "rank": 7,
+      "votes": 20355,
+      "winner": false
+    },
+    {
+      "external_id": "134115745",
+      "title": "Oath and Honor",
+      "authors": [
+        "Liz Cheney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1700581468l/134115745._SY600_.jpg",
+      "rank": 8,
+      "votes": 13711,
+      "winner": false
+    },
+    {
+      "external_id": "195790788",
+      "title": "A Well-Trained Wife",
+      "authors": [
+        "Tia  Levings"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697534507l/195790788._SY600_.jpg",
+      "rank": 9,
+      "votes": 13302,
+      "winner": false
+    },
+    {
+      "external_id": "202939207",
+      "title": "Bits and Pieces",
+      "authors": [
+        "Whoopi Goldberg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1707172244l/202939207._SY600_.jpg",
+      "rank": 10,
+      "votes": 12690,
+      "winner": false
+    },
+    {
+      "external_id": "127282631",
+      "title": "Grief Is for People",
+      "authors": [
+        "Sloane Crosley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1689777641l/127282631._SY600_.jpg",
+      "rank": 11,
+      "votes": 4461,
+      "winner": false
+    },
+    {
+      "external_id": "198385436",
+      "title": "I Shouldn’t Be Telling You This [But I'm Going to Anyway]",
+      "authors": [
+        "Chelsea Devantez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1696962462l/198385436.jpg",
+      "rank": 12,
+      "votes": 4405,
+      "winner": false
+    },
+    {
+      "external_id": "181346634",
+      "title": "There's Always This Year",
+      "authors": [
+        "Hanif Abdurraqib"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1691597828l/181346634.jpg",
+      "rank": 13,
+      "votes": 4149,
+      "winner": false
+    },
+    {
+      "external_id": "203708995",
+      "title": "The Friday Afternoon Club",
+      "authors": [
+        "Griffin Dunne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1702439478l/203708995._SY600_.jpg",
+      "rank": 14,
+      "votes": 3350,
+      "winner": false
+    },
+    {
+      "external_id": "196585876",
+      "title": "An Unfinished Love Story",
+      "authors": [
+        "Doris Kearns Goodwin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1695416963l/196585876._SY600_.jpg",
+      "rank": 15,
+      "votes": 2981,
+      "winner": false
+    },
+    {
+      "external_id": "176443920",
+      "title": "The Wives",
+      "authors": [
+        "Simone Gorrindo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1687711861l/176443920.jpg",
+      "rank": 16,
+      "votes": 2921,
+      "winner": false
+    },
+    {
+      "external_id": "182095845",
+      "title": "Here After",
+      "authors": [
+        "Amy  Lin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1695222056l/182095845._SY600_.jpg",
+      "rank": 17,
+      "votes": 2919,
+      "winner": false
+    },
+    {
+      "external_id": "126918693",
+      "title": "My Side of the River",
+      "authors": [
+        "Elizabeth Camarillo Gutierrez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1681802892l/126918693.jpg",
+      "rank": 18,
+      "votes": 2562,
+      "winner": false
+    },
+    {
+      "external_id": "127305940",
+      "title": "The Manicurist's Daughter",
+      "authors": [
+        "Susan Lieu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1692280214l/127305940._SY600_.jpg",
+      "rank": 19,
+      "votes": 2082,
+      "winner": false
+    },
+    {
+      "external_id": "200100950",
+      "title": "Wanted",
+      "authors": [
+        "Stephanie Kiser"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1709057165l/200100950._SY600_.jpg",
+      "rank": 20,
+      "votes": 1908,
+      "winner": false
+    }
+  ]
+}

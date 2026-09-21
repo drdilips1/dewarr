@@ -18,7 +18,7 @@ playwright-report/
 *.egg-info/
 
 # Local deployments and backups
-data/
+/data/
 backups/
 
 # Internal planning and research stay local.

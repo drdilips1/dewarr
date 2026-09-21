@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-food-cookbooks-2019",
+  "kind": "award",
+  "title": "Food & Cookbooks",
+  "source_url": "https://www.goodreads.com/choiceawards/best-food-cookbooks-2019",
+  "year": 2019,
+  "category": "Food & Cookbooks",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:16.523111+00:00",
+  "books": [
+    {
+      "external_id": "39977443",
+      "title": "Antoni in the Kitchen",
+      "authors": [
+        "Antoni Porowski"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552708587l/39977443._SY600_.jpg",
+      "rank": 1,
+      "votes": 25387,
+      "winner": true
+    },
+    {
+      "external_id": "43884186",
+      "title": "The Adventurous Eaters Club",
+      "authors": [
+        "Misha Collins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562003802l/43884186._SY600_.jpg",
+      "rank": 2,
+      "votes": 21108,
+      "winner": false
+    },
+    {
+      "external_id": "40645634",
+      "title": "Notes from a Young Black Chef",
+      "authors": [
+        "Kwame Onwuachi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1538695770l/40645634._SY600_.jpg",
+      "rank": 3,
+      "votes": 19910,
+      "winner": false
+    },
+    {
+      "external_id": "44429515",
+      "title": "The Little Women Cookbook",
+      "authors": [
+        "Wini Moranville"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1560224400l/44429515._SY600_.jpg",
+      "rank": 4,
+      "votes": 15334,
+      "winner": false
+    },
+    {
+      "external_id": "43849324",
+      "title": "Rachael Ray 50",
+      "authors": [
+        "Rachael Ray"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558960875l/43849324._SY600_.jpg",
+      "rank": 5,
+      "votes": 14953,
+      "winner": false
+    },
+    {
+      "external_id": "41948849",
+      "title": "Plant-Based on a Budget",
+      "authors": [
+        "Toni Okamoto"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554335771l/41948849.jpg",
+      "rank": 6,
+      "votes": 13561,
+      "winner": false
+    },
+    {
+      "external_id": "42583941",
+      "title": "Let's Make Ramen!",
+      "authors": [
+        "Hugh Amano"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545876649l/42583941.jpg",
+      "rank": 7,
+      "votes": 13416,
+      "winner": false
+    },
+    {
+      "external_id": "41644326",
+      "title": "Save Me the Plums",
+      "authors": [
+        "Ruth Reichl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1544114364l/41644326.jpg",
+      "rank": 8,
+      "votes": 11220,
+      "winner": false
+    },
+    {
+      "external_id": "40796136",
+      "title": "Indian-Ish",
+      "authors": [
+        "Priya Krishna"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1547189763l/40796136.jpg",
+      "rank": 9,
+      "votes": 9699,
+      "winner": false
+    },
+    {
+      "external_id": "41155069",
+      "title": "Happiness Is Baking",
+      "authors": [
+        "Maida Heatter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1547757718l/41155069.jpg",
+      "rank": 10,
+      "votes": 7635,
+      "winner": false
+    },
+    {
+      "external_id": "46131607",
+      "title": "Forking Good",
+      "authors": [
+        "Valya Dudycz Lupescu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1561637216l/46131607.jpg",
+      "rank": 11,
+      "votes": 3521,
+      "winner": false
+    },
+    {
+      "external_id": "39858047",
+      "title": "The Clean Plate",
+      "authors": [
+        "Gwyneth Paltrow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545419288l/39858047._SY600_.jpg",
+      "rank": 12,
+      "votes": 2903,
+      "winner": false
+    },
+    {
+      "external_id": "40180121",
+      "title": "Zaitoun",
+      "authors": [
+        "Yasmin    Khan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1542493759l/40180121.jpg",
+      "rank": 13,
+      "votes": 2762,
+      "winner": false
+    },
+    {
+      "external_id": "40796103",
+      "title": "No Crumbs Left",
+      "authors": [
+        "Teri Turner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1535688269l/40796103._SY600_.jpg",
+      "rank": 14,
+      "votes": 2581,
+      "winner": false
+    },
+    {
+      "external_id": "49630911",
+      "title": "Sunny-Side Up",
+      "authors": [
+        "Waylynn Lucas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1563035455l/49630911._SX318_SY475_.jpg",
+      "rank": 15,
+      "votes": 2494,
+      "winner": false
+    },
+    {
+      "external_id": "43261151",
+      "title": "Binging with Babish",
+      "authors": [
+        "Andrew Rea"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1560068419l/43261151._SY600_.jpg",
+      "rank": 16,
+      "votes": 2286,
+      "winner": false
+    },
+    {
+      "external_id": "37805223",
+      "title": "Midnight Chicken",
+      "authors": [
+        "Ella Risbridger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1532099975l/37805223.jpg",
+      "rank": 17,
+      "votes": 2149,
+      "winner": false
+    },
+    {
+      "external_id": "44767037",
+      "title": "Nothing Fancy",
+      "authors": [
+        "Alison Roman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1567157492l/44767037._SY600_.jpg",
+      "rank": 18,
+      "votes": 927,
+      "winner": false
+    },
+    {
+      "external_id": "40864247",
+      "title": "Mostly Plants",
+      "authors": [
+        "Tracy Pollan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549999014l/40864247._SY600_.jpg",
+      "rank": 19,
+      "votes": 897,
+      "winner": false
+    },
+    {
+      "external_id": "40916358",
+      "title": "Burn the Place",
+      "authors": [
+        "Iliana Regan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1557712148l/40916358.jpg",
+      "rank": 20,
+      "votes": 876,
+      "winner": false
+    }
+  ]
+}

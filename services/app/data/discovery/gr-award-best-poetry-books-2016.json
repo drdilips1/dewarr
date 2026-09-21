@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-poetry-books-2016",
+  "kind": "award",
+  "title": "Poetry",
+  "source_url": "https://www.goodreads.com/choiceawards/best-poetry-books-2016",
+  "year": 2016,
+  "category": "Poetry",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:18.935768+00:00",
+  "books": [
+    {
+      "external_id": "30075802",
+      "title": "The Princess Saves Herself in This One",
+      "authors": [
+        "Amanda Lovelace"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1619708912l/30075802.jpg",
+      "rank": 1,
+      "votes": 22560,
+      "winner": true
+    },
+    {
+      "external_id": "29431081",
+      "title": "The Universe of Us",
+      "authors": [
+        "Lang Leav"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1466948266l/29431081._SY600_.jpg",
+      "rank": 2,
+      "votes": 9638,
+      "winner": false
+    },
+    {
+      "external_id": "26196204",
+      "title": "Then Come Back",
+      "authors": [
+        "Pablo Neruda"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1469453809l/26196204._SY600_.jpg",
+      "rank": 3,
+      "votes": 8873,
+      "winner": false
+    },
+    {
+      "external_id": "28871313",
+      "title": "Graffiti",
+      "authors": [
+        "Savannah   Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1454430877l/28871313._SY600_.jpg",
+      "rank": 4,
+      "votes": 8197,
+      "winner": false
+    },
+    {
+      "external_id": "26031215",
+      "title": "Quarter Life Poetry",
+      "authors": [
+        "Samantha    Jayne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1455747726l/26031215.jpg",
+      "rank": 5,
+      "votes": 7951,
+      "winner": false
+    },
+    {
+      "external_id": "25897953",
+      "title": "Booked",
+      "authors": [
+        "Kwame Alexander"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1447139181l/25897953.jpg",
+      "rank": 6,
+      "votes": 7375,
+      "winner": false
+    },
+    {
+      "external_id": "25986828",
+      "title": "Today Means Amen",
+      "authors": [
+        "Sierra DeMulder"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1444688243l/25986828.jpg",
+      "rank": 7,
+      "votes": 6011,
+      "winner": false
+    },
+    {
+      "external_id": "29996717",
+      "title": "Beautiful And Damned",
+      "authors": [
+        "Robert M. Drake"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1467799778l/29996717._SY600_.jpg",
+      "rank": 8,
+      "votes": 5888,
+      "winner": false
+    },
+    {
+      "external_id": "29059581",
+      "title": "Stuff I've Been Feeling Lately",
+      "authors": [
+        "Alicia Cook"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1455132988l/29059581._SY600_.jpg",
+      "rank": 9,
+      "votes": 4255,
+      "winner": false
+    },
+    {
+      "external_id": "30230550",
+      "title": "La Douleur Exquise",
+      "authors": [
+        "J.R. Rogue"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1478733076l/30230550._SY600_.jpg",
+      "rank": 10,
+      "votes": 3246,
+      "winner": false
+    },
+    {
+      "external_id": "29499443",
+      "title": "Whiskey Words & a Shovel II",
+      "authors": [
+        "R.H. Sin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1465140029l/29499443._SY600_.jpg",
+      "rank": 11,
+      "votes": 2052,
+      "winner": false
+    },
+    {
+      "external_id": "30245389",
+      "title": "Night Sky with Exit Wounds",
+      "authors": [
+        "Ocean Vuong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1607205491l/30245389._SY600_.jpg",
+      "rank": 12,
+      "votes": 1854,
+      "winner": false
+    },
+    {
+      "external_id": "28818619",
+      "title": "Even This Page Is White",
+      "authors": [
+        "Vivek Shraya"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1454918391l/28818619.jpg",
+      "rank": 13,
+      "votes": 1563,
+      "winner": false
+    },
+    {
+      "external_id": "25746714",
+      "title": "The Type",
+      "authors": [
+        "Sarah Kay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445190492l/25746714.jpg",
+      "rank": 14,
+      "votes": 1517,
+      "winner": false
+    },
+    {
+      "external_id": "30227846",
+      "title": "Bitter Sweet Love",
+      "authors": [
+        "Michael Faudet"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470622226l/30227846.jpg",
+      "rank": 15,
+      "votes": 1217,
+      "winner": false
+    },
+    {
+      "external_id": "28503713",
+      "title": "Rain in Portugal, The",
+      "authors": [
+        "Billy Collins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474616264l/28503713.jpg",
+      "rank": 16,
+      "votes": 985,
+      "winner": false
+    },
+    {
+      "external_id": "28482146",
+      "title": "Tales of a Receding Hairline",
+      "authors": [
+        "K.W. Peery"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1452274495l/28482146._SY600_.jpg",
+      "rank": 17,
+      "votes": 974,
+      "winner": false
+    },
+    {
+      "external_id": "26114310",
+      "title": "Look",
+      "authors": [
+        "Solmaz Sharif"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1444695417l/26114310.jpg",
+      "rank": 18,
+      "votes": 557,
+      "winner": false
+    },
+    {
+      "external_id": "29872928",
+      "title": "Field Guide to the End of the World",
+      "authors": [
+        "Jeannine Hall Gailey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460590928l/29872928.jpg",
+      "rank": 19,
+      "votes": 461,
+      "winner": false
+    },
+    {
+      "external_id": "25664566",
+      "title": "The Darkening Trapeze",
+      "authors": [
+        "Larry Levis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1450795903l/25664566._SY600_.jpg",
+      "rank": 20,
+      "votes": 330,
+      "winner": false
+    }
+  ]
+}

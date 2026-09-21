@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-fiction-books-2022",
+  "kind": "award",
+  "title": "Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fiction-books-2022",
+  "year": 2022,
+  "category": "Fiction",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:35.695196+00:00",
+  "books": [
+    {
+      "external_id": "58784475",
+      "title": "Tomorrow, and Tomorrow, and Tomorrow",
+      "authors": [
+        "Gabrielle Zevin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1636978687l/58784475._SY600_.jpg",
+      "rank": 1,
+      "votes": 90971,
+      "winner": true
+    },
+    {
+      "external_id": "57701764",
+      "title": "Wish You Were Here",
+      "authors": [
+        "Jodi Picoult"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1635240584l/57701764.jpg",
+      "rank": 2,
+      "votes": 54368,
+      "winner": false
+    },
+    {
+      "external_id": "60209470",
+      "title": "The Winners",
+      "authors": [
+        "Fredrik Backman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1663514088l/60209470.jpg",
+      "rank": 3,
+      "votes": 52412,
+      "winner": false
+    },
+    {
+      "external_id": "58733693",
+      "title": "Remarkably Bright Creatures",
+      "authors": [
+        "Shelby Van Pelt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1651600548l/58733693._SY600_.jpg",
+      "rank": 4,
+      "votes": 45635,
+      "winner": false
+    },
+    {
+      "external_id": "59227941",
+      "title": "The Hotel Nantucket",
+      "authors": [
+        "Elin Hilderbrand"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1634954735l/59227941.jpg",
+      "rank": 5,
+      "votes": 39882,
+      "winner": false
+    },
+    {
+      "external_id": "60149573",
+      "title": "Our Missing Hearts",
+      "authors": [
+        "Celeste Ng"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664802258l/60149573._SY600_.jpg",
+      "rank": 6,
+      "votes": 34753,
+      "winner": false
+    },
+    {
+      "external_id": "57693262",
+      "title": "Cleopatra and Frankenstein",
+      "authors": [
+        "Coco Mellors"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1621624081l/57693262.jpg",
+      "rank": 7,
+      "votes": 32387,
+      "winner": false
+    },
+    {
+      "external_id": "57739876",
+      "title": "To Paradise",
+      "authors": [
+        "Hanya Yanagihara"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628100349l/57739876.jpg",
+      "rank": 8,
+      "votes": 31569,
+      "winner": false
+    },
+    {
+      "external_id": "59807954",
+      "title": "Other Birds",
+      "authors": [
+        "Sarah Addison Allen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642803780l/59807954.jpg",
+      "rank": 9,
+      "votes": 24077,
+      "winner": false
+    },
+    {
+      "external_id": "57773248",
+      "title": "Notes on an Execution",
+      "authors": [
+        "Danya Kukafka"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631888297l/57773248.jpg",
+      "rank": 10,
+      "votes": 22990,
+      "winner": false
+    },
+    {
+      "external_id": "59912428",
+      "title": "Mad Honey",
+      "authors": [
+        "Jodi Picoult"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642705453l/59912428.jpg",
+      "rank": 11,
+      "votes": 8654,
+      "winner": false
+    },
+    {
+      "external_id": "57693171",
+      "title": "Olga Dies Dreaming",
+      "authors": [
+        "Xóchitl González"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620085798l/57693171.jpg",
+      "rank": 12,
+      "votes": 8239,
+      "winner": false
+    },
+    {
+      "external_id": "59089704",
+      "title": "This Time Tomorrow",
+      "authors": [
+        "Emma Straub"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1635860014l/59089704.jpg",
+      "rank": 13,
+      "votes": 7764,
+      "winner": false
+    },
+    {
+      "external_id": "60194162",
+      "title": "Demon Copperhead",
+      "authors": [
+        "Barbara Kingsolver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1660050779l/60194162.jpg",
+      "rank": 14,
+      "votes": 7276,
+      "winner": false
+    },
+    {
+      "external_id": "58395049",
+      "title": "True Biz",
+      "authors": [
+        "Sara Nović"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642403959l/58395049.jpg",
+      "rank": 15,
+      "votes": 6141,
+      "winner": false
+    },
+    {
+      "external_id": "58537371",
+      "title": "Nightcrawling",
+      "authors": [
+        "Leila Mottley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1654709397l/58537371._SY600_.jpg",
+      "rank": 16,
+      "votes": 6138,
+      "winner": false
+    },
+    {
+      "external_id": "60657583",
+      "title": "Lucy by the Sea",
+      "authors": [
+        "Elizabeth Strout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1650574627l/60657583._SY600_.jpg",
+      "rank": 17,
+      "votes": 5337,
+      "winner": false
+    },
+    {
+      "external_id": "56271394",
+      "title": "Honor",
+      "authors": [
+        "Thrity Umrigar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1640084756l/56271394._SY600_.jpg",
+      "rank": 18,
+      "votes": 4708,
+      "winner": false
+    },
+    {
+      "external_id": "59808037",
+      "title": "How Not to Drown in a Glass of Water",
+      "authors": [
+        "Angie Cruz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1643989625l/59808037.jpg",
+      "rank": 19,
+      "votes": 3883,
+      "winner": false
+    },
+    {
+      "external_id": "60415700",
+      "title": "Now Is Not the Time to Panic",
+      "authors": [
+        "Kevin    Wilson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673009807l/60415700._SY600_.jpg",
+      "rank": 20,
+      "votes": 3689,
+      "winner": false
+    }
+  ]
+}

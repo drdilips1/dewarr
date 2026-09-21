@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-fantasy-books-2023",
+  "kind": "award",
+  "title": "Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fantasy-books-2023",
+  "year": 2023,
+  "category": "Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:20.503002+00:00",
+  "books": [
+    {
+      "external_id": "60652997",
+      "title": "Hell Bent",
+      "authors": [
+        "Leigh Bardugo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1648744814l/60652997.jpg",
+      "rank": 1,
+      "votes": 75800,
+      "winner": true
+    },
+    {
+      "external_id": "63068384",
+      "title": "Tress of the Emerald Sea",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675297784l/63068384.jpg",
+      "rank": 2,
+      "votes": 57818,
+      "winner": false
+    },
+    {
+      "external_id": "60766189",
+      "title": "A Day of Fallen Night",
+      "authors": [
+        "Samantha Shannon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675653942l/60766189._SY600_.jpg",
+      "rank": 3,
+      "votes": 39708,
+      "winner": false
+    },
+    {
+      "external_id": "60657589",
+      "title": "Emily Wilde's Encyclopaedia of Faeries",
+      "authors": [
+        "Heather Fawcett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1651622856l/60657589.jpg",
+      "rank": 4,
+      "votes": 38650,
+      "winner": false
+    },
+    {
+      "external_id": "65213543",
+      "title": "Bookshops & Bonedust",
+      "authors": [
+        "Travis Baldree"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1678122626l/65213543.jpg",
+      "rank": 5,
+      "votes": 38157,
+      "winner": false
+    },
+    {
+      "external_id": "111673828",
+      "title": "The Fragile Threads of Power",
+      "authors": [
+        "V.E. Schwab"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1678296412l/111673828.jpg",
+      "rank": 6,
+      "votes": 37138,
+      "winner": false
+    },
+    {
+      "external_id": "36679274",
+      "title": "Sword Catcher",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1674841074l/36679274.jpg",
+      "rank": 7,
+      "votes": 30578,
+      "winner": false
+    },
+    {
+      "external_id": "61294937",
+      "title": "The Adventures of Amina al-Sirafi",
+      "authors": [
+        "S.A. Chakraborty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1663869260l/61294937.jpg",
+      "rank": 8,
+      "votes": 28274,
+      "winner": false
+    },
+    {
+      "external_id": "65213595",
+      "title": "Starling House",
+      "authors": [
+        "Alix E. Harrow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1734185816l/65213595._SY600_.jpg",
+      "rank": 9,
+      "votes": 27920,
+      "winner": false
+    },
+    {
+      "external_id": "66087062",
+      "title": "The Unmaking of June Farrow",
+      "authors": [
+        "Adrienne Young"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1678126802l/66087062.jpg",
+      "rank": 10,
+      "votes": 24489,
+      "winner": false
+    },
+    {
+      "external_id": "61102615",
+      "title": "Stone Blind",
+      "authors": [
+        "Natalie Haynes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664995844l/61102615.jpg",
+      "rank": 11,
+      "votes": 9336,
+      "winner": false
+    },
+    {
+      "external_id": "61612864",
+      "title": "The Book That Wouldn’t Burn",
+      "authors": [
+        "Mark  Lawrence"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673645786l/61612864.jpg",
+      "rank": 12,
+      "votes": 8313,
+      "winner": false
+    },
+    {
+      "external_id": "62854842",
+      "title": "Ink Blood Sister Scribe",
+      "authors": [
+        "Emma Törzs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1685457125l/62854842._SY600_.jpg",
+      "rank": 13,
+      "votes": 6895,
+      "winner": false
+    },
+    {
+      "external_id": "61361681",
+      "title": "Clytemnestra",
+      "authors": [
+        "Costanza Casati"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1656358463l/61361681._SY600_.jpg",
+      "rank": 14,
+      "votes": 6588,
+      "winner": false
+    },
+    {
+      "external_id": "62919748",
+      "title": "The Will of the Many",
+      "authors": [
+        "James Islington"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1777221467l/62919748._SY600_.jpg",
+      "rank": 15,
+      "votes": 5659,
+      "winner": false
+    },
+    {
+      "external_id": "61884838",
+      "title": "Atalanta",
+      "authors": [
+        "Jennifer Saint"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675082381l/61884838.jpg",
+      "rank": 16,
+      "votes": 5118,
+      "winner": false
+    },
+    {
+      "external_id": "61150759",
+      "title": "The Last Tale of the Flower Bride",
+      "authors": [
+        "Roshani Chokshi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675641961l/61150759.jpg",
+      "rank": 17,
+      "votes": 4922,
+      "winner": false
+    },
+    {
+      "external_id": "61111246",
+      "title": "Victory City",
+      "authors": [
+        "Salman Rushdie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1670259879l/61111246.jpg",
+      "rank": 18,
+      "votes": 4245,
+      "winner": false
+    },
+    {
+      "external_id": "61885085",
+      "title": "Witch King",
+      "authors": [
+        "Martha Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1663769801l/61885085.jpg",
+      "rank": 19,
+      "votes": 3994,
+      "winner": false
+    },
+    {
+      "external_id": "60877589",
+      "title": "VenCo",
+      "authors": [
+        "Cherie Dimaline"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664815099l/60877589.jpg",
+      "rank": 20,
+      "votes": 2418,
+      "winner": false
+    }
+  ]
+}

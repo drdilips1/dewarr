@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-young-adult-fantasy-books-2017",
+  "kind": "award",
+  "title": "Young Adult Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fantasy-books-2017",
+  "year": 2017,
+  "category": "Young Adult Fantasy",
+  "genres": [
+    "fantasy",
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:52.505544+00:00",
+  "books": [
+    {
+      "external_id": "23766634",
+      "title": "A Court of Wings and Ruin",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555221560l/23766634._SY600_.jpg",
+      "rank": 1,
+      "votes": 71165,
+      "winner": true
+    },
+    {
+      "external_id": "30312891",
+      "title": "Lord of Shadows",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479513427l/30312891._SY600_.jpg",
+      "rank": 2,
+      "votes": 40104,
+      "winner": false
+    },
+    {
+      "external_id": "30227022",
+      "title": "King's Cage",
+      "authors": [
+        "Victoria Aveyard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1467121248l/30227022.jpg",
+      "rank": 3,
+      "votes": 24789,
+      "winner": false
+    },
+    {
+      "external_id": "28449207",
+      "title": "Strange the Dreamer",
+      "authors": [
+        "Laini Taylor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1519915549l/28449207._SY600_.jpg",
+      "rank": 4,
+      "votes": 24705,
+      "winner": false
+    },
+    {
+      "external_id": "27883214",
+      "title": "Caraval",
+      "authors": [
+        "Stephanie Garber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1465563623l/27883214.jpg",
+      "rank": 5,
+      "votes": 21976,
+      "winner": false
+    },
+    {
+      "external_id": "31450852",
+      "title": "Tower of Dawn",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1497973101l/31450852.jpg",
+      "rank": 6,
+      "votes": 19127,
+      "winner": false
+    },
+    {
+      "external_id": "29385546",
+      "title": "Warcross",
+      "authors": [
+        "Marie Lu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1489081682l/29385546.jpg",
+      "rank": 7,
+      "votes": 16838,
+      "winner": false
+    },
+    {
+      "external_id": "28954189",
+      "title": "Scythe",
+      "authors": [
+        "Neal Shusterman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456172676l/28954189.jpg",
+      "rank": 8,
+      "votes": 15775,
+      "winner": false
+    },
+    {
+      "external_id": "30117284",
+      "title": "Carve the Mark",
+      "authors": [
+        "Veronica Roth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462467867l/30117284._SY600_.jpg",
+      "rank": 9,
+      "votes": 13723,
+      "winner": false
+    },
+    {
+      "external_id": "32075662",
+      "title": "Our Dark Duet",
+      "authors": [
+        "Victoria Schwab"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476399662l/32075662._SY600_.jpg",
+      "rank": 10,
+      "votes": 12839,
+      "winner": false
+    },
+    {
+      "external_id": "24763621",
+      "title": "Wintersong",
+      "authors": [
+        "S. Jae-Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479206906l/24763621.jpg",
+      "rank": 11,
+      "votes": 4630,
+      "winner": false
+    },
+    {
+      "external_id": "23308087",
+      "title": "Flame in the Mist",
+      "authors": [
+        "Renée Ahdieh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476724612l/23308087._SY600_.jpg",
+      "rank": 12,
+      "votes": 3973,
+      "winner": false
+    },
+    {
+      "external_id": "34128219",
+      "title": "La Belle Sauvage",
+      "authors": [
+        "Philip Pullman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498930382l/34128219.jpg",
+      "rank": 13,
+      "votes": 3261,
+      "winner": false
+    },
+    {
+      "external_id": "34076952",
+      "title": "The Language of Thorns",
+      "authors": [
+        "Leigh Bardugo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1491842507l/34076952.jpg",
+      "rank": 14,
+      "votes": 2723,
+      "winner": false
+    },
+    {
+      "external_id": "29739361",
+      "title": "Traitor to the Throne",
+      "authors": [
+        "Alwyn Hamilton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476374209l/29739361._SY600_.jpg",
+      "rank": 15,
+      "votes": 2670,
+      "winner": false
+    },
+    {
+      "external_id": "28260402",
+      "title": "The Song Rising",
+      "authors": [
+        "Samantha Shannon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464899007l/28260402.jpg",
+      "rank": 16,
+      "votes": 2421,
+      "winner": false
+    },
+    {
+      "external_id": "30025336",
+      "title": "All the Crooked Saints",
+      "authors": [
+        "Maggie Stiefvater"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500451773l/30025336._SY600_.jpg",
+      "rank": 17,
+      "votes": 2312,
+      "winner": false
+    },
+    {
+      "external_id": "23367261",
+      "title": "Crystal Storm",
+      "authors": [
+        "Morgan Rhodes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1458655374l/23367261.jpg",
+      "rank": 18,
+      "votes": 2072,
+      "winner": false
+    },
+    {
+      "external_id": "31944679",
+      "title": "In Other Lands",
+      "authors": [
+        "Sarah Rees Brennan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1496783711l/31944679.jpg",
+      "rank": 19,
+      "votes": 1264,
+      "winner": false
+    },
+    {
+      "external_id": "25740412",
+      "title": "The Black Witch",
+      "authors": [
+        "Laurie Forest"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1487956992l/25740412._SY600_.jpg",
+      "rank": 20,
+      "votes": 1253,
+      "winner": false
+    }
+  ]
+}

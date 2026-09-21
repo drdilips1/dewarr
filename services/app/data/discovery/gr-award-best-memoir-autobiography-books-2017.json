@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-memoir-autobiography-books-2017",
+  "kind": "award",
+  "title": "Memoir & Autobiography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-memoir-autobiography-books-2017",
+  "year": 2017,
+  "category": "Memoir & Autobiography",
+  "genres": [
+    "biography"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:40.983273+00:00",
+  "books": [
+    {
+      "external_id": "34138013",
+      "title": "What Happened",
+      "authors": [
+        "Hillary Rodham Clinton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1503366034l/34138013._SY600_.jpg",
+      "rank": 1,
+      "votes": 30866,
+      "winner": true
+    },
+    {
+      "external_id": "26074156",
+      "title": "Hunger",
+      "authors": [
+        "Roxane Gay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1710083259l/26074156._SY600_.jpg",
+      "rank": 2,
+      "votes": 26092,
+      "winner": false
+    },
+    {
+      "external_id": "32737127",
+      "title": "Unfiltered",
+      "authors": [
+        "Lily Collins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1477341317l/32737127._SY600_.jpg",
+      "rank": 3,
+      "votes": 13522,
+      "winner": false
+    },
+    {
+      "external_id": "32620356",
+      "title": "Daring to Drive",
+      "authors": [
+        "Manal Al-Sharif"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545228360l/32620356._SY600_.jpg",
+      "rank": 4,
+      "votes": 12134,
+      "winner": false
+    },
+    {
+      "external_id": "31420708",
+      "title": "You Don't Have to Say You Love Me",
+      "authors": [
+        "Sherman Alexie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483038395l/31420708._SY600_.jpg",
+      "rank": 5,
+      "votes": 10532,
+      "winner": false
+    },
+    {
+      "external_id": "32052074",
+      "title": "The Most Beautiful",
+      "authors": [
+        "Mayte Garcia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474319186l/32052074.jpg",
+      "rank": 6,
+      "votes": 9991,
+      "winner": false
+    },
+    {
+      "external_id": "31371728",
+      "title": "My Lovely Wife in the Psych Ward",
+      "authors": [
+        "Mark Lukach"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1477642667l/31371728._SY600_.jpg",
+      "rank": 7,
+      "votes": 9654,
+      "winner": false
+    },
+    {
+      "external_id": "31208653",
+      "title": "How to Murder Your Life",
+      "authors": [
+        "Cat Marnell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511288224l/31208653._SY600_.jpg",
+      "rank": 8,
+      "votes": 8415,
+      "winner": false
+    },
+    {
+      "external_id": "31751594",
+      "title": "How Dare the Sun Rise",
+      "authors": [
+        "Sandra Uwiringiyimana"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1477313227l/31751594.jpg",
+      "rank": 9,
+      "votes": 8317,
+      "winner": false
+    },
+    {
+      "external_id": "32076678",
+      "title": "The Fact of a Body",
+      "authors": [
+        "Alexandria Marzano-Lesnevich"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1496316115l/32076678._SY600_.jpg",
+      "rank": 10,
+      "votes": 8146,
+      "winner": false
+    },
+    {
+      "external_id": "30649506",
+      "title": "At Home in the World",
+      "authors": [
+        "Tsh Oxenreider"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1466450151l/30649506.jpg",
+      "rank": 11,
+      "votes": 2804,
+      "winner": false
+    },
+    {
+      "external_id": "32572166",
+      "title": "The Rules Do Not Apply",
+      "authors": [
+        "Ariel Levy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1490082071l/32572166._SY600_.jpg",
+      "rank": 12,
+      "votes": 2743,
+      "winner": false
+    },
+    {
+      "external_id": "34104392",
+      "title": "The Bright Hour",
+      "authors": [
+        "Nina Riggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507193499l/34104392._SY600_.jpg",
+      "rank": 13,
+      "votes": 2175,
+      "winner": false
+    },
+    {
+      "external_id": "27917674",
+      "title": "When We Rise",
+      "authors": [
+        "Cleve Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1473684149l/27917674.jpg",
+      "rank": 14,
+      "votes": 1939,
+      "winner": false
+    },
+    {
+      "external_id": "30038960",
+      "title": "Insomniac City",
+      "authors": [
+        "Bill Hayes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1485975500l/30038960.jpg",
+      "rank": 15,
+      "votes": 1907,
+      "winner": false
+    },
+    {
+      "external_id": "30956087",
+      "title": "The Polygamist's Daughter",
+      "authors": [
+        "Anna LeBaron"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1468499949l/30956087._SY600_.jpg",
+      "rank": 16,
+      "votes": 1824,
+      "winner": false
+    },
+    {
+      "external_id": "33898878",
+      "title": "Happiness",
+      "authors": [
+        "Heather Harpham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1489679331l/33898878.jpg",
+      "rank": 17,
+      "votes": 1739,
+      "winner": false
+    },
+    {
+      "external_id": "34275220",
+      "title": "Voice Lessons",
+      "authors": [
+        "Cara Mentzel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1491690039l/34275220.jpg",
+      "rank": 18,
+      "votes": 886,
+      "winner": false
+    },
+    {
+      "external_id": "31848282",
+      "title": "I Was Told to Come Alone",
+      "authors": [
+        "Souad Mekhennet"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1497381278l/31848282.jpg",
+      "rank": 19,
+      "votes": 587,
+      "winner": false
+    },
+    {
+      "external_id": "31920820",
+      "title": "Priestdaddy",
+      "authors": [
+        "Patricia Lockwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481223015l/31920820.jpg",
+      "rank": 20,
+      "votes": 496,
+      "winner": false
+    }
+  ]
+}

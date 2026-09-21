@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-childrens-books-2018",
+  "kind": "award",
+  "title": "Middle Grade & Children's",
+  "source_url": "https://www.goodreads.com/choiceawards/best-childrens-books-2018",
+  "year": 2018,
+  "category": "Middle Grade & Children's",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:22.561855+00:00",
+  "books": [
+    {
+      "external_id": "28006096",
+      "title": "The Burning Maze",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1693258878l/28006096.jpg",
+      "rank": 1,
+      "votes": 42529,
+      "winner": true
+    },
+    {
+      "external_id": "35403058",
+      "title": "City of Ghosts",
+      "authors": [
+        "Victoria Schwab"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1516638225l/35403058._SY600_.jpg",
+      "rank": 2,
+      "votes": 35781,
+      "winner": false
+    },
+    {
+      "external_id": "33784323",
+      "title": "The Magic Misfits",
+      "authors": [
+        "Neil Patrick Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493263695l/33784323.jpg",
+      "rank": 3,
+      "votes": 15674,
+      "winner": false
+    },
+    {
+      "external_id": "36222611",
+      "title": "Aru Shah and the End of Time",
+      "authors": [
+        "Roshani Chokshi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1506615949l/36222611.jpg",
+      "rank": 4,
+      "votes": 13872,
+      "winner": false
+    },
+    {
+      "external_id": "36086513",
+      "title": "Amal Unbound",
+      "authors": [
+        "Aisha Saeed"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509102472l/36086513.jpg",
+      "rank": 5,
+      "votes": 8698,
+      "winner": false
+    },
+    {
+      "external_id": "35959634",
+      "title": "Ghost Boys",
+      "authors": [
+        "Jewell Parker Rhodes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1519544047l/35959634.jpg",
+      "rank": 6,
+      "votes": 8021,
+      "winner": false
+    },
+    {
+      "external_id": "36644148",
+      "title": "The Penderwicks at Last",
+      "authors": [
+        "Jeanne Birdsall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511391110l/36644148.jpg",
+      "rank": 7,
+      "votes": 7398,
+      "winner": false
+    },
+    {
+      "external_id": "36546966",
+      "title": "Willa of the Wood",
+      "authors": [
+        "Robert  Beatty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1512419645l/36546966._SY600_.jpg",
+      "rank": 8,
+      "votes": 7265,
+      "winner": false
+    },
+    {
+      "external_id": "33004208",
+      "title": "The Miscalculations of Lightning Girl",
+      "authors": [
+        "Stacy McAnulty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511875058l/33004208.jpg",
+      "rank": 9,
+      "votes": 6831,
+      "winner": false
+    },
+    {
+      "external_id": "36443315",
+      "title": "Bob",
+      "authors": [
+        "Wendy Mass"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511014740l/36443315.jpg",
+      "rank": 10,
+      "votes": 6010,
+      "winner": false
+    },
+    {
+      "external_id": "36127488",
+      "title": "Front Desk",
+      "authors": [
+        "Kelly Yang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507986199l/36127488.jpg",
+      "rank": 11,
+      "votes": 2600,
+      "winner": false
+    },
+    {
+      "external_id": "35297562",
+      "title": "Sunny",
+      "authors": [
+        "Jason Reynolds"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1508662056l/35297562.jpg",
+      "rank": 12,
+      "votes": 2488,
+      "winner": false
+    },
+    {
+      "external_id": "35068526",
+      "title": "You Go First",
+      "authors": [
+        "Erin Entrada Kelly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1502743191l/35068526._SY600_.jpg",
+      "rank": 13,
+      "votes": 2077,
+      "winner": false
+    },
+    {
+      "external_id": "35464020",
+      "title": "The Night Diary",
+      "authors": [
+        "Veera Hiranandani"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1587877739l/35464020._SY600_.jpg",
+      "rank": 14,
+      "votes": 2065,
+      "winner": false
+    },
+    {
+      "external_id": "32618983",
+      "title": "The Serpent's Secret",
+      "authors": [
+        "Sayantani DasGupta"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1495562210l/32618983.jpg",
+      "rank": 15,
+      "votes": 1923,
+      "winner": false
+    },
+    {
+      "external_id": "39217633",
+      "title": "Louisiana's Way Home",
+      "authors": [
+        "Kate DiCamillo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522256710l/39217633.jpg",
+      "rank": 16,
+      "votes": 1591,
+      "winner": false
+    },
+    {
+      "external_id": "37822631",
+      "title": "The Golden Tower",
+      "authors": [
+        "Holly Black"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522340388l/37822631._SY600_.jpg",
+      "rank": 17,
+      "votes": 1474,
+      "winner": false
+    },
+    {
+      "external_id": "38903002",
+      "title": "Wrath of the Dragon King",
+      "authors": [
+        "Brandon Mull"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1525007736l/38903002._SY600_.jpg",
+      "rank": 18,
+      "votes": 1236,
+      "winner": false
+    },
+    {
+      "external_id": "36959639",
+      "title": "Small Spaces",
+      "authors": [
+        "Katherine Arden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1539180297l/36959639._SY600_.jpg",
+      "rank": 19,
+      "votes": 1104,
+      "winner": false
+    },
+    {
+      "external_id": "36373280",
+      "title": "The Unforgettable Guinevere St. Clair",
+      "authors": [
+        "Amy Makechnie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1519633091l/36373280._SY600_.jpg",
+      "rank": 20,
+      "votes": 768,
+      "winner": false
+    }
+  ]
+}

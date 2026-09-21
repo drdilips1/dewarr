@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-science-fiction-books-2014",
+  "kind": "award",
+  "title": "Science Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-fiction-books-2014",
+  "year": 2014,
+  "category": "Science Fiction",
+  "genres": [
+    "science-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:06.783163+00:00",
+  "books": [
+    {
+      "external_id": "18007564",
+      "title": "The Martian",
+      "authors": [
+        "Andy Weir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413706054l/18007564.jpg",
+      "rank": 1,
+      "votes": 30561,
+      "winner": true
+    },
+    {
+      "external_id": "21418013",
+      "title": "Lock In",
+      "authors": [
+        "John Scalzi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1438701397l/21418013._SY600_.jpg",
+      "rank": 2,
+      "votes": 14953,
+      "winner": false
+    },
+    {
+      "external_id": "20509356",
+      "title": "Sand",
+      "authors": [
+        "Hugh Howey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389416278l/20509356.jpg",
+      "rank": 3,
+      "votes": 14410,
+      "winner": false
+    },
+    {
+      "external_id": "18295861",
+      "title": "The First Fifteen Lives of Harry August",
+      "authors": [
+        "Claire North"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1379133081l/18295861.jpg",
+      "rank": 4,
+      "votes": 13421,
+      "winner": false
+    },
+    {
+      "external_id": "18586487",
+      "title": "The Long Mars",
+      "authors": [
+        "Terry Pratchett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1397123447l/18586487.jpg",
+      "rank": 5,
+      "votes": 9927,
+      "winner": false
+    },
+    {
+      "external_id": "17934530",
+      "title": "Annihilation",
+      "authors": [
+        "Jeff Vandermeer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403941587l/17934530.jpg",
+      "rank": 6,
+      "votes": 9050,
+      "winner": false
+    },
+    {
+      "external_id": "23214943",
+      "title": "Apolonia",
+      "authors": [
+        "Jamie McGuire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1433541411l/23214943._SY600_.jpg",
+      "rank": 7,
+      "votes": 8173,
+      "winner": false
+    },
+    {
+      "external_id": "18114057",
+      "title": "Influx",
+      "authors": [
+        "Daniel Suarez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1374634071l/18114057.jpg",
+      "rank": 8,
+      "votes": 7962,
+      "winner": false
+    },
+    {
+      "external_id": "18774020",
+      "title": "California",
+      "authors": [
+        "Edan Lepucki"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400863574l/18774020.jpg",
+      "rank": 9,
+      "votes": 7218,
+      "winner": false
+    },
+    {
+      "external_id": "18490707",
+      "title": "Earth Awakens",
+      "authors": [
+        "Orson Scott Card"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1396829768l/18490707.jpg",
+      "rank": 10,
+      "votes": 6883,
+      "winner": false
+    },
+    {
+      "external_id": "20706284",
+      "title": "Ancillary Sword",
+      "authors": [
+        "Ann Leckie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1597476183l/20706284._SY600_.jpg",
+      "rank": 11,
+      "votes": 3005,
+      "winner": false
+    },
+    {
+      "external_id": "18079705",
+      "title": "The Flight of the Silvers",
+      "authors": [
+        "Daniel  Price"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391305642l/18079705.jpg",
+      "rank": 12,
+      "votes": 3005,
+      "winner": false
+    },
+    {
+      "external_id": "18656030",
+      "title": "Cibola Burn",
+      "authors": [
+        "James S.A. Corey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729035804l/18656030._SY600_.jpg",
+      "rank": 13,
+      "votes": 2738,
+      "winner": false
+    },
+    {
+      "external_id": "18295835",
+      "title": "Heaven's Queen",
+      "authors": [
+        "Rachel Bach"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1399076617l/18295835.jpg",
+      "rank": 14,
+      "votes": 2727,
+      "winner": false
+    },
+    {
+      "external_id": "20797535",
+      "title": "A Better World",
+      "authors": [
+        "Marcus Sakey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394856007l/20797535.jpg",
+      "rank": 15,
+      "votes": 2395,
+      "winner": false
+    },
+    {
+      "external_id": "18691070",
+      "title": "World of Trouble",
+      "authors": [
+        "Ben H. Winters"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1480183288l/18691070.jpg",
+      "rank": 16,
+      "votes": 2269,
+      "winner": false
+    },
+    {
+      "external_id": "18692689",
+      "title": "Out of the Black",
+      "authors": [
+        "Evan Currie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405288872l/18692689.jpg",
+      "rank": 17,
+      "votes": 1921,
+      "winner": false
+    },
+    {
+      "external_id": "18318651",
+      "title": "To Honor You Call Us",
+      "authors": [
+        "H. Paul Honsinger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1384712533l/18318651.jpg",
+      "rank": 18,
+      "votes": 1685,
+      "winner": false
+    },
+    {
+      "external_id": "19084955",
+      "title": "Hollow World",
+      "authors": [
+        "Michael J. Sullivan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387920861l/19084955.jpg",
+      "rank": 19,
+      "votes": 1234,
+      "winner": false
+    },
+    {
+      "external_id": "18476102",
+      "title": "Lines of Departure",
+      "authors": [
+        "Marko Kloos"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386580646l/18476102.jpg",
+      "rank": 20,
+      "votes": 1181,
+      "winner": false
+    }
+  ]
+}

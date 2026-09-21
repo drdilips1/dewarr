@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-debut-novel-2021",
+  "kind": "award",
+  "title": "Debut Novel",
+  "source_url": "https://www.goodreads.com/choiceawards/best-debut-novel-2021",
+  "year": 2021,
+  "category": "Debut Novel",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:18.531500+00:00",
+  "books": [
+    {
+      "external_id": "57190892",
+      "title": "The Spanish Love Deception",
+      "authors": [
+        "Elena  Armas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1614122544l/57190892._SY600_.jpg",
+      "rank": 1,
+      "votes": 55621,
+      "winner": true
+    },
+    {
+      "external_id": "53288434",
+      "title": "The Lost Apothecary",
+      "authors": [
+        "Sarah Penner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1593013000l/53288434.jpg",
+      "rank": 2,
+      "votes": 47761,
+      "winner": false
+    },
+    {
+      "external_id": "57812106",
+      "title": "Firekeeper's Daughter",
+      "authors": [
+        "Angeline Boulley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1619021348l/57812106._SY600_.jpg",
+      "rank": 3,
+      "votes": 38188,
+      "winner": false
+    },
+    {
+      "external_id": "52476830",
+      "title": "The Push",
+      "authors": [
+        "Ashley Audrain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1609854219l/52476830._SY600_.jpg",
+      "rank": 4,
+      "votes": 29928,
+      "winner": false
+    },
+    {
+      "external_id": "53028775",
+      "title": "The Gilded Ones",
+      "authors": [
+        "Namina Forna"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1574327625l/53028775._SX318_SY475_.jpg",
+      "rank": 5,
+      "votes": 26689,
+      "winner": false
+    },
+    {
+      "external_id": "55077538",
+      "title": "She Who Became the Sun",
+      "authors": [
+        "Shelley Parker-Chan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605538291l/55077538.jpg",
+      "rank": 6,
+      "votes": 24986,
+      "winner": false
+    },
+    {
+      "external_id": "58698241",
+      "title": "The Paper Palace",
+      "authors": [
+        "Miranda Cowley Heller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628066374l/58698241._SY600_.jpg",
+      "rank": 7,
+      "votes": 18153,
+      "winner": false
+    },
+    {
+      "external_id": "53922305",
+      "title": "Honey Girl",
+      "authors": [
+        "Morgan  Rogers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1591856088l/53922305.jpg",
+      "rank": 8,
+      "votes": 16898,
+      "winner": false
+    },
+    {
+      "external_id": "55169040",
+      "title": "We Are the Brennans",
+      "authors": [
+        "Tracey Lange"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628802754l/55169040._SY600_.jpg",
+      "rank": 9,
+      "votes": 13541,
+      "winner": false
+    },
+    {
+      "external_id": "48890225",
+      "title": "Detransition, Baby",
+      "authors": [
+        "Torrey Peters"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1587480347l/48890225.jpg",
+      "rank": 10,
+      "votes": 13289,
+      "winner": false
+    },
+    {
+      "external_id": "53205912",
+      "title": "Winter's Orbit",
+      "authors": [
+        "Everina Maxwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612284457l/53205912._SY600_.jpg",
+      "rank": 11,
+      "votes": 4079,
+      "winner": false
+    },
+    {
+      "external_id": "53138197",
+      "title": "Of Women and Salt",
+      "authors": [
+        "Gabriela  Garcia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1595815950l/53138197.jpg",
+      "rank": 12,
+      "votes": 3566,
+      "winner": false
+    },
+    {
+      "external_id": "54304125",
+      "title": "The Final Revival of Opal & Nev",
+      "authors": [
+        "Dawnie Walton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617092144l/54304125._SY600_.jpg",
+      "rank": 13,
+      "votes": 3411,
+      "winner": false
+    },
+    {
+      "external_id": "56435922",
+      "title": "The Prophets",
+      "authors": [
+        "Robert Jones Jr."
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1623371602l/56435922._SY600_.jpg",
+      "rank": 14,
+      "votes": 3139,
+      "winner": false
+    },
+    {
+      "external_id": "51183428",
+      "title": "The Love Songs of W.E.B. Du Bois",
+      "authors": [
+        "Honorée Fanonne Jeffers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1629809930l/51183428._SY600_.jpg",
+      "rank": 15,
+      "votes": 2902,
+      "winner": false
+    },
+    {
+      "external_id": "56607366",
+      "title": "Black Buck",
+      "authors": [
+        "Mateo Askaripour"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1635539922l/56607366.jpg",
+      "rank": 16,
+      "votes": 2751,
+      "winner": false
+    },
+    {
+      "external_id": "54404602",
+      "title": "The Sweetness of Water",
+      "authors": [
+        "Nathan  Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1593989595l/54404602.jpg",
+      "rank": 17,
+      "votes": 2714,
+      "winner": false
+    },
+    {
+      "external_id": "53414230",
+      "title": "Open Water",
+      "authors": [
+        "Caleb Azumah Nelson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600095386l/53414230.jpg",
+      "rank": 18,
+      "votes": 2541,
+      "winner": false
+    },
+    {
+      "external_id": "57505278",
+      "title": "All Her Little Secrets",
+      "authors": [
+        "Wanda M. Morris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617072042l/57505278.jpg",
+      "rank": 19,
+      "votes": 1611,
+      "winner": false
+    },
+    {
+      "external_id": "53597769",
+      "title": "The Five Wounds",
+      "authors": [
+        "Kirstin Valdez Quade"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612030905l/53597769.jpg",
+      "rank": 20,
+      "votes": 1430,
+      "winner": false
+    }
+  ]
+}

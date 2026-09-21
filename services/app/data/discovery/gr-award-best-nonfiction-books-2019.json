@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-nonfiction-books-2019",
+  "kind": "award",
+  "title": "Nonfiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-nonfiction-books-2019",
+  "year": 2019,
+  "category": "Nonfiction",
+  "genres": [
+    "non-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:10.244485+00:00",
+  "books": [
+    {
+      "external_id": "40591267",
+      "title": "Girl, Stop Apologizing",
+      "authors": [
+        "Rachel Hollis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550607364l/40591267._SY600_.jpg",
+      "rank": 1,
+      "votes": 31276,
+      "winner": true
+    },
+    {
+      "external_id": "41066983",
+      "title": "Stay Sexy & Don't Get Murdered",
+      "authors": [
+        "Karen Kilgariff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1622192678l/41066983._SY600_.jpg",
+      "rank": 2,
+      "votes": 29382,
+      "winner": false
+    },
+    {
+      "external_id": "37570546",
+      "title": "Maybe You Should Talk to Someone",
+      "authors": [
+        "Lori Gottlieb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1547189796l/37570546.jpg",
+      "rank": 3,
+      "votes": 25429,
+      "winner": false
+    },
+    {
+      "external_id": "53011908",
+      "title": "Catch and Kill",
+      "authors": [
+        "Ronan Farrow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1596006841l/53011908._SY600_.jpg",
+      "rank": 4,
+      "votes": 25118,
+      "winner": false
+    },
+    {
+      "external_id": "40574441",
+      "title": "Everything Is F*cked",
+      "authors": [
+        "Mark Manson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553934153l/40574441._SY600_.jpg",
+      "rank": 5,
+      "votes": 24294,
+      "winner": false
+    },
+    {
+      "external_id": "43848929",
+      "title": "Talking to Strangers",
+      "authors": [
+        "Malcolm Gladwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549393502l/43848929._SY600_.jpg",
+      "rank": 6,
+      "votes": 22702,
+      "winner": false
+    },
+    {
+      "external_id": "42201100",
+      "title": "Three Women",
+      "authors": [
+        "Lisa Taddeo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1560679612l/42201100.jpg",
+      "rank": 7,
+      "votes": 15892,
+      "winner": false
+    },
+    {
+      "external_id": "43231095",
+      "title": "American Predator",
+      "authors": [
+        "Maureen Callahan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1547217501l/43231095._SY600_.jpg",
+      "rank": 8,
+      "votes": 14825,
+      "winner": false
+    },
+    {
+      "external_id": "44767249",
+      "title": "She Said",
+      "authors": [
+        "Jodi Kantor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1573830483l/44767249._SY600_.jpg",
+      "rank": 9,
+      "votes": 12091,
+      "winner": false
+    },
+    {
+      "external_id": "40776644",
+      "title": "The Moment of Lift",
+      "authors": [
+        "Melinda French Gates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1540299907l/40776644.jpg",
+      "rank": 10,
+      "votes": 11641,
+      "winner": false
+    },
+    {
+      "external_id": "38362811",
+      "title": "The Witches Are Coming",
+      "authors": [
+        "Lindy West"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552089064l/38362811.jpg",
+      "rank": 11,
+      "votes": 5075,
+      "winner": false
+    },
+    {
+      "external_id": "41154327",
+      "title": "Parkland",
+      "authors": [
+        "Dave Cullen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1534371385l/41154327._SY600_.jpg",
+      "rank": 12,
+      "votes": 4966,
+      "winner": false
+    },
+    {
+      "external_id": "43822665",
+      "title": "Embrace Your Weird",
+      "authors": [
+        "Felicia Day"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1567950989l/43822665._SY600_.jpg",
+      "rank": 13,
+      "votes": 4764,
+      "winner": false
+    },
+    {
+      "external_id": "40121993",
+      "title": "The Collected Schizophrenias",
+      "authors": [
+        "Esmé Weijun Wang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1527408064l/40121993.jpg",
+      "rank": 14,
+      "votes": 4521,
+      "winner": false
+    },
+    {
+      "external_id": "43126457",
+      "title": "Trick Mirror",
+      "authors": [
+        "Jia Tolentino"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1544069605l/43126457.jpg",
+      "rank": 15,
+      "votes": 4469,
+      "winner": false
+    },
+    {
+      "external_id": "41883932",
+      "title": "Furious Hours",
+      "authors": [
+        "Casey Cep"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1542898679l/41883932.jpg",
+      "rank": 16,
+      "votes": 4227,
+      "winner": false
+    },
+    {
+      "external_id": "44767265",
+      "title": "Blowout",
+      "authors": [
+        "Rachel Maddow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558401356l/44767265.jpg",
+      "rank": 17,
+      "votes": 2215,
+      "winner": false
+    },
+    {
+      "external_id": "40265832",
+      "title": "How to Be an Antiracist",
+      "authors": [
+        "Ibram X. Kendi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1560163756l/40265832.jpg",
+      "rank": 18,
+      "votes": 2184,
+      "winner": false
+    },
+    {
+      "external_id": "40365093",
+      "title": "Thick",
+      "authors": [
+        "Tressie McMillan Cottom"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1527976802l/40365093.jpg",
+      "rank": 19,
+      "votes": 1239,
+      "winner": false
+    },
+    {
+      "external_id": "36742978",
+      "title": "Grace Will Lead Us Home",
+      "authors": [
+        "Jennifer Berry Hawes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1513182562l/36742978.jpg",
+      "rank": 20,
+      "votes": 675,
+      "winner": false
+    }
+  ]
+}

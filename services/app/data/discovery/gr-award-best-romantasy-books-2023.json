@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-romantasy-books-2023",
+  "kind": "award",
+  "title": "Romantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-romantasy-books-2023",
+  "year": 2023,
+  "category": "Romantasy",
+  "genres": [
+    "fantasy",
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:19.080804+00:00",
+  "books": [
+    {
+      "external_id": "61431922",
+      "title": "Fourth Wing",
+      "authors": [
+        "Rebecca Yarros"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1761312598l/61431922._SY600_.jpg",
+      "rank": 1,
+      "votes": 397565,
+      "winner": true
+    },
+    {
+      "external_id": "123257687",
+      "title": "Assistant to the Villain",
+      "authors": [
+        "Hannah Nicole Maehrer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1702057336l/123257687._SY600_.jpg",
+      "rank": 2,
+      "votes": 33665,
+      "winner": false
+    },
+    {
+      "external_id": "62335396",
+      "title": "The Ashes & the Star-Cursed King",
+      "authors": [
+        "Carissa Broadbent"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1711665192l/62335396._SY600_.jpg",
+      "rank": 3,
+      "votes": 29127,
+      "winner": false
+    },
+    {
+      "external_id": "63847274",
+      "title": "A Soul of Ash and Blood",
+      "authors": [
+        "Jennifer L. Armentrout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677612497l/63847274._SY600_.jpg",
+      "rank": 4,
+      "votes": 16747,
+      "winner": false
+    },
+    {
+      "external_id": "59808792",
+      "title": "Sorrow and Starlight",
+      "authors": [
+        "Caroline Peckham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664442356l/59808792._SY600_.jpg",
+      "rank": 5,
+      "votes": 15440,
+      "winner": false
+    },
+    {
+      "external_id": "73071451",
+      "title": "Throne of the Fallen",
+      "authors": [
+        "Kerri Maniscalco"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673510962l/73071451._SY600_.jpg",
+      "rank": 6,
+      "votes": 13061,
+      "winner": false
+    },
+    {
+      "external_id": "75668288",
+      "title": "The Hurricane Wars",
+      "authors": [
+        "Thea Guanzon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1681316893l/75668288.jpg",
+      "rank": 7,
+      "votes": 12218,
+      "winner": false
+    },
+    {
+      "external_id": "63127235",
+      "title": "The Hanging City",
+      "authors": [
+        "Charlie N. Holmberg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1674165466l/63127235._SY600_.jpg",
+      "rank": 8,
+      "votes": 10965,
+      "winner": false
+    },
+    {
+      "external_id": "61150440",
+      "title": "A Fire in the Flesh",
+      "authors": [
+        "Jennifer L. Armentrout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1681507578l/61150440._SY600_.jpg",
+      "rank": 9,
+      "votes": 10128,
+      "winner": false
+    },
+    {
+      "external_id": "60581370",
+      "title": "The Jasad Heir",
+      "authors": [
+        "Sara  Hashem"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1671465519l/60581370.jpg",
+      "rank": 10,
+      "votes": 9437,
+      "winner": false
+    },
+    {
+      "external_id": "56587784",
+      "title": "A Game of Gods",
+      "authors": [
+        "Scarlett St.  Clair"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1610057817l/56587784._SY600_.jpg",
+      "rank": 11,
+      "votes": 3619,
+      "winner": false
+    },
+    {
+      "external_id": "59397314",
+      "title": "The Foxglove King",
+      "authors": [
+        "Hannah Whitten"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1654300847l/59397314._SY600_.jpg",
+      "rank": 12,
+      "votes": 3593,
+      "winner": false
+    },
+    {
+      "external_id": "75396525",
+      "title": "The Coven",
+      "authors": [
+        "Harper L. Woods"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1678470633l/75396525._SY600_.jpg",
+      "rank": 13,
+      "votes": 2915,
+      "winner": false
+    },
+    {
+      "external_id": "65214365",
+      "title": "Fall of Ruin and Wrath",
+      "authors": [
+        "Jennifer L. Armentrout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677160116l/65214365.jpg",
+      "rank": 14,
+      "votes": 2591,
+      "winner": false
+    },
+    {
+      "external_id": "60225993",
+      "title": "Bewitched",
+      "authors": [
+        "Laura Thalassa"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1728486263l/60225993._SY600_.jpg",
+      "rank": 15,
+      "votes": 2400,
+      "winner": false
+    },
+    {
+      "external_id": "123368729",
+      "title": "Slaying the Vampire Conqueror",
+      "authors": [
+        "Carissa Broadbent"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1679927142l/123368729._SY600_.jpg",
+      "rank": 16,
+      "votes": 2314,
+      "winner": false
+    },
+    {
+      "external_id": "191754348",
+      "title": "Rule of the Aurora King",
+      "authors": [
+        "Nisha J. Tuli"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1690915587l/191754348._SY600_.jpg",
+      "rank": 17,
+      "votes": 2186,
+      "winner": false
+    },
+    {
+      "external_id": "62004837",
+      "title": "A Queen of Thieves & Chaos",
+      "authors": [
+        "K.A. Tucker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1678712435l/62004837._SY600_.jpg",
+      "rank": 18,
+      "votes": 1738,
+      "winner": false
+    },
+    {
+      "external_id": "122779502",
+      "title": "A Court This Cruel & Lovely",
+      "authors": [
+        "Stacia Stark"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677462724l/122779502._SY600_.jpg",
+      "rank": 19,
+      "votes": 1705,
+      "winner": false
+    },
+    {
+      "external_id": "195775182",
+      "title": "A Dawn of Onyx",
+      "authors": [
+        "Kate  Golden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1691300029l/195775182._SY600_.jpg",
+      "rank": 20,
+      "votes": 1398,
+      "winner": false
+    }
+  ]
+}

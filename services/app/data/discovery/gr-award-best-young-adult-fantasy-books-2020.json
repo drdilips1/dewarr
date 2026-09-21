@@ -1,0 +1,226 @@
+{
+  "id": "gr-award-best-young-adult-fantasy-books-2020",
+  "kind": "award",
+  "title": "Young Adult Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fantasy-books-2020",
+  "year": 2020,
+  "category": "Young Adult Fantasy",
+  "genres": [
+    "fantasy",
+    "young-adult"
+  ],
+  "count": 19,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:52.446323+00:00",
+  "books": [
+    {
+      "external_id": "44428899",
+      "title": "The Queen of Nothing",
+      "authors": [
+        "Holly Black"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553625031l/44428899.jpg",
+      "rank": 1,
+      "votes": 62771,
+      "winner": true
+    },
+    {
+      "external_id": "50794839",
+      "title": "The Ballad of Songbirds and Snakes",
+      "authors": [
+        "Suzanne Collins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1619083873l/50794839.jpg",
+      "rank": 2,
+      "votes": 59681,
+      "winner": false
+    },
+    {
+      "external_id": "17699853",
+      "title": "Chain of Gold",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571379245l/17699853.jpg",
+      "rank": 3,
+      "votes": 42233,
+      "winner": false
+    },
+    {
+      "external_id": "53287484",
+      "title": "Midnight Sun",
+      "authors": [
+        "Stephenie Meyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1588597375l/53287484.jpg",
+      "rank": 4,
+      "votes": 35466,
+      "winner": false
+    },
+    {
+      "external_id": "39122774",
+      "title": "Children of Virtue and Vengeance",
+      "authors": [
+        "Tomi Adeyemi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1591090724l/39122774._SY600_.jpg",
+      "rank": 5,
+      "votes": 28489,
+      "winner": false
+    },
+    {
+      "external_id": "52339313",
+      "title": "Cemetery Boys",
+      "authors": [
+        "Aiden Thomas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594059624l/52339313._SY600_.jpg",
+      "rank": 6,
+      "votes": 27570,
+      "winner": false
+    },
+    {
+      "external_id": "43979540",
+      "title": "Starsight",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556211418l/43979540.jpg",
+      "rank": 7,
+      "votes": 27263,
+      "winner": false
+    },
+    {
+      "external_id": "44012880",
+      "title": "Fable",
+      "authors": [
+        "Adrienne Young"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1590354131l/44012880.jpg",
+      "rank": 8,
+      "votes": 15617,
+      "winner": false
+    },
+    {
+      "external_id": "51079282",
+      "title": "Cinderella Is Dead",
+      "authors": [
+        "Kalynn  Bayron"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1574698373l/51079282.jpg",
+      "rank": 9,
+      "votes": 15179,
+      "winner": false
+    },
+    {
+      "external_id": "50892338",
+      "title": "Legendborn",
+      "authors": [
+        "Tracy Deonn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598382979l/50892338._SY600_.jpg",
+      "rank": 10,
+      "votes": 14101,
+      "winner": false
+    },
+    {
+      "external_id": "51182650",
+      "title": "Girl, Serpent, Thorn",
+      "authors": [
+        "Melissa Bashardoust"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1596558892l/51182650._SY600_.jpg",
+      "rank": 11,
+      "votes": 6107,
+      "winner": false
+    },
+    {
+      "external_id": "49629448",
+      "title": "A Song of Wraiths and Ruin",
+      "authors": [
+        "Roseanne A. Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627444987l/49629448._SY600_.jpg",
+      "rank": 12,
+      "votes": 5577,
+      "winner": false
+    },
+    {
+      "external_id": "45872054",
+      "title": "The Kingdom of Back",
+      "authors": [
+        "Marie Lu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562771370l/45872054._SY600_.jpg",
+      "rank": 13,
+      "votes": 5423,
+      "winner": false
+    },
+    {
+      "external_id": "50892212",
+      "title": "These Violent Delights",
+      "authors": [
+        "Chloe Gong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1580958058l/50892212.jpg",
+      "rank": 14,
+      "votes": 3461,
+      "winner": false
+    },
+    {
+      "external_id": "44280868",
+      "title": "All the Stars and Teeth",
+      "authors": [
+        "Adalyn  Grace"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562721197l/44280868.jpg",
+      "rank": 15,
+      "votes": 2956,
+      "winner": false
+    },
+    {
+      "external_id": "35702241",
+      "title": "The Shadows Between Us",
+      "authors": [
+        "Tricia Levenseller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558027905l/35702241.jpg",
+      "rank": 16,
+      "votes": 2928,
+      "winner": false
+    },
+    {
+      "external_id": "52380340",
+      "title": "The Extraordinaries",
+      "authors": [
+        "T.J. Klune"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1572524566l/52380340._SX318_SY475_.jpg",
+      "rank": 17,
+      "votes": 2249,
+      "winner": false
+    },
+    {
+      "external_id": "11503920",
+      "title": "Return of the Thief",
+      "authors": [
+        "Megan Whalen Turner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1531833605l/11503920.jpg",
+      "rank": 18,
+      "votes": 1726,
+      "winner": false
+    },
+    {
+      "external_id": "50158128",
+      "title": "Raybearer",
+      "authors": [
+        "Jordan Ifueko"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1567330635l/50158128._SX318_SY475_.jpg",
+      "rank": 19,
+      "votes": 1205,
+      "winner": false
+    }
+  ]
+}

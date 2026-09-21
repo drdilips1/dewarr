@@ -1,0 +1,50 @@
+[
+  {
+    "genre": "fantasy",
+    "url": "https://www.goodreads.com/list/show/50"
+  },
+  {
+    "genre": "mystery",
+    "url": "https://www.goodreads.com/list/show/914"
+  },
+  {
+    "genre": "horror",
+    "url": "https://www.goodreads.com/list/show/135"
+  },
+  {
+    "genre": "historical-fiction",
+    "url": "https://www.goodreads.com/list/show/15"
+  },
+  {
+    "genre": "non-fiction",
+    "url": "https://www.goodreads.com/list/show/134"
+  },
+  {
+    "genre": "history",
+    "url": "https://www.goodreads.com/list/show/1362"
+  },
+  {
+    "genre": "biography",
+    "url": "https://www.goodreads.com/list/show/281"
+  },
+  {
+    "genre": "young-adult",
+    "url": "https://www.goodreads.com/list/show/43"
+  },
+  {
+    "genre": "science-fiction",
+    "url": "https://www.goodreads.com/list/show/19341.Best_Science_Fiction"
+  },
+  {
+    "genre": "romance",
+    "url": "https://www.goodreads.com/list/show/12362.All_Time_Favorite_Romance_Novels"
+  },
+  {
+    "genre": "children",
+    "url": "https://www.goodreads.com/list/show/86.Best_Children_s_Books"
+  },
+  {
+    "genre": "classics",
+    "url": "https://www.goodreads.com/list/show/16.Best_Books_of_the_19th_Century"
+  }
+]

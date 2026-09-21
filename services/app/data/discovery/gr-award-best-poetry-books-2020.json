@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-poetry-books-2020",
+  "kind": "award",
+  "title": "Poetry",
+  "source_url": "https://www.goodreads.com/choiceawards/best-poetry-books-2020",
+  "year": 2020,
+  "category": "Poetry",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:47.572029+00:00",
+  "books": [
+    {
+      "external_id": "50706476",
+      "title": "Dearly",
+      "authors": [
+        "Margaret Atwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1580793100l/50706476.jpg",
+      "rank": 1,
+      "votes": 22811,
+      "winner": true
+    },
+    {
+      "external_id": "54019416",
+      "title": "Violet Bent Backwards Over the Grass",
+      "authors": [
+        "Lana Del Rey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594563349l/54019416.jpg",
+      "rank": 2,
+      "votes": 20696,
+      "winner": false
+    },
+    {
+      "external_id": "52945057",
+      "title": "Break Your Glass Slippers",
+      "authors": [
+        "Amanda Lovelace"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1573919105l/52945057._SX318_SY475_.jpg",
+      "rank": 3,
+      "votes": 17975,
+      "winner": false
+    },
+    {
+      "external_id": "52641647",
+      "title": "Swimming Lessons",
+      "authors": [
+        "Lili Reinhart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1692732798l/52641647._SY600_.jpg",
+      "rank": 4,
+      "votes": 16204,
+      "winner": false
+    },
+    {
+      "external_id": "52854164",
+      "title": "Home Body",
+      "authors": [
+        "Rupi Kaur"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600615839l/52854164.jpg",
+      "rank": 5,
+      "votes": 15932,
+      "winner": false
+    },
+    {
+      "external_id": "51307102",
+      "title": "On the Horizon",
+      "authors": [
+        "Lois Lowry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1564709502l/51307102.jpg",
+      "rank": 6,
+      "votes": 11743,
+      "winner": false
+    },
+    {
+      "external_id": "49814602",
+      "title": "The Girl and the Goddess",
+      "authors": [
+        "Nikita Gill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1595209290l/49814602.jpg",
+      "rank": 7,
+      "votes": 10699,
+      "winner": false
+    },
+    {
+      "external_id": "44094014",
+      "title": "Homie",
+      "authors": [
+        "Danez Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566099563l/44094014.jpg",
+      "rank": 8,
+      "votes": 9934,
+      "winner": false
+    },
+    {
+      "external_id": "44441884",
+      "title": "All Along You Were Blooming",
+      "authors": [
+        "Morgan Harper Nichols"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1557789033l/44441884.jpg",
+      "rank": 9,
+      "votes": 9773,
+      "winner": false
+    },
+    {
+      "external_id": "50997643",
+      "title": "What Kind of Woman",
+      "authors": [
+        "Kate Baer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585630975l/50997643.jpg",
+      "rank": 10,
+      "votes": 8892,
+      "winner": false
+    },
+    {
+      "external_id": "44094069",
+      "title": "Postcolonial Love Poem",
+      "authors": [
+        "Natalie Díaz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566106111l/44094069.jpg",
+      "rank": 11,
+      "votes": 2721,
+      "winner": false
+    },
+    {
+      "external_id": "52584411",
+      "title": "Whale Day",
+      "authors": [
+        "Billy Collins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1584850446l/52584411.jpg",
+      "rank": 12,
+      "votes": 2670,
+      "winner": false
+    },
+    {
+      "external_id": "45730512",
+      "title": "Cast Away",
+      "authors": [
+        "Naomi Shihab Nye"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1572993490l/45730512.jpg",
+      "rank": 13,
+      "votes": 2536,
+      "winner": false
+    },
+    {
+      "external_id": "48984964",
+      "title": "Finna",
+      "authors": [
+        "Nate Marshall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1586282794l/48984964.jpg",
+      "rank": 14,
+      "votes": 2079,
+      "winner": false
+    },
+    {
+      "external_id": "50898135",
+      "title": "Sorry I Haven't Texted You Back",
+      "authors": [
+        "Alicia Cook"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1586702378l/50898135.jpg",
+      "rank": 15,
+      "votes": 1920,
+      "winner": false
+    },
+    {
+      "external_id": "53945491",
+      "title": "Poems for the End of the World",
+      "authors": [
+        "Katie  Wismer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1591823997l/53945491.jpg",
+      "rank": 16,
+      "votes": 1780,
+      "winner": false
+    },
+    {
+      "external_id": "45895148",
+      "title": "Romance or the End",
+      "authors": [
+        "Elaine Kahn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1560229137l/45895148.jpg",
+      "rank": 17,
+      "votes": 1618,
+      "winner": false
+    },
+    {
+      "external_id": "49867447",
+      "title": "How to Fly in Ten Thousand Easy Lessons",
+      "authors": [
+        "Barbara Kingsolver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1587479023l/49867447.jpg",
+      "rank": 18,
+      "votes": 1354,
+      "winner": false
+    },
+    {
+      "external_id": "53299031",
+      "title": "Without",
+      "authors": [
+        "Meg  Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1588229375l/53299031.jpg",
+      "rank": 19,
+      "votes": 1166,
+      "winner": false
+    },
+    {
+      "external_id": "55596862",
+      "title": "Sweetdark",
+      "authors": [
+        "Savannah   Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602158844l/55596862._SY600_.jpg",
+      "rank": 20,
+      "votes": 1074,
+      "winner": false
+    }
+  ]
+}

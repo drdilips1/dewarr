@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-goodreads-author-2012",
+  "kind": "award",
+  "title": "Goodreads Author",
+  "source_url": "https://www.goodreads.com/choiceawards/best-goodreads-author-2012",
+  "year": 2012,
+  "category": "Goodreads Author",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:22.207017+00:00",
+  "books": [
+    {
+      "external_id": "11735983",
+      "title": "Insurgent",
+      "authors": [
+        "Veronica Roth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1618525340l/11735983._SY600_.jpg",
+      "rank": 1,
+      "votes": 20328,
+      "winner": true
+    },
+    {
+      "external_id": "8755776",
+      "title": "City of Lost Souls",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460477703l/8755776.jpg",
+      "rank": 2,
+      "votes": 13858,
+      "winner": false
+    },
+    {
+      "external_id": "12837725",
+      "title": "Gone Girl",
+      "authors": [
+        "Gillian Flynn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327596526l/12837725.jpg",
+      "rank": 3,
+      "votes": 12617,
+      "winner": false
+    },
+    {
+      "external_id": "13536860",
+      "title": "Fifty Shades Freed",
+      "authors": [
+        "E.L. James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336418837l/13536860.jpg",
+      "rank": 4,
+      "votes": 11930,
+      "winner": false
+    },
+    {
+      "external_id": "8709523",
+      "title": "The Golden Lily",
+      "authors": [
+        "Richelle Mead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1360599818l/8709523.jpg",
+      "rank": 5,
+      "votes": 7245,
+      "winner": false
+    },
+    {
+      "external_id": "11235712",
+      "title": "Cinder",
+      "authors": [
+        "Marissa Meyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470056948l/11235712._SY600_.jpg",
+      "rank": 6,
+      "votes": 5810,
+      "winner": false
+    },
+    {
+      "external_id": "15803858",
+      "title": "Slammed",
+      "authors": [
+        "Colleen Hoover"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344611361l/15803858.jpg",
+      "rank": 7,
+      "votes": 5511,
+      "winner": false
+    },
+    {
+      "external_id": "13548456",
+      "title": "Easy",
+      "authors": [
+        "Tammara Webber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1342983117l/13548456.jpg",
+      "rank": 8,
+      "votes": 5191,
+      "winner": false
+    },
+    {
+      "external_id": "9593911",
+      "title": "Pandemonium",
+      "authors": [
+        "Lauren Oliver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1310371414l/9593911.jpg",
+      "rank": 9,
+      "votes": 4985,
+      "winner": false
+    },
+    {
+      "external_id": "13047090",
+      "title": "Onyx",
+      "authors": [
+        "Jennifer L. Armentrout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1329408511l/13047090.jpg",
+      "rank": 10,
+      "votes": 4535,
+      "winner": false
+    },
+    {
+      "external_id": "11367726",
+      "title": "Defending Jacob",
+      "authors": [
+        "William Landay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1329612158l/11367726.jpg",
+      "rank": 11,
+      "votes": 2594,
+      "winner": false
+    },
+    {
+      "external_id": "12043770",
+      "title": "Third Grave Dead Ahead",
+      "authors": [
+        "Darynda Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1310823404l/12043770.jpg",
+      "rank": 12,
+      "votes": 2227,
+      "winner": false
+    },
+    {
+      "external_id": "13453029",
+      "title": "Wool Omnibus",
+      "authors": [
+        "Hugh Howey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349614200l/13453029.jpg",
+      "rank": 13,
+      "votes": 2118,
+      "winner": false
+    },
+    {
+      "external_id": "15760001",
+      "title": "On Dublin Street",
+      "authors": [
+        "Samantha Young"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1490401910l/15760001.jpg",
+      "rank": 14,
+      "votes": 1916,
+      "winner": false
+    },
+    {
+      "external_id": "9275658",
+      "title": "Legend",
+      "authors": [
+        "Marie Lu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1501368160l/9275658.jpg",
+      "rank": 15,
+      "votes": 1907,
+      "winner": false
+    },
+    {
+      "external_id": "13050840",
+      "title": "Gunmetal Magic",
+      "authors": [
+        "Ilona Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331230653l/13050840.jpg",
+      "rank": 16,
+      "votes": 1487,
+      "winner": false
+    },
+    {
+      "external_id": "13448656",
+      "title": "Motorcycle Man",
+      "authors": [
+        "Kristen Ashley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1547157943l/13448656.jpg",
+      "rank": 17,
+      "votes": 1379,
+      "winner": false
+    },
+    {
+      "external_id": "11559200",
+      "title": "Shadow of Night",
+      "authors": [
+        "Deborah Harkness"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320604137l/11559200._SY600_.jpg",
+      "rank": 18,
+      "votes": 1135,
+      "winner": false
+    },
+    {
+      "external_id": "13451045",
+      "title": "Bared to You",
+      "authors": [
+        "Sylvia Day"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336019727l/13451045.jpg",
+      "rank": 19,
+      "votes": 848,
+      "winner": false
+    },
+    {
+      "external_id": "15816413",
+      "title": "Gabriel's Rapture",
+      "authors": [
+        "Sylvain Reynard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1346866986l/15816413.jpg",
+      "rank": 20,
+      "votes": 760,
+      "winner": false
+    }
+  ]
+}

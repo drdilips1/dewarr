@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-paranormal-fantasy-books-2012",
+  "kind": "award",
+  "title": "Paranormal Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-paranormal-fantasy-books-2012",
+  "year": 2012,
+  "category": "Paranormal Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:06.357975+00:00",
+  "books": [
+    {
+      "external_id": "11559200",
+      "title": "Shadow of Night",
+      "authors": [
+        "Deborah Harkness"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320604137l/11559200._SY600_.jpg",
+      "rank": 1,
+      "votes": 12660,
+      "winner": true
+    },
+    {
+      "external_id": "12275680",
+      "title": "Wicked Business",
+      "authors": [
+        "Janet Evanovich"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328334213l/12275680.jpg",
+      "rank": 2,
+      "votes": 5917,
+      "winner": false
+    },
+    {
+      "external_id": "10599805",
+      "title": "A Perfect Blood",
+      "authors": [
+        "Kim Harrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1312426322l/10599805.jpg",
+      "rank": 3,
+      "votes": 5393,
+      "winner": false
+    },
+    {
+      "external_id": "11480917",
+      "title": "Fair Game",
+      "authors": [
+        "Patricia Briggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1309650058l/11480917.jpg",
+      "rank": 4,
+      "votes": 4780,
+      "winner": false
+    },
+    {
+      "external_id": "12348550",
+      "title": "Timeless",
+      "authors": [
+        "Gail Carriger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327956741l/12348550.jpg",
+      "rank": 5,
+      "votes": 4590,
+      "winner": false
+    },
+    {
+      "external_id": "11336491",
+      "title": "Shadow Heir",
+      "authors": [
+        "Richelle Mead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327900369l/11336491.jpg",
+      "rank": 6,
+      "votes": 4587,
+      "winner": false
+    },
+    {
+      "external_id": "12043770",
+      "title": "Third Grave Dead Ahead",
+      "authors": [
+        "Darynda Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1310823404l/12043770.jpg",
+      "rank": 7,
+      "votes": 4477,
+      "winner": false
+    },
+    {
+      "external_id": "12288282",
+      "title": "Gunmetal Magic",
+      "authors": [
+        "Ilona Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331230049l/12288282.jpg",
+      "rank": 8,
+      "votes": 4329,
+      "winner": false
+    },
+    {
+      "external_id": "10836728",
+      "title": "The Rook",
+      "authors": [
+        "Daniel O'Malley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1561584006l/10836728.jpg",
+      "rank": 9,
+      "votes": 4265,
+      "winner": false
+    },
+    {
+      "external_id": "12849320",
+      "title": "Thirteen",
+      "authors": [
+        "Kelley Armstrong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320956578l/12849320.jpg",
+      "rank": 10,
+      "votes": 4192,
+      "winner": false
+    },
+    {
+      "external_id": "12383252",
+      "title": "Kiss the Dead",
+      "authors": [
+        "Laurell K. Hamilton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328767132l/12383252.jpg",
+      "rank": 11,
+      "votes": 2328,
+      "winner": false
+    },
+    {
+      "external_id": "12700306",
+      "title": "Tricked",
+      "authors": [
+        "Kevin Hearne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1660271575l/12700306._SY600_.jpg",
+      "rank": 12,
+      "votes": 1831,
+      "winner": false
+    },
+    {
+      "external_id": "12444166",
+      "title": "Iced",
+      "authors": [
+        "Karen Marie Moning"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333022535l/12444166.jpg",
+      "rank": 13,
+      "votes": 1755,
+      "winner": false
+    },
+    {
+      "external_id": "12381269",
+      "title": "Deadlocked",
+      "authors": [
+        "Charlaine Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1321805655l/12381269.jpg",
+      "rank": 14,
+      "votes": 1496,
+      "winner": false
+    },
+    {
+      "external_id": "13542786",
+      "title": "Ashes of Honor",
+      "authors": [
+        "Seanan McGuire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1343753793l/13542786.jpg",
+      "rank": 15,
+      "votes": 1149,
+      "winner": false
+    },
+    {
+      "external_id": "11337148",
+      "title": "Sacrificial Magic",
+      "authors": [
+        "Stacia Kane"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1342164053l/11337148.jpg",
+      "rank": 16,
+      "votes": 1130,
+      "winner": false
+    },
+    {
+      "external_id": "11557982",
+      "title": "By a Thread",
+      "authors": [
+        "Jennifer Estep"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1314639873l/11557982.jpg",
+      "rank": 17,
+      "votes": 798,
+      "winner": false
+    },
+    {
+      "external_id": "11746102",
+      "title": "Biting Cold",
+      "authors": [
+        "Chloe Neill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1316664429l/11746102.jpg",
+      "rank": 18,
+      "votes": 592,
+      "winner": false
+    },
+    {
+      "external_id": "13091829",
+      "title": "The Reckoning",
+      "authors": [
+        "Alma Katsu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358271532l/13091829.jpg",
+      "rank": 19,
+      "votes": 530,
+      "winner": false
+    },
+    {
+      "external_id": "12114440",
+      "title": "Fury's Kiss",
+      "authors": [
+        "Karen Chance"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1335403194l/12114440.jpg",
+      "rank": 20,
+      "votes": 304,
+      "winner": false
+    }
+  ]
+}

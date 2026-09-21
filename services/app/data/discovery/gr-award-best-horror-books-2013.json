@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-horror-books-2013",
+  "kind": "award",
+  "title": "Horror",
+  "source_url": "https://www.goodreads.com/choiceawards/best-horror-books-2013",
+  "year": 2013,
+  "category": "Horror",
+  "genres": [
+    "horror"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:40.714571+00:00",
+  "books": [
+    {
+      "external_id": "16130549",
+      "title": "Doctor Sleep",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510335480l/16130549._SY600_.jpg",
+      "rank": 1,
+      "votes": 28678,
+      "winner": true
+    },
+    {
+      "external_id": "15729539",
+      "title": "NOS4A2",
+      "authors": [
+        "Joe  Hill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369591617l/15729539.jpg",
+      "rank": 2,
+      "votes": 11000,
+      "winner": false
+    },
+    {
+      "external_id": "17457124",
+      "title": "Red Hill",
+      "authors": [
+        "Jamie McGuire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1374859114l/17457124.jpg",
+      "rank": 3,
+      "votes": 10584,
+      "winner": false
+    },
+    {
+      "external_id": "15797722",
+      "title": "Deeply Odd",
+      "authors": [
+        "Dean Koontz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1364250954l/15797722.jpg",
+      "rank": 4,
+      "votes": 7290,
+      "winner": false
+    },
+    {
+      "external_id": "15818164",
+      "title": "The Blood Gospel",
+      "authors": [
+        "James Rollins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1357605320l/15818164.jpg",
+      "rank": 5,
+      "votes": 4218,
+      "winner": false
+    },
+    {
+      "external_id": "15738579",
+      "title": "White Trash Zombie Apocalypse",
+      "authors": [
+        "Diana Rowland"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1377544520l/15738579.jpg",
+      "rank": 6,
+      "votes": 4165,
+      "winner": false
+    },
+    {
+      "external_id": "13641105",
+      "title": "Parasite",
+      "authors": [
+        "Mira Grant"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362417533l/13641105.jpg",
+      "rank": 7,
+      "votes": 3962,
+      "winner": false
+    },
+    {
+      "external_id": "15818568",
+      "title": "The Fate of Mercy Alban",
+      "authors": [
+        "Wendy     Webb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351182409l/15818568.jpg",
+      "rank": 8,
+      "votes": 3619,
+      "winner": false
+    },
+    {
+      "external_id": "15799400",
+      "title": "The Resurrectionist",
+      "authors": [
+        "E.B. Hudspeth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1374515873l/15799400.jpg",
+      "rank": 9,
+      "votes": 3215,
+      "winner": false
+    },
+    {
+      "external_id": "17348985",
+      "title": "Help for the Haunted",
+      "authors": [
+        "John Searles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1379084909l/17348985.jpg",
+      "rank": 10,
+      "votes": 2305,
+      "winner": false
+    },
+    {
+      "external_id": "17262197",
+      "title": "The Wolves of Midwinter",
+      "authors": [
+        "Anne Rice"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369925665l/17262197.jpg",
+      "rank": 11,
+      "votes": 1177,
+      "winner": false
+    },
+    {
+      "external_id": "15783828",
+      "title": "Kill City Blues",
+      "authors": [
+        "Richard Kadrey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1353098191l/15783828.jpg",
+      "rank": 12,
+      "votes": 1177,
+      "winner": false
+    },
+    {
+      "external_id": "15793091",
+      "title": "Extinction Machine",
+      "authors": [
+        "Jonathan Maberry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344318645l/15793091.jpg",
+      "rank": 13,
+      "votes": 704,
+      "winner": false
+    },
+    {
+      "external_id": "18109850",
+      "title": "Fractured",
+      "authors": [
+        "D.J. Molles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1371913908l/18109850.jpg",
+      "rank": 14,
+      "votes": 681,
+      "winner": false
+    },
+    {
+      "external_id": "10825907",
+      "title": "Shattered Hourglass",
+      "authors": [
+        "J.L. Bourne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1359422558l/10825907.jpg",
+      "rank": 15,
+      "votes": 680,
+      "winner": false
+    },
+    {
+      "external_id": "16143338",
+      "title": "Come Alive",
+      "authors": [
+        "Karina Halle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602889934l/16143338._SY600_.jpg",
+      "rank": 16,
+      "votes": 614,
+      "winner": false
+    },
+    {
+      "external_id": "17229633",
+      "title": "Ex-Communication",
+      "authors": [
+        "Peter Clines"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1373585286l/17229633.jpg",
+      "rank": 17,
+      "votes": 537,
+      "winner": false
+    },
+    {
+      "external_id": "15818440",
+      "title": "The Accursed",
+      "authors": [
+        "Joyce Carol Oates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348425145l/15818440.jpg",
+      "rank": 18,
+      "votes": 431,
+      "winner": false
+    },
+    {
+      "external_id": "15826602",
+      "title": "Red Moon",
+      "authors": [
+        "Benjamin Percy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1352304279l/15826602.jpg",
+      "rank": 19,
+      "votes": 280,
+      "winner": false
+    },
+    {
+      "external_id": "14781178",
+      "title": "American Elsewhere",
+      "authors": [
+        "Robert Jackson Bennett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1340758848l/14781178.jpg",
+      "rank": 20,
+      "votes": 163,
+      "winner": false
+    }
+  ]
+}

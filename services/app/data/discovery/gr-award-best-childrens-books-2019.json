@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-childrens-books-2019",
+  "kind": "award",
+  "title": "Middle Grade & Children's",
+  "source_url": "https://www.goodreads.com/choiceawards/best-childrens-books-2019",
+  "year": 2019,
+  "category": "Middle Grade & Children's",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:49.451820+00:00",
+  "books": [
+    {
+      "external_id": "43128231",
+      "title": "The Tyrant's Tomb",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1693988313l/43128231.jpg",
+      "rank": 1,
+      "votes": 33333,
+      "winner": true
+    },
+    {
+      "external_id": "43319657",
+      "title": "Tunnel of Bones",
+      "authors": [
+        "Victoria Schwab"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1547147699l/43319657.jpg",
+      "rank": 2,
+      "votes": 30557,
+      "winner": false
+    },
+    {
+      "external_id": "42097227",
+      "title": "Guts",
+      "authors": [
+        "Raina Telgemeier"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1538831809l/42097227.jpg",
+      "rank": 3,
+      "votes": 20488,
+      "winner": false
+    },
+    {
+      "external_id": "39280558",
+      "title": "The Remarkable Journey of Coyote Sunrise",
+      "authors": [
+        "Dan Gemeinhart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1535034048l/39280558._SY600_.jpg",
+      "rank": 4,
+      "votes": 10979,
+      "winner": false
+    },
+    {
+      "external_id": "39893619",
+      "title": "New Kid",
+      "authors": [
+        "Jerry Craft"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1534310236l/39893619.jpg",
+      "rank": 5,
+      "votes": 10452,
+      "winner": false
+    },
+    {
+      "external_id": "40139216",
+      "title": "A Crystal of Time",
+      "authors": [
+        "Soman Chainani"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1528122505l/40139216.jpg",
+      "rank": 6,
+      "votes": 9798,
+      "winner": false
+    },
+    {
+      "external_id": "34966859",
+      "title": "Dragon Pearl",
+      "authors": [
+        "Yoon Ha Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1517413544l/34966859.jpg",
+      "rank": 7,
+      "votes": 9008,
+      "winner": false
+    },
+    {
+      "external_id": "43120234",
+      "title": "Diary of an Awesome Friendly Kid",
+      "authors": [
+        "Jeff Kinney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1547955823l/43120234.jpg",
+      "rank": 8,
+      "votes": 8726,
+      "winner": false
+    },
+    {
+      "external_id": "40390757",
+      "title": "The Strangers",
+      "authors": [
+        "Margaret Peterson Haddix"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529990008l/40390757._SY600_.jpg",
+      "rank": 9,
+      "votes": 7878,
+      "winner": false
+    },
+    {
+      "external_id": "41067826",
+      "title": "Aru Shah and the Song of Death",
+      "authors": [
+        "Roshani Chokshi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1536069675l/41067826.jpg",
+      "rank": 10,
+      "votes": 7336,
+      "winner": false
+    },
+    {
+      "external_id": "40206380",
+      "title": "The Bridge Home",
+      "authors": [
+        "Padma Venkatraman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1531855208l/40206380.jpg",
+      "rank": 11,
+      "votes": 3481,
+      "winner": false
+    },
+    {
+      "external_id": "41154293",
+      "title": "Other Words for Home",
+      "authors": [
+        "Jasmine Warga"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608098767l/41154293._SY600_.jpg",
+      "rank": 12,
+      "votes": 3371,
+      "winner": false
+    },
+    {
+      "external_id": "43822791",
+      "title": "Legacy",
+      "authors": [
+        "Shannon Messenger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1557767102l/43822791.jpg",
+      "rank": 13,
+      "votes": 3061,
+      "winner": false
+    },
+    {
+      "external_id": "41429527",
+      "title": "Shouting at the Rain",
+      "authors": [
+        "Lynda Mullaly Hunt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1540471585l/41429527.jpg",
+      "rank": 14,
+      "votes": 2910,
+      "winner": false
+    },
+    {
+      "external_id": "38609428",
+      "title": "To Night Owl from Dogfish",
+      "authors": [
+        "Holly Goldberg Sloan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1559032551l/38609428._SY600_.jpg",
+      "rank": 15,
+      "votes": 2817,
+      "winner": false
+    },
+    {
+      "external_id": "43231099",
+      "title": "Dead Voices",
+      "authors": [
+        "Katherine Arden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553534795l/43231099.jpg",
+      "rank": 16,
+      "votes": 2757,
+      "winner": false
+    },
+    {
+      "external_id": "39855034",
+      "title": "The Unteachables",
+      "authors": [
+        "Gordon Korman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1531747705l/39855034.jpg",
+      "rank": 17,
+      "votes": 2715,
+      "winner": false
+    },
+    {
+      "external_id": "44023770",
+      "title": "A Tale of Magic...",
+      "authors": [
+        "Chris Colfer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552986512l/44023770.jpg",
+      "rank": 18,
+      "votes": 2460,
+      "winner": false
+    },
+    {
+      "external_id": "43453642",
+      "title": "Dear Sweet Pea",
+      "authors": [
+        "Julie   Murphy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550077223l/43453642.jpg",
+      "rank": 19,
+      "votes": 1344,
+      "winner": false
+    },
+    {
+      "external_id": "39884337",
+      "title": "Tristan Strong Punches a Hole in the Sky",
+      "authors": [
+        "Kwame Mbalia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549350938l/39884337.jpg",
+      "rank": 20,
+      "votes": 1295,
+      "winner": false
+    }
+  ]
+}

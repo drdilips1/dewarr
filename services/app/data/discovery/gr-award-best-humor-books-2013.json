@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-humor-books-2013",
+  "kind": "award",
+  "title": "Humor",
+  "source_url": "https://www.goodreads.com/choiceawards/best-humor-books-2013",
+  "year": 2013,
+  "category": "Humor",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:47.712832+00:00",
+  "books": [
+    {
+      "external_id": "17571007",
+      "title": "Hyperbole and a Half",
+      "authors": [
+        "Allie Brosh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1485676840l/17571007._SY600_.jpg",
+      "rank": 1,
+      "votes": 14309,
+      "winner": true
+    },
+    {
+      "external_id": "15858248",
+      "title": "Wallbanger",
+      "authors": [
+        "Alice Clayton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1352205960l/15858248.jpg",
+      "rank": 2,
+      "votes": 12494,
+      "winner": false
+    },
+    {
+      "external_id": "15790837",
+      "title": "Let's Explore Diabetes with Owls",
+      "authors": [
+        "David Sedaris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1359704028l/15790837.jpg",
+      "rank": 3,
+      "votes": 12423,
+      "winner": false
+    },
+    {
+      "external_id": "17673271",
+      "title": "Si-cology 1",
+      "authors": [
+        "Si Robertson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1379892056l/17673271.jpg",
+      "rank": 4,
+      "votes": 8520,
+      "winner": false
+    },
+    {
+      "external_id": "15852522",
+      "title": "Vader's Little Princess",
+      "authors": [
+        "Jeffrey   Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356174855l/15852522.jpg",
+      "rank": 5,
+      "votes": 7818,
+      "winner": false
+    },
+    {
+      "external_id": "17138271",
+      "title": "My Dog",
+      "authors": [
+        "Matthew Inman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391653917l/17138271.jpg",
+      "rank": 6,
+      "votes": 7432,
+      "winner": false
+    },
+    {
+      "external_id": "15843610",
+      "title": "Still Foolin' 'Em",
+      "authors": [
+        "Billy Crystal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369569180l/15843610.jpg",
+      "rank": 7,
+      "votes": 6202,
+      "winner": false
+    },
+    {
+      "external_id": "16085474",
+      "title": "Dad Is Fat",
+      "authors": [
+        "Jim Gaffigan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1354052763l/16085474.jpg",
+      "rank": 8,
+      "votes": 6087,
+      "winner": false
+    },
+    {
+      "external_id": "17262540",
+      "title": "William Shakespeare's Star Wars",
+      "authors": [
+        "Ian Doescher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1411696453l/17262540.jpg",
+      "rank": 9,
+      "votes": 5604,
+      "winner": false
+    },
+    {
+      "external_id": "16071701",
+      "title": "Bad Monkey",
+      "authors": [
+        "Carl Hiaasen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1751051813l/16071701._SY600_.jpg",
+      "rank": 10,
+      "votes": 5092,
+      "winner": false
+    },
+    {
+      "external_id": "15791144",
+      "title": "Adulting",
+      "authors": [
+        "Kelly Williams Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1352437033l/15791144.jpg",
+      "rank": 11,
+      "votes": 2574,
+      "winner": false
+    },
+    {
+      "external_id": "15808650",
+      "title": "The Tao of Martha",
+      "authors": [
+        "Jen Lancaster"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1353351021l/15808650.jpg",
+      "rank": 12,
+      "votes": 1951,
+      "winner": false
+    },
+    {
+      "external_id": "17938417",
+      "title": "To Be or Not To Be",
+      "authors": [
+        "Ryan North"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1371519375l/17938417.jpg",
+      "rank": 13,
+      "votes": 1897,
+      "winner": false
+    },
+    {
+      "external_id": "16000983",
+      "title": "Parenting",
+      "authors": [
+        "Amber Dusick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1367209715l/16000983.jpg",
+      "rank": 14,
+      "votes": 1574,
+      "winner": false
+    },
+    {
+      "external_id": "16130417",
+      "title": "The Last Word",
+      "authors": [
+        "Lisa Lutz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1372445469l/16130417.jpg",
+      "rank": 15,
+      "votes": 1455,
+      "winner": false
+    },
+    {
+      "external_id": "15791108",
+      "title": "Man Up!",
+      "authors": [
+        "Ross Mathews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1357703046l/15791108.jpg",
+      "rank": 16,
+      "votes": 1258,
+      "winner": false
+    },
+    {
+      "external_id": "16071830",
+      "title": "Wedding Night",
+      "authors": [
+        "Sophie Kinsella"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356471746l/16071830.jpg",
+      "rank": 17,
+      "votes": 1227,
+      "winner": false
+    },
+    {
+      "external_id": "18300604",
+      "title": "Love and Lists",
+      "authors": [
+        "Tara Sivec"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375919954l/18300604.jpg",
+      "rank": 18,
+      "votes": 892,
+      "winner": false
+    },
+    {
+      "external_id": "17262155",
+      "title": "Mad About the Boy",
+      "authors": [
+        "Helen Fielding"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1374883586l/17262155.jpg",
+      "rank": 19,
+      "votes": 693,
+      "winner": false
+    },
+    {
+      "external_id": "15815342",
+      "title": "Insane City",
+      "authors": [
+        "Dave Barry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1346076440l/15815342.jpg",
+      "rank": 20,
+      "votes": 206,
+      "winner": false
+    }
+  ]
+}

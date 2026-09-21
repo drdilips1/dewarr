@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-science-fiction-books-2017",
+  "kind": "award",
+  "title": "Science Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-fiction-books-2017",
+  "year": 2017,
+  "category": "Science Fiction",
+  "genres": [
+    "science-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:35.124393+00:00",
+  "books": [
+    {
+      "external_id": "34928122",
+      "title": "Artemis",
+      "authors": [
+        "Andy Weir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1776234222l/34928122._SY600_.jpg",
+      "rank": 1,
+      "votes": 33957,
+      "winner": true
+    },
+    {
+      "external_id": "30134847",
+      "title": "Waking Gods",
+      "authors": [
+        "Sylvain Neuvel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462736382l/30134847.jpg",
+      "rank": 2,
+      "votes": 21920,
+      "winner": false
+    },
+    {
+      "external_id": "31140332",
+      "title": "Thrawn",
+      "authors": [
+        "Timothy Zahn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1468787895l/31140332._SY600_.jpg",
+      "rank": 3,
+      "votes": 20595,
+      "winner": false
+    },
+    {
+      "external_id": "32283423",
+      "title": "American War",
+      "authors": [
+        "Omar El Akkad"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481494946l/32283423._SY600_.jpg",
+      "rank": 4,
+      "votes": 17537,
+      "winner": false
+    },
+    {
+      "external_id": "30038988",
+      "title": "Home",
+      "authors": [
+        "Nnedi Okorafor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470413239l/30038988.jpg",
+      "rank": 5,
+      "votes": 11470,
+      "winner": false
+    },
+    {
+      "external_id": "31451186",
+      "title": "Borne",
+      "authors": [
+        "Jeff Vandermeer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1477487850l/31451186.jpg",
+      "rank": 6,
+      "votes": 11035,
+      "winner": false
+    },
+    {
+      "external_id": "25877663",
+      "title": "Babylon’s Ashes",
+      "authors": [
+        "James S.A. Corey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442247299l/25877663._SY600_.jpg",
+      "rank": 7,
+      "votes": 10691,
+      "winner": false
+    },
+    {
+      "external_id": "30153293",
+      "title": "All Our Wrong Todays",
+      "authors": [
+        "Elan Mastai"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479757342l/30153293.jpg",
+      "rank": 8,
+      "votes": 10256,
+      "winner": false
+    },
+    {
+      "external_id": "29939160",
+      "title": "The Collapsing Empire",
+      "authors": [
+        "John Scalzi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464097604l/29939160.jpg",
+      "rank": 9,
+      "votes": 9788,
+      "winner": false
+    },
+    {
+      "external_id": "31213373",
+      "title": "And the Rest Is History",
+      "authors": [
+        "Jodi Taylor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1503844358l/31213373._SY600_.jpg",
+      "rank": 10,
+      "votes": 9664,
+      "winner": false
+    },
+    {
+      "external_id": "34878094",
+      "title": "For We Are Many",
+      "authors": [
+        "Dennis E. Taylor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492533321l/34878094._SY600_.jpg",
+      "rank": 11,
+      "votes": 2989,
+      "winner": false
+    },
+    {
+      "external_id": "33387769",
+      "title": "All Systems Red",
+      "authors": [
+        "Martha Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1788877304l/33387769._SY600_.jpg",
+      "rank": 12,
+      "votes": 2920,
+      "winner": false
+    },
+    {
+      "external_id": "34219845",
+      "title": "Provenance",
+      "authors": [
+        "Ann Leckie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1490622765l/34219845.jpg",
+      "rank": 13,
+      "votes": 2828,
+      "winner": false
+    },
+    {
+      "external_id": "32075825",
+      "title": "The Rise and Fall of D.O.D.O.",
+      "authors": [
+        "Neal Stephenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1486520624l/32075825._SY600_.jpg",
+      "rank": 14,
+      "votes": 1892,
+      "winner": false
+    },
+    {
+      "external_id": "32927239",
+      "title": "Raven Stratagem",
+      "authors": [
+        "Yoon Ha Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1478799108l/32927239.jpg",
+      "rank": 15,
+      "votes": 1536,
+      "winner": false
+    },
+    {
+      "external_id": "28962996",
+      "title": "Six Wakes",
+      "authors": [
+        "Mur Lafferty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483175828l/28962996._SY600_.jpg",
+      "rank": 16,
+      "votes": 1132,
+      "winner": false
+    },
+    {
+      "external_id": "31340859",
+      "title": "Fields of Fire",
+      "authors": [
+        "Marko Kloos"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479592901l/31340859.jpg",
+      "rank": 17,
+      "votes": 1108,
+      "winner": false
+    },
+    {
+      "external_id": "32922275",
+      "title": "The Stars Are Legion",
+      "authors": [
+        "Kameron Hurley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1478618024l/32922275._SY600_.jpg",
+      "rank": 18,
+      "votes": 807,
+      "winner": false
+    },
+    {
+      "external_id": "32446949",
+      "title": "The Punch Escrow",
+      "authors": [
+        "Tal M. Klein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1490875614l/32446949._SY600_.jpg",
+      "rank": 19,
+      "votes": 739,
+      "winner": false
+    },
+    {
+      "external_id": "28220647",
+      "title": "Seven Surrenders",
+      "authors": [
+        "Ada Palmer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1517514624l/28220647._SY600_.jpg",
+      "rank": 20,
+      "votes": 689,
+      "winner": false
+    }
+  ]
+}

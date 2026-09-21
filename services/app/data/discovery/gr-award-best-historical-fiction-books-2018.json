@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-historical-fiction-books-2018",
+  "kind": "award",
+  "title": "Historical Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-historical-fiction-books-2018",
+  "year": 2018,
+  "category": "Historical Fiction",
+  "genres": [
+    "historical-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:56.929286+00:00",
+  "books": [
+    {
+      "external_id": "34927828",
+      "title": "The Great Alone",
+      "authors": [
+        "Kristin Hannah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1521954798l/34927828.jpg",
+      "rank": 1,
+      "votes": 61702,
+      "winner": true
+    },
+    {
+      "external_id": "37486222",
+      "title": "The Tattooist of Auschwitz",
+      "authors": [
+        "Heather   Morris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523720881l/37486222.jpg",
+      "rank": 2,
+      "votes": 55536,
+      "winner": false
+    },
+    {
+      "external_id": "30288282",
+      "title": "The Immortalists",
+      "authors": [
+        "Chloe  Benjamin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493015963l/30288282.jpg",
+      "rank": 3,
+      "votes": 30737,
+      "winner": false
+    },
+    {
+      "external_id": "38530939",
+      "title": "The Clockmaker's Daughter",
+      "authors": [
+        "Kate Morton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1526476937l/38530939._SY600_.jpg",
+      "rank": 4,
+      "votes": 27451,
+      "winner": false
+    },
+    {
+      "external_id": "37703550",
+      "title": "Where the Crawdads Sing",
+      "authors": [
+        "Delia Owens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1563462890l/37703550._SY600_.jpg",
+      "rank": 5,
+      "votes": 18540,
+      "winner": false
+    },
+    {
+      "external_id": "34374628",
+      "title": "Next Year in Havana",
+      "authors": [
+        "Chanel Cleeton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498524468l/34374628._SY600_.jpg",
+      "rank": 6,
+      "votes": 12784,
+      "winner": false
+    },
+    {
+      "external_id": "36373417",
+      "title": "The Map of Salt and Stars",
+      "authors": [
+        "Zeyn Joukhadar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608401496l/36373417._SY600_.jpg",
+      "rank": 7,
+      "votes": 12446,
+      "winner": false
+    },
+    {
+      "external_id": "37946414",
+      "title": "Transcription",
+      "authors": [
+        "Kate Atkinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1521173471l/37946414.jpg",
+      "rank": 8,
+      "votes": 10602,
+      "winner": false
+    },
+    {
+      "external_id": "36723246",
+      "title": "Warlight",
+      "authors": [
+        "Michael Ondaatje"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1514442361l/36723246.jpg",
+      "rank": 9,
+      "votes": 10156,
+      "winner": false
+    },
+    {
+      "external_id": "36381085",
+      "title": "The Summer Wives",
+      "authors": [
+        "Beatriz Williams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509586304l/36381085.jpg",
+      "rank": 10,
+      "votes": 8944,
+      "winner": false
+    },
+    {
+      "external_id": "35397026",
+      "title": "My Dear Hamilton",
+      "authors": [
+        "Stephanie Dray"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523481270l/35397026._SY600_.jpg",
+      "rank": 11,
+      "votes": 4213,
+      "winner": false
+    },
+    {
+      "external_id": "38236861",
+      "title": "Unsheltered",
+      "authors": [
+        "Barbara Kingsolver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1527384246l/38236861.jpg",
+      "rank": 12,
+      "votes": 4027,
+      "winner": false
+    },
+    {
+      "external_id": "36097619",
+      "title": "The Tuscan Child",
+      "authors": [
+        "Rhys Bowen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507626327l/36097619.jpg",
+      "rank": 13,
+      "votes": 3358,
+      "winner": false
+    },
+    {
+      "external_id": "36636727",
+      "title": "Fruit of the Drunken Tree",
+      "authors": [
+        "Ingrid Rojas Contreras"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511284543l/36636727.jpg",
+      "rank": 14,
+      "votes": 2794,
+      "winner": false
+    },
+    {
+      "external_id": "36614133",
+      "title": "Love and Ruin",
+      "authors": [
+        "Paula McLain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1515608665l/36614133.jpg",
+      "rank": 15,
+      "votes": 2652,
+      "winner": false
+    },
+    {
+      "external_id": "35889209",
+      "title": "White Rose, Black Forest",
+      "authors": [
+        "Eoin Dempsey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520356787l/35889209._SY600_.jpg",
+      "rank": 16,
+      "votes": 2645,
+      "winner": false
+    },
+    {
+      "external_id": "37946116",
+      "title": "War of the Wolf",
+      "authors": [
+        "Bernard Cornwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1526598353l/37946116.jpg",
+      "rank": 17,
+      "votes": 1937,
+      "winner": false
+    },
+    {
+      "external_id": "39828805",
+      "title": "Bellewether",
+      "authors": [
+        "Susanna Kearsley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1532439339l/39828805.jpg",
+      "rank": 18,
+      "votes": 1327,
+      "winner": false
+    },
+    {
+      "external_id": "35995489",
+      "title": "The Extraordinary Life of Sam Hell",
+      "authors": [
+        "Robert Dugoni"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510251600l/35995489._SY600_.jpg",
+      "rank": 19,
+      "votes": 1128,
+      "winner": false
+    },
+    {
+      "external_id": "36739329",
+      "title": "The Great Believers",
+      "authors": [
+        "Rebecca Makkai"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1513005580l/36739329.jpg",
+      "rank": 20,
+      "votes": 1042,
+      "winner": false
+    }
+  ]
+}

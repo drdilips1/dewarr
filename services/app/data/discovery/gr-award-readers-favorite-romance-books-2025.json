@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-readers-favorite-romance-books-2025",
+  "kind": "award",
+  "title": "Romance",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-romance-books-2025",
+  "year": 2025,
+  "category": "Romance",
+  "genres": [
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:39:45.253347+00:00",
+  "books": [
+    {
+      "external_id": "231922031",
+      "title": "Great Big Beautiful Life",
+      "authors": [
+        "Emily Henry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1745536299l/231922031._SY600_.jpg",
+      "rank": 1,
+      "votes": 117054,
+      "winner": true
+    },
+    {
+      "external_id": "217182552",
+      "title": "Say You'll Remember Me",
+      "authors": [
+        "Abby Jimenez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1726849668l/217182552._SY600_.jpg",
+      "rank": 2,
+      "votes": 93945,
+      "winner": false
+    },
+    {
+      "external_id": "217245654",
+      "title": "One Golden Summer",
+      "authors": [
+        "Carley Fortune"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1733978703l/217245654._SY600_.jpg",
+      "rank": 3,
+      "votes": 93098,
+      "winner": false
+    },
+    {
+      "external_id": "212806619",
+      "title": "Deep End",
+      "authors": [
+        "Ali Hazelwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1719029257l/212806619._SY600_.jpg",
+      "rank": 4,
+      "votes": 86798,
+      "winner": false
+    },
+    {
+      "external_id": "211399784",
+      "title": "The Favorites",
+      "authors": [
+        "Layne Fargo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1713149403l/211399784._SY600_.jpg",
+      "rank": 5,
+      "votes": 57653,
+      "winner": false
+    },
+    {
+      "external_id": "216156650",
+      "title": "Rewind It Back",
+      "authors": [
+        "Liz Tomforde"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1738087358l/216156650._SY600_.jpg",
+      "rank": 6,
+      "votes": 56688,
+      "winner": false
+    },
+    {
+      "external_id": "213243908",
+      "title": "First-Time Caller",
+      "authors": [
+        "B.K. Borison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718283728l/213243908._SY600_.jpg",
+      "rank": 7,
+      "votes": 53979,
+      "winner": false
+    },
+    {
+      "external_id": "214310631",
+      "title": "Scythe & Sparrow",
+      "authors": [
+        "Brynne Weaver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718848287l/214310631._SY600_.jpg",
+      "rank": 8,
+      "votes": 44765,
+      "winner": false
+    },
+    {
+      "external_id": "217271613",
+      "title": "Wild Side",
+      "authors": [
+        "Elsie Silver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742769934l/217271613.jpg",
+      "rank": 9,
+      "votes": 43930,
+      "winner": false
+    },
+    {
+      "external_id": "214194773",
+      "title": "King of Envy",
+      "authors": [
+        "Ana Huang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1731645190l/214194773._SY600_.jpg",
+      "rank": 10,
+      "votes": 38992,
+      "winner": false
+    },
+    {
+      "external_id": "228691356",
+      "title": "Problematic Summer Romance",
+      "authors": [
+        "Ali Hazelwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1745430233l/228691356.jpg",
+      "rank": 11,
+      "votes": 17738,
+      "winner": false
+    },
+    {
+      "external_id": "220255008",
+      "title": "The Gingerbread Bakery",
+      "authors": [
+        "Laurie Gilmore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1734202124l/220255008._SY600_.jpg",
+      "rank": 12,
+      "votes": 17019,
+      "winner": false
+    },
+    {
+      "external_id": "218372325",
+      "title": "Can't Get Enough",
+      "authors": [
+        "Kennedy Ryan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1730138255l/218372325._SY600_.jpg",
+      "rank": 13,
+      "votes": 13433,
+      "winner": false
+    },
+    {
+      "external_id": "229004405",
+      "title": "If It Makes You Happy",
+      "authors": [
+        "Julie Olivia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1743774517l/229004405._SY600_.jpg",
+      "rank": 14,
+      "votes": 12763,
+      "winner": false
+    },
+    {
+      "external_id": "227081370",
+      "title": "Till Summer Do Us Part",
+      "authors": [
+        "Meghan Quinn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1750687903l/227081370._SY600_.jpg",
+      "rank": 15,
+      "votes": 12085,
+      "winner": false
+    },
+    {
+      "external_id": "231299870",
+      "title": "Tourist Season",
+      "authors": [
+        "Brynne Weaver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1744773411l/231299870._SY600_.jpg",
+      "rank": 16,
+      "votes": 11217,
+      "winner": false
+    },
+    {
+      "external_id": "211164792",
+      "title": "Beg, Borrow, or Steal",
+      "authors": [
+        "Sarah       Adams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1721061234l/211164792._SY600_.jpg",
+      "rank": 17,
+      "votes": 10892,
+      "winner": false
+    },
+    {
+      "external_id": "216233719",
+      "title": "Story of My Life",
+      "authors": [
+        "Lucy Score"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1738020312l/216233719._SY600_.jpg",
+      "rank": 18,
+      "votes": 8254,
+      "winner": false
+    },
+    {
+      "external_id": "213618272",
+      "title": "Spiral",
+      "authors": [
+        "Bal Khabra"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716934079l/213618272._SY600_.jpg",
+      "rank": 19,
+      "votes": 4803,
+      "winner": false
+    },
+    {
+      "external_id": "214619719",
+      "title": "Love Arranged",
+      "authors": [
+        "Lauren Asher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1744907536l/214619719._SY600_.jpg",
+      "rank": 20,
+      "votes": 3026,
+      "winner": false
+    }
+  ]
+}

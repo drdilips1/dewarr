@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-historical-fiction-books-2022",
+  "kind": "award",
+  "title": "Historical Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-historical-fiction-books-2022",
+  "year": 2022,
+  "category": "Historical Fiction",
+  "genres": [
+    "historical-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:38.423705+00:00",
+  "books": [
+    {
+      "external_id": "60435878",
+      "title": "Carrie Soto Is Back",
+      "authors": [
+        "Taylor Jenkins Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1649848581l/60435878.jpg",
+      "rank": 1,
+      "votes": 100745,
+      "winner": true
+    },
+    {
+      "external_id": "58065033",
+      "title": "Lessons in Chemistry",
+      "authors": [
+        "Bonnie Garmus"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1634748496l/58065033._SY600_.jpg",
+      "rank": 2,
+      "votes": 92554,
+      "winner": false
+    },
+    {
+      "external_id": "57699848",
+      "title": "Go Tell the Bees That I Am Gone",
+      "authors": [
+        "Diana Gabaldon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1618500168l/57699848.jpg",
+      "rank": 3,
+      "votes": 42201,
+      "winner": false
+    },
+    {
+      "external_id": "58490567",
+      "title": "The Diamond Eye",
+      "authors": [
+        "Kate Quinn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1641777418l/58490567.jpg",
+      "rank": 4,
+      "votes": 35056,
+      "winner": false
+    },
+    {
+      "external_id": "57926137",
+      "title": "Black Cake",
+      "authors": [
+        "Charmaine Wilkerson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1623664615l/57926137.jpg",
+      "rank": 5,
+      "votes": 28111,
+      "winner": false
+    },
+    {
+      "external_id": "57933338",
+      "title": "Violeta",
+      "authors": [
+        "Isabel Allende"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1623948647l/57933338.jpg",
+      "rank": 6,
+      "votes": 26802,
+      "winner": false
+    },
+    {
+      "external_id": "60353768",
+      "title": "The Marriage Portrait",
+      "authors": [
+        "Maggie O'Farrell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1655741851l/60353768.jpg",
+      "rank": 7,
+      "votes": 23656,
+      "winner": false
+    },
+    {
+      "external_id": "55650158",
+      "title": "Take My Hand",
+      "authors": [
+        "Dolen Perkins-Valdez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1626449299l/55650158.jpg",
+      "rank": 8,
+      "votes": 21970,
+      "winner": false
+    },
+    {
+      "external_id": "58803339",
+      "title": "The Book Woman's Daughter",
+      "authors": [
+        "Kim Michele Richardson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1651584644l/58803339._SY600_.jpg",
+      "rank": 9,
+      "votes": 21013,
+      "winner": false
+    },
+    {
+      "external_id": "58891551",
+      "title": "Young Mungo",
+      "authors": [
+        "Douglas   Stuart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1637602267l/58891551.jpg",
+      "rank": 10,
+      "votes": 18330,
+      "winner": false
+    },
+    {
+      "external_id": "57099323",
+      "title": "The Magnolia Palace",
+      "authors": [
+        "Fiona  Davis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1619545174l/57099323.jpg",
+      "rank": 11,
+      "votes": 5878,
+      "winner": false
+    },
+    {
+      "external_id": "57693519",
+      "title": "The Last House on the Street",
+      "authors": [
+        "Diane Chamberlain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1635841627l/57693519.jpg",
+      "rank": 12,
+      "votes": 5019,
+      "winner": false
+    },
+    {
+      "external_id": "52268640",
+      "title": "Memphis",
+      "authors": [
+        "Tara M. Stringfellow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1626515519l/52268640.jpg",
+      "rank": 13,
+      "votes": 5009,
+      "winner": false
+    },
+    {
+      "external_id": "59807978",
+      "title": "Hester",
+      "authors": [
+        "Laurie Lico Albanese"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659421275l/59807978.jpg",
+      "rank": 14,
+      "votes": 4866,
+      "winner": false
+    },
+    {
+      "external_id": "57518629",
+      "title": "The Last Rose of Shanghai",
+      "authors": [
+        "Weina Dai Randel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631875491l/57518629.jpg",
+      "rank": 15,
+      "votes": 4265,
+      "winner": false
+    },
+    {
+      "external_id": "60371805",
+      "title": "Shrines of Gaiety",
+      "authors": [
+        "Kate Atkinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1654809117l/60371805.jpg",
+      "rank": 16,
+      "votes": 3351,
+      "winner": false
+    },
+    {
+      "external_id": "58210933",
+      "title": "Trust",
+      "authors": [
+        "Hernan Diaz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631246461l/58210933.jpg",
+      "rank": 17,
+      "votes": 3275,
+      "winner": false
+    },
+    {
+      "external_id": "60581087",
+      "title": "The Passenger",
+      "authors": [
+        "Cormac McCarthy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1646843143l/60581087._SY600_.jpg",
+      "rank": 18,
+      "votes": 3237,
+      "winner": false
+    },
+    {
+      "external_id": "58231775",
+      "title": "Peach Blossom Spring",
+      "authors": [
+        "Melissa Fu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1625715839l/58231775.jpg",
+      "rank": 19,
+      "votes": 3029,
+      "winner": false
+    },
+    {
+      "external_id": "55987334",
+      "title": "Four Treasures of the Sky",
+      "authors": [
+        "Jenny Tinghui Zhang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620715564l/55987334.jpg",
+      "rank": 20,
+      "votes": 2581,
+      "winner": false
+    }
+  ]
+}

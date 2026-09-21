@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-graphic-novels-comics-2012",
+  "kind": "award",
+  "title": "Graphic Novels & Comics",
+  "source_url": "https://www.goodreads.com/choiceawards/best-graphic-novels-comics-2012",
+  "year": 2012,
+  "category": "Graphic Novels & Comics",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:19.419607+00:00",
+  "books": [
+    {
+      "external_id": "13581999",
+      "title": "The Walking Dead, Vol. 16",
+      "authors": [
+        "Robert Kirkman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1337002667l/13581999.jpg",
+      "rank": 1,
+      "votes": 8614,
+      "winner": true
+    },
+    {
+      "external_id": "12413836",
+      "title": "Avatar",
+      "authors": [
+        "Gene Luen Yang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1335027742l/12413836.jpg",
+      "rank": 2,
+      "votes": 6937,
+      "winner": false
+    },
+    {
+      "external_id": "9723976",
+      "title": "Frostbite",
+      "authors": [
+        "Leigh Dragoon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331421398l/9723976.jpg",
+      "rank": 3,
+      "votes": 6464,
+      "winner": false
+    },
+    {
+      "external_id": "11514260",
+      "title": "Hush, Hush",
+      "authors": [
+        "Derek Ruiz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1312079637l/11514260.jpg",
+      "rank": 4,
+      "votes": 4517,
+      "winner": false
+    },
+    {
+      "external_id": "13223349",
+      "title": "Batman, Volume 1",
+      "authors": [
+        "Scott Snyder"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1674319615l/13223349.jpg",
+      "rank": 5,
+      "votes": 3246,
+      "winner": false
+    },
+    {
+      "external_id": "10630620",
+      "title": "Fever Moon",
+      "authors": [
+        "Karen Marie Moning"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1330966513l/10630620.jpg",
+      "rank": 6,
+      "votes": 3075,
+      "winner": false
+    },
+    {
+      "external_id": "11566956",
+      "title": "Are You My Mother?",
+      "authors": [
+        "Alison Bechdel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511409644l/11566956._SY600_.jpg",
+      "rank": 7,
+      "votes": 3025,
+      "winner": false
+    },
+    {
+      "external_id": "12033364",
+      "title": "Soulless",
+      "authors": [
+        "Gail Carriger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1310995028l/12033364.jpg",
+      "rank": 8,
+      "votes": 2588,
+      "winner": false
+    },
+    {
+      "external_id": "10710392",
+      "title": "Chopsticks",
+      "authors": [
+        "Jessica  Anthony"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1364073067l/10710392.jpg",
+      "rank": 9,
+      "votes": 2525,
+      "winner": false
+    },
+    {
+      "external_id": "13490570",
+      "title": "Locke & Key, Vol. 5",
+      "authors": [
+        "Joe  Hill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1343848792l/13490570.jpg",
+      "rank": 10,
+      "votes": 2166,
+      "winner": false
+    },
+    {
+      "external_id": "15704307",
+      "title": "Saga, Volume 1",
+      "authors": [
+        "Brian K. Vaughan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1486028947l/15704307._SY600_.jpg",
+      "rank": 11,
+      "votes": 1023,
+      "winner": false
+    },
+    {
+      "external_id": "13573235",
+      "title": "Building Stories",
+      "authors": [
+        "Chris Ware"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336846329l/13573235.jpg",
+      "rank": 12,
+      "votes": 886,
+      "winner": false
+    },
+    {
+      "external_id": "13226173",
+      "title": "The Infernal Devices",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344542903l/13226173.jpg",
+      "rank": 13,
+      "votes": 868,
+      "winner": false
+    },
+    {
+      "external_id": "12132930",
+      "title": "The Unwritten, Vol. 5",
+      "authors": [
+        "Mike Carey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327959829l/12132930.jpg",
+      "rank": 14,
+      "votes": 747,
+      "winner": false
+    },
+    {
+      "external_id": "11389398",
+      "title": "Friends With Boys",
+      "authors": [
+        "Faith Erin Hicks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1317794304l/11389398.jpg",
+      "rank": 15,
+      "votes": 737,
+      "winner": false
+    },
+    {
+      "external_id": "13513205",
+      "title": "A Wrinkle in Time",
+      "authors": [
+        "Hope Larson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1334801023l/13513205.jpg",
+      "rank": 16,
+      "votes": 573,
+      "winner": false
+    },
+    {
+      "external_id": "12153951",
+      "title": "American Vampire, Vol. 3",
+      "authors": [
+        "Scott Snyder"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1329038804l/12153951.jpg",
+      "rank": 17,
+      "votes": 429,
+      "winner": false
+    },
+    {
+      "external_id": "13228097",
+      "title": "Fables, Vol. 17",
+      "authors": [
+        "Bill Willingham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375405130l/13228097.jpg",
+      "rank": 18,
+      "votes": 279,
+      "winner": false
+    },
+    {
+      "external_id": "13228306",
+      "title": "Scalped, Vol. 9",
+      "authors": [
+        "Jason Aaron"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741148588l/13228306.jpg",
+      "rank": 19,
+      "votes": 126,
+      "winner": false
+    },
+    {
+      "external_id": "13227874",
+      "title": "Batwoman, Volume 1",
+      "authors": [
+        "J.H. Williams III"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362089266l/13227874.jpg",
+      "rank": 20,
+      "votes": 122,
+      "winner": false
+    }
+  ]
+}

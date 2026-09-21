@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-picture-books-2016",
+  "kind": "award",
+  "title": "Picture Books",
+  "source_url": "https://www.goodreads.com/choiceawards/best-picture-books-2016",
+  "year": 2016,
+  "category": "Picture Books",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:25.981202+00:00",
+  "books": [
+    {
+      "external_id": "27247476",
+      "title": "The Thank You Book",
+      "authors": [
+        "Mo Willems"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1454296147l/27247476.jpg",
+      "rank": 1,
+      "votes": 16433,
+      "winner": true
+    },
+    {
+      "external_id": "28645670",
+      "title": "They All Saw a Cat",
+      "authors": [
+        "Brendan Wenzel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460909821l/28645670.jpg",
+      "rank": 2,
+      "votes": 11291,
+      "winner": false
+    },
+    {
+      "external_id": "26030671",
+      "title": "Are We There Yet?",
+      "authors": [
+        "Dan Santat"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439827023l/26030671.jpg",
+      "rank": 3,
+      "votes": 10942,
+      "winner": false
+    },
+    {
+      "external_id": "28863341",
+      "title": "What Do You Do With a Problem?",
+      "authors": [
+        "Kobi Yamada"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462409348l/28863341._SY600_.jpg",
+      "rank": 4,
+      "votes": 10743,
+      "winner": false
+    },
+    {
+      "external_id": "25785760",
+      "title": "Ida, Always",
+      "authors": [
+        "Caron Levis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456077882l/25785760._SY600_.jpg",
+      "rank": 5,
+      "votes": 9761,
+      "winner": false
+    },
+    {
+      "external_id": "28686931",
+      "title": "A Child of Books",
+      "authors": [
+        "Oliver Jeffers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459436374l/28686931._SY600_.jpg",
+      "rank": 6,
+      "votes": 9541,
+      "winner": false
+    },
+    {
+      "external_id": "25689038",
+      "title": "Nobody Likes a Goblin",
+      "authors": [
+        "Ben Hatke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1484349735l/25689038._SY600_.jpg",
+      "rank": 7,
+      "votes": 7029,
+      "winner": false
+    },
+    {
+      "external_id": "28507895",
+      "title": "Ada Twist, Scientist (The Questioneers",
+      "authors": [
+        "Andrea Beaty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1458172796l/28507895._SY600_.jpg",
+      "rank": 8,
+      "votes": 6769,
+      "winner": false
+    },
+    {
+      "external_id": "27064356",
+      "title": "Otter Goes to School",
+      "authors": [
+        "Sam Garton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1450040695l/27064356._SY600_.jpg",
+      "rank": 9,
+      "votes": 6524,
+      "winner": false
+    },
+    {
+      "external_id": "28586748",
+      "title": "We Found a Hat",
+      "authors": [
+        "Jon Klassen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474569626l/28586748._SY600_.jpg",
+      "rank": 10,
+      "votes": 5610,
+      "winner": false
+    },
+    {
+      "external_id": "26244910",
+      "title": "Thunder Boy Jr.",
+      "authors": [
+        "Sherman Alexie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1444074952l/26244910._SY600_.jpg",
+      "rank": 11,
+      "votes": 3203,
+      "winner": false
+    },
+    {
+      "external_id": "25332008",
+      "title": "When Green Becomes Tomatoes",
+      "authors": [
+        "Julie Fogliano"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1451244283l/25332008.jpg",
+      "rank": 12,
+      "votes": 2621,
+      "winner": false
+    },
+    {
+      "external_id": "25817352",
+      "title": "Worm Loves Worm",
+      "authors": [
+        "J.J. Austrian"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442816894l/25817352._SY600_.jpg",
+      "rank": 13,
+      "votes": 2342,
+      "winner": false
+    },
+    {
+      "external_id": "25489475",
+      "title": "Snappsy the Alligator",
+      "authors": [
+        "Julie Falatko"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1434189243l/25489475._SY600_.jpg",
+      "rank": 14,
+      "votes": 2149,
+      "winner": false
+    },
+    {
+      "external_id": "25689022",
+      "title": "School's First Day of School",
+      "authors": [
+        "Adam Rex"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442849331l/25689022._SY600_.jpg",
+      "rank": 15,
+      "votes": 1873,
+      "winner": false
+    },
+    {
+      "external_id": "25785644",
+      "title": "A Hungry Lion, or A Dwindling Assortment of Animals",
+      "authors": [
+        "Lucy Ruth Cummins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1452817600l/25785644._SY600_.jpg",
+      "rank": 16,
+      "votes": 1744,
+      "winner": false
+    },
+    {
+      "external_id": "24833423",
+      "title": "Twenty Yawns",
+      "authors": [
+        "Jane Smiley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1449339756l/24833423._SY600_.jpg",
+      "rank": 17,
+      "votes": 1431,
+      "winner": false
+    },
+    {
+      "external_id": "26031162",
+      "title": "Flora and the Peacocks",
+      "authors": [
+        "Molly Idle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1482179309l/26031162._SY600_.jpg",
+      "rank": 18,
+      "votes": 1151,
+      "winner": false
+    },
+    {
+      "external_id": "28691962",
+      "title": "King Baby",
+      "authors": [
+        "Kate Beaton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1455173168l/28691962.jpg",
+      "rank": 19,
+      "votes": 997,
+      "winner": false
+    },
+    {
+      "external_id": "25897837",
+      "title": "Maybe Something Beautiful",
+      "authors": [
+        "F. Isabel Campoy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436842355l/25897837._SY600_.jpg",
+      "rank": 20,
+      "votes": 732,
+      "winner": false
+    }
+  ]
+}

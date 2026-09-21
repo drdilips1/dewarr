@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-science-fiction-books-2011",
+  "kind": "award",
+  "title": "Science Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-fiction-books-2011",
+  "year": 2011,
+  "category": "Science Fiction",
+  "genres": [
+    "science-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:40.045727+00:00",
+  "books": [
+    {
+      "external_id": "10644930",
+      "title": "11/22/63",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327876792l/10644930.jpg",
+      "rank": 1,
+      "votes": 4429,
+      "winner": true
+    },
+    {
+      "external_id": "9969571",
+      "title": "Ready Player One",
+      "authors": [
+        "Ernest Cline"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500930947l/9969571._SY600_.jpg",
+      "rank": 2,
+      "votes": 3402,
+      "winner": false
+    },
+    {
+      "external_id": "11045709",
+      "title": "When She Woke",
+      "authors": [
+        "Hillary Jordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358274814l/11045709.jpg",
+      "rank": 3,
+      "votes": 2682,
+      "winner": false
+    },
+    {
+      "external_id": "12620241",
+      "title": "Silver Shark",
+      "authors": [
+        "Ilona Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1316029956l/12620241.jpg",
+      "rank": 4,
+      "votes": 2611,
+      "winner": false
+    },
+    {
+      "external_id": "9634967",
+      "title": "Robopocalypse",
+      "authors": [
+        "Daniel H. Wilson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327885891l/9634967.jpg",
+      "rank": 5,
+      "votes": 2234,
+      "winner": false
+    },
+    {
+      "external_id": "9673936",
+      "title": "Basilisk",
+      "authors": [
+        "Rob Thurman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1296384051l/9673936.jpg",
+      "rank": 6,
+      "votes": 1634,
+      "winner": false
+    },
+    {
+      "external_id": "9265453",
+      "title": "Embassytown",
+      "authors": [
+        "China Miéville"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320470326l/9265453.jpg",
+      "rank": 7,
+      "votes": 1424,
+      "winner": false
+    },
+    {
+      "external_id": "9795166",
+      "title": "Phoenix Rising",
+      "authors": [
+        "Pip Ballantine"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1319574583l/9795166.jpg",
+      "rank": 8,
+      "votes": 1251,
+      "winner": false
+    },
+    {
+      "external_id": "10648186",
+      "title": "Aftermath",
+      "authors": [
+        "Ann Aguirre"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388447612l/10648186.jpg",
+      "rank": 9,
+      "votes": 1160,
+      "winner": false
+    },
+    {
+      "external_id": "8855321",
+      "title": "Leviathan Wakes",
+      "authors": [
+        "James S.A. Corey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1411013134l/8855321.jpg",
+      "rank": 10,
+      "votes": 897,
+      "winner": false
+    },
+    {
+      "external_id": "9647532",
+      "title": "Fuzzy Nation",
+      "authors": [
+        "John Scalzi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1316132345l/9647532.jpg",
+      "rank": 11,
+      "votes": 461,
+      "winner": false
+    },
+    {
+      "external_id": "8429441",
+      "title": "Wonder",
+      "authors": [
+        "Robert J. Sawyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1276291664l/8429441.jpg",
+      "rank": 12,
+      "votes": 420,
+      "winner": false
+    },
+    {
+      "external_id": "9762449",
+      "title": "Ghost Ship",
+      "authors": [
+        "Sharon Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1457446024l/9762449._SY600_.jpg",
+      "rank": 13,
+      "votes": 359,
+      "winner": false
+    },
+    {
+      "external_id": "10138547",
+      "title": "Rule 34",
+      "authors": [
+        "Charles Stross"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1306168735l/10138547.jpg",
+      "rank": 14,
+      "votes": 302,
+      "winner": false
+    },
+    {
+      "external_id": "9676849",
+      "title": "Dreadnaught",
+      "authors": [
+        "Jack Campbell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441050271l/9676849._SY600_.jpg",
+      "rank": 15,
+      "votes": 255,
+      "winner": false
+    },
+    {
+      "external_id": "8714075",
+      "title": "Alien in the Family",
+      "authors": [
+        "Gini Koch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1323746325l/8714075.jpg",
+      "rank": 16,
+      "votes": 210,
+      "winner": false
+    },
+    {
+      "external_id": "8701508",
+      "title": "Rising Tides",
+      "authors": [
+        "Taylor  Anderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1342530348l/8701508.jpg",
+      "rank": 17,
+      "votes": 105,
+      "winner": false
+    },
+    {
+      "external_id": "9432902",
+      "title": "Flashback",
+      "authors": [
+        "Dan Simmons"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1291668812l/9432902.jpg",
+      "rank": 18,
+      "votes": 71,
+      "winner": false
+    },
+    {
+      "external_id": "10207116",
+      "title": "The Final Evolution",
+      "authors": [
+        "Jeff Somers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344263821l/10207116.jpg",
+      "rank": 19,
+      "votes": 39,
+      "winner": false
+    },
+    {
+      "external_id": "9756310",
+      "title": "The Clockwork Rocket",
+      "authors": [
+        "Greg Egan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1309397561l/9756310.jpg",
+      "rank": 20,
+      "votes": 32,
+      "winner": false
+    }
+  ]
+}

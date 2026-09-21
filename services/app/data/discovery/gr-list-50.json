@@ -1,0 +1,1116 @@
+{
+  "id": "gr-list-50",
+  "kind": "listopia",
+  "title": "The Best Epic Fantasy (fiction)",
+  "source_url": "https://www.goodreads.com/list/show/50",
+  "year": null,
+  "category": null,
+  "genres": [
+    "fantasy"
+  ],
+  "count": 4812,
+  "coverage": "partial",
+  "updated_at": "2026-09-20T19:04:34.675049+00:00",
+  "books": [
+    {
+      "external_id": "13496",
+      "title": "A Game of Thrones (A Song of Ice and Fire, #1)",
+      "authors": [
+        "George R.R. Martin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562726234i/13496._SY600_.jpg",
+      "rank": 1,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "30",
+      "title": "J.R.R. Tolkien 4-Book Boxed Set: The Hobbit and The Lord of the Rings",
+      "authors": [
+        "J.R.R. Tolkien"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1656625315i/30._SY600_.jpg",
+      "rank": 2,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "186074",
+      "title": "The Name of the Wind (The Kingkiller Chronicle, #1)",
+      "authors": [
+        "Patrick Rothfuss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1704917687i/186074._SY600_.jpg",
+      "rank": 3,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7235533",
+      "title": "The Way of Kings (The Stormlight Archive, #1)",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659905828i/7235533._SY600_.jpg",
+      "rank": 4,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "228665",
+      "title": "The Eye of the World (The Wheel of Time, #1)",
+      "authors": [
+        "Robert Jordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659905815i/228665._SY600_.jpg",
+      "rank": 5,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "11127",
+      "title": "The Chronicles of Narnia (The Chronicles of Narnia, #1-7)",
+      "authors": [
+        "C.S. Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1661032875i/11127._SY600_.jpg",
+      "rank": 6,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "68428",
+      "title": "Mistborn: The Final Empire (Mistborn, #1)",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617768316i/68428._SY600_.jpg",
+      "rank": 7,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "18116",
+      "title": "His Dark Materials (His Dark Materials #1-3)",
+      "authors": [
+        "Philip Pullman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442329494i/18116._SY600_.jpg",
+      "rank": 8,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "77197",
+      "title": "Assassin's Apprentice (Farseer Trilogy, #1)",
+      "authors": [
+        "Robin Hobb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673728072i/77197._SY600_.jpg",
+      "rank": 9,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "113436",
+      "title": "Eragon (The Inheritance Cycle #1)",
+      "authors": [
+        "Christopher Paolini"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366212852i/113436._SY600_.jpg",
+      "rank": 10,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "29588376",
+      "title": "The Lies of Locke Lamora (Gentleman Bastard, #1)",
+      "authors": [
+        "Scott Lynch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1458646334i/29588376._SY600_.jpg",
+      "rank": 11,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "43615",
+      "title": "The Gunslinger (The Dark Tower, #1)",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554220416i/43615._SY600_.jpg",
+      "rank": 12,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "43889",
+      "title": "Wizard's First Rule (Sword of Truth, #1)",
+      "authors": [
+        "Terry Goodkind"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385248539i/43889._SY600_.jpg",
+      "rank": 13,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "944073",
+      "title": "The Blade Itself (The First Law, #1)",
+      "authors": [
+        "Joe Abercrombie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1747782133i/944073._SY600_.jpg",
+      "rank": 14,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7332",
+      "title": "The Silmarillion",
+      "authors": [
+        "J.R.R. Tolkien"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1610045590i/7332._SY600_.jpg",
+      "rank": 15,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "55399",
+      "title": "Gardens of the Moon (Malazan Book of the Fallen, #1)",
+      "authors": [
+        "Steven Erikson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1548497031i/55399._SY600_.jpg",
+      "rank": 16,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "21787",
+      "title": "The Princess Bride",
+      "authors": [
+        "William Goldman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327903636i/21787._SY600_.jpg",
+      "rank": 17,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "44660",
+      "title": "The Belgariad Boxed Set: Pawn of Prophecy / Queen of Sorcery / Magician's Gambit / Castle of Wizardry / Enchanters' End Game (The Belgariad, #1-5)",
+      "authors": [
+        "David Eddings"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391347386i/44660._SY600_.jpg",
+      "rank": 18,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13812",
+      "title": "Magician: Apprentice (The Riftwar Saga, #1)",
+      "authors": [
+        "Raymond E. Feist"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1655656552i/13812._SY600_.jpg",
+      "rank": 19,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "40605251",
+      "title": "The Mists of Avalon (Avalon, #1)",
+      "authors": [
+        "Marion Zimmer Bradley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529610467i/40605251._SY600_.jpg",
+      "rank": 20,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "518848",
+      "title": "Sabriel (Abhorsen, #1)",
+      "authors": [
+        "Garth Nix"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1293655399i/518848._SY600_.jpg",
+      "rank": 21,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "17332218",
+      "title": "Words of Radiance (The Stormlight Archive, #2)",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1728768241i/17332218._SY600_.jpg",
+      "rank": 22,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6122735",
+      "title": "The Night Angel Trilogy (Night Angel, #1-3)",
+      "authors": [
+        "Brent Weeks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1450327994i/6122735._SY600_.jpg",
+      "rank": 23,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "9579634",
+      "title": "Prince of Thorns (Broken Empire, #1)",
+      "authors": [
+        "Mark  Lawrence"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327917754i/9579634._SY600_.jpg",
+      "rank": 24,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "8356426",
+      "title": "The Dragonriders of Pern: Books 1-3",
+      "authors": [
+        "Anne McCaffrey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328329430i/8356426._SY600_.jpg",
+      "rank": 25,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "34497",
+      "title": "The Color of Magic (Discworld, #1; Rincewind, #1)",
+      "authors": [
+        "Terry Pratchett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1407111017i/34497._SY600_.jpg",
+      "rank": 26,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "12067",
+      "title": "Good Omens: The Nice and Accurate Prophecies of Agnes Nutter, Witch",
+      "authors": [
+        "Terry Pratchett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1615552073i/12067._SY600_.jpg",
+      "rank": 27,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3428935",
+      "title": "The Warded Man (Demon Cycle #1)",
+      "authors": [
+        "Peter V. Brett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1354571949i/3428935._SY600_.jpg",
+      "rank": 28,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3236307",
+      "title": "Graceling (Graceling Realm, #1)",
+      "authors": [
+        "Kristin Cashore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331548394i/3236307._SY600_.jpg",
+      "rank": 29,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7996",
+      "title": "Redwall (Redwall, #1)",
+      "authors": [
+        "Brian Jacques"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327877368i/7996._SY600_.jpg",
+      "rank": 30,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "153008",
+      "title": "Kushiel's Dart (Phèdre's Trilogy, #1)",
+      "authors": [
+        "Jacqueline Carey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328168291i/153008._SY600_.jpg",
+      "rank": 31,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13569581",
+      "title": "Blood Song (Raven's Shadow, #1)",
+      "authors": [
+        "Anthony Ryan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421573407i/13569581._SY600_.jpg",
+      "rank": 32,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "68380",
+      "title": "Dragonlance Chronicles (Dragonlance, #1-3)",
+      "authors": [
+        "Margaret Weis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1266464667i/68380._SY600_.jpg",
+      "rank": 33,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "29396",
+      "title": "Furies of Calderon (Codex Alera, #1)",
+      "authors": [
+        "Jim  Butcher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1329104514i/29396._SY600_.jpg",
+      "rank": 34,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1170158",
+      "title": "The Earthsea Trilogy (Earthsea Cycle, #1-3)",
+      "authors": [
+        "Ursula K. Le Guin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1295382040i/1170158._SY600_.jpg",
+      "rank": 35,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "68418",
+      "title": "The Dark Elf Trilogy Collector's Edition (Forgotten Realms: Dark Elf Trilogy, #1-3; Legend of Drizzt, #1-3)",
+      "authors": [
+        "R.A. Salvatore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388191945i/68418._SY600_.jpg",
+      "rank": 36,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "91981",
+      "title": "The Dragonbone Chair (Memory, Sorrow, and Thorn, #1)",
+      "authors": [
+        "Tad Williams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1704912678i/91981._SY600_.jpg",
+      "rank": 37,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7165300",
+      "title": "The Black Prism (Lightbringer, #1)",
+      "authors": [
+        "Brent Weeks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327921884i/7165300._SY600_.jpg",
+      "rank": 38,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "10790290",
+      "title": "Theft of Swords (The Riyria Revelations, #1-2)",
+      "authors": [
+        "Michael J. Sullivan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659900253i/10790290._SY600_.jpg",
+      "rank": 39,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "68488",
+      "title": "Fool's Errand (Tawny Man, #1)",
+      "authors": [
+        "Robin Hobb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1759666405i/68488._SY600_.jpg",
+      "rank": 40,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "478894",
+      "title": "The Sword of Shannara Trilogy (Shannara, #1-3)",
+      "authors": [
+        "Terry Brooks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388201262i/478894._SY600_.jpg",
+      "rank": 41,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1268479",
+      "title": "Warbreaker",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1240256182i/1268479._SY600_.jpg",
+      "rank": 42,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "27712",
+      "title": "The Neverending Story",
+      "authors": [
+        "Michael Ende"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554230952i/27712._SY600_.jpg",
+      "rank": 43,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13831",
+      "title": "Alanna: The First Adventure (Song of the Lioness, #1)",
+      "authors": [
+        "Tamora Pierce"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388206270i/13831._SY600_.jpg",
+      "rank": 44,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "5367",
+      "title": "The Great Book of Amber (The Chronicles of Amber, #1-10)",
+      "authors": [
+        "Roger Zelazny"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1165519096i/5367._SY600_.jpg",
+      "rank": 45,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "104089",
+      "title": "Tigana",
+      "authors": [
+        "Guy Gavriel Kay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348738842i/104089._SY600_.jpg",
+      "rank": 46,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "45100",
+      "title": "Ship of Magic (Liveship Traders, #1)",
+      "authors": [
+        "Robin Hobb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1759664044i/45100._SY600_.jpg",
+      "rank": 47,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "43545",
+      "title": "The Once and Future King (The Once and Future King, #1–5)",
+      "authors": [
+        "T.H. White"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1338741283i/43545._SY600_.jpg",
+      "rank": 48,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6294",
+      "title": "Howl's Moving Castle (Howl's Moving Castle, #1)",
+      "authors": [
+        "Diana Wynne Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630502935i/6294._SY600_.jpg",
+      "rank": 49,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "28876",
+      "title": "His Majesty's Dragon (Temeraire, #1)",
+      "authors": [
+        "Naomi Novik"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1376392909i/28876._SY600_.jpg",
+      "rank": 50,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "179033",
+      "title": "The Chronicles of Thomas Covenant, the Unbeliever (The Chronicles of Thomas Covenant the Unbeliever, #1-3)",
+      "authors": [
+        "Stephen R. Donaldson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386920669i/179033._SY600_.jpg",
+      "rank": 51,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "140671",
+      "title": "The Black Company (The Chronicles of the Black Company, #1)",
+      "authors": [
+        "Glen Cook"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389929874i/140671._SY600_.jpg",
+      "rank": 52,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "463063",
+      "title": "The Chronicles of Prydain",
+      "authors": [
+        "Lloyd Alexander"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415302907i/463063._SY600_.jpg",
+      "rank": 53,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7896527",
+      "title": "Throne of Glass (Throne of Glass, #1)",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1495278054i/7896527._SY600_.jpg",
+      "rank": 54,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "210329",
+      "title": "The Dark Is Rising (The Dark is Rising, #2)",
+      "authors": [
+        "Susan Cooper"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349051230i/210329._SY600_.jpg",
+      "rank": 55,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "597790",
+      "title": "The Children of Húrin",
+      "authors": [
+        "J.R.R. Tolkien"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1762290218i/597790._SY600_.jpg",
+      "rank": 56,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "47953",
+      "title": "The Black Jewels Trilogy (The Black Jewels, #1-3)",
+      "authors": [
+        "Anne Bishop"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435098931i/47953._SY600_.jpg",
+      "rank": 57,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1381",
+      "title": "The Odyssey",
+      "authors": [
+        "Homer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1711957706i/1381._SY600_.jpg",
+      "rank": 58,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "28249",
+      "title": "The Magicians' Guild (The Black Magician Trilogy, #1)",
+      "authors": [
+        "Trudi Canavan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327356788i/28249._SY600_.jpg",
+      "rank": 59,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "407813",
+      "title": "The Blue Sword (Damar, #1)",
+      "authors": [
+        "Robin McKinley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1563198223i/407813._SY600_.jpg",
+      "rank": 60,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "40603587",
+      "title": "The Last Wish (The Witcher, #0.5)",
+      "authors": [
+        "Andrzej Sapkowski"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529591917i/40603587._SY600_.jpg",
+      "rank": 61,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "68427",
+      "title": "Elantris (Elantris, #1)",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1475740953i/68427._SY600_.jpg",
+      "rank": 62,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "100915",
+      "title": "The Lion, the Witch and the Wardrobe (Chronicles of Narnia, #1)",
+      "authors": [
+        "C.S. Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1353029077i/100915._SY600_.jpg",
+      "rank": 63,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "82192",
+      "title": "The Crystal Cave (Arthurian Saga, #1)",
+      "authors": [
+        "Mary  Stewart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439344566i/82192._SY600_.jpg",
+      "rank": 64,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "334123",
+      "title": "The Amulet of Samarkand (Bartimaeus, #1)",
+      "authors": [
+        "Jonathan Stroud"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1528705815i/334123._SY600_.jpg",
+      "rank": 65,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2767793",
+      "title": "The Hero of Ages (Mistborn, #3)",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628563911i/2767793._SY600_.jpg",
+      "rank": 66,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13928",
+      "title": "Daughter of the Forest  (Sevenwaters, #1)",
+      "authors": [
+        "Juliet Marillier"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1343589988i/13928._SY600_.jpg",
+      "rank": 67,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "208448191",
+      "title": "Blades of Destiny (Book One) – An Epic Fantasy of War & Fate in Mythic Ireland: Chosen by Her Gods. Bound by Fate. Forged by Blades.",
+      "authors": [
+        "James Raquepau"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1782552897i/208448191._SY600_.jpg",
+      "rank": 68,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1148721",
+      "title": "The Fionavar Tapestry",
+      "authors": [
+        "Guy Gavriel Kay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1181410214i/1148721._SY600_.jpg",
+      "rank": 69,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "60400",
+      "title": "The Ruins of Gorlan (Ranger's Apprentice, #1)",
+      "authors": [
+        "John Flanagan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1293952830i/60400._SY600_.jpg",
+      "rank": 70,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "10611",
+      "title": "The Eyes of the Dragon",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1660526231i/10611._SY600_.jpg",
+      "rank": 71,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "30036",
+      "title": "Elric of Melniboné (The Elric Saga, #1)",
+      "authors": [
+        "Michael Moorcock"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388345555i/30036._SY600_.jpg",
+      "rank": 72,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "239113072",
+      "title": "Heart of Destiny (Book Three) – An Epic Fantasy of War & Fate in Mythic Ireland: Identity Shattered. Cost Revealed. Choice Endures. (The Destiny Cycle - aka The Dàn Cycle 3)",
+      "authors": [
+        "James Raquepau"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1753050300i/239113072._SY600_.jpg",
+      "rank": 73,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "96281",
+      "title": "The Deed of Paksenarrion (The Deed of Paksenarrion, #1-3)",
+      "authors": [
+        "Elizabeth Moon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400873078i/96281._SY600_.jpg",
+      "rank": 74,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "62485",
+      "title": "The Icewind Dale Trilogy Collector's Edition (Forgotten Realms: Icewind Dale, #1-3; Legend of Drizzt, #4-6)",
+      "authors": [
+        "R.A. Salvatore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442601703i/62485._SY600_.jpg",
+      "rank": 75,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "77366",
+      "title": "The Hero and the Crown (Damar, #2)",
+      "authors": [
+        "Robin McKinley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386642407i/77366._SY600_.jpg",
+      "rank": 76,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "209485602",
+      "title": "Lia Dàn: Stone of Destiny Revised Edition II (Dàn Cycle, #2)",
+      "authors": [
+        "James Raquepau"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1709578252i/209485602._SY600_.jpg",
+      "rank": 77,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "589979",
+      "title": "Daughter of the Empire (The Empire Trilogy, #1)",
+      "authors": [
+        "Raymond E. Feist"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1672516954i/589979._SY600_.jpg",
+      "rank": 78,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "61886",
+      "title": "The Curse of Chalion (World of the Five Gods, #1)",
+      "authors": [
+        "Lois McMaster Bujold"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1322571773i/61886._SY600_.jpg",
+      "rank": 79,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2315892",
+      "title": "Best Served Cold",
+      "authors": [
+        "Joe Abercrombie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1739462265i/2315892._SY600_.jpg",
+      "rank": 80,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "29127",
+      "title": "The Last Unicorn (The Last Unicorn, #1)",
+      "authors": [
+        "Peter S. Beagle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1524764327i/29127._SY600_.jpg",
+      "rank": 81,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "12891107",
+      "title": "King of Thorns (Broken Empire, #2)",
+      "authors": [
+        "Mark  Lawrence"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1322539112i/12891107._SY600_.jpg",
+      "rank": 82,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "68429",
+      "title": "The Well of Ascension (Mistborn, #2)",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1619538925i/68429._SY600_.jpg",
+      "rank": 83,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "76658",
+      "title": "On a Pale Horse (Incarnations of Immortality, #1)",
+      "authors": [
+        "Piers Anthony"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388210126i/76658._SY600_.jpg",
+      "rank": 84,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4345290",
+      "title": "The Crown Conspiracy (The Riyria Revelations, #1)",
+      "authors": [
+        "Michael J. Sullivan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1313141264i/4345290._SY600_.jpg",
+      "rank": 85,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13836",
+      "title": "Wild Magic (Immortals, #1)",
+      "authors": [
+        "Tamora Pierce"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554192590i/13836._SY600_.jpg",
+      "rank": 86,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "77160",
+      "title": "Across the Nightingale Floor (Tales of the Otori, #1)",
+      "authors": [
+        "Lian Hearn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1438630231i/77160._SY600_.jpg",
+      "rank": 87,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "28481",
+      "title": "Dragon Wing (The Death Gate Cycle, #1)",
+      "authors": [
+        "Margaret Weis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1680378149i/28481._SY600_.jpg",
+      "rank": 88,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "147843",
+      "title": "Green Rider (Green Rider, #1)",
+      "authors": [
+        "Kristen Britain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386749176i/147843._SY600_.jpg",
+      "rank": 89,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "616678",
+      "title": "The Diamond Throne (The Elenium, #1)",
+      "authors": [
+        "David Eddings"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388212601i/616678._SY600_.jpg",
+      "rank": 90,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13986",
+      "title": "Arrows of the Queen (Heralds of Valdemar, #1)",
+      "authors": [
+        "Mercedes Lackey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1296358547i/13986._SY600_.jpg",
+      "rank": 91,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "261604",
+      "title": "Rhapsody: Child of Blood (Symphony of Ages, #1)",
+      "authors": [
+        "Elizabeth Haydon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388350382i/261604._SY600_.jpg",
+      "rank": 92,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3227063",
+      "title": "The Way of Shadows (Night Angel, #1)",
+      "authors": [
+        "Brent Weeks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1672601160i/3227063._SY600_.jpg",
+      "rank": 93,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "19821",
+      "title": "Riddle-Master (Riddle-Master, #1-3)",
+      "authors": [
+        "Patricia A. McKillip"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1401387247i/19821._SY600_.jpg",
+      "rank": 94,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "208051245",
+      "title": "The Three Witches and The Master",
+      "authors": [
+        "Max Nowaz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1707837803i/208051245._SY600_.jpg",
+      "rank": 95,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "60589757",
+      "title": "Vorclaw",
+      "authors": [
+        "Jason Kalinowski"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1646974634i/60589757._SY600_.jpg",
+      "rank": 96,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "28759",
+      "title": "Magic's Pawn (The Last Herald-Mage, #1)",
+      "authors": [
+        "Mercedes Lackey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1345854036i/28759._SY600_.jpg",
+      "rank": 97,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "205404157",
+      "title": "Viciously Yours (Fae Kings of Eden, #1)",
+      "authors": [
+        "Jamie Applegate Hunter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1753442907i/205404157._SY600_.jpg",
+      "rank": 98,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "104101",
+      "title": "The Lions of Al-Rassan",
+      "authors": [
+        "Guy Gavriel Kay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659900897i/104101._SY600_.jpg",
+      "rank": 99,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "133454",
+      "title": "Jhereg (Vlad Taltos, #1)",
+      "authors": [
+        "Steven Brust"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328204364i/133454._SY600_.jpg",
+      "rank": 100,
+      "votes": null,
+      "winner": false
+    }
+  ]
+}

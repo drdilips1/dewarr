@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-history-biography-books-2022",
+  "kind": "award",
+  "title": "History & Biography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-history-biography-books-2022",
+  "year": 2022,
+  "category": "History & Biography",
+  "genres": [
+    "biography",
+    "history"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:49.597413+00:00",
+  "books": [
+    {
+      "external_id": "59012057",
+      "title": "Bad Gays",
+      "authors": [
+        "Huw Lemmey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631844850l/59012057.jpg",
+      "rank": 1,
+      "votes": 22711,
+      "winner": true
+    },
+    {
+      "external_id": "58890953",
+      "title": "His Name Is George Floyd",
+      "authors": [
+        "Robert Samuels"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644336500l/58890953.jpg",
+      "rank": 2,
+      "votes": 22265,
+      "winner": false
+    },
+    {
+      "external_id": "53138220",
+      "title": "The Dark Queens",
+      "authors": [
+        "Shelley Puhak"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1593216033l/53138220.jpg",
+      "rank": 3,
+      "votes": 21891,
+      "winner": false
+    },
+    {
+      "external_id": "60194141",
+      "title": "The Escape Artist",
+      "authors": [
+        "Jonathan Freedland"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1647444786l/60194141.jpg",
+      "rank": 4,
+      "votes": 17126,
+      "winner": false
+    },
+    {
+      "external_id": "60647674",
+      "title": "And There Was Light",
+      "authors": [
+        "Jon Meacham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1648682688l/60647674.jpg",
+      "rank": 5,
+      "votes": 15066,
+      "winner": false
+    },
+    {
+      "external_id": "55510928",
+      "title": "Wise Gals",
+      "authors": [
+        "Nathalia Holt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1646927617l/55510928.jpg",
+      "rank": 6,
+      "votes": 14950,
+      "winner": false
+    },
+    {
+      "external_id": "59366098",
+      "title": "Anna",
+      "authors": [
+        "Amy Odell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1651710974l/59366098._SY600_.jpg",
+      "rank": 7,
+      "votes": 12768,
+      "winner": false
+    },
+    {
+      "external_id": "58724805",
+      "title": "Slaying the Dragon",
+      "authors": [
+        "Ben Riggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1650845000l/58724805.jpg",
+      "rank": 8,
+      "votes": 12622,
+      "winner": false
+    },
+    {
+      "external_id": "58141198",
+      "title": "Agent Josephine",
+      "authors": [
+        "Damien Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631383311l/58141198.jpg",
+      "rank": 9,
+      "votes": 9231,
+      "winner": false
+    },
+    {
+      "external_id": "58777696",
+      "title": "River of the Gods",
+      "authors": [
+        "Candice Millard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1635789021l/58777696._SY600_.jpg",
+      "rank": 10,
+      "votes": 9031,
+      "winner": false
+    },
+    {
+      "external_id": "56212888",
+      "title": "Shine Bright",
+      "authors": [
+        "Danyel Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1639155199l/56212888._SY600_.jpg",
+      "rank": 11,
+      "votes": 2762,
+      "winner": false
+    },
+    {
+      "external_id": "59577287",
+      "title": "The Scandalous Hamiltons",
+      "authors": [
+        "Bill Shaffer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1649029046l/59577287.jpg",
+      "rank": 12,
+      "votes": 2293,
+      "winner": false
+    },
+    {
+      "external_id": "59883560",
+      "title": "Prisoners of the Castle",
+      "authors": [
+        "Ben Macintyre"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1648413491l/59883560.jpg",
+      "rank": 13,
+      "votes": 1934,
+      "winner": false
+    },
+    {
+      "external_id": "58999198",
+      "title": "Bad Mexicans",
+      "authors": [
+        "Kelly Lytle Hernández"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1646449882l/58999198.jpg",
+      "rank": 14,
+      "votes": 1795,
+      "winner": false
+    },
+    {
+      "external_id": "55959483",
+      "title": "Rise",
+      "authors": [
+        "Jeff Yang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631103986l/55959483._SY600_.jpg",
+      "rank": 15,
+      "votes": 1773,
+      "winner": false
+    },
+    {
+      "external_id": "60468246",
+      "title": "The Revolutionary",
+      "authors": [
+        "Stacy Schiff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1653943150l/60468246.jpg",
+      "rank": 16,
+      "votes": 1584,
+      "winner": false
+    },
+    {
+      "external_id": "58678848",
+      "title": "Gangsters vs. Nazis",
+      "authors": [
+        "Michael Benson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1641778437l/58678848.jpg",
+      "rank": 17,
+      "votes": 1519,
+      "winner": false
+    },
+    {
+      "external_id": "59571998",
+      "title": "Dangerous Rhythms",
+      "authors": [
+        "T.J. English"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1638754497l/59571998.jpg",
+      "rank": 18,
+      "votes": 1077,
+      "winner": false
+    },
+    {
+      "external_id": "60141696",
+      "title": "American Midnight",
+      "authors": [
+        "Adam Hochschild"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1648718294l/60141696.jpg",
+      "rank": 19,
+      "votes": 1020,
+      "winner": false
+    },
+    {
+      "external_id": "60165389",
+      "title": "By Hands Now Known",
+      "authors": [
+        "Margaret A. Burnham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1656129660l/60165389.jpg",
+      "rank": 20,
+      "votes": 962,
+      "winner": false
+    }
+  ]
+}

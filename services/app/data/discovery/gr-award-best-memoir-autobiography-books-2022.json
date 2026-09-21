@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-memoir-autobiography-books-2022",
+  "kind": "award",
+  "title": "Memoir & Autobiography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-memoir-autobiography-books-2022",
+  "year": 2022,
+  "category": "Memoir & Autobiography",
+  "genres": [
+    "biography"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:48.176851+00:00",
+  "books": [
+    {
+      "external_id": "59366244",
+      "title": "I'm Glad My Mom Died",
+      "authors": [
+        "Jennette McCurdy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1649228846l/59366244.jpg",
+      "rank": 1,
+      "votes": 202606,
+      "winner": true
+    },
+    {
+      "external_id": "59808451",
+      "title": "Madly, Deeply",
+      "authors": [
+        "Alan Rickman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1658244851l/59808451.jpg",
+      "rank": 2,
+      "votes": 40603,
+      "winner": false
+    },
+    {
+      "external_id": "58687126",
+      "title": "Finding Me",
+      "authors": [
+        "Viola Davis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1650842995l/58687126.jpg",
+      "rank": 3,
+      "votes": 32842,
+      "winner": false
+    },
+    {
+      "external_id": "59641216",
+      "title": "Friends, Lovers, and the Big Terrible Thing",
+      "authors": [
+        "Matthew  Perry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1699634140l/59641216._SY600_.jpg",
+      "rank": 4,
+      "votes": 30901,
+      "winner": false
+    },
+    {
+      "external_id": "55507037",
+      "title": "We Were Dreamers",
+      "authors": [
+        "Simu Liu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1643731444l/55507037._SY600_.jpg",
+      "rank": 5,
+      "votes": 16691,
+      "winner": false
+    },
+    {
+      "external_id": "58214328",
+      "title": "What My Bones Know",
+      "authors": [
+        "Stephanie Foo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644336652l/58214328.jpg",
+      "rank": 6,
+      "votes": 10026,
+      "winner": false
+    },
+    {
+      "external_id": "59452407",
+      "title": "Mean Baby",
+      "authors": [
+        "Selma Blair"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1639200853l/59452407.jpg",
+      "rank": 7,
+      "votes": 7882,
+      "winner": false
+    },
+    {
+      "external_id": "59900688",
+      "title": "Solito",
+      "authors": [
+        "Javier Zamora"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1774287644l/59900688._SY600_.jpg",
+      "rank": 8,
+      "votes": 7706,
+      "winner": false
+    },
+    {
+      "external_id": "56269214",
+      "title": "Funny Farm",
+      "authors": [
+        "Laurie Zaleski"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1623669464l/56269214.jpg",
+      "rank": 9,
+      "votes": 7697,
+      "winner": false
+    },
+    {
+      "external_id": "59900658",
+      "title": "Year of the Tiger",
+      "authors": [
+        "Alice  Wong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1656929726l/59900658.jpg",
+      "rank": 10,
+      "votes": 5693,
+      "winner": false
+    },
+    {
+      "external_id": "58065372",
+      "title": "In Love",
+      "authors": [
+        "Amy Bloom"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1641777500l/58065372.jpg",
+      "rank": 11,
+      "votes": 1991,
+      "winner": false
+    },
+    {
+      "external_id": "58438569",
+      "title": "Bomb Shelter",
+      "authors": [
+        "Mary Laura Philpott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1647447985l/58438569.jpg",
+      "rank": 12,
+      "votes": 1887,
+      "winner": false
+    },
+    {
+      "external_id": "59537947",
+      "title": "Token Black Girl",
+      "authors": [
+        "Danielle Prescod"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1652512991l/59537947.jpg",
+      "rank": 13,
+      "votes": 1757,
+      "winner": false
+    },
+    {
+      "external_id": "58684300",
+      "title": "Left on Tenth",
+      "authors": [
+        "Delia Ephron"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1645389614l/58684300.jpg",
+      "rank": 14,
+      "votes": 1175,
+      "winner": false
+    },
+    {
+      "external_id": "57800384",
+      "title": "Lost & Found",
+      "authors": [
+        "Kathryn Schulz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620412715l/57800384.jpg",
+      "rank": 15,
+      "votes": 1101,
+      "winner": false
+    },
+    {
+      "external_id": "58988396",
+      "title": "Crying in the Bathroom",
+      "authors": [
+        "Erika L. Sánchez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1636978186l/58988396.jpg",
+      "rank": 16,
+      "votes": 1089,
+      "winner": false
+    },
+    {
+      "external_id": "59808316",
+      "title": "Uncultured",
+      "authors": [
+        "Daniella Mestyanek Young"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1647261673l/59808316.jpg",
+      "rank": 17,
+      "votes": 845,
+      "winner": false
+    },
+    {
+      "external_id": "59411559",
+      "title": "The Man Who Could Move Clouds",
+      "authors": [
+        "Ingrid Rojas Contreras"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1639949013l/59411559.jpg",
+      "rank": 18,
+      "votes": 743,
+      "winner": false
+    },
+    {
+      "external_id": "59900070",
+      "title": "Stay True",
+      "authors": [
+        "Hua Hsu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1647558486l/59900070._SY600_.jpg",
+      "rank": 19,
+      "votes": 657,
+      "winner": false
+    },
+    {
+      "external_id": "58438546",
+      "title": "Easy Beauty",
+      "authors": [
+        "Chloé Cooper Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642351567l/58438546.jpg",
+      "rank": 20,
+      "votes": 626,
+      "winner": false
+    }
+  ]
+}

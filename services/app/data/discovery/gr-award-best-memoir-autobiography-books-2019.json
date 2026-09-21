@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-memoir-autobiography-books-2019",
+  "kind": "award",
+  "title": "Memoir & Autobiography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-memoir-autobiography-books-2019",
+  "year": 2019,
+  "category": "Memoir & Autobiography",
+  "genres": [
+    "biography"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:11.677123+00:00",
+  "books": [
+    {
+      "external_id": "43386674",
+      "title": "Over the Top",
+      "authors": [
+        "Jonathan Van Ness"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1559166865l/43386674.jpg",
+      "rank": 1,
+      "votes": 28977,
+      "winner": true
+    },
+    {
+      "external_id": "46264398",
+      "title": "Know My Name",
+      "authors": [
+        "Chanel Miller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1712271512l/46264398._SY600_.jpg",
+      "rank": 2,
+      "votes": 23817,
+      "winner": false
+    },
+    {
+      "external_id": "44286431",
+      "title": "Home Work",
+      "authors": [
+        "Julie Andrews Edwards"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556723540l/44286431.jpg",
+      "rank": 3,
+      "votes": 21228,
+      "winner": false
+    },
+    {
+      "external_id": "39218350",
+      "title": "Maid",
+      "authors": [
+        "Stephanie  Land"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1573822660l/39218350.jpg",
+      "rank": 4,
+      "votes": 20852,
+      "winner": false
+    },
+    {
+      "external_id": "44303730",
+      "title": "Me",
+      "authors": [
+        "Elton John"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553526563l/44303730.jpg",
+      "rank": 5,
+      "votes": 18633,
+      "winner": false
+    },
+    {
+      "external_id": "40364332",
+      "title": "Inheritance",
+      "authors": [
+        "Dani Shapiro"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1531185781l/40364332.jpg",
+      "rank": 6,
+      "votes": 13807,
+      "winner": false
+    },
+    {
+      "external_id": "45167624",
+      "title": "Inside Out",
+      "authors": [
+        "Demi Moore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558586807l/45167624.jpg",
+      "rank": 7,
+      "votes": 12918,
+      "winner": false
+    },
+    {
+      "external_id": "42202117",
+      "title": "From Scratch",
+      "authors": [
+        "Tembi Locke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556725262l/42202117._SY600_.jpg",
+      "rank": 8,
+      "votes": 9791,
+      "winner": false
+    },
+    {
+      "external_id": "43682552",
+      "title": "How We Fight For Our Lives",
+      "authors": [
+        "Saeed Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1564946002l/43682552.jpg",
+      "rank": 9,
+      "votes": 9340,
+      "winner": false
+    },
+    {
+      "external_id": "43263491",
+      "title": "Toil & Trouble",
+      "authors": [
+        "Augusten Burroughs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550776804l/43263491.jpg",
+      "rank": 10,
+      "votes": 9000,
+      "winner": false
+    },
+    {
+      "external_id": "44776548",
+      "title": "Year of the Monkey",
+      "authors": [
+        "Patti Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1577575516l/44776548._SY600_.jpg",
+      "rank": 11,
+      "votes": 4379,
+      "winner": false
+    },
+    {
+      "external_id": "42188604",
+      "title": "In the Dream House",
+      "authors": [
+        "Carmen Maria Machado"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1547590972l/42188604._SY600_.jpg",
+      "rank": 12,
+      "votes": 3935,
+      "winner": false
+    },
+    {
+      "external_id": "46223297",
+      "title": "Permanent Record",
+      "authors": [
+        "Edward Snowden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1564666396l/46223297.jpg",
+      "rank": 13,
+      "votes": 3331,
+      "winner": false
+    },
+    {
+      "external_id": "42729452",
+      "title": "More Than Enough",
+      "authors": [
+        "Elaine Welteroth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1548692987l/42729452.jpg",
+      "rank": 14,
+      "votes": 3072,
+      "winner": false
+    },
+    {
+      "external_id": "40046084",
+      "title": "Long Live the Tribe of Fatherless Girls",
+      "authors": [
+        "T Kira Madden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546015233l/40046084.jpg",
+      "rank": 15,
+      "votes": 3009,
+      "winner": false
+    },
+    {
+      "external_id": "43497893",
+      "title": "Prognosis",
+      "authors": [
+        "Sarah Vallance"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556142574l/43497893.jpg",
+      "rank": 16,
+      "votes": 2652,
+      "winner": false
+    },
+    {
+      "external_id": "40180065",
+      "title": "Sounds Like Titanic",
+      "authors": [
+        "Jessica Chiccehitto Hindman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537802331l/40180065.jpg",
+      "rank": 17,
+      "votes": 2289,
+      "winner": false
+    },
+    {
+      "external_id": "39216478",
+      "title": "The Unwinding of the Miracle",
+      "authors": [
+        "Julie Yip-Williams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644862729l/39216478._SY600_.jpg",
+      "rank": 18,
+      "votes": 2202,
+      "winner": false
+    },
+    {
+      "external_id": "44288534",
+      "title": "What Is a Girl Worth?",
+      "authors": [
+        "Rachael Denhollander"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1551853187l/44288534._SY600_.jpg",
+      "rank": 19,
+      "votes": 2156,
+      "winner": false
+    },
+    {
+      "external_id": "43261166",
+      "title": "Wild Game",
+      "authors": [
+        "Adrienne Brodeur"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1564709516l/43261166.jpg",
+      "rank": 20,
+      "votes": 1306,
+      "winner": false
+    }
+  ]
+}

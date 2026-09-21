@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-fantasy-books-2013",
+  "kind": "award",
+  "title": "Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fantasy-books-2013",
+  "year": 2013,
+  "category": "Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:34.976123+00:00",
+  "books": [
+    {
+      "external_id": "15783514",
+      "title": "The Ocean at the End of the Lane",
+      "authors": [
+        "Neil Gaiman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1497098563l/15783514._SY600_.jpg",
+      "rank": 1,
+      "votes": 43534,
+      "winner": true
+    },
+    {
+      "external_id": "7743175",
+      "title": "A Memory of Light",
+      "authors": [
+        "Robert Jordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1647270202l/7743175._SY600_.jpg",
+      "rank": 2,
+      "votes": 13021,
+      "winner": false
+    },
+    {
+      "external_id": "15819028",
+      "title": "The Golem and the Jinni",
+      "authors": [
+        "Helene Wecker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349205573l/15819028.jpg",
+      "rank": 3,
+      "votes": 8378,
+      "winner": false
+    },
+    {
+      "external_id": "2890090",
+      "title": "The Republic of Thieves",
+      "authors": [
+        "Scott Lynch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1769467502l/2890090._SY600_.jpg",
+      "rank": 4,
+      "votes": 7231,
+      "winner": false
+    },
+    {
+      "external_id": "16248223",
+      "title": "The Ghost Bride",
+      "authors": [
+        "Yangsze Choo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356671808l/16248223.jpg",
+      "rank": 5,
+      "votes": 6969,
+      "winner": false
+    },
+    {
+      "external_id": "15942636",
+      "title": "The Firebird",
+      "authors": [
+        "Susanna Kearsley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347896972l/15942636.jpg",
+      "rank": 6,
+      "votes": 6381,
+      "winner": false
+    },
+    {
+      "external_id": "13109291",
+      "title": "Blood of Dragons",
+      "authors": [
+        "Robin Hobb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1341265576l/13109291.jpg",
+      "rank": 7,
+      "votes": 5016,
+      "winner": false
+    },
+    {
+      "external_id": "16101090",
+      "title": "The River of No Return",
+      "authors": [
+        "Bee Ridgway"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351484845l/16101090.jpg",
+      "rank": 8,
+      "votes": 4947,
+      "winner": false
+    },
+    {
+      "external_id": "15985373",
+      "title": "Emperor of Thorns",
+      "authors": [
+        "Mark  Lawrence"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1352546239l/15985373.jpg",
+      "rank": 9,
+      "votes": 4914,
+      "winner": false
+    },
+    {
+      "external_id": "15989176",
+      "title": "Forged in Blood I",
+      "authors": [
+        "Lindsay Buroker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1368997250l/15989176.jpg",
+      "rank": 10,
+      "votes": 4154,
+      "winner": false
+    },
+    {
+      "external_id": "16142151",
+      "title": "The Companions",
+      "authors": [
+        "R.A. Salvatore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1372353196l/16142151.jpg",
+      "rank": 11,
+      "votes": 2084,
+      "winner": false
+    },
+    {
+      "external_id": "13638125",
+      "title": "Vicious",
+      "authors": [
+        "V.E. Schwab"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1527839682l/13638125._SY600_.jpg",
+      "rank": 12,
+      "votes": 2059,
+      "winner": false
+    },
+    {
+      "external_id": "9268487",
+      "title": "The Daylight War",
+      "authors": [
+        "Peter V. Brett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1360777092l/9268487.jpg",
+      "rank": 13,
+      "votes": 2016,
+      "winner": false
+    },
+    {
+      "external_id": "16043804",
+      "title": "The Crown Tower",
+      "authors": [
+        "Michael J. Sullivan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1654573996l/16043804._SY600_.jpg",
+      "rank": 14,
+      "votes": 1952,
+      "winner": false
+    },
+    {
+      "external_id": "15790883",
+      "title": "Promise of Blood",
+      "authors": [
+        "Brian  McClellan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659903996l/15790883._SY600_.jpg",
+      "rank": 15,
+      "votes": 1535,
+      "winner": false
+    },
+    {
+      "external_id": "16158565",
+      "title": "The Thinking Woman's Guide to Real Magic",
+      "authors": [
+        "Emily Croy Barker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356093770l/16158565.jpg",
+      "rank": 16,
+      "votes": 832,
+      "winner": false
+    },
+    {
+      "external_id": "12974372",
+      "title": "A Natural History of Dragons",
+      "authors": [
+        "Marie Brennan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1680460687l/12974372._SY600_.jpg",
+      "rank": 17,
+      "votes": 697,
+      "winner": false
+    },
+    {
+      "external_id": "17317908",
+      "title": "The Third Kingdom",
+      "authors": [
+        "Terry Goodkind"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1371115714l/17317908.jpg",
+      "rank": 18,
+      "votes": 489,
+      "winner": false
+    },
+    {
+      "external_id": "15802432",
+      "title": "Seduction",
+      "authors": [
+        "M.J. Rose"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1365327796l/15802432.jpg",
+      "rank": 19,
+      "votes": 481,
+      "winner": false
+    },
+    {
+      "external_id": "15808474",
+      "title": "River of Stars",
+      "authors": [
+        "Guy Gavriel Kay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356089847l/15808474.jpg",
+      "rank": 20,
+      "votes": 292,
+      "winner": false
+    }
+  ]
+}

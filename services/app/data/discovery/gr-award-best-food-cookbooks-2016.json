@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-food-cookbooks-2016",
+  "kind": "award",
+  "title": "Food & Cookbooks",
+  "source_url": "https://www.goodreads.com/choiceawards/best-food-cookbooks-2016",
+  "year": 2016,
+  "category": "Food & Cookbooks",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:15.828673+00:00",
+  "books": [
+    {
+      "external_id": "25982685",
+      "title": "Cravings",
+      "authors": [
+        "Chrissy Teigen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481803272l/25982685._SY600_.jpg",
+      "rank": 1,
+      "votes": 23867,
+      "winner": true
+    },
+    {
+      "external_id": "26832930",
+      "title": "Outlander Kitchen",
+      "authors": [
+        "Theresa Carle-Sanders"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498058925l/26832930._SY600_.jpg",
+      "rank": 2,
+      "votes": 19131,
+      "winner": false
+    },
+    {
+      "external_id": "25982612",
+      "title": "The Bob's Burgers Burger Book",
+      "authors": [
+        "Loren Bouchard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453058296l/25982612.jpg",
+      "rank": 3,
+      "votes": 14260,
+      "winner": false
+    },
+    {
+      "external_id": "28503835",
+      "title": "EveryDayCook",
+      "authors": [
+        "Alton Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459112231l/28503835._SY600_.jpg",
+      "rank": 4,
+      "votes": 12312,
+      "winner": false
+    },
+    {
+      "external_id": "26240710",
+      "title": "Layered",
+      "authors": [
+        "Tessa Huff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1458171796l/26240710.jpg",
+      "rank": 5,
+      "votes": 10387,
+      "winner": false
+    },
+    {
+      "external_id": "26031228",
+      "title": "It's All Easy",
+      "authors": [
+        "Gwyneth Paltrow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453060682l/26031228._SY600_.jpg",
+      "rank": 6,
+      "votes": 7780,
+      "winner": false
+    },
+    {
+      "external_id": "28186250",
+      "title": "Oh She Glows Every Day",
+      "authors": [
+        "Angela  Liddon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1469408266l/28186250._SY600_.jpg",
+      "rank": 7,
+      "votes": 6404,
+      "winner": false
+    },
+    {
+      "external_id": "28110861",
+      "title": "Real Food / Fake Food",
+      "authors": [
+        "Larry Olmsted"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1468174365l/28110861._SY600_.jpg",
+      "rank": 8,
+      "votes": 5936,
+      "winner": false
+    },
+    {
+      "external_id": "28588001",
+      "title": "Skinnytaste Fast and Slow",
+      "authors": [
+        "Gina Homolka"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1465620917l/28588001._SY600_.jpg",
+      "rank": 9,
+      "votes": 5585,
+      "winner": false
+    },
+    {
+      "external_id": "26247044",
+      "title": "Raw. Vegan. Not Gross.",
+      "authors": [
+        "Laura    Miller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1455501987l/26247044._SY600_.jpg",
+      "rank": 10,
+      "votes": 5152,
+      "winner": false
+    },
+    {
+      "external_id": "25852800",
+      "title": "Eating in the Middle",
+      "authors": [
+        "Andie Mitchell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445789023l/25852800.jpg",
+      "rank": 11,
+      "votes": 2649,
+      "winner": false
+    },
+    {
+      "external_id": "25810693",
+      "title": "The Vegetable Butcher",
+      "authors": [
+        "Cara Mangini"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459704141l/25810693._SY600_.jpg",
+      "rank": 12,
+      "votes": 2481,
+      "winner": false
+    },
+    {
+      "external_id": "25810687",
+      "title": "Project Smoke",
+      "authors": [
+        "Steven Raichlen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460900097l/25810687._SY600_.jpg",
+      "rank": 13,
+      "votes": 2271,
+      "winner": false
+    },
+    {
+      "external_id": "25938485",
+      "title": "Locally Laid",
+      "authors": [
+        "Lucie B. Amundsen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453062265l/25938485.jpg",
+      "rank": 14,
+      "votes": 1909,
+      "winner": false
+    },
+    {
+      "external_id": "25614890",
+      "title": "Koreatown",
+      "authors": [
+        "Deuki Hong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1449523579l/25614890._SY600_.jpg",
+      "rank": 15,
+      "votes": 1770,
+      "winner": false
+    },
+    {
+      "external_id": "24944924",
+      "title": "The Big Book of Kombucha",
+      "authors": [
+        "Hannah Crum"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1454256879l/24944924._SY600_.jpg",
+      "rank": 16,
+      "votes": 1484,
+      "winner": false
+    },
+    {
+      "external_id": "27208950",
+      "title": "Smuggler's Cove",
+      "authors": [
+        "Martin Cate"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1454296157l/27208950._SY600_.jpg",
+      "rank": 17,
+      "votes": 1018,
+      "winner": false
+    },
+    {
+      "external_id": "28925236",
+      "title": "Appetites",
+      "authors": [
+        "Anthony Bourdain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462163749l/28925236.jpg",
+      "rank": 18,
+      "votes": 915,
+      "winner": false
+    },
+    {
+      "external_id": "28260591",
+      "title": "Run Fast. Eat Slow.",
+      "authors": [
+        "Shalane Flanagan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1465586809l/28260591._SY600_.jpg",
+      "rank": 19,
+      "votes": 721,
+      "winner": false
+    },
+    {
+      "external_id": "28962990",
+      "title": "Deep Run Roots",
+      "authors": [
+        "Vivian Howard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1471285861l/28962990._SY600_.jpg",
+      "rank": 20,
+      "votes": 631,
+      "winner": false
+    }
+  ]
+}

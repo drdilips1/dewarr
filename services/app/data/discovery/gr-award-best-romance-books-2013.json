@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-romance-books-2013",
+  "kind": "award",
+  "title": "Romance",
+  "source_url": "https://www.goodreads.com/choiceawards/best-romance-books-2013",
+  "year": 2013,
+  "category": "Romance",
+  "genres": [
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:39.430315+00:00",
+  "books": [
+    {
+      "external_id": "13570854",
+      "title": "Lover at Last",
+      "authors": [
+        "J.R. Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1339084717l/13570854.jpg",
+      "rank": 1,
+      "votes": 24333,
+      "winner": true
+    },
+    {
+      "external_id": "15745950",
+      "title": "Walking Disaster",
+      "authors": [
+        "Jamie McGuire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1352338368l/15745950.jpg",
+      "rank": 2,
+      "votes": 17893,
+      "winner": false
+    },
+    {
+      "external_id": "15731779",
+      "title": "Entwined with You",
+      "authors": [
+        "Sylvia Day"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362526983l/15731779._SY600_.jpg",
+      "rank": 3,
+      "votes": 14855,
+      "winner": false
+    },
+    {
+      "external_id": "17340050",
+      "title": "Losing Hope",
+      "authors": [
+        "Colleen Hoover"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1368348507l/17340050.jpg",
+      "rank": 4,
+      "votes": 9882,
+      "winner": false
+    },
+    {
+      "external_id": "16070903",
+      "title": "Fallen Too Far",
+      "authors": [
+        "Abbi Glines"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349565157l/16070903.jpg",
+      "rank": 5,
+      "votes": 8824,
+      "winner": false
+    },
+    {
+      "external_id": "15990969",
+      "title": "Ten Tiny Breaths",
+      "authors": [
+        "K.A. Tucker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1368808763l/15990969.jpg",
+      "rank": 6,
+      "votes": 8254,
+      "winner": false
+    },
+    {
+      "external_id": "13600318",
+      "title": "Reckless",
+      "authors": [
+        "S.C. Stephens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356986017l/13600318.jpg",
+      "rank": 7,
+      "votes": 8222,
+      "winner": false
+    },
+    {
+      "external_id": "16102004",
+      "title": "Beautiful Bastard",
+      "authors": [
+        "Christina Lauren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362258921l/16102004.jpg",
+      "rank": 8,
+      "votes": 7891,
+      "winner": false
+    },
+    {
+      "external_id": "17314430",
+      "title": "Wait for You",
+      "authors": [
+        "J. Lynn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1363819713l/17314430.jpg",
+      "rank": 9,
+      "votes": 7846,
+      "winner": false
+    },
+    {
+      "external_id": "18149927",
+      "title": "Beneath This Man",
+      "authors": [
+        "Jodi Ellen Malpas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1538749218l/18149927.jpg",
+      "rank": 10,
+      "votes": 6217,
+      "winner": false
+    },
+    {
+      "external_id": "18297707",
+      "title": "Tangled",
+      "authors": [
+        "Emma Chase"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375808439l/18297707.jpg",
+      "rank": 11,
+      "votes": 3396,
+      "winner": false
+    },
+    {
+      "external_id": "16113791",
+      "title": "The Coincidence of Callie & Kayden",
+      "authors": [
+        "Jessica Sorensen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1353550763l/16113791.jpg",
+      "rank": 12,
+      "votes": 3389,
+      "winner": false
+    },
+    {
+      "external_id": "17407748",
+      "title": "The Longest Ride",
+      "authors": [
+        "Nicholas Sparks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1367536453l/17407748.jpg",
+      "rank": 13,
+      "votes": 2309,
+      "winner": false
+    },
+    {
+      "external_id": "15784909",
+      "title": "This Girl",
+      "authors": [
+        "Colleen Hoover"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1761078533l/15784909._SY600_.jpg",
+      "rank": 14,
+      "votes": 2251,
+      "winner": false
+    },
+    {
+      "external_id": "17201095",
+      "title": "Play with Me",
+      "authors": [
+        "Kristen Proby"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1360471559l/17201095._SY600_.jpg",
+      "rank": 15,
+      "votes": 1973,
+      "winner": false
+    },
+    {
+      "external_id": "15795628",
+      "title": "Blackmoore",
+      "authors": [
+        "Julianne Donaldson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366846456l/15795628.jpg",
+      "rank": 16,
+      "votes": 1494,
+      "winner": false
+    },
+    {
+      "external_id": "17617277",
+      "title": "Real",
+      "authors": [
+        "Katy Evans"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1363442697l/17617277.jpg",
+      "rank": 17,
+      "votes": 1475,
+      "winner": false
+    },
+    {
+      "external_id": "17156015",
+      "title": "Beauty from Pain",
+      "authors": [
+        "Georgia Cates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1743710056l/17156015._SY600_.jpg",
+      "rank": 18,
+      "votes": 1357,
+      "winner": false
+    },
+    {
+      "external_id": "17158596",
+      "title": "Collide",
+      "authors": [
+        "Gail McHugh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1359831056l/17158596.jpg",
+      "rank": 19,
+      "votes": 562,
+      "winner": false
+    },
+    {
+      "external_id": "17190226",
+      "title": "Surrender Your Love",
+      "authors": [
+        "J.C. Reed"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1359887738l/17190226.jpg",
+      "rank": 20,
+      "votes": 544,
+      "winner": false
+    }
+  ]
+}

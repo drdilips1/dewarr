@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-poetry-books-2013",
+  "kind": "award",
+  "title": "Poetry",
+  "source_url": "https://www.goodreads.com/choiceawards/best-poetry-books-2013",
+  "year": 2013,
+  "category": "Poetry",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:50.507050+00:00",
+  "books": [
+    {
+      "external_id": "16075147",
+      "title": "The Fall of Arthur",
+      "authors": [
+        "J.R.R. Tolkien"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349706081l/16075147.jpg",
+      "rank": 1,
+      "votes": 15096,
+      "winner": true
+    },
+    {
+      "external_id": "18003300",
+      "title": "Love & Misadventure",
+      "authors": [
+        "Lang Leav"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1370084153l/18003300.jpg",
+      "rank": 2,
+      "votes": 6120,
+      "winner": false
+    },
+    {
+      "external_id": "17707772",
+      "title": "Dog Songs",
+      "authors": [
+        "Mary Oliver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1367269165l/17707772.jpg",
+      "rank": 3,
+      "votes": 5958,
+      "winner": false
+    },
+    {
+      "external_id": "15798111",
+      "title": "Aimless Love",
+      "authors": [
+        "Billy Collins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366046336l/15798111.jpg",
+      "rank": 4,
+      "votes": 3446,
+      "winner": false
+    },
+    {
+      "external_id": "17333426",
+      "title": "Egghead; or, You Can't Survive on Ideas Alone",
+      "authors": [
+        "Bo Burnham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400879372l/17333426.jpg",
+      "rank": 5,
+      "votes": 2542,
+      "winner": false
+    },
+    {
+      "external_id": "17159513",
+      "title": "I Will Never Be Beautiful Enough to Make Us Beautiful Together",
+      "authors": [
+        "Mira  González"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358313208l/17159513.jpg",
+      "rank": 6,
+      "votes": 2519,
+      "winner": false
+    },
+    {
+      "external_id": "16099190",
+      "title": "Love, Dishonor, Marry, Die, Cherish, Perish",
+      "authors": [
+        "David Rakoff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1360646237l/16099190.jpg",
+      "rank": 7,
+      "votes": 2256,
+      "winner": false
+    },
+    {
+      "external_id": "17729031",
+      "title": "The Anatomy of Being",
+      "authors": [
+        "Shinji Moon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1365016469l/17729031.jpg",
+      "rank": 8,
+      "votes": 2235,
+      "winner": false
+    },
+    {
+      "external_id": "18369456",
+      "title": "Survival Songs",
+      "authors": [
+        "Meggie C. Royer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1377296062l/18369456.jpg",
+      "rank": 9,
+      "votes": 1982,
+      "winner": false
+    },
+    {
+      "external_id": "15824233",
+      "title": "The World Will Follow Joy",
+      "authors": [
+        "Alice Walker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1360650499l/15824233.jpg",
+      "rank": 10,
+      "votes": 1946,
+      "winner": false
+    },
+    {
+      "external_id": "17194983",
+      "title": "Bough Down",
+      "authors": [
+        "Karen Green"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362121040l/17194983.jpg",
+      "rank": 11,
+      "votes": 596,
+      "winner": false
+    },
+    {
+      "external_id": "15797355",
+      "title": "Red Doc>",
+      "authors": [
+        "Anne Carson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344618948l/15797355.jpg",
+      "rank": 12,
+      "votes": 419,
+      "winner": false
+    },
+    {
+      "external_id": "15792899",
+      "title": "Incarnadine",
+      "authors": [
+        "Mary Szybist"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385187727l/15792899.jpg",
+      "rank": 13,
+      "votes": 394,
+      "winner": false
+    },
+    {
+      "external_id": "17072298",
+      "title": "Black Aperture",
+      "authors": [
+        "Matt Rasmussen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1359982160l/17072298.jpg",
+      "rank": 14,
+      "votes": 369,
+      "winner": false
+    },
+    {
+      "external_id": "17575197",
+      "title": "Unexplained Fevers",
+      "authors": [
+        "Jeannine Hall Gailey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1363034269l/17575197.jpg",
+      "rank": 15,
+      "votes": 308,
+      "winner": false
+    },
+    {
+      "external_id": "17448302",
+      "title": "Songbook for Haunted Boys and Girls",
+      "authors": [
+        "Wayne McNeill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1361935490l/17448302.jpg",
+      "rank": 16,
+      "votes": 277,
+      "winner": false
+    },
+    {
+      "external_id": "16059376",
+      "title": "Metaphysical Dog",
+      "authors": [
+        "Frank Bidart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1376835260l/16059376.jpg",
+      "rank": 17,
+      "votes": 259,
+      "winner": false
+    },
+    {
+      "external_id": "18159867",
+      "title": "Hysteria",
+      "authors": [
+        "Stephanie M. Wytovich"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1372875555l/18159867.jpg",
+      "rank": 18,
+      "votes": 243,
+      "winner": false
+    },
+    {
+      "external_id": "18585282",
+      "title": "Salt",
+      "authors": [
+        "Nayyirah Waheed"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1380105266l/18585282.jpg",
+      "rank": 19,
+      "votes": 114,
+      "winner": false
+    },
+    {
+      "external_id": "17265206",
+      "title": "The Boss",
+      "authors": [
+        "Victoria Chang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1370983688l/17265206.jpg",
+      "rank": 20,
+      "votes": 53,
+      "winner": false
+    }
+  ]
+}

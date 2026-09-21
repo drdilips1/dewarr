@@ -1,0 +1,1116 @@
+{
+  "id": "gr-list-43",
+  "kind": "listopia",
+  "title": "Best Young Adult Books",
+  "source_url": "https://www.goodreads.com/list/show/43",
+  "year": null,
+  "category": null,
+  "genres": [
+    "young-adult"
+  ],
+  "count": 13357,
+  "coverage": "partial",
+  "updated_at": "2026-09-20T19:04:37.605631+00:00",
+  "books": [
+    {
+      "external_id": "3",
+      "title": "Harry Potter and the Sorcerer's Stone (Harry Potter, #1)",
+      "authors": [
+        "J.K. Rowling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474154022i/3._SY600_.jpg",
+      "rank": 1,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "28187",
+      "title": "The Lightning Thief (Percy Jackson and the Olympians, #1)",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400602609i/28187._SY600_.jpg",
+      "rank": 2,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2767052",
+      "title": "The Hunger Games (The Hunger Games, #1)",
+      "authors": [
+        "Suzanne Collins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1586722975i/2767052._SY600_.jpg",
+      "rank": 3,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "41865",
+      "title": "Twilight (The Twilight Saga, #1)",
+      "authors": [
+        "Stephenie Meyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1700522826i/41865._SY600_.jpg",
+      "rank": 4,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3636",
+      "title": "The Giver (Giver, #1)",
+      "authors": [
+        "Lois Lowry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1342493368i/3636._SY600_.jpg",
+      "rank": 5,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "11870085",
+      "title": "The Fault in Our Stars",
+      "authors": [
+        "John  Green"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1660273739i/11870085._SY600_.jpg",
+      "rank": 6,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "256683",
+      "title": "City of Bones (The Mortal Instruments, #1)",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1432730315i/256683._SY600_.jpg",
+      "rank": 7,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13335037",
+      "title": "Divergent (Divergent, #1)",
+      "authors": [
+        "Veronica Roth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1618526890i/13335037._SY600_.jpg",
+      "rank": 8,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "19063",
+      "title": "The Book Thief",
+      "authors": [
+        "Markus Zusak"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522157426i/19063._SY600_.jpg",
+      "rank": 9,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2657",
+      "title": "To Kill a Mockingbird",
+      "authors": [
+        "Harper Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553383690i/2657._SY600_.jpg",
+      "rank": 10,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "22628",
+      "title": "The Perks of Being a Wallflower",
+      "authors": [
+        "Stephen Chbosky"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1650033115i/22628._SY600_.jpg",
+      "rank": 11,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "5907",
+      "title": "The Hobbit, or There and Back Again",
+      "authors": [
+        "J.R.R. Tolkien"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546071216i/5907._SY600_.jpg",
+      "rank": 12,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "38709",
+      "title": "Holes (Holes, #1)",
+      "authors": [
+        "Louis Sachar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1618269830i/38709._SY600_.jpg",
+      "rank": 13,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "231804",
+      "title": "The Outsiders",
+      "authors": [
+        "S.E. Hinton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442129426i/231804._SY600_.jpg",
+      "rank": 14,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "119322",
+      "title": "The Golden Compass (His Dark Materials, #1)",
+      "authors": [
+        "Philip Pullman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1505766203i/119322._SY600_.jpg",
+      "rank": 15,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1656001",
+      "title": "The Host",
+      "authors": [
+        "Stephenie Meyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1318009171i/1656001._SY600_.jpg",
+      "rank": 16,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "99561",
+      "title": "Looking for Alaska",
+      "authors": [
+        "John  Green"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1652042180i/99561._SY600_.jpg",
+      "rank": 17,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "345627",
+      "title": "Vampire Academy (Vampire Academy, #1)",
+      "authors": [
+        "Richelle Mead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1361098973i/345627._SY600_.jpg",
+      "rank": 18,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "113436",
+      "title": "Eragon (The Inheritance Cycle #1)",
+      "authors": [
+        "Christopher Paolini"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366212852i/113436._SY600_.jpg",
+      "rank": 19,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "33574273",
+      "title": "A Wrinkle in Time (Time Quintet, #1)",
+      "authors": [
+        "Madeleine L'Engle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507963312i/33574273._SY600_.jpg",
+      "rank": 20,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "24770",
+      "title": "Uglies (Uglies, #1)",
+      "authors": [
+        "Scott Westerfeld"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1654202671i/24770._SY600_.jpg",
+      "rank": 21,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7171637",
+      "title": "Clockwork Angel (The Infernal Devices, #1)",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1693490271i/7171637._SY600_.jpg",
+      "rank": 22,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "24337",
+      "title": "Ella Enchanted (Ella Enchanted, #1)",
+      "authors": [
+        "Gail Carson Levine"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410727190i/24337._SY600_.jpg",
+      "rank": 23,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "40940121",
+      "title": "Bridge to Terabithia",
+      "authors": [
+        "Katherine Paterson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1532478367i/40940121._SY600_.jpg",
+      "rank": 24,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1885",
+      "title": "Pride and Prejudice",
+      "authors": [
+        "Jane Austen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320399351i/1885._SY600_.jpg",
+      "rank": 25,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1934",
+      "title": "Little Women (Little Women, #1)",
+      "authors": [
+        "Louisa May Alcott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562690475i/1934._SY600_.jpg",
+      "rank": 26,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6186357",
+      "title": "The Maze Runner (The Maze Runner, #1)",
+      "authors": [
+        "James Dashner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375596592i/6186357._SY600_.jpg",
+      "rank": 27,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "39280444",
+      "title": "Speak",
+      "authors": [
+        "Laurie Halse Anderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529044298i/39280444._SY600_.jpg",
+      "rank": 28,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7736182",
+      "title": "The Lost Hero (The Heroes of Olympus, #1)",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201003i/7736182._SY600_.jpg",
+      "rank": 29,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "24178",
+      "title": "Charlotte’s Web",
+      "authors": [
+        "E.B. White"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628267712i/24178._SY600_.jpg",
+      "rank": 30,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "157993",
+      "title": "The Little Prince",
+      "authors": [
+        "Antoine de Saint-Exupéry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1367545443i/157993._SY600_.jpg",
+      "rank": 31,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "78411",
+      "title": "The Bad Beginning (A Series of Unfortunate Events, #1)",
+      "authors": [
+        "Lemony Snicket"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436737029i/78411._SY600_.jpg",
+      "rank": 32,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3236307",
+      "title": "Graceling (Graceling Realm, #1)",
+      "authors": [
+        "Kristin Cashore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331548394i/3236307._SY600_.jpg",
+      "rank": 33,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "47281",
+      "title": "Number the Stars",
+      "authors": [
+        "Lois Lowry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630542426i/47281._SY600_.jpg",
+      "rank": 34,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "375802",
+      "title": "Ender’s Game (Ender's Saga, #1)",
+      "authors": [
+        "Orson Scott Card"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408303130i/375802._SY600_.jpg",
+      "rank": 35,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "28194",
+      "title": "Inkheart (Inkworld, #1)",
+      "authors": [
+        "Cornelia Funke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1538266636i/28194._SY600_.jpg",
+      "rank": 36,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "8127",
+      "title": "Anne of Green Gables (Anne of Green Gables, #1)",
+      "authors": [
+        "L.M. Montgomery"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1615094578i/8127._SY600_.jpg",
+      "rank": 37,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6310",
+      "title": "Charlie and the Chocolate Factory (Charlie Bucket, #1)",
+      "authors": [
+        "Roald Dahl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1309211401i/6310._SY600_.jpg",
+      "rank": 38,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6339664",
+      "title": "Hush, Hush (Hush, Hush, #1)",
+      "authors": [
+        "Becca Fitzpatrick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358261334i/6339664._SY600_.jpg",
+      "rank": 39,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "29844228",
+      "title": "Thirteen Reasons Why",
+      "authors": [
+        "Jay Asher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555345043i/29844228._SY600_.jpg",
+      "rank": 40,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2998",
+      "title": "The Secret Garden",
+      "authors": [
+        "Frances Hodgson Burnett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327873635i/2998._SY600_.jpg",
+      "rank": 41,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "249747",
+      "title": "Artemis Fowl (Artemis Fowl, #1)",
+      "authors": [
+        "Eoin Colfer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630661894i/249747._SY600_.jpg",
+      "rank": 42,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "22232",
+      "title": "Stargirl (Stargirl, #1)",
+      "authors": [
+        "Jerry Spinelli"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1335947642i/22232._SY600_.jpg",
+      "rank": 43,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "41044096",
+      "title": "Island of the Blue Dolphins",
+      "authors": [
+        "Scott O'Dell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1533405446i/41044096._SY600_.jpg",
+      "rank": 44,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "84981",
+      "title": "Tuck Everlasting",
+      "authors": [
+        "Natalie Babbitt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1661030663i/84981._SY600_.jpg",
+      "rank": 45,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7624",
+      "title": "Lord of the Flies",
+      "authors": [
+        "William Golding"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327869409i/7624._SY600_.jpg",
+      "rank": 46,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "452306",
+      "title": "The Sisterhood of the Traveling Pants (Sisterhood, #1)",
+      "authors": [
+        "Ann Brashares"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461611233i/452306._SY600_.jpg",
+      "rank": 47,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "17061",
+      "title": "Coraline",
+      "authors": [
+        "Neil Gaiman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493497435i/17061._SY600_.jpg",
+      "rank": 48,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6442769",
+      "title": "Paper Towns",
+      "authors": [
+        "John  Green"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349013610i/6442769._SY600_.jpg",
+      "rank": 49,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "36381037",
+      "title": "Cinder (The Lunar Chronicles, #1)",
+      "authors": [
+        "Marissa Meyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507557775i/36381037._SY600_.jpg",
+      "rank": 50,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "5107",
+      "title": "The Catcher in the Rye",
+      "authors": [
+        "J.D. Salinger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398034300i/5107._SY600_.jpg",
+      "rank": 51,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13152",
+      "title": "The Angel Experiment (Maximum Ride, #1)",
+      "authors": [
+        "James  Patterson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1339277875i/13152._SY600_.jpg",
+      "rank": 52,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "30183",
+      "title": "Marked (House of Night, #1)",
+      "authors": [
+        "P.C. Cast"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1317067002i/30183._SY600_.jpg",
+      "rank": 53,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "378",
+      "title": "The Phantom Tollbooth",
+      "authors": [
+        "Norton Juster"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558858485i/378._SY600_.jpg",
+      "rank": 54,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "42844155",
+      "title": "Harry Potter and the Philosopher's Stone (Harry Potter, #1)",
+      "authors": [
+        "J.K. Rowling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598823299i/42844155._SY600_.jpg",
+      "rank": 55,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "50",
+      "title": "Hatchet (Brian's Saga, #1)",
+      "authors": [
+        "Gary Paulsen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385297074i/50._SY600_.jpg",
+      "rank": 56,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6068551",
+      "title": "Shiver (The Wolves of Mercy Falls, #1)",
+      "authors": [
+        "Maggie Stiefvater"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1409283154i/6068551._SY600_.jpg",
+      "rank": 57,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "10507293",
+      "title": "The Selection (The Selection, #1)",
+      "authors": [
+        "Kiera Cass"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1322103400i/10507293._SY600_.jpg",
+      "rank": 58,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "21787",
+      "title": "The Princess Bride",
+      "authors": [
+        "William Goldman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327903636i/21787._SY600_.jpg",
+      "rank": 59,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "902",
+      "title": "The Westing Game",
+      "authors": [
+        "Ellen Raskin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356850909i/902._SY600_.jpg",
+      "rank": 60,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3008",
+      "title": "A Little Princess",
+      "authors": [
+        "Frances Hodgson Burnett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327868556i/3008._SY600_.jpg",
+      "rank": 61,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "51738",
+      "title": "Just Listen",
+      "authors": [
+        "Sarah Dessen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358270741i/51738._SY600_.jpg",
+      "rank": 62,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "37732",
+      "title": "Are You There God? It’s Me, Margaret",
+      "authors": [
+        "Judy Blume"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388356524i/37732._SY600_.jpg",
+      "rank": 63,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6294",
+      "title": "Howl's Moving Castle (Howl's Moving Castle, #1)",
+      "authors": [
+        "Diana Wynne Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630502935i/6294._SY600_.jpg",
+      "rank": 64,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "10365",
+      "title": "Where the Red Fern Grows",
+      "authors": [
+        "Wilson Rawls"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518702249i/10365._SY600_.jpg",
+      "rank": 65,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6487308",
+      "title": "Fallen (Fallen, #1)",
+      "authors": [
+        "Lauren Kate"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1440619649i/6487308._SY600_.jpg",
+      "rank": 66,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7735333",
+      "title": "Matched (Matched, #1)",
+      "authors": [
+        "Ally Condie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1367706191i/7735333._SY600_.jpg",
+      "rank": 67,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "852470",
+      "title": "I'd Tell You I Love You, But Then I'd Have to Kill You (Gallagher Girls, #1)",
+      "authors": [
+        "Ally Carter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1334491180i/852470._SY600_.jpg",
+      "rank": 68,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "51737",
+      "title": "The Truth About Forever",
+      "authors": [
+        "Sarah Dessen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362767907i/51737._SY600_.jpg",
+      "rank": 69,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1618",
+      "title": "The Curious Incident of the Dog in the Night-Time",
+      "authors": [
+        "Mark Haddon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479863624i/1618._SY600_.jpg",
+      "rank": 70,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "85990",
+      "title": "Princess Academy (Princess Academy, #1)",
+      "authors": [
+        "Shannon Hale"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349410861i/85990._SY600_.jpg",
+      "rank": 71,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3682",
+      "title": "A Great and Terrible Beauty (Gemma Doyle, #1)",
+      "authors": [
+        "Libba Bray"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1284558475i/3682._SY600_.jpg",
+      "rank": 72,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "11614718",
+      "title": "Delirium (Delirium, #1)",
+      "authors": [
+        "Lauren Oliver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327890411i/11614718._SY600_.jpg",
+      "rank": 73,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6304335",
+      "title": "Beautiful Creatures (Caster Chronicles, #1)",
+      "authors": [
+        "Kami Garcia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327873282i/6304335._SY600_.jpg",
+      "rank": 74,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "357664",
+      "title": "Because of Winn-Dixie",
+      "authors": [
+        "Kate DiCamillo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456871914i/357664._SY600_.jpg",
+      "rank": 75,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "9275658",
+      "title": "Legend (Legend, #1)",
+      "authors": [
+        "Marie Lu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1501368160i/9275658._SY600_.jpg",
+      "rank": 76,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3685",
+      "title": "Black Beauty",
+      "authors": [
+        "Anna Sewell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1578265482i/3685._SY600_.jpg",
+      "rank": 77,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "19302",
+      "title": "Pippi Longstocking (Pippi Långstrump, #1)",
+      "authors": [
+        "Astrid Lindgren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1519300455i/19302._SY600_.jpg",
+      "rank": 78,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13831",
+      "title": "Alanna: The First Adventure (Song of the Lioness, #1)",
+      "authors": [
+        "Tamora Pierce"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388206270i/13831._SY600_.jpg",
+      "rank": 79,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "179064",
+      "title": "The Goose Girl (The Books of Bayern, #1)",
+      "authors": [
+        "Shannon Hale"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617553319i/179064._SY600_.jpg",
+      "rank": 80,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "76620",
+      "title": "Watership Down (Watership Down, #1)",
+      "authors": [
+        "Richard  Adams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405136931i/76620._SY600_.jpg",
+      "rank": 81,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "30119",
+      "title": "Where the Sidewalk Ends",
+      "authors": [
+        "Shel Silverstein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1769901144i/30119._SY600_.jpg",
+      "rank": 82,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "518848",
+      "title": "Sabriel (Abhorsen, #1)",
+      "authors": [
+        "Garth Nix"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1293655399i/518848._SY600_.jpg",
+      "rank": 83,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2213661",
+      "title": "The Graveyard Book",
+      "authors": [
+        "Neil Gaiman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1531295292i/2213661._SY600_.jpg",
+      "rank": 84,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "53496",
+      "title": "Walk Two Moons",
+      "authors": [
+        "Sharon Creech"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389035862i/53496._SY600_.jpg",
+      "rank": 85,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3980",
+      "title": "From the Mixed-up Files of Mrs. Basil E. Frankweiler",
+      "authors": [
+        "E.L. Konigsburg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327784751i/3980._SY600_.jpg",
+      "rank": 86,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "46799",
+      "title": "Go Ask Alice",
+      "authors": [
+        "Beatrice Sparks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327870536i/46799._SY600_.jpg",
+      "rank": 87,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "44652",
+      "title": "Fablehaven (Fablehaven, #1)",
+      "authors": [
+        "Brandon Mull"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460309528i/44652._SY600_.jpg",
+      "rank": 88,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "331920",
+      "title": "Flipped",
+      "authors": [
+        "Wendelin Van Draanen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388554293i/331920._SY600_.jpg",
+      "rank": 89,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2800905",
+      "title": "The Summoning (Darkest Powers, #1)",
+      "authors": [
+        "Kelley Armstrong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1478986944i/2800905._SY600_.jpg",
+      "rank": 90,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "693208",
+      "title": "The Absolutely True Diary of a Part-Time Indian",
+      "authors": [
+        "Sherman Alexie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327908992i/693208._SY600_.jpg",
+      "rank": 91,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "12232938",
+      "title": "The Lovely Bones",
+      "authors": [
+        "Alice Sebold"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1457810586i/12232938._SY600_.jpg",
+      "rank": 92,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3975774",
+      "title": "Evermore (The Immortals, #1)",
+      "authors": [
+        "Alyson Noel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362336360i/3975774._SY600_.jpg",
+      "rank": 93,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "227651",
+      "title": "Among the Hidden (Shadow Children, #1)",
+      "authors": [
+        "Margaret Peterson Haddix"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388382796i/227651._SY600_.jpg",
+      "rank": 94,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "38980",
+      "title": "The Princess Diaries (The Princess Diaries, #1)",
+      "authors": [
+        "Meg Cabot"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355011082i/38980._SY600_.jpg",
+      "rank": 95,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "9822",
+      "title": "Mrs. Frisby and the Rats of NIMH (Rats of NIMH, #1)",
+      "authors": [
+        "Robert C. O'Brien"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351191064i/9822._SY600_.jpg",
+      "rank": 96,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "703292",
+      "title": "The Witch of Blackbird Pond",
+      "authors": [
+        "Elizabeth George Speare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1345499790i/703292._SY600_.jpg",
+      "rank": 97,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "22205",
+      "title": "This Lullaby",
+      "authors": [
+        "Sarah Dessen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1397779294i/22205._SY600_.jpg",
+      "rank": 98,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "60288648",
+      "title": "The Chain Between Worlds (The Lost Artefacts #1)",
+      "authors": [
+        "Johnathon Nicolaou"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1643771474i/60288648._SY600_.jpg",
+      "rank": 99,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13376",
+      "title": "The House of the Scorpion (Matteo Alacran, #1)",
+      "authors": [
+        "Nancy Farmer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1401734230i/13376._SY600_.jpg",
+      "rank": 100,
+      "votes": null,
+      "winner": false
+    }
+  ]
+}

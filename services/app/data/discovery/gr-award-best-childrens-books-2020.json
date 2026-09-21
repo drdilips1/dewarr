@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-childrens-books-2020",
+  "kind": "award",
+  "title": "Middle Grade & Children's",
+  "source_url": "https://www.goodreads.com/choiceawards/best-childrens-books-2020",
+  "year": 2020,
+  "category": "Middle Grade & Children's",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:53.864672+00:00",
+  "books": [
+    {
+      "external_id": "48717744",
+      "title": "The Tower of Nero",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1694946244l/48717744.jpg",
+      "rank": 1,
+      "votes": 49341,
+      "winner": true
+    },
+    {
+      "external_id": "48613333",
+      "title": "The One and Only Bob",
+      "authors": [
+        "Katherine Applegate"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1572990860l/48613333.jpg",
+      "rank": 2,
+      "votes": 23486,
+      "winner": false
+    },
+    {
+      "external_id": "51988656",
+      "title": "Before the Ever After",
+      "authors": [
+        "Jacqueline Woodson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1589833024l/51988656.jpg",
+      "rank": 3,
+      "votes": 15347,
+      "winner": false
+    },
+    {
+      "external_id": "45343240",
+      "title": "One True King",
+      "authors": [
+        "Soman Chainani"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585444816l/45343240.jpg",
+      "rank": 4,
+      "votes": 13228,
+      "winner": false
+    },
+    {
+      "external_id": "46196106",
+      "title": "Hollowpox",
+      "authors": [
+        "Jessica Townsend"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1577773211l/46196106.jpg",
+      "rank": 5,
+      "votes": 13186,
+      "winner": false
+    },
+    {
+      "external_id": "45169415",
+      "title": "From the Desk of Zoe Washington",
+      "authors": [
+        "Janae Marks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1560957404l/45169415.jpg",
+      "rank": 6,
+      "votes": 11673,
+      "winner": false
+    },
+    {
+      "external_id": "52515165",
+      "title": "We Dream of Space",
+      "authors": [
+        "Erin Entrada Kelly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1579013935l/52515165._SX318_SY475_.jpg",
+      "rank": 7,
+      "votes": 11151,
+      "winner": false
+    },
+    {
+      "external_id": "44900082",
+      "title": "The List of Things That Will Not Change",
+      "authors": [
+        "Rebecca Stead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1575342178l/44900082.jpg",
+      "rank": 8,
+      "votes": 10230,
+      "winner": false
+    },
+    {
+      "external_id": "36601937",
+      "title": "Ghost Squad",
+      "authors": [
+        "Claribel A. Ortega"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555437499l/36601937._SY600_.jpg",
+      "rank": 9,
+      "votes": 10049,
+      "winner": false
+    },
+    {
+      "external_id": "44286536",
+      "title": "Ali Cross",
+      "authors": [
+        "James  Patterson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558455888l/44286536.jpg",
+      "rank": 10,
+      "votes": 9520,
+      "winner": false
+    },
+    {
+      "external_id": "51300436",
+      "title": "Aru Shah and the Tree of Wishes",
+      "authors": [
+        "Roshani Chokshi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1567185481l/51300436._SX318_SY475_.jpg",
+      "rank": 11,
+      "votes": 4351,
+      "winner": false
+    },
+    {
+      "external_id": "44575111",
+      "title": "King and the Dragonflies",
+      "authors": [
+        "Kacen Callender"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1561211214l/44575111.jpg",
+      "rank": 12,
+      "votes": 4296,
+      "winner": false
+    },
+    {
+      "external_id": "49917829",
+      "title": "Clean Getaway",
+      "authors": [
+        "Nic Stone"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1569285842l/49917829._SX318_SY475_.jpg",
+      "rank": 13,
+      "votes": 3900,
+      "winner": false
+    },
+    {
+      "external_id": "45485735",
+      "title": "Here in the Real World",
+      "authors": [
+        "Sara Pennypacker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1572155035l/45485735.jpg",
+      "rank": 14,
+      "votes": 3666,
+      "winner": false
+    },
+    {
+      "external_id": "50998132",
+      "title": "A Tale of Witchcraft...",
+      "authors": [
+        "Chris Colfer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598244948l/50998132.jpg",
+      "rank": 15,
+      "votes": 3599,
+      "winner": false
+    },
+    {
+      "external_id": "36353103",
+      "title": "Race to the Sun",
+      "authors": [
+        "Rebecca Roanhorse"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549292562l/36353103.jpg",
+      "rank": 16,
+      "votes": 3516,
+      "winner": false
+    },
+    {
+      "external_id": "51323393",
+      "title": "Unlocked",
+      "authors": [
+        "Shannon Messenger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594228085l/51323393.jpg",
+      "rank": 17,
+      "votes": 2108,
+      "winner": false
+    },
+    {
+      "external_id": "55124276",
+      "title": "Lizzy Albright and the Attic Window",
+      "authors": [
+        "Ricky Tims"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598387645l/55124276._SY600_.jpg",
+      "rank": 18,
+      "votes": 1612,
+      "winner": false
+    },
+    {
+      "external_id": "48945757",
+      "title": "Fighting Words",
+      "authors": [
+        "Kimberly Brubaker Bradley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1574716879l/48945757.jpg",
+      "rank": 19,
+      "votes": 760,
+      "winner": false
+    },
+    {
+      "external_id": "52507955",
+      "title": "Efrén Divided",
+      "authors": [
+        "Ernesto Cisneros"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1567693986l/52507955._SX318_SY475_.jpg",
+      "rank": 20,
+      "votes": 734,
+      "winner": false
+    }
+  ]
+}

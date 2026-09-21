@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-humor-books-2012",
+  "kind": "award",
+  "title": "Humor",
+  "source_url": "https://www.goodreads.com/choiceawards/best-humor-books-2012",
+  "year": 2012,
+  "category": "Humor",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:17.957658+00:00",
+  "books": [
+    {
+      "external_id": "12868761",
+      "title": "Let's Pretend This Never Happened",
+      "authors": [
+        "Jenny  Lawson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1489415716l/12868761._SY600_.jpg",
+      "rank": 1,
+      "votes": 13066,
+      "winner": true
+    },
+    {
+      "external_id": "13529139",
+      "title": "I am a Pole",
+      "authors": [
+        "Stephen Colbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1334310503l/13529139.jpg",
+      "rank": 2,
+      "votes": 4984,
+      "winner": false
+    },
+    {
+      "external_id": "12853720",
+      "title": "How to Be a Woman",
+      "authors": [
+        "Caitlin Moran"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355106361l/12853720.jpg",
+      "rank": 3,
+      "votes": 4836,
+      "winner": false
+    },
+    {
+      "external_id": "12640991",
+      "title": "Weird Things Customers Say in Bookshops",
+      "authors": [
+        "Jen Campbell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537900257l/12640991._SY600_.jpg",
+      "rank": 4,
+      "votes": 4717,
+      "winner": false
+    },
+    {
+      "external_id": "7743117",
+      "title": "Sacré Bleu",
+      "authors": [
+        "Christopher Moore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331321350l/7743117.jpg",
+      "rank": 5,
+      "votes": 4243,
+      "winner": false
+    },
+    {
+      "external_id": "13163846",
+      "title": "Darth Vader and Son",
+      "authors": [
+        "Jeffrey   Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1392020416l/13163846.jpg",
+      "rank": 6,
+      "votes": 4199,
+      "winner": false
+    },
+    {
+      "external_id": "12405612",
+      "title": "Tough Shit",
+      "authors": [
+        "Kevin  Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1440453245l/12405612._SY600_.jpg",
+      "rank": 7,
+      "votes": 3959,
+      "winner": false
+    },
+    {
+      "external_id": "13526165",
+      "title": "Where'd You Go, Bernadette",
+      "authors": [
+        "Maria Semple"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1338822317l/13526165.jpg",
+      "rank": 8,
+      "votes": 2569,
+      "winner": false
+    },
+    {
+      "external_id": "13167847",
+      "title": "Most Talkative",
+      "authors": [
+        "Andy Cohen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1335383485l/13167847.jpg",
+      "rank": 9,
+      "votes": 1883,
+      "winner": false
+    },
+    {
+      "external_id": "13425415",
+      "title": "I Suck at Girls",
+      "authors": [
+        "Justin Halpern"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1337716379l/13425415.jpg",
+      "rank": 10,
+      "votes": 1875,
+      "winner": false
+    },
+    {
+      "external_id": "12166282",
+      "title": "Trail of the Spellmans",
+      "authors": [
+        "Lisa Lutz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1329960906l/12166282.jpg",
+      "rank": 11,
+      "votes": 1203,
+      "winner": false
+    },
+    {
+      "external_id": "12959743",
+      "title": "How to Be Black",
+      "authors": [
+        "Baratunde R. Thurston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366557156l/12959743.jpg",
+      "rank": 12,
+      "votes": 1088,
+      "winner": false
+    },
+    {
+      "external_id": "12332573",
+      "title": "Jeneration X",
+      "authors": [
+        "Jen Lancaster"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347898510l/12332573.jpg",
+      "rank": 13,
+      "votes": 996,
+      "winner": false
+    },
+    {
+      "external_id": "8570787",
+      "title": "Drop Dead Healthy",
+      "authors": [
+        "A.J. Jacobs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344398815l/8570787.jpg",
+      "rank": 14,
+      "votes": 948,
+      "winner": false
+    },
+    {
+      "external_id": "15799936",
+      "title": "How to Tell If Your Cat Is Plotting to Kill You",
+      "authors": [
+        "Matthew Inman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461518764l/15799936._SY600_.jpg",
+      "rank": 15,
+      "votes": 749,
+      "winner": false
+    },
+    {
+      "external_id": "14060248",
+      "title": "Fifty Shames of Earl Grey",
+      "authors": [
+        "Fanny Merkin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1337500200l/14060248.jpg",
+      "rank": 16,
+      "votes": 626,
+      "winner": false
+    },
+    {
+      "external_id": "13528506",
+      "title": "America Again",
+      "authors": [
+        "Stephen Colbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348708518l/13528506.jpg",
+      "rank": 17,
+      "votes": 578,
+      "winner": false
+    },
+    {
+      "external_id": "12511117",
+      "title": "You're Not Doing It Right",
+      "authors": [
+        "Michael Ian Black"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1326168351l/12511117.jpg",
+      "rank": 18,
+      "votes": 509,
+      "winner": false
+    },
+    {
+      "external_id": "15758840",
+      "title": "I Kill Me",
+      "authors": [
+        "Tracy H. Tucker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1343652505l/15758840.jpg",
+      "rank": 19,
+      "votes": 94,
+      "winner": false
+    },
+    {
+      "external_id": "13151428",
+      "title": "Not Taco Bell Material",
+      "authors": [
+        "Adam Carolla"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333576891l/13151428.jpg",
+      "rank": 20,
+      "votes": 93,
+      "winner": false
+    }
+  ]
+}

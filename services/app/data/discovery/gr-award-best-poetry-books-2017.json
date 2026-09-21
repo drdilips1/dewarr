@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-poetry-books-2017",
+  "kind": "award",
+  "title": "Poetry",
+  "source_url": "https://www.goodreads.com/choiceawards/best-poetry-books-2017",
+  "year": 2017,
+  "category": "Poetry",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:48.334697+00:00",
+  "books": [
+    {
+      "external_id": "35606560",
+      "title": "The Sun and Her Flowers",
+      "authors": [
+        "Rupi Kaur"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1499791446l/35606560._SY600_.jpg",
+      "rank": 1,
+      "votes": 35856,
+      "winner": true
+    },
+    {
+      "external_id": "34594982",
+      "title": "Depression & Other Magic Tricks",
+      "authors": [
+        "Sabrina Benaim"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492920202l/34594982.jpg",
+      "rank": 2,
+      "votes": 22625,
+      "winner": false
+    },
+    {
+      "external_id": "33004293",
+      "title": "Solo",
+      "authors": [
+        "Kwame Alexander"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479444434l/33004293.jpg",
+      "rank": 3,
+      "votes": 7924,
+      "winner": false
+    },
+    {
+      "external_id": "33208115",
+      "title": "Love Her Wild",
+      "authors": [
+        "Atticus  ."
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1499862908l/33208115._SY600_.jpg",
+      "rank": 4,
+      "votes": 7546,
+      "winner": false
+    },
+    {
+      "external_id": "22552026",
+      "title": "Long Way Down",
+      "authors": [
+        "Jason Reynolds"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520008013l/22552026._SY600_.jpg",
+      "rank": 5,
+      "votes": 6903,
+      "winner": false
+    },
+    {
+      "external_id": "34753166",
+      "title": "We Come Apart",
+      "authors": [
+        "Sarah Crossan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1491140330l/34753166._SY600_.jpg",
+      "rank": 6,
+      "votes": 5716,
+      "winner": false
+    },
+    {
+      "external_id": "33921696",
+      "title": "New American Best Friend",
+      "authors": [
+        "Olivia Gatwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1486670000l/33921696.jpg",
+      "rank": 7,
+      "votes": 5609,
+      "winner": false
+    },
+    {
+      "external_id": "30304222",
+      "title": "There Are More Beautiful Things Than Beyoncé",
+      "authors": [
+        "Morgan  Parker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1621431940l/30304222._SY600_.jpg",
+      "rank": 8,
+      "votes": 5501,
+      "winner": false
+    },
+    {
+      "external_id": "34451544",
+      "title": "Plum",
+      "authors": [
+        "Hollie McNish"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1488497294l/34451544._SY600_.jpg",
+      "rank": 9,
+      "votes": 4127,
+      "winner": false
+    },
+    {
+      "external_id": "34144863",
+      "title": "Electric Arches",
+      "authors": [
+        "Eve L. Ewing"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1504101607l/34144863._SY600_.jpg",
+      "rank": 10,
+      "votes": 3798,
+      "winner": false
+    },
+    {
+      "external_id": "30231755",
+      "title": "Magdalene",
+      "authors": [
+        "Marie Howe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464994857l/30231755.jpg",
+      "rank": 11,
+      "votes": 1617,
+      "winner": false
+    },
+    {
+      "external_id": "34466674",
+      "title": "Adultolescence",
+      "authors": [
+        "Gabbie Hanna"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1505658887l/34466674._SY600_.jpg",
+      "rank": 12,
+      "votes": 1616,
+      "winner": false
+    },
+    {
+      "external_id": "33631747",
+      "title": "Broken Wishbones and Empty Spaces",
+      "authors": [
+        "Pyrokardia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483018249l/33631747._SY600_.jpg",
+      "rank": 13,
+      "votes": 1358,
+      "winner": false
+    },
+    {
+      "external_id": "31944953",
+      "title": "When I Grow Up I Want to Be a List of Further Possibilities",
+      "authors": [
+        "Chen Chen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1475302164l/31944953.jpg",
+      "rank": 14,
+      "votes": 1210,
+      "winner": false
+    },
+    {
+      "external_id": "32311036",
+      "title": "Nature Poem",
+      "authors": [
+        "Tommy Pico"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1477088802l/32311036.jpg",
+      "rank": 15,
+      "votes": 1061,
+      "winner": false
+    },
+    {
+      "external_id": "33606259",
+      "title": "Exits, Desires, and Slow Fires",
+      "authors": [
+        "J.R. Rogue"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1504153764l/33606259._SY600_.jpg",
+      "rank": 16,
+      "votes": 921,
+      "winner": false
+    },
+    {
+      "external_id": "34376890",
+      "title": "Magic with Skin On",
+      "authors": [
+        "Morgan Nikola-Wren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1487806008l/34376890._SY600_.jpg",
+      "rank": 17,
+      "votes": 867,
+      "winner": false
+    },
+    {
+      "external_id": "32566407",
+      "title": "Portrait of the Alcoholic",
+      "authors": [
+        "Kaveh Akbar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1478793203l/32566407.jpg",
+      "rank": 18,
+      "votes": 866,
+      "winner": false
+    },
+    {
+      "external_id": "33375618",
+      "title": "Don't Call Us Dead",
+      "authors": [
+        "Danez Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1485966636l/33375618.jpg",
+      "rank": 19,
+      "votes": 796,
+      "winner": false
+    },
+    {
+      "external_id": "31944749",
+      "title": "Hard Child",
+      "authors": [
+        "Natalie Shapero"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1639850752l/31944749._SY600_.jpg",
+      "rank": 20,
+      "votes": 781,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-fiction-books-2015",
+  "kind": "award",
+  "title": "Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fiction-books-2015",
+  "year": 2015,
+  "category": "Fiction",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:29.220051+00:00",
+  "books": [
+    {
+      "external_id": "24817626",
+      "title": "Go Set a Watchman",
+      "authors": [
+        "Harper Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1451442088l/24817626.jpg",
+      "rank": 1,
+      "votes": 31093,
+      "winner": true
+    },
+    {
+      "external_id": "24941288",
+      "title": "After You",
+      "authors": [
+        "Jojo Moyes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1467061008l/24941288.jpg",
+      "rank": 2,
+      "votes": 19838,
+      "winner": false
+    },
+    {
+      "external_id": "22875451",
+      "title": "The Royal We",
+      "authors": [
+        "Heather Cocks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421107274l/22875451.jpg",
+      "rank": 3,
+      "votes": 16862,
+      "winner": false
+    },
+    {
+      "external_id": "22822858",
+      "title": "A Little Life",
+      "authors": [
+        "Hanya Yanagihara"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1446469353l/22822858._SY600_.jpg",
+      "rank": 4,
+      "votes": 15488,
+      "winner": false
+    },
+    {
+      "external_id": "23604559",
+      "title": "My Grandmother Asked Me to Tell You She's Sorry",
+      "authors": [
+        "Fredrik Backman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461904020l/23604559._SY600_.jpg",
+      "rank": 5,
+      "votes": 14957,
+      "winner": false
+    },
+    {
+      "external_id": "24612118",
+      "title": "Fates and Furies",
+      "authors": [
+        "Lauren Groff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1434750235l/24612118._SY600_.jpg",
+      "rank": 6,
+      "votes": 12750,
+      "winner": false
+    },
+    {
+      "external_id": "22716194",
+      "title": "Inside the O'Briens",
+      "authors": [
+        "Lisa Genova"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1423486279l/22716194.jpg",
+      "rank": 7,
+      "votes": 12195,
+      "winner": false
+    },
+    {
+      "external_id": "23209971",
+      "title": "Girl at War",
+      "authors": [
+        "Sara Nović"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414348859l/23209971.jpg",
+      "rank": 8,
+      "votes": 11782,
+      "winner": false
+    },
+    {
+      "external_id": "23602562",
+      "title": "Our Souls at Night",
+      "authors": [
+        "Kent Haruf"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418766517l/23602562.jpg",
+      "rank": 9,
+      "votes": 10638,
+      "winner": false
+    },
+    {
+      "external_id": "23417396",
+      "title": "Trail of Broken Wings",
+      "authors": [
+        "Sejal Badani"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1419962749l/23417396.jpg",
+      "rank": 10,
+      "votes": 7976,
+      "winner": false
+    },
+    {
+      "external_id": "23398961",
+      "title": "The Sound of Glass",
+      "authors": [
+        "Karen   White"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1446574357l/23398961._SY600_.jpg",
+      "rank": 11,
+      "votes": 4564,
+      "winner": false
+    },
+    {
+      "external_id": "23398625",
+      "title": "Kitchens of the Great Midwest",
+      "authors": [
+        "J. Ryan Stradal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1777617983l/23398625.jpg",
+      "rank": 12,
+      "votes": 4347,
+      "winner": false
+    },
+    {
+      "external_id": "21853633",
+      "title": "First Frost",
+      "authors": [
+        "Sarah Addison Allen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410962794l/21853633.jpg",
+      "rank": 13,
+      "votes": 4143,
+      "winner": false
+    },
+    {
+      "external_id": "22217702",
+      "title": "The Secret Wisdom of the Earth",
+      "authors": [
+        "Christopher Scotton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403541255l/22217702.jpg",
+      "rank": 14,
+      "votes": 3503,
+      "winner": false
+    },
+    {
+      "external_id": "24452249",
+      "title": "Did You Ever Have a Family",
+      "authors": [
+        "Bill Clegg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1440378380l/24452249._SY600_.jpg",
+      "rank": 15,
+      "votes": 3339,
+      "winner": false
+    },
+    {
+      "external_id": "23447506",
+      "title": "When the Moon is Low",
+      "authors": [
+        "Nadia Hashimi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421706885l/23447506.jpg",
+      "rank": 16,
+      "votes": 3209,
+      "winner": false
+    },
+    {
+      "external_id": "22318507",
+      "title": "A Spool of Blue Thread",
+      "authors": [
+        "Anne Tyler"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417412304l/22318507.jpg",
+      "rank": 17,
+      "votes": 2788,
+      "winner": false
+    },
+    {
+      "external_id": "23901089",
+      "title": "The Perfect Son",
+      "authors": [
+        "Barbara Claypole White"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430403869l/23901089.jpg",
+      "rank": 18,
+      "votes": 2632,
+      "winner": false
+    },
+    {
+      "external_id": "21535546",
+      "title": "Signs Preceding the End of the World",
+      "authors": [
+        "Yuri Herrera"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398195367l/21535546.jpg",
+      "rank": 19,
+      "votes": 1893,
+      "winner": false
+    },
+    {
+      "external_id": "23754479",
+      "title": "Purity",
+      "authors": [
+        "Jonathan Franzen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1438958976l/23754479._SY600_.jpg",
+      "rank": 20,
+      "votes": 1328,
+      "winner": false
+    }
+  ]
+}

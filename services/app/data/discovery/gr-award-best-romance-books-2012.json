@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-romance-books-2012",
+  "kind": "award",
+  "title": "Romance",
+  "source_url": "https://www.goodreads.com/choiceawards/best-romance-books-2012",
+  "year": 2012,
+  "category": "Romance",
+  "genres": [
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:09.184224+00:00",
+  "books": [
+    {
+      "external_id": "13536860",
+      "title": "Fifty Shades Freed",
+      "authors": [
+        "E.L. James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336418837l/13536860.jpg",
+      "rank": 1,
+      "votes": 22976,
+      "winner": true
+    },
+    {
+      "external_id": "13451045",
+      "title": "Bared to You",
+      "authors": [
+        "Sylvia Day"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336019727l/13451045.jpg",
+      "rank": 2,
+      "votes": 8306,
+      "winner": false
+    },
+    {
+      "external_id": "10993282",
+      "title": "Lover Reborn",
+      "authors": [
+        "J.R. Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1319144072l/10993282.jpg",
+      "rank": 3,
+      "votes": 7522,
+      "winner": false
+    },
+    {
+      "external_id": "12716613",
+      "title": "The Witness",
+      "authors": [
+        "Nora Roberts"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1329921937l/12716613.jpg",
+      "rank": 4,
+      "votes": 7177,
+      "winner": false
+    },
+    {
+      "external_id": "7039218",
+      "title": "Once Burned",
+      "authors": [
+        "Jeaniene Frost"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1335738276l/7039218.jpg",
+      "rank": 5,
+      "votes": 6382,
+      "winner": false
+    },
+    {
+      "external_id": "15775781",
+      "title": "On Dublin Street",
+      "authors": [
+        "Samantha Young"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1343566709l/15775781.jpg",
+      "rank": 6,
+      "votes": 6013,
+      "winner": false
+    },
+    {
+      "external_id": "12820360",
+      "title": "Edenbrooke",
+      "authors": [
+        "Julianne Donaldson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1371398291l/12820360.jpg",
+      "rank": 7,
+      "votes": 5176,
+      "winner": false
+    },
+    {
+      "external_id": "15816413",
+      "title": "Gabriel's Rapture",
+      "authors": [
+        "Sylvain Reynard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1346866986l/15816413.jpg",
+      "rank": 8,
+      "votes": 4883,
+      "winner": false
+    },
+    {
+      "external_id": "13448656",
+      "title": "Motorcycle Man",
+      "authors": [
+        "Kristen Ashley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1547157943l/13448656.jpg",
+      "rank": 9,
+      "votes": 4755,
+      "winner": false
+    },
+    {
+      "external_id": "10790516",
+      "title": "Lothaire",
+      "authors": [
+        "Kresley Cole"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366322959l/10790516.jpg",
+      "rank": 10,
+      "votes": 3140,
+      "winner": false
+    },
+    {
+      "external_id": "15704001",
+      "title": "Seduction and Snacks",
+      "authors": [
+        "Tara Sivec"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1371178840l/15704001.jpg",
+      "rank": 11,
+      "votes": 2026,
+      "winner": false
+    },
+    {
+      "external_id": "13486122",
+      "title": "The Marriage Bargain",
+      "authors": [
+        "Jennifer Probst"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1329319988l/13486122.jpg",
+      "rank": 12,
+      "votes": 1717,
+      "winner": false
+    },
+    {
+      "external_id": "9995135",
+      "title": "The Darkest Seduction",
+      "authors": [
+        "Gena Showalter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1316891535l/9995135.jpg",
+      "rank": 13,
+      "votes": 1580,
+      "winner": false
+    },
+    {
+      "external_id": "12647642",
+      "title": "Love Unrehearsed",
+      "authors": [
+        "Tina Reber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347242126l/12647642.jpg",
+      "rank": 14,
+      "votes": 1461,
+      "winner": false
+    },
+    {
+      "external_id": "11294214",
+      "title": "Darker After Midnight",
+      "authors": [
+        "Lara Adrian"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1306166897l/11294214.jpg",
+      "rank": 15,
+      "votes": 1039,
+      "winner": false
+    },
+    {
+      "external_id": "12925200",
+      "title": "A Night Like This",
+      "authors": [
+        "Julia Quinn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1326735102l/12925200.jpg",
+      "rank": 16,
+      "votes": 1022,
+      "winner": false
+    },
+    {
+      "external_id": "13612739",
+      "title": "Seduced in the Dark",
+      "authors": [
+        "C.J. Roberts"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1335114363l/13612739.jpg",
+      "rank": 17,
+      "votes": 586,
+      "winner": false
+    },
+    {
+      "external_id": "13420351",
+      "title": "Shattered Glass",
+      "authors": [
+        "Dani Alexander"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1471959516l/13420351._SY600_.jpg",
+      "rank": 18,
+      "votes": 542,
+      "winner": false
+    },
+    {
+      "external_id": "11235783",
+      "title": "About That Night",
+      "authors": [
+        "Julie James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1342553249l/11235783.jpg",
+      "rank": 19,
+      "votes": 513,
+      "winner": false
+    },
+    {
+      "external_id": "15762657",
+      "title": "Seducing Cinderella",
+      "authors": [
+        "Gina L. Maxwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1342860599l/15762657.jpg",
+      "rank": 20,
+      "votes": 333,
+      "winner": false
+    }
+  ]
+}

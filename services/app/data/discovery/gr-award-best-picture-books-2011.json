@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-picture-books-2011",
+  "kind": "award",
+  "title": "Picture Books",
+  "source_url": "https://www.goodreads.com/choiceawards/best-picture-books-2011",
+  "year": 2011,
+  "category": "Picture Books",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:48:21.414711+00:00",
+  "books": [
+    {
+      "external_id": "9328233",
+      "title": "When I Grow Up",
+      "authors": [
+        "Al Yankovic"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327904806l/9328233.jpg",
+      "rank": 1,
+      "votes": 1967,
+      "winner": true
+    },
+    {
+      "external_id": "11233988",
+      "title": "I Want My Hat Back",
+      "authors": [
+        "Jon Klassen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327888784l/11233988.jpg",
+      "rank": 2,
+      "votes": 1821,
+      "winner": false
+    },
+    {
+      "external_id": "9314560",
+      "title": "Scaredy Squirrel Has a Birthday Party",
+      "authors": [
+        "Mélanie Watt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1354718161l/9314560.jpg",
+      "rank": 3,
+      "votes": 1241,
+      "winner": false
+    },
+    {
+      "external_id": "8471012",
+      "title": "Little White Rabbit",
+      "authors": [
+        "Kevin Henkes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1434179420l/8471012._SY600_.jpg",
+      "rank": 4,
+      "votes": 1204,
+      "winner": false
+    },
+    {
+      "external_id": "8726737",
+      "title": "Cat Secrets",
+      "authors": [
+        "Jef Czekaj"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1282256464l/8726737.jpg",
+      "rank": 5,
+      "votes": 993,
+      "winner": false
+    },
+    {
+      "external_id": "10574666",
+      "title": "Grandpa Green",
+      "authors": [
+        "Lane Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375931801l/10574666.jpg",
+      "rank": 6,
+      "votes": 924,
+      "winner": false
+    },
+    {
+      "external_id": "9212014",
+      "title": "Cloudette",
+      "authors": [
+        "Tom Lichtenheld"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1367020183l/9212014.jpg",
+      "rank": 7,
+      "votes": 907,
+      "winner": false
+    },
+    {
+      "external_id": "9211991",
+      "title": "Queen of the Falls",
+      "authors": [
+        "Chris Van Allsburg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348409544l/9211991.jpg",
+      "rank": 8,
+      "votes": 872,
+      "winner": false
+    },
+    {
+      "external_id": "9465166",
+      "title": "Hooray for Amanda & Her Alligator!",
+      "authors": [
+        "Mo Willems"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348088681l/9465166.jpg",
+      "rank": 9,
+      "votes": 839,
+      "winner": false
+    },
+    {
+      "external_id": "10168924",
+      "title": "Blackout",
+      "authors": [
+        "John Rocco"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1360565979l/10168924.jpg",
+      "rank": 10,
+      "votes": 756,
+      "winner": false
+    },
+    {
+      "external_id": "10550292",
+      "title": "If You Give a Dog a Donut",
+      "authors": [
+        "Laura Joffe Numeroff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348593826l/10550292.jpg",
+      "rank": 11,
+      "votes": 405,
+      "winner": false
+    },
+    {
+      "external_id": "9771739",
+      "title": "Say Hello to Zorro!",
+      "authors": [
+        "Carter Goodrich"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348946035l/9771739.jpg",
+      "rank": 12,
+      "votes": 368,
+      "winner": false
+    },
+    {
+      "external_id": "8411631",
+      "title": "Won-Ton",
+      "authors": [
+        "Lee Wardlaw"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585424225l/8411631._SY600_.jpg",
+      "rank": 13,
+      "votes": 337,
+      "winner": false
+    },
+    {
+      "external_id": "8999818",
+      "title": "I Broke My Trunk!",
+      "authors": [
+        "Mo Willems"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1360573429l/8999818.jpg",
+      "rank": 14,
+      "votes": 327,
+      "winner": false
+    },
+    {
+      "external_id": "9537743",
+      "title": "Where's Walrus?",
+      "authors": [
+        "Stephen A. Savage"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328842741l/9537743.jpg",
+      "rank": 15,
+      "votes": 312,
+      "winner": false
+    },
+    {
+      "external_id": "9642662",
+      "title": "Me... Jane",
+      "authors": [
+        "Patrick McDonnell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424982601l/9642662.jpg",
+      "rank": 16,
+      "votes": 293,
+      "winner": false
+    },
+    {
+      "external_id": "11345770",
+      "title": "Llama Llama Home with Mama",
+      "authors": [
+        "Anna Dewdney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327898208l/11345770.jpg",
+      "rank": 17,
+      "votes": 256,
+      "winner": false
+    },
+    {
+      "external_id": "10253286",
+      "title": "Skippyjon Jones, Class Action",
+      "authors": [
+        "Judy Schachner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1311281612l/10253286.jpg",
+      "rank": 18,
+      "votes": 240,
+      "winner": false
+    },
+    {
+      "external_id": "8471013",
+      "title": "Perfect Square",
+      "authors": [
+        "Michael  Hall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327974028l/8471013.jpg",
+      "rank": 19,
+      "votes": 220,
+      "winner": false
+    },
+    {
+      "external_id": "11051230",
+      "title": "You Will Be My Friend!",
+      "authors": [
+        "Peter  Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327971419l/11051230.jpg",
+      "rank": 20,
+      "votes": 99,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-young-adult-fantasy-books-2019",
+  "kind": "award",
+  "title": "Young Adult Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fantasy-books-2019",
+  "year": 2019,
+  "category": "Young Adult Fantasy",
+  "genres": [
+    "fantasy",
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:47.949192+00:00",
+  "books": [
+    {
+      "external_id": "38237340",
+      "title": "The Wicked King",
+      "authors": [
+        "Holly Black"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1693084139l/38237340._SY600_.jpg",
+      "rank": 1,
+      "votes": 48181,
+      "winner": true
+    },
+    {
+      "external_id": "44017627",
+      "title": "Wayward Son",
+      "authors": [
+        "Rainbow Rowell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552666477l/44017627.jpg",
+      "rank": 2,
+      "votes": 39909,
+      "winner": false
+    },
+    {
+      "external_id": "36538785",
+      "title": "Queen of Air and Darkness",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511089369l/36538785.jpg",
+      "rank": 3,
+      "votes": 35431,
+      "winner": false
+    },
+    {
+      "external_id": "39804936",
+      "title": "King of Scars",
+      "authors": [
+        "Leigh Bardugo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1525110798l/39804936.jpg",
+      "rank": 4,
+      "votes": 25250,
+      "winner": false
+    },
+    {
+      "external_id": "42505366",
+      "title": "Wilder Girls",
+      "authors": [
+        "Rory Power"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1544204706l/42505366.jpg",
+      "rank": 5,
+      "votes": 23072,
+      "winner": false
+    },
+    {
+      "external_id": "43822024",
+      "title": "The Toll",
+      "authors": [
+        "Neal Shusterman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558117336l/43822024.jpg",
+      "rank": 6,
+      "votes": 20323,
+      "winner": false
+    },
+    {
+      "external_id": "43204703",
+      "title": "A Curse So Dark and Lonely",
+      "authors": [
+        "Brigid Kemmerer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1574179523l/43204703._SY600_.jpg",
+      "rank": 7,
+      "votes": 17037,
+      "winner": false
+    },
+    {
+      "external_id": "40381392",
+      "title": "Finale",
+      "authors": [
+        "Stephanie Garber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1540221721l/40381392.jpg",
+      "rank": 8,
+      "votes": 15942,
+      "winner": false
+    },
+    {
+      "external_id": "42201395",
+      "title": "Sorcery of Thorns",
+      "authors": [
+        "Margaret  Rogerson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1541621322l/42201395.jpg",
+      "rank": 9,
+      "votes": 15723,
+      "winner": false
+    },
+    {
+      "external_id": "30075662",
+      "title": "Aurora Rising",
+      "authors": [
+        "Amie Kaufman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1560056657l/30075662._SY600_.jpg",
+      "rank": 10,
+      "votes": 14457,
+      "winner": false
+    },
+    {
+      "external_id": "42771754",
+      "title": "Supernova",
+      "authors": [
+        "Marissa Meyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1557159835l/42771754.jpg",
+      "rank": 11,
+      "votes": 7423,
+      "winner": false
+    },
+    {
+      "external_id": "34992959",
+      "title": "Defy Me",
+      "authors": [
+        "Tahereh Mafi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1548349704l/34992959.jpg",
+      "rank": 12,
+      "votes": 5699,
+      "winner": false
+    },
+    {
+      "external_id": "39863277",
+      "title": "Bloodwitch",
+      "authors": [
+        "Susan Dennard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537551594l/39863277.jpg",
+      "rank": 13,
+      "votes": 4484,
+      "winner": false
+    },
+    {
+      "external_id": "31373184",
+      "title": "Call Down the Hawk",
+      "authors": [
+        "Maggie Stiefvater"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550860945l/31373184.jpg",
+      "rank": 14,
+      "votes": 4477,
+      "winner": false
+    },
+    {
+      "external_id": "40367270",
+      "title": "Four Dead Queens",
+      "authors": [
+        "Astrid Scholte"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550191188l/40367270.jpg",
+      "rank": 15,
+      "votes": 4057,
+      "winner": false
+    },
+    {
+      "external_id": "42121526",
+      "title": "Rebel",
+      "authors": [
+        "Marie Lu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1557505626l/42121526.jpg",
+      "rank": 16,
+      "votes": 4055,
+      "winner": false
+    },
+    {
+      "external_id": "44139418",
+      "title": "The Secret Commonwealth",
+      "authors": [
+        "Philip Pullman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565068240l/44139418.jpg",
+      "rank": 17,
+      "votes": 2580,
+      "winner": false
+    },
+    {
+      "external_id": "40024139",
+      "title": "Serpent & Dove",
+      "authors": [
+        "Shelby Mahurin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549476128l/40024139.jpg",
+      "rank": 18,
+      "votes": 2482,
+      "winner": false
+    },
+    {
+      "external_id": "36492488",
+      "title": "We Hunt the Flame",
+      "authors": [
+        "Hafsah Faizal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1551185822l/36492488.jpg",
+      "rank": 19,
+      "votes": 1916,
+      "winner": false
+    },
+    {
+      "external_id": "39863498",
+      "title": "The Gilded Wolves",
+      "authors": [
+        "Roshani Chokshi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1525714353l/39863498.jpg",
+      "rank": 20,
+      "votes": 1859,
+      "winner": false
+    }
+  ]
+}

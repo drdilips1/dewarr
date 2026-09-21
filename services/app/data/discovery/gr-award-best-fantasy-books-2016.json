@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-fantasy-books-2016",
+  "kind": "award",
+  "title": "Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fantasy-books-2016",
+  "year": 2016,
+  "category": "Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:02.657343+00:00",
+  "books": [
+    {
+      "external_id": "29056083",
+      "title": "Harry Potter and the Cursed Child",
+      "authors": [
+        "J.K. Rowling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470082995l/29056083._SY600_.jpg",
+      "rank": 1,
+      "votes": 128543,
+      "winner": true
+    },
+    {
+      "external_id": "20764879",
+      "title": "A Gathering of Shadows",
+      "authors": [
+        "V.E. Schwab"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1758322185l/20764879._SY600_.jpg",
+      "rank": 2,
+      "votes": 38615,
+      "winner": false
+    },
+    {
+      "external_id": "24019186",
+      "title": "The Bands of Mourning",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1450135215l/24019186.jpg",
+      "rank": 3,
+      "votes": 28982,
+      "winner": false
+    },
+    {
+      "external_id": "12444298",
+      "title": "Feverborn",
+      "authors": [
+        "Karen Marie Moning"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435195536l/12444298.jpg",
+      "rank": 4,
+      "votes": 16412,
+      "winner": false
+    },
+    {
+      "external_id": "25776210",
+      "title": "Fire Touched",
+      "authors": [
+        "Patricia Briggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441912000l/25776210.jpg",
+      "rank": 5,
+      "votes": 14798,
+      "winner": false
+    },
+    {
+      "external_id": "25372801",
+      "title": "All the Birds in the Sky",
+      "authors": [
+        "Charlie Jane Anders"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1429225322l/25372801.jpg",
+      "rank": 6,
+      "votes": 13753,
+      "winner": false
+    },
+    {
+      "external_id": "17333174",
+      "title": "Magic Binds",
+      "authors": [
+        "Ilona Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1454609590l/17333174.jpg",
+      "rank": 7,
+      "votes": 13346,
+      "winner": false
+    },
+    {
+      "external_id": "29008738",
+      "title": "The Bird and the Sword",
+      "authors": [
+        "Amy Harmon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462457112l/29008738._SY600_.jpg",
+      "rank": 8,
+      "votes": 12739,
+      "winner": false
+    },
+    {
+      "external_id": "22062202",
+      "title": "Marked in Flesh",
+      "authors": [
+        "Anne Bishop"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1438874868l/22062202.jpg",
+      "rank": 9,
+      "votes": 10114,
+      "winner": false
+    },
+    {
+      "external_id": "26114340",
+      "title": "The Curse of Tenth Grave",
+      "authors": [
+        "Darynda Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464580707l/26114340._SY600_.jpg",
+      "rank": 10,
+      "votes": 8924,
+      "winner": false
+    },
+    {
+      "external_id": "26228034",
+      "title": "The Obelisk Gate",
+      "authors": [
+        "N.K. Jemisin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1788545076l/26228034.jpg",
+      "rank": 11,
+      "votes": 4987,
+      "winner": false
+    },
+    {
+      "external_id": "24885533",
+      "title": "The Paper Menagerie and Other Stories",
+      "authors": [
+        "Ken Liu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511290092l/24885533._SY600_.jpg",
+      "rank": 12,
+      "votes": 4952,
+      "winner": false
+    },
+    {
+      "external_id": "26863057",
+      "title": "Age of Myth",
+      "authors": [
+        "Michael J. Sullivan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507307691l/26863057.jpg",
+      "rank": 13,
+      "votes": 4870,
+      "winner": false
+    },
+    {
+      "external_id": "16280689",
+      "title": "Staked",
+      "authors": [
+        "Kevin Hearne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1434745650l/16280689._SY600_.jpg",
+      "rank": 14,
+      "votes": 3354,
+      "winner": false
+    },
+    {
+      "external_id": "25695756",
+      "title": "Stiletto",
+      "authors": [
+        "Daniel O'Malley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1433883952l/25695756._SY600_.jpg",
+      "rank": 15,
+      "votes": 3208,
+      "winner": false
+    },
+    {
+      "external_id": "25526296",
+      "title": "Every Heart a Doorway",
+      "authors": [
+        "Seanan McGuire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1431438555l/25526296.jpg",
+      "rank": 16,
+      "votes": 1986,
+      "winner": false
+    },
+    {
+      "external_id": "27154427",
+      "title": "The Wheel of Osheim",
+      "authors": [
+        "Mark  Lawrence"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1450726066l/27154427._SY600_.jpg",
+      "rank": 17,
+      "votes": 1613,
+      "winner": false
+    },
+    {
+      "external_id": "29627784",
+      "title": "Vampire Girl",
+      "authors": [
+        "Karpov Kinrade"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459058073l/29627784._SY600_.jpg",
+      "rank": 18,
+      "votes": 1497,
+      "winner": false
+    },
+    {
+      "external_id": "29467232",
+      "title": "The Blood Mirror",
+      "authors": [
+        "Brent Weeks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1458662967l/29467232.jpg",
+      "rank": 19,
+      "votes": 1246,
+      "winner": false
+    },
+    {
+      "external_id": "23909755",
+      "title": "City of Blades",
+      "authors": [
+        "Robert Jackson Bennett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1426255519l/23909755.jpg",
+      "rank": 20,
+      "votes": 713,
+      "winner": false
+    }
+  ]
+}

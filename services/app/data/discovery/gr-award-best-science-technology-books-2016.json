@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-science-technology-books-2016",
+  "kind": "award",
+  "title": "Science & Technology",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-technology-books-2016",
+  "year": 2016,
+  "category": "Science & Technology",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:13.975516+00:00",
+  "books": [
+    {
+      "external_id": "26530322",
+      "title": "Are We Smart Enough to Know How Smart Animals Are?",
+      "authors": [
+        "Frans de Waal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1448044158l/26530322.jpg",
+      "rank": 1,
+      "votes": 12370,
+      "winner": true
+    },
+    {
+      "external_id": "27276428",
+      "title": "The Gene",
+      "authors": [
+        "Siddhartha Mukherjee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1452452965l/27276428._SY600_.jpg",
+      "rank": 2,
+      "votes": 9820,
+      "winner": false
+    },
+    {
+      "external_id": "26530320",
+      "title": "Grunt",
+      "authors": [
+        "Mary Roach"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1463185939l/26530320.jpg",
+      "rank": 3,
+      "votes": 9797,
+      "winner": false
+    },
+    {
+      "external_id": "25938481",
+      "title": "The Genius of Birds",
+      "authors": [
+        "Jennifer Ackerman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445790452l/25938481.jpg",
+      "rank": 4,
+      "votes": 9719,
+      "winner": false
+    },
+    {
+      "external_id": "26150770",
+      "title": "The Big Picture",
+      "authors": [
+        "Sean Carroll"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443740660l/26150770.jpg",
+      "rank": 5,
+      "votes": 8589,
+      "winner": false
+    },
+    {
+      "external_id": "25937922",
+      "title": "Patient H.M.",
+      "authors": [
+        "Luke Dittrich"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1449682415l/25937922.jpg",
+      "rank": 6,
+      "votes": 6983,
+      "winner": false
+    },
+    {
+      "external_id": "26530389",
+      "title": "Idiot Brain",
+      "authors": [
+        "Dean Burnett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1463185933l/26530389.jpg",
+      "rank": 7,
+      "votes": 6957,
+      "winner": false
+    },
+    {
+      "external_id": "25733658",
+      "title": "Into the Magic Shop",
+      "authors": [
+        "James R. Doty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1449996983l/25733658.jpg",
+      "rank": 8,
+      "votes": 6818,
+      "winner": false
+    },
+    {
+      "external_id": "25329850",
+      "title": "Thing Explainer",
+      "authors": [
+        "Randall Munroe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1431518396l/25329850.jpg",
+      "rank": 9,
+      "votes": 6713,
+      "winner": false
+    },
+    {
+      "external_id": "25430558",
+      "title": "In a Different Key",
+      "authors": [
+        "John Donvan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439327531l/25430558.jpg",
+      "rank": 10,
+      "votes": 6415,
+      "winner": false
+    },
+    {
+      "external_id": "25664449",
+      "title": "Unseen City",
+      "authors": [
+        "Nathanael Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1448218971l/25664449.jpg",
+      "rank": 11,
+      "votes": 2513,
+      "winner": false
+    },
+    {
+      "external_id": "27276431",
+      "title": "On Trails",
+      "authors": [
+        "Robert  Moor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1467552182l/27276431.jpg",
+      "rank": 12,
+      "votes": 2232,
+      "winner": false
+    },
+    {
+      "external_id": "25666050",
+      "title": "Algorithms to Live By",
+      "authors": [
+        "Brian  Christian"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1454296875l/25666050.jpg",
+      "rank": 13,
+      "votes": 2228,
+      "winner": false
+    },
+    {
+      "external_id": "25430578",
+      "title": "Cure",
+      "authors": [
+        "Jo Marchant"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443812463l/25430578._SY600_.jpg",
+      "rank": 14,
+      "votes": 1887,
+      "winner": false
+    },
+    {
+      "external_id": "27213168",
+      "title": "I Contain Multitudes",
+      "authors": [
+        "Ed Yong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445606162l/27213168.jpg",
+      "rank": 15,
+      "votes": 1618,
+      "winner": false
+    },
+    {
+      "external_id": "27209431",
+      "title": "The Inevitable",
+      "authors": [
+        "Kevin Kelly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453057334l/27209431.jpg",
+      "rank": 16,
+      "votes": 1137,
+      "winner": false
+    },
+    {
+      "external_id": "28587950",
+      "title": "Time Travel",
+      "authors": [
+        "James Gleick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460910277l/28587950._SY600_.jpg",
+      "rank": 17,
+      "votes": 850,
+      "winner": false
+    },
+    {
+      "external_id": "28186015",
+      "title": "Weapons of Math Destruction",
+      "authors": [
+        "Cathy O'Neil"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456091964l/28186015.jpg",
+      "rank": 18,
+      "votes": 756,
+      "winner": false
+    },
+    {
+      "external_id": "25897940",
+      "title": "Baby Birds",
+      "authors": [
+        "Julie Zickefoose"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445050168l/25897940._SY600_.jpg",
+      "rank": 19,
+      "votes": 664,
+      "winner": false
+    },
+    {
+      "external_id": "22580997",
+      "title": "Citizen Scientist",
+      "authors": [
+        "Mary Ellen Hannibal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470622556l/22580997.jpg",
+      "rank": 20,
+      "votes": 310,
+      "winner": false
+    }
+  ]
+}

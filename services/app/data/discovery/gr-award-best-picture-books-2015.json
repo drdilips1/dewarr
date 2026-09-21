@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-picture-books-2015",
+  "kind": "award",
+  "title": "Picture Books",
+  "source_url": "https://www.goodreads.com/choiceawards/best-picture-books-2015",
+  "year": 2015,
+  "category": "Picture Books",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:56.591702+00:00",
+  "books": [
+    {
+      "external_id": "23310161",
+      "title": "The Day the Crayons Came Home",
+      "authors": [
+        "Drew Daywalt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1448911756l/23310161._SY600_.jpg",
+      "rank": 1,
+      "votes": 16011,
+      "winner": true
+    },
+    {
+      "external_id": "21469062",
+      "title": "Winnie",
+      "authors": [
+        "Sally M. Walker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421837322l/21469062.jpg",
+      "rank": 2,
+      "votes": 11810,
+      "winner": false
+    },
+    {
+      "external_id": "23341903",
+      "title": "I Will Take a Nap!",
+      "authors": [
+        "Mo Willems"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1423402212l/23341903.jpg",
+      "rank": 3,
+      "votes": 11267,
+      "winner": false
+    },
+    {
+      "external_id": "24968109",
+      "title": "What Pet Should I Get?",
+      "authors": [
+        "Dr. Seuss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1771154072l/24968109._SY600_.jpg",
+      "rank": 4,
+      "votes": 11151,
+      "winner": false
+    },
+    {
+      "external_id": "23604390",
+      "title": "The Princess and the Pony",
+      "authors": [
+        "Kate Beaton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1419320922l/23604390.jpg",
+      "rank": 5,
+      "votes": 7497,
+      "winner": false
+    },
+    {
+      "external_id": "20663085",
+      "title": "Goodnight Already!",
+      "authors": [
+        "Jory John"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1458875340l/20663085._SY600_.jpg",
+      "rank": 6,
+      "votes": 6834,
+      "winner": false
+    },
+    {
+      "external_id": "22635853",
+      "title": "If You Plant a Seed",
+      "authors": [
+        "Kadir Nelson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414348254l/22635853.jpg",
+      "rank": 7,
+      "votes": 6582,
+      "winner": false
+    },
+    {
+      "external_id": "22249668",
+      "title": "Red",
+      "authors": [
+        "Michael  Hall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421012559l/22249668.jpg",
+      "rank": 8,
+      "votes": 6358,
+      "winner": false
+    },
+    {
+      "external_id": "22484277",
+      "title": "I Wish You More",
+      "authors": [
+        "Amy Krouse Rosenthal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549906445l/22484277._SY600_.jpg",
+      "rank": 9,
+      "votes": 5832,
+      "winner": false
+    },
+    {
+      "external_id": "22750286",
+      "title": "Sidewalk Flowers",
+      "authors": [
+        "JonArno Lawson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1409185207l/22750286.jpg",
+      "rank": 10,
+      "votes": 5375,
+      "winner": false
+    },
+    {
+      "external_id": "20307024",
+      "title": "Wolfie the Bunny",
+      "authors": [
+        "Ame Dyckman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415583212l/20307024.jpg",
+      "rank": 11,
+      "votes": 2409,
+      "winner": false
+    },
+    {
+      "external_id": "22747803",
+      "title": "Mesmerized",
+      "authors": [
+        "Mara Rockliff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415587519l/22747803.jpg",
+      "rank": 12,
+      "votes": 2369,
+      "winner": false
+    },
+    {
+      "external_id": "22926713",
+      "title": "This Is Sadie",
+      "authors": [
+        "Sara O'Leary"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1409618779l/22926713.jpg",
+      "rank": 13,
+      "votes": 2008,
+      "winner": false
+    },
+    {
+      "external_id": "22521973",
+      "title": "Last Stop on Market Street",
+      "authors": [
+        "Matt de la Peña"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453342770l/22521973._SY600_.jpg",
+      "rank": 14,
+      "votes": 1924,
+      "winner": false
+    },
+    {
+      "external_id": "23395099",
+      "title": "Your Baby's First Word Will Be DADA",
+      "authors": [
+        "Jimmy Fallon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421837353l/23395099.jpg",
+      "rank": 15,
+      "votes": 1807,
+      "winner": false
+    },
+    {
+      "external_id": "22875394",
+      "title": "Interstellar Cinderella",
+      "authors": [
+        "Deborah Underwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415585916l/22875394.jpg",
+      "rank": 16,
+      "votes": 1781,
+      "winner": false
+    },
+    {
+      "external_id": "14823980",
+      "title": "A Fine Dessert",
+      "authors": [
+        "Emily Jenkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408308881l/14823980.jpg",
+      "rank": 17,
+      "votes": 1177,
+      "winner": false
+    },
+    {
+      "external_id": "22934455",
+      "title": "Otter in Space",
+      "authors": [
+        "Sam Garton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1416178074l/22934455.jpg",
+      "rank": 18,
+      "votes": 1099,
+      "winner": false
+    },
+    {
+      "external_id": "23309640",
+      "title": "Float",
+      "authors": [
+        "Daniel Miyares"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1428630478l/23309640.jpg",
+      "rank": 19,
+      "votes": 1083,
+      "winner": false
+    },
+    {
+      "external_id": "23735067",
+      "title": "Waiting",
+      "authors": [
+        "Kevin Henkes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453342607l/23735067._SY600_.jpg",
+      "rank": 20,
+      "votes": 660,
+      "winner": false
+    }
+  ]
+}

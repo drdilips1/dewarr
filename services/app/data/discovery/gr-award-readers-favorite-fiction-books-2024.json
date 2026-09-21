@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-readers-favorite-fiction-books-2024",
+  "kind": "award",
+  "title": "Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-fiction-books-2024",
+  "year": 2024,
+  "category": "Fiction",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:40:27.204563+00:00",
+  "books": [
+    {
+      "external_id": "198902277",
+      "title": "The Wedding People",
+      "authors": [
+        "Alison Espach"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1759683499l/198902277._SY600_.jpg",
+      "rank": 1,
+      "votes": 94733,
+      "winner": true
+    },
+    {
+      "external_id": "208931300",
+      "title": "Intermezzo",
+      "authors": [
+        "Sally Rooney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716387455l/208931300._SY600_.jpg",
+      "rank": 2,
+      "votes": 67268,
+      "winner": false
+    },
+    {
+      "external_id": "133938826",
+      "title": "Welcome to the Hyunam-Dong Bookshop",
+      "authors": [
+        "Hwang Bo-Reum"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1688424684l/133938826.jpg",
+      "rank": 3,
+      "votes": 51958,
+      "winner": false
+    },
+    {
+      "external_id": "195430687",
+      "title": "Blue Sisters",
+      "authors": [
+        "Coco Mellors"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1726685281l/195430687._SY600_.jpg",
+      "rank": 4,
+      "votes": 50659,
+      "winner": false
+    },
+    {
+      "external_id": "208516656",
+      "title": "Here One Moment",
+      "authors": [
+        "Liane Moriarty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1721670560l/208516656._SY600_.jpg",
+      "rank": 5,
+      "votes": 48432,
+      "winner": false
+    },
+    {
+      "external_id": "200484931",
+      "title": "Swan Song",
+      "authors": [
+        "Elin Hilderbrand"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1698505960l/200484931._SY600_.jpg",
+      "rank": 6,
+      "votes": 41212,
+      "winner": false
+    },
+    {
+      "external_id": "198688460",
+      "title": "Good Material",
+      "authors": [
+        "Dolly Alderton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1703948991l/198688460._SY600_.jpg",
+      "rank": 7,
+      "votes": 33508,
+      "winner": false
+    },
+    {
+      "external_id": "200987323",
+      "title": "I Hope This Finds You Well",
+      "authors": [
+        "Natalie Sue"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729545169l/200987323._SY600_.jpg",
+      "rank": 8,
+      "votes": 30650,
+      "winner": false
+    },
+    {
+      "external_id": "199534613",
+      "title": "Margo's Got Money Troubles",
+      "authors": [
+        "Rufi Thorpe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1701221812l/199534613._SY600_.jpg",
+      "rank": 9,
+      "votes": 27439,
+      "winner": false
+    },
+    {
+      "external_id": "139400713",
+      "title": "Martyr!",
+      "authors": [
+        "Kaveh Akbar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1683818219l/139400713.jpg",
+      "rank": 10,
+      "votes": 25992,
+      "winner": false
+    },
+    {
+      "external_id": "174147294",
+      "title": "Wandering Stars",
+      "authors": [
+        "Tommy Orange"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1695837414l/174147294.jpg",
+      "rank": 11,
+      "votes": 9041,
+      "winner": false
+    },
+    {
+      "external_id": "62929342",
+      "title": "Real Americans",
+      "authors": [
+        "Rachel Khong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1691858842l/62929342._SY600_.jpg",
+      "rank": 12,
+      "votes": 8546,
+      "winner": false
+    },
+    {
+      "external_id": "200028726",
+      "title": "Sandwich",
+      "authors": [
+        "Catherine Newman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1699631079l/200028726._SY600_.jpg",
+      "rank": 13,
+      "votes": 8108,
+      "winner": false
+    },
+    {
+      "external_id": "204811915",
+      "title": "Tell Me Everything",
+      "authors": [
+        "Elizabeth Strout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1726253855l/204811915._SY600_.jpg",
+      "rank": 14,
+      "votes": 7276,
+      "winner": false
+    },
+    {
+      "external_id": "197798168",
+      "title": "All Fours",
+      "authors": [
+        "Miranda July"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1695913995l/197798168._SY600_.jpg",
+      "rank": 15,
+      "votes": 5655,
+      "winner": false
+    },
+    {
+      "external_id": "205478762",
+      "title": "Playground",
+      "authors": [
+        "Richard Powers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1712677708l/205478762._SY600_.jpg",
+      "rank": 16,
+      "votes": 5039,
+      "winner": false
+    },
+    {
+      "external_id": "199344873",
+      "title": "Same As It Ever Was",
+      "authors": [
+        "Claire Lombardo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1701715475l/199344873.jpg",
+      "rank": 17,
+      "votes": 4746,
+      "winner": false
+    },
+    {
+      "external_id": "199793431",
+      "title": "The Mighty Red",
+      "authors": [
+        "Louise Erdrich"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1712837291l/199793431._SY600_.jpg",
+      "rank": 18,
+      "votes": 4021,
+      "winner": false
+    },
+    {
+      "external_id": "176443453",
+      "title": "Greta & Valdin",
+      "authors": [
+        "Rebecca K. Reilly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686503205l/176443453.jpg",
+      "rank": 19,
+      "votes": 3757,
+      "winner": false
+    },
+    {
+      "external_id": "220572240",
+      "title": "Colored Television",
+      "authors": [
+        "Danzy Senna"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729343974l/220572240._SY600_.jpg",
+      "rank": 20,
+      "votes": 2151,
+      "winner": false
+    }
+  ]
+}

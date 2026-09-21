@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-picture-books-2017",
+  "kind": "award",
+  "title": "Picture Books",
+  "source_url": "https://www.goodreads.com/choiceawards/best-picture-books-2017",
+  "year": 2017,
+  "category": "Picture Books",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:55.375874+00:00",
+  "books": [
+    {
+      "external_id": "32777609",
+      "title": "We're All Wonders",
+      "authors": [
+        "R.J. Palacio"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1489819210l/32777609._SY600_.jpg",
+      "rank": 1,
+      "votes": 24470,
+      "winner": true
+    },
+    {
+      "external_id": "34219824",
+      "title": "Malala's Magic Pencil",
+      "authors": [
+        "Malala Yousafzai"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1494921199l/34219824._SY600_.jpg",
+      "rank": 2,
+      "votes": 16741,
+      "winner": false
+    },
+    {
+      "external_id": "34504361",
+      "title": "She Persisted",
+      "authors": [
+        "Chelsea Clinton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1489947578l/34504361._SY600_.jpg",
+      "rank": 3,
+      "votes": 15500,
+      "winner": false
+    },
+    {
+      "external_id": "30364127",
+      "title": "Over and Under the Pond",
+      "authors": [
+        "Kate Messner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483834166l/30364127._SY600_.jpg",
+      "rank": 4,
+      "votes": 8483,
+      "winner": false
+    },
+    {
+      "external_id": "30268071",
+      "title": "A Greyhound, a Groundhog",
+      "authors": [
+        "Emily Jenkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1469404163l/30268071._SY600_.jpg",
+      "rank": 5,
+      "votes": 7857,
+      "winner": false
+    },
+    {
+      "external_id": "31247841",
+      "title": "Triangle",
+      "authors": [
+        "Mac Barnett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474550592l/31247841._SY600_.jpg",
+      "rank": 6,
+      "votes": 7755,
+      "winner": false
+    },
+    {
+      "external_id": "31456756",
+      "title": "The Book of Mistakes",
+      "authors": [
+        "Corinna Luyken"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1482921647l/31456756._SY600_.jpg",
+      "rank": 7,
+      "votes": 7240,
+      "winner": false
+    },
+    {
+      "external_id": "30555639",
+      "title": "Little Fox in the Forest",
+      "authors": [
+        "Stephanie Graegin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1469410990l/30555639._SY600_.jpg",
+      "rank": 8,
+      "votes": 7000,
+      "winner": false
+    },
+    {
+      "external_id": "31215005",
+      "title": "The Legend of Rock Paper Scissors",
+      "authors": [
+        "Drew Daywalt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1484283303l/31215005._SY600_.jpg",
+      "rank": 9,
+      "votes": 6684,
+      "winner": false
+    },
+    {
+      "external_id": "20670612",
+      "title": "The Youngest Marcher",
+      "authors": [
+        "Cynthia Levinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1475460835l/20670612._SY600_.jpg",
+      "rank": 10,
+      "votes": 6094,
+      "winner": false
+    },
+    {
+      "external_id": "34137106",
+      "title": "A Different Pond",
+      "authors": [
+        "Bao Phi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1489605385l/34137106._SY600_.jpg",
+      "rank": 11,
+      "votes": 2855,
+      "winner": false
+    },
+    {
+      "external_id": "31340805",
+      "title": "Duck and Hippo in the Rainstorm",
+      "authors": [
+        "Jonathan London"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1473206850l/31340805._SY600_.jpg",
+      "rank": 12,
+      "votes": 2517,
+      "winner": false
+    },
+    {
+      "external_id": "30254920",
+      "title": "Spunky Little Monkey",
+      "authors": [
+        "Bill Martin Jr."
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1465946850l/30254920._SY600_.jpg",
+      "rank": 13,
+      "votes": 2308,
+      "winner": false
+    },
+    {
+      "external_id": "34445373",
+      "title": "Franklin's Flying Bookshop",
+      "authors": [
+        "Jen Campbell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1488612712l/34445373._SY600_.jpg",
+      "rank": 14,
+      "votes": 1912,
+      "winner": false
+    },
+    {
+      "external_id": "31423547",
+      "title": "Be Quiet!",
+      "authors": [
+        "Ryan T.  Higgins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479414740l/31423547._SY600_.jpg",
+      "rank": 15,
+      "votes": 1809,
+      "winner": false
+    },
+    {
+      "external_id": "30312747",
+      "title": "Not Quite Narwhal",
+      "authors": [
+        "Jessie Sima"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476030563l/30312747._SY600_.jpg",
+      "rank": 16,
+      "votes": 1740,
+      "winner": false
+    },
+    {
+      "external_id": "31625795",
+      "title": "Jabari Jumps",
+      "authors": [
+        "Gaia Cornwall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474598253l/31625795._SY600_.jpg",
+      "rank": 17,
+      "votes": 1646,
+      "winner": false
+    },
+    {
+      "external_id": "32508692",
+      "title": "The Case of the Stinky Stench",
+      "authors": [
+        "Josh Funk"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1482953093l/32508692._SY600_.jpg",
+      "rank": 18,
+      "votes": 1578,
+      "winner": false
+    },
+    {
+      "external_id": "30375426",
+      "title": "Trollbella Throws a Party",
+      "authors": [
+        "Chris Colfer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479754456l/30375426._SY600_.jpg",
+      "rank": 19,
+      "votes": 1235,
+      "winner": false
+    },
+    {
+      "external_id": "33376257",
+      "title": "After the Fall",
+      "authors": [
+        "Dan Santat"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483556250l/33376257.jpg",
+      "rank": 20,
+      "votes": 1137,
+      "winner": false
+    }
+  ]
+}

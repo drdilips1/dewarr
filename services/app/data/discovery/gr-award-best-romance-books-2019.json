@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-romance-books-2019",
+  "kind": "award",
+  "title": "Romance",
+  "source_url": "https://www.goodreads.com/choiceawards/best-romance-books-2019",
+  "year": 2019,
+  "category": "Romance",
+  "genres": [
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:04.332942+00:00",
+  "books": [
+    {
+      "external_id": "52410331",
+      "title": "Red, White & Royal Blue",
+      "authors": [
+        "Casey McQuiston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585639229l/52410331.jpg",
+      "rank": 1,
+      "votes": 76688,
+      "winner": true
+    },
+    {
+      "external_id": "43225180",
+      "title": "Verity",
+      "authors": [
+        "Colleen Hoover"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608403534l/43225180._SY600_.jpg",
+      "rank": 2,
+      "votes": 35868,
+      "winner": false
+    },
+    {
+      "external_id": "52709482",
+      "title": "The Unhoneymooners",
+      "authors": [
+        "Christina Lauren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566937798l/52709482._SX318_SY475_.jpg",
+      "rank": 3,
+      "votes": 28816,
+      "winner": false
+    },
+    {
+      "external_id": "41150382",
+      "title": "Things You Save in a Fire",
+      "authors": [
+        "Katherine Center"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1539876418l/41150382.jpg",
+      "rank": 4,
+      "votes": 26097,
+      "winner": false
+    },
+    {
+      "external_id": "39338454",
+      "title": "The Bride Test",
+      "authors": [
+        "Helen  Hoang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1548428073l/39338454._SY600_.jpg",
+      "rank": 5,
+      "votes": 25343,
+      "winner": false
+    },
+    {
+      "external_id": "42101728",
+      "title": "The Savior",
+      "authors": [
+        "J.R. Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1541952588l/42101728.jpg",
+      "rank": 6,
+      "votes": 24476,
+      "winner": false
+    },
+    {
+      "external_id": "41450662",
+      "title": "The Kiss Thief",
+      "authors": [
+        "L.J. Shen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1785973586l/41450662.jpg",
+      "rank": 7,
+      "votes": 17513,
+      "winner": false
+    },
+    {
+      "external_id": "41150287",
+      "title": "The Flatshare",
+      "authors": [
+        "Beth O'Leary"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1597355643l/41150287._SY600_.jpg",
+      "rank": 8,
+      "votes": 17495,
+      "winner": false
+    },
+    {
+      "external_id": "39709060",
+      "title": "Pretty Reckless",
+      "authors": [
+        "L.J. Shen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554895598l/39709060._SY600_.jpg",
+      "rank": 9,
+      "votes": 13891,
+      "winner": false
+    },
+    {
+      "external_id": "36117813",
+      "title": "The Girl He Used to Know",
+      "authors": [
+        "Tracey Garvis Graves"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1527367695l/36117813.jpg",
+      "rank": 10,
+      "votes": 13432,
+      "winner": false
+    },
+    {
+      "external_id": "50206920",
+      "title": "Ayesha at Last",
+      "authors": [
+        "Uzma Jalaluddin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1563944093l/50206920._SX318_SY475_.jpg",
+      "rank": 11,
+      "votes": 6287,
+      "winner": false
+    },
+    {
+      "external_id": "42785825",
+      "title": "The Friend Zone",
+      "authors": [
+        "Abby Jimenez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554144047l/42785825.jpg",
+      "rank": 12,
+      "votes": 5970,
+      "winner": false
+    },
+    {
+      "external_id": "42599067",
+      "title": "The Wedding Party",
+      "authors": [
+        "Jasmine Guillory"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1544056222l/42599067.jpg",
+      "rank": 13,
+      "votes": 5142,
+      "winner": false
+    },
+    {
+      "external_id": "41063454",
+      "title": "Meet Cute",
+      "authors": [
+        "Helena Hunting"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1536852275l/41063454.jpg",
+      "rank": 14,
+      "votes": 4748,
+      "winner": false
+    },
+    {
+      "external_id": "43205122",
+      "title": "Well Met",
+      "authors": [
+        "Jen DeLuca"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562773697l/43205122._SY600_.jpg",
+      "rank": 15,
+      "votes": 4257,
+      "winner": false
+    },
+    {
+      "external_id": "43603066",
+      "title": "Sapphire Flames",
+      "authors": [
+        "Ilona Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1560809402l/43603066.jpg",
+      "rank": 16,
+      "votes": 3669,
+      "winner": false
+    },
+    {
+      "external_id": "53166909",
+      "title": "Beard Necessities",
+      "authors": [
+        "Penny Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1573827075l/53166909._SX318_SY475_.jpg",
+      "rank": 17,
+      "votes": 3456,
+      "winner": false
+    },
+    {
+      "external_id": "52176814",
+      "title": "The Best Thing",
+      "authors": [
+        "Mariana Zapata"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566226445l/52176814._SX318_SY475_.jpg",
+      "rank": 18,
+      "votes": 2215,
+      "winner": false
+    },
+    {
+      "external_id": "43616063",
+      "title": "The Wallflower Wager",
+      "authors": [
+        "Tessa Dare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552950500l/43616063.jpg",
+      "rank": 19,
+      "votes": 1711,
+      "winner": false
+    },
+    {
+      "external_id": "42079209",
+      "title": "Brazen and the Beast",
+      "authors": [
+        "Sarah MacLean"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545828818l/42079209.jpg",
+      "rank": 20,
+      "votes": 1335,
+      "winner": false
+    }
+  ]
+}

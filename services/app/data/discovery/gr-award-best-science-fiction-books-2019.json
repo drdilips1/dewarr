@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-science-fiction-books-2019",
+  "kind": "award",
+  "title": "Science Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-fiction-books-2019",
+  "year": 2019,
+  "category": "Science Fiction",
+  "genres": [
+    "science-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:05.754618+00:00",
+  "books": [
+    {
+      "external_id": "42046112",
+      "title": "Recursion",
+      "authors": [
+        "Blake Crouch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1750526564l/42046112._SY600_.jpg",
+      "rank": 1,
+      "votes": 41261,
+      "winner": true
+    },
+    {
+      "external_id": "37678631",
+      "title": "Dark Age",
+      "authors": [
+        "Pierce Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1525464553l/37678631.jpg",
+      "rank": 2,
+      "votes": 35556,
+      "winner": false
+    },
+    {
+      "external_id": "42036538",
+      "title": "Gideon the Ninth",
+      "authors": [
+        "Tamsyn Muir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546870952l/42036538.jpg",
+      "rank": 3,
+      "votes": 23273,
+      "winner": false
+    },
+    {
+      "external_id": "41093489",
+      "title": "This Is How You Lose the Time War",
+      "authors": [
+        "Amal El-Mohtar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1543954115l/41093489.jpg",
+      "rank": 4,
+      "votes": 20344,
+      "winner": false
+    },
+    {
+      "external_id": "42201962",
+      "title": "The Deep",
+      "authors": [
+        "Rivers Solomon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549411869l/42201962.jpg",
+      "rank": 5,
+      "votes": 18350,
+      "winner": false
+    },
+    {
+      "external_id": "28335698",
+      "title": "Tiamat's Wrath",
+      "authors": [
+        "James S.A. Corey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522779721l/28335698.jpg",
+      "rank": 6,
+      "votes": 14088,
+      "winner": false
+    },
+    {
+      "external_id": "42260978",
+      "title": "Machines Like Me",
+      "authors": [
+        "Ian McEwan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1755249686l/42260978._SY600_.jpg",
+      "rank": 7,
+      "votes": 13508,
+      "winner": false
+    },
+    {
+      "external_id": "52222275",
+      "title": "Exhalation",
+      "authors": [
+        "Ted Chiang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1561894093l/52222275._SX318_SY475_.jpg",
+      "rank": 8,
+      "votes": 11829,
+      "winner": false
+    },
+    {
+      "external_id": "41940388",
+      "title": "The Test",
+      "authors": [
+        "Sylvain Neuvel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537914781l/41940388.jpg",
+      "rank": 9,
+      "votes": 9095,
+      "winner": false
+    },
+    {
+      "external_id": "41824495",
+      "title": "Fall; or, Dodge in Hell",
+      "authors": [
+        "Neal Stephenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1548719156l/41824495._SY600_.jpg",
+      "rank": 10,
+      "votes": 8368,
+      "winner": false
+    },
+    {
+      "external_id": "42036965",
+      "title": "One Word Kill",
+      "authors": [
+        "Mark  Lawrence"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1604785791l/42036965._SY600_.jpg",
+      "rank": 11,
+      "votes": 4029,
+      "winner": false
+    },
+    {
+      "external_id": "43190272",
+      "title": "To Be Taught, If Fortunate",
+      "authors": [
+        "Becky Chambers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552530326l/43190272.jpg",
+      "rank": 12,
+      "votes": 3898,
+      "winner": false
+    },
+    {
+      "external_id": "34019083",
+      "title": "Wanderers",
+      "authors": [
+        "Chuck Wendig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1541976794l/34019083._SY600_.jpg",
+      "rank": 13,
+      "votes": 3801,
+      "winner": false
+    },
+    {
+      "external_id": "37534907",
+      "title": "The City in the Middle of the Night",
+      "authors": [
+        "Charlie Jane Anders"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1532447389l/37534907.jpg",
+      "rank": 14,
+      "votes": 3258,
+      "winner": false
+    },
+    {
+      "external_id": "39863238",
+      "title": "A Memory Called Empire",
+      "authors": [
+        "Arkady Martine"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1526486594l/39863238.jpg",
+      "rank": 15,
+      "votes": 3109,
+      "winner": false
+    },
+    {
+      "external_id": "43160651",
+      "title": "Thrawn",
+      "authors": [
+        "Timothy Zahn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545447248l/43160651.jpg",
+      "rank": 16,
+      "votes": 2953,
+      "winner": false
+    },
+    {
+      "external_id": "43263237",
+      "title": "The Future of Another Timeline",
+      "authors": [
+        "Annalee Newitz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550000245l/43263237.jpg",
+      "rank": 17,
+      "votes": 2945,
+      "winner": false
+    },
+    {
+      "external_id": "39217756",
+      "title": "Here and Now and Then",
+      "authors": [
+        "Mike Chen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1543383258l/39217756.jpg",
+      "rank": 18,
+      "votes": 1728,
+      "winner": false
+    },
+    {
+      "external_id": "41716930",
+      "title": "Children of Ruin",
+      "authors": [
+        "Adrian Tchaikovsky"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552089366l/41716930.jpg",
+      "rank": 19,
+      "votes": 1699,
+      "winner": false
+    },
+    {
+      "external_id": "40523931",
+      "title": "The Light Brigade",
+      "authors": [
+        "Kameron Hurley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537977912l/40523931.jpg",
+      "rank": 20,
+      "votes": 584,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-memoir-autobiography-books-2018",
+  "kind": "award",
+  "title": "Memoir & Autobiography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-memoir-autobiography-books-2018",
+  "year": 2018,
+  "category": "Memoir & Autobiography",
+  "genres": [
+    "biography"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:09.020013+00:00",
+  "books": [
+    {
+      "external_id": "35133922",
+      "title": "Educated",
+      "authors": [
+        "Tara Westover"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1774287363l/35133922._SY600_.jpg",
+      "rank": 1,
+      "votes": 57938,
+      "winner": true
+    },
+    {
+      "external_id": "38744839",
+      "title": "Becoming",
+      "authors": [
+        "Michelle Obama"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1527182226l/38744839._SY600_.jpg",
+      "rank": 2,
+      "votes": 54965,
+      "winner": false
+    },
+    {
+      "external_id": "38508771",
+      "title": "In Pieces",
+      "authors": [
+        "Sally Field"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522083373l/38508771.jpg",
+      "rank": 3,
+      "votes": 20221,
+      "winner": false
+    },
+    {
+      "external_id": "35582344",
+      "title": "This Is Me",
+      "authors": [
+        "Chrissy Metz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518327615l/35582344.jpg",
+      "rank": 4,
+      "votes": 13242,
+      "winner": false
+    },
+    {
+      "external_id": "35718164",
+      "title": "A River in Darkness",
+      "authors": [
+        "Masaji Ishikawa"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1501540508l/35718164._SY600_.jpg",
+      "rank": 5,
+      "votes": 12391,
+      "winner": false
+    },
+    {
+      "external_id": "34964998",
+      "title": "When They Call You a Terrorist",
+      "authors": [
+        "Patrisse Khan-Cullors"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1499148072l/34964998.jpg",
+      "rank": 6,
+      "votes": 9417,
+      "winner": false
+    },
+    {
+      "external_id": "35108805",
+      "title": "A Higher Loyalty",
+      "authors": [
+        "James B. Comey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509630796l/35108805.jpg",
+      "rank": 7,
+      "votes": 8422,
+      "winner": false
+    },
+    {
+      "external_id": "35137915",
+      "title": "I Am, I Am, I Am",
+      "authors": [
+        "Maggie O'Farrell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1517352695l/35137915._SY600_.jpg",
+      "rank": 8,
+      "votes": 7614,
+      "winner": false
+    },
+    {
+      "external_id": "36086537",
+      "title": "The Girl Who Smiled Beads",
+      "authors": [
+        "Clemantine Wamariya"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509460282l/36086537.jpg",
+      "rank": 9,
+      "votes": 7611,
+      "winner": false
+    },
+    {
+      "external_id": "35133923",
+      "title": "Everything Happens for a Reason",
+      "authors": [
+        "Kate Bowler"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1504731691l/35133923._SY600_.jpg",
+      "rank": 10,
+      "votes": 7445,
+      "winner": false
+    },
+    {
+      "external_id": "34964905",
+      "title": "The Sun Does Shine",
+      "authors": [
+        "Anthony Ray Hinton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1591203630l/34964905._SY600_.jpg",
+      "rank": 11,
+      "votes": 3642,
+      "winner": false
+    },
+    {
+      "external_id": "35840657",
+      "title": "Heart Berries",
+      "authors": [
+        "Terese Marie Mailhot"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1521733690l/35840657._SY600_.jpg",
+      "rank": 12,
+      "votes": 2767,
+      "winner": false
+    },
+    {
+      "external_id": "30297153",
+      "title": "All You Can Ever Know",
+      "authors": [
+        "Nicole Chung"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1519748414l/30297153.jpg",
+      "rank": 13,
+      "votes": 2609,
+      "winner": false
+    },
+    {
+      "external_id": "35018200",
+      "title": "Tell Me More",
+      "authors": [
+        "Kelly Corrigan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498839065l/35018200.jpg",
+      "rank": 14,
+      "votes": 1956,
+      "winner": false
+    },
+    {
+      "external_id": "39218044",
+      "title": "Small Fry",
+      "authors": [
+        "Lisa Brennan-Jobs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1524765986l/39218044.jpg",
+      "rank": 15,
+      "votes": 1560,
+      "winner": false
+    },
+    {
+      "external_id": "35068683",
+      "title": "Brave",
+      "authors": [
+        "Rose McGowan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1516647279l/35068683._SY600_.jpg",
+      "rank": 16,
+      "votes": 1469,
+      "winner": false
+    },
+    {
+      "external_id": "35959678",
+      "title": "And Now We Have Everything",
+      "authors": [
+        "Meaghan O'Connell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509033722l/35959678.jpg",
+      "rank": 17,
+      "votes": 1309,
+      "winner": false
+    },
+    {
+      "external_id": "35340555",
+      "title": "Room to Dream",
+      "authors": [
+        "David  Lynch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511263619l/35340555.jpg",
+      "rank": 18,
+      "votes": 785,
+      "winner": false
+    },
+    {
+      "external_id": "36373407",
+      "title": "Tragedy Plus Time",
+      "authors": [
+        "Adam Cayton-Holland"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1516321734l/36373407._SY600_.jpg",
+      "rank": 19,
+      "votes": 576,
+      "winner": false
+    },
+    {
+      "external_id": "29430746",
+      "title": "Heavy",
+      "authors": [
+        "Kiese Laymon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1517524042l/29430746._SY600_.jpg",
+      "rank": 20,
+      "votes": 516,
+      "winner": false
+    }
+  ]
+}

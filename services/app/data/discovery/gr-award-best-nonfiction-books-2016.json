@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-nonfiction-books-2016",
+  "kind": "award",
+  "title": "Nonfiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-nonfiction-books-2016",
+  "year": 2016,
+  "category": "Nonfiction",
+  "genres": [
+    "non-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:09.715979+00:00",
+  "books": [
+    {
+      "external_id": "26200563",
+      "title": "Hamilton",
+      "authors": [
+        "Lin-Manuel Miranda"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1451400644l/26200563._SY600_.jpg",
+      "rank": 1,
+      "votes": 52925,
+      "winner": true
+    },
+    {
+      "external_id": "24331386",
+      "title": "The View from the Cheap Seats",
+      "authors": [
+        "Neil Gaiman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460911005l/24331386._SY600_.jpg",
+      "rank": 2,
+      "votes": 15324,
+      "winner": false
+    },
+    {
+      "external_id": "25816707",
+      "title": "Girls & Sex",
+      "authors": [
+        "Peggy Orenstein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443493024l/25816707.jpg",
+      "rank": 3,
+      "votes": 11636,
+      "winner": false
+    },
+    {
+      "external_id": "27883209",
+      "title": "Adnan's Story",
+      "authors": [
+        "Rabia Chaudry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470865674l/27883209._SY600_.jpg",
+      "rank": 4,
+      "votes": 9056,
+      "winner": false
+    },
+    {
+      "external_id": "25852784",
+      "title": "Evicted",
+      "authors": [
+        "Matthew Desmond"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442840968l/25852784.jpg",
+      "rank": 5,
+      "votes": 8242,
+      "winner": false
+    },
+    {
+      "external_id": "25667449",
+      "title": "The Lonely City",
+      "authors": [
+        "Olivia Laing"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1450039964l/25667449.jpg",
+      "rank": 6,
+      "votes": 7733,
+      "winner": false
+    },
+    {
+      "external_id": "27068734",
+      "title": "But What If We're Wrong? Thinking About the Present As If It ...",
+      "authors": [
+        "Chuck Klosterman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1454284600l/27068734.jpg",
+      "rank": 7,
+      "votes": 6425,
+      "winner": false
+    },
+    {
+      "external_id": "27833614",
+      "title": "Dark Money",
+      "authors": [
+        "Jane Mayer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453057494l/27833614.jpg",
+      "rank": 8,
+      "votes": 6353,
+      "winner": false
+    },
+    {
+      "external_id": "25614523",
+      "title": "Originals",
+      "authors": [
+        "Adam M. Grant"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445791874l/25614523.jpg",
+      "rank": 9,
+      "votes": 6349,
+      "winner": false
+    },
+    {
+      "external_id": "26114477",
+      "title": "The Geek Feminist Revolution",
+      "authors": [
+        "Kameron Hurley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442933437l/26114477.jpg",
+      "rank": 10,
+      "votes": 5876,
+      "winner": false
+    },
+    {
+      "external_id": "25814485",
+      "title": "Grit",
+      "authors": [
+        "Angela Duckworth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483546380l/25814485._SY600_.jpg",
+      "rank": 11,
+      "votes": 3068,
+      "winner": false
+    },
+    {
+      "external_id": "28119237",
+      "title": "Tribe",
+      "authors": [
+        "Sebastian Junger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459114807l/28119237.jpg",
+      "rank": 12,
+      "votes": 2902,
+      "winner": false
+    },
+    {
+      "external_id": "26792284",
+      "title": "The Only Rule Is It Has to Work",
+      "authors": [
+        "Ben Lindbergh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461532941l/26792284.jpg",
+      "rank": 13,
+      "votes": 2664,
+      "winner": false
+    },
+    {
+      "external_id": "25814413",
+      "title": "And Then All Hell Broke Loose",
+      "authors": [
+        "Richard Engel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1454863999l/25814413._SY600_.jpg",
+      "rank": 14,
+      "votes": 2218,
+      "winner": false
+    },
+    {
+      "external_id": "27036528",
+      "title": "Ego Is the Enemy",
+      "authors": [
+        "Ryan Holiday"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459114043l/27036528.jpg",
+      "rank": 15,
+      "votes": 2037,
+      "winner": false
+    },
+    {
+      "external_id": "25733966",
+      "title": "Smarter Faster Better",
+      "authors": [
+        "Charles Duhigg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453057544l/25733966.jpg",
+      "rank": 16,
+      "votes": 1999,
+      "winner": false
+    },
+    {
+      "external_id": "25744928",
+      "title": "Deep Work",
+      "authors": [
+        "Cal Newport"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1447957962l/25744928._SY600_.jpg",
+      "rank": 17,
+      "votes": 1289,
+      "winner": false
+    },
+    {
+      "external_id": "29502379",
+      "title": "Another Day in the Death of America",
+      "authors": [
+        "Gary Younge"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470283021l/29502379.jpg",
+      "rank": 18,
+      "votes": 823,
+      "winner": false
+    },
+    {
+      "external_id": "28505023",
+      "title": "The Fire This Time",
+      "authors": [
+        "Jesmyn Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1469969005l/28505023.jpg",
+      "rank": 19,
+      "votes": 810,
+      "winner": false
+    },
+    {
+      "external_id": "25779641",
+      "title": "Don't Be a Jerk",
+      "authors": [
+        "Brad Warner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453389848l/25779641.jpg",
+      "rank": 20,
+      "votes": 668,
+      "winner": false
+    }
+  ]
+}

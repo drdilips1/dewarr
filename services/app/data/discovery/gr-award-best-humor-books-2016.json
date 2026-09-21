@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-humor-books-2016",
+  "kind": "award",
+  "title": "Humor",
+  "source_url": "https://www.goodreads.com/choiceawards/best-humor-books-2016",
+  "year": 2016,
+  "category": "Humor",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:08.125449+00:00",
+  "books": [
+    {
+      "external_id": "29405093",
+      "title": "The Girl with the Lower Back Tattoo",
+      "authors": [
+        "Amy Schumer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462657819l/29405093.jpg",
+      "rank": 1,
+      "votes": 41080,
+      "winner": true
+    },
+    {
+      "external_id": "29868610",
+      "title": "Scrappy Little Nobody",
+      "authors": [
+        "Anna Kendrick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1469410391l/29868610.jpg",
+      "rank": 2,
+      "votes": 23353,
+      "winner": false
+    },
+    {
+      "external_id": "29429875",
+      "title": "Where Am I Now?",
+      "authors": [
+        "Mara Wilson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460558453l/29429875.jpg",
+      "rank": 3,
+      "votes": 19166,
+      "winner": false
+    },
+    {
+      "external_id": "26895155",
+      "title": "Mother, Can You Not?",
+      "authors": [
+        "Kate Siegel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456090548l/26895155.jpg",
+      "rank": 4,
+      "votes": 15148,
+      "winner": false
+    },
+    {
+      "external_id": "29496435",
+      "title": "You Can't Touch My Hair",
+      "authors": [
+        "Phoebe Robinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1477907975l/29496435._SY600_.jpg",
+      "rank": 5,
+      "votes": 11647,
+      "winner": false
+    },
+    {
+      "external_id": "27276226",
+      "title": "It Gets Worse",
+      "authors": [
+        "Shane Dawson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1468787053l/27276226._SY600_.jpg",
+      "rank": 6,
+      "votes": 10521,
+      "winner": false
+    },
+    {
+      "external_id": "28696602",
+      "title": "I'm Judging You",
+      "authors": [
+        "Luvvie Ajayi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1646145167l/28696602._SY600_.jpg",
+      "rank": 7,
+      "votes": 8701,
+      "winner": false
+    },
+    {
+      "external_id": "30613790",
+      "title": "Dan and Phil Go Outside",
+      "authors": [
+        "Daniel  Howell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1471295566l/30613790.jpg",
+      "rank": 8,
+      "votes": 6926,
+      "winner": false
+    },
+    {
+      "external_id": "28686959",
+      "title": "Based on a True Story",
+      "authors": [
+        "Norm Macdonald"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1468269907l/28686959.jpg",
+      "rank": 9,
+      "votes": 6457,
+      "winner": false
+    },
+    {
+      "external_id": "25817690",
+      "title": "I Want My Epidural Back",
+      "authors": [
+        "Karen Alpert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1457893082l/25817690.jpg",
+      "rank": 10,
+      "votes": 5794,
+      "winner": false
+    },
+    {
+      "external_id": "26890698",
+      "title": "I'm Just a Person",
+      "authors": [
+        "Tig Notaro"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1465972670l/26890698._SY600_.jpg",
+      "rank": 11,
+      "votes": 2917,
+      "winner": false
+    },
+    {
+      "external_id": "27171845",
+      "title": "Seinfeldia",
+      "authors": [
+        "Jennifer Keishin Armstrong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460924223l/27171845._SY600_.jpg",
+      "rank": 12,
+      "votes": 2859,
+      "winner": false
+    },
+    {
+      "external_id": "27245977",
+      "title": "Housebroken",
+      "authors": [
+        "Laurie Notaro"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1457891550l/27245977.jpg",
+      "rank": 13,
+      "votes": 2436,
+      "winner": false
+    },
+    {
+      "external_id": "27170141",
+      "title": "You'll Grow Out of It",
+      "authors": [
+        "Jessi Klein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462261735l/27170141._SY600_.jpg",
+      "rank": 14,
+      "votes": 2333,
+      "winner": false
+    },
+    {
+      "external_id": "25814361",
+      "title": "I Know What I'm Doing and Other Lies I Tell Myself",
+      "authors": [
+        "Jen Kirkman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460304814l/25814361._SY600_.jpg",
+      "rank": 15,
+      "votes": 2115,
+      "winner": false
+    },
+    {
+      "external_id": "25666058",
+      "title": "If at Birth You Don't Succeed",
+      "authors": [
+        "Zach Anner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1440432005l/25666058.jpg",
+      "rank": 16,
+      "votes": 1842,
+      "winner": false
+    },
+    {
+      "external_id": "25817261",
+      "title": "Real Artists Have Day Jobs",
+      "authors": [
+        "Sara Benincasa"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1458494791l/25817261.jpg",
+      "rank": 17,
+      "votes": 1427,
+      "winner": false
+    },
+    {
+      "external_id": "25111121",
+      "title": "Navel Gazing",
+      "authors": [
+        "Michael Ian Black"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1434329430l/25111121._SY600_.jpg",
+      "rank": 18,
+      "votes": 1127,
+      "winner": false
+    },
+    {
+      "external_id": "29093310",
+      "title": "Best. State. Ever.",
+      "authors": [
+        "Dave Barry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459111918l/29093310.jpg",
+      "rank": 19,
+      "votes": 1011,
+      "winner": false
+    },
+    {
+      "external_id": "31188362",
+      "title": "Alan Partridge",
+      "authors": [
+        "Alan Partridge"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1704673067l/31188362._SY600_.jpg",
+      "rank": 20,
+      "votes": 508,
+      "winner": false
+    }
+  ]
+}

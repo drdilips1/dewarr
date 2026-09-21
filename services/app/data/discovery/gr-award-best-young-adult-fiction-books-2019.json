@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-young-adult-fiction-books-2019",
+  "kind": "award",
+  "title": "Young Adult Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fiction-books-2019",
+  "year": 2019,
+  "category": "Young Adult Fiction",
+  "genres": [
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:46.599715+00:00",
+  "books": [
+    {
+      "external_id": "38926328",
+      "title": "Five Feet Apart",
+      "authors": [
+        "Rachael Lippincott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1534693322l/38926328.jpg",
+      "rank": 1,
+      "votes": 36232,
+      "winner": true
+    },
+    {
+      "external_id": "35887567",
+      "title": "On the Come Up",
+      "authors": [
+        "Angie Thomas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518828924l/35887567._SY600_.jpg",
+      "rank": 2,
+      "votes": 34932,
+      "winner": false
+    },
+    {
+      "external_id": "41154268",
+      "title": "With the Fire on High",
+      "authors": [
+        "Elizabeth Acevedo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537976105l/41154268.jpg",
+      "rank": 3,
+      "votes": 23010,
+      "winner": false
+    },
+    {
+      "external_id": "38225791",
+      "title": "Two Can Keep a Secret",
+      "authors": [
+        "Karen M. McManus"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1531316524l/38225791._SY600_.jpg",
+      "rank": 4,
+      "votes": 21419,
+      "winner": false
+    },
+    {
+      "external_id": "43220998",
+      "title": "The Fountains of Silence",
+      "authors": [
+        "Ruta Sepetys"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549121768l/43220998._SY600_.jpg",
+      "rank": 5,
+      "votes": 20415,
+      "winner": false
+    },
+    {
+      "external_id": "41147279",
+      "title": "Again, But Better",
+      "authors": [
+        "Christine Riccio"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552398900l/41147279._SY600_.jpg",
+      "rank": 6,
+      "votes": 20395,
+      "winner": false
+    },
+    {
+      "external_id": "41473872",
+      "title": "I Wish You All the Best",
+      "authors": [
+        "Mason Deaver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1538483349l/41473872.jpg",
+      "rank": 7,
+      "votes": 16048,
+      "winner": false
+    },
+    {
+      "external_id": "39893545",
+      "title": "The Vanishing Stair",
+      "authors": [
+        "Maureen Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529970325l/39893545.jpg",
+      "rank": 8,
+      "votes": 15030,
+      "winner": false
+    },
+    {
+      "external_id": "43744300",
+      "title": "American Royals",
+      "authors": [
+        "Katharine McGee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1551859882l/43744300.jpg",
+      "rank": 9,
+      "votes": 14322,
+      "winner": false
+    },
+    {
+      "external_id": "42245770",
+      "title": "The Rest of the Story",
+      "authors": [
+        "Sarah Dessen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553281123l/42245770._SY600_.jpg",
+      "rank": 10,
+      "votes": 11979,
+      "winner": false
+    },
+    {
+      "external_id": "37539001",
+      "title": "Capturing the Devil",
+      "authors": [
+        "Kerri Maniscalco"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556550359l/37539001.jpg",
+      "rank": 11,
+      "votes": 5815,
+      "winner": false
+    },
+    {
+      "external_id": "40695682",
+      "title": "Internment",
+      "authors": [
+        "Samira Ahmed"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1531826601l/40695682.jpg",
+      "rank": 12,
+      "votes": 4874,
+      "winner": false
+    },
+    {
+      "external_id": "39725622",
+      "title": "The Princess and the Fangirl",
+      "authors": [
+        "Ashley Poston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1542265229l/39725622._SY600_.jpg",
+      "rank": 13,
+      "votes": 4657,
+      "winner": false
+    },
+    {
+      "external_id": "39847584",
+      "title": "Frankly in Love",
+      "authors": [
+        "David  Yoon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549919762l/39847584.jpg",
+      "rank": 14,
+      "votes": 4538,
+      "winner": false
+    },
+    {
+      "external_id": "36511805",
+      "title": "Serious Moonlight",
+      "authors": [
+        "Jenn Bennett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1528129525l/36511805.jpg",
+      "rank": 15,
+      "votes": 3060,
+      "winner": false
+    },
+    {
+      "external_id": "40536335",
+      "title": "Opposite of Always",
+      "authors": [
+        "Justin A. Reynolds"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529948150l/40536335._SY600_.jpg",
+      "rank": 16,
+      "votes": 2876,
+      "winner": false
+    },
+    {
+      "external_id": "43263520",
+      "title": "The Grace Year",
+      "authors": [
+        "Kim Liggett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1548518877l/43263520._SY600_.jpg",
+      "rank": 17,
+      "votes": 1958,
+      "winner": false
+    },
+    {
+      "external_id": "44107480",
+      "title": "Lovely War",
+      "authors": [
+        "Julie Berry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554392694l/44107480.jpg",
+      "rank": 18,
+      "votes": 1707,
+      "winner": false
+    },
+    {
+      "external_id": "40148146",
+      "title": "Love from A to Z",
+      "authors": [
+        "S.K. Ali"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545943011l/40148146._SY600_.jpg",
+      "rank": 19,
+      "votes": 1464,
+      "winner": false
+    },
+    {
+      "external_id": "39863399",
+      "title": "Birthday",
+      "authors": [
+        "Meredith Russo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1540229768l/39863399.jpg",
+      "rank": 20,
+      "votes": 1264,
+      "winner": false
+    }
+  ]
+}

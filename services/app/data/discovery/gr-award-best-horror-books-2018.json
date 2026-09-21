@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-horror-books-2018",
+  "kind": "award",
+  "title": "Horror",
+  "source_url": "https://www.goodreads.com/choiceawards/best-horror-books-2018",
+  "year": 2018,
+  "category": "Horror",
+  "genres": [
+    "horror"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:04.610328+00:00",
+  "books": [
+    {
+      "external_id": "38355410",
+      "title": "Elevation",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1542040067l/38355410._SY600_.jpg",
+      "rank": 1,
+      "votes": 39616,
+      "winner": true
+    },
+    {
+      "external_id": "35410511",
+      "title": "Baby Teeth",
+      "authors": [
+        "Zoje Stage"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664342132l/35410511._SY600_.jpg",
+      "rank": 2,
+      "votes": 20423,
+      "winner": false
+    },
+    {
+      "external_id": "38363799",
+      "title": "Dracul",
+      "authors": [
+        "Dacre Stoker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523747418l/38363799.jpg",
+      "rank": 3,
+      "votes": 14995,
+      "winner": false
+    },
+    {
+      "external_id": "34449265",
+      "title": "The Passion of Cleopatra",
+      "authors": [
+        "Anne Rice"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1490228999l/34449265.jpg",
+      "rank": 4,
+      "votes": 11388,
+      "winner": false
+    },
+    {
+      "external_id": "36373398",
+      "title": "The Woman in the Woods",
+      "authors": [
+        "John Connolly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523875174l/36373398._SY600_.jpg",
+      "rank": 5,
+      "votes": 9708,
+      "winner": false
+    },
+    {
+      "external_id": "36381091",
+      "title": "The Cabin at the End of the World",
+      "authors": [
+        "Paul Tremblay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1575855422l/36381091._SY600_.jpg",
+      "rank": 6,
+      "votes": 9491,
+      "winner": false
+    },
+    {
+      "external_id": "37824221",
+      "title": "Craven Manor",
+      "authors": [
+        "Darcy Coates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1517527276l/37824221.jpg",
+      "rank": 7,
+      "votes": 8786,
+      "winner": false
+    },
+    {
+      "external_id": "30285766",
+      "title": "The Hunger",
+      "authors": [
+        "Alma Katsu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1497803277l/30285766.jpg",
+      "rank": 8,
+      "votes": 8597,
+      "winner": false
+    },
+    {
+      "external_id": "39790706",
+      "title": "We Sold Our Souls",
+      "authors": [
+        "Grady Hendrix"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1530526119l/39790706.jpg",
+      "rank": 9,
+      "votes": 6336,
+      "winner": false
+    },
+    {
+      "external_id": "39217966",
+      "title": "Flight or Fright",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520972704l/39217966.jpg",
+      "rank": 10,
+      "votes": 5196,
+      "winner": false
+    },
+    {
+      "external_id": "36342156",
+      "title": "The Anomaly",
+      "authors": [
+        "Michael Rutger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1508879817l/36342156.jpg",
+      "rank": 11,
+      "votes": 2352,
+      "winner": false
+    },
+    {
+      "external_id": "35035160",
+      "title": "The Merry Spinster",
+      "authors": [
+        "Daniel M. Lavery"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1515148254l/35035160.jpg",
+      "rank": 12,
+      "votes": 2259,
+      "winner": false
+    },
+    {
+      "external_id": "37510662",
+      "title": "Foe",
+      "authors": [
+        "Iain Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1535881766l/37510662.jpg",
+      "rank": 13,
+      "votes": 2194,
+      "winner": false
+    },
+    {
+      "external_id": "39707880",
+      "title": "The Carrow Haunt",
+      "authors": [
+        "Darcy Coates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522727054l/39707880._SY600_.jpg",
+      "rank": 14,
+      "votes": 1936,
+      "winner": false
+    },
+    {
+      "external_id": "35655156",
+      "title": "The Summer Children",
+      "authors": [
+        "Dot Hutchison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1519857679l/35655156._SY600_.jpg",
+      "rank": 15,
+      "votes": 1785,
+      "winner": false
+    },
+    {
+      "external_id": "38608066",
+      "title": "The Siren and the Specter",
+      "authors": [
+        "Jonathan Janz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518907734l/38608066.jpg",
+      "rank": 16,
+      "votes": 1175,
+      "winner": false
+    },
+    {
+      "external_id": "38392331",
+      "title": "Generation Z",
+      "authors": [
+        "Peter     Meredith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520775062l/38392331.jpg",
+      "rank": 17,
+      "votes": 1143,
+      "winner": false
+    },
+    {
+      "external_id": "35297544",
+      "title": "Zero Day",
+      "authors": [
+        "Ezekiel Boone"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1519640765l/35297544._SY600_.jpg",
+      "rank": 18,
+      "votes": 826,
+      "winner": false
+    },
+    {
+      "external_id": "36049101",
+      "title": "The Devil and the Deep",
+      "authors": [
+        "Ellen Datlow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1517456655l/36049101._SY600_.jpg",
+      "rank": 19,
+      "votes": 766,
+      "winner": false
+    },
+    {
+      "external_id": "36694914",
+      "title": "The Labyrinth Index",
+      "authors": [
+        "Charles Stross"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1512103525l/36694914._SY600_.jpg",
+      "rank": 20,
+      "votes": 599,
+      "winner": false
+    }
+  ]
+}

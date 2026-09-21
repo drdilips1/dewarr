@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-fantasy-books-2014",
+  "kind": "award",
+  "title": "Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fantasy-books-2014",
+  "year": 2014,
+  "category": "Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:03.762366+00:00",
+  "books": [
+    {
+      "external_id": "16054217",
+      "title": "The Book of Life",
+      "authors": [
+        "Deborah Harkness"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389281784l/16054217._SY600_.jpg",
+      "rank": 1,
+      "votes": 51462,
+      "winner": true
+    },
+    {
+      "external_id": "17332218",
+      "title": "Words of Radiance",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1728768241l/17332218.jpg",
+      "rank": 2,
+      "votes": 28449,
+      "winner": false
+    },
+    {
+      "external_id": "19486421",
+      "title": "Skin Game",
+      "authors": [
+        "Jim  Butcher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1654573059l/19486421._SY600_.jpg",
+      "rank": 3,
+      "votes": 22104,
+      "winner": false
+    },
+    {
+      "external_id": "21535271",
+      "title": "The Slow Regard of Silent Things",
+      "authors": [
+        "Patrick Rothfuss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1785753848l/21535271._SY600_.jpg",
+      "rank": 4,
+      "votes": 19301,
+      "winner": false
+    },
+    {
+      "external_id": "19103097",
+      "title": "The Magician's Land",
+      "authors": [
+        "Lev Grossman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1455089828l/19103097.jpg",
+      "rank": 5,
+      "votes": 16751,
+      "winner": false
+    },
+    {
+      "external_id": "17562900",
+      "title": "Night Broken",
+      "authors": [
+        "Patricia Briggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1379437095l/17562900.jpg",
+      "rank": 6,
+      "votes": 16402,
+      "winner": false
+    },
+    {
+      "external_id": "10357792",
+      "title": "Up from the Grave",
+      "authors": [
+        "Jeaniene Frost"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1367085937l/10357792.jpg",
+      "rank": 7,
+      "votes": 16174,
+      "winner": false
+    },
+    {
+      "external_id": "20426917",
+      "title": "The Witch with No Name",
+      "authors": [
+        "Kim Harrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398700782l/20426917.jpg",
+      "rank": 8,
+      "votes": 13762,
+      "winner": false
+    },
+    {
+      "external_id": "12119529",
+      "title": "Magic Breaks",
+      "authors": [
+        "Ilona Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1383236969l/12119529.jpg",
+      "rank": 9,
+      "votes": 13413,
+      "winner": false
+    },
+    {
+      "external_id": "20174424",
+      "title": "City of Stairs",
+      "authors": [
+        "Robert Jackson Bennett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394545220l/20174424.jpg",
+      "rank": 10,
+      "votes": 8713,
+      "winner": false
+    },
+    {
+      "external_id": "18693743",
+      "title": "Prince of Fools",
+      "authors": [
+        "Mark  Lawrence"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385072473l/18693743.jpg",
+      "rank": 11,
+      "votes": 4544,
+      "winner": false
+    },
+    {
+      "external_id": "12652457",
+      "title": "The Broken Eye",
+      "authors": [
+        "Brent Weeks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659765822l/12652457._SY600_.jpg",
+      "rank": 12,
+      "votes": 3431,
+      "winner": false
+    },
+    {
+      "external_id": "18712886",
+      "title": "The Queen of the Tearling",
+      "authors": [
+        "Erika Johansen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417685148l/18712886.jpg",
+      "rank": 13,
+      "votes": 3428,
+      "winner": false
+    },
+    {
+      "external_id": "19288321",
+      "title": "Fool's Assassin",
+      "authors": [
+        "Robin Hobb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1393886110l/19288321.jpg",
+      "rank": 14,
+      "votes": 2925,
+      "winner": false
+    },
+    {
+      "external_id": "17563080",
+      "title": "Murder of Crows",
+      "authors": [
+        "Anne Bishop"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1733954312l/17563080._SY600_.jpg",
+      "rank": 15,
+      "votes": 2722,
+      "winner": false
+    },
+    {
+      "external_id": "17910048",
+      "title": "The Goblin Emperor",
+      "authors": [
+        "Katherine Addison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1373039517l/17910048.jpg",
+      "rank": 16,
+      "votes": 2063,
+      "winner": false
+    },
+    {
+      "external_id": "17910124",
+      "title": "The Emperor's Blades",
+      "authors": [
+        "Brian Staveley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369246817l/17910124.jpg",
+      "rank": 17,
+      "votes": 1669,
+      "winner": false
+    },
+    {
+      "external_id": "16280678",
+      "title": "Shattered",
+      "authors": [
+        "Kevin Hearne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387891720l/16280678.jpg",
+      "rank": 18,
+      "votes": 1400,
+      "winner": false
+    },
+    {
+      "external_id": "18138189",
+      "title": "Tower Lord",
+      "authors": [
+        "Anthony Ryan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1382486392l/18138189.jpg",
+      "rank": 19,
+      "votes": 1254,
+      "winner": false
+    },
+    {
+      "external_id": "20299849",
+      "title": "Traitor's Blade",
+      "authors": [
+        "Sebastien de Castell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403537232l/20299849.jpg",
+      "rank": 20,
+      "votes": 844,
+      "winner": false
+    }
+  ]
+}

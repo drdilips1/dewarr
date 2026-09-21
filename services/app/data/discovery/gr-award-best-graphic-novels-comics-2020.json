@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-graphic-novels-comics-2020",
+  "kind": "award",
+  "title": "Graphic Novels & Comics",
+  "source_url": "https://www.goodreads.com/choiceawards/best-graphic-novels-comics-2020",
+  "year": 2020,
+  "category": "Graphic Novels & Comics",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:46.097655+00:00",
+  "books": [
+    {
+      "external_id": "44779280",
+      "title": "Heartstopper",
+      "authors": [
+        "Alice Oseman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1587842273l/44779280._SY600_.jpg",
+      "rank": 1,
+      "votes": 44384,
+      "winner": true
+    },
+    {
+      "external_id": "50898148",
+      "title": "Fangs",
+      "authors": [
+        "Sarah Andersen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585286731l/50898148._SY600_.jpg",
+      "rank": 2,
+      "votes": 22329,
+      "winner": false
+    },
+    {
+      "external_id": "50159129",
+      "title": "I Will Judge You by Your Bookshelf",
+      "authors": [
+        "Grant Snider"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1564836659l/50159129._SX318_SY475_.jpg",
+      "rank": 3,
+      "votes": 22247,
+      "winner": false
+    },
+    {
+      "external_id": "52854406",
+      "title": "Fangirl, Vol. 1",
+      "authors": [
+        "Sam Maggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585676692l/52854406.jpg",
+      "rank": 4,
+      "votes": 20374,
+      "winner": false
+    },
+    {
+      "external_id": "54110137",
+      "title": "Sapiens",
+      "authors": [
+        "David Vandermeulen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594616346l/54110137.jpg",
+      "rank": 5,
+      "votes": 18629,
+      "winner": false
+    },
+    {
+      "external_id": "52713814",
+      "title": "Harleen",
+      "authors": [
+        "Stjepan Šejić"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1637421365l/52713814.jpg",
+      "rank": 6,
+      "votes": 16518,
+      "winner": false
+    },
+    {
+      "external_id": "44280825",
+      "title": "Check, Please! Book 2",
+      "authors": [
+        "Ngozi Ukazu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1561505630l/44280825.jpg",
+      "rank": 7,
+      "votes": 14318,
+      "winner": false
+    },
+    {
+      "external_id": "46127757",
+      "title": "Teen Titans",
+      "authors": [
+        "Kami Garcia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1559433257l/46127757.jpg",
+      "rank": 8,
+      "votes": 13736,
+      "winner": false
+    },
+    {
+      "external_id": "50490087",
+      "title": "Basketful of Heads",
+      "authors": [
+        "Joe  Hill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598838206l/50490087.jpg",
+      "rank": 9,
+      "votes": 11236,
+      "winner": false
+    },
+    {
+      "external_id": "50892014",
+      "title": "The Times I Knew I Was Gay",
+      "authors": [
+        "Eleanor Crewes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1599400191l/50892014.jpg",
+      "rank": 10,
+      "votes": 10850,
+      "winner": false
+    },
+    {
+      "external_id": "50010932",
+      "title": "Dancing at the Pity Party",
+      "authors": [
+        "Tyler Feder"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571889853l/50010932._SX318_SY475_.jpg",
+      "rank": 11,
+      "votes": 4361,
+      "winner": false
+    },
+    {
+      "external_id": "45449811",
+      "title": "Almost American Girl",
+      "authors": [
+        "Robin Ha"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1561399798l/45449811.jpg",
+      "rank": 12,
+      "votes": 4358,
+      "winner": false
+    },
+    {
+      "external_id": "45169737",
+      "title": "The Fire Never Goes Out",
+      "authors": [
+        "N.D. Stevenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1561046811l/45169737.jpg",
+      "rank": 13,
+      "votes": 2607,
+      "winner": false
+    },
+    {
+      "external_id": "52024847",
+      "title": "When Stars Are Scattered",
+      "authors": [
+        "Omar Mohamed"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565705354l/52024847._SX318_SY475_.jpg",
+      "rank": 14,
+      "votes": 2457,
+      "winner": false
+    },
+    {
+      "external_id": "52637764",
+      "title": "Monstress, Volume 5",
+      "authors": [
+        "Marjorie M. Liu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729446725l/52637764.jpg",
+      "rank": 15,
+      "votes": 2264,
+      "winner": false
+    },
+    {
+      "external_id": "51601851",
+      "title": "The Sacrifice of Darkness",
+      "authors": [
+        "Roxane Gay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1582467829l/51601851.jpg",
+      "rank": 16,
+      "votes": 1925,
+      "winner": false
+    },
+    {
+      "external_id": "51116307",
+      "title": "The Low, Low Woods",
+      "authors": [
+        "Carmen Maria Machado"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598836612l/51116307.jpg",
+      "rank": 17,
+      "votes": 1670,
+      "winner": false
+    },
+    {
+      "external_id": "52757853",
+      "title": "Fence, Vol. 4",
+      "authors": [
+        "C.S. Pacat"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1570968617l/52757853._SX318_SY475_.jpg",
+      "rank": 18,
+      "votes": 1558,
+      "winner": false
+    },
+    {
+      "external_id": "46223323",
+      "title": "The Adventure Zone Vol. 3",
+      "authors": [
+        "Clint McElroy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585146457l/46223323.jpg",
+      "rank": 19,
+      "votes": 1528,
+      "winner": false
+    },
+    {
+      "external_id": "50285848",
+      "title": "The Magic Fish",
+      "authors": [
+        "Trung Le Nguyen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1595816705l/50285848.jpg",
+      "rank": 20,
+      "votes": 885,
+      "winner": false
+    }
+  ]
+}

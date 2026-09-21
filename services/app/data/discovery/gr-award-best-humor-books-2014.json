@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-humor-books-2014",
+  "kind": "award",
+  "title": "Humor",
+  "source_url": "https://www.goodreads.com/choiceawards/best-humor-books-2014",
+  "year": 2014,
+  "category": "Humor",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:09.632047+00:00",
+  "books": [
+    {
+      "external_id": "20910157",
+      "title": "Yes Please",
+      "authors": [
+        "Amy Poehler"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1402815435l/20910157.jpg",
+      "rank": 1,
+      "votes": 36009,
+      "winner": true
+    },
+    {
+      "external_id": "20170296",
+      "title": "Neil Patrick Harris",
+      "authors": [
+        "Neil Patrick Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400599072l/20170296.jpg",
+      "rank": 2,
+      "votes": 27062,
+      "winner": false
+    },
+    {
+      "external_id": "18775203",
+      "title": "Rusty Nailed",
+      "authors": [
+        "Alice Clayton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470670923l/18775203.jpg",
+      "rank": 3,
+      "votes": 20263,
+      "winner": false
+    },
+    {
+      "external_id": "18730154",
+      "title": "My Drunk Kitchen",
+      "authors": [
+        "Hannah Hart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403536255l/18730154.jpg",
+      "rank": 4,
+      "votes": 18620,
+      "winner": false
+    },
+    {
+      "external_id": "20588698",
+      "title": "Not That Kind of Girl",
+      "authors": [
+        "Lena Dunham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1402816003l/20588698.jpg",
+      "rank": 5,
+      "votes": 11933,
+      "winner": false
+    },
+    {
+      "external_id": "18089900",
+      "title": "The Serpent of Venice",
+      "authors": [
+        "Christopher Moore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1376934009l/18089900.jpg",
+      "rank": 6,
+      "votes": 10903,
+      "winner": false
+    },
+    {
+      "external_id": "18283020",
+      "title": "William Shakespeare's The Empire Striketh Back",
+      "authors": [
+        "Ian Doescher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518527264l/18283020._SY600_.jpg",
+      "rank": 7,
+      "votes": 10718,
+      "winner": false
+    },
+    {
+      "external_id": "18248422",
+      "title": "People I Want to Punch in the Throat",
+      "authors": [
+        "Jen Mann"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413747861l/18248422.jpg",
+      "rank": 8,
+      "votes": 9241,
+      "winner": false
+    },
+    {
+      "external_id": "18246733",
+      "title": "Shame on You",
+      "authors": [
+        "Tara Sivec"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1384347128l/18246733.jpg",
+      "rank": 9,
+      "votes": 7403,
+      "winner": false
+    },
+    {
+      "external_id": "18127101",
+      "title": "Uganda Be Kidding Me",
+      "authors": [
+        "Chelsea Handler"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403174817l/18127101.jpg",
+      "rank": 10,
+      "votes": 6561,
+      "winner": false
+    },
+    {
+      "external_id": "20926077",
+      "title": "The Terrible and Wonderful Reasons Why I Run Long Distances",
+      "authors": [
+        "Matthew Inman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395627986l/20926077.jpg",
+      "rank": 11,
+      "votes": 3854,
+      "winner": false
+    },
+    {
+      "external_id": "17159009",
+      "title": "Never Have I Ever",
+      "authors": [
+        "Katie Heaney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391409510l/17159009.jpg",
+      "rank": 12,
+      "votes": 3824,
+      "winner": false
+    },
+    {
+      "external_id": "18007533",
+      "title": "One More Thing",
+      "authors": [
+        "B.J. Novak"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1393786903l/18007533.jpg",
+      "rank": 13,
+      "votes": 3713,
+      "winner": false
+    },
+    {
+      "external_id": "20876097",
+      "title": "Tied",
+      "authors": [
+        "Emma Chase"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398355635l/20876097.jpg",
+      "rank": 14,
+      "votes": 3246,
+      "winner": false
+    },
+    {
+      "external_id": "22168240",
+      "title": "Grace's Guide",
+      "authors": [
+        "Grace Helbig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400631688l/22168240.jpg",
+      "rank": 15,
+      "votes": 2693,
+      "winner": false
+    },
+    {
+      "external_id": "18168478",
+      "title": "The Amazing Thing About the Way It Goes",
+      "authors": [
+        "Stephanie Pearl-McPhee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1384160111l/18168478.jpg",
+      "rank": 16,
+      "votes": 2562,
+      "winner": false
+    },
+    {
+      "external_id": "20697471",
+      "title": "Food",
+      "authors": [
+        "Jim Gaffigan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1419183381l/20697471.jpg",
+      "rank": 17,
+      "votes": 2302,
+      "winner": false
+    },
+    {
+      "external_id": "21546166",
+      "title": "Passion and Ponies",
+      "authors": [
+        "Tara Sivec"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395707517l/21546166.jpg",
+      "rank": 18,
+      "votes": 1954,
+      "winner": false
+    },
+    {
+      "external_id": "17857647",
+      "title": "How to Fight Presidents",
+      "authors": [
+        "Daniel  O'Brien"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1378711165l/17857647.jpg",
+      "rank": 19,
+      "votes": 1496,
+      "winner": false
+    },
+    {
+      "external_id": "22442697",
+      "title": "Decker's Wood",
+      "authors": [
+        "Kirsty Dallas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1409213722l/22442697.jpg",
+      "rank": 20,
+      "votes": 684,
+      "winner": false
+    }
+  ]
+}

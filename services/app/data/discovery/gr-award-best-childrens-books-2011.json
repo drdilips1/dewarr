@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-childrens-books-2011",
+  "kind": "award",
+  "title": "Middle Grade & Children's",
+  "source_url": "https://www.goodreads.com/choiceawards/best-childrens-books-2011",
+  "year": 2011,
+  "category": "Middle Grade & Children's",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:48:19.894030+00:00",
+  "books": [
+    {
+      "external_id": "9520360",
+      "title": "The Son of Neptune",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201114l/9520360._SY600_.jpg",
+      "rank": 1,
+      "votes": 4186,
+      "winner": true
+    },
+    {
+      "external_id": "9067850",
+      "title": "The Throne of Fire",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1661018148l/9067850._SY600_.jpg",
+      "rank": 2,
+      "votes": 3827,
+      "winner": false
+    },
+    {
+      "external_id": "10659536",
+      "title": "Every Thing on It",
+      "authors": [
+        "Shel Silverstein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331416624l/10659536.jpg",
+      "rank": 3,
+      "votes": 3498,
+      "winner": false
+    },
+    {
+      "external_id": "11254250",
+      "title": "Cabin Fever",
+      "authors": [
+        "Jeff Kinney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1350396037l/11254250.jpg",
+      "rank": 4,
+      "votes": 3167,
+      "winner": false
+    },
+    {
+      "external_id": "10128428",
+      "title": "Wonderstruck",
+      "authors": [
+        "Brian Selznick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327885739l/10128428.jpg",
+      "rank": 5,
+      "votes": 1990,
+      "winner": false
+    },
+    {
+      "external_id": "9591398",
+      "title": "The Girl Who Circumnavigated Fairyland in a Ship of Her Own M...",
+      "authors": [
+        "Catherynne M. Valente"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388179691l/9591398.jpg",
+      "rank": 6,
+      "votes": 1947,
+      "winner": false
+    },
+    {
+      "external_id": "8621462",
+      "title": "A Monster Calls",
+      "authors": [
+        "Patrick Ness"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1485991317l/8621462._SY600_.jpg",
+      "rank": 7,
+      "votes": 1783,
+      "winner": false
+    },
+    {
+      "external_id": "10425811",
+      "title": "Liesl & Po",
+      "authors": [
+        "Lauren Oliver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1298937848l/10425811.jpg",
+      "rank": 8,
+      "votes": 1290,
+      "winner": false
+    },
+    {
+      "external_id": "8485458",
+      "title": "Sign of the Moon",
+      "authors": [
+        "Erin Hunter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1279932743l/8485458.jpg",
+      "rank": 9,
+      "votes": 1055,
+      "winner": false
+    },
+    {
+      "external_id": "8435445",
+      "title": "Scorpia Rising",
+      "authors": [
+        "Anthony Horowitz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417405144l/8435445.jpg",
+      "rank": 10,
+      "votes": 1033,
+      "winner": false
+    },
+    {
+      "external_id": "9165406",
+      "title": "Okay for Now",
+      "authors": [
+        "Gary D. Schmidt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388860777l/9165406.jpg",
+      "rank": 11,
+      "votes": 641,
+      "winner": false
+    },
+    {
+      "external_id": "7355137",
+      "title": "Darke",
+      "authors": [
+        "Angie Sage"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347727660l/7355137.jpg",
+      "rank": 12,
+      "votes": 495,
+      "winner": false
+    },
+    {
+      "external_id": "8306745",
+      "title": "A World Without Heroes",
+      "authors": [
+        "Brandon Mull"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388338606l/8306745.jpg",
+      "rank": 13,
+      "votes": 443,
+      "winner": false
+    },
+    {
+      "external_id": "9252036",
+      "title": "The Penderwicks at Point Mouette",
+      "authors": [
+        "Jeanne Birdsall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1568984370l/9252036._SY600_.jpg",
+      "rank": 14,
+      "votes": 396,
+      "winner": false
+    },
+    {
+      "external_id": "8619814",
+      "title": "The Emerald Atlas",
+      "authors": [
+        "John  Stephens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388180813l/8619814.jpg",
+      "rank": 15,
+      "votes": 389,
+      "winner": false
+    },
+    {
+      "external_id": "9465845",
+      "title": "Vespers Rising",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1357211079l/9465845.jpg",
+      "rank": 16,
+      "votes": 277,
+      "winner": false
+    },
+    {
+      "external_id": "11082352",
+      "title": "Travel to Tomorrow",
+      "authors": [
+        "Angela Sage Larsen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1311260419l/11082352.jpg",
+      "rank": 17,
+      "votes": 183,
+      "winner": false
+    },
+    {
+      "external_id": "10637959",
+      "title": "Breadcrumbs",
+      "authors": [
+        "Anne Ursu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1300592738l/10637959.jpg",
+      "rank": 18,
+      "votes": 177,
+      "winner": false
+    },
+    {
+      "external_id": "9917879",
+      "title": "The Unwanteds",
+      "authors": [
+        "Lisa McMann"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1308432658l/9917879.jpg",
+      "rank": 19,
+      "votes": 146,
+      "winner": false
+    },
+    {
+      "external_id": "10431447",
+      "title": "Wildwood",
+      "authors": [
+        "Colin Meloy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1393683769l/10431447.jpg",
+      "rank": 20,
+      "votes": 119,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-historical-fiction-books-2021",
+  "kind": "award",
+  "title": "Historical Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-historical-fiction-books-2021",
+  "year": 2021,
+  "category": "Historical Fiction",
+  "genres": [
+    "historical-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:03.239049+00:00",
+  "books": [
+    {
+      "external_id": "58745185",
+      "title": "Malibu Rising",
+      "authors": [
+        "Taylor Jenkins Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1730399958l/58745185._SY600_.jpg",
+      "rank": 1,
+      "votes": 104854,
+      "winner": true
+    },
+    {
+      "external_id": "57175097",
+      "title": "The Four Winds",
+      "authors": [
+        "Kristin Hannah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620988384l/57175097._SY600_.jpg",
+      "rank": 2,
+      "votes": 77546,
+      "winner": false
+    },
+    {
+      "external_id": "53288434",
+      "title": "The Lost Apothecary",
+      "authors": [
+        "Sarah Penner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1593013000l/53288434.jpg",
+      "rank": 3,
+      "votes": 51959,
+      "winner": false
+    },
+    {
+      "external_id": "53914937",
+      "title": "The Rose Code",
+      "authors": [
+        "Kate Quinn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1596548551l/53914937.jpg",
+      "rank": 4,
+      "votes": 32804,
+      "winner": false
+    },
+    {
+      "external_id": "57109107",
+      "title": "The Lincoln Highway",
+      "authors": [
+        "Amor Towles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1633443634l/57109107._SY600_.jpg",
+      "rank": 5,
+      "votes": 22834,
+      "winner": false
+    },
+    {
+      "external_id": "52761909",
+      "title": "The Paris Library",
+      "authors": [
+        "Janet Skeslien Charles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1583066862l/52761909.jpg",
+      "rank": 6,
+      "votes": 19722,
+      "winner": false
+    },
+    {
+      "external_id": "54814839",
+      "title": "The Dictionary of Lost Words",
+      "authors": [
+        "Pip Williams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1599246306l/54814839.jpg",
+      "rank": 7,
+      "votes": 18609,
+      "winner": false
+    },
+    {
+      "external_id": "54063343",
+      "title": "Hour of the Witch",
+      "authors": [
+        "Chris Bohjalian"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1592260136l/54063343.jpg",
+      "rank": 8,
+      "votes": 16726,
+      "winner": false
+    },
+    {
+      "external_id": "55333938",
+      "title": "The Personal Librarian",
+      "authors": [
+        "Marie Benedict"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1610646708l/55333938.jpg",
+      "rank": 9,
+      "votes": 16127,
+      "winner": false
+    },
+    {
+      "external_id": "54304031",
+      "title": "Yellow Wife",
+      "authors": [
+        "Sadeqa  Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608477179l/54304031.jpg",
+      "rank": 10,
+      "votes": 12518,
+      "winner": false
+    },
+    {
+      "external_id": "56435922",
+      "title": "The Prophets",
+      "authors": [
+        "Robert Jones Jr."
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1623371602l/56435922._SY600_.jpg",
+      "rank": 11,
+      "votes": 4456,
+      "winner": false
+    },
+    {
+      "external_id": "53138197",
+      "title": "Of Women and Salt",
+      "authors": [
+        "Gabriela  Garcia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1595815950l/53138197.jpg",
+      "rank": 12,
+      "votes": 4135,
+      "winner": false
+    },
+    {
+      "external_id": "54304125",
+      "title": "The Final Revival of Opal & Nev",
+      "authors": [
+        "Dawnie Walton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617092144l/54304125._SY600_.jpg",
+      "rank": 13,
+      "votes": 3914,
+      "winner": false
+    },
+    {
+      "external_id": "51183428",
+      "title": "The Love Songs of W.E.B. Du Bois",
+      "authors": [
+        "Honorée Fanonne Jeffers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1629809930l/51183428._SY600_.jpg",
+      "rank": 14,
+      "votes": 3639,
+      "winner": false
+    },
+    {
+      "external_id": "58997456",
+      "title": "Great Circle",
+      "authors": [
+        "Maggie Shipstead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631650934l/58997456._SY600_.jpg",
+      "rank": 15,
+      "votes": 3487,
+      "winner": false
+    },
+    {
+      "external_id": "40204619",
+      "title": "Eternal",
+      "authors": [
+        "Lisa Scottoline"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611244191l/40204619._SY600_.jpg",
+      "rank": 16,
+      "votes": 3112,
+      "winner": false
+    },
+    {
+      "external_id": "55881796",
+      "title": "Crossroads",
+      "authors": [
+        "Jonathan Franzen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617877772l/55881796._SY600_.jpg",
+      "rank": 17,
+      "votes": 2861,
+      "winner": false
+    },
+    {
+      "external_id": "56382412",
+      "title": "Small Pleasures",
+      "authors": [
+        "Clare Chambers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1626115553l/56382412.jpg",
+      "rank": 18,
+      "votes": 2727,
+      "winner": false
+    },
+    {
+      "external_id": "53453399",
+      "title": "West with Giraffes",
+      "authors": [
+        "Lynda Rutledge"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598218510l/53453399.jpg",
+      "rank": 19,
+      "votes": 2670,
+      "winner": false
+    },
+    {
+      "external_id": "54404602",
+      "title": "The Sweetness of Water",
+      "authors": [
+        "Nathan  Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1593989595l/54404602.jpg",
+      "rank": 20,
+      "votes": 2385,
+      "winner": false
+    }
+  ]
+}

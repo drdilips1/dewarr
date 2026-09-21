@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-historical-fiction-books-2014",
+  "kind": "award",
+  "title": "Historical Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-historical-fiction-books-2014",
+  "year": 2014,
+  "category": "Historical Fiction",
+  "genres": [
+    "historical-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:02.461229+00:00",
+  "books": [
+    {
+      "external_id": "18143977",
+      "title": "All the Light We Cannot See",
+      "authors": [
+        "Anthony Doerr"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1451445646l/18143977.jpg",
+      "rank": 1,
+      "votes": 41512,
+      "winner": true
+    },
+    {
+      "external_id": "18079776",
+      "title": "The Invention of Wings",
+      "authors": [
+        "Sue Monk Kidd"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386699861l/18079776.jpg",
+      "rank": 2,
+      "votes": 32095,
+      "winner": false
+    },
+    {
+      "external_id": "11389875",
+      "title": "Edge of Eternity",
+      "authors": [
+        "Ken Follett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1377871984l/11389875.jpg",
+      "rank": 3,
+      "votes": 23015,
+      "winner": false
+    },
+    {
+      "external_id": "18232495",
+      "title": "The Auschwitz Escape",
+      "authors": [
+        "Joel C. Rosenberg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415118326l/18232495.jpg",
+      "rank": 4,
+      "votes": 17406,
+      "winner": false
+    },
+    {
+      "external_id": "18498569",
+      "title": "The Miniaturist",
+      "authors": [
+        "Jessie Burton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1392415313l/18498569.jpg",
+      "rank": 5,
+      "votes": 13909,
+      "winner": false
+    },
+    {
+      "external_id": "18144053",
+      "title": "The Museum of Extraordinary Things",
+      "authors": [
+        "Alice Hoffman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1392575125l/18144053.jpg",
+      "rank": 6,
+      "votes": 12024,
+      "winner": false
+    },
+    {
+      "external_id": "18404427",
+      "title": "China Dolls",
+      "authors": [
+        "Lisa See"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405290827l/18404427.jpg",
+      "rank": 7,
+      "votes": 10763,
+      "winner": false
+    },
+    {
+      "external_id": "18775398",
+      "title": "The King's Curse",
+      "authors": [
+        "Philippa Gregory"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410170379l/18775398.jpg",
+      "rank": 8,
+      "votes": 10761,
+      "winner": false
+    },
+    {
+      "external_id": "20821087",
+      "title": "The Paying Guests",
+      "authors": [
+        "Sarah Waters"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1396671788l/20821087.jpg",
+      "rank": 9,
+      "votes": 10005,
+      "winner": false
+    },
+    {
+      "external_id": "18693929",
+      "title": "Doll-baby",
+      "authors": [
+        "Laura Lane McNeal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385967681l/18693929.jpg",
+      "rank": 10,
+      "votes": 6294,
+      "winner": false
+    },
+    {
+      "external_id": "18079806",
+      "title": "A King's Ransom",
+      "authors": [
+        "Sharon Kay Penman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1448656839l/18079806._SY600_.jpg",
+      "rank": 11,
+      "votes": 3564,
+      "winner": false
+    },
+    {
+      "external_id": "18775356",
+      "title": "Wayfaring Stranger",
+      "authors": [
+        "James Lee Burke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405259870l/18775356.jpg",
+      "rank": 12,
+      "votes": 2780,
+      "winner": false
+    },
+    {
+      "external_id": "18467802",
+      "title": "Euphoria",
+      "authors": [
+        "Lily King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418788366l/18467802.jpg",
+      "rank": 13,
+      "votes": 2524,
+      "winner": false
+    },
+    {
+      "external_id": "20587777",
+      "title": "Some Luck",
+      "authors": [
+        "Jane Smiley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413128987l/20587777.jpg",
+      "rank": 14,
+      "votes": 2491,
+      "winner": false
+    },
+    {
+      "external_id": "18667976",
+      "title": "The Secret Life of Violet Grant",
+      "authors": [
+        "Beatriz Williams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1393212446l/18667976.jpg",
+      "rank": 15,
+      "votes": 2454,
+      "winner": false
+    },
+    {
+      "external_id": "18090082",
+      "title": "A Burnable Book",
+      "authors": [
+        "Bruce Holsinger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1378328811l/18090082.jpg",
+      "rank": 16,
+      "votes": 1817,
+      "winner": false
+    },
+    {
+      "external_id": "18295858",
+      "title": "Frog Music",
+      "authors": [
+        "Emma Donoghue"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1393227215l/18295858.jpg",
+      "rank": 17,
+      "votes": 1672,
+      "winner": false
+    },
+    {
+      "external_id": "19322250",
+      "title": "The Narrow Road to the Deep North",
+      "authors": [
+        "Richard Flanagan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414350277l/19322250.jpg",
+      "rank": 18,
+      "votes": 1242,
+      "winner": false
+    },
+    {
+      "external_id": "17934498",
+      "title": "My Name is Resolute",
+      "authors": [
+        "Nancy E. Turner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385661370l/17934498.jpg",
+      "rank": 19,
+      "votes": 1216,
+      "winner": false
+    },
+    {
+      "external_id": "20026466",
+      "title": "I Shall Be Near to You",
+      "authors": [
+        "Erin Lindsay McCabe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389984589l/20026466.jpg",
+      "rank": 20,
+      "votes": 958,
+      "winner": false
+    }
+  ]
+}

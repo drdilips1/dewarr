@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-readers-favorite-nonfiction-books-2024",
+  "kind": "award",
+  "title": "Nonfiction",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-nonfiction-books-2024",
+  "year": 2024,
+  "category": "Nonfiction",
+  "genres": [
+    "non-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:07.815723+00:00",
+  "books": [
+    {
+      "external_id": "171681821",
+      "title": "The Anxious Generation",
+      "authors": [
+        "Jonathan Haidt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1711573377l/171681821._SY600_.jpg",
+      "rank": 1,
+      "votes": 39553,
+      "winner": true
+    },
+    {
+      "external_id": "195790756",
+      "title": "It's Not Hysteria",
+      "authors": [
+        "Karen Tang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1696573912l/195790756._SY600_.jpg",
+      "rank": 2,
+      "votes": 28181,
+      "winner": false
+    },
+    {
+      "external_id": "210943364",
+      "title": "The Message",
+      "authors": [
+        "Ta-Nehisi Coates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1717094243l/210943364.jpg",
+      "rank": 3,
+      "votes": 24789,
+      "winner": false
+    },
+    {
+      "external_id": "207006355",
+      "title": "Want",
+      "authors": [
+        "Gillian Anderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718802861l/207006355._SY600_.jpg",
+      "rank": 4,
+      "votes": 24511,
+      "winner": false
+    },
+    {
+      "external_id": "194803881",
+      "title": "The Backyard Bird Chronicles",
+      "authors": [
+        "Amy Tan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1692209028l/194803881._SY600_.jpg",
+      "rank": 5,
+      "votes": 22608,
+      "winner": false
+    },
+    {
+      "external_id": "158649729",
+      "title": "All in Her Head",
+      "authors": [
+        "Elizabeth Comen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697828093l/158649729._SY600_.jpg",
+      "rank": 6,
+      "votes": 19797,
+      "winner": false
+    },
+    {
+      "external_id": "123921296",
+      "title": "One in a Millennial",
+      "authors": [
+        "Kate Kennedy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686579205l/123921296.jpg",
+      "rank": 7,
+      "votes": 19641,
+      "winner": false
+    },
+    {
+      "external_id": "209786389",
+      "title": "Framed",
+      "authors": [
+        "John Grisham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1711027483l/209786389.jpg",
+      "rank": 8,
+      "votes": 19463,
+      "winner": false
+    },
+    {
+      "external_id": "203578896",
+      "title": "Disney High",
+      "authors": [
+        "Ashley  Spencer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1707753283l/203578896._SY600_.jpg",
+      "rank": 9,
+      "votes": 17813,
+      "winner": false
+    },
+    {
+      "external_id": "182733784",
+      "title": "Nuclear War",
+      "authors": [
+        "Annie Jacobsen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1698060837l/182733784._SY600_.jpg",
+      "rank": 10,
+      "votes": 13496,
+      "winner": false
+    },
+    {
+      "external_id": "75496481",
+      "title": "Blood",
+      "authors": [
+        "Jennifer Gunter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684819411l/75496481.jpg",
+      "rank": 11,
+      "votes": 5532,
+      "winner": false
+    },
+    {
+      "external_id": "203751764",
+      "title": "I'm Sorry for My Loss",
+      "authors": [
+        "Rebecca Little and Colleen ..."
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1710872482l/203751764._SY600_.jpg",
+      "rank": 12,
+      "votes": 5177,
+      "winner": false
+    },
+    {
+      "external_id": "216857785",
+      "title": "Revenge of the Tipping Point",
+      "authors": [
+        "Malcolm Gladwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1721984170l/216857785.jpg",
+      "rank": 13,
+      "votes": 4722,
+      "winner": false
+    },
+    {
+      "external_id": "210454076",
+      "title": "The Devil at His Elbow",
+      "authors": [
+        "Valerie Bauerlein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1712842498l/210454076._SY600_.jpg",
+      "rank": 14,
+      "votes": 4174,
+      "winner": false
+    },
+    {
+      "external_id": "127653704",
+      "title": "The Kingdom, the Power, and the Glory",
+      "authors": [
+        "Tim Alberta"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1702467465l/127653704.jpg",
+      "rank": 15,
+      "votes": 3952,
+      "winner": false
+    },
+    {
+      "external_id": "142402923",
+      "title": "Feel-Good Productivity",
+      "authors": [
+        "Ali  Abdaal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1689695229l/142402923._SY600_.jpg",
+      "rank": 16,
+      "votes": 3657,
+      "winner": false
+    },
+    {
+      "external_id": "208580597",
+      "title": "How to Tell When We Will Die",
+      "authors": [
+        "Johanna Hedva"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718206248l/208580597.jpg",
+      "rank": 17,
+      "votes": 3466,
+      "winner": false
+    },
+    {
+      "external_id": "214438480",
+      "title": "Supercommunicators",
+      "authors": [
+        "Charles Duhigg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1717935972l/214438480._SY600_.jpg",
+      "rank": 18,
+      "votes": 3282,
+      "winner": false
+    },
+    {
+      "external_id": "203579030",
+      "title": "The Sing Sing Files",
+      "authors": [
+        "Dan Slepian"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1712251570l/203579030._SY600_.jpg",
+      "rank": 19,
+      "votes": 1678,
+      "winner": false
+    },
+    {
+      "external_id": "205363955",
+      "title": "Meditations for Mortals",
+      "authors": [
+        "Oliver Burkeman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718696458l/205363955._SY600_.jpg",
+      "rank": 20,
+      "votes": 1517,
+      "winner": false
+    }
+  ]
+}

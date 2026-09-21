@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-memoir-autobiography-books-2014",
+  "kind": "award",
+  "title": "Memoir & Autobiography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-memoir-autobiography-books-2014",
+  "year": 2014,
+  "category": "Memoir & Autobiography",
+  "genres": [
+    "biography"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:12.510490+00:00",
+  "books": [
+    {
+      "external_id": "17675031",
+      "title": "This Star Won't Go Out",
+      "authors": [
+        "Esther Earl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1392015126l/17675031.jpg",
+      "rank": 1,
+      "votes": 27850,
+      "winner": true
+    },
+    {
+      "external_id": "21412202",
+      "title": "As You Wish",
+      "authors": [
+        "Cary Elwes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418103917l/21412202.jpg",
+      "rank": 2,
+      "votes": 24111,
+      "winner": false
+    },
+    {
+      "external_id": "20604350",
+      "title": "Not My Father's Son",
+      "authors": [
+        "Alan Cumming"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1451446788l/20604350._SY600_.jpg",
+      "rank": 3,
+      "votes": 17938,
+      "winner": false
+    },
+    {
+      "external_id": "18296165",
+      "title": "Everybody's Got Something",
+      "authors": [
+        "Robin Roberts"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403168180l/18296165.jpg",
+      "rank": 4,
+      "votes": 13768,
+      "winner": false
+    },
+    {
+      "external_id": "18779662",
+      "title": "A Fighting Chance",
+      "authors": [
+        "Elizabeth Warren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1393067197l/18779662.jpg",
+      "rank": 5,
+      "votes": 8507,
+      "winner": false
+    },
+    {
+      "external_id": "18667753",
+      "title": "Popular",
+      "authors": [
+        "Maya Van Wagenen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1383335610l/18667753.jpg",
+      "rank": 6,
+      "votes": 8189,
+      "winner": false
+    },
+    {
+      "external_id": "17727276",
+      "title": "Hard Choices",
+      "authors": [
+        "Hillary Rodham Clinton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1402198745l/17727276.jpg",
+      "rank": 7,
+      "votes": 8179,
+      "winner": false
+    },
+    {
+      "external_id": "20663702",
+      "title": "Smoke Gets in Your Eyes",
+      "authors": [
+        "Caitlin Doughty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1416181987l/20663702.jpg",
+      "rank": 8,
+      "votes": 7129,
+      "winner": false
+    },
+    {
+      "external_id": "20257122",
+      "title": "Finding Me",
+      "authors": [
+        "Michelle Knight"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387770620l/20257122.jpg",
+      "rank": 9,
+      "votes": 6499,
+      "winner": false
+    },
+    {
+      "external_id": "18630531",
+      "title": "My Salinger Year",
+      "authors": [
+        "Joanna Rakoff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388374724l/18630531.jpg",
+      "rank": 10,
+      "votes": 5300,
+      "winner": false
+    },
+    {
+      "external_id": "17910544",
+      "title": "Glitter and Glue",
+      "authors": [
+        "Kelly Corrigan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403166272l/17910544.jpg",
+      "rank": 11,
+      "votes": 2856,
+      "winner": false
+    },
+    {
+      "external_id": "19335733",
+      "title": "Something Other than God",
+      "authors": [
+        "Jennifer Fulwiler"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404479038l/19335733.jpg",
+      "rank": 12,
+      "votes": 2804,
+      "winner": false
+    },
+    {
+      "external_id": "18453268",
+      "title": "Stronger",
+      "authors": [
+        "Jeff Bauman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403175123l/18453268.jpg",
+      "rank": 13,
+      "votes": 2699,
+      "winner": false
+    },
+    {
+      "external_id": "18144064",
+      "title": "Love Life",
+      "authors": [
+        "Rob Lowe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1376250055l/18144064.jpg",
+      "rank": 14,
+      "votes": 2364,
+      "winner": false
+    },
+    {
+      "external_id": "18144031",
+      "title": "Redefining Realness",
+      "authors": [
+        "Janet Mock"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394420737l/18144031.jpg",
+      "rank": 15,
+      "votes": 2080,
+      "winner": false
+    },
+    {
+      "external_id": "20736640",
+      "title": "Dear Leader",
+      "authors": [
+        "Jang Jin-sung"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1397767877l/20736640.jpg",
+      "rank": 16,
+      "votes": 1808,
+      "winner": false
+    },
+    {
+      "external_id": "21424655",
+      "title": "Life, Animated",
+      "authors": [
+        "Ron Suskind"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394580916l/21424655.jpg",
+      "rank": 17,
+      "votes": 1131,
+      "winner": false
+    },
+    {
+      "external_id": "18498559",
+      "title": "Tibetan Peach Pie",
+      "authors": [
+        "Tom Robbins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394730060l/18498559.jpg",
+      "rank": 18,
+      "votes": 1064,
+      "winner": false
+    },
+    {
+      "external_id": "18490752",
+      "title": "Duty",
+      "authors": [
+        "Robert M. Gates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1380493942l/18490752.jpg",
+      "rank": 19,
+      "votes": 981,
+      "winner": false
+    },
+    {
+      "external_id": "17857652",
+      "title": "Little Failure",
+      "authors": [
+        "Gary Shteyngart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403176713l/17857652.jpg",
+      "rank": 20,
+      "votes": 843,
+      "winner": false
+    }
+  ]
+}

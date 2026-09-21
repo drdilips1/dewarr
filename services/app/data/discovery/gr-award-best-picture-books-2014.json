@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-picture-books-2014",
+  "kind": "award",
+  "title": "Picture Books",
+  "source_url": "https://www.goodreads.com/choiceawards/best-picture-books-2014",
+  "year": 2014,
+  "category": "Picture Books",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:27.866040+00:00",
+  "books": [
+    {
+      "external_id": "17846011",
+      "title": "The Pigeon Needs a Bath!",
+      "authors": [
+        "Mo Willems"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1770890409l/17846011._SY600_.jpg",
+      "rank": 1,
+      "votes": 26074,
+      "winner": true
+    },
+    {
+      "external_id": "20821299",
+      "title": "The Book with No Pictures",
+      "authors": [
+        "B.J. Novak"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400873472l/20821299.jpg",
+      "rank": 2,
+      "votes": 21589,
+      "winner": false
+    },
+    {
+      "external_id": "20388087",
+      "title": "Julia's House for Lost Creatures",
+      "authors": [
+        "Ben Hatke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1393067060l/20388087.jpg",
+      "rank": 3,
+      "votes": 10289,
+      "winner": false
+    },
+    {
+      "external_id": "18465502",
+      "title": "Tuesday Tucks Me In",
+      "authors": [
+        "Luis Carlos Montalván"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386356541l/18465502.jpg",
+      "rank": 4,
+      "votes": 9660,
+      "winner": false
+    },
+    {
+      "external_id": "18570357",
+      "title": "What Do You Do With an Idea?",
+      "authors": [
+        "Kobi Yamada"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391248131l/18570357.jpg",
+      "rank": 5,
+      "votes": 6949,
+      "winner": false
+    },
+    {
+      "external_id": "17471114",
+      "title": "Sparky!",
+      "authors": [
+        "Jenny Offill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1406511241l/17471114.jpg",
+      "rank": 6,
+      "votes": 6768,
+      "winner": false
+    },
+    {
+      "external_id": "17043027",
+      "title": "Josephine",
+      "authors": [
+        "Patricia Hruby Powell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443780737l/17043027._SY600_.jpg",
+      "rank": 7,
+      "votes": 5394,
+      "winner": false
+    },
+    {
+      "external_id": "17243953",
+      "title": "Hi, Koo!",
+      "authors": [
+        "Jon J. Muth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1384382708l/17243953.jpg",
+      "rank": 8,
+      "votes": 5350,
+      "winner": false
+    },
+    {
+      "external_id": "18349512",
+      "title": "Here Comes the Easter Cat",
+      "authors": [
+        "Deborah Underwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414367729l/18349512.jpg",
+      "rank": 9,
+      "votes": 5329,
+      "winner": false
+    },
+    {
+      "external_id": "20708773",
+      "title": "Quest",
+      "authors": [
+        "Aaron Becker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400890167l/20708773.jpg",
+      "rank": 10,
+      "votes": 4611,
+      "winner": false
+    },
+    {
+      "external_id": "18295821",
+      "title": "The Adventures of Beekle",
+      "authors": [
+        "Dan Santat"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424308067l/18295821.jpg",
+      "rank": 11,
+      "votes": 2578,
+      "winner": false
+    },
+    {
+      "external_id": "18012466",
+      "title": "Maple",
+      "authors": [
+        "Lori Nichols"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1372044076l/18012466.jpg",
+      "rank": 12,
+      "votes": 2570,
+      "winner": false
+    },
+    {
+      "external_id": "17269361",
+      "title": "Knock Knock",
+      "authors": [
+        "Daniel Beaty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369817794l/17269361.jpg",
+      "rank": 13,
+      "votes": 2477,
+      "winner": false
+    },
+    {
+      "external_id": "17296693",
+      "title": "I Am Otter",
+      "authors": [
+        "Sam Garton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1384734675l/17296693.jpg",
+      "rank": 14,
+      "votes": 1849,
+      "winner": false
+    },
+    {
+      "external_id": "18166919",
+      "title": "Firefly July",
+      "authors": [
+        "Paul B. Janeczko"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1384015361l/18166919.jpg",
+      "rank": 15,
+      "votes": 1782,
+      "winner": false
+    },
+    {
+      "external_id": "18051269",
+      "title": "The Girl and the Bicycle",
+      "authors": [
+        "Mark Pett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398734284l/18051269.jpg",
+      "rank": 16,
+      "votes": 1709,
+      "winner": false
+    },
+    {
+      "external_id": "19565411",
+      "title": "Gaston",
+      "authors": [
+        "Kelly DiPucchio"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387665374l/19565411.jpg",
+      "rank": 17,
+      "votes": 1165,
+      "winner": false
+    },
+    {
+      "external_id": "14999830",
+      "title": "The Scraps Book",
+      "authors": [
+        "Lois Ehlert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1419212752l/14999830.jpg",
+      "rank": 18,
+      "votes": 1153,
+      "winner": false
+    },
+    {
+      "external_id": "20675319",
+      "title": "Bird of the Soul",
+      "authors": [
+        "Ilchi Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391387899l/20675319.jpg",
+      "rank": 19,
+      "votes": 1065,
+      "winner": false
+    },
+    {
+      "external_id": "20708761",
+      "title": "Sam & Dave Dig a Hole",
+      "authors": [
+        "Mac Barnett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1423771325l/20708761.jpg",
+      "rank": 20,
+      "votes": 692,
+      "winner": false
+    }
+  ]
+}

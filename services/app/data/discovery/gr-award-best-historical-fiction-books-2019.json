@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-historical-fiction-books-2019",
+  "kind": "award",
+  "title": "Historical Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-historical-fiction-books-2019",
+  "year": 2019,
+  "category": "Historical Fiction",
+  "genres": [
+    "historical-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:01.425685+00:00",
+  "books": [
+    {
+      "external_id": "40597810",
+      "title": "Daisy Jones & The Six",
+      "authors": [
+        "Taylor Jenkins Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1580255154l/40597810._SY600_.jpg",
+      "rank": 1,
+      "votes": 82483,
+      "winner": true
+    },
+    {
+      "external_id": "42279228",
+      "title": "The Nickel Boys",
+      "authors": [
+        "Colson Whitehead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1708798336l/42279228._SY600_.jpg",
+      "rank": 2,
+      "votes": 29362,
+      "winner": false
+    },
+    {
+      "external_id": "40390766",
+      "title": "The Huntress",
+      "authors": [
+        "Kate Quinn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1534172386l/40390766.jpg",
+      "rank": 3,
+      "votes": 25851,
+      "winner": false
+    },
+    {
+      "external_id": "42135029",
+      "title": "City of Girls",
+      "authors": [
+        "Elizabeth Gilbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545498817l/42135029.jpg",
+      "rank": 4,
+      "votes": 25671,
+      "winner": false
+    },
+    {
+      "external_id": "43925876",
+      "title": "The Giver of Stars",
+      "authors": [
+        "Jojo Moyes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1572879113l/43925876._SY600_.jpg",
+      "rank": 5,
+      "votes": 24250,
+      "winner": false
+    },
+    {
+      "external_id": "43982054",
+      "title": "The Water Dancer",
+      "authors": [
+        "Ta-Nehisi Coates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549993860l/43982054.jpg",
+      "rank": 6,
+      "votes": 24100,
+      "winner": false
+    },
+    {
+      "external_id": "40130093",
+      "title": "Once Upon a River",
+      "authors": [
+        "Diane Setterfield"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1526451355l/40130093.jpg",
+      "rank": 7,
+      "votes": 22234,
+      "winner": false
+    },
+    {
+      "external_id": "41556734",
+      "title": "The Lost Girls of Paris",
+      "authors": [
+        "Pam Jenoff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1535480126l/41556734.jpg",
+      "rank": 8,
+      "votes": 19298,
+      "winner": false
+    },
+    {
+      "external_id": "44318414",
+      "title": "The Dutch House",
+      "authors": [
+        "Ann Patchett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552334367l/44318414.jpg",
+      "rank": 9,
+      "votes": 18878,
+      "winner": false
+    },
+    {
+      "external_id": "42283286",
+      "title": "Summer of '69",
+      "authors": [
+        "Elin Hilderbrand"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1540085775l/42283286.jpg",
+      "rank": 10,
+      "votes": 16700,
+      "winner": false
+    },
+    {
+      "external_id": "40538657",
+      "title": "The Island of Sea Women",
+      "authors": [
+        "Lisa See"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549839392l/40538657._SY600_.jpg",
+      "rank": 11,
+      "votes": 8368,
+      "winner": false
+    },
+    {
+      "external_id": "40546098",
+      "title": "What the Wind Knows",
+      "authors": [
+        "Amy Harmon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1534991808l/40546098._SY600_.jpg",
+      "rank": 12,
+      "votes": 7423,
+      "winner": false
+    },
+    {
+      "external_id": "39863482",
+      "title": "The Night Tiger",
+      "authors": [
+        "Yangsze Choo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554191365l/39863482._SY600_.jpg",
+      "rank": 13,
+      "votes": 6799,
+      "winner": false
+    },
+    {
+      "external_id": "40988979",
+      "title": "Lost Roses",
+      "authors": [
+        "Martha Hall Kelly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1536843020l/40988979.jpg",
+      "rank": 14,
+      "votes": 5628,
+      "winner": false
+    },
+    {
+      "external_id": "42589678",
+      "title": "Mrs. Everything",
+      "authors": [
+        "Jennifer Weiner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1542051938l/42589678._SY600_.jpg",
+      "rank": 15,
+      "votes": 5387,
+      "winner": false
+    },
+    {
+      "external_id": "45033931",
+      "title": "Cilka's Journey",
+      "authors": [
+        "Heather   Morris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555421893l/45033931.jpg",
+      "rank": 16,
+      "votes": 3122,
+      "winner": false
+    },
+    {
+      "external_id": "42366224",
+      "title": "The Book Woman of Troublesome Creek",
+      "authors": [
+        "Kim Michele Richardson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556194034l/42366224.jpg",
+      "rank": 17,
+      "votes": 2940,
+      "winner": false
+    },
+    {
+      "external_id": "25813942",
+      "title": "This Tender Land",
+      "authors": [
+        "William Kent Krueger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565526433l/25813942.jpg",
+      "rank": 18,
+      "votes": 2280,
+      "winner": false
+    },
+    {
+      "external_id": "41555942",
+      "title": "Nottingham",
+      "authors": [
+        "Nathan Makaryk"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1574941380l/41555942._SY600_.jpg",
+      "rank": 19,
+      "votes": 1315,
+      "winner": false
+    },
+    {
+      "external_id": "41454042",
+      "title": "The Summer Country",
+      "authors": [
+        "Lauren Willig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1539182526l/41454042.jpg",
+      "rank": 20,
+      "votes": 754,
+      "winner": false
+    }
+  ]
+}

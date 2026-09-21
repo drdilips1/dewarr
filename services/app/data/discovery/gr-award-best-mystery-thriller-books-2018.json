@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-mystery-thriller-books-2018",
+  "kind": "award",
+  "title": "Mystery & Thriller",
+  "source_url": "https://www.goodreads.com/choiceawards/best-mystery-thriller-books-2018",
+  "year": 2018,
+  "category": "Mystery & Thriller",
+  "genres": [
+    "mystery"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:55.548019+00:00",
+  "books": [
+    {
+      "external_id": "36124936",
+      "title": "The Outsider",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1524596540l/36124936._SY600_.jpg",
+      "rank": 1,
+      "votes": 62170,
+      "winner": true
+    },
+    {
+      "external_id": "34848682",
+      "title": "The Woman in the Window",
+      "authors": [
+        "A.J. Finn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1496341857l/34848682.jpg",
+      "rank": 2,
+      "votes": 55003,
+      "winner": false
+    },
+    {
+      "external_id": "40696964",
+      "title": "Lethal White",
+      "authors": [
+        "Robert Galbraith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1538378095l/40696964.jpg",
+      "rank": 3,
+      "votes": 39287,
+      "winner": false
+    },
+    {
+      "external_id": "34189556",
+      "title": "The Wife Between Us",
+      "authors": [
+        "Greer Hendricks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1496862122l/34189556.jpg",
+      "rank": 4,
+      "votes": 26711,
+      "winner": false
+    },
+    {
+      "external_id": "35297426",
+      "title": "Then She Was Gone",
+      "authors": [
+        "Lisa Jewell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741291185l/35297426._SY600_.jpg",
+      "rank": 5,
+      "votes": 21868,
+      "winner": false
+    },
+    {
+      "external_id": "35085389",
+      "title": "The President Is Missing",
+      "authors": [
+        "Bill Clinton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510788525l/35085389.jpg",
+      "rank": 6,
+      "votes": 21436,
+      "winner": false
+    },
+    {
+      "external_id": "36373481",
+      "title": "The Death of Mrs. Westaway",
+      "authors": [
+        "Ruth Ware"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518710953l/36373481._SY600_.jpg",
+      "rank": 7,
+      "votes": 20231,
+      "winner": false
+    },
+    {
+      "external_id": "39723581",
+      "title": "The Witch Elm",
+      "authors": [
+        "Tana French"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1527311155l/39723581.jpg",
+      "rank": 8,
+      "votes": 18802,
+      "winner": false
+    },
+    {
+      "external_id": "34275222",
+      "title": "Force of Nature",
+      "authors": [
+        "Jane Harper"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1501790749l/34275222._SY600_.jpg",
+      "rank": 9,
+      "votes": 13347,
+      "winner": false
+    },
+    {
+      "external_id": "34275231",
+      "title": "Sometimes I Lie",
+      "authors": [
+        "Alice Feeney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1519037612l/34275231.jpg",
+      "rank": 10,
+      "votes": 11895,
+      "winner": false
+    },
+    {
+      "external_id": "36337550",
+      "title": "The 7½ Deaths of Evelyn Hardcastle",
+      "authors": [
+        "Stuart Turton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1506896221l/36337550.jpg",
+      "rank": 11,
+      "votes": 5979,
+      "winner": false
+    },
+    {
+      "external_id": "36388243",
+      "title": "Something in the Water",
+      "authors": [
+        "Catherine Steadman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1528120440l/36388243._SY600_.jpg",
+      "rank": 12,
+      "votes": 5864,
+      "winner": false
+    },
+    {
+      "external_id": "35356382",
+      "title": "The Chalk Man",
+      "authors": [
+        "C.J. Tudor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1568852018l/35356382._SY600_.jpg",
+      "rank": 13,
+      "votes": 4837,
+      "winner": false
+    },
+    {
+      "external_id": "35133064",
+      "title": "The Widows of Malabar Hill",
+      "authors": [
+        "Sujata Massey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1497293192l/35133064.jpg",
+      "rank": 14,
+      "votes": 4391,
+      "winner": false
+    },
+    {
+      "external_id": "37638161",
+      "title": "Leverage in Death",
+      "authors": [
+        "J.D. Robb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520020353l/37638161.jpg",
+      "rank": 15,
+      "votes": 3858,
+      "winner": false
+    },
+    {
+      "external_id": "36448554",
+      "title": "Bring Me Back",
+      "authors": [
+        "B.A. Paris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1508949859l/36448554.jpg",
+      "rank": 16,
+      "votes": 3494,
+      "winner": false
+    },
+    {
+      "external_id": "35305625",
+      "title": "The Broken Girls",
+      "authors": [
+        "Simone St. James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1497406195l/35305625.jpg",
+      "rank": 17,
+      "votes": 2447,
+      "winner": false
+    },
+    {
+      "external_id": "36750068",
+      "title": "The Last Time I Lied",
+      "authors": [
+        "Riley Sager"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1513115459l/36750068.jpg",
+      "rank": 18,
+      "votes": 2277,
+      "winner": false
+    },
+    {
+      "external_id": "36604959",
+      "title": "Jane Doe",
+      "authors": [
+        "Victoria Helen Stone"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1526358285l/36604959.jpg",
+      "rank": 19,
+      "votes": 1346,
+      "winner": false
+    },
+    {
+      "external_id": "38496758",
+      "title": "Wrecked",
+      "authors": [
+        "Joe Ide"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522081341l/38496758.jpg",
+      "rank": 20,
+      "votes": 1164,
+      "winner": false
+    }
+  ]
+}

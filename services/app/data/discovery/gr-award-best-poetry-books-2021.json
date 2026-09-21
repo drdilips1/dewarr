@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-poetry-books-2021",
+  "kind": "award",
+  "title": "Poetry",
+  "source_url": "https://www.goodreads.com/choiceawards/best-poetry-books-2021",
+  "year": 2021,
+  "category": "Poetry",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:17.239352+00:00",
+  "books": [
+    {
+      "external_id": "56914101",
+      "title": "The Hill We Climb",
+      "authors": [
+        "Amanda Gorman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612178266l/56914101.jpg",
+      "rank": 1,
+      "votes": 49251,
+      "winner": true
+    },
+    {
+      "external_id": "54359466",
+      "title": "Black Girl, Call Home",
+      "authors": [
+        "Jasmine Mans"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605310476l/54359466.jpg",
+      "rank": 2,
+      "votes": 13407,
+      "winner": false
+    },
+    {
+      "external_id": "54335207",
+      "title": "Shine your Icy Crown",
+      "authors": [
+        "Amanda Lovelace"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601825190l/54335207.jpg",
+      "rank": 3,
+      "votes": 11579,
+      "winner": false
+    },
+    {
+      "external_id": "58464584",
+      "title": "You Better Be Lightning",
+      "authors": [
+        "Andrea Gibson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1625108383l/58464584._SY600_.jpg",
+      "rank": 4,
+      "votes": 11388,
+      "winner": false
+    },
+    {
+      "external_id": "57007429",
+      "title": "I Hope This Finds You Well",
+      "authors": [
+        "Kate Baer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1625580074l/57007429._SY600_.jpg",
+      "rank": 5,
+      "votes": 10293,
+      "winner": false
+    },
+    {
+      "external_id": "55659276",
+      "title": "Where Hope Comes From",
+      "authors": [
+        "Nikita Gill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1607783800l/55659276._SY600_.jpg",
+      "rank": 6,
+      "votes": 9184,
+      "winner": false
+    },
+    {
+      "external_id": "56802114",
+      "title": "Goldenrod",
+      "authors": [
+        "Maggie  Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620951436l/56802114.jpg",
+      "rank": 7,
+      "votes": 8950,
+      "winner": false
+    },
+    {
+      "external_id": "50498335",
+      "title": "Me",
+      "authors": [
+        "Amber McBride"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1603796610l/50498335.jpg",
+      "rank": 8,
+      "votes": 6933,
+      "winner": false
+    },
+    {
+      "external_id": "54335204",
+      "title": "Clarity & Connection",
+      "authors": [
+        "Yung Pueblo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611502539l/54335204.jpg",
+      "rank": 9,
+      "votes": 6889,
+      "winner": false
+    },
+    {
+      "external_id": "54416144",
+      "title": "Home Is Not a Country",
+      "authors": [
+        "Safia Elhillo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600022140l/54416144.jpg",
+      "rank": 10,
+      "votes": 6658,
+      "winner": false
+    },
+    {
+      "external_id": "56950454",
+      "title": "Look Mom I’m a Poet",
+      "authors": [
+        "Andrew Shaffer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612469538l/56950454._SY600_.jpg",
+      "rank": 11,
+      "votes": 2371,
+      "winner": false
+    },
+    {
+      "external_id": "53240799",
+      "title": "If I Tell You the Truth",
+      "authors": [
+        "Jasmin Kaur"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1592843884l/53240799.jpg",
+      "rank": 12,
+      "votes": 2355,
+      "winner": false
+    },
+    {
+      "external_id": "54287653",
+      "title": "How Far You Have Come",
+      "authors": [
+        "Morgan Harper Nichols"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1606941062l/54287653._SY600_.jpg",
+      "rank": 13,
+      "votes": 2199,
+      "winner": false
+    },
+    {
+      "external_id": "51135126",
+      "title": "I'll Fly Away",
+      "authors": [
+        "Rudy Francisco"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1586817760l/51135126.jpg",
+      "rank": 14,
+      "votes": 2137,
+      "winner": false
+    },
+    {
+      "external_id": "54419215",
+      "title": "Chlorine Sky",
+      "authors": [
+        "Mahogany L. Browne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1595815459l/54419215.jpg",
+      "rank": 15,
+      "votes": 2084,
+      "winner": false
+    },
+    {
+      "external_id": "54482759",
+      "title": "Call Me Athena",
+      "authors": [
+        "Colby Cedar Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1607456965l/54482759._SY600_.jpg",
+      "rank": 16,
+      "votes": 2042,
+      "winner": false
+    },
+    {
+      "external_id": "53402145",
+      "title": "American Melancholy",
+      "authors": [
+        "Joyce Carol Oates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594617555l/53402145.jpg",
+      "rank": 17,
+      "votes": 2023,
+      "winner": false
+    },
+    {
+      "external_id": "55829991",
+      "title": "I am The Rage",
+      "authors": [
+        "Martina McGowan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1609766560l/55829991.jpg",
+      "rank": 18,
+      "votes": 1684,
+      "winner": false
+    },
+    {
+      "external_id": "56462368",
+      "title": "When We Make It",
+      "authors": [
+        "Elisabet Velasquez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617468430l/56462368.jpg",
+      "rank": 19,
+      "votes": 1601,
+      "winner": false
+    },
+    {
+      "external_id": "53398748",
+      "title": "God I Feel Modern Tonight",
+      "authors": [
+        "Catherine Cohen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602562964l/53398748.jpg",
+      "rank": 20,
+      "votes": 937,
+      "winner": false
+    }
+  ]
+}

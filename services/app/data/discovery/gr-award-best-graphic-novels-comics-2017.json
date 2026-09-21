@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-graphic-novels-comics-2017",
+  "kind": "award",
+  "title": "Graphic Novels & Comics",
+  "source_url": "https://www.goodreads.com/choiceawards/best-graphic-novels-comics-2017",
+  "year": 2017,
+  "category": "Graphic Novels & Comics",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:46.892702+00:00",
+  "books": [
+    {
+      "external_id": "30754980",
+      "title": "Big Mushy Happy Lump",
+      "authors": [
+        "Sarah Andersen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1490071048l/30754980._SY600_.jpg",
+      "rank": 1,
+      "votes": 26647,
+      "winner": true
+    },
+    {
+      "external_id": "31223882",
+      "title": "Wonder Woman, Vol. 1",
+      "authors": [
+        "Greg Rucka"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476757866l/31223882._SY600_.jpg",
+      "rank": 2,
+      "votes": 22585,
+      "winner": false
+    },
+    {
+      "external_id": "29237211",
+      "title": "Saga, Volume 7",
+      "authors": [
+        "Brian K. Vaughan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642677880l/29237211.jpg",
+      "rank": 3,
+      "votes": 21597,
+      "winner": false
+    },
+    {
+      "external_id": "29772863",
+      "title": "Wires and Nerve",
+      "authors": [
+        "Marissa Meyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470414564l/29772863.jpg",
+      "rank": 4,
+      "votes": 17871,
+      "winner": false
+    },
+    {
+      "external_id": "33540347",
+      "title": "Monstress, Volume 2",
+      "authors": [
+        "Marjorie M. Liu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729013778l/33540347.jpg",
+      "rank": 5,
+      "votes": 13846,
+      "winner": false
+    },
+    {
+      "external_id": "31145178",
+      "title": "Real Friends",
+      "authors": [
+        "Shannon Hale"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1503615816l/31145178._SY600_.jpg",
+      "rank": 6,
+      "votes": 10937,
+      "winner": false
+    },
+    {
+      "external_id": "29775583",
+      "title": "Civil War II",
+      "authors": [
+        "G. Willow Wilson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481861058l/29775583._SY600_.jpg",
+      "rank": 7,
+      "votes": 10574,
+      "winner": false
+    },
+    {
+      "external_id": "32497911",
+      "title": "Everyone's a Aliebn When Ur a Aliebn Too",
+      "authors": [
+        "Jomny Sun"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481043739l/32497911._SY600_.jpg",
+      "rank": 8,
+      "votes": 9627,
+      "winner": false
+    },
+    {
+      "external_id": "29936927",
+      "title": "The Best We Could Do",
+      "authors": [
+        "Thi Bui"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461818306l/29936927.jpg",
+      "rank": 9,
+      "votes": 8880,
+      "winner": false
+    },
+    {
+      "external_id": "31338724",
+      "title": "Paper Girls, Volume 2",
+      "authors": [
+        "Brian K. Vaughan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1656849325l/31338724.jpg",
+      "rank": 10,
+      "votes": 8728,
+      "winner": false
+    },
+    {
+      "external_id": "28953803",
+      "title": "Lumberjanes, Vol. 5",
+      "authors": [
+        "N.D. Stevenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476029830l/28953803._SY600_.jpg",
+      "rank": 11,
+      "votes": 3679,
+      "winner": false
+    },
+    {
+      "external_id": "29069374",
+      "title": "My Favorite Thing Is Monsters, Vol. 1",
+      "authors": [
+        "Emil Ferris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1580775137l/29069374._SY600_.jpg",
+      "rank": 12,
+      "votes": 3064,
+      "winner": false
+    },
+    {
+      "external_id": "33161035",
+      "title": "The Legend of Korra",
+      "authors": [
+        "Michael Dante DiMartino"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1494028061l/33161035._SY600_.jpg",
+      "rank": 13,
+      "votes": 2633,
+      "winner": false
+    },
+    {
+      "external_id": "29507117",
+      "title": "The Vision, Vol. 2",
+      "authors": [
+        "Tom     King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1480727492l/29507117._SY600_.jpg",
+      "rank": 14,
+      "votes": 1669,
+      "winner": false
+    },
+    {
+      "external_id": "31387199",
+      "title": "The Black Monday Murders, Vol. 1",
+      "authors": [
+        "Jonathan Hickman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483433389l/31387199._SY600_.jpg",
+      "rank": 15,
+      "votes": 1208,
+      "winner": false
+    },
+    {
+      "external_id": "25893783",
+      "title": "Black Hammer, Vol. 1",
+      "authors": [
+        "Jeff Lemire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1539824649l/25893783._SY600_.jpg",
+      "rank": 16,
+      "votes": 891,
+      "winner": false
+    },
+    {
+      "external_id": "29972029",
+      "title": "Bitch Planet, Vol. 2",
+      "authors": [
+        "Kelly Sue DeConnick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461253315l/29972029.jpg",
+      "rank": 17,
+      "votes": 773,
+      "winner": false
+    },
+    {
+      "external_id": "33585540",
+      "title": "The Wicked + The Divine, Vol. 5",
+      "authors": [
+        "Kieron Gillen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1761793076l/33585540.jpg",
+      "rank": 18,
+      "votes": 749,
+      "winner": false
+    },
+    {
+      "external_id": "36206433",
+      "title": "Username",
+      "authors": [
+        "Joe Sugg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1504895095l/36206433._SY600_.jpg",
+      "rank": 19,
+      "votes": 674,
+      "winner": false
+    },
+    {
+      "external_id": "31145185",
+      "title": "Spill Zone",
+      "authors": [
+        "Scott Westerfeld"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511656473l/31145185._SY600_.jpg",
+      "rank": 20,
+      "votes": 458,
+      "winner": false
+    }
+  ]
+}

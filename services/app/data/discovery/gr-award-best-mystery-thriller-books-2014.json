@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-mystery-thriller-books-2014",
+  "kind": "award",
+  "title": "Mystery & Thriller",
+  "source_url": "https://www.goodreads.com/choiceawards/best-mystery-thriller-books-2014",
+  "year": 2014,
+  "category": "Mystery & Thriller",
+  "genres": [
+    "mystery"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:00.907018+00:00",
+  "books": [
+    {
+      "external_id": "18775247",
+      "title": "Mr. Mercedes",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1468705326l/18775247._SY600_.jpg",
+      "rank": 1,
+      "votes": 41453,
+      "winner": true
+    },
+    {
+      "external_id": "18214414",
+      "title": "The Silkworm",
+      "authors": [
+        "Robert Galbraith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1540217126l/18214414.jpg",
+      "rank": 2,
+      "votes": 41034,
+      "winner": false
+    },
+    {
+      "external_id": "18209454",
+      "title": "The Thousand-Dollar Tan Line",
+      "authors": [
+        "Rob Thomas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1393100477l/18209454.jpg",
+      "rank": 3,
+      "votes": 23255,
+      "winner": false
+    },
+    {
+      "external_id": "20821249",
+      "title": "Festive in Death",
+      "authors": [
+        "J.D. Robb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1396639010l/20821249.jpg",
+      "rank": 4,
+      "votes": 17646,
+      "winner": false
+    },
+    {
+      "external_id": "19004663",
+      "title": "Top Secret Twenty-One",
+      "authors": [
+        "Janet Evanovich"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394500766l/19004663.jpg",
+      "rank": 5,
+      "votes": 16896,
+      "winner": false
+    },
+    {
+      "external_id": "19561922",
+      "title": "The Long Way Home",
+      "authors": [
+        "Louise Penny"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1396828238l/19561922.jpg",
+      "rank": 6,
+      "votes": 16890,
+      "winner": false
+    },
+    {
+      "external_id": "20821043",
+      "title": "The Secret Place",
+      "authors": [
+        "Tana French"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1538064620l/20821043._SY600_.jpg",
+      "rank": 7,
+      "votes": 14297,
+      "winner": false
+    },
+    {
+      "external_id": "19101283",
+      "title": "The Son",
+      "authors": [
+        "Jo Nesbø"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390177620l/19101283.jpg",
+      "rank": 8,
+      "votes": 12496,
+      "winner": false
+    },
+    {
+      "external_id": "18144124",
+      "title": "I Am Pilgrim",
+      "authors": [
+        "Terry Hayes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403345411l/18144124.jpg",
+      "rank": 9,
+      "votes": 12270,
+      "winner": false
+    },
+    {
+      "external_id": "17834904",
+      "title": "The Dead in Their Vaulted Arches",
+      "authors": [
+        "Alan Bradley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1432578235l/17834904._SY600_.jpg",
+      "rank": 10,
+      "votes": 11237,
+      "winner": false
+    },
+    {
+      "external_id": "18114060",
+      "title": "Missing You",
+      "authors": [
+        "Harlan Coben"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1373737793l/18114060.jpg",
+      "rank": 11,
+      "votes": 6631,
+      "winner": false
+    },
+    {
+      "external_id": "17333227",
+      "title": "The Gods of Guilt",
+      "authors": [
+        "Michael Connelly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362529630l/17333227.jpg",
+      "rank": 12,
+      "votes": 6333,
+      "winner": false
+    },
+    {
+      "external_id": "18505832",
+      "title": "Natchez Burning",
+      "authors": [
+        "Greg Iles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1383438264l/18505832.jpg",
+      "rank": 13,
+      "votes": 5992,
+      "winner": false
+    },
+    {
+      "external_id": "18812405",
+      "title": "The Good Girl",
+      "authors": [
+        "Mary Kubica"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388340126l/18812405.jpg",
+      "rank": 14,
+      "votes": 4955,
+      "winner": false
+    },
+    {
+      "external_id": "20736539",
+      "title": "In the Blood",
+      "authors": [
+        "Lisa Unger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405872316l/20736539.jpg",
+      "rank": 15,
+      "votes": 3312,
+      "winner": false
+    },
+    {
+      "external_id": "20263040",
+      "title": "Personal",
+      "authors": [
+        "Lee Child"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1468705564l/20263040.jpg",
+      "rank": 16,
+      "votes": 2842,
+      "winner": false
+    },
+    {
+      "external_id": "18353714",
+      "title": "The Target",
+      "authors": [
+        "David Baldacci"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391463804l/18353714.jpg",
+      "rank": 17,
+      "votes": 2598,
+      "winner": false
+    },
+    {
+      "external_id": "20454672",
+      "title": "Mean Streak",
+      "authors": [
+        "Sandra       Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1399916694l/20454672.jpg",
+      "rank": 18,
+      "votes": 2244,
+      "winner": false
+    },
+    {
+      "external_id": "18209468",
+      "title": "The Weight of Blood",
+      "authors": [
+        "Laura McHugh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395611141l/18209468.jpg",
+      "rank": 19,
+      "votes": 1714,
+      "winner": false
+    },
+    {
+      "external_id": "17934463",
+      "title": "Runner",
+      "authors": [
+        "Patrick  Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390036544l/17934463.jpg",
+      "rank": 20,
+      "votes": 1480,
+      "winner": false
+    }
+  ]
+}

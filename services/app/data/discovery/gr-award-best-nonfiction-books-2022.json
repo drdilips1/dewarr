@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-nonfiction-books-2022",
+  "kind": "award",
+  "title": "Nonfiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-nonfiction-books-2022",
+  "year": 2022,
+  "category": "Nonfiction",
+  "genres": [
+    "non-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:46.702133+00:00",
+  "books": [
+    {
+      "external_id": "58330567",
+      "title": "Atlas of the Heart",
+      "authors": [
+        "Brené Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630947399l/58330567._SY600_.jpg",
+      "rank": 1,
+      "votes": 34200,
+      "winner": true
+    },
+    {
+      "external_id": "57693618",
+      "title": "Unmasked",
+      "authors": [
+        "Paul Holes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1687444591l/57693618._SY600_.jpg",
+      "rank": 2,
+      "votes": 28094,
+      "winner": false
+    },
+    {
+      "external_id": "58536046",
+      "title": "Why Has Nobody Told Me This Before?",
+      "authors": [
+        "Julie      Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1670001084l/58536046._SY600_.jpg",
+      "rank": 3,
+      "votes": 23322,
+      "winner": false
+    },
+    {
+      "external_id": "60190659",
+      "title": "What If? 2",
+      "authors": [
+        "Randall Munroe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1643644004l/60190659.jpg",
+      "rank": 4,
+      "votes": 19805,
+      "winner": false
+    },
+    {
+      "external_id": "56922687",
+      "title": "These Precious Days",
+      "authors": [
+        "Ann Patchett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1621841000l/56922687.jpg",
+      "rank": 5,
+      "votes": 19123,
+      "winner": false
+    },
+    {
+      "external_id": "58724737",
+      "title": "All the Living and the Dead",
+      "authors": [
+        "Hayley Campbell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1647804467l/58724737.jpg",
+      "rank": 6,
+      "votes": 18031,
+      "winner": false
+    },
+    {
+      "external_id": "58537332",
+      "title": "The Myth of Normal",
+      "authors": [
+        "Gabor Maté"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1647801716l/58537332.jpg",
+      "rank": 7,
+      "votes": 14258,
+      "winner": false
+    },
+    {
+      "external_id": "58484901",
+      "title": "How to Be Perfect",
+      "authors": [
+        "Michael Schur"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642042986l/58484901.jpg",
+      "rank": 8,
+      "votes": 14071,
+      "winner": false
+    },
+    {
+      "external_id": "59575939",
+      "title": "An Immense World",
+      "authors": [
+        "Ed Yong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1652105350l/59575939.jpg",
+      "rank": 9,
+      "votes": 13983,
+      "winner": false
+    },
+    {
+      "external_id": "58734811",
+      "title": "Bittersweet",
+      "authors": [
+        "Susan Cain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1637095772l/58734811.jpg",
+      "rank": 10,
+      "votes": 12465,
+      "winner": false
+    },
+    {
+      "external_id": "58848151",
+      "title": "The Trayvon Generation",
+      "authors": [
+        "Elizabeth Alexander"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1638159186l/58848151.jpg",
+      "rank": 11,
+      "votes": 4548,
+      "winner": false
+    },
+    {
+      "external_id": "59808487",
+      "title": "Starry Messenger",
+      "authors": [
+        "Neil deGrasse Tyson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1651630947l/59808487.jpg",
+      "rank": 12,
+      "votes": 4208,
+      "winner": false
+    },
+    {
+      "external_id": "59148726",
+      "title": "Rogues",
+      "authors": [
+        "Patrick Radden Keefe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1636978568l/59148726.jpg",
+      "rank": 13,
+      "votes": 3646,
+      "winner": false
+    },
+    {
+      "external_id": "60321392",
+      "title": "The Song of the Cell",
+      "authors": [
+        "Siddhartha Mukherjee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1666198162l/60321392.jpg",
+      "rank": 14,
+      "votes": 3532,
+      "winner": false
+    },
+    {
+      "external_id": "58446721",
+      "title": "The Power of Regret",
+      "authors": [
+        "Daniel H. Pink"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631506945l/58446721.jpg",
+      "rank": 15,
+      "votes": 3513,
+      "winner": false
+    },
+    {
+      "external_id": "60149558",
+      "title": "Visual Thinking",
+      "authors": [
+        "Temple Grandin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1646647785l/60149558.jpg",
+      "rank": 16,
+      "votes": 3469,
+      "winner": false
+    },
+    {
+      "external_id": "57933306",
+      "title": "Stolen Focus",
+      "authors": [
+        "Johann Hari"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1626718328l/57933306.jpg",
+      "rank": 17,
+      "votes": 3257,
+      "winner": false
+    },
+    {
+      "external_id": "55276620",
+      "title": "South to America",
+      "authors": [
+        "Imani Perry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628531701l/55276620.jpg",
+      "rank": 18,
+      "votes": 3116,
+      "winner": false
+    },
+    {
+      "external_id": "56269163",
+      "title": "A Taste for Poison",
+      "authors": [
+        "Neil Bradbury"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1626116898l/56269163.jpg",
+      "rank": 19,
+      "votes": 3034,
+      "winner": false
+    },
+    {
+      "external_id": "59616977",
+      "title": "Building a Second Brain",
+      "authors": [
+        "Tiago Forte"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1652891488l/59616977.jpg",
+      "rank": 20,
+      "votes": 1751,
+      "winner": false
+    }
+  ]
+}

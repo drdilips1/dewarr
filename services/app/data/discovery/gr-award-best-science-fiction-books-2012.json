@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-science-fiction-books-2012",
+  "kind": "award",
+  "title": "Science Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-fiction-books-2012",
+  "year": 2012,
+  "category": "Science Fiction",
+  "genres": [
+    "science-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:07.749558+00:00",
+  "books": [
+    {
+      "external_id": "13147230",
+      "title": "The Long Earth",
+      "authors": [
+        "Terry Pratchett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1335532694l/13147230.jpg",
+      "rank": 1,
+      "votes": 7670,
+      "winner": true
+    },
+    {
+      "external_id": "13453029",
+      "title": "Wool Omnibus",
+      "authors": [
+        "Hugh Howey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349614200l/13453029.jpg",
+      "rank": 2,
+      "votes": 5624,
+      "winner": false
+    },
+    {
+      "external_id": "13055592",
+      "title": "Redshirts",
+      "authors": [
+        "John Scalzi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348617890l/13055592.jpg",
+      "rank": 3,
+      "votes": 4618,
+      "winner": false
+    },
+    {
+      "external_id": "11099729",
+      "title": "Darth Plagueis",
+      "authors": [
+        "James Luceno"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405546262l/11099729.jpg",
+      "rank": 4,
+      "votes": 4584,
+      "winner": false
+    },
+    {
+      "external_id": "12040447",
+      "title": "Shadows in Flight",
+      "authors": [
+        "Orson Scott Card"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395376383l/12040447.jpg",
+      "rank": 5,
+      "votes": 3416,
+      "winner": false
+    },
+    {
+      "external_id": "12953520",
+      "title": "Year Zero",
+      "authors": [
+        "Rob  Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1340573020l/12953520.jpg",
+      "rank": 6,
+      "votes": 2839,
+      "winner": false
+    },
+    {
+      "external_id": "13085609",
+      "title": "The Janus Affair",
+      "authors": [
+        "Pip Ballantine"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328960260l/13085609.jpg",
+      "rank": 7,
+      "votes": 2579,
+      "winner": false
+    },
+    {
+      "external_id": "12266560",
+      "title": "Angelmaker",
+      "authors": [
+        "Nick Harkaway"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1326121401l/12266560.jpg",
+      "rank": 8,
+      "votes": 2204,
+      "winner": false
+    },
+    {
+      "external_id": "10772954",
+      "title": "Alien Proliferation",
+      "authors": [
+        "Gini Koch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1309129293l/10772954.jpg",
+      "rank": 9,
+      "votes": 1812,
+      "winner": false
+    },
+    {
+      "external_id": "12591698",
+      "title": "Caliban’s War",
+      "authors": [
+        "James S.A. Corey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1407572377l/12591698.jpg",
+      "rank": 10,
+      "votes": 1506,
+      "winner": false
+    },
+    {
+      "external_id": "13543136",
+      "title": "Endgame",
+      "authors": [
+        "Ann Aguirre"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1334372113l/13543136.jpg",
+      "rank": 11,
+      "votes": 759,
+      "winner": false
+    },
+    {
+      "external_id": "12952546",
+      "title": "Deep Sky",
+      "authors": [
+        "Patrick  Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348921562l/12952546.jpg",
+      "rank": 12,
+      "votes": 668,
+      "winner": false
+    },
+    {
+      "external_id": "13542606",
+      "title": "Kill Decision",
+      "authors": [
+        "Daniel Suarez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1332376530l/13542606.jpg",
+      "rank": 13,
+      "votes": 649,
+      "winner": false
+    },
+    {
+      "external_id": "12398719",
+      "title": "Invincible",
+      "authors": [
+        "Jack Campbell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348688226l/12398719.jpg",
+      "rank": 14,
+      "votes": 572,
+      "winner": false
+    },
+    {
+      "external_id": "12269981",
+      "title": "A Rising Thunder",
+      "authors": [
+        "David  Weber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1312412252l/12269981.jpg",
+      "rank": 15,
+      "votes": 521,
+      "winner": false
+    },
+    {
+      "external_id": "12377547",
+      "title": "Blue Remembered Earth",
+      "authors": [
+        "Alastair Reynolds"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1334097015l/12377547.jpg",
+      "rank": 16,
+      "votes": 430,
+      "winner": false
+    },
+    {
+      "external_id": "11830394",
+      "title": "2312",
+      "authors": [
+        "Kim Stanley Robinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405778758l/11830394.jpg",
+      "rank": 17,
+      "votes": 422,
+      "winner": false
+    },
+    {
+      "external_id": "12998057",
+      "title": "Captain Vorpatril's Alliance",
+      "authors": [
+        "Lois McMaster Bujold"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333475380l/12998057.jpg",
+      "rank": 18,
+      "votes": 311,
+      "winner": false
+    },
+    {
+      "external_id": "15698799",
+      "title": "Incursion",
+      "authors": [
+        "Aleksandr Voinov"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1339279813l/15698799._SX318_SY475_.jpg",
+      "rank": 19,
+      "votes": 286,
+      "winner": false
+    },
+    {
+      "external_id": "13528419",
+      "title": "The Hydrogen Sonata",
+      "authors": [
+        "Iain M. Banks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1340894482l/13528419.jpg",
+      "rank": 20,
+      "votes": 189,
+      "winner": false
+    }
+  ]
+}

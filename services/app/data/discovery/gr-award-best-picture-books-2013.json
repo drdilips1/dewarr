@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-picture-books-2013",
+  "kind": "award",
+  "title": "Picture Books",
+  "source_url": "https://www.goodreads.com/choiceawards/best-picture-books-2013",
+  "year": 2013,
+  "category": "Picture Books",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:57.805571+00:00",
+  "books": [
+    {
+      "external_id": "16101018",
+      "title": "The Day the Crayons Quit",
+      "authors": [
+        "Drew Daywalt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1397425766l/16101018.jpg",
+      "rank": 1,
+      "votes": 9087,
+      "winner": true
+    },
+    {
+      "external_id": "15790852",
+      "title": "The Dark",
+      "authors": [
+        "Lemony Snicket"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1350766092l/15790852.jpg",
+      "rank": 2,
+      "votes": 8466,
+      "winner": false
+    },
+    {
+      "external_id": "15727792",
+      "title": "Chu's Day",
+      "authors": [
+        "Neil Gaiman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1350289203l/15727792.jpg",
+      "rank": 3,
+      "votes": 7124,
+      "winner": false
+    },
+    {
+      "external_id": "13260645",
+      "title": "A Little Book of Sloth",
+      "authors": [
+        "Lucy Cooke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1376784442l/13260645.jpg",
+      "rank": 4,
+      "votes": 6248,
+      "winner": false
+    },
+    {
+      "external_id": "17262290",
+      "title": "Journey",
+      "authors": [
+        "Aaron Becker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552528957l/17262290._SY600_.jpg",
+      "rank": 5,
+      "votes": 4893,
+      "winner": false
+    },
+    {
+      "external_id": "16250904",
+      "title": "Unicorn Thinks He's Pretty Great",
+      "authors": [
+        "Bob Shea"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1613377096l/16250904.jpg",
+      "rank": 6,
+      "votes": 4480,
+      "winner": false
+    },
+    {
+      "external_id": "15818453",
+      "title": "My Brother's Book",
+      "authors": [
+        "Maurice Sendak"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1357588555l/15818453.jpg",
+      "rank": 7,
+      "votes": 3542,
+      "winner": false
+    },
+    {
+      "external_id": "16650266",
+      "title": "Count the Monkeys",
+      "authors": [
+        "Mac Barnett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1360564793l/16650266.jpg",
+      "rank": 8,
+      "votes": 2975,
+      "winner": false
+    },
+    {
+      "external_id": "15791063",
+      "title": "Flora and the Flamingo",
+      "authors": [
+        "Molly Idle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424309341l/15791063.jpg",
+      "rank": 9,
+      "votes": 2895,
+      "winner": false
+    },
+    {
+      "external_id": "16285053",
+      "title": "That Is Not a Good Idea!",
+      "authors": [
+        "Mo Willems"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355994101l/16285053.jpg",
+      "rank": 10,
+      "votes": 2805,
+      "winner": false
+    },
+    {
+      "external_id": "15798648",
+      "title": "The Matchbox Diary",
+      "authors": [
+        "Paul Fleischman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351213489l/15798648.jpg",
+      "rank": 11,
+      "votes": 1451,
+      "winner": false
+    },
+    {
+      "external_id": "17333265",
+      "title": "Mr. Tiger Goes Wild",
+      "authors": [
+        "Peter  Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1361746283l/17333265.jpg",
+      "rank": 12,
+      "votes": 1398,
+      "winner": false
+    },
+    {
+      "external_id": "15815400",
+      "title": "Exclamation Mark",
+      "authors": [
+        "Amy Krouse Rosenthal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1350532222l/15815400.jpg",
+      "rank": 13,
+      "votes": 1171,
+      "winner": false
+    },
+    {
+      "external_id": "13792593",
+      "title": "Open This Little Book",
+      "authors": [
+        "Jesse Klausmeier"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1346377042l/13792593.jpg",
+      "rank": 14,
+      "votes": 1125,
+      "winner": false
+    },
+    {
+      "external_id": "14955390",
+      "title": "On a Beam of Light",
+      "authors": [
+        "Jennifer  Berne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1368424385l/14955390.jpg",
+      "rank": 15,
+      "votes": 924,
+      "winner": false
+    },
+    {
+      "external_id": "17165875",
+      "title": "Mr. Wuffles!",
+      "authors": [
+        "David Wiesner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391613176l/17165875.jpg",
+      "rank": 16,
+      "votes": 857,
+      "winner": false
+    },
+    {
+      "external_id": "15814439",
+      "title": "Mustache Baby",
+      "authors": [
+        "Bridget Heos"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348098491l/15814439.jpg",
+      "rank": 17,
+      "votes": 726,
+      "winner": false
+    },
+    {
+      "external_id": "17655209",
+      "title": "Deck the Walls",
+      "authors": [
+        "Erin Dealey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1384124116l/17655209.jpg",
+      "rank": 18,
+      "votes": 338,
+      "winner": false
+    },
+    {
+      "external_id": "15953632",
+      "title": "If You Want to See a Whale",
+      "authors": [
+        "Julie Fogliano"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355111071l/15953632.jpg",
+      "rank": 19,
+      "votes": 253,
+      "winner": false
+    },
+    {
+      "external_id": "15926775",
+      "title": "Sophie's Squash",
+      "authors": [
+        "Pat Zietlow Miller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404959958l/15926775.jpg",
+      "rank": 20,
+      "votes": 239,
+      "winner": false
+    }
+  ]
+}

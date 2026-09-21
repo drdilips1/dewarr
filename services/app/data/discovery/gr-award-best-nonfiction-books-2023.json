@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-nonfiction-books-2023",
+  "kind": "award",
+  "title": "Nonfiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-nonfiction-books-2023",
+  "year": 2023,
+  "category": "Nonfiction",
+  "genres": [
+    "non-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:29.010954+00:00",
+  "books": [
+    {
+      "external_id": "61358638",
+      "title": "Poverty, by America",
+      "authors": [
+        "Matthew Desmond"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1665696294l/61358638._SY600_.jpg",
+      "rank": 1,
+      "votes": 25910,
+      "winner": true
+    },
+    {
+      "external_id": "59366123",
+      "title": "Butts",
+      "authors": [
+        "Heather Radke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1667415133l/59366123.jpg",
+      "rank": 2,
+      "votes": 25413,
+      "winner": false
+    },
+    {
+      "external_id": "62873378",
+      "title": "The Art Thief",
+      "authors": [
+        "Michael Finkel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1701688707l/62873378._SY600_.jpg",
+      "rank": 3,
+      "votes": 24429,
+      "winner": false
+    },
+    {
+      "external_id": "61886251",
+      "title": "8 Rules of Love",
+      "authors": [
+        "Jay Shetty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673299423l/61886251.jpg",
+      "rank": 4,
+      "votes": 18122,
+      "winner": false
+    },
+    {
+      "external_id": "63876551",
+      "title": "On Our Best Behavior",
+      "authors": [
+        "Elise Loehnen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684817671l/63876551.jpg",
+      "rank": 5,
+      "votes": 17535,
+      "winner": false
+    },
+    {
+      "external_id": "138505710",
+      "title": "Doppelganger",
+      "authors": [
+        "Naomi Klein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1689105362l/138505710._SY600_.jpg",
+      "rank": 6,
+      "votes": 16718,
+      "winner": false
+    },
+    {
+      "external_id": "61153739",
+      "title": "Outlive",
+      "authors": [
+        "Peter Attia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1700067079l/61153739._SY600_.jpg",
+      "rank": 7,
+      "votes": 16108,
+      "winner": false
+    },
+    {
+      "external_id": "60965426",
+      "title": "The Creative Act",
+      "authors": [
+        "Rick Rubin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1663707011l/60965426.jpg",
+      "rank": 8,
+      "votes": 15603,
+      "winner": false
+    },
+    {
+      "external_id": "64000414",
+      "title": "Trail of the Lost",
+      "authors": [
+        "Andrea Lankford"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1701183131l/64000414._SY600_.jpg",
+      "rank": 9,
+      "votes": 15274,
+      "winner": false
+    },
+    {
+      "external_id": "60769830",
+      "title": "How Far the Light Reaches",
+      "authors": [
+        "Sabrina Imbler"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1665468908l/60769830.jpg",
+      "rank": 10,
+      "votes": 14617,
+      "winner": false
+    },
+    {
+      "external_id": "123195171",
+      "title": "Opinions",
+      "authors": [
+        "Roxane Gay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1692819821l/123195171._SY600_.jpg",
+      "rank": 11,
+      "votes": 4601,
+      "winner": false
+    },
+    {
+      "external_id": "75494215",
+      "title": "Eve",
+      "authors": [
+        "Cat Bohannon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684815183l/75494215.jpg",
+      "rank": 12,
+      "votes": 4215,
+      "winner": false
+    },
+    {
+      "external_id": "60784614",
+      "title": "Cobalt Red",
+      "authors": [
+        "Siddharth Kara"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1666032360l/60784614.jpg",
+      "rank": 13,
+      "votes": 3809,
+      "winner": false
+    },
+    {
+      "external_id": "157095669",
+      "title": "Hidden Potential",
+      "authors": [
+        "Adam M. Grant"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1689111352l/157095669._SY600_.jpg",
+      "rank": 14,
+      "votes": 3789,
+      "winner": false
+    },
+    {
+      "external_id": "62586003",
+      "title": "Ultra-Processed People",
+      "authors": [
+        "Chris van Tulleken"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1679715862l/62586003.jpg",
+      "rank": 15,
+      "votes": 3697,
+      "winner": false
+    },
+    {
+      "external_id": "61685822",
+      "title": "Monsters",
+      "authors": [
+        "Claire Dederer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673870643l/61685822.jpg",
+      "rank": 16,
+      "votes": 3672,
+      "winner": false
+    },
+    {
+      "external_id": "65214406",
+      "title": "Punished for Dreaming",
+      "authors": [
+        "Bettina L. Love"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675084406l/65214406.jpg",
+      "rank": 17,
+      "votes": 2851,
+      "winner": false
+    },
+    {
+      "external_id": "63102846",
+      "title": "Never Finished",
+      "authors": [
+        "David Goggins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1666753060l/63102846._SY600_.jpg",
+      "rank": 18,
+      "votes": 2848,
+      "winner": false
+    },
+    {
+      "external_id": "61273746",
+      "title": "The Good Life",
+      "authors": [
+        "Robert Waldinger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1671054230l/61273746.jpg",
+      "rank": 19,
+      "votes": 2616,
+      "winner": false
+    },
+    {
+      "external_id": "137978862",
+      "title": "Build the Life You Want",
+      "authors": [
+        "Arthur C. Brooks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1692830209l/137978862._SY600_.jpg",
+      "rank": 20,
+      "votes": 2202,
+      "winner": false
+    }
+  ]
+}

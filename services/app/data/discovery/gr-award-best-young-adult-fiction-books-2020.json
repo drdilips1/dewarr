@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-young-adult-fiction-books-2020",
+  "kind": "award",
+  "title": "Young Adult Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fiction-books-2020",
+  "year": 2020,
+  "category": "Young Adult Fiction",
+  "genres": [
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:50.968841+00:00",
+  "books": [
+    {
+      "external_id": "52516332",
+      "title": "Clap When You Land",
+      "authors": [
+        "Elizabeth Acevedo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1570558443l/52516332._SX318_SY475_.jpg",
+      "rank": 1,
+      "votes": 39335,
+      "winner": true
+    },
+    {
+      "external_id": "45874065",
+      "title": "A Good Girl's Guide to Murder",
+      "authors": [
+        "Holly  Jackson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1563445163l/45874065.jpg",
+      "rank": 2,
+      "votes": 36285,
+      "winner": false
+    },
+    {
+      "external_id": "44654627",
+      "title": "One of Us Is Next",
+      "authors": [
+        "Karen M. McManus"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558455815l/44654627.jpg",
+      "rank": 3,
+      "votes": 34540,
+      "winner": false
+    },
+    {
+      "external_id": "51931067",
+      "title": "Felix Ever After",
+      "authors": [
+        "Kacen Callender"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571161915l/51931067.jpg",
+      "rank": 4,
+      "votes": 24077,
+      "winner": false
+    },
+    {
+      "external_id": "55052604",
+      "title": "You Should See Me in a Crown",
+      "authors": [
+        "Leah  Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598021773l/55052604._SY600_.jpg",
+      "rank": 5,
+      "votes": 22779,
+      "winner": false
+    },
+    {
+      "external_id": "52439531",
+      "title": "The Inheritance Games",
+      "authors": [
+        "Jennifer Lynn Barnes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1587396413l/52439531.jpg",
+      "rank": 6,
+      "votes": 20639,
+      "winner": false
+    },
+    {
+      "external_id": "45240918",
+      "title": "The Hand on the Wall",
+      "authors": [
+        "Maureen Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1561155199l/45240918.jpg",
+      "rank": 7,
+      "votes": 18985,
+      "winner": false
+    },
+    {
+      "external_id": "51518972",
+      "title": "Majesty",
+      "authors": [
+        "Katharine McGee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1582291053l/51518972.jpg",
+      "rank": 8,
+      "votes": 18887,
+      "winner": false
+    },
+    {
+      "external_id": "45045129",
+      "title": "Tweet Cute",
+      "authors": [
+        "Emma    Lord"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558456354l/45045129.jpg",
+      "rank": 9,
+      "votes": 18184,
+      "winner": false
+    },
+    {
+      "external_id": "44281034",
+      "title": "The Gravity of Us",
+      "authors": [
+        "Phil Stamper"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1557327577l/44281034.jpg",
+      "rank": 10,
+      "votes": 15185,
+      "winner": false
+    },
+    {
+      "external_id": "49397758",
+      "title": "Grown",
+      "authors": [
+        "Tiffany D. Jackson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1579764388l/49397758.jpg",
+      "rank": 11,
+      "votes": 6837,
+      "winner": false
+    },
+    {
+      "external_id": "45155609",
+      "title": "Yes No Maybe So",
+      "authors": [
+        "Becky Albertalli"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565194333l/45155609.jpg",
+      "rank": 12,
+      "votes": 6494,
+      "winner": false
+    },
+    {
+      "external_id": "51175739",
+      "title": "The Henna Wars",
+      "authors": [
+        "Adiba Jaigirdar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1573648375l/51175739._SX318_SY475_.jpg",
+      "rank": 13,
+      "votes": 4547,
+      "winner": false
+    },
+    {
+      "external_id": "45046743",
+      "title": "Only Mostly Devastated",
+      "authors": [
+        "Sophie Gonzales"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558716772l/45046743.jpg",
+      "rank": 14,
+      "votes": 3998,
+      "winner": false
+    },
+    {
+      "external_id": "49151299",
+      "title": "Punching the Air",
+      "authors": [
+        "Ibi Zoboi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1584643837l/49151299.jpg",
+      "rank": 15,
+      "votes": 3956,
+      "winner": false
+    },
+    {
+      "external_id": "52855024",
+      "title": "This Is My America",
+      "authors": [
+        "Kim  Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1576177540l/52855024._SX318_SY475_.jpg",
+      "rank": 16,
+      "votes": 1913,
+      "winner": false
+    },
+    {
+      "external_id": "52766407",
+      "title": "Today Tonight Tomorrow",
+      "authors": [
+        "Rachel Lynn Solomon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1582468069l/52766407.jpg",
+      "rank": 17,
+      "votes": 1251,
+      "winner": false
+    },
+    {
+      "external_id": "49025767",
+      "title": "Darius the Great Deserves Better",
+      "authors": [
+        "Adib Khorram"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1576517046l/49025767.jpg",
+      "rank": 18,
+      "votes": 1007,
+      "winner": false
+    },
+    {
+      "external_id": "49150990",
+      "title": "Furia",
+      "authors": [
+        "Yamile Saied Méndez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1591893767l/49150990._SY600_.jpg",
+      "rank": 19,
+      "votes": 953,
+      "winner": false
+    },
+    {
+      "external_id": "48589203",
+      "title": "Beyond the Break",
+      "authors": [
+        "Heather Buchta"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1579038598l/48589203._SY600_.jpg",
+      "rank": 20,
+      "votes": 771,
+      "winner": false
+    }
+  ]
+}

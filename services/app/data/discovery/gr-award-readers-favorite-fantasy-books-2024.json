@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-readers-favorite-fantasy-books-2024",
+  "kind": "award",
+  "title": "Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-fantasy-books-2024",
+  "year": 2024,
+  "category": "Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:40:33.966965+00:00",
+  "books": [
+    {
+      "external_id": "199347538",
+      "title": "Somewhere Beyond the Sea",
+      "authors": [
+        "T.J. Klune"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1752528282l/199347538._SY600_.jpg",
+      "rank": 1,
+      "votes": 69854,
+      "winner": true
+    },
+    {
+      "external_id": "133286777",
+      "title": "The Familiar",
+      "authors": [
+        "Leigh Bardugo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1695054790l/133286777.jpg",
+      "rank": 2,
+      "votes": 68564,
+      "winner": false
+    },
+    {
+      "external_id": "134117196",
+      "title": "Emily Wilde’s Map of the Otherlands",
+      "authors": [
+        "Heather Fawcett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684452206l/134117196.jpg",
+      "rank": 3,
+      "votes": 50157,
+      "winner": false
+    },
+    {
+      "external_id": "156009464",
+      "title": "The Book of Doors",
+      "authors": [
+        "Gareth  Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1695839720l/156009464._SY600_.jpg",
+      "rank": 4,
+      "votes": 33455,
+      "winner": false
+    },
+    {
+      "external_id": "126918599",
+      "title": "Empire of the Damned",
+      "authors": [
+        "Jay Kristoff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1687870963l/126918599.jpg",
+      "rank": 5,
+      "votes": 28376,
+      "winner": false
+    },
+    {
+      "external_id": "201608152",
+      "title": "Five Broken Blades",
+      "authors": [
+        "Mai Corland"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1712003696l/201608152._SY600_.jpg",
+      "rank": 6,
+      "votes": 28356,
+      "winner": false
+    },
+    {
+      "external_id": "127278666",
+      "title": "The Fox Wife",
+      "authors": [
+        "Yangsze Choo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1688161442l/127278666.jpg",
+      "rank": 7,
+      "votes": 21029,
+      "winner": false
+    },
+    {
+      "external_id": "199927030",
+      "title": "The Lost Story",
+      "authors": [
+        "Meg Shaffer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1699644888l/199927030._SY600_.jpg",
+      "rank": 8,
+      "votes": 20328,
+      "winner": false
+    },
+    {
+      "external_id": "150247395",
+      "title": "The Tainted Cup",
+      "authors": [
+        "Robert Jackson Bennett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1735662086l/150247395._SY600_.jpg",
+      "rank": 9,
+      "votes": 19218,
+      "winner": false
+    },
+    {
+      "external_id": "203518955",
+      "title": "The Black Bird Oracle",
+      "authors": [
+        "Deborah Harkness"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1702589361l/203518955._SY600_.jpg",
+      "rank": 10,
+      "votes": 18784,
+      "winner": false
+    },
+    {
+      "external_id": "203956639",
+      "title": "An Academy for Liars",
+      "authors": [
+        "Alexis  Henderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1714065440l/203956639._SY600_.jpg",
+      "rank": 11,
+      "votes": 8243,
+      "winner": false
+    },
+    {
+      "external_id": "195790847",
+      "title": "A Sorceress Comes to Call",
+      "authors": [
+        "T. Kingfisher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697733485l/195790847._SY600_.jpg",
+      "rank": 12,
+      "votes": 8073,
+      "winner": false
+    },
+    {
+      "external_id": "203578730",
+      "title": "A Song to Drown Rivers",
+      "authors": [
+        "Ann Liang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1727713627l/203578730._SY600_.jpg",
+      "rank": 13,
+      "votes": 7438,
+      "winner": false
+    },
+    {
+      "external_id": "154462576",
+      "title": "The Warm Hands of Ghosts",
+      "authors": [
+        "Katherine Arden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1692543384l/154462576._SY600_.jpg",
+      "rank": 14,
+      "votes": 6222,
+      "winner": false
+    },
+    {
+      "external_id": "195790597",
+      "title": "When Among Crows",
+      "authors": [
+        "Veronica Roth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1691522142l/195790597._SY600_.jpg",
+      "rank": 15,
+      "votes": 5726,
+      "winner": false
+    },
+    {
+      "external_id": "201129898",
+      "title": "The Night Ends with Fire",
+      "authors": [
+        "K.X. Song"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1717503808l/201129898._SY600_.jpg",
+      "rank": 16,
+      "votes": 4747,
+      "winner": false
+    },
+    {
+      "external_id": "201750794",
+      "title": "The Bright Sword",
+      "authors": [
+        "Lev Grossman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1699329867l/201750794._SY600_.jpg",
+      "rank": 17,
+      "votes": 4282,
+      "winner": false
+    },
+    {
+      "external_id": "210298804",
+      "title": "Voyage of the Damned",
+      "authors": [
+        "Frances   White"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1722519099l/210298804._SY600_.jpg",
+      "rank": 18,
+      "votes": 4180,
+      "winner": false
+    },
+    {
+      "external_id": "127305606",
+      "title": "The Dead Cat Tail Assassins",
+      "authors": [
+        "P. Djèlí Clark"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684868626l/127305606.jpg",
+      "rank": 19,
+      "votes": 3635,
+      "winner": false
+    },
+    {
+      "external_id": "186872566",
+      "title": "A Sweet Sting of Salt",
+      "authors": [
+        "Rose Sutherland"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1689361073l/186872566._SY600_.jpg",
+      "rank": 20,
+      "votes": 3048,
+      "winner": false
+    }
+  ]
+}

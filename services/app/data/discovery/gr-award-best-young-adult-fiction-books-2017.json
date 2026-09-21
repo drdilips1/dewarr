@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-young-adult-fiction-books-2017",
+  "kind": "award",
+  "title": "Young Adult Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fiction-books-2017",
+  "year": 2017,
+  "category": "Young Adult Fiction",
+  "genres": [
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:51.050782+00:00",
+  "books": [
+    {
+      "external_id": "32075671",
+      "title": "The Hate U Give",
+      "authors": [
+        "Angie Thomas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476284759l/32075671._SY600_.jpg",
+      "rank": 1,
+      "votes": 59571,
+      "winner": true
+    },
+    {
+      "external_id": "35504431",
+      "title": "Turtles All the Way Down",
+      "authors": [
+        "John  Green"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1503002776l/35504431._SY600_.jpg",
+      "rank": 2,
+      "votes": 52517,
+      "winner": false
+    },
+    {
+      "external_id": "32682118",
+      "title": "One of Us Is Lying",
+      "authors": [
+        "Karen M. McManus"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492240563l/32682118.jpg",
+      "rank": 3,
+      "votes": 21394,
+      "winner": false
+    },
+    {
+      "external_id": "29283884",
+      "title": "The Gentleman's Guide to Vice and Virtue",
+      "authors": [
+        "Mackenzi Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492601464l/29283884._SY600_.jpg",
+      "rank": 4,
+      "votes": 20990,
+      "winner": false
+    },
+    {
+      "external_id": "35247769",
+      "title": "Always and Forever, Lara Jean",
+      "authors": [
+        "Jenny Han"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1495992139l/35247769._SY600_.jpg",
+      "rank": 5,
+      "votes": 19487,
+      "winner": false
+    },
+    {
+      "external_id": "30724132",
+      "title": "Geekerella",
+      "authors": [
+        "Ashley Poston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476734515l/30724132.jpg",
+      "rank": 6,
+      "votes": 15150,
+      "winner": false
+    },
+    {
+      "external_id": "31931941",
+      "title": "Eliza and Her Monsters",
+      "authors": [
+        "Francesca Zappia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476994065l/31931941._SY600_.jpg",
+      "rank": 7,
+      "votes": 12173,
+      "winner": false
+    },
+    {
+      "external_id": "32078787",
+      "title": "Once and for All",
+      "authors": [
+        "Sarah Dessen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1494152180l/32078787._SY600_.jpg",
+      "rank": 8,
+      "votes": 11334,
+      "winner": false
+    },
+    {
+      "external_id": "28458598",
+      "title": "When Dimple Met Rishi",
+      "authors": [
+        "Sandhya Menon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1475687488l/28458598.jpg",
+      "rank": 9,
+      "votes": 9036,
+      "winner": false
+    },
+    {
+      "external_id": "30256248",
+      "title": "By Your Side",
+      "authors": [
+        "Kasie West"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1472078174l/30256248._SY600_.jpg",
+      "rank": 10,
+      "votes": 8395,
+      "winner": false
+    },
+    {
+      "external_id": "30653853",
+      "title": "The Upside of Unrequited",
+      "authors": [
+        "Becky Albertalli"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1487956734l/30653853.jpg",
+      "rank": 11,
+      "votes": 4248,
+      "winner": false
+    },
+    {
+      "external_id": "30102870",
+      "title": "History Is All You Left Me",
+      "authors": [
+        "Adam Silvera"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1480682451l/30102870._SY600_.jpg",
+      "rank": 12,
+      "votes": 4161,
+      "winner": false
+    },
+    {
+      "external_id": "23447923",
+      "title": "The Inexplicable Logic of My Life",
+      "authors": [
+        "Benjamin Alire Sáenz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1465572387l/23447923.jpg",
+      "rank": 13,
+      "votes": 4142,
+      "winner": false
+    },
+    {
+      "external_id": "25613472",
+      "title": "A List of Cages",
+      "authors": [
+        "Robin Roe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1455814564l/25613472.jpg",
+      "rank": 14,
+      "votes": 2895,
+      "winner": false
+    },
+    {
+      "external_id": "33385229",
+      "title": "They Both Die at the End",
+      "authors": [
+        "Adam Silvera"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1494333138l/33385229._SY600_.jpg",
+      "rank": 15,
+      "votes": 2398,
+      "winner": false
+    },
+    {
+      "external_id": "31694016",
+      "title": "Stranger Than Fanfiction",
+      "authors": [
+        "Chris Colfer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1477421938l/31694016._SY600_.jpg",
+      "rank": 16,
+      "votes": 1855,
+      "winner": false
+    },
+    {
+      "external_id": "28243032",
+      "title": "We Are Okay",
+      "authors": [
+        "Nina LaCour"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1471899036l/28243032.jpg",
+      "rank": 17,
+      "votes": 1604,
+      "winner": false
+    },
+    {
+      "external_id": "30649795",
+      "title": "Goodbye Days",
+      "authors": [
+        "Jeff Zentner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476384938l/30649795._SY600_.jpg",
+      "rank": 18,
+      "votes": 1433,
+      "winner": false
+    },
+    {
+      "external_id": "28919058",
+      "title": "Autoboyography",
+      "authors": [
+        "Christina Lauren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1490425916l/28919058._SY600_.jpg",
+      "rank": 19,
+      "votes": 1286,
+      "winner": false
+    },
+    {
+      "external_id": "33163378",
+      "title": "Moxie",
+      "authors": [
+        "Jennifer Mathieu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1494950979l/33163378.jpg",
+      "rank": 20,
+      "votes": 1053,
+      "winner": false
+    }
+  ]
+}

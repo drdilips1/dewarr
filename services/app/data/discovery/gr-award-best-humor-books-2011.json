@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-humor-books-2011",
+  "kind": "award",
+  "title": "Humor",
+  "source_url": "https://www.goodreads.com/choiceawards/best-humor-books-2011",
+  "year": 2011,
+  "category": "Humor",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:51:06.619829+00:00",
+  "books": [
+    {
+      "external_id": "9418327",
+      "title": "Bossypants",
+      "authors": [
+        "Tina Fey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481509554l/9418327.jpg",
+      "rank": 1,
+      "votes": 8722,
+      "winner": true
+    },
+    {
+      "external_id": "11192642",
+      "title": "Go the Fuck to Sleep",
+      "authors": [
+        "Adam Mansbach"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1342861907l/11192642.jpg",
+      "rank": 2,
+      "votes": 7781,
+      "winner": false
+    },
+    {
+      "external_id": "9972053",
+      "title": "If You Ask Me",
+      "authors": [
+        "Betty White"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348700186l/9972053.jpg",
+      "rank": 3,
+      "votes": 3321,
+      "winner": false
+    },
+    {
+      "external_id": "9713837",
+      "title": "If You Were Here",
+      "authors": [
+        "Jen Lancaster"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1311280971l/9713837.jpg",
+      "rank": 4,
+      "votes": 2228,
+      "winner": false
+    },
+    {
+      "external_id": "10335308",
+      "title": "Is Everyone Hanging Out Without Me?",
+      "authors": [
+        "Mindy Kaling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443264638l/10335308._SY600_.jpg",
+      "rank": 5,
+      "votes": 2110,
+      "winner": false
+    },
+    {
+      "external_id": "10041004",
+      "title": "Lies That Chelsea Handler Told Me",
+      "authors": [
+        "Chelsea Handler"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327950868l/10041004.jpg",
+      "rank": 6,
+      "votes": 1963,
+      "winner": false
+    },
+    {
+      "external_id": "11230081",
+      "title": "Seriously... I'm Kidding",
+      "authors": [
+        "Ellen DeGeneres"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441195131l/11230081._SY600_.jpg",
+      "rank": 7,
+      "votes": 1923,
+      "winner": false
+    },
+    {
+      "external_id": "10505349",
+      "title": "Thank You Notes",
+      "authors": [
+        "Jimmy Fallon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344267998l/10505349.jpg",
+      "rank": 8,
+      "votes": 882,
+      "winner": false
+    },
+    {
+      "external_id": "9452338",
+      "title": "This is a Book",
+      "authors": [
+        "Demetri Martin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415827886l/9452338.jpg",
+      "rank": 9,
+      "votes": 863,
+      "winner": false
+    },
+    {
+      "external_id": "8495145",
+      "title": "God, No! Signs You May Already Be an Atheist and Other Magica...",
+      "authors": [
+        "Penn Jillette"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327935821l/8495145.jpg",
+      "rank": 10,
+      "votes": 856,
+      "winner": false
+    },
+    {
+      "external_id": "9673577",
+      "title": "It Looked Different on the Model",
+      "authors": [
+        "Laurie Notaro"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320559503l/9673577.jpg",
+      "rank": 11,
+      "votes": 410,
+      "winner": false
+    },
+    {
+      "external_id": "10227995",
+      "title": "Damn You, Autocorrect!",
+      "authors": [
+        "Jillian Madison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327892498l/10227995.jpg",
+      "rank": 12,
+      "votes": 389,
+      "winner": false
+    },
+    {
+      "external_id": "10790819",
+      "title": "Domestic Violets",
+      "authors": [
+        "Matthew Norman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1306344559l/10790819.jpg",
+      "rank": 13,
+      "votes": 273,
+      "winner": false
+    },
+    {
+      "external_id": "9965550",
+      "title": "The Real Macaw",
+      "authors": [
+        "Donna Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388887577l/9965550.jpg",
+      "rank": 14,
+      "votes": 240,
+      "winner": false
+    },
+    {
+      "external_id": "9875493",
+      "title": "2030",
+      "authors": [
+        "Albert Brooks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442931347l/9875493._SY600_.jpg",
+      "rank": 15,
+      "votes": 215,
+      "winner": false
+    },
+    {
+      "external_id": "8520878",
+      "title": "It's All Relative",
+      "authors": [
+        "Wade Rouse"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320397539l/8520878.jpg",
+      "rank": 16,
+      "votes": 200,
+      "winner": false
+    },
+    {
+      "external_id": "12306447",
+      "title": "The Day I Wore My Panties Inside Out",
+      "authors": [
+        "Jen Tucker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347413089l/12306447.jpg",
+      "rank": 17,
+      "votes": 161,
+      "winner": false
+    },
+    {
+      "external_id": "8586212",
+      "title": "Electric Barracuda",
+      "authors": [
+        "Tim Dorsey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348603074l/8586212.jpg",
+      "rank": 18,
+      "votes": 124,
+      "winner": false
+    },
+    {
+      "external_id": "10880532",
+      "title": "Doodling",
+      "authors": [
+        "Jonathan  Gould"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327204735l/10880532.jpg",
+      "rank": 19,
+      "votes": 116,
+      "winner": false
+    },
+    {
+      "external_id": "7841659",
+      "title": "Zombie Spaceship Wasteland",
+      "authors": [
+        "Patton Oswalt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1286204437l/7841659.jpg",
+      "rank": 20,
+      "votes": 101,
+      "winner": false
+    }
+  ]
+}

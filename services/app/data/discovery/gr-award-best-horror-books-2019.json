@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-horror-books-2019",
+  "kind": "award",
+  "title": "Horror",
+  "source_url": "https://www.goodreads.com/choiceawards/best-horror-books-2019",
+  "year": 2019,
+  "category": "Horror",
+  "genres": [
+    "horror"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:07.274148+00:00",
+  "books": [
+    {
+      "external_id": "43798285",
+      "title": "The Institute",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549241208l/43798285.jpg",
+      "rank": 1,
+      "votes": 75717,
+      "winner": true
+    },
+    {
+      "external_id": "43522576",
+      "title": "Imaginary Friend",
+      "authors": [
+        "Stephen Chbosky"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550723936l/43522576.jpg",
+      "rank": 2,
+      "votes": 22865,
+      "winner": false
+    },
+    {
+      "external_id": "42881101",
+      "title": "The Girl in Red",
+      "authors": [
+        "Christina Henry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545249589l/42881101.jpg",
+      "rank": 3,
+      "votes": 17847,
+      "winner": false
+    },
+    {
+      "external_id": "40065317",
+      "title": "The Invited",
+      "authors": [
+        "Jennifer  McMahon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1541824130l/40065317.jpg",
+      "rank": 4,
+      "votes": 12016,
+      "winner": false
+    },
+    {
+      "external_id": "44034616",
+      "title": "The Lost Causes of Bleak Creek",
+      "authors": [
+        "Rhett McLaughlin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556591693l/44034616.jpg",
+      "rank": 5,
+      "votes": 11966,
+      "winner": false
+    },
+    {
+      "external_id": "43801817",
+      "title": "Full Throttle",
+      "authors": [
+        "Joe  Hill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553255544l/43801817.jpg",
+      "rank": 6,
+      "votes": 9941,
+      "winner": false
+    },
+    {
+      "external_id": "42815544",
+      "title": "Bunny",
+      "authors": [
+        "Mona Awad"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1544742360l/42815544.jpg",
+      "rank": 7,
+      "votes": 7352,
+      "winner": false
+    },
+    {
+      "external_id": "40725252",
+      "title": "Wakenhyrst",
+      "authors": [
+        "Michelle Paver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545910688l/40725252._SY600_.jpg",
+      "rank": 8,
+      "votes": 5825,
+      "winner": false
+    },
+    {
+      "external_id": "42527596",
+      "title": "The Twisted Ones",
+      "authors": [
+        "T. Kingfisher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1567950921l/42527596._SY600_.jpg",
+      "rank": 9,
+      "votes": 5055,
+      "winner": false
+    },
+    {
+      "external_id": "43506916",
+      "title": "A Cosmology of Monsters",
+      "authors": [
+        "Shaun Hamill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553582284l/43506916.jpg",
+      "rank": 10,
+      "votes": 4587,
+      "winner": false
+    },
+    {
+      "external_id": "43706714",
+      "title": "No One's Home",
+      "authors": [
+        "D.M. Pulley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552490936l/43706714.jpg",
+      "rank": 11,
+      "votes": 1974,
+      "winner": false
+    },
+    {
+      "external_id": "42118050",
+      "title": "Growing Things and Other Stories",
+      "authors": [
+        "Paul Tremblay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556112321l/42118050._SY600_.jpg",
+      "rank": 12,
+      "votes": 1960,
+      "winner": false
+    },
+    {
+      "external_id": "41888678",
+      "title": "Song for the Unraveling of the World",
+      "authors": [
+        "Brian Evenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1539260891l/41888678.jpg",
+      "rank": 13,
+      "votes": 1815,
+      "winner": false
+    },
+    {
+      "external_id": "41555927",
+      "title": "The Toll",
+      "authors": [
+        "Cherie Priest"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537651567l/41555927.jpg",
+      "rank": 14,
+      "votes": 1600,
+      "winner": false
+    },
+    {
+      "external_id": "44349541",
+      "title": "Violet",
+      "authors": [
+        "Scott   Thomas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566100001l/44349541.jpg",
+      "rank": 15,
+      "votes": 1273,
+      "winner": false
+    },
+    {
+      "external_id": "44791629",
+      "title": "The Remaking",
+      "authors": [
+        "Clay McLeod Chapman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1561579258l/44791629.jpg",
+      "rank": 16,
+      "votes": 1234,
+      "winner": false
+    },
+    {
+      "external_id": "43263515",
+      "title": "The Monster of Elendhaven",
+      "authors": [
+        "Jennifer Giesbrecht"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1569867908l/43263515._SY600_.jpg",
+      "rank": 17,
+      "votes": 1121,
+      "winner": false
+    },
+    {
+      "external_id": "40696751",
+      "title": "The Luminous Dead",
+      "authors": [
+        "Caitlin  Starling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1536763297l/40696751.jpg",
+      "rank": 18,
+      "votes": 1074,
+      "winner": false
+    },
+    {
+      "external_id": "42201850",
+      "title": "The Need",
+      "authors": [
+        "Helen          Phillips"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1560679888l/42201850.jpg",
+      "rank": 19,
+      "votes": 748,
+      "winner": false
+    },
+    {
+      "external_id": "42186023",
+      "title": "Petra's Ghost",
+      "authors": [
+        "C.S. O’Cinneide"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550614117l/42186023.jpg",
+      "rank": 20,
+      "votes": 501,
+      "winner": false
+    }
+  ]
+}

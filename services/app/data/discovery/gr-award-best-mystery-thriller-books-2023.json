@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-mystery-thriller-books-2023",
+  "kind": "award",
+  "title": "Mystery & Thriller",
+  "source_url": "https://www.goodreads.com/choiceawards/best-mystery-thriller-books-2023",
+  "year": 2023,
+  "category": "Mystery & Thriller",
+  "genres": [
+    "mystery"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:16.495569+00:00",
+  "books": [
+    {
+      "external_id": "62848145",
+      "title": "The Housemaid's Secret",
+      "authors": [
+        "Freida McFadden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664729357l/62848145._SY600_.jpg",
+      "rank": 1,
+      "votes": 86468,
+      "winner": true
+    },
+    {
+      "external_id": "62334530",
+      "title": "None of This Is True",
+      "authors": [
+        "Lisa Jewell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686092508l/62334530._SY600_.jpg",
+      "rank": 2,
+      "votes": 73187,
+      "winner": false
+    },
+    {
+      "external_id": "62703226",
+      "title": "The Only One Left",
+      "authors": [
+        "Riley Sager"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1668181003l/62703226.jpg",
+      "rank": 3,
+      "votes": 63021,
+      "winner": false
+    },
+    {
+      "external_id": "62226126",
+      "title": "The Last Devil to Die",
+      "authors": [
+        "Richard Osman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1680740298l/62226126._SY600_.jpg",
+      "rank": 4,
+      "votes": 58583,
+      "winner": false
+    },
+    {
+      "external_id": "61327512",
+      "title": "Vera Wong's Unsolicited Advice for Murderers",
+      "authors": [
+        "Jesse Q. Sutanto"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677871383l/61327512._SY600_.jpg",
+      "rank": 5,
+      "votes": 39966,
+      "winner": false
+    },
+    {
+      "external_id": "101124639",
+      "title": "Bright Young Women",
+      "authors": [
+        "Jessica Knoll"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1676221840l/101124639.jpg",
+      "rank": 6,
+      "votes": 34352,
+      "winner": false
+    },
+    {
+      "external_id": "60784636",
+      "title": "All the Dangerous Things",
+      "authors": [
+        "Stacy Willingham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1652631076l/60784636.jpg",
+      "rank": 7,
+      "votes": 31428,
+      "winner": false
+    },
+    {
+      "external_id": "61683285",
+      "title": "Homecoming",
+      "authors": [
+        "Kate Morton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1661354811l/61683285.jpg",
+      "rank": 8,
+      "votes": 27135,
+      "winner": false
+    },
+    {
+      "external_id": "61053829",
+      "title": "I Have Some Questions for You",
+      "authors": [
+        "Rebecca Makkai"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1658970269l/61053829.jpg",
+      "rank": 9,
+      "votes": 24636,
+      "winner": false
+    },
+    {
+      "external_id": "61884832",
+      "title": "All the Sinners Bleed",
+      "authors": [
+        "S.A. Cosby"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1663544598l/61884832.jpg",
+      "rank": 10,
+      "votes": 20704,
+      "winner": false
+    },
+    {
+      "external_id": "101160844",
+      "title": "The River We Remember",
+      "authors": [
+        "William Kent Krueger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1688068221l/101160844.jpg",
+      "rank": 11,
+      "votes": 9182,
+      "winner": false
+    },
+    {
+      "external_id": "60784373",
+      "title": "What Lies in the Woods",
+      "authors": [
+        "Kate Alice Marshall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1652628677l/60784373.jpg",
+      "rank": 12,
+      "votes": 8928,
+      "winner": false
+    },
+    {
+      "external_id": "60784641",
+      "title": "The Villa",
+      "authors": [
+        "Rachel Hawkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1651426717l/60784641.jpg",
+      "rank": 13,
+      "votes": 7788,
+      "winner": false
+    },
+    {
+      "external_id": "63833664",
+      "title": "After That Night",
+      "authors": [
+        "Karin Slaughter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1681107221l/63833664.jpg",
+      "rank": 14,
+      "votes": 6741,
+      "winner": false
+    },
+    {
+      "external_id": "123423832",
+      "title": "The Coworker",
+      "authors": [
+        "Freida McFadden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1685248649l/123423832.jpg",
+      "rank": 15,
+      "votes": 6373,
+      "winner": false
+    },
+    {
+      "external_id": "75495002",
+      "title": "Happiness Falls",
+      "authors": [
+        "Angie  Kim"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1693315671l/75495002._SY600_.jpg",
+      "rank": 16,
+      "votes": 5471,
+      "winner": false
+    },
+    {
+      "external_id": "83668030",
+      "title": "Good Bad Girl",
+      "authors": [
+        "Alice Feeney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1679068112l/83668030.jpg",
+      "rank": 17,
+      "votes": 5323,
+      "winner": false
+    },
+    {
+      "external_id": "80830635",
+      "title": "Don't Let Her Stay",
+      "authors": [
+        "Nicola Sanders"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1674147285l/80830635._SY600_.jpg",
+      "rank": 18,
+      "votes": 4099,
+      "winner": false
+    },
+    {
+      "external_id": "78296909",
+      "title": "The Leftover Woman",
+      "authors": [
+        "Jean Kwok"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1679352643l/78296909.jpg",
+      "rank": 19,
+      "votes": 3378,
+      "winner": false
+    },
+    {
+      "external_id": "60588456",
+      "title": "The Maid's Diary",
+      "authors": [
+        "Loreth Anne White"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1647551429l/60588456._SY600_.jpg",
+      "rank": 20,
+      "votes": 2982,
+      "winner": false
+    }
+  ]
+}

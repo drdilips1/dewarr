@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-young-adult-fiction-books-2023",
+  "kind": "award",
+  "title": "Young Adult Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fiction-books-2023",
+  "year": 2023,
+  "category": "Young Adult Fiction",
+  "genres": [
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:26.335695+00:00",
+  "books": [
+    {
+      "external_id": "60683957",
+      "title": "Check & Mate",
+      "authors": [
+        "Ali Hazelwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1678378842l/60683957.jpg",
+      "rank": 1,
+      "votes": 68736,
+      "winner": true
+    },
+    {
+      "external_id": "62804258",
+      "title": "The Brothers Hawthorne",
+      "authors": [
+        "Jennifer Lynn Barnes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664812464l/62804258.jpg",
+      "rank": 2,
+      "votes": 65748,
+      "winner": false
+    },
+    {
+      "external_id": "60788826",
+      "title": "Five Survive",
+      "authors": [
+        "Holly  Jackson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659677880l/60788826.jpg",
+      "rank": 3,
+      "votes": 57736,
+      "winner": false
+    },
+    {
+      "external_id": "57932307",
+      "title": "One of Us Is Back",
+      "authors": [
+        "Karen M. McManus"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1670438734l/57932307._SY600_.jpg",
+      "rank": 4,
+      "votes": 28037,
+      "winner": false
+    },
+    {
+      "external_id": "60784644",
+      "title": "Immortality",
+      "authors": [
+        "Dana Schwartz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1667592421l/60784644._SY600_.jpg",
+      "rank": 5,
+      "votes": 23765,
+      "winner": false
+    },
+    {
+      "external_id": "57370115",
+      "title": "Highly Suspicious and Unfairly Cute",
+      "authors": [
+        "Talia Hibbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1658632099l/57370115.jpg",
+      "rank": 6,
+      "votes": 22755,
+      "winner": false
+    },
+    {
+      "external_id": "61675933",
+      "title": "Warrior Girl Unearthed",
+      "authors": [
+        "Angeline Boulley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659757856l/61675933.jpg",
+      "rank": 7,
+      "votes": 20401,
+      "winner": false
+    },
+    {
+      "external_id": "61896624",
+      "title": "Imogen, Obviously",
+      "authors": [
+        "Becky Albertalli"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1665161544l/61896624.jpg",
+      "rank": 8,
+      "votes": 17288,
+      "winner": false
+    },
+    {
+      "external_id": "58469344",
+      "title": "The Davenports",
+      "authors": [
+        "Krystal Marquis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1654791714l/58469344.jpg",
+      "rank": 9,
+      "votes": 15401,
+      "winner": false
+    },
+    {
+      "external_id": "61948564",
+      "title": "Reign",
+      "authors": [
+        "Katharine McGee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1676578954l/61948564.jpg",
+      "rank": 10,
+      "votes": 12821,
+      "winner": false
+    },
+    {
+      "external_id": "58484187",
+      "title": "We Deserve Monuments",
+      "authors": [
+        "Jas Hammonds"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644414847l/58484187.jpg",
+      "rank": 11,
+      "votes": 5943,
+      "winner": false
+    },
+    {
+      "external_id": "60495147",
+      "title": "Nine Liars",
+      "authors": [
+        "Maureen Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1650735371l/60495147.jpg",
+      "rank": 12,
+      "votes": 5728,
+      "winner": false
+    },
+    {
+      "external_id": "59808187",
+      "title": "Never Ever Getting Back Together",
+      "authors": [
+        "Sophie Gonzales"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1643645196l/59808187.jpg",
+      "rank": 13,
+      "votes": 4661,
+      "winner": false
+    },
+    {
+      "external_id": "101141137",
+      "title": "Pride and Prejudice and Pittsburgh",
+      "authors": [
+        "Rachael Lippincott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686092574l/101141137._SY600_.jpg",
+      "rank": 14,
+      "votes": 3968,
+      "winner": false
+    },
+    {
+      "external_id": "60197316",
+      "title": "What Happens After Midnight",
+      "authors": [
+        "K.L. Walther"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1666703072l/60197316.jpg",
+      "rank": 15,
+      "votes": 3794,
+      "winner": false
+    },
+    {
+      "external_id": "63933651",
+      "title": "Together We Rot",
+      "authors": [
+        "Skyla Arndt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1671477934l/63933651.jpg",
+      "rank": 16,
+      "votes": 3682,
+      "winner": false
+    },
+    {
+      "external_id": "60759266",
+      "title": "This Time It's Real",
+      "authors": [
+        "Ann Liang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1674642451l/60759266.jpg",
+      "rank": 17,
+      "votes": 3435,
+      "winner": false
+    },
+    {
+      "external_id": "112974911",
+      "title": "Thieves' Gambit",
+      "authors": [
+        "Kayvion Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677505315l/112974911.jpg",
+      "rank": 18,
+      "votes": 2804,
+      "winner": false
+    },
+    {
+      "external_id": "61273082",
+      "title": "Forget Me Not",
+      "authors": [
+        "Alyson Derrick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1678326157l/61273082.jpg",
+      "rank": 19,
+      "votes": 2719,
+      "winner": false
+    },
+    {
+      "external_id": "66087070",
+      "title": "Suddenly a Murder",
+      "authors": [
+        "Lauren Muñoz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1696279096l/66087070._SY600_.jpg",
+      "rank": 20,
+      "votes": 1861,
+      "winner": false
+    }
+  ]
+}

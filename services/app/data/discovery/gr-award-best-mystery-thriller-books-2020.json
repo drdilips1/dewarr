@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-mystery-thriller-books-2020",
+  "kind": "award",
+  "title": "Mystery & Thriller",
+  "source_url": "https://www.goodreads.com/choiceawards/best-mystery-thriller-books-2020",
+  "year": 2020,
+  "category": "Mystery & Thriller",
+  "genres": [
+    "mystery"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:28.511706+00:00",
+  "books": [
+    {
+      "external_id": "54911607",
+      "title": "The Guest List",
+      "authors": [
+        "Lucy Foley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1597345150l/54911607._SY600_.jpg",
+      "rank": 1,
+      "votes": 73605,
+      "winner": true
+    },
+    {
+      "external_id": "50833559",
+      "title": "Home Before Dark",
+      "authors": [
+        "Riley Sager"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571683410l/50833559._SX318_SY475_.jpg",
+      "rank": 2,
+      "votes": 35356,
+      "winner": false
+    },
+    {
+      "external_id": "45885644",
+      "title": "The Sun Down Motel",
+      "authors": [
+        "Simone St. James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1570443079l/45885644.jpg",
+      "rank": 3,
+      "votes": 35340,
+      "winner": false
+    },
+    {
+      "external_id": "49398072",
+      "title": "When No One Is Watching",
+      "authors": [
+        "Alyssa Cole"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585146341l/49398072.jpg",
+      "rank": 4,
+      "votes": 33068,
+      "winner": false
+    },
+    {
+      "external_id": "44510385",
+      "title": "The Wives",
+      "authors": [
+        "Tarryn Fisher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555273902l/44510385.jpg",
+      "rank": 5,
+      "votes": 31924,
+      "winner": false
+    },
+    {
+      "external_id": "52661162",
+      "title": "The Searcher",
+      "authors": [
+        "Tana French"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1588572246l/52661162.jpg",
+      "rank": 6,
+      "votes": 25428,
+      "winner": false
+    },
+    {
+      "external_id": "51204046",
+      "title": "The Boy from the Woods",
+      "authors": [
+        "Harlan Coben"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1575400945l/51204046._SX318_SY475_.jpg",
+      "rank": 7,
+      "votes": 23717,
+      "winner": false
+    },
+    {
+      "external_id": "50892433",
+      "title": "One by One",
+      "authors": [
+        "Ruth Ware"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1587655884l/50892433._SY600_.jpg",
+      "rank": 8,
+      "votes": 23019,
+      "winner": false
+    },
+    {
+      "external_id": "51854625",
+      "title": "The Devil and the Dark Water",
+      "authors": [
+        "Stuart Turton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585584090l/51854625.jpg",
+      "rank": 9,
+      "votes": 22852,
+      "winner": false
+    },
+    {
+      "external_id": "43834909",
+      "title": "Long Bright River",
+      "authors": [
+        "Liz    Moore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555616163l/43834909.jpg",
+      "rank": 10,
+      "votes": 21436,
+      "winner": false
+    },
+    {
+      "external_id": "49127539",
+      "title": "All the Devils Are Here",
+      "authors": [
+        "Louise Penny"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1582597966l/49127539.jpg",
+      "rank": 11,
+      "votes": 7734,
+      "winner": false
+    },
+    {
+      "external_id": "45046742",
+      "title": "You Are Not Alone",
+      "authors": [
+        "Greer Hendricks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1582724709l/45046742._SY600_.jpg",
+      "rank": 12,
+      "votes": 6549,
+      "winner": false
+    },
+    {
+      "external_id": "51807232",
+      "title": "Troubled Blood",
+      "authors": [
+        "Robert Galbraith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594301752l/51807232._SY600_.jpg",
+      "rank": 13,
+      "votes": 6375,
+      "winner": false
+    },
+    {
+      "external_id": "44303982",
+      "title": "Unspeakable Things",
+      "authors": [
+        "Jess Lourey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562829246l/44303982.jpg",
+      "rank": 14,
+      "votes": 5222,
+      "winner": false
+    },
+    {
+      "external_id": "48678117",
+      "title": "Winter Counts",
+      "authors": [
+        "David Heska Wanbli Weiden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1592246046l/48678117.jpg",
+      "rank": 15,
+      "votes": 3925,
+      "winner": false
+    },
+    {
+      "external_id": "51182571",
+      "title": "Blacktop Wasteland",
+      "authors": [
+        "S.A. Cosby"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1573874784l/51182571.jpg",
+      "rank": 16,
+      "votes": 3606,
+      "winner": false
+    },
+    {
+      "external_id": "51169341",
+      "title": "The Night Swim",
+      "authors": [
+        "Megan Goldin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1569898236l/51169341.jpg",
+      "rank": 17,
+      "votes": 3186,
+      "winner": false
+    },
+    {
+      "external_id": "49247317",
+      "title": "And Now She's Gone",
+      "authors": [
+        "Rachel Howzell Hall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585673162l/49247317.jpg",
+      "rank": 18,
+      "votes": 2387,
+      "winner": false
+    },
+    {
+      "external_id": "49374505",
+      "title": "Confessions on the 7",
+      "authors": [
+        "Lisa Unger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1583203799l/49374505.jpg",
+      "rank": 19,
+      "votes": 1622,
+      "winner": false
+    },
+    {
+      "external_id": "54442955",
+      "title": "First Girl Gone",
+      "authors": [
+        "L.T. Vargus"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594219624l/54442955.jpg",
+      "rank": 20,
+      "votes": 855,
+      "winner": false
+    }
+  ]
+}

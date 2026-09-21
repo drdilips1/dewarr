@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-history-biography-books-2016",
+  "kind": "award",
+  "title": "History & Biography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-history-biography-books-2016",
+  "year": 2016,
+  "category": "History & Biography",
+  "genres": [
+    "biography",
+    "history"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:12.528644+00:00",
+  "books": [
+    {
+      "external_id": "25819509",
+      "title": "Leonard",
+      "authors": [
+        "William Shatner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1449593516l/25819509.jpg",
+      "rank": 1,
+      "votes": 16477,
+      "winner": true
+    },
+    {
+      "external_id": "21094391",
+      "title": "The Romanovs, 1613-1918",
+      "authors": [
+        "Simon Sebag Montefiore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435023227l/21094391._SY600_.jpg",
+      "rank": 2,
+      "votes": 15398,
+      "winner": false
+    },
+    {
+      "external_id": "25817804",
+      "title": "First Women",
+      "authors": [
+        "Kate Andersen Brower"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1454631473l/25817804.jpg",
+      "rank": 3,
+      "votes": 13488,
+      "winner": false
+    },
+    {
+      "external_id": "26030711",
+      "title": "Rise of the Rocket Girls",
+      "authors": [
+        "Nathalia Holt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462515796l/26030711._SY600_.jpg",
+      "rank": 4,
+      "votes": 12995,
+      "winner": false
+    },
+    {
+      "external_id": "25814394",
+      "title": "All the Single Ladies",
+      "authors": [
+        "Rebecca Traister"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1454864662l/25814394.jpg",
+      "rank": 5,
+      "votes": 10343,
+      "winner": false
+    },
+    {
+      "external_id": "27209433",
+      "title": "White Trash",
+      "authors": [
+        "Nancy Isenberg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483563991l/27209433._SY600_.jpg",
+      "rank": 6,
+      "votes": 10033,
+      "winner": false
+    },
+    {
+      "external_id": "25953369",
+      "title": "Hidden Figures",
+      "authors": [
+        "Margot Lee Shetterly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464022031l/25953369._SY600_.jpg",
+      "rank": 7,
+      "votes": 9715,
+      "winner": false
+    },
+    {
+      "external_id": "23168778",
+      "title": "The Midnight Assassin",
+      "authors": [
+        "Skip Hollandsworth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1449998008l/23168778.jpg",
+      "rank": 8,
+      "votes": 7397,
+      "winner": false
+    },
+    {
+      "external_id": "26240780",
+      "title": "Blood Brothers",
+      "authors": [
+        "Randy W. Roberts"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1448320116l/26240780.jpg",
+      "rank": 9,
+      "votes": 5654,
+      "winner": false
+    },
+    {
+      "external_id": "29370481",
+      "title": "Killing the Rising Sun",
+      "authors": [
+        "Bill O'Reilly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1465765347l/29370481.jpg",
+      "rank": 10,
+      "votes": 4139,
+      "winner": false
+    },
+    {
+      "external_id": "26109390",
+      "title": "Valiant Ambition",
+      "authors": [
+        "Nathaniel Philbrick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1440441461l/26109390.jpg",
+      "rank": 11,
+      "votes": 2278,
+      "winner": false
+    },
+    {
+      "external_id": "25897805",
+      "title": "The Immortal Irishman",
+      "authors": [
+        "Timothy Egan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445050195l/25897805.jpg",
+      "rank": 12,
+      "votes": 2157,
+      "winner": false
+    },
+    {
+      "external_id": "27214080",
+      "title": "Five Presidents",
+      "authors": [
+        "Clint Hill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462176361l/27214080._SY600_.jpg",
+      "rank": 13,
+      "votes": 1898,
+      "winner": false
+    },
+    {
+      "external_id": "25817182",
+      "title": "Midnight in Broad Daylight",
+      "authors": [
+        "Pamela Rotner Sakamoto"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1448215889l/25817182.jpg",
+      "rank": 14,
+      "votes": 1611,
+      "winner": false
+    },
+    {
+      "external_id": "25897720",
+      "title": "The Winter Fortress",
+      "authors": [
+        "Neal Bascomb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443466025l/25897720.jpg",
+      "rank": 15,
+      "votes": 1560,
+      "winner": false
+    },
+    {
+      "external_id": "25897691",
+      "title": "Spain in Our Hearts",
+      "authors": [
+        "Adam Hochschild"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1447080466l/25897691.jpg",
+      "rank": 16,
+      "votes": 1085,
+      "winner": false
+    },
+    {
+      "external_id": "28789677",
+      "title": "Shirley Jackson",
+      "authors": [
+        "Ruth Franklin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470421230l/28789677.jpg",
+      "rank": 17,
+      "votes": 965,
+      "winner": false
+    },
+    {
+      "external_id": "27064368",
+      "title": "Eve of a Hundred Midnights",
+      "authors": [
+        "Bill Lascher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1449778220l/27064368.jpg",
+      "rank": 18,
+      "votes": 657,
+      "winner": false
+    },
+    {
+      "external_id": "26891468",
+      "title": "Hero of the Empire",
+      "authors": [
+        "Candice Millard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1455141956l/26891468.jpg",
+      "rank": 19,
+      "votes": 593,
+      "winner": false
+    },
+    {
+      "external_id": "28789644",
+      "title": "Blood at the Root",
+      "authors": [
+        "Patrick Phillips"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456514346l/28789644.jpg",
+      "rank": 20,
+      "votes": 327,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-historical-fiction-books-2013",
+  "kind": "award",
+  "title": "Historical Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-historical-fiction-books-2013",
+  "year": 2013,
+  "category": "Historical Fiction",
+  "genres": [
+    "historical-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:33.668544+00:00",
+  "books": [
+    {
+      "external_id": "15790842",
+      "title": "Life After Life",
+      "authors": [
+        "Kate Atkinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358173808l/15790842.jpg",
+      "rank": 1,
+      "votes": 17976,
+      "winner": true
+    },
+    {
+      "external_id": "12326627",
+      "title": "The White Princess",
+      "authors": [
+        "Philippa Gregory"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479698298l/12326627.jpg",
+      "rank": 2,
+      "votes": 9882,
+      "winner": false
+    },
+    {
+      "external_id": "16002030",
+      "title": "Z",
+      "authors": [
+        "Therese Anne Fowler"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1359803588l/16002030.jpg",
+      "rank": 3,
+      "votes": 7908,
+      "winner": false
+    },
+    {
+      "external_id": "13642950",
+      "title": "The Aviator's Wife",
+      "authors": [
+        "Melanie Benjamin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1345153864l/13642950.jpg",
+      "rank": 4,
+      "votes": 7636,
+      "winner": false
+    },
+    {
+      "external_id": "17383934",
+      "title": "The Valley of Amazement",
+      "authors": [
+        "Amy Tan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362956150l/17383934.jpg",
+      "rank": 5,
+      "votes": 7309,
+      "winner": false
+    },
+    {
+      "external_id": "17333319",
+      "title": "Burial Rites",
+      "authors": [
+        "Hannah Kent"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1384207446l/17333319.jpg",
+      "rank": 6,
+      "votes": 6500,
+      "winner": false
+    },
+    {
+      "external_id": "16138688",
+      "title": "The Painted Girls",
+      "authors": [
+        "Cathy Marie Buchanan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1352484200l/16138688.jpg",
+      "rank": 7,
+      "votes": 5972,
+      "winner": false
+    },
+    {
+      "external_id": "17333230",
+      "title": "The Luminaries",
+      "authors": [
+        "Eleanor Catton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410524246l/17333230.jpg",
+      "rank": 8,
+      "votes": 5356,
+      "winner": false
+    },
+    {
+      "external_id": "17286747",
+      "title": "Necessary Lies",
+      "authors": [
+        "Diane Chamberlain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362226103l/17286747.jpg",
+      "rank": 9,
+      "votes": 5324,
+      "winner": false
+    },
+    {
+      "external_id": "17465453",
+      "title": "The Signature of All Things",
+      "authors": [
+        "Elizabeth Gilbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1560901426l/17465453._SY600_.jpg",
+      "rank": 10,
+      "votes": 4664,
+      "winner": false
+    },
+    {
+      "external_id": "16248311",
+      "title": "The Perfume Collector",
+      "authors": [
+        "Kathleen Tessaro"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358532124l/16248311.jpg",
+      "rank": 11,
+      "votes": 2664,
+      "winner": false
+    },
+    {
+      "external_id": "16158535",
+      "title": "A Hundred Summers",
+      "authors": [
+        "Beatriz Williams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366561825l/16158535.jpg",
+      "rank": 12,
+      "votes": 2510,
+      "winner": false
+    },
+    {
+      "external_id": "16058610",
+      "title": "Whistling Past the Graveyard",
+      "authors": [
+        "Susan Crandall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1360518751l/16058610.jpg",
+      "rank": 13,
+      "votes": 2281,
+      "winner": false
+    },
+    {
+      "external_id": "15705011",
+      "title": "The Last Runaway",
+      "authors": [
+        "Tracy Chevalier"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349448072l/15705011.jpg",
+      "rank": 14,
+      "votes": 2209,
+      "winner": false
+    },
+    {
+      "external_id": "16240761",
+      "title": "The Son",
+      "authors": [
+        "Philipp Meyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355349098l/16240761.jpg",
+      "rank": 15,
+      "votes": 2005,
+      "winner": false
+    },
+    {
+      "external_id": "16085517",
+      "title": "TransAtlantic",
+      "authors": [
+        "Colum McCann"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1367929787l/16085517.jpg",
+      "rank": 16,
+      "votes": 1764,
+      "winner": false
+    },
+    {
+      "external_id": "15786792",
+      "title": "Paris",
+      "authors": [
+        "Edward Rutherfurd"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344117043l/15786792.jpg",
+      "rank": 17,
+      "votes": 674,
+      "winner": false
+    },
+    {
+      "external_id": "15808287",
+      "title": "Mrs. Lincoln's Dressmaker",
+      "authors": [
+        "Jennifer Chiaverini"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1350586527l/15808287.jpg",
+      "rank": 18,
+      "votes": 567,
+      "winner": false
+    },
+    {
+      "external_id": "16099189",
+      "title": "The Light in the Ruins",
+      "authors": [
+        "Chris Bohjalian"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355182026l/16099189.jpg",
+      "rank": 19,
+      "votes": 544,
+      "winner": false
+    },
+    {
+      "external_id": "17232261",
+      "title": "Songs of Willow Frost",
+      "authors": [
+        "Jamie Ford"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1367527068l/17232261.jpg",
+      "rank": 20,
+      "votes": 363,
+      "winner": false
+    }
+  ]
+}

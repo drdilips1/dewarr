@@ -1,0 +1,1116 @@
+{
+  "id": "gr-list-86",
+  "kind": "listopia",
+  "title": "Best Children's Books",
+  "source_url": "https://www.goodreads.com/list/show/86",
+  "year": null,
+  "category": null,
+  "genres": [
+    "children"
+  ],
+  "count": 5465,
+  "coverage": "partial",
+  "updated_at": "2026-09-20T19:04:38.803666+00:00",
+  "books": [
+    {
+      "external_id": "19543",
+      "title": "Where the Wild Things Are",
+      "authors": [
+        "Maurice Sendak"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1384434560i/19543._SY600_.jpg",
+      "rank": 1,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4948",
+      "title": "The Very Hungry Caterpillar",
+      "authors": [
+        "Eric Carle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1603739265i/4948._SY600_.jpg",
+      "rank": 2,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "370493",
+      "title": "The Giving Tree",
+      "authors": [
+        "Shel Silverstein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1769901237i/370493._SY600_.jpg",
+      "rank": 3,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "23772",
+      "title": "Green Eggs and Ham",
+      "authors": [
+        "Dr. Seuss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673212751i/23772._SY600_.jpg",
+      "rank": 4,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "32929",
+      "title": "Goodnight Moon",
+      "authors": [
+        "Margaret Wise Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439223893i/32929._SY600_.jpg",
+      "rank": 5,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "24178",
+      "title": "Charlotte’s Web",
+      "authors": [
+        "E.B. White"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628267712i/24178._SY600_.jpg",
+      "rank": 6,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "233093",
+      "title": "The Cat in the Hat (Cat in the Hat, #1)",
+      "authors": [
+        "Dr. Seuss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1468890477i/233093._SY600_.jpg",
+      "rank": 7,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "30119",
+      "title": "Where the Sidewalk Ends",
+      "authors": [
+        "Shel Silverstein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1769901144i/30119._SY600_.jpg",
+      "rank": 8,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "767680",
+      "title": "If You Give a Mouse a Cookie",
+      "authors": [
+        "Laura Joffe Numeroff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1276046901i/767680._SY600_.jpg",
+      "rank": 9,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "310259",
+      "title": "Love You Forever",
+      "authors": [
+        "Robert Munsch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348832754i/310259._SY600_.jpg",
+      "rank": 10,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "231850",
+      "title": "Corduroy",
+      "authors": [
+        "Don Freeman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347517273i/231850._SY600_.jpg",
+      "rank": 11,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7784",
+      "title": "The Lorax",
+      "authors": [
+        "Dr. Seuss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1705520064i/7784._SY600_.jpg",
+      "rank": 12,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "475339",
+      "title": "Madeline",
+      "authors": [
+        "Ludwig Bemelmans"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1175060644i/475339._SY600_.jpg",
+      "rank": 13,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "42844155",
+      "title": "Harry Potter and the Philosopher's Stone (Harry Potter, #1)",
+      "authors": [
+        "J.K. Rowling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598823299i/42844155._SY600_.jpg",
+      "rank": 14,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "144974",
+      "title": "The Velveteen Rabbit",
+      "authors": [
+        "Margery Williams Bianco"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347748913i/144974._SY600_.jpg",
+      "rank": 15,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "113946",
+      "title": "How the Grinch Stole Christmas!",
+      "authors": [
+        "Dr. Seuss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1771151369i/113946._SY600_.jpg",
+      "rank": 16,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "44186",
+      "title": "The Monster at the End of this Book",
+      "authors": [
+        "Jon Stone"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388193494i/44186._SY600_.jpg",
+      "rank": 17,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "420297",
+      "title": "Curious George",
+      "authors": [
+        "H.A. Rey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1771155814i/420297._SY600_.jpg",
+      "rank": 18,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "293595",
+      "title": "Chicka Chicka Boom Boom",
+      "authors": [
+        "Bill Martin Jr."
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348384871i/293595._SY600_.jpg",
+      "rank": 19,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "157993",
+      "title": "The Little Prince",
+      "authors": [
+        "Antoine de Saint-Exupéry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1367545443i/157993._SY600_.jpg",
+      "rank": 20,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7770",
+      "title": "One Fish, Two Fish, Red Fish, Blue Fish",
+      "authors": [
+        "Dr. Seuss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1165640023i/7770._SY600_.jpg",
+      "rank": 21,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "759611",
+      "title": "Brown Bear, Brown Bear, What Do You See?",
+      "authors": [
+        "Bill Martin Jr."
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430155496i/759611._SY600_.jpg",
+      "rank": 22,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "39988",
+      "title": "Matilda",
+      "authors": [
+        "Roald Dahl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388793265i/39988._SY600_.jpg",
+      "rank": 23,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "46677",
+      "title": "Alexander and the Terrible, Horrible, No Good, Very Bad Day",
+      "authors": [
+        "Judith Viorst"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1769900464i/46677._SY600_.jpg",
+      "rank": 24,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "98573",
+      "title": "Harold and the Purple Crayon (Harold, #1)",
+      "authors": [
+        "Crockett Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327390957i/98573._SY600_.jpg",
+      "rank": 25,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "19321",
+      "title": "The Tale of Peter Rabbit (World of Beatrix Potter, #1)",
+      "authors": [
+        "Beatrix Potter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1485118382i/19321._SY600_.jpg",
+      "rank": 26,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "197084",
+      "title": "Are You My Mother?",
+      "authors": [
+        "P.D. Eastman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389098758i/197084._SY600_.jpg",
+      "rank": 27,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "191139",
+      "title": "Oh, the Places You’ll Go!",
+      "authors": [
+        "Dr. Seuss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630510695l/191139._SX50_SY75_.jpg",
+      "rank": 28,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "537296",
+      "title": "Frog and Toad Are Friends (Frog and Toad, #1)",
+      "authors": [
+        "Arnold Lobel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1626145524i/537296._SY600_.jpg",
+      "rank": 29,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "8073",
+      "title": "Cloudy with a Chance of Meatballs (Cloudy with a Chance of Meatballs, #1)",
+      "authors": [
+        "Judi Barrett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1769935774i/8073._SY600_.jpg",
+      "rank": 30,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "99111",
+      "title": "The World of Winnie-the-Pooh (Winnie-the-Pooh, #1-2)",
+      "authors": [
+        "A.A. Milne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348200401i/99111._SY600_.jpg",
+      "rank": 31,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2998",
+      "title": "The Secret Garden",
+      "authors": [
+        "Frances Hodgson Burnett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327873635i/2998._SY600_.jpg",
+      "rank": 32,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "24213",
+      "title": "Alice’s Adventures in Wonderland / Through the Looking-Glass",
+      "authors": [
+        "Lewis Carroll"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630487234i/24213._SY600_.jpg",
+      "rank": 33,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "301736",
+      "title": "Guess How Much I Love You",
+      "authors": [
+        "Sam McBratney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320457007i/301736._SY600_.jpg",
+      "rank": 34,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7779",
+      "title": "Horton Hears a Who!",
+      "authors": [
+        "Dr. Seuss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327924655i/7779._SY600_.jpg",
+      "rank": 35,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "11127",
+      "title": "The Chronicles of Narnia (The Chronicles of Narnia, #1-7)",
+      "authors": [
+        "C.S. Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1661032875i/11127._SY600_.jpg",
+      "rank": 36,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "8127",
+      "title": "Anne of Green Gables (Anne of Green Gables, #1)",
+      "authors": [
+        "L.M. Montgomery"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1615094578i/8127._SY600_.jpg",
+      "rank": 37,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "19302",
+      "title": "Pippi Longstocking (Pippi Långstrump, #1)",
+      "authors": [
+        "Astrid Lindgren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1519300455i/19302._SY600_.jpg",
+      "rank": 38,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "125507",
+      "title": "The True Story of the 3 Little Pigs",
+      "authors": [
+        "Jon Scieszka"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644190639i/125507._SY600_.jpg",
+      "rank": 39,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6310",
+      "title": "Charlie and the Chocolate Factory (Charlie Bucket, #1)",
+      "authors": [
+        "Roald Dahl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1309211401i/6310._SY600_.jpg",
+      "rank": 40,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "824204",
+      "title": "The Little Engine That Could",
+      "authors": [
+        "Watty Piper"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1770900122i/824204._SY600_.jpg",
+      "rank": 41,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "774001",
+      "title": "Amelia Bedelia  (Amelia Bedelia, #1)",
+      "authors": [
+        "Peggy Parish"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1353400157i/774001._SY600_.jpg",
+      "rank": 42,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6319",
+      "title": "The BFG",
+      "authors": [
+        "Roald Dahl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327872673i/6319._SY600_.jpg",
+      "rank": 43,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "5907",
+      "title": "The Hobbit, or There and Back Again",
+      "authors": [
+        "J.R.R. Tolkien"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546071216i/5907._SY600_.jpg",
+      "rank": 44,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "407429",
+      "title": "The Stinky Cheese Man and Other Fairly Stupid Tales",
+      "authors": [
+        "Jon Scieszka"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1488588399i/407429._SY600_.jpg",
+      "rank": 45,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "786256",
+      "title": "Stellaluna",
+      "authors": [
+        "Janell Cannon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1275583521i/786256._SY600_.jpg",
+      "rank": 46,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "505304",
+      "title": "The Poky Little Puppy",
+      "authors": [
+        "Janette Sebring Lowrey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320424154i/505304._SY600_.jpg",
+      "rank": 47,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "766020",
+      "title": "The Rainbow Fish",
+      "authors": [
+        "Marcus Pfister"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328755881i/766020._SY600_.jpg",
+      "rank": 48,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "29291",
+      "title": "Make Way for Ducklings",
+      "authors": [
+        "Robert McCloskey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362580777i/29291._SY600_.jpg",
+      "rank": 49,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6689",
+      "title": "James and the Giant Peach",
+      "authors": [
+        "Roald Dahl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320412586i/6689._SY600_.jpg",
+      "rank": 50,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "33574273",
+      "title": "A Wrinkle in Time (Time Quintet, #1)",
+      "authors": [
+        "Madeleine L'Engle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507963312i/33574273._SY600_.jpg",
+      "rank": 51,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "191113",
+      "title": "Don't Let the Pigeon Drive the Bus! (Pigeon, #1)",
+      "authors": [
+        "Mo Willems"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1770889609i/191113._SY600_.jpg",
+      "rank": 52,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "37190",
+      "title": "The Tale of Despereaux",
+      "authors": [
+        "Kate DiCamillo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1412211823i/37190._SY600_.jpg",
+      "rank": 53,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "420282",
+      "title": "The Polar Express",
+      "authors": [
+        "Chris Van Allsburg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1638557399i/420282._SY600_.jpg",
+      "rank": 54,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "378",
+      "title": "The Phantom Tollbooth",
+      "authors": [
+        "Norton Juster"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558858485i/378._SY600_.jpg",
+      "rank": 55,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "8337",
+      "title": "Little House in the Big Woods (Little House, #1)",
+      "authors": [
+        "Laura Ingalls Wilder"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1743630755i/8337._SY600_.jpg",
+      "rank": 56,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "236093",
+      "title": "The Wonderful Wizard of Oz (Oz, #1)",
+      "authors": [
+        "L. Frank Baum"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398003737i/236093._SY600_.jpg",
+      "rank": 57,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "460548",
+      "title": "Go, Dog. Go!",
+      "authors": [
+        "P.D. Eastman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333578440i/460548._SY600_.jpg",
+      "rank": 58,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "232109",
+      "title": "The Mouse and the Motorcycle (Ralph S. Mouse, #1)",
+      "authors": [
+        "Beverly Cleary"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348990967i/232109._SY600_.jpg",
+      "rank": 59,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3636",
+      "title": "The Giver (Giver, #1)",
+      "authors": [
+        "Lois Lowry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1342493368i/3636._SY600_.jpg",
+      "rank": 60,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "773951",
+      "title": "The Story of Ferdinand",
+      "authors": [
+        "Munro Leaf"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348133512i/773951._SY600_.jpg",
+      "rank": 61,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "196970",
+      "title": "The Night Before Christmas",
+      "authors": [
+        "Clement Clarke Moore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388370094i/196970._SY600_.jpg",
+      "rank": 62,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "40940121",
+      "title": "Bridge to Terabithia",
+      "authors": [
+        "Katherine Paterson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1532478367i/40940121._SY600_.jpg",
+      "rank": 63,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "133526",
+      "title": "Blueberries for Sal",
+      "authors": [
+        "Robert McCloskey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1363586056i/133526._SY600_.jpg",
+      "rank": 64,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "99107",
+      "title": "Winnie-the-Pooh (Winnie-the-Pooh, #1)",
+      "authors": [
+        "A.A. Milne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1298440130i/99107._SY600_.jpg",
+      "rank": 65,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "132080146",
+      "title": "The Lion, the Witch and the Wardrobe (Chronicles of Narnia, #1)",
+      "authors": [
+        "C.S. Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697079942i/132080146._SY600_.jpg",
+      "rank": 66,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6327",
+      "title": "The Witches",
+      "authors": [
+        "Roald Dahl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351707720i/6327._SY600_.jpg",
+      "rank": 67,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "105551",
+      "title": "Fox in Socks",
+      "authors": [
+        "Dr. Seuss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673300877i/105551._SY600_.jpg",
+      "rank": 68,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "858719",
+      "title": "Clifford the Big Red Dog",
+      "authors": [
+        "Norman Bridwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388851547i/858719._SY600_.jpg",
+      "rank": 69,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "775597",
+      "title": "Caps for Sale: A Tale of a Peddler, Some Monkeys and Their Monkey Business",
+      "authors": [
+        "Esphyr Slobodkina"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348541342i/775597._SY600_.jpg",
+      "rank": 70,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "201146",
+      "title": "Little Bear (Little Bear, #1)",
+      "authors": [
+        "Else Holmelund Minarik"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1318518124i/201146._SY600_.jpg",
+      "rank": 71,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "310258",
+      "title": "The Snowy Day (Peter, #1)",
+      "authors": [
+        "Ezra Jack Keats"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347624377i/310258._SY600_.jpg",
+      "rank": 72,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "240130",
+      "title": "The Paper Bag Princess",
+      "authors": [
+        "Robert Munsch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386912856i/240130._SY600_.jpg",
+      "rank": 73,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "474858",
+      "title": "A Bad Case of Stripes",
+      "authors": [
+        "David Shannon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328867924i/474858._SY600_.jpg",
+      "rank": 74,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "551876",
+      "title": "Tikki Tikki Tembo",
+      "authors": [
+        "Arlene Mosel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1317064300i/551876._SY600_.jpg",
+      "rank": 74,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "858513",
+      "title": "Chrysanthemum",
+      "authors": [
+        "Kevin Henkes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348668136i/858513._SY600_.jpg",
+      "rank": 76,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "147732",
+      "title": "Miss Nelson Is Missing! (Miss Nelson, #1)",
+      "authors": [
+        "Harry Allard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546976385i/147732._SY600_.jpg",
+      "rank": 77,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "766955",
+      "title": "Click, Clack, Moo: Cows That Type",
+      "authors": [
+        "Doreen Cronin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1770853080i/766955._SY600_.jpg",
+      "rank": 78,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "105549",
+      "title": "The Sneetches and Other Stories",
+      "authors": [
+        "Dr. Seuss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673285588i/105549._SY600_.jpg",
+      "rank": 79,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "30120",
+      "title": "Falling Up",
+      "authors": [
+        "Shel Silverstein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327871908i/30120._SY600_.jpg",
+      "rank": 80,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3980",
+      "title": "From the Mixed-up Files of Mrs. Basil E. Frankweiler",
+      "authors": [
+        "E.L. Konigsburg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327784751i/3980._SY600_.jpg",
+      "rank": 81,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "356321",
+      "title": "The Story of Babar (Babar, #1)",
+      "authors": [
+        "Jean de Brunhoff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1353333493i/356321._SY600_.jpg",
+      "rank": 82,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "125404",
+      "title": "The Indian in the Cupboard (The Indian in the Cupboard, #1)",
+      "authors": [
+        "Lynne Reid Banks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1171903915i/125404._SY600_.jpg",
+      "rank": 83,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "24583",
+      "title": "The Adventures of Tom Sawyer",
+      "authors": [
+        "Mark Twain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404811979i/24583._SY600_.jpg",
+      "rank": 84,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "770051",
+      "title": "Olivia (Olivia, #1)",
+      "authors": [
+        "Ian Falconer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349034348i/770051._SY600_.jpg",
+      "rank": 85,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "114345",
+      "title": "The Little House Collection (Little House, #1-9)",
+      "authors": [
+        "Laura Ingalls Wilder"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1577932823i/114345._SY600_.jpg",
+      "rank": 86,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "138959",
+      "title": "Stuart Little",
+      "authors": [
+        "E.B. White"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1692299661i/138959._SY600_.jpg",
+      "rank": 87,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "15779",
+      "title": "Sideways Stories from Wayside School (Wayside School, #1)",
+      "authors": [
+        "Louis Sachar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347614755i/15779._SY600_.jpg",
+      "rank": 88,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "27712",
+      "title": "The Neverending Story",
+      "authors": [
+        "Michael Ende"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554230952i/27712._SY600_.jpg",
+      "rank": 89,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "78039",
+      "title": "Ramona the Pest (Ramona, #2)",
+      "authors": [
+        "Beverly Cleary"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408926719i/78039._SY600_.jpg",
+      "rank": 90,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "153540",
+      "title": "The Little House",
+      "authors": [
+        "Virginia Lee Burton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1363184334i/153540._SY600_.jpg",
+      "rank": 91,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "206962",
+      "title": "Hop On Pop",
+      "authors": [
+        "Dr. Seuss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1689278933i/206962._SY600_.jpg",
+      "rank": 92,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "857448",
+      "title": "Harry the Dirty Dog",
+      "authors": [
+        "Gene Zion"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348901453i/857448._SY600_.jpg",
+      "rank": 93,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "11301",
+      "title": "Horton Hatches the Egg",
+      "authors": [
+        "Dr. Seuss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408927129i/11301._SY600_.jpg",
+      "rank": 94,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "281235",
+      "title": "Bunnicula: A Rabbit-Tale of Mystery (Bunnicula, #1)",
+      "authors": [
+        "Deborah Howe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348802537i/281235._SY600_.jpg",
+      "rank": 95,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "5",
+      "title": "Harry Potter and the Prisoner of Azkaban (Harry Potter, #3)",
+      "authors": [
+        "J.K. Rowling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630547330i/5._SY600_.jpg",
+      "rank": 96,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "331701",
+      "title": "Stone Soup",
+      "authors": [
+        "Jon J. Muth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1579893832i/331701._SY600_.jpg",
+      "rank": 97,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "30118",
+      "title": "A Light in the Attic",
+      "authors": [
+        "Shel Silverstein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1427169918i/30118._SY600_.jpg",
+      "rank": 98,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "58922",
+      "title": "The Runaway Bunny",
+      "authors": [
+        "Margaret Wise Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1763837010i/58922._SY600_.jpg",
+      "rank": 99,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "15881",
+      "title": "Harry Potter and the Chamber of Secrets (Harry Potter, #2)",
+      "authors": [
+        "J.K. Rowling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474169725i/15881._SY600_.jpg",
+      "rank": 100,
+      "votes": null,
+      "winner": false
+    }
+  ]
+}

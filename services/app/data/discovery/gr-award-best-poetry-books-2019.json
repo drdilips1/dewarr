@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-poetry-books-2019",
+  "kind": "award",
+  "title": "Poetry",
+  "source_url": "https://www.goodreads.com/choiceawards/best-poetry-books-2019",
+  "year": 2019,
+  "category": "Poetry",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:50:53.438378+00:00",
+  "books": [
+    {
+      "external_id": "40519259",
+      "title": "Shout",
+      "authors": [
+        "Laurie Halse Anderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1536542439l/40519259._SY600_.jpg",
+      "rank": 1,
+      "votes": 18911,
+      "winner": true
+    },
+    {
+      "external_id": "40680973",
+      "title": "The Mermaid's Voice Returns in This One",
+      "authors": [
+        "Amanda Lovelace"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1538919872l/40680973.jpg",
+      "rank": 2,
+      "votes": 18710,
+      "winner": false
+    },
+    {
+      "external_id": "43838654",
+      "title": "The Truth About Magic",
+      "authors": [
+        "Atticus  ."
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566100125l/43838654.jpg",
+      "rank": 3,
+      "votes": 14270,
+      "winner": false
+    },
+    {
+      "external_id": "39656141",
+      "title": "Lord of the Butterflies",
+      "authors": [
+        "Andrea Gibson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1532369250l/39656141.jpg",
+      "rank": 4,
+      "votes": 11598,
+      "winner": false
+    },
+    {
+      "external_id": "44157727",
+      "title": "Great Goddesses - Life Lessons from Myths and Monsters",
+      "authors": [
+        "Nikita Gill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562702090l/44157727._SY600_.jpg",
+      "rank": 5,
+      "votes": 9777,
+      "winner": false
+    },
+    {
+      "external_id": "41219132",
+      "title": "Love Looks Pretty on You",
+      "authors": [
+        "Lang Leav"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1548799473l/41219132.jpg",
+      "rank": 6,
+      "votes": 9311,
+      "winner": false
+    },
+    {
+      "external_id": "40046136",
+      "title": "A Bound Woman Is a Dangerous Thing",
+      "authors": [
+        "DaMaris B. Hill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1527404823l/40046136.jpg",
+      "rank": 7,
+      "votes": 8200,
+      "winner": false
+    },
+    {
+      "external_id": "43453732",
+      "title": "When You Ask Me Where I'm Going",
+      "authors": [
+        "Jasmin Kaur"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558900337l/43453732.jpg",
+      "rank": 8,
+      "votes": 7741,
+      "winner": false
+    },
+    {
+      "external_id": "40680971",
+      "title": "Empty Bottles Full of Stories",
+      "authors": [
+        "R.H. Sin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537722941l/40680971.jpg",
+      "rank": 9,
+      "votes": 5925,
+      "winner": false
+    },
+    {
+      "external_id": "43124132",
+      "title": "Life of the Party",
+      "authors": [
+        "Olivia Gatwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550889542l/43124132.jpg",
+      "rank": 10,
+      "votes": 5777,
+      "winner": false
+    },
+    {
+      "external_id": "40611194",
+      "title": "Magical Negro",
+      "authors": [
+        "Morgan  Parker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1543089042l/40611194.jpg",
+      "rank": 11,
+      "votes": 2690,
+      "winner": false
+    },
+    {
+      "external_id": "43822523",
+      "title": "Almost Home",
+      "authors": [
+        "Madisen Kuhn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1567950967l/43822523._SY600_.jpg",
+      "rank": 12,
+      "votes": 2246,
+      "winner": false
+    },
+    {
+      "external_id": "41746324",
+      "title": "The Tradition",
+      "authors": [
+        "Jericho Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1539265221l/41746324.jpg",
+      "rank": 13,
+      "votes": 2026,
+      "winner": false
+    },
+    {
+      "external_id": "40121980",
+      "title": "Deaf Republic",
+      "authors": [
+        "Ilya Kaminsky"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1527398356l/40121980.jpg",
+      "rank": 14,
+      "votes": 1817,
+      "winner": false
+    },
+    {
+      "external_id": "41745412",
+      "title": "Soft Science",
+      "authors": [
+        "Franny Choi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1536484665l/41745412.jpg",
+      "rank": 15,
+      "votes": 1665,
+      "winner": false
+    },
+    {
+      "external_id": "48510012",
+      "title": "I'm Not Your Paper Princess",
+      "authors": [
+        "J.R. Rogue"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571539684l/48510012._SY600_.jpg",
+      "rank": 16,
+      "votes": 1644,
+      "winner": false
+    },
+    {
+      "external_id": "40909463",
+      "title": "The Octopus Museum",
+      "authors": [
+        "Brenda Shaughnessy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1532426438l/40909463._SY600_.jpg",
+      "rank": 17,
+      "votes": 1485,
+      "winner": false
+    },
+    {
+      "external_id": "44313592",
+      "title": "Aphrodite Made Me Do It",
+      "authors": [
+        "Trista Mateer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1557002396l/44313592.jpg",
+      "rank": 18,
+      "votes": 1477,
+      "winner": false
+    },
+    {
+      "external_id": "43726619",
+      "title": "A Fortune for Your Disaster",
+      "authors": [
+        "Hanif Abdurraqib"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555598013l/43726619._SY600_.jpg",
+      "rank": 19,
+      "votes": 1286,
+      "winner": false
+    },
+    {
+      "external_id": "42977358",
+      "title": "The Girl Aquarium",
+      "authors": [
+        "Jen Campbell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1543454507l/42977358._SY600_.jpg",
+      "rank": 20,
+      "votes": 899,
+      "winner": false
+    }
+  ]
+}

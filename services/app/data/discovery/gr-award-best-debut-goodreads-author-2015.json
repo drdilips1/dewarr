@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-debut-goodreads-author-2015",
+  "kind": "award",
+  "title": "Debut Goodreads Author",
+  "source_url": "https://www.goodreads.com/choiceawards/best-debut-goodreads-author-2015",
+  "year": 2015,
+  "category": "Debut Goodreads Author",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:50.491146+00:00",
+  "books": [
+    {
+      "external_id": "22328546",
+      "title": "Red Queen",
+      "authors": [
+        "Victoria Aveyard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1449778912l/22328546._SY600_.jpg",
+      "rank": 1,
+      "votes": 46698,
+      "winner": true
+    },
+    {
+      "external_id": "20560137",
+      "title": "An Ember in the Ashes",
+      "authors": [
+        "Sabaa Tahir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1787783215l/20560137._SY600_.jpg",
+      "rank": 2,
+      "votes": 23753,
+      "winner": false
+    },
+    {
+      "external_id": "19547856",
+      "title": "Simon vs. the Homo Sapiens Agenda",
+      "authors": [
+        "Becky Albertalli"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1402915678l/19547856.jpg",
+      "rank": 3,
+      "votes": 12991,
+      "winner": false
+    },
+    {
+      "external_id": "18692431",
+      "title": "Everything, Everything",
+      "authors": [
+        "Nicola Yoon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1450515891l/18692431._SY600_.jpg",
+      "rank": 4,
+      "votes": 11925,
+      "winner": false
+    },
+    {
+      "external_id": "23507745",
+      "title": "Serafina and the Black Cloak",
+      "authors": [
+        "Robert  Beatty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1420158894l/23507745.jpg",
+      "rank": 5,
+      "votes": 9189,
+      "winner": false
+    },
+    {
+      "external_id": "22609317",
+      "title": "Luckiest Girl Alive",
+      "authors": [
+        "Jessica Knoll"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1425975301l/22609317.jpg",
+      "rank": 6,
+      "votes": 8121,
+      "winner": false
+    },
+    {
+      "external_id": "23209971",
+      "title": "Girl at War",
+      "authors": [
+        "Sara Nović"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414348859l/23209971.jpg",
+      "rank": 7,
+      "votes": 7667,
+      "winner": false
+    },
+    {
+      "external_id": "24908399",
+      "title": "The Hurricane",
+      "authors": [
+        "R.J. Prescott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424605213l/24908399.jpg",
+      "rank": 8,
+      "votes": 6823,
+      "winner": false
+    },
+    {
+      "external_id": "22328549",
+      "title": "My Heart and Other Black Holes",
+      "authors": [
+        "Jasmine Warga"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414464523l/22328549.jpg",
+      "rank": 9,
+      "votes": 6579,
+      "winner": false
+    },
+    {
+      "external_id": "25413371",
+      "title": "The Strongest Steel",
+      "authors": [
+        "Scarlett Cole"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1432038948l/25413371.jpg",
+      "rank": 10,
+      "votes": 5481,
+      "winner": false
+    },
+    {
+      "external_id": "24128264",
+      "title": "The Mason List",
+      "authors": [
+        "S.D. Hendrickson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1419714521l/24128264.jpg",
+      "rank": 11,
+      "votes": 2824,
+      "winner": false
+    },
+    {
+      "external_id": "22217702",
+      "title": "The Secret Wisdom of the Earth",
+      "authors": [
+        "Christopher Scotton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403541255l/22217702.jpg",
+      "rank": 12,
+      "votes": 2770,
+      "winner": false
+    },
+    {
+      "external_id": "22875103",
+      "title": "The Fishermen",
+      "authors": [
+        "Chigozie Obioma"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1451434679l/22875103._SY600_.jpg",
+      "rank": 13,
+      "votes": 2395,
+      "winner": false
+    },
+    {
+      "external_id": "25687508",
+      "title": "In the Middle of Somewhere",
+      "authors": [
+        "Roan Parrish"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1433927277l/25687508._SY600_.jpg",
+      "rank": 14,
+      "votes": 2322,
+      "winner": false
+    },
+    {
+      "external_id": "22859573",
+      "title": "Orhan's Inheritance",
+      "authors": [
+        "Aline Ohanesian"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1423486689l/22859573.jpg",
+      "rank": 15,
+      "votes": 1864,
+      "winner": false
+    },
+    {
+      "external_id": "23281919",
+      "title": "Circus Mirandus",
+      "authors": [
+        "Cassie Beasley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462663576l/23281919._SY600_.jpg",
+      "rank": 16,
+      "votes": 1803,
+      "winner": false
+    },
+    {
+      "external_id": "23363928",
+      "title": "The Library at Mount Char",
+      "authors": [
+        "Scott  Hawkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1416181258l/23363928.jpg",
+      "rank": 17,
+      "votes": 1670,
+      "winner": false
+    },
+    {
+      "external_id": "17661416",
+      "title": "Made You Up",
+      "authors": [
+        "Francesca Zappia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413485149l/17661416.jpg",
+      "rank": 18,
+      "votes": 1226,
+      "winner": false
+    },
+    {
+      "external_id": "23016075",
+      "title": "Three Simple Rules",
+      "authors": [
+        "Nikki Sloane"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1416874369l/23016075.jpg",
+      "rank": 19,
+      "votes": 1060,
+      "winner": false
+    },
+    {
+      "external_id": "22749796",
+      "title": "Dietland",
+      "authors": [
+        "Sarai Walker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1429097346l/22749796.jpg",
+      "rank": 20,
+      "votes": 789,
+      "winner": false
+    }
+  ]
+}

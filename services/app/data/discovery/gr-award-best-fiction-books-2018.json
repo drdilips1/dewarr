@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-fiction-books-2018",
+  "kind": "award",
+  "title": "Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fiction-books-2018",
+  "year": 2018,
+  "category": "Fiction",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:54.088497+00:00",
+  "books": [
+    {
+      "external_id": "35791968",
+      "title": "Still Me",
+      "authors": [
+        "Jojo Moyes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1502818159l/35791968.jpg",
+      "rank": 1,
+      "votes": 55300,
+      "winner": true
+    },
+    {
+      "external_id": "33590210",
+      "title": "An American Marriage",
+      "authors": [
+        "Tayari Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1491493625l/33590210._SY600_.jpg",
+      "rank": 2,
+      "votes": 41826,
+      "winner": false
+    },
+    {
+      "external_id": "36373463",
+      "title": "Us Against You",
+      "authors": [
+        "Fredrik Backman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1516019348l/36373463._SY600_.jpg",
+      "rank": 3,
+      "votes": 38981,
+      "winner": false
+    },
+    {
+      "external_id": "39280445",
+      "title": "Nine Perfect Strangers",
+      "authors": [
+        "Liane Moriarty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529076901l/39280445.jpg",
+      "rank": 4,
+      "votes": 31447,
+      "winner": false
+    },
+    {
+      "external_id": "38186611",
+      "title": "An Absolutely Remarkable Thing",
+      "authors": [
+        "Hank Green"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520448919l/38186611.jpg",
+      "rank": 5,
+      "votes": 24363,
+      "winner": false
+    },
+    {
+      "external_id": "38820047",
+      "title": "Killing Commendatore",
+      "authors": [
+        "Haruki Murakami"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1527854255l/38820047.jpg",
+      "rank": 6,
+      "votes": 23695,
+      "winner": false
+    },
+    {
+      "external_id": "36692478",
+      "title": "There There",
+      "authors": [
+        "Tommy Orange"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1512071034l/36692478.jpg",
+      "rank": 7,
+      "votes": 18614,
+      "winner": false
+    },
+    {
+      "external_id": "34275212",
+      "title": "Girls Burn Brighter",
+      "authors": [
+        "Shobha   Rao"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520279618l/34275212._SY600_.jpg",
+      "rank": 8,
+      "votes": 17854,
+      "winner": false
+    },
+    {
+      "external_id": "36723031",
+      "title": "All We Ever Wanted",
+      "authors": [
+        "Emily Giffin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1512578780l/36723031.jpg",
+      "rank": 9,
+      "votes": 17490,
+      "winner": false
+    },
+    {
+      "external_id": "36082326",
+      "title": "Every Note Played",
+      "authors": [
+        "Lisa Genova"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1521364066l/36082326._SY600_.jpg",
+      "rank": 10,
+      "votes": 15427,
+      "winner": false
+    },
+    {
+      "external_id": "35480518",
+      "title": "The Female Persuasion",
+      "authors": [
+        "Meg Wolitzer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1503001734l/35480518._SY600_.jpg",
+      "rank": 11,
+      "votes": 7343,
+      "winner": false
+    },
+    {
+      "external_id": "36840397",
+      "title": "A Place for Us",
+      "authors": [
+        "Fatima Farheen Mirza"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1517006183l/36840397.jpg",
+      "rank": 12,
+      "votes": 6839,
+      "winner": false
+    },
+    {
+      "external_id": "39072220",
+      "title": "A Spark of Light",
+      "authors": [
+        "Jodi Picoult"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1524516474l/39072220.jpg",
+      "rank": 13,
+      "votes": 5554,
+      "winner": false
+    },
+    {
+      "external_id": "36203391",
+      "title": "My Year of Rest and Relaxation",
+      "authors": [
+        "Ottessa Moshfegh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1513259517l/36203391._SY600_.jpg",
+      "rank": 14,
+      "votes": 5045,
+      "winner": false
+    },
+    {
+      "external_id": "34262106",
+      "title": "Everything Here Is Beautiful",
+      "authors": [
+        "Mira T. Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492886846l/34262106.jpg",
+      "rank": 15,
+      "votes": 4405,
+      "winner": false
+    },
+    {
+      "external_id": "35187203",
+      "title": "The Overstory",
+      "authors": [
+        "Richard Powers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1501866666l/35187203.jpg",
+      "rank": 16,
+      "votes": 4239,
+      "winner": false
+    },
+    {
+      "external_id": "35952871",
+      "title": "You Think It, I'll Say It",
+      "authors": [
+        "Curtis Sittenfeld"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509832627l/35952871.jpg",
+      "rank": 17,
+      "votes": 3126,
+      "winner": false
+    },
+    {
+      "external_id": "36249638",
+      "title": "How to Walk Away",
+      "authors": [
+        "Katherine Center"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507579931l/36249638.jpg",
+      "rank": 18,
+      "votes": 1973,
+      "winner": false
+    },
+    {
+      "external_id": "36723245",
+      "title": "The Book of Essie",
+      "authors": [
+        "Meghan MacLean Weir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1515873936l/36723245.jpg",
+      "rank": 19,
+      "votes": 1641,
+      "winner": false
+    },
+    {
+      "external_id": "36373648",
+      "title": "The Mars Room",
+      "authors": [
+        "Rachel Kushner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1524991696l/36373648._SY600_.jpg",
+      "rank": 20,
+      "votes": 1352,
+      "winner": false
+    }
+  ]
+}

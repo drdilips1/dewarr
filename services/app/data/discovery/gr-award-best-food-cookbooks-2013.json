@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-food-cookbooks-2013",
+  "kind": "award",
+  "title": "Food & Cookbooks",
+  "source_url": "https://www.goodreads.com/choiceawards/best-food-cookbooks-2013",
+  "year": 2013,
+  "category": "Food & Cookbooks",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:46.248851+00:00",
+  "books": [
+    {
+      "external_id": "15843172",
+      "title": "Tequila Mockingbird",
+      "authors": [
+        "Tim Federle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1359423297l/15843172.jpg",
+      "rank": 1,
+      "votes": 8598,
+      "winner": true
+    },
+    {
+      "external_id": "17349204",
+      "title": "The Pioneer Woman Cooks",
+      "authors": [
+        "Ree Drummond"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389688164l/17349204.jpg",
+      "rank": 2,
+      "votes": 6293,
+      "winner": false
+    },
+    {
+      "external_id": "16277245",
+      "title": "The Drunken Botanist",
+      "authors": [
+        "Amy  Stewart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404581364l/16277245.jpg",
+      "rank": 3,
+      "votes": 6247,
+      "winner": false
+    },
+    {
+      "external_id": "15797397",
+      "title": "Salt Sugar Fat",
+      "authors": [
+        "Michael  Moss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1609621984l/15797397.jpg",
+      "rank": 4,
+      "votes": 5200,
+      "winner": false
+    },
+    {
+      "external_id": "15811496",
+      "title": "Cooked",
+      "authors": [
+        "Michael Pollan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601146168l/15811496._SY600_.jpg",
+      "rank": 5,
+      "votes": 4966,
+      "winner": false
+    },
+    {
+      "external_id": "17167085",
+      "title": "Moosewood Restaurant Favorites",
+      "authors": [
+        "The Moosewood Collective"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362226082l/17167085.jpg",
+      "rank": 6,
+      "votes": 4616,
+      "winner": false
+    },
+    {
+      "external_id": "15786110",
+      "title": "Relish",
+      "authors": [
+        "Lucy Knisley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1345686126l/15786110.jpg",
+      "rank": 7,
+      "votes": 3933,
+      "winner": false
+    },
+    {
+      "external_id": "16182601",
+      "title": "Bread and Wine",
+      "authors": [
+        "Shauna Niequist"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1364905830l/16182601.jpg",
+      "rank": 8,
+      "votes": 3207,
+      "winner": false
+    },
+    {
+      "external_id": "16131090",
+      "title": "Eating on the Wild Side",
+      "authors": [
+        "Jo Robinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1352225938l/16131090.jpg",
+      "rank": 9,
+      "votes": 3060,
+      "winner": false
+    },
+    {
+      "external_id": "17164565",
+      "title": "The FastDiet",
+      "authors": [
+        "Michael Mosley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1367831515l/17164565.jpg",
+      "rank": 10,
+      "votes": 2310,
+      "winner": false
+    },
+    {
+      "external_id": "17262525",
+      "title": "Notes from the Larder",
+      "authors": [
+        "Nigel Slater"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1363265256l/17262525.jpg",
+      "rank": 11,
+      "votes": 1215,
+      "winner": false
+    },
+    {
+      "external_id": "16160818",
+      "title": "My Beef with Meat",
+      "authors": [
+        "Rip Esselstyn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358759131l/16160818.jpg",
+      "rank": 12,
+      "votes": 1166,
+      "winner": false
+    },
+    {
+      "external_id": "15797974",
+      "title": "Vegetable Literacy",
+      "authors": [
+        "Deborah Madison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1353033265l/15797974.jpg",
+      "rank": 13,
+      "votes": 1118,
+      "winner": false
+    },
+    {
+      "external_id": "16131211",
+      "title": "It's All Good",
+      "authors": [
+        "Gwyneth Paltrow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391182214l/16131211.jpg",
+      "rank": 14,
+      "votes": 1023,
+      "winner": false
+    },
+    {
+      "external_id": "16058189",
+      "title": "Pandora's Lunchbox",
+      "authors": [
+        "Melanie Warner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410978241l/16058189.jpg",
+      "rank": 15,
+      "votes": 828,
+      "winner": false
+    },
+    {
+      "external_id": "13586978",
+      "title": "Happy Herbivore Abroad",
+      "authors": [
+        "Lindsay S. Nixon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1376474014l/13586978.jpg",
+      "rank": 16,
+      "votes": 812,
+      "winner": false
+    },
+    {
+      "external_id": "17348311",
+      "title": "Fool's Gold Cookbook",
+      "authors": [
+        "Susan Mallery"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388234158l/17348311.jpg",
+      "rank": 17,
+      "votes": 695,
+      "winner": false
+    },
+    {
+      "external_id": "13587039",
+      "title": "Whole",
+      "authors": [
+        "T. Colin Campbell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1379393042l/13587039.jpg",
+      "rank": 18,
+      "votes": 614,
+      "winner": false
+    },
+    {
+      "external_id": "17333302",
+      "title": "Grain Brain",
+      "authors": [
+        "David Perlmutter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395680212l/17333302.jpg",
+      "rank": 19,
+      "votes": 244,
+      "winner": false
+    },
+    {
+      "external_id": "15798321",
+      "title": "VB6",
+      "authors": [
+        "Mark Bittman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1363265020l/15798321.jpg",
+      "rank": 20,
+      "votes": 174,
+      "winner": false
+    }
+  ]
+}

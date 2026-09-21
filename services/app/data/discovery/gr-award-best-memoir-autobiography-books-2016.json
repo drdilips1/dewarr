@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-memoir-autobiography-books-2016",
+  "kind": "award",
+  "title": "Memoir & Autobiography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-memoir-autobiography-books-2016",
+  "year": 2016,
+  "category": "Memoir & Autobiography",
+  "genres": [
+    "biography"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:11.134428+00:00",
+  "books": [
+    {
+      "external_id": "25614898",
+      "title": "When Breath Becomes Air",
+      "authors": [
+        "Paul Kalanithi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1463936399l/25614898._SY600_.jpg",
+      "rank": 1,
+      "votes": 26085,
+      "winner": true
+    },
+    {
+      "external_id": "25330544",
+      "title": "The Only Pirate at the Party",
+      "authors": [
+        "Lindsey Stirling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435029398l/25330544._SY600_.jpg",
+      "rank": 2,
+      "votes": 18412,
+      "winner": false
+    },
+    {
+      "external_id": "26074224",
+      "title": "The Rainbow Comes and Goes",
+      "authors": [
+        "Anderson Cooper"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456162524l/26074224.jpg",
+      "rank": 3,
+      "votes": 14124,
+      "winner": false
+    },
+    {
+      "external_id": "31845516",
+      "title": "Love Warrior",
+      "authors": [
+        "Glennon Doyle Melton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1473164102l/31845516._SY600_.jpg",
+      "rank": 4,
+      "votes": 13501,
+      "winner": false
+    },
+    {
+      "external_id": "29072594",
+      "title": "Born to Run",
+      "authors": [
+        "Bruce Springsteen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1472979089l/29072594._SY600_.jpg",
+      "rank": 5,
+      "votes": 12308,
+      "winner": false
+    },
+    {
+      "external_id": "25733983",
+      "title": "Lab Girl",
+      "authors": [
+        "Hope Jahren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441826687l/25733983.jpg",
+      "rank": 6,
+      "votes": 11621,
+      "winner": false
+    },
+    {
+      "external_id": "27161156",
+      "title": "Hillbilly Elegy",
+      "authors": [
+        "J.D. Vance"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1463569814l/27161156.jpg",
+      "rank": 7,
+      "votes": 11470,
+      "winner": false
+    },
+    {
+      "external_id": "16130440",
+      "title": "Hungry Heart",
+      "authors": [
+        "Jennifer Weiner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1465479549l/16130440._SY600_.jpg",
+      "rank": 8,
+      "votes": 11030,
+      "winner": false
+    },
+    {
+      "external_id": "28218973",
+      "title": "Buffering",
+      "authors": [
+        "Hannah Hart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479041055l/28218973._SY600_.jpg",
+      "rank": 9,
+      "votes": 8129,
+      "winner": false
+    },
+    {
+      "external_id": "29340182",
+      "title": "Shrill",
+      "authors": [
+        "Lindy West"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460015959l/29340182.jpg",
+      "rank": 10,
+      "votes": 8011,
+      "winner": false
+    },
+    {
+      "external_id": "25937937",
+      "title": "A Mother's Reckoning",
+      "authors": [
+        "Sue Klebold"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1438869477l/25937937.jpg",
+      "rank": 11,
+      "votes": 4119,
+      "winner": false
+    },
+    {
+      "external_id": "25111005",
+      "title": "A Thousand Naked Strangers",
+      "authors": [
+        "Kevin Hazzard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1451843171l/25111005._SY600_.jpg",
+      "rank": 12,
+      "votes": 3731,
+      "winner": false
+    },
+    {
+      "external_id": "25802615",
+      "title": "Unashamed",
+      "authors": [
+        "Lecrae Moore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1440107364l/25802615.jpg",
+      "rank": 13,
+      "votes": 3701,
+      "winner": false
+    },
+    {
+      "external_id": "25332115",
+      "title": "The Sound of Gravel",
+      "authors": [
+        "Ruth Wariner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436200674l/25332115._SY600_.jpg",
+      "rank": 14,
+      "votes": 2780,
+      "winner": false
+    },
+    {
+      "external_id": "26192600",
+      "title": "Party of One",
+      "authors": [
+        "Dave  Holmes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453057855l/26192600.jpg",
+      "rank": 15,
+      "votes": 2342,
+      "winner": false
+    },
+    {
+      "external_id": "25663652",
+      "title": "Lust & Wonder",
+      "authors": [
+        "Augusten Burroughs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1444932277l/25663652.jpg",
+      "rank": 16,
+      "votes": 2324,
+      "winner": false
+    },
+    {
+      "external_id": "27220736",
+      "title": "Shoe Dog",
+      "authors": [
+        "Phil Knight"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1457284880l/27220736.jpg",
+      "rank": 17,
+      "votes": 2287,
+      "winner": false
+    },
+    {
+      "external_id": "26795372",
+      "title": "Sex Object",
+      "authors": [
+        "Jessica Valenti"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461317225l/26795372._SY600_.jpg",
+      "rank": 18,
+      "votes": 1324,
+      "winner": false
+    },
+    {
+      "external_id": "31248693",
+      "title": "Keeping Kyrie",
+      "authors": [
+        "Emily Christensen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474990299l/31248693._SY600_.jpg",
+      "rank": 19,
+      "votes": 1045,
+      "winner": false
+    },
+    {
+      "external_id": "30634883",
+      "title": "A Smile in One Eye",
+      "authors": [
+        "Ralph  Webster"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1466131296l/30634883._SY600_.jpg",
+      "rank": 20,
+      "votes": 509,
+      "winner": false
+    }
+  ]
+}

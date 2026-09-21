@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-science-technology-books-2015",
+  "kind": "award",
+  "title": "Science & Technology",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-technology-books-2015",
+  "year": 2015,
+  "category": "Science & Technology",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:44.897811+00:00",
+  "books": [
+    {
+      "external_id": "23014804",
+      "title": "Beneath the Surface",
+      "authors": [
+        "John Hargrove"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1426127539l/23014804.jpg",
+      "rank": 1,
+      "votes": 8097,
+      "winner": true
+    },
+    {
+      "external_id": "22856166",
+      "title": "Headstrong",
+      "authors": [
+        "Rachel Swaby"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1416500509l/22856166.jpg",
+      "rank": 2,
+      "votes": 7744,
+      "winner": false
+    },
+    {
+      "external_id": "23615703",
+      "title": "Voices in the Ocean",
+      "authors": [
+        "Susan Casey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418772681l/23615703.jpg",
+      "rank": 3,
+      "votes": 7712,
+      "winner": false
+    },
+    {
+      "external_id": "23214337",
+      "title": "Forensics",
+      "authors": [
+        "Val McDermid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430944407l/23214337.jpg",
+      "rank": 4,
+      "votes": 7640,
+      "winner": false
+    },
+    {
+      "external_id": "22609341",
+      "title": "Come as You Are",
+      "authors": [
+        "Emily Nagoski"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421037685l/22609341.jpg",
+      "rank": 5,
+      "votes": 7492,
+      "winner": false
+    },
+    {
+      "external_id": "25541028",
+      "title": "Elon Musk",
+      "authors": [
+        "Ashlee Vance"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518291452l/25541028.jpg",
+      "rank": 6,
+      "votes": 7025,
+      "winner": false
+    },
+    {
+      "external_id": "22609348",
+      "title": "What Stands in a Storm",
+      "authors": [
+        "Kim Cross"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1425975255l/22609348.jpg",
+      "rank": 7,
+      "votes": 6815,
+      "winner": false
+    },
+    {
+      "external_id": "24972194",
+      "title": "On the Move",
+      "authors": [
+        "Oliver Sacks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1431138932l/24972194.jpg",
+      "rank": 8,
+      "votes": 6135,
+      "winner": false
+    },
+    {
+      "external_id": "22875118",
+      "title": "Brain Maker",
+      "authors": [
+        "David Perlmutter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415588147l/22875118.jpg",
+      "rank": 9,
+      "votes": 5159,
+      "winner": false
+    },
+    {
+      "external_id": "23013953",
+      "title": "Gut",
+      "authors": [
+        "Giulia Enders"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435168687l/23013953._SY600_.jpg",
+      "rank": 10,
+      "votes": 5082,
+      "winner": false
+    },
+    {
+      "external_id": "23398715",
+      "title": "How Music Got Free",
+      "authors": [
+        "Stephen   Witt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414348373l/23398715.jpg",
+      "rank": 11,
+      "votes": 1898,
+      "winner": false
+    },
+    {
+      "external_id": "22320456",
+      "title": "Beyond Words",
+      "authors": [
+        "Carl Safina"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415428650l/22320456.jpg",
+      "rank": 12,
+      "votes": 1689,
+      "winner": false
+    },
+    {
+      "external_id": "22318382",
+      "title": "Becoming Steve Jobs",
+      "authors": [
+        "Brent Schlender"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422811281l/22318382.jpg",
+      "rank": 13,
+      "votes": 1467,
+      "winner": false
+    },
+    {
+      "external_id": "22609485",
+      "title": "The Soul of an Octopus",
+      "authors": [
+        "Sy Montgomery"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1425611143l/22609485.jpg",
+      "rank": 14,
+      "votes": 1396,
+      "winner": false
+    },
+    {
+      "external_id": "22522293",
+      "title": "The Brain's Way of Healing",
+      "authors": [
+        "Norman Doidge"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1411335371l/22522293.jpg",
+      "rank": 15,
+      "votes": 1231,
+      "winner": false
+    },
+    {
+      "external_id": "22609444",
+      "title": "Bold",
+      "authors": [
+        "Peter H. Diamandis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422848692l/22609444.jpg",
+      "rank": 16,
+      "votes": 890,
+      "winner": false
+    },
+    {
+      "external_id": "22318398",
+      "title": "Future Crimes",
+      "authors": [
+        "Marc Goodman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414351128l/22318398.jpg",
+      "rank": 17,
+      "votes": 797,
+      "winner": false
+    },
+    {
+      "external_id": "20518979",
+      "title": "Spare Parts",
+      "authors": [
+        "Joshua Davis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414514396l/20518979.jpg",
+      "rank": 18,
+      "votes": 770,
+      "winner": false
+    },
+    {
+      "external_id": "22514020",
+      "title": "NeuroTribes",
+      "authors": [
+        "Steve Silberman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421707890l/22514020.jpg",
+      "rank": 19,
+      "votes": 731,
+      "winner": false
+    },
+    {
+      "external_id": "22822881",
+      "title": "Rain",
+      "authors": [
+        "Cynthia Barnett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1412530642l/22822881.jpg",
+      "rank": 20,
+      "votes": 646,
+      "winner": false
+    }
+  ]
+}

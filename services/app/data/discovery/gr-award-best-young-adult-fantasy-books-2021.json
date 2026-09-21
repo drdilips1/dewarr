@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-young-adult-fantasy-books-2021",
+  "kind": "award",
+  "title": "Young Adult Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fantasy-books-2021",
+  "year": 2021,
+  "category": "Young Adult Fantasy",
+  "genres": [
+    "fantasy",
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:21.449438+00:00",
+  "books": [
+    {
+      "external_id": "54589790",
+      "title": "Rule of Wolves",
+      "authors": [
+        "Leigh Bardugo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598133973l/54589790.jpg",
+      "rank": 1,
+      "votes": 48212,
+      "winner": true
+    },
+    {
+      "external_id": "17699855",
+      "title": "Chain of Iron",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1604591461l/17699855._SY600_.jpg",
+      "rank": 2,
+      "votes": 31911,
+      "winner": false
+    },
+    {
+      "external_id": "53375824",
+      "title": "Lore",
+      "authors": [
+        "Alexandra Bracken"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594222283l/53375824.jpg",
+      "rank": 3,
+      "votes": 27855,
+      "winner": false
+    },
+    {
+      "external_id": "52190991",
+      "title": "Any Way the Wind Blows",
+      "authors": [
+        "Rainbow Rowell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1610744543l/52190991.jpg",
+      "rank": 4,
+      "votes": 26842,
+      "winner": false
+    },
+    {
+      "external_id": "53402403",
+      "title": "How the King of Elfhame Learned to Hate Stories",
+      "authors": [
+        "Holly Black"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742573362l/53402403._SY600_.jpg",
+      "rank": 5,
+      "votes": 26479,
+      "winner": false
+    },
+    {
+      "external_id": "52459864",
+      "title": "Iron Widow",
+      "authors": [
+        "Xiran Jay Zhao"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1710540125l/52459864._SY600_.jpg",
+      "rank": 6,
+      "votes": 23754,
+      "winner": false
+    },
+    {
+      "external_id": "53028775",
+      "title": "The Gilded Ones",
+      "authors": [
+        "Namina Forna"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1574327625l/53028775._SX318_SY475_.jpg",
+      "rank": 7,
+      "votes": 23486,
+      "winner": false
+    },
+    {
+      "external_id": "56980367",
+      "title": "Our Violent Ends",
+      "authors": [
+        "Chloe Gong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1635089834l/56980367.jpg",
+      "rank": 8,
+      "votes": 19782,
+      "winner": false
+    },
+    {
+      "external_id": "52013133",
+      "title": "A ​Sky Beyond the Storm",
+      "authors": [
+        "Sabaa Tahir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1583172784l/52013133.jpg",
+      "rank": 9,
+      "votes": 19505,
+      "winner": false
+    },
+    {
+      "external_id": "55987278",
+      "title": "Once Upon a Broken Heart",
+      "authors": [
+        "Stephanie Garber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1615486938l/55987278.jpg",
+      "rank": 10,
+      "votes": 17698,
+      "winner": false
+    },
+    {
+      "external_id": "54613751",
+      "title": "House of Hollow",
+      "authors": [
+        "Krystal Sutherland"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1595266293l/54613751.jpg",
+      "rank": 11,
+      "votes": 6510,
+      "winner": false
+    },
+    {
+      "external_id": "55725741",
+      "title": "Six Crimson Cranes",
+      "authors": [
+        "Elizabeth Lim"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617071638l/55725741.jpg",
+      "rank": 12,
+      "votes": 6214,
+      "winner": false
+    },
+    {
+      "external_id": "58784159",
+      "title": "Namesake",
+      "authors": [
+        "Adrienne Young"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630922243l/58784159._SY600_.jpg",
+      "rank": 13,
+      "votes": 6080,
+      "winner": false
+    },
+    {
+      "external_id": "57965663",
+      "title": "Realm Breaker",
+      "authors": [
+        "Victoria Aveyard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620330469l/57965663._SY600_.jpg",
+      "rank": 14,
+      "votes": 5210,
+      "winner": false
+    },
+    {
+      "external_id": "46223364",
+      "title": "We Free the Stars",
+      "authors": [
+        "Hafsah Faizal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1570454006l/46223364.jpg",
+      "rank": 15,
+      "votes": 5193,
+      "winner": false
+    },
+    {
+      "external_id": "55425313",
+      "title": "Gods & Monsters",
+      "authors": [
+        "Shelby Mahurin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612545993l/55425313.jpg",
+      "rank": 16,
+      "votes": 5187,
+      "winner": false
+    },
+    {
+      "external_id": "53968510",
+      "title": "These Hollow Vows",
+      "authors": [
+        "Lexi Ryan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1603478075l/53968510.jpg",
+      "rank": 17,
+      "votes": 3937,
+      "winner": false
+    },
+    {
+      "external_id": "39897752",
+      "title": "Lost in the Never Woods",
+      "authors": [
+        "Aiden Thomas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1592493557l/39897752.jpg",
+      "rank": 18,
+      "votes": 3640,
+      "winner": false
+    },
+    {
+      "external_id": "54017953",
+      "title": "The Ones We're Meant to Find",
+      "authors": [
+        "Joan He"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600354627l/54017953.jpg",
+      "rank": 19,
+      "votes": 3086,
+      "winner": false
+    },
+    {
+      "external_id": "53138253",
+      "title": "A Vow So Bold and Deadly",
+      "authors": [
+        "Brigid Kemmerer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594380552l/53138253.jpg",
+      "rank": 20,
+      "votes": 3052,
+      "winner": false
+    }
+  ]
+}

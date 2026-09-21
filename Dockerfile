@@ -12,6 +12,7 @@ COPY pyproject.toml uv.lock ./
 COPY services/ ./services/
 COPY docs/notices/ ./docs/notices/
 RUN uv sync --frozen --no-dev --no-editable
+RUN .venv/bin/python -c "from app.domain.discovery_catalog import catalog; assert catalog(), 'Bundled discovery catalog is missing'"
 
 FROM python:3.13.14-slim-bookworm@sha256:67a1e1f215ccda113cfc024e8639049257e88f273898f595b61476d128d387e8 AS runtime
 RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg tini tzdata && rm -rf /var/lib/apt/lists/*

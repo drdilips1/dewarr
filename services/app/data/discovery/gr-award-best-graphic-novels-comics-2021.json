@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-graphic-novels-comics-2021",
+  "kind": "award",
+  "title": "Graphic Novels & Comics",
+  "source_url": "https://www.goodreads.com/choiceawards/best-graphic-novels-comics-2021",
+  "year": 2021,
+  "category": "Graphic Novels & Comics",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:15.912831+00:00",
+  "books": [
+    {
+      "external_id": "57282218",
+      "title": "Lore Olympus",
+      "authors": [
+        "Rachel  Smythe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1614887007l/57282218.jpg",
+      "rank": 1,
+      "votes": 53686,
+      "winner": true
+    },
+    {
+      "external_id": "50395705",
+      "title": "Frank Herbert's Dune",
+      "authors": [
+        "Brian Herbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1592650253l/50395705.jpg",
+      "rank": 2,
+      "votes": 28981,
+      "winner": false
+    },
+    {
+      "external_id": "54663469",
+      "title": "Toph Beifong's Metalbending Academy",
+      "authors": [
+        "Faith Erin Hicks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1595627500l/54663469.jpg",
+      "rank": 3,
+      "votes": 18438,
+      "winner": false
+    },
+    {
+      "external_id": "54776523",
+      "title": "The Girl from the Sea",
+      "authors": [
+        "Lee Knox Ostertag"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598476607l/54776523.jpg",
+      "rank": 4,
+      "votes": 18269,
+      "winner": false
+    },
+    {
+      "external_id": "54739125",
+      "title": "ExtraOrdinary",
+      "authors": [
+        "V.E. Schwab"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1619646189l/54739125._SY600_.jpg",
+      "rank": 5,
+      "votes": 15445,
+      "winner": false
+    },
+    {
+      "external_id": "55214376",
+      "title": "The Sad Ghost Club",
+      "authors": [
+        "Lize Meddings"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742755909l/55214376._SY600_.jpg",
+      "rank": 6,
+      "votes": 15153,
+      "winner": false
+    },
+    {
+      "external_id": "54482758",
+      "title": "In Love & Pajamas",
+      "authors": [
+        "Catana Chetwynd"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601825163l/54482758.jpg",
+      "rank": 7,
+      "votes": 13717,
+      "winner": false
+    },
+    {
+      "external_id": "55082274",
+      "title": "Teen Titans",
+      "authors": [
+        "Kami Garcia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1629116972l/55082274.jpg",
+      "rank": 8,
+      "votes": 11781,
+      "winner": false
+    },
+    {
+      "external_id": "54017829",
+      "title": "The Adventure Zone Vol. 4",
+      "authors": [
+        "Clint McElroy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602565061l/54017829.jpg",
+      "rank": 9,
+      "votes": 6225,
+      "winner": false
+    },
+    {
+      "external_id": "55711045",
+      "title": "Cheer Up",
+      "authors": [
+        "Crystal Frasier"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1622046805l/55711045.jpg",
+      "rank": 10,
+      "votes": 6015,
+      "winner": false
+    },
+    {
+      "external_id": "54619012",
+      "title": "And Now I Spill the Family Secrets",
+      "authors": [
+        "Margaret Kimball"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1606107560l/54619012.jpg",
+      "rank": 11,
+      "votes": 2472,
+      "winner": false
+    },
+    {
+      "external_id": "57127813",
+      "title": "Dark One",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1613747900l/57127813.jpg",
+      "rank": 12,
+      "votes": 2471,
+      "winner": false
+    },
+    {
+      "external_id": "55711552",
+      "title": "Wake",
+      "authors": [
+        "Rebecca    Hall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620572851l/55711552.jpg",
+      "rank": 13,
+      "votes": 2460,
+      "winner": false
+    },
+    {
+      "external_id": "57752416",
+      "title": "Between Shades of Gray",
+      "authors": [
+        "Andrew Donkin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1618548667l/57752416.jpg",
+      "rank": 14,
+      "votes": 2402,
+      "winner": false
+    },
+    {
+      "external_id": "53968436",
+      "title": "The Secret to Superhuman Strength",
+      "authors": [
+        "Alison Bechdel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1603447250l/53968436.jpg",
+      "rank": 15,
+      "votes": 2326,
+      "winner": false
+    },
+    {
+      "external_id": "57600413",
+      "title": "Run",
+      "authors": [
+        "John             Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642286873l/57600413._SY600_.jpg",
+      "rank": 16,
+      "votes": 2207,
+      "winner": false
+    },
+    {
+      "external_id": "52295479",
+      "title": "Squad",
+      "authors": [
+        "Maggie Tokuda-Hall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1613592358l/52295479.jpg",
+      "rank": 17,
+      "votes": 2121,
+      "winner": false
+    },
+    {
+      "external_id": "55648627",
+      "title": "Seek You",
+      "authors": [
+        "Kristen Radtke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1604997087l/55648627.jpg",
+      "rank": 18,
+      "votes": 1888,
+      "winner": false
+    },
+    {
+      "external_id": "54304166",
+      "title": "Thirsty Mermaids",
+      "authors": [
+        "Kat Leyh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1610894900l/54304166._SY600_.jpg",
+      "rank": 19,
+      "votes": 1301,
+      "winner": false
+    },
+    {
+      "external_id": "55284968",
+      "title": "Bubble",
+      "authors": [
+        "Jordan  Morris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600090666l/55284968.jpg",
+      "rank": 20,
+      "votes": 1241,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-history-biography-books-2014",
+  "kind": "award",
+  "title": "History & Biography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-history-biography-books-2014",
+  "year": 2014,
+  "category": "History & Biography",
+  "genres": [
+    "biography",
+    "history"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:13.860675+00:00",
+  "books": [
+    {
+      "external_id": "18404173",
+      "title": "The Romanov Sisters",
+      "authors": [
+        "Helen Rappaport"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1396818138l/18404173.jpg",
+      "rank": 1,
+      "votes": 21118,
+      "winner": true
+    },
+    {
+      "external_id": "18679391",
+      "title": "Liar, Temptress, Soldier, Spy",
+      "authors": [
+        "Karen Abbott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395710606l/18679391.jpg",
+      "rank": 2,
+      "votes": 14093,
+      "winner": false
+    },
+    {
+      "external_id": "18778170",
+      "title": "Joss Whedon",
+      "authors": [
+        "Amy Pascale"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400873068l/18778170.jpg",
+      "rank": 3,
+      "votes": 10076,
+      "winner": false
+    },
+    {
+      "external_id": "22381892",
+      "title": "Killing Patton",
+      "authors": [
+        "Bill O'Reilly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1401543704l/22381892.jpg",
+      "rank": 4,
+      "votes": 9933,
+      "winner": false
+    },
+    {
+      "external_id": "19500064",
+      "title": "The Woman Who Would Be King",
+      "authors": [
+        "Kara Cooney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400082547l/19500064.jpg",
+      "rank": 5,
+      "votes": 9085,
+      "winner": false
+    },
+    {
+      "external_id": "18775337",
+      "title": "Sally Ride",
+      "authors": [
+        "Lynn Sherr"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410977601l/18775337.jpg",
+      "rank": 6,
+      "votes": 8533,
+      "winner": false
+    },
+    {
+      "external_id": "20897517",
+      "title": "In the Kingdom of Ice",
+      "authors": [
+        "Hampton Sides"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395935993l/20897517.jpg",
+      "rank": 7,
+      "votes": 7203,
+      "winner": false
+    },
+    {
+      "external_id": "18453086",
+      "title": "Michael Jordan",
+      "authors": [
+        "Roland Lazenby"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1392587782l/18453086.jpg",
+      "rank": 8,
+      "votes": 6375,
+      "winner": false
+    },
+    {
+      "external_id": "18775365",
+      "title": "The Short and Tragic Life of Robert Peace",
+      "authors": [
+        "Jeff Hobbs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1420938377l/18775365.jpg",
+      "rank": 9,
+      "votes": 6153,
+      "winner": false
+    },
+    {
+      "external_id": "17697447",
+      "title": "The Kid",
+      "authors": [
+        "Ben Bradlee Jr."
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369825443l/17697447.jpg",
+      "rank": 10,
+      "votes": 4997,
+      "winner": false
+    },
+    {
+      "external_id": "18527222",
+      "title": "Grandma Gatewood's Walk",
+      "authors": [
+        "Ben Montgomery"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1412746814l/18527222.jpg",
+      "rank": 11,
+      "votes": 2570,
+      "winner": false
+    },
+    {
+      "external_id": "18691058",
+      "title": "Elephant Company",
+      "authors": [
+        "Vicki Constantine Croke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1419183720l/18691058.jpg",
+      "rank": 12,
+      "votes": 2461,
+      "winner": false
+    },
+    {
+      "external_id": "18773666",
+      "title": "A Spy Among Friends",
+      "authors": [
+        "Ben Macintyre"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413129627l/18773666.jpg",
+      "rank": 13,
+      "votes": 1930,
+      "winner": false
+    },
+    {
+      "external_id": "18373198",
+      "title": "The Good Spy",
+      "authors": [
+        "Kai Bird"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404477516l/18373198.jpg",
+      "rank": 14,
+      "votes": 1823,
+      "winner": false
+    },
+    {
+      "external_id": "18085481",
+      "title": "Astoria",
+      "authors": [
+        "Peter     Stark"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385351103l/18085481.jpg",
+      "rank": 15,
+      "votes": 1642,
+      "winner": false
+    },
+    {
+      "external_id": "18693728",
+      "title": "The Mockingbird Next Door",
+      "authors": [
+        "Marja Mills"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405865883l/18693728.jpg",
+      "rank": 16,
+      "votes": 1540,
+      "winner": false
+    },
+    {
+      "external_id": "18089996",
+      "title": "Savage Harvest",
+      "authors": [
+        "Carl Hoffman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389596192l/18089996.jpg",
+      "rank": 17,
+      "votes": 991,
+      "winner": false
+    },
+    {
+      "external_id": "21420139",
+      "title": "Mission at Nuremberg",
+      "authors": [
+        "Tim  Townsend"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394511246l/21420139.jpg",
+      "rank": 18,
+      "votes": 865,
+      "winner": false
+    },
+    {
+      "external_id": "18310279",
+      "title": "Fierce Patriot",
+      "authors": [
+        "Robert L. O'Connell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1382316007l/18310279.jpg",
+      "rank": 19,
+      "votes": 489,
+      "winner": false
+    },
+    {
+      "external_id": "18114047",
+      "title": "Five Came Back",
+      "authors": [
+        "Mark  Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375064279l/18114047.jpg",
+      "rank": 20,
+      "votes": 220,
+      "winner": false
+    }
+  ]
+}

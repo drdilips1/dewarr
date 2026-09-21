@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-fiction-books-2019",
+  "kind": "award",
+  "title": "Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fiction-books-2019",
+  "year": 2019,
+  "category": "Fiction",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:58.537681+00:00",
+  "books": [
+    {
+      "external_id": "42975172",
+      "title": "The Testaments",
+      "authors": [
+        "Margaret Atwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549292344l/42975172.jpg",
+      "rank": 1,
+      "votes": 98291,
+      "winner": true
+    },
+    {
+      "external_id": "41057294",
+      "title": "Normal People",
+      "authors": [
+        "Sally Rooney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571423190l/41057294._SY600_.jpg",
+      "rank": 2,
+      "votes": 40081,
+      "winner": false
+    },
+    {
+      "external_id": "40545956",
+      "title": "Where the Forest Meets the Stars",
+      "authors": [
+        "Glendy Vanderah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1543428712l/40545956._SY600_.jpg",
+      "rank": 3,
+      "votes": 29342,
+      "winner": false
+    },
+    {
+      "external_id": "42201996",
+      "title": "Ask Again, Yes",
+      "authors": [
+        "Mary Beth Keane"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1557052821l/42201996.jpg",
+      "rank": 4,
+      "votes": 26653,
+      "winner": false
+    },
+    {
+      "external_id": "40539165",
+      "title": "Queenie",
+      "authors": [
+        "Candice Carty-Williams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550417694l/40539165._SY600_.jpg",
+      "rank": 5,
+      "votes": 21524,
+      "winner": false
+    },
+    {
+      "external_id": "41880609",
+      "title": "On Earth We're Briefly Gorgeous",
+      "authors": [
+        "Ocean Vuong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1615580168l/41880609._SY600_.jpg",
+      "rank": 6,
+      "votes": 21177,
+      "winner": false
+    },
+    {
+      "external_id": "34313931",
+      "title": "A Woman Is No Man",
+      "authors": [
+        "Etaf Rum"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1533072101l/34313931.jpg",
+      "rank": 7,
+      "votes": 20211,
+      "winner": false
+    },
+    {
+      "external_id": "41723456",
+      "title": "The Overdue Life of Amy Byler",
+      "authors": [
+        "Kelly Harms"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550089762l/41723456.jpg",
+      "rank": 8,
+      "votes": 15892,
+      "winner": false
+    },
+    {
+      "external_id": "43984883",
+      "title": "Olive, Again",
+      "authors": [
+        "Elizabeth Strout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1576676858l/43984883._SY600_.jpg",
+      "rank": 9,
+      "votes": 15767,
+      "winner": false
+    },
+    {
+      "external_id": "41880044",
+      "title": "The Most Fun We Ever Had",
+      "authors": [
+        "Claire Lombardo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1559679977l/41880044.jpg",
+      "rank": 10,
+      "votes": 12291,
+      "winner": false
+    },
+    {
+      "external_id": "42431386",
+      "title": "The Bookish Life of Nina Hill",
+      "authors": [
+        "Abbi Waxman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545258277l/42431386._SY600_.jpg",
+      "rank": 11,
+      "votes": 6069,
+      "winner": false
+    },
+    {
+      "external_id": "40390714",
+      "title": "The Last Romantics",
+      "authors": [
+        "Tara Conklin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1531271055l/40390714.jpg",
+      "rank": 12,
+      "votes": 5679,
+      "winner": false
+    },
+    {
+      "external_id": "43697186",
+      "title": "Red at the Bone",
+      "authors": [
+        "Jacqueline Woodson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555530960l/43697186.jpg",
+      "rank": 13,
+      "votes": 5517,
+      "winner": false
+    },
+    {
+      "external_id": "39863464",
+      "title": "When All Is Said",
+      "authors": [
+        "Anne  Griffin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1542078980l/39863464.jpg",
+      "rank": 14,
+      "votes": 5065,
+      "winner": false
+    },
+    {
+      "external_id": "42207168",
+      "title": "The Gifted School",
+      "authors": [
+        "Bruce Holsinger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1541188758l/42207168.jpg",
+      "rank": 15,
+      "votes": 4932,
+      "winner": false
+    },
+    {
+      "external_id": "41880602",
+      "title": "Fleishman Is in Trouble",
+      "authors": [
+        "Taffy Brodesser-Akner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556374309l/41880602._SY600_.jpg",
+      "rank": 16,
+      "votes": 3591,
+      "winner": false
+    },
+    {
+      "external_id": "44581535",
+      "title": "Find Me",
+      "authors": [
+        "André Aciman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1557077508l/44581535.jpg",
+      "rank": 17,
+      "votes": 2787,
+      "winner": false
+    },
+    {
+      "external_id": "42976592",
+      "title": "The Reckless Oath We Made",
+      "authors": [
+        "Bryn Greenwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556034027l/42976592._SY600_.jpg",
+      "rank": 18,
+      "votes": 1486,
+      "winner": false
+    },
+    {
+      "external_id": "52186796",
+      "title": "Girl, Woman, Other",
+      "authors": [
+        "Bernardine Evaristo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673543674l/52186796._SY600_.jpg",
+      "rank": 19,
+      "votes": 1413,
+      "winner": false
+    },
+    {
+      "external_id": "41940306",
+      "title": "Lanny",
+      "authors": [
+        "Max Porter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1539960490l/41940306._SY600_.jpg",
+      "rank": 20,
+      "votes": 1238,
+      "winner": false
+    }
+  ]
+}

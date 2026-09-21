@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-readers-favorite-audio-books-2025",
+  "kind": "award",
+  "title": "Audiobook",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-audio-books-2025",
+  "year": 2025,
+  "category": "Audiobook",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:39:53.352815+00:00",
+  "books": [
+    {
+      "external_id": "223806512",
+      "title": "Onyx Storm",
+      "authors": [
+        "Rebecca Yarros"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1737386758l/223806512._SY600_.jpg",
+      "rank": 1,
+      "votes": 107386,
+      "winner": true
+    },
+    {
+      "external_id": "221039409",
+      "title": "Atmosphere",
+      "authors": [
+        "Taylor Jenkins Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1730325472l/221039409._SY600_.jpg",
+      "rank": 2,
+      "votes": 73916,
+      "winner": false
+    },
+    {
+      "external_id": "239930331",
+      "title": "Harry Potter and the Sorcerer’s Stone",
+      "authors": [
+        "J.K. Rowling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1778321664l/239930331._SY600_.jpg",
+      "rank": 3,
+      "votes": 63188,
+      "winner": false
+    },
+    {
+      "external_id": "218689177",
+      "title": "Great Big Beautiful Life",
+      "authors": [
+        "Emily Henry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729209597l/218689177._SY600_.jpg",
+      "rank": 4,
+      "votes": 47862,
+      "winner": false
+    },
+    {
+      "external_id": "237083196",
+      "title": "My Friends",
+      "authors": [
+        "Fredrik Backman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1750721815l/237083196._SY600_.jpg",
+      "rank": 5,
+      "votes": 39179,
+      "winner": false
+    },
+    {
+      "external_id": "235706782",
+      "title": "Pride and Prejudice",
+      "authors": [
+        "Jane Austen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1757908761l/235706782._SY600_.jpg",
+      "rank": 6,
+      "votes": 36389,
+      "winner": false
+    },
+    {
+      "external_id": "238924906",
+      "title": "Tourist Season",
+      "authors": [
+        "Brynne Weaver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1752786713l/238924906._SY600_.jpg",
+      "rank": 7,
+      "votes": 28393,
+      "winner": false
+    },
+    {
+      "external_id": "223116930",
+      "title": "The Let Them Theory",
+      "authors": [
+        "Mel Robbins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1735606986l/223116930._SY600_.jpg",
+      "rank": 8,
+      "votes": 28302,
+      "winner": false
+    },
+    {
+      "external_id": "242386417",
+      "title": "Alchemised",
+      "authors": [
+        "SenLinYu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1759560340l/242386417._SY600_.jpg",
+      "rank": 9,
+      "votes": 27063,
+      "winner": false
+    },
+    {
+      "external_id": "228709118",
+      "title": "Broken Country",
+      "authors": [
+        "Clare Leslie Hall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741105009l/228709118._SY600_.jpg",
+      "rank": 10,
+      "votes": 24155,
+      "winner": false
+    },
+    {
+      "external_id": "239553013",
+      "title": "107 Days",
+      "authors": [
+        "Kamala Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1753979353l/239553013._SY600_.jpg",
+      "rank": 11,
+      "votes": 11015,
+      "winner": false
+    },
+    {
+      "external_id": "231393606",
+      "title": "The Devils",
+      "authors": [
+        "Joe Abercrombie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1744650019l/231393606._SY600_.jpg",
+      "rank": 12,
+      "votes": 9281,
+      "winner": false
+    },
+    {
+      "external_id": "240676020",
+      "title": "Nobody's Girl",
+      "authors": [
+        "Virginia Roberts Giuffre"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1756260410l/240676020._SY600_.jpg",
+      "rank": 13,
+      "votes": 8281,
+      "winner": false
+    },
+    {
+      "external_id": "234884303",
+      "title": "The Correspondent",
+      "authors": [
+        "Virginia      Evans"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1748085287l/234884303._SY600_.jpg",
+      "rank": 14,
+      "votes": 7777,
+      "winner": false
+    },
+    {
+      "external_id": "228441423",
+      "title": "King of Ashes",
+      "authors": [
+        "S.A. Cosby"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742428028l/228441423._SY600_.jpg",
+      "rank": 15,
+      "votes": 7503,
+      "winner": false
+    },
+    {
+      "external_id": "221853481",
+      "title": "We Are All Guilty Here",
+      "authors": [
+        "Karin Slaughter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741732679l/221853481._SY600_.jpg",
+      "rank": 16,
+      "votes": 6440,
+      "winner": false
+    },
+    {
+      "external_id": "228567699",
+      "title": "Sister Wife",
+      "authors": [
+        "Christine Brown Woolley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742427709l/228567699._SY600_.jpg",
+      "rank": 17,
+      "votes": 4583,
+      "winner": false
+    },
+    {
+      "external_id": "228438861",
+      "title": "Awake",
+      "authors": [
+        "Jen Hatmaker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742428243l/228438861._SY600_.jpg",
+      "rank": 18,
+      "votes": 3620,
+      "winner": false
+    },
+    {
+      "external_id": "224298081",
+      "title": "Matriarch",
+      "authors": [
+        "Tina Knowles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742427871l/224298081._SY600_.jpg",
+      "rank": 19,
+      "votes": 2101,
+      "winner": false
+    },
+    {
+      "external_id": "228427002",
+      "title": "The Next Conversation",
+      "authors": [
+        "Jefferson Fisher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742426066l/228427002._SY600_.jpg",
+      "rank": 20,
+      "votes": 1244,
+      "winner": false
+    }
+  ]
+}

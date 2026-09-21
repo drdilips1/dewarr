@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-picture-books-2020",
+  "kind": "award",
+  "title": "Picture Books",
+  "source_url": "https://www.goodreads.com/choiceawards/best-picture-books-2020",
+  "year": 2020,
+  "category": "Picture Books",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:55.374769+00:00",
+  "books": [
+    {
+      "external_id": "52535437",
+      "title": "Antiracist Baby",
+      "authors": [
+        "Ibram X. Kendi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1575323604l/52535437._SX318_SY475_.jpg",
+      "rank": 1,
+      "votes": 28359,
+      "winner": true
+    },
+    {
+      "external_id": "43659628",
+      "title": "Just Like Me",
+      "authors": [
+        "Vanessa Brantley-Newton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1563397090l/43659628._SY600_.jpg",
+      "rank": 2,
+      "votes": 24858,
+      "winner": false
+    },
+    {
+      "external_id": "45730161",
+      "title": "The Cool Bean",
+      "authors": [
+        "Jory John"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1563758989l/45730161._SY600_.jpg",
+      "rank": 3,
+      "votes": 17011,
+      "winner": false
+    },
+    {
+      "external_id": "49216540",
+      "title": "The Serious Goose",
+      "authors": [
+        "Jimmy Kimmel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571889364l/49216540._SX318_SY475_.jpg",
+      "rank": 4,
+      "votes": 16998,
+      "winner": false
+    },
+    {
+      "external_id": "43706730",
+      "title": "This Book Is Gray",
+      "authors": [
+        "Lindsay Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571242142l/43706730._SY600_.jpg",
+      "rank": 5,
+      "votes": 13717,
+      "winner": false
+    },
+    {
+      "external_id": "50438921",
+      "title": "Sweet Child o' Mine",
+      "authors": [
+        "Guns N' Roses"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1592244362l/50438921._SY600_.jpg",
+      "rank": 6,
+      "votes": 10933,
+      "winner": false
+    },
+    {
+      "external_id": "49024173",
+      "title": "I Am Every Good Thing",
+      "authors": [
+        "Derrick Barnes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1580381889l/49024173.jpg",
+      "rank": 7,
+      "votes": 10650,
+      "winner": false
+    },
+    {
+      "external_id": "52024896",
+      "title": "The Seed of Compassion",
+      "authors": [
+        "Dalai Lama XIV"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1569892809l/52024896._SX318_SY475_.jpg",
+      "rank": 8,
+      "votes": 10392,
+      "winner": false
+    },
+    {
+      "external_id": "50215810",
+      "title": "The Oldest Student",
+      "authors": [
+        "Rita Lorraine Hubbard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1561613346l/50215810._SX318_SY475_.jpg",
+      "rank": 9,
+      "votes": 8164,
+      "winner": false
+    },
+    {
+      "external_id": "51038307",
+      "title": "Bird Hugs",
+      "authors": [
+        "Ged Adamson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571242144l/51038307._SX318_SY475_.jpg",
+      "rank": 10,
+      "votes": 8038,
+      "winner": false
+    },
+    {
+      "external_id": "51472378",
+      "title": "Julián at the Wedding",
+      "authors": [
+        "Jessica     Love"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1586221654l/51472378._SY600_.jpg",
+      "rank": 11,
+      "votes": 3582,
+      "winner": false
+    },
+    {
+      "external_id": "51326665",
+      "title": "Bedtime Bonnet",
+      "authors": [
+        "Nancy Redd"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571684658l/51326665._SX318_SY475_.jpg",
+      "rank": 12,
+      "votes": 3385,
+      "winner": false
+    },
+    {
+      "external_id": "55106555",
+      "title": "Coronavirus",
+      "authors": [
+        "Elizabeth Jenner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598304138l/55106555._SY600_.jpg",
+      "rank": 13,
+      "votes": 3334,
+      "winner": false
+    },
+    {
+      "external_id": "52027711",
+      "title": "Grandma's Gardens",
+      "authors": [
+        "Hillary Rodham Clinton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1568304403l/52027711._SX318_SY475_.jpg",
+      "rank": 14,
+      "votes": 3063,
+      "winner": false
+    },
+    {
+      "external_id": "53105938",
+      "title": "The World Needs More Purple People",
+      "authors": [
+        "Kristen  Bell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1580795116l/53105938._SX318_SY475_.jpg",
+      "rank": 15,
+      "votes": 2600,
+      "winner": false
+    },
+    {
+      "external_id": "52273975",
+      "title": "Think Outside the Box",
+      "authors": [
+        "Justine Avery"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1583891939l/52273975._SY600_.jpg",
+      "rank": 16,
+      "votes": 2342,
+      "winner": false
+    },
+    {
+      "external_id": "44581496",
+      "title": "We Are Water Protectors",
+      "authors": [
+        "Carole Lindstrom"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562025181l/44581496._SY600_.jpg",
+      "rank": 17,
+      "votes": 2113,
+      "winner": false
+    },
+    {
+      "external_id": "49699400",
+      "title": "Dewdrop",
+      "authors": [
+        "K. O'Neill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1563722568l/49699400._SX318_SY475_.jpg",
+      "rank": 18,
+      "votes": 1322,
+      "winner": false
+    },
+    {
+      "external_id": "48932414",
+      "title": "We Will Rock Our Classmates",
+      "authors": [
+        "Ryan T.  Higgins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1578187475l/48932414._SY600_.jpg",
+      "rank": 19,
+      "votes": 975,
+      "winner": false
+    },
+    {
+      "external_id": "51457317",
+      "title": "Wild Symphony",
+      "authors": [
+        "Dan    Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1582771986l/51457317._SY600_.jpg",
+      "rank": 20,
+      "votes": 847,
+      "winner": false
+    }
+  ]
+}

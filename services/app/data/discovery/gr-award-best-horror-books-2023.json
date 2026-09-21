@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-horror-books-2023",
+  "kind": "award",
+  "title": "Horror",
+  "source_url": "https://www.goodreads.com/choiceawards/best-horror-books-2023",
+  "year": 2023,
+  "category": "Horror",
+  "genres": [
+    "horror"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:23.664961+00:00",
+  "books": [
+    {
+      "external_id": "65916344",
+      "title": "Holly",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1674418461l/65916344.jpg",
+      "rank": 1,
+      "votes": 77993,
+      "winner": true
+    },
+    {
+      "external_id": "59414094",
+      "title": "How to Sell a Haunted House",
+      "authors": [
+        "Grady Hendrix"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1650818993l/59414094.jpg",
+      "rank": 2,
+      "votes": 47851,
+      "winner": false
+    },
+    {
+      "external_id": "60784409",
+      "title": "A House with Good Bones",
+      "authors": [
+        "T. Kingfisher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1782182392l/60784409._SY600_.jpg",
+      "rank": 3,
+      "votes": 22580,
+      "winner": false
+    },
+    {
+      "external_id": "63892214",
+      "title": "Vampires of El Norte",
+      "authors": [
+        "Isabel Cañas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1669783077l/63892214.jpg",
+      "rank": 4,
+      "votes": 22510,
+      "winner": false
+    },
+    {
+      "external_id": "157184735",
+      "title": "Rouge",
+      "authors": [
+        "Mona Awad"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684423250l/157184735._SY600_.jpg",
+      "rank": 5,
+      "votes": 17437,
+      "winner": false
+    },
+    {
+      "external_id": "101145269",
+      "title": "My Darling Girl",
+      "authors": [
+        "Jennifer  McMahon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1688658775l/101145269._SY600_.jpg",
+      "rank": 6,
+      "votes": 16442,
+      "winner": false
+    },
+    {
+      "external_id": "64623481",
+      "title": "The September House",
+      "authors": [
+        "Carissa Orlando"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686576214l/64623481.jpg",
+      "rank": 7,
+      "votes": 15783,
+      "winner": false
+    },
+    {
+      "external_id": "63249718",
+      "title": "Silver Nitrate",
+      "authors": [
+        "Silvia Moreno-Garcia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1670014934l/63249718.jpg",
+      "rank": 8,
+      "votes": 15389,
+      "winner": false
+    },
+    {
+      "external_id": "61111034",
+      "title": "Our Share of Night",
+      "authors": [
+        "Mariana Enriquez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1660429329l/61111034.jpg",
+      "rank": 9,
+      "votes": 14658,
+      "winner": false
+    },
+    {
+      "external_id": "60460704",
+      "title": "Lone Women",
+      "authors": [
+        "Victor LaValle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673265868l/60460704.jpg",
+      "rank": 10,
+      "votes": 12704,
+      "winner": false
+    },
+    {
+      "external_id": "69704909",
+      "title": "Black Sheep",
+      "authors": [
+        "Rachel   Harrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1680293749l/69704909.jpg",
+      "rank": 11,
+      "votes": 4779,
+      "winner": false
+    },
+    {
+      "external_id": "63331415",
+      "title": "Mister Magic",
+      "authors": [
+        "Kiersten White"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1668565101l/63331415.jpg",
+      "rank": 12,
+      "votes": 4185,
+      "winner": false
+    },
+    {
+      "external_id": "59366246",
+      "title": "Don't Fear the Reaper",
+      "authors": [
+        "Stephen Graham Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673499594l/59366246.jpg",
+      "rank": 13,
+      "votes": 3977,
+      "winner": false
+    },
+    {
+      "external_id": "62919847",
+      "title": "The Reformatory",
+      "authors": [
+        "Tananarive Due"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686761184l/62919847.jpg",
+      "rank": 14,
+      "votes": 3744,
+      "winner": false
+    },
+    {
+      "external_id": "61420120",
+      "title": "Natural Beauty",
+      "authors": [
+        "Ling Ling Huang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659407685l/61420120.jpg",
+      "rank": 15,
+      "votes": 3191,
+      "winner": false
+    },
+    {
+      "external_id": "61686006",
+      "title": "Sisters of the Lost Nation",
+      "authors": [
+        "Nick Medina"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675646126l/61686006.jpg",
+      "rank": 16,
+      "votes": 3008,
+      "winner": false
+    },
+    {
+      "external_id": "62888191",
+      "title": "Monstrilio",
+      "authors": [
+        "Gerardo Sámano Córdova"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664985853l/62888191.jpg",
+      "rank": 17,
+      "votes": 2595,
+      "winner": false
+    },
+    {
+      "external_id": "101144676",
+      "title": "Becoming the Boogeyman",
+      "authors": [
+        "Richard  Chizmar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1676324384l/101144676.jpg",
+      "rank": 18,
+      "votes": 2458,
+      "winner": false
+    },
+    {
+      "external_id": "63259070",
+      "title": "Her Little Flowers",
+      "authors": [
+        "Shannon  Morgan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1667946255l/63259070.jpg",
+      "rank": 19,
+      "votes": 1911,
+      "winner": false
+    },
+    {
+      "external_id": "63077620",
+      "title": "Dead Eleven",
+      "authors": [
+        "Jimmy Juliano"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1668017771l/63077620.jpg",
+      "rank": 20,
+      "votes": 1858,
+      "winner": false
+    }
+  ]
+}

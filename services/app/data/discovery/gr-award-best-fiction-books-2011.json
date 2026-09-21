@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-fiction-books-2011",
+  "kind": "award",
+  "title": "Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fiction-books-2011",
+  "year": 2011,
+  "category": "Fiction",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:32.200313+00:00",
+  "books": [
+    {
+      "external_id": "10357575",
+      "title": "1Q84",
+      "authors": [
+        "Haruki Murakami"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483103331l/10357575.jpg",
+      "rank": 1,
+      "votes": 4107,
+      "winner": true
+    },
+    {
+      "external_id": "8546358",
+      "title": "The Peach Keeper",
+      "authors": [
+        "Sarah Addison Allen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320549305l/8546358.jpg",
+      "rank": 2,
+      "votes": 3948,
+      "winner": false
+    },
+    {
+      "external_id": "8554005",
+      "title": "Sing You Home",
+      "authors": [
+        "Jodi Picoult"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347775953l/8554005.jpg",
+      "rank": 3,
+      "votes": 3676,
+      "winner": false
+    },
+    {
+      "external_id": "8949352",
+      "title": "Night Road",
+      "authors": [
+        "Kristin Hannah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1282369257l/8949352.jpg",
+      "rank": 4,
+      "votes": 3245,
+      "winner": false
+    },
+    {
+      "external_id": "9279177",
+      "title": "The Lover's Dictionary",
+      "authors": [
+        "David Levithan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1312055996l/9279177.jpg",
+      "rank": 5,
+      "votes": 3000,
+      "winner": false
+    },
+    {
+      "external_id": "9118135",
+      "title": "State of Wonder",
+      "authors": [
+        "Ann Patchett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1454428541l/9118135._SY600_.jpg",
+      "rank": 6,
+      "votes": 2204,
+      "winner": false
+    },
+    {
+      "external_id": "8366402",
+      "title": "The Tiger's Wife",
+      "authors": [
+        "Téa Obreht"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1382570044l/8366402.jpg",
+      "rank": 7,
+      "votes": 2192,
+      "winner": false
+    },
+    {
+      "external_id": "10032672",
+      "title": "The Language of Flowers",
+      "authors": [
+        "Vanessa Diffenbaugh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333577674l/10032672.jpg",
+      "rank": 8,
+      "votes": 1867,
+      "winner": false
+    },
+    {
+      "external_id": "10964693",
+      "title": "The Marriage Plot",
+      "authors": [
+        "Jeffrey Eugenides"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328736940l/10964693.jpg",
+      "rank": 9,
+      "votes": 1827,
+      "winner": false
+    },
+    {
+      "external_id": "9545064",
+      "title": "The Story of Beautiful Girl",
+      "authors": [
+        "Rachel Simon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336851169l/9545064.jpg",
+      "rank": 10,
+      "votes": 1661,
+      "winner": false
+    },
+    {
+      "external_id": "10996342",
+      "title": "The Art of Fielding",
+      "authors": [
+        "Chad Harbach"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554025214l/10996342._SY600_.jpg",
+      "rank": 11,
+      "votes": 601,
+      "winner": false
+    },
+    {
+      "external_id": "11804738",
+      "title": "The Sense of an Ending",
+      "authors": [
+        "Julian Barnes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405784985l/11804738.jpg",
+      "rank": 12,
+      "votes": 568,
+      "winner": false
+    },
+    {
+      "external_id": "10059498",
+      "title": "The Midwife's Confession",
+      "authors": [
+        "Diane Chamberlain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1323870279l/10059498.jpg",
+      "rank": 13,
+      "votes": 553,
+      "winner": false
+    },
+    {
+      "external_id": "9443405",
+      "title": "The Pale King",
+      "authors": [
+        "David Foster Wallace"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1324405497l/9443405.jpg",
+      "rank": 14,
+      "votes": 516,
+      "winner": false
+    },
+    {
+      "external_id": "10364994",
+      "title": "The Submission",
+      "authors": [
+        "Amy Waldman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442936732l/10364994._SY600_.jpg",
+      "rank": 15,
+      "votes": 273,
+      "winner": false
+    },
+    {
+      "external_id": "9749711",
+      "title": "Silver Sparrow",
+      "authors": [
+        "Tayari Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327358458l/9749711._SY600_.jpg",
+      "rank": 16,
+      "votes": 248,
+      "winner": false
+    },
+    {
+      "external_id": "9923372",
+      "title": "Maine",
+      "authors": [
+        "J. Courtney Sullivan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1295996313l/9923372.jpg",
+      "rank": 17,
+      "votes": 170,
+      "winner": false
+    },
+    {
+      "external_id": "10762469",
+      "title": "The Leftovers",
+      "authors": [
+        "Tom Perrotta"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404872433l/10762469.jpg",
+      "rank": 18,
+      "votes": 167,
+      "winner": false
+    },
+    {
+      "external_id": "8584686",
+      "title": "Swamplandia!",
+      "authors": [
+        "Karen Russell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320536498l/8584686.jpg",
+      "rank": 19,
+      "votes": 167,
+      "winner": false
+    },
+    {
+      "external_id": "9658159",
+      "title": "Once Upon a River",
+      "authors": [
+        "Bonnie Jo Campbell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1294263416l/9658159.jpg",
+      "rank": 20,
+      "votes": 107,
+      "winner": false
+    }
+  ]
+}

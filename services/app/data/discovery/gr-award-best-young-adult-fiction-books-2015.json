@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-young-adult-fiction-books-2015",
+  "kind": "award",
+  "title": "Young Adult Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fiction-books-2015",
+  "year": 2015,
+  "category": "Young Adult Fiction",
+  "genres": [
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:51.940675+00:00",
+  "books": [
+    {
+      "external_id": "18460392",
+      "title": "All the Bright Places",
+      "authors": [
+        "Jennifer Niven"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404331702l/18460392.jpg",
+      "rank": 1,
+      "votes": 31978,
+      "winner": true
+    },
+    {
+      "external_id": "20698530",
+      "title": "P.S. I Still Love You",
+      "authors": [
+        "Jenny Han"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422881430l/20698530.jpg",
+      "rank": 2,
+      "votes": 26274,
+      "winner": false
+    },
+    {
+      "external_id": "23009402",
+      "title": "Saint Anything",
+      "authors": [
+        "Sarah Dessen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414680105l/23009402.jpg",
+      "rank": 3,
+      "votes": 16217,
+      "winner": false
+    },
+    {
+      "external_id": "18879761",
+      "title": "I Was Here",
+      "authors": [
+        "Gayle Forman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405960366l/18879761.jpg",
+      "rank": 4,
+      "votes": 16186,
+      "winner": false
+    },
+    {
+      "external_id": "19547856",
+      "title": "Simon vs. the Homo Sapiens Agenda",
+      "authors": [
+        "Becky Albertalli"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1402915678l/19547856.jpg",
+      "rank": 5,
+      "votes": 15100,
+      "winner": false
+    },
+    {
+      "external_id": "18692431",
+      "title": "Everything, Everything",
+      "authors": [
+        "Nicola Yoon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1450515891l/18692431._SY600_.jpg",
+      "rank": 6,
+      "votes": 11542,
+      "winner": false
+    },
+    {
+      "external_id": "23305614",
+      "title": "Finding Audrey",
+      "authors": [
+        "Sophie Kinsella"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1466835008l/23305614.jpg",
+      "rank": 7,
+      "votes": 10109,
+      "winner": false
+    },
+    {
+      "external_id": "23492282",
+      "title": "Nowhere But Here",
+      "authors": [
+        "Katie McGarry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422584378l/23492282.jpg",
+      "rank": 8,
+      "votes": 8493,
+      "winner": false
+    },
+    {
+      "external_id": "25452125",
+      "title": "Wild Reckless",
+      "authors": [
+        "Ginger Scott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430334808l/25452125.jpg",
+      "rank": 9,
+      "votes": 7977,
+      "winner": false
+    },
+    {
+      "external_id": "21921204",
+      "title": "Mosquitoland",
+      "authors": [
+        "David  Arnold"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403130634l/21921204.jpg",
+      "rank": 10,
+      "votes": 7498,
+      "winner": false
+    },
+    {
+      "external_id": "22328549",
+      "title": "My Heart and Other Black Holes",
+      "authors": [
+        "Jasmine Warga"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414464523l/22328549.jpg",
+      "rank": 11,
+      "votes": 3764,
+      "winner": false
+    },
+    {
+      "external_id": "17661416",
+      "title": "Made You Up",
+      "authors": [
+        "Francesca Zappia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413485149l/17661416.jpg",
+      "rank": 12,
+      "votes": 3653,
+      "winner": false
+    },
+    {
+      "external_id": "24885704",
+      "title": "Until Friday Night",
+      "authors": [
+        "Abbi Glines"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1429191098l/24885704._SY600_.jpg",
+      "rank": 13,
+      "votes": 3009,
+      "winner": false
+    },
+    {
+      "external_id": "21469068",
+      "title": "I'll Meet You There",
+      "authors": [
+        "Heather Demetrios"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403897439l/21469068.jpg",
+      "rank": 14,
+      "votes": 2972,
+      "winner": false
+    },
+    {
+      "external_id": "23341894",
+      "title": "Every Last Word",
+      "authors": [
+        "Tamara Ireland Stone"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1431016937l/23341894.jpg",
+      "rank": 15,
+      "votes": 2907,
+      "winner": false
+    },
+    {
+      "external_id": "17285330",
+      "title": "The Last Time We Say Goodbye",
+      "authors": [
+        "Cynthia Hand"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403710453l/17285330.jpg",
+      "rank": 16,
+      "votes": 2701,
+      "winner": false
+    },
+    {
+      "external_id": "19542841",
+      "title": "More Happy Than Not",
+      "authors": [
+        "Adam Silvera"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1437759419l/19542841._SY600_.jpg",
+      "rank": 17,
+      "votes": 2537,
+      "winner": false
+    },
+    {
+      "external_id": "18304322",
+      "title": "Dumplin'",
+      "authors": [
+        "Julie   Murphy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424189465l/18304322.jpg",
+      "rank": 18,
+      "votes": 2471,
+      "winner": false
+    },
+    {
+      "external_id": "18660447",
+      "title": "The Fill-In Boyfriend",
+      "authors": [
+        "Kasie West"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555964577l/18660447._SY600_.jpg",
+      "rank": 19,
+      "votes": 1983,
+      "winner": false
+    },
+    {
+      "external_id": "21853636",
+      "title": "All the Rage",
+      "authors": [
+        "Courtney Summers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410879862l/21853636.jpg",
+      "rank": 20,
+      "votes": 1446,
+      "winner": false
+    }
+  ]
+}

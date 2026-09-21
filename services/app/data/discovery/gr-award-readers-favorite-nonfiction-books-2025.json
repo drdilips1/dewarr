@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-readers-favorite-nonfiction-books-2025",
+  "kind": "award",
+  "title": "Nonfiction",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-nonfiction-books-2025",
+  "year": 2025,
+  "category": "Nonfiction",
+  "genres": [
+    "non-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:39:57.523658+00:00",
+  "books": [
+    {
+      "external_id": "220341389",
+      "title": "Everything Is Tuberculosis",
+      "authors": [
+        "John  Green"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729825992l/220341389._SY600_.jpg",
+      "rank": 1,
+      "votes": 114142,
+      "winner": true
+    },
+    {
+      "external_id": "216351768",
+      "title": "The Let Them Theory",
+      "authors": [
+        "Mel Robbins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1735589383l/216351768._SY600_.jpg",
+      "rank": 2,
+      "votes": 78705,
+      "winner": false
+    },
+    {
+      "external_id": "213870084",
+      "title": "One Day, Everyone Will Have Always Been Against This",
+      "authors": [
+        "Omar El Akkad"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1764097849l/213870084._SY600_.jpg",
+      "rank": 3,
+      "votes": 35077,
+      "winner": false
+    },
+    {
+      "external_id": "208840291",
+      "title": "The Serviceberry",
+      "authors": [
+        "Robin Wall Kimmerer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1760641870l/208840291._SY600_.jpg",
+      "rank": 4,
+      "votes": 24579,
+      "winner": false
+    },
+    {
+      "external_id": "216970860",
+      "title": "Girl on Girl",
+      "authors": [
+        "Sophie Gilbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1737731201l/216970860._SY600_.jpg",
+      "rank": 5,
+      "votes": 19691,
+      "winner": false
+    },
+    {
+      "external_id": "220481360",
+      "title": "The New Age of Sexism",
+      "authors": [
+        "Laura Bates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1760606628l/220481360._SY600_.jpg",
+      "rank": 6,
+      "votes": 17815,
+      "winner": false
+    },
+    {
+      "external_id": "222733476",
+      "title": "The Idaho Four",
+      "authors": [
+        "James  Patterson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1739959692l/222733476._SY600_.jpg",
+      "rank": 7,
+      "votes": 17794,
+      "winner": false
+    },
+    {
+      "external_id": "217927444",
+      "title": "Murderland",
+      "authors": [
+        "Caroline Fraser"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1737606245l/217927444._SY600_.jpg",
+      "rank": 8,
+      "votes": 16313,
+      "winner": false
+    },
+    {
+      "external_id": "216247552",
+      "title": "No More Tears",
+      "authors": [
+        "Gardiner Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1724259520l/216247552._SY600_.jpg",
+      "rank": 9,
+      "votes": 13176,
+      "winner": false
+    },
+    {
+      "external_id": "176444106",
+      "title": "Abundance",
+      "authors": [
+        "Ezra Klein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1737312514l/176444106._SY600_.jpg",
+      "rank": 10,
+      "votes": 11361,
+      "winner": false
+    },
+    {
+      "external_id": "217245588",
+      "title": "The Book of Alchemy",
+      "authors": [
+        "Suleika Jaouad"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729249655l/217245588.jpg",
+      "rank": 11,
+      "votes": 5392,
+      "winner": false
+    },
+    {
+      "external_id": "222376640",
+      "title": "Enshittification",
+      "authors": [
+        "Cory Doctorow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1745430964l/222376640._SY600_.jpg",
+      "rank": 12,
+      "votes": 5282,
+      "winner": false
+    },
+    {
+      "external_id": "199534697",
+      "title": "Black in Blues",
+      "authors": [
+        "Imani Perry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1726021576l/199534697._SY600_.jpg",
+      "rank": 13,
+      "votes": 4800,
+      "winner": false
+    },
+    {
+      "external_id": "222625142",
+      "title": "Are You Mad at Me?",
+      "authors": [
+        "Meg  Josephson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1746538566l/222625142._SY600_.jpg",
+      "rank": 14,
+      "votes": 4675,
+      "winner": false
+    },
+    {
+      "external_id": "218569826",
+      "title": "Is a River Alive?",
+      "authors": [
+        "Robert Macfarlane"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729776933l/218569826._SY600_.jpg",
+      "rank": 15,
+      "votes": 4146,
+      "winner": false
+    },
+    {
+      "external_id": "212426504",
+      "title": "You Didn't Hear This From Me",
+      "authors": [
+        "Kelsey McKinney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1715007292l/212426504._SY600_.jpg",
+      "rank": 16,
+      "votes": 4031,
+      "winner": false
+    },
+    {
+      "external_id": "223736287",
+      "title": "Replaceable You",
+      "authors": [
+        "Mary Roach"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1749647448l/223736287._SY600_.jpg",
+      "rank": 17,
+      "votes": 3155,
+      "winner": false
+    },
+    {
+      "external_id": "220458600",
+      "title": "The Fort Bragg Cartel",
+      "authors": [
+        "Seth Harp"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1731642509l/220458600._SY600_.jpg",
+      "rank": 18,
+      "votes": 2414,
+      "winner": false
+    },
+    {
+      "external_id": "212806718",
+      "title": "The 5 Types of Wealth",
+      "authors": [
+        "Sahil Bloom"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718997233l/212806718._SY600_.jpg",
+      "rank": 19,
+      "votes": 1958,
+      "winner": false
+    },
+    {
+      "external_id": "222376732",
+      "title": "The Tragedy of True Crime",
+      "authors": [
+        "John J.  Lennon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742015751l/222376732._SY600_.jpg",
+      "rank": 20,
+      "votes": 1688,
+      "winner": false
+    }
+  ]
+}

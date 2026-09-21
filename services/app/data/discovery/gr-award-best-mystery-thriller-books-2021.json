@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-mystery-thriller-books-2021",
+  "kind": "award",
+  "title": "Mystery & Thriller",
+  "source_url": "https://www.goodreads.com/choiceawards/best-mystery-thriller-books-2021",
+  "year": 2021,
+  "category": "Mystery & Thriller",
+  "genres": [
+    "mystery"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:01.920985+00:00",
+  "books": [
+    {
+      "external_id": "58744977",
+      "title": "The Last Thing He Told Me",
+      "authors": [
+        "Laura Dave"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628623381l/58744977._SY600_.jpg",
+      "rank": 1,
+      "votes": 58406,
+      "winner": true
+    },
+    {
+      "external_id": "45300567",
+      "title": "The Maidens",
+      "authors": [
+        "Alex Michaelides"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608557750l/45300567.jpg",
+      "rank": 2,
+      "votes": 49829,
+      "winner": false
+    },
+    {
+      "external_id": "56852407",
+      "title": "Billy Summers",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1618151020l/56852407.jpg",
+      "rank": 3,
+      "votes": 47847,
+      "winner": false
+    },
+    {
+      "external_id": "52476830",
+      "title": "The Push",
+      "authors": [
+        "Ashley Audrain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1609854219l/52476830._SY600_.jpg",
+      "rank": 4,
+      "votes": 39069,
+      "winner": false
+    },
+    {
+      "external_id": "54886959",
+      "title": "Arsenic and Adobo",
+      "authors": [
+        "Mia P. Manansala"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605571302l/54886959.jpg",
+      "rank": 5,
+      "votes": 28263,
+      "winner": false
+    },
+    {
+      "external_id": "54626223",
+      "title": "Harlem Shuffle",
+      "authors": [
+        "Colson Whitehead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612449660l/54626223.jpg",
+      "rank": 6,
+      "votes": 26200,
+      "winner": false
+    },
+    {
+      "external_id": "56143578",
+      "title": "Apples Never Fall",
+      "authors": [
+        "Liane Moriarty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611956842l/56143578.jpg",
+      "rank": 7,
+      "votes": 24584,
+      "winner": false
+    },
+    {
+      "external_id": "53137893",
+      "title": "The Wife Upstairs",
+      "authors": [
+        "Rachel Hawkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1609506208l/53137893._SY600_.jpg",
+      "rank": 8,
+      "votes": 22922,
+      "winner": false
+    },
+    {
+      "external_id": "56269064",
+      "title": "Rock Paper Scissors",
+      "authors": [
+        "Alice Feeney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612020952l/56269064.jpg",
+      "rank": 9,
+      "votes": 21201,
+      "winner": false
+    },
+    {
+      "external_id": "57660923",
+      "title": "Razorblade Tears",
+      "authors": [
+        "S.A. Cosby"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617826855l/57660923._SY600_.jpg",
+      "rank": 10,
+      "votes": 17636,
+      "winner": false
+    },
+    {
+      "external_id": "54737068",
+      "title": "Local Woman Missing",
+      "authors": [
+        "Mary Kubica"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605828061l/54737068.jpg",
+      "rank": 11,
+      "votes": 7273,
+      "winner": false
+    },
+    {
+      "external_id": "53317496",
+      "title": "The Survivors",
+      "authors": [
+        "Jane Harper"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1603739993l/53317496.jpg",
+      "rank": 12,
+      "votes": 6955,
+      "winner": false
+    },
+    {
+      "external_id": "53137974",
+      "title": "The Good Sister",
+      "authors": [
+        "Sally Hepworth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611556027l/53137974.jpg",
+      "rank": 13,
+      "votes": 6844,
+      "winner": false
+    },
+    {
+      "external_id": "55922299",
+      "title": "The Night She Disappeared",
+      "authors": [
+        "Lisa Jewell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628703473l/55922299.jpg",
+      "rank": 14,
+      "votes": 6828,
+      "winner": false
+    },
+    {
+      "external_id": "50279680",
+      "title": "We Begin at the End",
+      "authors": [
+        "Chris  Whitaker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1603742175l/50279680.jpg",
+      "rank": 15,
+      "votes": 6706,
+      "winner": false
+    },
+    {
+      "external_id": "55315487",
+      "title": "The Plot",
+      "authors": [
+        "Jean Hanff Korelitz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1626185013l/55315487._SY600_.jpg",
+      "rank": 16,
+      "votes": 5340,
+      "winner": false
+    },
+    {
+      "external_id": "56366617",
+      "title": "Not a Happy Family",
+      "authors": [
+        "Shari Lapena"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608637770l/56366617.jpg",
+      "rank": 17,
+      "votes": 4807,
+      "winner": false
+    },
+    {
+      "external_id": "56213354",
+      "title": "A Slow Fire Burning",
+      "authors": [
+        "Paula Hawkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1613412239l/56213354._SY600_.jpg",
+      "rank": 18,
+      "votes": 4702,
+      "winner": false
+    },
+    {
+      "external_id": "50516731",
+      "title": "Every Last Secret",
+      "authors": [
+        "A.R. Torre"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1592376976l/50516731.jpg",
+      "rank": 19,
+      "votes": 3004,
+      "winner": false
+    },
+    {
+      "external_id": "57505278",
+      "title": "All Her Little Secrets",
+      "authors": [
+        "Wanda M. Morris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617072042l/57505278.jpg",
+      "rank": 20,
+      "votes": 1883,
+      "winner": false
+    }
+  ]
+}

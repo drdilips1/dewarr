@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-romance-books-2014",
+  "kind": "award",
+  "title": "Romance",
+  "source_url": "https://www.goodreads.com/choiceawards/best-romance-books-2014",
+  "year": 2014,
+  "category": "Romance",
+  "genres": [
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:05.192969+00:00",
+  "books": [
+    {
+      "external_id": "11710373",
+      "title": "Written in My Own Heart's Blood",
+      "authors": [
+        "Diana Gabaldon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1365173799l/11710373.jpg",
+      "rank": 1,
+      "votes": 50933,
+      "winner": true
+    },
+    {
+      "external_id": "24445517",
+      "title": "Maybe Someday",
+      "authors": [
+        "Colleen Hoover"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421002815l/24445517.jpg",
+      "rank": 2,
+      "votes": 29535,
+      "winner": false
+    },
+    {
+      "external_id": "18108281",
+      "title": "The King",
+      "authors": [
+        "J.R. Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1371919011l/18108281.jpg",
+      "rank": 3,
+      "votes": 28526,
+      "winner": false
+    },
+    {
+      "external_id": "17788401",
+      "title": "Ugly Love",
+      "authors": [
+        "Colleen Hoover"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1632597571l/17788401._SY600_.jpg",
+      "rank": 4,
+      "votes": 19027,
+      "winner": false
+    },
+    {
+      "external_id": "20639274",
+      "title": "Archer's Voice",
+      "authors": [
+        "Mia Sheridan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390778440l/20639274.jpg",
+      "rank": 5,
+      "votes": 16520,
+      "winner": false
+    },
+    {
+      "external_id": "18104607",
+      "title": "Beautiful Oblivion",
+      "authors": [
+        "Jamie McGuire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1688188867l/18104607._SY600_.jpg",
+      "rank": 6,
+      "votes": 16043,
+      "winner": false
+    },
+    {
+      "external_id": "20603820",
+      "title": "The Will",
+      "authors": [
+        "Kristen Ashley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390276224l/20603820.jpg",
+      "rank": 7,
+      "votes": 13739,
+      "winner": false
+    },
+    {
+      "external_id": "17159944",
+      "title": "Shield of Winter",
+      "authors": [
+        "Nalini Singh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1384968780l/17159944.jpg",
+      "rank": 8,
+      "votes": 11162,
+      "winner": false
+    },
+    {
+      "external_id": "16247792",
+      "title": "Gabriel's Redemption",
+      "authors": [
+        "Sylvain Reynard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366632463l/16247792.jpg",
+      "rank": 9,
+      "votes": 10463,
+      "winner": false
+    },
+    {
+      "external_id": "17880714",
+      "title": "Crashed",
+      "authors": [
+        "K. Bromberg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391008361l/17880714.jpg",
+      "rank": 10,
+      "votes": 10216,
+      "winner": false
+    },
+    {
+      "external_id": "18052985",
+      "title": "Romancing the Duke",
+      "authors": [
+        "Tessa Dare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1377311107l/18052985.jpg",
+      "rank": 11,
+      "votes": 5892,
+      "winner": false
+    },
+    {
+      "external_id": "20421367",
+      "title": "Raw",
+      "authors": [
+        "Belle Aurora"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1437456543l/20421367._SY600_.jpg",
+      "rank": 12,
+      "votes": 4697,
+      "winner": false
+    },
+    {
+      "external_id": "20504754",
+      "title": "Transcendence",
+      "authors": [
+        "Shay Savage"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391320052l/20504754._SY600_.jpg",
+      "rank": 13,
+      "votes": 3539,
+      "winner": false
+    },
+    {
+      "external_id": "19059695",
+      "title": "The Backup Boyfriend",
+      "authors": [
+        "River Jaymes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385797196l/19059695.jpg",
+      "rank": 14,
+      "votes": 3367,
+      "winner": false
+    },
+    {
+      "external_id": "22843341",
+      "title": "Stepbrother Dearest",
+      "authors": [
+        "Penelope Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1407407844l/22843341.jpg",
+      "rank": 15,
+      "votes": 2290,
+      "winner": false
+    },
+    {
+      "external_id": "19095025",
+      "title": "Play",
+      "authors": [
+        "Kylie Scott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1393202794l/19095025.jpg",
+      "rank": 16,
+      "votes": 2282,
+      "winner": false
+    },
+    {
+      "external_id": "18304765",
+      "title": "Fighting Redemption",
+      "authors": [
+        "Kate  McCarthy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1383004376l/18304765.jpg",
+      "rank": 17,
+      "votes": 2216,
+      "winner": false
+    },
+    {
+      "external_id": "18775297",
+      "title": "Sweet Filthy Boy",
+      "authors": [
+        "Christina Lauren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395723782l/18775297.jpg",
+      "rank": 18,
+      "votes": 2064,
+      "winner": false
+    },
+    {
+      "external_id": "18115061",
+      "title": "Before Jamaica Lane",
+      "authors": [
+        "Samantha Young"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1372090894l/18115061.jpg",
+      "rank": 19,
+      "votes": 1711,
+      "winner": false
+    },
+    {
+      "external_id": "23110403",
+      "title": "Black Lies",
+      "authors": [
+        "Alessandra Torre"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1409650186l/23110403.jpg",
+      "rank": 20,
+      "votes": 1265,
+      "winner": false
+    }
+  ]
+}

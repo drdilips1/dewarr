@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-memoir-autobiography-books-2021",
+  "kind": "award",
+  "title": "Memoir & Autobiography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-memoir-autobiography-books-2021",
+  "year": 2021,
+  "category": "Memoir & Autobiography",
+  "genres": [
+    "biography"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:12.769132+00:00",
+  "books": [
+    {
+      "external_id": "54814676",
+      "title": "Crying in H Mart",
+      "authors": [
+        "Michelle Zauner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601937850l/54814676.jpg",
+      "rank": 1,
+      "votes": 51361,
+      "winner": true
+    },
+    {
+      "external_id": "55360284",
+      "title": "Taste",
+      "authors": [
+        "Stanley Tucci"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1626644825l/55360284.jpg",
+      "rank": 2,
+      "votes": 36789,
+      "winner": false
+    },
+    {
+      "external_id": "54860610",
+      "title": "Somebody's Daughter",
+      "authors": [
+        "Ashley C. Ford"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600787680l/54860610.jpg",
+      "rank": 3,
+      "votes": 19798,
+      "winner": false
+    },
+    {
+      "external_id": "50743767",
+      "title": "Between Two Kingdoms",
+      "authors": [
+        "Suleika Jaouad"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1579614170l/50743767.jpg",
+      "rank": 4,
+      "votes": 15858,
+      "winner": false
+    },
+    {
+      "external_id": "55538528",
+      "title": "Unfinished",
+      "authors": [
+        "Priyanka Chopra Jonas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1619923221l/55538528.jpg",
+      "rank": 5,
+      "votes": 14022,
+      "winner": false
+    },
+    {
+      "external_id": "57032570",
+      "title": "Notes on Grief",
+      "authors": [
+        "Chimamanda Ngozi Adichie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642286916l/57032570._SY600_.jpg",
+      "rank": 6,
+      "votes": 13764,
+      "winner": false
+    },
+    {
+      "external_id": "57351643",
+      "title": "Unbound",
+      "authors": [
+        "Tarana Burke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1619011035l/57351643.jpg",
+      "rank": 7,
+      "votes": 13014,
+      "winner": false
+    },
+    {
+      "external_id": "50622390",
+      "title": "Just as I Am",
+      "authors": [
+        "Cicely Tyson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608626888l/50622390.jpg",
+      "rank": 8,
+      "votes": 12741,
+      "winner": false
+    },
+    {
+      "external_id": "54895726",
+      "title": "Broken Horses",
+      "authors": [
+        "Brandi Carlile"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605648571l/54895726.jpg",
+      "rank": 9,
+      "votes": 10624,
+      "winner": false
+    },
+    {
+      "external_id": "55277901",
+      "title": "Brat",
+      "authors": [
+        "Andrew McCarthy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602569785l/55277901.jpg",
+      "rank": 10,
+      "votes": 9969,
+      "winner": false
+    },
+    {
+      "external_id": "56461570",
+      "title": "Beautiful Country",
+      "authors": [
+        "Qian Julie Wang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1614681640l/56461570.jpg",
+      "rank": 11,
+      "votes": 4213,
+      "winner": false
+    },
+    {
+      "external_id": "55711622",
+      "title": "¡Hola Papi!",
+      "authors": [
+        "John Paul Brammer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1623264430l/55711622._SY600_.jpg",
+      "rank": 12,
+      "votes": 2719,
+      "winner": false
+    },
+    {
+      "external_id": "50542126",
+      "title": "Beautiful Things",
+      "authors": [
+        "Hunter Biden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612712713l/50542126.jpg",
+      "rank": 13,
+      "votes": 2533,
+      "winner": false
+    },
+    {
+      "external_id": "54799395",
+      "title": "The Puma Years",
+      "authors": [
+        "Laura   Coleman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620290928l/54799395.jpg",
+      "rank": 14,
+      "votes": 2048,
+      "winner": false
+    },
+    {
+      "external_id": "52321511",
+      "title": "Bravey",
+      "authors": [
+        "Alexi Pappas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600114227l/52321511._SY600_.jpg",
+      "rank": 15,
+      "votes": 1737,
+      "winner": false
+    },
+    {
+      "external_id": "53376379",
+      "title": "Seeing Ghosts",
+      "authors": [
+        "Kat Chow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1589992826l/53376379.jpg",
+      "rank": 16,
+      "votes": 1421,
+      "winner": false
+    },
+    {
+      "external_id": "53317418",
+      "title": "Finding Freedom",
+      "authors": [
+        "Erin French"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1618437884l/53317418._SY600_.jpg",
+      "rank": 17,
+      "votes": 1347,
+      "winner": false
+    },
+    {
+      "external_id": "55106753",
+      "title": "Widowish",
+      "authors": [
+        "Melissa  Gould"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611346362l/55106753._SY600_.jpg",
+      "rank": 18,
+      "votes": 1300,
+      "winner": false
+    },
+    {
+      "external_id": "52766142",
+      "title": "Aftershocks",
+      "authors": [
+        "Nadia Owusu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1577016280l/52766142.jpg",
+      "rank": 19,
+      "votes": 1280,
+      "winner": false
+    },
+    {
+      "external_id": "55710553",
+      "title": "House of Sticks",
+      "authors": [
+        "Ly Tran"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620572993l/55710553.jpg",
+      "rank": 20,
+      "votes": 980,
+      "winner": false
+    }
+  ]
+}

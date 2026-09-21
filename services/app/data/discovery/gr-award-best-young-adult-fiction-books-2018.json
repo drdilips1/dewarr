@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-young-adult-fiction-books-2018",
+  "kind": "award",
+  "title": "Young Adult Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fiction-books-2018",
+  "year": 2018,
+  "category": "Young Adult Fiction",
+  "genres": [
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:19.553465+00:00",
+  "books": [
+    {
+      "external_id": "31180248",
+      "title": "Leah on the Offbeat",
+      "authors": [
+        "Becky Albertalli"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510886704l/31180248.jpg",
+      "rank": 1,
+      "votes": 24880,
+      "winner": true
+    },
+    {
+      "external_id": "34810320",
+      "title": "Sadie",
+      "authors": [
+        "Courtney Summers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556559178l/34810320._SY600_.jpg",
+      "rank": 2,
+      "votes": 21528,
+      "winner": false
+    },
+    {
+      "external_id": "36341204",
+      "title": "What If It's Us",
+      "authors": [
+        "Becky Albertalli"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1526557760l/36341204._SY600_.jpg",
+      "rank": 3,
+      "votes": 19464,
+      "winner": false
+    },
+    {
+      "external_id": "36987719",
+      "title": "All the Little Lights",
+      "authors": [
+        "Jamie McGuire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1517243886l/36987719.jpg",
+      "rank": 4,
+      "votes": 18186,
+      "winner": false
+    },
+    {
+      "external_id": "37880094",
+      "title": "The Lady's Guide to Petticoats and Piracy",
+      "authors": [
+        "Mackenzi Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522625323l/37880094.jpg",
+      "rank": 5,
+      "votes": 17769,
+      "winner": false
+    },
+    {
+      "external_id": "35604686",
+      "title": "The Astonishing Color of After",
+      "authors": [
+        "Emily X.R. Pan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1516893525l/35604686.jpg",
+      "rank": 6,
+      "votes": 17685,
+      "winner": false
+    },
+    {
+      "external_id": "32333338",
+      "title": "Save the Date",
+      "authors": [
+        "Morgan Matson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1528430336l/32333338._SY600_.jpg",
+      "rank": 7,
+      "votes": 14860,
+      "winner": false
+    },
+    {
+      "external_id": "29589074",
+      "title": "Truly, Devious",
+      "authors": [
+        "Maureen Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498501619l/29589074._SY600_.jpg",
+      "rank": 8,
+      "votes": 13684,
+      "winner": false
+    },
+    {
+      "external_id": "35887533",
+      "title": "Puddin'",
+      "authors": [
+        "Julie   Murphy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1506962424l/35887533.jpg",
+      "rank": 9,
+      "votes": 13410,
+      "winner": false
+    },
+    {
+      "external_id": "35297272",
+      "title": "Emergency Contact",
+      "authors": [
+        "Mary H.K. Choi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1519613921l/35297272._SY600_.jpg",
+      "rank": 10,
+      "votes": 9891,
+      "winner": false
+    },
+    {
+      "external_id": "35520012",
+      "title": "Love, Life, and the List",
+      "authors": [
+        "Kasie West"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498498324l/35520012._SY600_.jpg",
+      "rank": 11,
+      "votes": 4758,
+      "winner": false
+    },
+    {
+      "external_id": "31625048",
+      "title": "Let's Talk About Love",
+      "authors": [
+        "Claire Kann"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1495644184l/31625048.jpg",
+      "rank": 12,
+      "votes": 4376,
+      "winner": false
+    },
+    {
+      "external_id": "35297469",
+      "title": "Starry Eyes",
+      "authors": [
+        "Jenn Bennett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1497542946l/35297469.jpg",
+      "rank": 13,
+      "votes": 4140,
+      "winner": false
+    },
+    {
+      "external_id": "30969755",
+      "title": "The Cheerleaders",
+      "authors": [
+        "Kara Thomas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1508532886l/30969755.jpg",
+      "rank": 14,
+      "votes": 3897,
+      "winner": false
+    },
+    {
+      "external_id": "33810737",
+      "title": "The Case for Jamie",
+      "authors": [
+        "Brittany Cavallaro"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498506342l/33810737.jpg",
+      "rank": 15,
+      "votes": 3664,
+      "winner": false
+    },
+    {
+      "external_id": "31207017",
+      "title": "Love, Hate & Other Filters",
+      "authors": [
+        "Samira Ahmed"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498910824l/31207017.jpg",
+      "rank": 16,
+      "votes": 3637,
+      "winner": false
+    },
+    {
+      "external_id": "38720939",
+      "title": "A Very Large Expanse of Sea",
+      "authors": [
+        "Tahereh Mafi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558453377l/38720939._SY600_.jpg",
+      "rank": 17,
+      "votes": 3454,
+      "winner": false
+    },
+    {
+      "external_id": "35604682",
+      "title": "Tyler Johnson Was Here",
+      "authors": [
+        "Jay Coles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1505137706l/35604682.jpg",
+      "rank": 18,
+      "votes": 2345,
+      "winner": false
+    },
+    {
+      "external_id": "34325090",
+      "title": "I Was Born for This",
+      "authors": [
+        "Alice Oseman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1517511429l/34325090._SY600_.jpg",
+      "rank": 19,
+      "votes": 2210,
+      "winner": false
+    },
+    {
+      "external_id": "40239755",
+      "title": "The Accidentals",
+      "authors": [
+        "Sarina Bowen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529068047l/40239755.jpg",
+      "rank": 20,
+      "votes": 1738,
+      "winner": false
+    }
+  ]
+}

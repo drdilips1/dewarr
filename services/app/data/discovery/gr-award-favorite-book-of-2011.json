@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-favorite-book-of-2011",
+  "kind": "award",
+  "title": "Favorite Book of 2011",
+  "source_url": "https://www.goodreads.com/choiceawards/favorite-book-of-2011",
+  "year": 2011,
+  "category": "Favorite Book of 2011",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:30.741694+00:00",
+  "books": [
+    {
+      "external_id": "8306857",
+      "title": "Divergent",
+      "authors": [
+        "Veronica Roth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327873996l/8306857.jpg",
+      "rank": 1,
+      "votes": 10159,
+      "winner": true
+    },
+    {
+      "external_id": "7304203",
+      "title": "Shadowfever",
+      "authors": [
+        "Karen Marie Moning"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439940228l/7304203._SY600_.jpg",
+      "rank": 2,
+      "votes": 8970,
+      "winner": false
+    },
+    {
+      "external_id": "10664113",
+      "title": "A Dance with Dragons",
+      "authors": [
+        "George R.R. Martin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1753059444l/10664113._SY600_.jpg",
+      "rank": 3,
+      "votes": 7617,
+      "winner": false
+    },
+    {
+      "external_id": "6752378",
+      "title": "City of Fallen Angels",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369452302l/6752378.jpg",
+      "rank": 4,
+      "votes": 7535,
+      "winner": false
+    },
+    {
+      "external_id": "9418327",
+      "title": "Bossypants",
+      "authors": [
+        "Tina Fey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481509554l/9418327.jpg",
+      "rank": 5,
+      "votes": 6287,
+      "winner": false
+    },
+    {
+      "external_id": "1215032",
+      "title": "The Wise Man's Fear",
+      "authors": [
+        "Patrick Rothfuss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1785688949l/1215032._SY600_.jpg",
+      "rank": 6,
+      "votes": 5859,
+      "winner": false
+    },
+    {
+      "external_id": "8667848",
+      "title": "A Discovery of Witches",
+      "authors": [
+        "Deborah Harkness"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1525097370l/8667848._SY600_.jpg",
+      "rank": 7,
+      "votes": 4833,
+      "winner": false
+    },
+    {
+      "external_id": "9460487",
+      "title": "Miss Peregrine's Home for Peculiar Children",
+      "authors": [
+        "Ransom Riggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1623449170l/9460487.jpg",
+      "rank": 8,
+      "votes": 4254,
+      "winner": false
+    },
+    {
+      "external_id": "7686667",
+      "title": "Delirium",
+      "authors": [
+        "Lauren Oliver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1298079937l/7686667.jpg",
+      "rank": 9,
+      "votes": 3754,
+      "winner": false
+    },
+    {
+      "external_id": "7981206",
+      "title": "Dead Reckoning",
+      "authors": [
+        "Charlaine Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1357679465l/7981206.jpg",
+      "rank": 10,
+      "votes": 3300,
+      "winner": false
+    },
+    {
+      "external_id": "9409458",
+      "title": "Forever",
+      "authors": [
+        "Maggie Stiefvater"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1285771367l/9409458.jpg",
+      "rank": 11,
+      "votes": 1732,
+      "winner": false
+    },
+    {
+      "external_id": "8554005",
+      "title": "Sing You Home",
+      "authors": [
+        "Jodi Picoult"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347775953l/8554005.jpg",
+      "rank": 12,
+      "votes": 1718,
+      "winner": false
+    },
+    {
+      "external_id": "9118135",
+      "title": "State of Wonder",
+      "authors": [
+        "Ann Patchett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1454428541l/9118135._SY600_.jpg",
+      "rank": 13,
+      "votes": 1347,
+      "winner": false
+    },
+    {
+      "external_id": "8683812",
+      "title": "The Paris Wife",
+      "authors": [
+        "Paula McLain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320545874l/8683812.jpg",
+      "rank": 14,
+      "votes": 1339,
+      "winner": false
+    },
+    {
+      "external_id": "8652190",
+      "title": "Awakened",
+      "authors": [
+        "P.C. Cast"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1307744664l/8652190.jpg",
+      "rank": 15,
+      "votes": 1319,
+      "winner": false
+    },
+    {
+      "external_id": "9361589",
+      "title": "The Night Circus",
+      "authors": [
+        "Erin Morgenstern"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1786033865l/9361589._SY600_.jpg",
+      "rank": 16,
+      "votes": 1293,
+      "winner": false
+    },
+    {
+      "external_id": "9520360",
+      "title": "The Son of Neptune",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201114l/9520360._SY600_.jpg",
+      "rank": 17,
+      "votes": 1137,
+      "winner": false
+    },
+    {
+      "external_id": "8709527",
+      "title": "Bloodlines",
+      "authors": [
+        "Richelle Mead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1297199431l/8709527.jpg",
+      "rank": 18,
+      "votes": 815,
+      "winner": false
+    },
+    {
+      "external_id": "8490112",
+      "title": "Daughter of Smoke & Bone",
+      "authors": [
+        "Laini Taylor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461353773l/8490112.jpg",
+      "rank": 19,
+      "votes": 683,
+      "winner": false
+    },
+    {
+      "external_id": "9969571",
+      "title": "Ready Player One",
+      "authors": [
+        "Ernest Cline"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500930947l/9969571._SY600_.jpg",
+      "rank": 20,
+      "votes": 613,
+      "winner": false
+    }
+  ]
+}

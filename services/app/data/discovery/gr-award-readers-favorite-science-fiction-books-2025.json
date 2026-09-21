@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-readers-favorite-science-fiction-books-2025",
+  "kind": "award",
+  "title": "Science Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-science-fiction-books-2025",
+  "year": 2025,
+  "category": "Science Fiction",
+  "genres": [
+    "science-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:39:49.346049+00:00",
+  "books": [
+    {
+      "external_id": "218460337",
+      "title": "The Compound",
+      "authors": [
+        "Aisling Rawle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1732112544l/218460337._SY600_.jpg",
+      "rank": 1,
+      "votes": 45287,
+      "winner": true
+    },
+    {
+      "external_id": "220161572",
+      "title": "The Book of Lost Hours",
+      "authors": [
+        "Hayley Gelfuso"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1733864413l/220161572._SY600_.jpg",
+      "rank": 2,
+      "votes": 40446,
+      "winner": false
+    },
+    {
+      "external_id": "218431658",
+      "title": "The Poppy Fields",
+      "authors": [
+        "Nikki Erlick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741536875l/218431658._SY600_.jpg",
+      "rank": 3,
+      "votes": 37483,
+      "winner": false
+    },
+    {
+      "external_id": "214329001",
+      "title": "Death of the Author",
+      "authors": [
+        "Nnedi Okorafor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1734381178l/214329001._SY600_.jpg",
+      "rank": 4,
+      "votes": 30919,
+      "winner": false
+    },
+    {
+      "external_id": "218695937",
+      "title": "The Dream Hotel",
+      "authors": [
+        "Laila Lalami"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1728608469l/218695937._SY600_.jpg",
+      "rank": 5,
+      "votes": 21986,
+      "winner": false
+    },
+    {
+      "external_id": "216881365",
+      "title": "Of Monsters and Mainframes",
+      "authors": [
+        "Barbara Truelove"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1728113202l/216881365._SY600_.jpg",
+      "rank": 6,
+      "votes": 20709,
+      "winner": false
+    },
+    {
+      "external_id": "211004190",
+      "title": "When the Moon Hits Your Eye",
+      "authors": [
+        "John Scalzi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1724773724l/211004190._SY600_.jpg",
+      "rank": 7,
+      "votes": 17184,
+      "winner": false
+    },
+    {
+      "external_id": "217388015",
+      "title": "Automatic Noodle",
+      "authors": [
+        "Annalee Newitz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1731705824l/217388015._SY600_.jpg",
+      "rank": 8,
+      "votes": 15233,
+      "winner": false
+    },
+    {
+      "external_id": "198190200",
+      "title": "I Think We've Been Here Before",
+      "authors": [
+        "Suzy Krause"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1706383102l/198190200._SY600_.jpg",
+      "rank": 9,
+      "votes": 14182,
+      "winner": false
+    },
+    {
+      "external_id": "210384823",
+      "title": "Shroud",
+      "authors": [
+        "Adrian Tchaikovsky"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1745049244l/210384823._SY600_.jpg",
+      "rank": 10,
+      "votes": 12392,
+      "winner": false
+    },
+    {
+      "external_id": "221452836",
+      "title": "These Memories Do Not Belong to Us",
+      "authors": [
+        "Yiming Ma"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1731410407l/221452836._SY600_.jpg",
+      "rank": 11,
+      "votes": 5768,
+      "winner": false
+    },
+    {
+      "external_id": "217929489",
+      "title": "The Memory Collectors",
+      "authors": [
+        "Dete Meserve"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1724211305l/217929489._SY600_.jpg",
+      "rank": 12,
+      "votes": 4536,
+      "winner": false
+    },
+    {
+      "external_id": "223614634",
+      "title": "The Merge",
+      "authors": [
+        "Grace          Walker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1743149009l/223614634._SY600_.jpg",
+      "rank": 13,
+      "votes": 3919,
+      "winner": false
+    },
+    {
+      "external_id": "213847219",
+      "title": "Hammajang Luck",
+      "authors": [
+        "Makana Yamamoto"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1721758158l/213847219._SY600_.jpg",
+      "rank": 14,
+      "votes": 3651,
+      "winner": false
+    },
+    {
+      "external_id": "221244034",
+      "title": "Local Heavens",
+      "authors": [
+        "K.M. Fajardo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741687271l/221244034._SY600_.jpg",
+      "rank": 15,
+      "votes": 3323,
+      "winner": false
+    },
+    {
+      "external_id": "222376623",
+      "title": "The Shattering Peace",
+      "authors": [
+        "John Scalzi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1738081345l/222376623._SY600_.jpg",
+      "rank": 16,
+      "votes": 2942,
+      "winner": false
+    },
+    {
+      "external_id": "217387959",
+      "title": "The Once and Future Me",
+      "authors": [
+        "Melissa  Pace"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1727628990l/217387959._SY600_.jpg",
+      "rank": 17,
+      "votes": 2857,
+      "winner": false
+    },
+    {
+      "external_id": "222376600",
+      "title": "Saltcrop",
+      "authors": [
+        "Yume Kitasei"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1738165911l/222376600._SY600_.jpg",
+      "rank": 18,
+      "votes": 2850,
+      "winner": false
+    },
+    {
+      "external_id": "215362027",
+      "title": "Dissolution",
+      "authors": [
+        "Nicholas Binge"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1728084015l/215362027._SY600_.jpg",
+      "rank": 19,
+      "votes": 2179,
+      "winner": false
+    },
+    {
+      "external_id": "214151232",
+      "title": "Luminous",
+      "authors": [
+        "Silvia Park"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1719941305l/214151232._SY600_.jpg",
+      "rank": 20,
+      "votes": 2087,
+      "winner": false
+    }
+  ]
+}

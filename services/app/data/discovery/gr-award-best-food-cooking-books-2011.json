@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-food-cooking-books-2011",
+  "kind": "award",
+  "title": "Food & Cooking",
+  "source_url": "https://www.goodreads.com/choiceawards/best-food-cooking-books-2011",
+  "year": 2011,
+  "category": "Food & Cooking",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:48:14.348495+00:00",
+  "books": [
+    {
+      "external_id": "9443977",
+      "title": "My Father's Daughter",
+      "authors": [
+        "Gwyneth Paltrow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344265471l/9443977.jpg",
+      "rank": 1,
+      "votes": 2287,
+      "winner": true
+    },
+    {
+      "external_id": "10987533",
+      "title": "Good Eats 3",
+      "authors": [
+        "Alton Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327953594l/10987533.jpg",
+      "rank": 2,
+      "votes": 2201,
+      "winner": false
+    },
+    {
+      "external_id": "8459594",
+      "title": "Blood, Bones, and Butter",
+      "authors": [
+        "Gabrielle Hamilton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327889966l/8459594.jpg",
+      "rank": 3,
+      "votes": 1748,
+      "winner": false
+    },
+    {
+      "external_id": "9833965",
+      "title": "Don't Kill the Birthday Girl",
+      "authors": [
+        "Sandra Beasley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320458547l/9833965.jpg",
+      "rank": 4,
+      "votes": 1488,
+      "winner": false
+    },
+    {
+      "external_id": "9745929",
+      "title": "Our Best Bites",
+      "authors": [
+        "Sara Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415425633l/9745929.jpg",
+      "rank": 5,
+      "votes": 1430,
+      "winner": false
+    },
+    {
+      "external_id": "8727466",
+      "title": "Why We Get Fat",
+      "authors": [
+        "Gary Taubes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320563681l/8727466.jpg",
+      "rank": 6,
+      "votes": 842,
+      "winner": false
+    },
+    {
+      "external_id": "9848914",
+      "title": "Vegan for Life",
+      "authors": [
+        "Jack Norris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1727189451l/9848914.jpg",
+      "rank": 7,
+      "votes": 811,
+      "winner": false
+    },
+    {
+      "external_id": "8704047",
+      "title": "The Sorcerer's Apprentices",
+      "authors": [
+        "Lisa Abend"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1321293913l/8704047.jpg",
+      "rank": 8,
+      "votes": 782,
+      "winner": false
+    },
+    {
+      "external_id": "10178769",
+      "title": "Jeni's Splendid Ice Creams at Home",
+      "authors": [
+        "Jeni Britton Bauer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404579881l/10178769.jpg",
+      "rank": 9,
+      "votes": 765,
+      "winner": false
+    },
+    {
+      "external_id": "10222093",
+      "title": "Tomatoland",
+      "authors": [
+        "Barry Estabrook"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347474148l/10222093.jpg",
+      "rank": 10,
+      "votes": 689,
+      "winner": false
+    },
+    {
+      "external_id": "8667490",
+      "title": "Life, on the Line",
+      "authors": [
+        "Grant Achatz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1298005883l/8667490.jpg",
+      "rank": 11,
+      "votes": 368,
+      "winner": false
+    },
+    {
+      "external_id": "11828823",
+      "title": "Paula Deen's Southern Cooking Bible",
+      "authors": [
+        "Paula H. Deen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348105264l/11828823.jpg",
+      "rank": 12,
+      "votes": 366,
+      "winner": false
+    },
+    {
+      "external_id": "9265477",
+      "title": "Power Foods",
+      "authors": [
+        "Whole Living Magazine"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320443911l/9265477.jpg",
+      "rank": 13,
+      "votes": 346,
+      "winner": false
+    },
+    {
+      "external_id": "9326166",
+      "title": "Super Natural Every Day",
+      "authors": [
+        "Heidi Swanson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347784316l/9326166.jpg",
+      "rank": 14,
+      "votes": 344,
+      "winner": false
+    },
+    {
+      "external_id": "9808248",
+      "title": "Veganist",
+      "authors": [
+        "Kathy Freston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1296595893l/9808248.jpg",
+      "rank": 15,
+      "votes": 307,
+      "winner": false
+    },
+    {
+      "external_id": "11505008",
+      "title": "Wheat Belly",
+      "authors": [
+        "William  Davis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1317793840l/11505008.jpg",
+      "rank": 16,
+      "votes": 268,
+      "winner": false
+    },
+    {
+      "external_id": "7665543",
+      "title": "Day of Honey",
+      "authors": [
+        "Annia Ciezadlo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442962622l/7665543._SY600_.jpg",
+      "rank": 17,
+      "votes": 172,
+      "winner": false
+    },
+    {
+      "external_id": "11680487",
+      "title": "The Urban Farm Handbook",
+      "authors": [
+        "Annette Cottrell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348524006l/11680487.jpg",
+      "rank": 18,
+      "votes": 124,
+      "winner": false
+    },
+    {
+      "external_id": "9382782",
+      "title": "Vegan Pie in the Sky",
+      "authors": [
+        "Isa Chandra Moskowitz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328829395l/9382782.jpg",
+      "rank": 19,
+      "votes": 101,
+      "winner": false
+    },
+    {
+      "external_id": "11550559",
+      "title": "The Kitchen Counter Cooking School",
+      "authors": [
+        "Kathleen Flinn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347825650l/11550559.jpg",
+      "rank": 20,
+      "votes": 70,
+      "winner": false
+    }
+  ]
+}

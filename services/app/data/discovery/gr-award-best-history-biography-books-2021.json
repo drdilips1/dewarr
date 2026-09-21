@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-history-biography-books-2021",
+  "kind": "award",
+  "title": "History & Biography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-history-biography-books-2021",
+  "year": 2021,
+  "category": "History & Biography",
+  "genres": [
+    "biography",
+    "history"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:14.388553+00:00",
+  "books": [
+    {
+      "external_id": "43868109",
+      "title": "Empire of Pain",
+      "authors": [
+        "Patrick Radden Keefe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611952534l/43868109.jpg",
+      "rank": 1,
+      "votes": 19969,
+      "winner": true
+    },
+    {
+      "external_id": "56132724",
+      "title": "The Woman They Could Not Silence",
+      "authors": [
+        "Kate  Moore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1614685052l/56132724.jpg",
+      "rank": 2,
+      "votes": 16199,
+      "winner": false
+    },
+    {
+      "external_id": "54968118",
+      "title": "The Code Breaker",
+      "authors": [
+        "Walter Isaacson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1610894755l/54968118.jpg",
+      "rank": 3,
+      "votes": 15574,
+      "winner": false
+    },
+    {
+      "external_id": "54998251",
+      "title": "Four Hundred Souls",
+      "authors": [
+        "Ibram X. Kendi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600089396l/54998251.jpg",
+      "rank": 4,
+      "votes": 15115,
+      "winner": false
+    },
+    {
+      "external_id": "56382342",
+      "title": "Vanderbilt",
+      "authors": [
+        "Anderson Cooper"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627322192l/56382342.jpg",
+      "rank": 5,
+      "votes": 15071,
+      "winner": false
+    },
+    {
+      "external_id": "53968539",
+      "title": "Come Fly the World",
+      "authors": [
+        "Julia  Cooke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598245496l/53968539.jpg",
+      "rank": 6,
+      "votes": 13994,
+      "winner": false
+    },
+    {
+      "external_id": "55643287",
+      "title": "How the Word Is Passed",
+      "authors": [
+        "Clint   Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1603917194l/55643287.jpg",
+      "rank": 7,
+      "votes": 13067,
+      "winner": false
+    },
+    {
+      "external_id": "53404774",
+      "title": "The Doctors Blackwell",
+      "authors": [
+        "Janice P. Nimura"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605025962l/53404774._SY600_.jpg",
+      "rank": 8,
+      "votes": 11760,
+      "winner": false
+    },
+    {
+      "external_id": "52090762",
+      "title": "The Light of Days",
+      "authors": [
+        "Judy Batalion"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1574330836l/52090762.jpg",
+      "rank": 9,
+      "votes": 11692,
+      "winner": false
+    },
+    {
+      "external_id": "56668328",
+      "title": "The Bomber Mafia",
+      "authors": [
+        "Malcolm Gladwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1616422126l/56668328.jpg",
+      "rank": 10,
+      "votes": 11653,
+      "winner": false
+    },
+    {
+      "external_id": "53138238",
+      "title": "The Three Mothers",
+      "authors": [
+        "Anna Malaika Tubbs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605558517l/53138238._SY600_.jpg",
+      "rank": 11,
+      "votes": 3597,
+      "winner": false
+    },
+    {
+      "external_id": "55298325",
+      "title": "On Juneteenth",
+      "authors": [
+        "Annette Gordon-Reed"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1604381998l/55298325.jpg",
+      "rank": 12,
+      "votes": 3522,
+      "winner": false
+    },
+    {
+      "external_id": "53122357",
+      "title": "Four Lost Cities",
+      "authors": [
+        "Annalee Newitz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1580793108l/53122357._SY600_.jpg",
+      "rank": 13,
+      "votes": 3487,
+      "winner": false
+    },
+    {
+      "external_id": "53915317",
+      "title": "Walk in My Combat Boots",
+      "authors": [
+        "James  Patterson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1606104755l/53915317.jpg",
+      "rank": 14,
+      "votes": 3366,
+      "winner": false
+    },
+    {
+      "external_id": "54900051",
+      "title": "Madhouse at the End of the Earth",
+      "authors": [
+        "Julian Sancton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600097225l/54900051.jpg",
+      "rank": 15,
+      "votes": 3030,
+      "winner": false
+    },
+    {
+      "external_id": "52630443",
+      "title": "Bag Man",
+      "authors": [
+        "Rachel Maddow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612708957l/52630443.jpg",
+      "rank": 16,
+      "votes": 2494,
+      "winner": false
+    },
+    {
+      "external_id": "56554585",
+      "title": "The Taking of Jemima Boone",
+      "authors": [
+        "Matthew Pearl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1619417696l/56554585.jpg",
+      "rank": 17,
+      "votes": 1779,
+      "winner": false
+    },
+    {
+      "external_id": "55920278",
+      "title": "Facing the Mountain",
+      "authors": [
+        "Daniel James Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1616478863l/55920278.jpg",
+      "rank": 18,
+      "votes": 1505,
+      "winner": false
+    },
+    {
+      "external_id": "56695159",
+      "title": "Amazon Unbound",
+      "authors": [
+        "Brad Stone"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620573018l/56695159._SY600_.jpg",
+      "rank": 19,
+      "votes": 1475,
+      "winner": false
+    },
+    {
+      "external_id": "55057586",
+      "title": "Zero Fail",
+      "authors": [
+        "Carol Leonnig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1607321292l/55057586.jpg",
+      "rank": 20,
+      "votes": 1169,
+      "winner": false
+    }
+  ]
+}

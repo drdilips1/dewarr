@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-readers-favorite-fiction-books-2025",
+  "kind": "award",
+  "title": "Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-fiction-books-2025",
+  "year": 2025,
+  "category": "Fiction",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:39:41.194084+00:00",
+  "books": [
+    {
+      "external_id": "217163697",
+      "title": "My Friends",
+      "authors": [
+        "Fredrik Backman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1734625930l/217163697._SY600_.jpg",
+      "rank": 1,
+      "votes": 167509,
+      "winner": true
+    },
+    {
+      "external_id": "211004089",
+      "title": "Wild Dark Shore",
+      "authors": [
+        "Charlotte McConaghy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1715784093l/211004089._SY600_.jpg",
+      "rank": 2,
+      "votes": 107486,
+      "winner": false
+    },
+    {
+      "external_id": "223001257",
+      "title": "The Correspondent",
+      "authors": [
+        "Virginia      Evans"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1735235942l/223001257._SY600_.jpg",
+      "rank": 3,
+      "votes": 41827,
+      "winner": false
+    },
+    {
+      "external_id": "217245618",
+      "title": "The Names",
+      "authors": [
+        "Florence Knapp"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1746106001l/217245618._SY600_.jpg",
+      "rank": 4,
+      "votes": 41454,
+      "winner": false
+    },
+    {
+      "external_id": "223541023",
+      "title": "The Academy",
+      "authors": [
+        "Elin Hilderbrand"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1738247902l/223541023.jpg",
+      "rank": 5,
+      "votes": 41354,
+      "winner": false
+    },
+    {
+      "external_id": "220239075",
+      "title": "These Summer Storms",
+      "authors": [
+        "Sarah MacLean"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1733197711l/220239075._SY600_.jpg",
+      "rank": 6,
+      "votes": 37354,
+      "winner": false
+    },
+    {
+      "external_id": "213243915",
+      "title": "We All Live Here",
+      "authors": [
+        "Jojo Moyes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1725547585l/213243915._SY600_.jpg",
+      "rank": 7,
+      "votes": 36891,
+      "winner": false
+    },
+    {
+      "external_id": "219848315",
+      "title": "The Emperor of Gladness",
+      "authors": [
+        "Ocean Vuong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1747142606l/219848315._SY600_.jpg",
+      "rank": 8,
+      "votes": 34472,
+      "winner": false
+    },
+    {
+      "external_id": "219319489",
+      "title": "The River Is Waiting",
+      "authors": [
+        "Wally Lamb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1749666637l/219319489._SY600_.jpg",
+      "rank": 9,
+      "votes": 33386,
+      "winner": false
+    },
+    {
+      "external_id": "214152244",
+      "title": "The Three Lives of Cate Kay",
+      "authors": [
+        "Kate Fagan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1719020959l/214152244._SY600_.jpg",
+      "rank": 10,
+      "votes": 25631,
+      "winner": false
+    },
+    {
+      "external_id": "219520778",
+      "title": "Dream Count",
+      "authors": [
+        "Chimamanda Ngozi Adichie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1733150461l/219520778._SY600_.jpg",
+      "rank": 11,
+      "votes": 11094,
+      "winner": false
+    },
+    {
+      "external_id": "219520677",
+      "title": "The Girls Who Grew Big",
+      "authors": [
+        "Leila Mottley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1734707534l/219520677._SY600_.jpg",
+      "rank": 12,
+      "votes": 10788,
+      "winner": false
+    },
+    {
+      "external_id": "227429747",
+      "title": "Cursed Daughters",
+      "authors": [
+        "Oyinkan Braithwaite"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1744489197l/227429747._SY600_.jpg",
+      "rank": 13,
+      "votes": 10271,
+      "winner": false
+    },
+    {
+      "external_id": "228110489",
+      "title": "Heart the Lover",
+      "authors": [
+        "Lily King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1745508457l/228110489._SY600_.jpg",
+      "rank": 14,
+      "votes": 9270,
+      "winner": false
+    },
+    {
+      "external_id": "213243949",
+      "title": "Three Days in June",
+      "authors": [
+        "Anne Tyler"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1749844607l/213243949._SY600_.jpg",
+      "rank": 15,
+      "votes": 8216,
+      "winner": false
+    },
+    {
+      "external_id": "223854881",
+      "title": "What We Can Know",
+      "authors": [
+        "Ian McEwan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1776242135l/223854881._SY600_.jpg",
+      "rank": 16,
+      "votes": 7320,
+      "winner": false
+    },
+    {
+      "external_id": "232207672",
+      "title": "A Guardian and a Thief",
+      "authors": [
+        "Megha Majumdar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1760973092l/232207672._SY600_.jpg",
+      "rank": 17,
+      "votes": 5150,
+      "winner": false
+    },
+    {
+      "external_id": "222683974",
+      "title": "The Loneliness of Sonia and Sunny",
+      "authors": [
+        "Kiran Desai"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1754044242l/222683974._SY600_.jpg",
+      "rank": 18,
+      "votes": 3405,
+      "winner": false
+    },
+    {
+      "external_id": "221251749",
+      "title": "People Like Us",
+      "authors": [
+        "Jason Mott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1740424709l/221251749._SY600_.jpg",
+      "rank": 19,
+      "votes": 2917,
+      "winner": false
+    },
+    {
+      "external_id": "222376836",
+      "title": "Life, and Death, and Giants",
+      "authors": [
+        "Ron Rindo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1738767126l/222376836._SY600_.jpg",
+      "rank": 20,
+      "votes": 2405,
+      "winner": false
+    }
+  ]
+}

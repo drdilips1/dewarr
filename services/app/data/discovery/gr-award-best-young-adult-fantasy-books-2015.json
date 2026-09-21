@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-young-adult-fantasy-books-2015",
+  "kind": "award",
+  "title": "Young Adult Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fantasy-books-2015",
+  "year": 2015,
+  "category": "Young Adult Fantasy",
+  "genres": [
+    "fantasy",
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:53.225965+00:00",
+  "books": [
+    {
+      "external_id": "18006496",
+      "title": "Queen of Shadows",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441230104l/18006496.jpg",
+      "rank": 1,
+      "votes": 35770,
+      "winner": true
+    },
+    {
+      "external_id": "23734628",
+      "title": "Carry On",
+      "authors": [
+        "Rainbow Rowell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1514812545l/23734628.jpg",
+      "rank": 2,
+      "votes": 29569,
+      "winner": false
+    },
+    {
+      "external_id": "13206900",
+      "title": "Winter",
+      "authors": [
+        "Marissa Meyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470057036l/13206900._SY600_.jpg",
+      "rank": 3,
+      "votes": 28418,
+      "winner": false
+    },
+    {
+      "external_id": "22328546",
+      "title": "Red Queen",
+      "authors": [
+        "Victoria Aveyard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1449778912l/22328546._SY600_.jpg",
+      "rank": 4,
+      "votes": 27915,
+      "winner": false
+    },
+    {
+      "external_id": "23019291",
+      "title": "The Heir",
+      "authors": [
+        "Kiera Cass"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441044173l/23019291._SY600_.jpg",
+      "rank": 5,
+      "votes": 26005,
+      "winner": false
+    },
+    {
+      "external_id": "16096824",
+      "title": "A Court of Thorns and Roses",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546406962l/16096824._SY600_.jpg",
+      "rank": 6,
+      "votes": 18272,
+      "winner": false
+    },
+    {
+      "external_id": "22544764",
+      "title": "Uprooted",
+      "authors": [
+        "Naomi Novik"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550135418l/22544764._SY600_.jpg",
+      "rank": 7,
+      "votes": 17315,
+      "winner": false
+    },
+    {
+      "external_id": "15704459",
+      "title": "Firefight",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1661014557l/15704459._SY600_.jpg",
+      "rank": 8,
+      "votes": 15602,
+      "winner": false
+    },
+    {
+      "external_id": "23437156",
+      "title": "Six of Crows",
+      "authors": [
+        "Leigh Bardugo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1651710803l/23437156.jpg",
+      "rank": 9,
+      "votes": 14219,
+      "winner": false
+    },
+    {
+      "external_id": "20560137",
+      "title": "An Ember in the Ashes",
+      "authors": [
+        "Sabaa Tahir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1787783215l/20560137._SY600_.jpg",
+      "rank": 10,
+      "votes": 10783,
+      "winner": false
+    },
+    {
+      "external_id": "18798983",
+      "title": "The Wrath and the Dawn",
+      "authors": [
+        "Renée Ahdieh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417956963l/18798983.jpg",
+      "rank": 11,
+      "votes": 4837,
+      "winner": false
+    },
+    {
+      "external_id": "24120519",
+      "title": "Library of Souls",
+      "authors": [
+        "Ransom Riggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1472783347l/24120519._SY600_.jpg",
+      "rank": 12,
+      "votes": 4679,
+      "winner": false
+    },
+    {
+      "external_id": "18748007",
+      "title": "Dead of Winter",
+      "authors": [
+        "Kresley Cole"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398969635l/18748007.jpg",
+      "rank": 13,
+      "votes": 4295,
+      "winner": false
+    },
+    {
+      "external_id": "8709528",
+      "title": "The Ruby Circle",
+      "authors": [
+        "Richelle Mead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1409815340l/8709528.jpg",
+      "rank": 14,
+      "votes": 3781,
+      "winner": false
+    },
+    {
+      "external_id": "21469060",
+      "title": "The Winner's Crime",
+      "authors": [
+        "Marie Rutkoski"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1411679515l/21469060.jpg",
+      "rank": 15,
+      "votes": 2764,
+      "winner": false
+    },
+    {
+      "external_id": "21569527",
+      "title": "The Heart of Betrayal",
+      "authors": [
+        "Mary E. Pearson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414932049l/21569527.jpg",
+      "rank": 16,
+      "votes": 1998,
+      "winner": false
+    },
+    {
+      "external_id": "23901077",
+      "title": "End of Days",
+      "authors": [
+        "Susan Ee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1423384743l/23901077.jpg",
+      "rank": 17,
+      "votes": 1947,
+      "winner": false
+    },
+    {
+      "external_id": "20958632",
+      "title": "The Darkest Part of the Forest",
+      "authors": [
+        "Holly Black"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1397755014l/20958632.jpg",
+      "rank": 18,
+      "votes": 1626,
+      "winner": false
+    },
+    {
+      "external_id": "20821149",
+      "title": "Gathering Darkness",
+      "authors": [
+        "Morgan Rhodes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1419104093l/20821149.jpg",
+      "rank": 19,
+      "votes": 1488,
+      "winner": false
+    },
+    {
+      "external_id": "23395680",
+      "title": "Illuminae",
+      "authors": [
+        "Amie Kaufman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443433956l/23395680._SY600_.jpg",
+      "rank": 20,
+      "votes": 1377,
+      "winner": false
+    }
+  ]
+}

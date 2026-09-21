@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-debut-author-2018",
+  "kind": "award",
+  "title": "Debut Author",
+  "source_url": "https://www.goodreads.com/choiceawards/best-debut-author-2018",
+  "year": 2018,
+  "category": "Debut Author",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:18.031817+00:00",
+  "books": [
+    {
+      "external_id": "34728667",
+      "title": "Children of Blood and Bone",
+      "authors": [
+        "Tomi Adeyemi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1516127989l/34728667.jpg",
+      "rank": 1,
+      "votes": 70984,
+      "winner": true
+    },
+    {
+      "external_id": "34848682",
+      "title": "The Woman in the Window",
+      "authors": [
+        "A.J. Finn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1496341857l/34848682.jpg",
+      "rank": 2,
+      "votes": 36008,
+      "winner": false
+    },
+    {
+      "external_id": "37486222",
+      "title": "The Tattooist of Auschwitz",
+      "authors": [
+        "Heather   Morris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523720881l/37486222.jpg",
+      "rank": 3,
+      "votes": 35180,
+      "winner": false
+    },
+    {
+      "external_id": "36577586",
+      "title": "The Kiss Quotient",
+      "authors": [
+        "Helen  Hoang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1527983720l/36577586._SY600_.jpg",
+      "rank": 4,
+      "votes": 23334,
+      "winner": false
+    },
+    {
+      "external_id": "34499221",
+      "title": "To Kill a Kingdom",
+      "authors": [
+        "Alexandra Christo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1524322945l/34499221._SY600_.jpg",
+      "rank": 5,
+      "votes": 20896,
+      "winner": false
+    },
+    {
+      "external_id": "36692478",
+      "title": "There There",
+      "authors": [
+        "Tommy Orange"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1512071034l/36692478.jpg",
+      "rank": 6,
+      "votes": 13962,
+      "winner": false
+    },
+    {
+      "external_id": "35887181",
+      "title": "The Poppy War",
+      "authors": [
+        "R.F. Kuang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1515692316l/35887181.jpg",
+      "rank": 7,
+      "votes": 11754,
+      "winner": false
+    },
+    {
+      "external_id": "35604686",
+      "title": "The Astonishing Color of After",
+      "authors": [
+        "Emily X.R. Pan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1516893525l/35604686.jpg",
+      "rank": 8,
+      "votes": 11502,
+      "winner": false
+    },
+    {
+      "external_id": "36388243",
+      "title": "Something in the Water",
+      "authors": [
+        "Catherine Steadman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1528120440l/36388243._SY600_.jpg",
+      "rank": 9,
+      "votes": 9718,
+      "winner": false
+    },
+    {
+      "external_id": "35356382",
+      "title": "The Chalk Man",
+      "authors": [
+        "C.J. Tudor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1568852018l/35356382._SY600_.jpg",
+      "rank": 10,
+      "votes": 8478,
+      "winner": false
+    },
+    {
+      "external_id": "38186611",
+      "title": "An Absolutely Remarkable Thing",
+      "authors": [
+        "Hank Green"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520448919l/38186611.jpg",
+      "rank": 11,
+      "votes": 4309,
+      "winner": false
+    },
+    {
+      "external_id": "36840397",
+      "title": "A Place for Us",
+      "authors": [
+        "Fatima Farheen Mirza"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1517006183l/36840397.jpg",
+      "rank": 12,
+      "votes": 4208,
+      "winner": false
+    },
+    {
+      "external_id": "36373417",
+      "title": "The Map of Salt and Stars",
+      "authors": [
+        "Zeyn Joukhadar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608401496l/36373417._SY600_.jpg",
+      "rank": 13,
+      "votes": 2815,
+      "winner": false
+    },
+    {
+      "external_id": "36337550",
+      "title": "The 7½ Deaths of Evelyn Hardcastle",
+      "authors": [
+        "Stuart Turton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1506896221l/36337550.jpg",
+      "rank": 14,
+      "votes": 2747,
+      "winner": false
+    },
+    {
+      "external_id": "34726469",
+      "title": "Sky in the Deep",
+      "authors": [
+        "Adrienne Young"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1508350209l/34726469.jpg",
+      "rank": 15,
+      "votes": 2696,
+      "winner": false
+    },
+    {
+      "external_id": "34275212",
+      "title": "Girls Burn Brighter",
+      "authors": [
+        "Shobha   Rao"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520279618l/34275212._SY600_.jpg",
+      "rank": 16,
+      "votes": 2607,
+      "winner": false
+    },
+    {
+      "external_id": "34262106",
+      "title": "Everything Here Is Beautiful",
+      "authors": [
+        "Mira T. Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492886846l/34262106.jpg",
+      "rank": 17,
+      "votes": 2153,
+      "winner": false
+    },
+    {
+      "external_id": "36636727",
+      "title": "Fruit of the Drunken Tree",
+      "authors": [
+        "Ingrid Rojas Contreras"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511284543l/36636727.jpg",
+      "rank": 18,
+      "votes": 1630,
+      "winner": false
+    },
+    {
+      "external_id": "36187116",
+      "title": "Witchmark",
+      "authors": [
+        "C.L. Polk"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1505336772l/36187116._SY600_.jpg",
+      "rank": 19,
+      "votes": 892,
+      "winner": false
+    },
+    {
+      "external_id": "35297106",
+      "title": "The Terminal List",
+      "authors": [
+        "Jack Carr"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520163970l/35297106._SY600_.jpg",
+      "rank": 20,
+      "votes": 732,
+      "winner": false
+    }
+  ]
+}

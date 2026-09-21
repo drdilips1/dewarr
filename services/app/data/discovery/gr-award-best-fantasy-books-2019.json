@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-fantasy-books-2019",
+  "kind": "award",
+  "title": "Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fantasy-books-2019",
+  "year": 2019,
+  "category": "Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:02.895054+00:00",
+  "books": [
+    {
+      "external_id": "43263680",
+      "title": "Ninth House",
+      "authors": [
+        "Leigh Bardugo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553102141l/43263680.jpg",
+      "rank": 1,
+      "votes": 53430,
+      "winner": true
+    },
+    {
+      "external_id": "43575115",
+      "title": "The Starless Sea",
+      "authors": [
+        "Erin Morgenstern"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617715077l/43575115._SY600_.jpg",
+      "rank": 2,
+      "votes": 35351,
+      "winner": false
+    },
+    {
+      "external_id": "39943621",
+      "title": "Fire & Blood",
+      "authors": [
+        "George R.R. Martin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1532828095l/39943621.jpg",
+      "rank": 3,
+      "votes": 32778,
+      "winner": false
+    },
+    {
+      "external_id": "40381319",
+      "title": "The Priory of the Orange Tree",
+      "authors": [
+        "Samantha Shannon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1579226799l/40381319._SY600_.jpg",
+      "rank": 4,
+      "votes": 30868,
+      "winner": false
+    },
+    {
+      "external_id": "35297403",
+      "title": "The Red Scrolls of Magic",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529105593l/35297403.jpg",
+      "rank": 5,
+      "votes": 29553,
+      "winner": false
+    },
+    {
+      "external_id": "36906346",
+      "title": "The Winter of the Witch",
+      "authors": [
+        "Katherine Arden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612904207l/36906346._SY600_.jpg",
+      "rank": 6,
+      "votes": 26836,
+      "winner": false
+    },
+    {
+      "external_id": "37638128",
+      "title": "Of Blood and Bone",
+      "authors": [
+        "Nora Roberts"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1525898215l/37638128.jpg",
+      "rank": 7,
+      "votes": 25671,
+      "winner": false
+    },
+    {
+      "external_id": "40524748",
+      "title": "Storm Cursed",
+      "authors": [
+        "Patricia Briggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1530631148l/40524748.jpg",
+      "rank": 8,
+      "votes": 22383,
+      "winner": false
+    },
+    {
+      "external_id": "40524312",
+      "title": "Black Leopard, Red Wolf",
+      "authors": [
+        "Marlon James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1538656386l/40524312._SY600_.jpg",
+      "rank": 9,
+      "votes": 15015,
+      "winner": false
+    },
+    {
+      "external_id": "41893832",
+      "title": "Middlegame",
+      "authors": [
+        "Seanan McGuire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537288490l/41893832.jpg",
+      "rank": 10,
+      "votes": 14421,
+      "winner": false
+    },
+    {
+      "external_id": "43521657",
+      "title": "The Ten Thousand Doors of January",
+      "authors": [
+        "Alix E. Harrow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1548174710l/43521657.jpg",
+      "rank": 11,
+      "votes": 6698,
+      "winner": false
+    },
+    {
+      "external_id": "36510722",
+      "title": "Gods of Jade and Shadow",
+      "authors": [
+        "Silvia Moreno-Garcia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1543268579l/36510722.jpg",
+      "rank": 12,
+      "votes": 6541,
+      "winner": false
+    },
+    {
+      "external_id": "39855052",
+      "title": "The Kingdom of Copper",
+      "authors": [
+        "S.A. Chakraborty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1530810166l/39855052.jpg",
+      "rank": 13,
+      "votes": 5588,
+      "winner": false
+    },
+    {
+      "external_id": "41212753",
+      "title": "The Dragon Republic",
+      "authors": [
+        "R.F. Kuang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1540305594l/41212753.jpg",
+      "rank": 14,
+      "votes": 4669,
+      "winner": false
+    },
+    {
+      "external_id": "37587820",
+      "title": "Darkdawn",
+      "authors": [
+        "Jay Kristoff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552521495l/37587820.jpg",
+      "rank": 15,
+      "votes": 4593,
+      "winner": false
+    },
+    {
+      "external_id": "41555947",
+      "title": "Magic for Liars",
+      "authors": [
+        "Sarah Gailey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537942294l/41555947.jpg",
+      "rank": 16,
+      "votes": 4424,
+      "winner": false
+    },
+    {
+      "external_id": "30169100",
+      "title": "The Burning White",
+      "authors": [
+        "Brent Weeks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1533264732l/30169100.jpg",
+      "rank": 17,
+      "votes": 2745,
+      "winner": false
+    },
+    {
+      "external_id": "42592353",
+      "title": "Age of Legend",
+      "authors": [
+        "Michael J. Sullivan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562549322l/42592353._SY600_.jpg",
+      "rank": 18,
+      "votes": 2239,
+      "winner": false
+    },
+    {
+      "external_id": "35606041",
+      "title": "A Little Hatred",
+      "authors": [
+        "Joe Abercrombie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558367199l/35606041.jpg",
+      "rank": 19,
+      "votes": 2097,
+      "winner": false
+    },
+    {
+      "external_id": "38099642",
+      "title": "Holy Sister",
+      "authors": [
+        "Mark  Lawrence"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1530812226l/38099642._SY600_.jpg",
+      "rank": 20,
+      "votes": 2047,
+      "winner": false
+    }
+  ]
+}

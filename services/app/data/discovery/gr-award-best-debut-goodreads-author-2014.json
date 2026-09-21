@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-debut-goodreads-author-2014",
+  "kind": "award",
+  "title": "Debut Goodreads Author",
+  "source_url": "https://www.goodreads.com/choiceawards/best-debut-goodreads-author-2014",
+  "year": 2014,
+  "category": "Debut Goodreads Author",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:22.426868+00:00",
+  "books": [
+    {
+      "external_id": "15839976",
+      "title": "Red Rising",
+      "authors": [
+        "Pierce Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461354651l/15839976._SY600_.jpg",
+      "rank": 1,
+      "votes": 15028,
+      "winner": true
+    },
+    {
+      "external_id": "15839984",
+      "title": "Cruel Beauty",
+      "authors": [
+        "Rosamund Hodge"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1371652590l/15839984.jpg",
+      "rank": 2,
+      "votes": 14381,
+      "winner": false
+    },
+    {
+      "external_id": "22028454",
+      "title": "Sweet Addiction",
+      "authors": [
+        "J.  Daniels"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398944538l/22028454.jpg",
+      "rank": 3,
+      "votes": 14074,
+      "winner": false
+    },
+    {
+      "external_id": "18007564",
+      "title": "The Martian",
+      "authors": [
+        "Andy Weir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413706054l/18007564.jpg",
+      "rank": 4,
+      "votes": 13367,
+      "winner": false
+    },
+    {
+      "external_id": "16068341",
+      "title": "The Truth About Alice",
+      "authors": [
+        "Jennifer Mathieu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1473462928l/16068341._SY600_.jpg",
+      "rank": 5,
+      "votes": 13041,
+      "winner": false
+    },
+    {
+      "external_id": "18812405",
+      "title": "The Good Girl",
+      "authors": [
+        "Mary Kubica"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388340126l/18812405.jpg",
+      "rank": 6,
+      "votes": 11360,
+      "winner": false
+    },
+    {
+      "external_id": "18053060",
+      "title": "Dorothy Must Die",
+      "authors": [
+        "Danielle  Paige"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1381437107l/18053060.jpg",
+      "rank": 7,
+      "votes": 10880,
+      "winner": false
+    },
+    {
+      "external_id": "18693763",
+      "title": "Everything I Never Told You",
+      "authors": [
+        "Celeste Ng"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386795198l/18693763._SY600_.jpg",
+      "rank": 8,
+      "votes": 10461,
+      "winner": false
+    },
+    {
+      "external_id": "18505784",
+      "title": "The Pearl That Broke Its Shell",
+      "authors": [
+        "Nadia Hashimi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1384543130l/18505784.jpg",
+      "rank": 9,
+      "votes": 8803,
+      "winner": false
+    },
+    {
+      "external_id": "17926775",
+      "title": "Stolen Songbird",
+      "authors": [
+        "Danielle L. Jensen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386265289l/17926775.jpg",
+      "rank": 10,
+      "votes": 8748,
+      "winner": false
+    },
+    {
+      "external_id": "20625686",
+      "title": "Full Measures",
+      "authors": [
+        "Rebecca Yarros"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390541918l/20625686.jpg",
+      "rank": 11,
+      "votes": 4419,
+      "winner": false
+    },
+    {
+      "external_id": "17910124",
+      "title": "The Emperor's Blades",
+      "authors": [
+        "Brian Staveley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369246817l/17910124.jpg",
+      "rank": 12,
+      "votes": 4351,
+      "winner": false
+    },
+    {
+      "external_id": "18635113",
+      "title": "Elizabeth Is Missing",
+      "authors": [
+        "Emma Healey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388883559l/18635113.jpg",
+      "rank": 13,
+      "votes": 4309,
+      "winner": false
+    },
+    {
+      "external_id": "17978160",
+      "title": "Open Road Summer",
+      "authors": [
+        "Emery Lord"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1480112353l/17978160.jpg",
+      "rank": 14,
+      "votes": 3765,
+      "winner": false
+    },
+    {
+      "external_id": "18209468",
+      "title": "The Weight of Blood",
+      "authors": [
+        "Laura McHugh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395611141l/18209468.jpg",
+      "rank": 15,
+      "votes": 3351,
+      "winner": false
+    },
+    {
+      "external_id": "18010355",
+      "title": "The Line",
+      "authors": [
+        "J.D. Horn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1382403224l/18010355.jpg",
+      "rank": 16,
+      "votes": 3031,
+      "winner": false
+    },
+    {
+      "external_id": "18079804",
+      "title": "Half Bad",
+      "authors": [
+        "Sally Green"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413889712l/18079804.jpg",
+      "rank": 17,
+      "votes": 2724,
+      "winner": false
+    },
+    {
+      "external_id": "18712886",
+      "title": "The Queen of the Tearling",
+      "authors": [
+        "Erika Johansen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417685148l/18712886.jpg",
+      "rank": 18,
+      "votes": 2372,
+      "winner": false
+    },
+    {
+      "external_id": "19180883",
+      "title": "Holding Out",
+      "authors": [
+        "Lila Rose"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386178253l/19180883.jpg",
+      "rank": 19,
+      "votes": 2017,
+      "winner": false
+    },
+    {
+      "external_id": "22249086",
+      "title": "Raine Falling",
+      "authors": [
+        "Paula Marinaro"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408641873l/22249086.jpg",
+      "rank": 20,
+      "votes": 336,
+      "winner": false
+    }
+  ]
+}

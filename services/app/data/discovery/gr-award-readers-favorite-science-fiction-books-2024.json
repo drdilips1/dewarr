@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-readers-favorite-science-fiction-books-2024",
+  "kind": "award",
+  "title": "Science Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-science-fiction-books-2024",
+  "year": 2024,
+  "category": "Science Fiction",
+  "genres": [
+    "science-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:40:35.419262+00:00",
+  "books": [
+    {
+      "external_id": "199798179",
+      "title": "The Ministry of Time",
+      "authors": [
+        "Kaliane Bradley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716480921l/199798179._SY600_.jpg",
+      "rank": 1,
+      "votes": 78459,
+      "winner": true
+    },
+    {
+      "external_id": "197108968",
+      "title": "The Family Experiment",
+      "authors": [
+        "John Marrs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1708790386l/197108968._SY600_.jpg",
+      "rank": 2,
+      "votes": 34821,
+      "winner": false
+    },
+    {
+      "external_id": "156023123",
+      "title": "Annie Bot",
+      "authors": [
+        "Sierra Greer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1690812484l/156023123._SY600_.jpg",
+      "rank": 3,
+      "votes": 30208,
+      "winner": false
+    },
+    {
+      "external_id": "201930181",
+      "title": "The Mercy of Gods",
+      "authors": [
+        "James S.A. Corey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1725128722l/201930181._SY600_.jpg",
+      "rank": 4,
+      "votes": 17516,
+      "winner": false
+    },
+    {
+      "external_id": "123136728",
+      "title": "Orbital",
+      "authors": [
+        "Samantha Harvey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1682375874l/123136728.jpg",
+      "rank": 5,
+      "votes": 16487,
+      "winner": false
+    },
+    {
+      "external_id": "195791479",
+      "title": "The Stardust Grail",
+      "authors": [
+        "Yume Kitasei"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1698507161l/195791479.jpg",
+      "rank": 6,
+      "votes": 14098,
+      "winner": false
+    },
+    {
+      "external_id": "65213662",
+      "title": "Extinction",
+      "authors": [
+        "Douglas Preston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684819571l/65213662.jpg",
+      "rank": 7,
+      "votes": 13326,
+      "winner": false
+    },
+    {
+      "external_id": "167067538",
+      "title": "Moon of the Turning Leaves",
+      "authors": [
+        "Waubgeshig Rice"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697721497l/167067538._SY600_.jpg",
+      "rank": 8,
+      "votes": 12860,
+      "winner": false
+    },
+    {
+      "external_id": "198276006",
+      "title": "I Cheerfully Refuse",
+      "authors": [
+        "Leif Enger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1698975179l/198276006._SY600_.jpg",
+      "rank": 9,
+      "votes": 11757,
+      "winner": false
+    },
+    {
+      "external_id": "176450755",
+      "title": "The Other Valley",
+      "authors": [
+        "Scott Alexander Howard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1687105854l/176450755.jpg",
+      "rank": 10,
+      "votes": 11322,
+      "winner": false
+    },
+    {
+      "external_id": "127282939",
+      "title": "Beautyland",
+      "authors": [
+        "Marie-Helene Bertino"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1685992173l/127282939.jpg",
+      "rank": 11,
+      "votes": 4811,
+      "winner": false
+    },
+    {
+      "external_id": "210367505",
+      "title": "Absolution",
+      "authors": [
+        "Jeff Vandermeer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1712258927l/210367505._SY600_.jpg",
+      "rank": 12,
+      "votes": 4659,
+      "winner": false
+    },
+    {
+      "external_id": "199353348",
+      "title": "Red Side Story",
+      "authors": [
+        "Jasper Fforde"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1706908057l/199353348._SY600_.jpg",
+      "rank": 13,
+      "votes": 4637,
+      "winner": false
+    },
+    {
+      "external_id": "203578812",
+      "title": "I'm Starting to Worry About This Black Box of Doom",
+      "authors": [
+        "Jason Pargin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1707198649l/203578812._SY600_.jpg",
+      "rank": 14,
+      "votes": 4357,
+      "winner": false
+    },
+    {
+      "external_id": "195790861",
+      "title": "Service Model",
+      "authors": [
+        "Adrian Tchaikovsky"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1698554344l/195790861._SY600_.jpg",
+      "rank": 15,
+      "votes": 3380,
+      "winner": false
+    },
+    {
+      "external_id": "207293815",
+      "title": "Sky Full of Elephants",
+      "authors": [
+        "Cebo Campbell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1707161023l/207293815._SY600_.jpg",
+      "rank": 16,
+      "votes": 3303,
+      "winner": false
+    },
+    {
+      "external_id": "173476065",
+      "title": "Baby X",
+      "authors": [
+        "Kira Peikoff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1711521036l/173476065.jpg",
+      "rank": 17,
+      "votes": 3170,
+      "winner": false
+    },
+    {
+      "external_id": "199248447",
+      "title": "The Blueprint",
+      "authors": [
+        "Rae Giana Rashad"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1696184040l/199248447._SY600_.jpg",
+      "rank": 18,
+      "votes": 2875,
+      "winner": false
+    },
+    {
+      "external_id": "65213204",
+      "title": "Yours for the Taking",
+      "authors": [
+        "Gabrielle Korn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1680211580l/65213204._SY600_.jpg",
+      "rank": 19,
+      "votes": 2769,
+      "winner": false
+    },
+    {
+      "external_id": "197063361",
+      "title": "In Ascension",
+      "authors": [
+        "Martin MacInnes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1698177121l/197063361._SY600_.jpg",
+      "rank": 20,
+      "votes": 2495,
+      "winner": false
+    }
+  ]
+}

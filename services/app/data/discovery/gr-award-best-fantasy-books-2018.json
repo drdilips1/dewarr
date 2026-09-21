@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-fantasy-books-2018",
+  "kind": "award",
+  "title": "Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fantasy-books-2018",
+  "year": 2018,
+  "category": "Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:58.412374+00:00",
+  "books": [
+    {
+      "external_id": "35959740",
+      "title": "Circe",
+      "authors": [
+        "Madeline Miller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565909496l/35959740._SY600_.jpg",
+      "rank": 1,
+      "votes": 78733,
+      "winner": true
+    },
+    {
+      "external_id": "36521316",
+      "title": "The Shape of Water",
+      "authors": [
+        "Guillermo del Toro"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509709054l/36521316._SY600_.jpg",
+      "rank": 2,
+      "votes": 42447,
+      "winner": false
+    },
+    {
+      "external_id": "37168303",
+      "title": "Spinning Silver",
+      "authors": [
+        "Naomi Novik"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550139278l/37168303._SY600_.jpg",
+      "rank": 3,
+      "votes": 33866,
+      "winner": false
+    },
+    {
+      "external_id": "34311452",
+      "title": "Year One",
+      "authors": [
+        "Nora Roberts"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1488360073l/34311452.jpg",
+      "rank": 4,
+      "votes": 31131,
+      "winner": false
+    },
+    {
+      "external_id": "35126152",
+      "title": "Iron and Magic",
+      "authors": [
+        "Ilona Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1578508906l/35126152._SY600_.jpg",
+      "rank": 5,
+      "votes": 18626,
+      "winner": false
+    },
+    {
+      "external_id": "35887181",
+      "title": "The Poppy War",
+      "authors": [
+        "R.F. Kuang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1515692316l/35887181.jpg",
+      "rank": 6,
+      "votes": 18040,
+      "winner": false
+    },
+    {
+      "external_id": "27366528",
+      "title": "Beneath the Sugar Sky",
+      "authors": [
+        "Seanan McGuire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1494436031l/27366528.jpg",
+      "rank": 7,
+      "votes": 16582,
+      "winner": false
+    },
+    {
+      "external_id": "35457273",
+      "title": "High Voltage",
+      "authors": [
+        "Karen Marie Moning"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1503486372l/35457273.jpg",
+      "rank": 8,
+      "votes": 13158,
+      "winner": false
+    },
+    {
+      "external_id": "35839437",
+      "title": "Burn Bright",
+      "authors": [
+        "Patricia Briggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1504578632l/35839437.jpg",
+      "rank": 9,
+      "votes": 12338,
+      "winner": false
+    },
+    {
+      "external_id": "35710709",
+      "title": "Grey Sister",
+      "authors": [
+        "Mark  Lawrence"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631998381l/35710709._SY600_.jpg",
+      "rank": 10,
+      "votes": 11954,
+      "winner": false
+    },
+    {
+      "external_id": "36204070",
+      "title": "The Book of M",
+      "authors": [
+        "Peng Shepherd"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1512147159l/36204070._SY600_.jpg",
+      "rank": 11,
+      "votes": 5600,
+      "winner": false
+    },
+    {
+      "external_id": "34050917",
+      "title": "The Girl in the Tower",
+      "authors": [
+        "Katherine Arden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612901466l/34050917._SY600_.jpg",
+      "rank": 12,
+      "votes": 4636,
+      "winner": false
+    },
+    {
+      "external_id": "35342928",
+      "title": "Age of War",
+      "authors": [
+        "Michael J. Sullivan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518439944l/35342928.jpg",
+      "rank": 13,
+      "votes": 4013,
+      "winner": false
+    },
+    {
+      "external_id": "40629159",
+      "title": "The Land",
+      "authors": [
+        "Aleron Kong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529897346l/40629159._SY600_.jpg",
+      "rank": 14,
+      "votes": 3791,
+      "winner": false
+    },
+    {
+      "external_id": "38395454",
+      "title": "Time's Convert",
+      "authors": [
+        "Deborah Harkness"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1517954252l/38395454.jpg",
+      "rank": 15,
+      "votes": 3662,
+      "winner": false
+    },
+    {
+      "external_id": "17333180",
+      "title": "Magic Triumphs",
+      "authors": [
+        "Ilona Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1502893641l/17333180.jpg",
+      "rank": 16,
+      "votes": 3549,
+      "winner": false
+    },
+    {
+      "external_id": "35271523",
+      "title": "Senlin Ascends",
+      "authors": [
+        "Josiah Bancroft"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1502224161l/35271523.jpg",
+      "rank": 17,
+      "votes": 3066,
+      "winner": false
+    },
+    {
+      "external_id": "28811018",
+      "title": "Wrath of Empire",
+      "authors": [
+        "Brian  McClellan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507140487l/28811018._SY600_.jpg",
+      "rank": 18,
+      "votes": 2397,
+      "winner": false
+    },
+    {
+      "external_id": "37007781",
+      "title": "Foundryside",
+      "authors": [
+        "Robert Jackson Bennett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520461034l/37007781.jpg",
+      "rank": 19,
+      "votes": 1121,
+      "winner": false
+    },
+    {
+      "external_id": "35052265",
+      "title": "Bloody Rose",
+      "authors": [
+        "Nicholas Eames"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509483649l/35052265._SY600_.jpg",
+      "rank": 20,
+      "votes": 1117,
+      "winner": false
+    }
+  ]
+}

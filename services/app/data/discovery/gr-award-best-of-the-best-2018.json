@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-of-the-best-2018",
+  "kind": "award",
+  "title": "Best of the Best",
+  "source_url": "https://www.goodreads.com/choiceawards/best-of-the-best-2018",
+  "year": 2018,
+  "category": "Best of the Best",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:59.930377+00:00",
+  "books": [
+    {
+      "external_id": "32075671",
+      "title": "The Hate U Give",
+      "authors": [
+        "Angie Thomas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476284759l/32075671._SY600_.jpg",
+      "rank": 1,
+      "votes": 68489,
+      "winner": true
+    },
+    {
+      "external_id": "18143977",
+      "title": "All the Light We Cannot See",
+      "authors": [
+        "Anthony Doerr"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1451445646l/18143977.jpg",
+      "rank": 2,
+      "votes": 60948,
+      "winner": false
+    },
+    {
+      "external_id": "26073150",
+      "title": "A Court of Mist and Fury",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1487592053l/26073150.jpg",
+      "rank": 3,
+      "votes": 53554,
+      "winner": false
+    },
+    {
+      "external_id": "4667024",
+      "title": "The Help",
+      "authors": [
+        "Kathryn Stockett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1622355533l/4667024._SY600_.jpg",
+      "rank": 4,
+      "votes": 48076,
+      "winner": false
+    },
+    {
+      "external_id": "21853621",
+      "title": "The Nightingale",
+      "authors": [
+        "Kristin Hannah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1681839850l/21853621._SY600_.jpg",
+      "rank": 5,
+      "votes": 47728,
+      "winner": false
+    },
+    {
+      "external_id": "18007564",
+      "title": "The Martian",
+      "authors": [
+        "Andy Weir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413706054l/18007564.jpg",
+      "rank": 6,
+      "votes": 45604,
+      "winner": false
+    },
+    {
+      "external_id": "12837725",
+      "title": "Gone Girl",
+      "authors": [
+        "Gillian Flynn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327596526l/12837725.jpg",
+      "rank": 7,
+      "votes": 35988,
+      "winner": false
+    },
+    {
+      "external_id": "15783514",
+      "title": "The Ocean at the End of the Lane",
+      "authors": [
+        "Neil Gaiman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1497098563l/15783514._SY600_.jpg",
+      "rank": 8,
+      "votes": 35710,
+      "winner": false
+    },
+    {
+      "external_id": "6148028",
+      "title": "Catching Fire",
+      "authors": [
+        "Suzanne Collins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1586722941l/6148028.jpg",
+      "rank": 9,
+      "votes": 34854,
+      "winner": false
+    },
+    {
+      "external_id": "11870085",
+      "title": "The Fault in Our Stars",
+      "authors": [
+        "John  Green"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1660273739l/11870085._SY600_.jpg",
+      "rank": 10,
+      "votes": 33038,
+      "winner": false
+    },
+    {
+      "external_id": "10644930",
+      "title": "11/22/63",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327876792l/10644930.jpg",
+      "rank": 11,
+      "votes": 10727,
+      "winner": false
+    },
+    {
+      "external_id": "18006496",
+      "title": "Queen of Shadows",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441230104l/18006496.jpg",
+      "rank": 12,
+      "votes": 10713,
+      "winner": false
+    },
+    {
+      "external_id": "13422727",
+      "title": "A Dance with Dragons",
+      "authors": [
+        "George R.R. Martin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664107266l/13422727._SY600_.jpg",
+      "rank": 13,
+      "votes": 8705,
+      "winner": false
+    },
+    {
+      "external_id": "34273236",
+      "title": "Little Fires Everywhere",
+      "authors": [
+        "Celeste Ng"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522684533l/34273236._SY600_.jpg",
+      "rank": 14,
+      "votes": 8586,
+      "winner": false
+    },
+    {
+      "external_id": "15745753",
+      "title": "Eleanor & Park",
+      "authors": [
+        "Rainbow Rowell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1341952742l/15745753.jpg",
+      "rank": 15,
+      "votes": 8464,
+      "winner": false
+    },
+    {
+      "external_id": "27276318",
+      "title": "It Ends with Us",
+      "authors": [
+        "Colleen Hoover"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470427525l/27276318._SY600_.jpg",
+      "rank": 16,
+      "votes": 7798,
+      "winner": false
+    },
+    {
+      "external_id": "15839976",
+      "title": "Red Rising",
+      "authors": [
+        "Pierce Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461354651l/15839976._SY600_.jpg",
+      "rank": 17,
+      "votes": 7531,
+      "winner": false
+    },
+    {
+      "external_id": "23766634",
+      "title": "A Court of Wings and Ruin",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555221560l/23766634._SY600_.jpg",
+      "rank": 18,
+      "votes": 7220,
+      "winner": false
+    },
+    {
+      "external_id": "32148570",
+      "title": "Before We Were Yours",
+      "authors": [
+        "Lisa Wingate"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498910914l/32148570._SY600_.jpg",
+      "rank": 19,
+      "votes": 6617,
+      "winner": false
+    },
+    {
+      "external_id": "18460392",
+      "title": "All the Bright Places",
+      "authors": [
+        "Jennifer Niven"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404331702l/18460392.jpg",
+      "rank": 20,
+      "votes": 5949,
+      "winner": false
+    }
+  ]
+}

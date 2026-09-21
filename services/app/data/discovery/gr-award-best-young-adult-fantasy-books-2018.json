@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-young-adult-fantasy-books-2018",
+  "kind": "award",
+  "title": "Young Adult Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fantasy-books-2018",
+  "year": 2018,
+  "category": "Young Adult Fantasy",
+  "genres": [
+    "fantasy",
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:20.980443+00:00",
+  "books": [
+    {
+      "external_id": "33590260",
+      "title": "Kingdom of Ash",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1531922609l/33590260.jpg",
+      "rank": 1,
+      "votes": 68782,
+      "winner": true
+    },
+    {
+      "external_id": "34728667",
+      "title": "Children of Blood and Bone",
+      "authors": [
+        "Tomi Adeyemi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1516127989l/34728667.jpg",
+      "rank": 2,
+      "votes": 50156,
+      "winner": false
+    },
+    {
+      "external_id": "26032825",
+      "title": "The Cruel Prince",
+      "authors": [
+        "Holly Black"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1574535986l/26032825._SY600_.jpg",
+      "rank": 3,
+      "votes": 34161,
+      "winner": false
+    },
+    {
+      "external_id": "27188596",
+      "title": "War Storm",
+      "authors": [
+        "Victoria Aveyard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510773212l/27188596.jpg",
+      "rank": 4,
+      "votes": 22852,
+      "winner": false
+    },
+    {
+      "external_id": "31076583",
+      "title": "A Court of Frost and Starlight",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546407073l/31076583._SY600_.jpg",
+      "rank": 5,
+      "votes": 19856,
+      "winner": false
+    },
+    {
+      "external_id": "24909347",
+      "title": "Obsidio",
+      "authors": [
+        "Amie Kaufman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1501704611l/24909347.jpg",
+      "rank": 6,
+      "votes": 19386,
+      "winner": false
+    },
+    {
+      "external_id": "33555224",
+      "title": "Thunderhead",
+      "authors": [
+        "Neal Shusterman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1505658534l/33555224._SY600_.jpg",
+      "rank": 7,
+      "votes": 19353,
+      "winner": false
+    },
+    {
+      "external_id": "34992929",
+      "title": "Restore Me",
+      "authors": [
+        "Tahereh Mafi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507232049l/34992929.jpg",
+      "rank": 8,
+      "votes": 14475,
+      "winner": false
+    },
+    {
+      "external_id": "30809786",
+      "title": "A Reaper at the Gates",
+      "authors": [
+        "Sabaa Tahir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507476834l/30809786._SY600_.jpg",
+      "rank": 9,
+      "votes": 13767,
+      "winner": false
+    },
+    {
+      "external_id": "29386918",
+      "title": "Wildcard",
+      "authors": [
+        "Marie Lu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1526376554l/29386918._SY600_.jpg",
+      "rank": 10,
+      "votes": 10287,
+      "winner": false
+    },
+    {
+      "external_id": "23197837",
+      "title": "The Belles",
+      "authors": [
+        "Dhonielle Clayton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1780531327l/23197837._SY600_.jpg",
+      "rank": 11,
+      "votes": 4795,
+      "winner": false
+    },
+    {
+      "external_id": "30223025",
+      "title": "Dread Nation",
+      "authors": [
+        "Justina Ireland"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1497900615l/30223025._SY600_.jpg",
+      "rank": 12,
+      "votes": 4701,
+      "winner": false
+    },
+    {
+      "external_id": "35820633",
+      "title": "The Fates Divide",
+      "authors": [
+        "Veronica Roth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1513195268l/35820633.jpg",
+      "rank": 13,
+      "votes": 4428,
+      "winner": false
+    },
+    {
+      "external_id": "34726469",
+      "title": "Sky in the Deep",
+      "authors": [
+        "Adrienne Young"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1508350209l/34726469.jpg",
+      "rank": 14,
+      "votes": 4333,
+      "winner": false
+    },
+    {
+      "external_id": "25446343",
+      "title": "Muse of Nightmares",
+      "authors": [
+        "Laini Taylor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518636521l/25446343.jpg",
+      "rank": 15,
+      "votes": 3898,
+      "winner": false
+    },
+    {
+      "external_id": "39348113",
+      "title": "Skyward",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1531845310l/39348113._SY600_.jpg",
+      "rank": 16,
+      "votes": 3269,
+      "winner": false
+    },
+    {
+      "external_id": "34275232",
+      "title": "The Hazel Wood",
+      "authors": [
+        "Melissa Albert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500549460l/34275232._SY600_.jpg",
+      "rank": 17,
+      "votes": 2984,
+      "winner": false
+    },
+    {
+      "external_id": "36329818",
+      "title": "Legendary",
+      "authors": [
+        "Stephanie Garber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1506803153l/36329818.jpg",
+      "rank": 18,
+      "votes": 2954,
+      "winner": false
+    },
+    {
+      "external_id": "29456569",
+      "title": "LIFEL1K3",
+      "authors": [
+        "Jay Kristoff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1516369970l/29456569.jpg",
+      "rank": 19,
+      "votes": 1749,
+      "winner": false
+    },
+    {
+      "external_id": "35495083",
+      "title": "Sightwitch",
+      "authors": [
+        "Susan Dennard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1503947826l/35495083._SY600_.jpg",
+      "rank": 20,
+      "votes": 922,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,238 @@
+{
+  "id": "gr-award-readers-favorite-ya-fantasy-and-science-fiction-books-2025",
+  "kind": "award",
+  "title": "Young Adult Fantasy & Sci-Fi",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-ya-fantasy-and-science-fiction-books-2025",
+  "year": 2025,
+  "category": "Young Adult Fantasy & Sci-Fi",
+  "genres": [
+    "fantasy",
+    "science-fiction",
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:39:54.645589+00:00",
+  "books": [
+    {
+      "external_id": "214331246",
+      "title": "Sunrise on the Reaping",
+      "authors": [
+        "Suzanne Collins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729085500l/214331246._SY600_.jpg",
+      "rank": 1,
+      "votes": 300427,
+      "winner": true
+    },
+    {
+      "external_id": "214151222",
+      "title": "Fearless",
+      "authors": [
+        "Lauren  Roberts"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1730330746l/214151222.jpg",
+      "rank": 2,
+      "votes": 65594,
+      "winner": false
+    },
+    {
+      "external_id": "60217777",
+      "title": "Rebel Witch",
+      "authors": [
+        "Kristen Ciccarelli"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1713462814l/60217777._SY600_.jpg",
+      "rank": 3,
+      "votes": 59072,
+      "winner": false
+    },
+    {
+      "external_id": "214151316",
+      "title": "Oathbound",
+      "authors": [
+        "Tracy Deonn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1719020901l/214151316._SY600_.jpg",
+      "rank": 4,
+      "votes": 30594,
+      "winner": false
+    },
+    {
+      "external_id": "216364822",
+      "title": "Watch Me",
+      "authors": [
+        "Tahereh Mafi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1724164047l/216364822._SY600_.jpg",
+      "rank": 5,
+      "votes": 28370,
+      "winner": false
+    },
+    {
+      "external_id": "210395729",
+      "title": "Our Infinite Fates",
+      "authors": [
+        "Laura   Steven"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1713360408l/210395729._SY600_.jpg",
+      "rank": 6,
+      "votes": 18354,
+      "winner": false
+    },
+    {
+      "external_id": "220909040",
+      "title": "Hazelthorn",
+      "authors": [
+        "C.G. Drews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1733699106l/220909040._SY600_.jpg",
+      "rank": 7,
+      "votes": 17522,
+      "winner": false
+    },
+    {
+      "external_id": "212808316",
+      "title": "Wings of Starlight",
+      "authors": [
+        "Allison Saft"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1719586016l/212808316._SY600_.jpg",
+      "rank": 8,
+      "votes": 17166,
+      "winner": false
+    },
+    {
+      "external_id": "211742041",
+      "title": "The Rose Bargain",
+      "authors": [
+        "Sasha Peyton Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1723991214l/211742041._SY600_.jpg",
+      "rank": 9,
+      "votes": 13551,
+      "winner": false
+    },
+    {
+      "external_id": "63072380",
+      "title": "Heavenly Tyrant",
+      "authors": [
+        "Xiran Jay Zhao"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1666660771l/63072380.jpg",
+      "rank": 10,
+      "votes": 11990,
+      "winner": false
+    },
+    {
+      "external_id": "224019348",
+      "title": "Hekate - The Witch",
+      "authors": [
+        "Nikita Gill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1743997629l/224019348._SY600_.jpg",
+      "rank": 11,
+      "votes": 5805,
+      "winner": false
+    },
+    {
+      "external_id": "221955020",
+      "title": "Immortal Consequences",
+      "authors": [
+        "I.V. Marie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1756121278l/221955020._SY600_.jpg",
+      "rank": 12,
+      "votes": 4676,
+      "winner": false
+    },
+    {
+      "external_id": "223097553",
+      "title": "Every Spiral of Fate",
+      "authors": [
+        "Tahereh Mafi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1739564190l/223097553._SY600_.jpg",
+      "rank": 13,
+      "votes": 4529,
+      "winner": false
+    },
+    {
+      "external_id": "211096516",
+      "title": "A Language of Dragons",
+      "authors": [
+        "S.F. Williamson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1722517068l/211096516._SY600_.jpg",
+      "rank": 14,
+      "votes": 4199,
+      "winner": false
+    },
+    {
+      "external_id": "215149209",
+      "title": "The Floating World",
+      "authors": [
+        "Axie Oh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1725143648l/215149209._SY600_.jpg",
+      "rank": 15,
+      "votes": 3497,
+      "winner": false
+    },
+    {
+      "external_id": "223296202",
+      "title": "Never Ever After",
+      "authors": [
+        "Sue Lynn Tan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741329651l/223296202._SY600_.jpg",
+      "rank": 16,
+      "votes": 3458,
+      "winner": false
+    },
+    {
+      "external_id": "221604746",
+      "title": "The House Saphir",
+      "authors": [
+        "Marissa Meyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1739454312l/221604746._SY600_.jpg",
+      "rank": 17,
+      "votes": 3233,
+      "winner": false
+    },
+    {
+      "external_id": "219334785",
+      "title": "A Forgery of Fate",
+      "authors": [
+        "Elizabeth Lim"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729804032l/219334785._SY600_.jpg",
+      "rank": 18,
+      "votes": 2900,
+      "winner": false
+    },
+    {
+      "external_id": "214268980",
+      "title": "The Otherwhere Post",
+      "authors": [
+        "Emily J. Taylor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1743705383l/214268980._SY600_.jpg",
+      "rank": 19,
+      "votes": 2806,
+      "winner": false
+    },
+    {
+      "external_id": "211003924",
+      "title": "Breath of the Dragon",
+      "authors": [
+        "Shannon Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1715360097l/211003924._SY600_.jpg",
+      "rank": 20,
+      "votes": 1761,
+      "winner": false
+    }
+  ]
+}

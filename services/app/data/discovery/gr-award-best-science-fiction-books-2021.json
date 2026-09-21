@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-science-fiction-books-2021",
+  "kind": "award",
+  "title": "Science Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-fiction-books-2021",
+  "year": 2021,
+  "category": "Science Fiction",
+  "genres": [
+    "science-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:07.409149+00:00",
+  "books": [
+    {
+      "external_id": "54493401",
+      "title": "Project Hail Mary",
+      "authors": [
+        "Andy Weir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1764703833l/54493401._SY600_.jpg",
+      "rank": 1,
+      "votes": 92831,
+      "winner": true
+    },
+    {
+      "external_id": "54120408",
+      "title": "Klara and the Sun",
+      "authors": [
+        "Kazuo Ishiguro"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1603206535l/54120408._SY600_.jpg",
+      "rank": 2,
+      "votes": 56284,
+      "winner": false
+    },
+    {
+      "external_id": "51637946",
+      "title": "Light of the Jedi",
+      "authors": [
+        "Charles Soule"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1582619576l/51637946.jpg",
+      "rank": 3,
+      "votes": 16980,
+      "winner": false
+    },
+    {
+      "external_id": "52379735",
+      "title": "The Echo Wife",
+      "authors": [
+        "Sarah Gailey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1588791809l/52379735.jpg",
+      "rank": 4,
+      "votes": 16889,
+      "winner": false
+    },
+    {
+      "external_id": "53205854",
+      "title": "Fugitive Telemetry",
+      "authors": [
+        "Martha Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1731700666l/53205854._SY600_.jpg",
+      "rank": 5,
+      "votes": 15880,
+      "winner": false
+    },
+    {
+      "external_id": "53205912",
+      "title": "Winter's Orbit",
+      "authors": [
+        "Everina Maxwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612284457l/53205912._SY600_.jpg",
+      "rank": 6,
+      "votes": 15671,
+      "winner": false
+    },
+    {
+      "external_id": "53911860",
+      "title": "The End of Men",
+      "authors": [
+        "Christina Sweeney-Baird"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600387025l/53911860._SY600_.jpg",
+      "rank": 7,
+      "votes": 14032,
+      "winner": false
+    },
+    {
+      "external_id": "53205922",
+      "title": "Remote Control",
+      "authors": [
+        "Nnedi Okorafor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1587580619l/53205922.jpg",
+      "rank": 8,
+      "votes": 10891,
+      "winner": false
+    },
+    {
+      "external_id": "56179360",
+      "title": "Light from Uncommon Stars",
+      "authors": [
+        "Ryka Aoki"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1626721795l/56179360.jpg",
+      "rank": 9,
+      "votes": 10739,
+      "winner": false
+    },
+    {
+      "external_id": "55077657",
+      "title": "A Psalm for the Wild-Built",
+      "authors": [
+        "Becky Chambers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600783497l/55077657.jpg",
+      "rank": 10,
+      "votes": 10338,
+      "winner": false
+    },
+    {
+      "external_id": "55481226",
+      "title": "Rabbits",
+      "authors": [
+        "Terry Miles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608054817l/55481226.jpg",
+      "rank": 11,
+      "votes": 3434,
+      "winner": false
+    },
+    {
+      "external_id": "45046566",
+      "title": "A Desolation Called Peace",
+      "authors": [
+        "Arkady Martine"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1591755459l/45046566.jpg",
+      "rank": 12,
+      "votes": 3426,
+      "winner": false
+    },
+    {
+      "external_id": "54785541",
+      "title": "Girl One",
+      "authors": [
+        "Sara Flannery Murphy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601598840l/54785541.jpg",
+      "rank": 13,
+      "votes": 2512,
+      "winner": false
+    },
+    {
+      "external_id": "53019456",
+      "title": "Shards of Earth",
+      "authors": [
+        "Adrian Tchaikovsky"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1733191854l/53019456.jpg",
+      "rank": 14,
+      "votes": 2470,
+      "winner": false
+    },
+    {
+      "external_id": "56314212",
+      "title": "Constance",
+      "authors": [
+        "Matthew FitzSimmons"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627421090l/56314212.jpg",
+      "rank": 15,
+      "votes": 2330,
+      "winner": false
+    },
+    {
+      "external_id": "53205794",
+      "title": "The Last Watch",
+      "authors": [
+        "J.S. Dewes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1610925839l/53205794.jpg",
+      "rank": 16,
+      "votes": 2293,
+      "winner": false
+    },
+    {
+      "external_id": "57094295",
+      "title": "Termination Shock",
+      "authors": [
+        "Neal Stephenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1621245328l/57094295.jpg",
+      "rank": 17,
+      "votes": 1475,
+      "winner": false
+    },
+    {
+      "external_id": "55659625",
+      "title": "Appleseed",
+      "authors": [
+        "Matt   Bell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605827475l/55659625.jpg",
+      "rank": 18,
+      "votes": 1341,
+      "winner": false
+    },
+    {
+      "external_id": "55711630",
+      "title": "Firebreak",
+      "authors": [
+        "Nicole Kornher-Stace"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1618150547l/55711630.jpg",
+      "rank": 19,
+      "votes": 1125,
+      "winner": false
+    },
+    {
+      "external_id": "54304067",
+      "title": "Machinehood",
+      "authors": [
+        "S.B. Divya"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612711972l/54304067.jpg",
+      "rank": 20,
+      "votes": 643,
+      "winner": false
+    }
+  ]
+}

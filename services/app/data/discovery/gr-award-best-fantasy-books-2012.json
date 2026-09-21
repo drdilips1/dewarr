@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-fantasy-books-2012",
+  "kind": "award",
+  "title": "Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fantasy-books-2012",
+  "year": 2012,
+  "category": "Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:05.017230+00:00",
+  "books": [
+    {
+      "external_id": "12106746",
+      "title": "The Wind Through the Keyhole",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1324598157l/12106746.jpg",
+      "rank": 1,
+      "votes": 8226,
+      "winner": true
+    },
+    {
+      "external_id": "13589159",
+      "title": "The Woman Who Died A Lot",
+      "authors": [
+        "Jasper Fforde"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1334585984l/13589159.jpg",
+      "rank": 2,
+      "votes": 5221,
+      "winner": false
+    },
+    {
+      "external_id": "15707526",
+      "title": "The First Confessor",
+      "authors": [
+        "Terry Goodkind"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1340889153l/15707526.jpg",
+      "rank": 3,
+      "votes": 4510,
+      "winner": false
+    },
+    {
+      "external_id": "12891107",
+      "title": "King of Thorns",
+      "authors": [
+        "Mark  Lawrence"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1322539112l/12891107.jpg",
+      "rank": 4,
+      "votes": 4332,
+      "winner": false
+    },
+    {
+      "external_id": "12499290",
+      "title": "The Blinding Knife",
+      "authors": [
+        "Brent Weeks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659765885l/12499290._SY600_.jpg",
+      "rank": 5,
+      "votes": 3491,
+      "winner": false
+    },
+    {
+      "external_id": "12970162",
+      "title": "The Traitor Queen",
+      "authors": [
+        "Trudi Canavan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1337561168l/12970162.jpg",
+      "rank": 6,
+      "votes": 3142,
+      "winner": false
+    },
+    {
+      "external_id": "11801463",
+      "title": "City of Dragons",
+      "authors": [
+        "Robin Hobb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1322613975l/11801463.jpg",
+      "rank": 7,
+      "votes": 2893,
+      "winner": false
+    },
+    {
+      "external_id": "11774272",
+      "title": "The Killing Moon",
+      "authors": [
+        "N.K. Jemisin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1335835254l/11774272.jpg",
+      "rank": 8,
+      "votes": 2483,
+      "winner": false
+    },
+    {
+      "external_id": "12941033",
+      "title": "Some Kind of Fairy Tale",
+      "authors": [
+        "Graham Joyce"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333578270l/12941033.jpg",
+      "rank": 9,
+      "votes": 2266,
+      "winner": false
+    },
+    {
+      "external_id": "13239822",
+      "title": "Alif the Unseen",
+      "authors": [
+        "G. Willow Wilson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1325543155l/13239822.jpg",
+      "rank": 10,
+      "votes": 1969,
+      "winner": false
+    },
+    {
+      "external_id": "11515995",
+      "title": "Bridge of Dreams",
+      "authors": [
+        "Anne Bishop"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442772040l/11515995._SY600_.jpg",
+      "rank": 11,
+      "votes": 1331,
+      "winner": false
+    },
+    {
+      "external_id": "10184855",
+      "title": "Casket of Souls",
+      "authors": [
+        "Lynn Flewelling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388342261l/10184855.jpg",
+      "rank": 12,
+      "votes": 1070,
+      "winner": false
+    },
+    {
+      "external_id": "12174312",
+      "title": "Percepliquis",
+      "authors": [
+        "Michael J. Sullivan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1312541516l/12174312.jpg",
+      "rank": 13,
+      "votes": 1039,
+      "winner": false
+    },
+    {
+      "external_id": "11487807",
+      "title": "Throne of the Crescent Moon",
+      "authors": [
+        "Saladin Ahmed"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344256189l/11487807.jpg",
+      "rank": 14,
+      "votes": 930,
+      "winner": false
+    },
+    {
+      "external_id": "12759057",
+      "title": "The King's Blood",
+      "authors": [
+        "Daniel Abraham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356495172l/12759057.jpg",
+      "rank": 15,
+      "votes": 797,
+      "winner": false
+    },
+    {
+      "external_id": "13548142",
+      "title": "Cast in Peril",
+      "authors": [
+        "Michelle Sagara"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394173628l/13548142.jpg",
+      "rank": 16,
+      "votes": 779,
+      "winner": false
+    },
+    {
+      "external_id": "13578175",
+      "title": "The Emperor's Soul",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659906200l/13578175._SY600_.jpg",
+      "rank": 17,
+      "votes": 572,
+      "winner": false
+    },
+    {
+      "external_id": "13265092",
+      "title": "Wards of Faerie",
+      "authors": [
+        "Terry Brooks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1548441188l/13265092._SY600_.jpg",
+      "rank": 18,
+      "votes": 409,
+      "winner": false
+    },
+    {
+      "external_id": "13528362",
+      "title": "Red Country",
+      "authors": [
+        "Joe Abercrombie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333662938l/13528362.jpg",
+      "rank": 19,
+      "votes": 298,
+      "winner": false
+    },
+    {
+      "external_id": "13038833",
+      "title": "Forge of Darkness",
+      "authors": [
+        "Steven Erikson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1337989053l/13038833.jpg",
+      "rank": 20,
+      "votes": 184,
+      "winner": false
+    }
+  ]
+}

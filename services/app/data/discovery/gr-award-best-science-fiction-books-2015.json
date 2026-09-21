@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-science-fiction-books-2015",
+  "kind": "award",
+  "title": "Science Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-fiction-books-2015",
+  "year": 2015,
+  "category": "Science Fiction",
+  "genres": [
+    "science-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:36.250386+00:00",
+  "books": [
+    {
+      "external_id": "20697410",
+      "title": "Golden Son",
+      "authors": [
+        "Pierce Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461354417l/20697410.jpg",
+      "rank": 1,
+      "votes": 32225,
+      "winner": true
+    },
+    {
+      "external_id": "22826126",
+      "title": "Seveneves",
+      "authors": [
+        "Neal Stephenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422566422l/22826126.jpg",
+      "rank": 2,
+      "votes": 15710,
+      "winner": false
+    },
+    {
+      "external_id": "24388326",
+      "title": "The Heart Goes Last",
+      "authors": [
+        "Margaret Atwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493598486l/24388326._SY600_.jpg",
+      "rank": 3,
+      "votes": 14147,
+      "winner": false
+    },
+    {
+      "external_id": "23129410",
+      "title": "Welcome to Night Vale",
+      "authors": [
+        "Joseph Fink"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1447774088l/23129410._SY600_.jpg",
+      "rank": 4,
+      "votes": 12410,
+      "winner": false
+    },
+    {
+      "external_id": "23209924",
+      "title": "The Water Knife",
+      "authors": [
+        "Paolo Bacigalupi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1411059576l/23209924.jpg",
+      "rank": 5,
+      "votes": 11574,
+      "winner": false
+    },
+    {
+      "external_id": "16278318",
+      "title": "Armada",
+      "authors": [
+        "Ernest Cline"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1377284428l/16278318.jpg",
+      "rank": 6,
+      "votes": 10204,
+      "winner": false
+    },
+    {
+      "external_id": "25134015",
+      "title": "Star Wars",
+      "authors": [
+        "Chuck Wendig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1426622433l/25134015.jpg",
+      "rank": 7,
+      "votes": 9273,
+      "winner": false
+    },
+    {
+      "external_id": "24819470",
+      "title": "Ancillary Mercy",
+      "authors": [
+        "Ann Leckie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1597476251l/24819470._SY600_.jpg",
+      "rank": 8,
+      "votes": 8042,
+      "winner": false
+    },
+    {
+      "external_id": "23168809",
+      "title": "The End of All Things",
+      "authors": [
+        "John Scalzi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1411134775l/23168809.jpg",
+      "rank": 9,
+      "votes": 6192,
+      "winner": false
+    },
+    {
+      "external_id": "23164927",
+      "title": "The Fold",
+      "authors": [
+        "Peter Clines"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1416182070l/23164927.jpg",
+      "rank": 10,
+      "votes": 5504,
+      "winner": false
+    },
+    {
+      "external_id": "25400043",
+      "title": "Nemesis Games",
+      "authors": [
+        "James S.A. Corey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729035829l/25400043._SY600_.jpg",
+      "rank": 11,
+      "votes": 2675,
+      "winner": false
+    },
+    {
+      "external_id": "26771521",
+      "title": "Beacon 23",
+      "authors": [
+        "Hugh Howey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1444683708l/26771521.jpg",
+      "rank": 12,
+      "votes": 2611,
+      "winner": false
+    },
+    {
+      "external_id": "23168817",
+      "title": "The Dark Forest",
+      "authors": [
+        "Liu Cixin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1412064931l/23168817.jpg",
+      "rank": 13,
+      "votes": 2400,
+      "winner": false
+    },
+    {
+      "external_id": "21412172",
+      "title": "Strands of Sorrow",
+      "authors": [
+        "John Ringo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394421549l/21412172.jpg",
+      "rank": 14,
+      "votes": 1543,
+      "winner": false
+    },
+    {
+      "external_id": "24876178",
+      "title": "Warship",
+      "authors": [
+        "Joshua Dalzelle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1423426560l/24876178.jpg",
+      "rank": 15,
+      "votes": 1477,
+      "winner": false
+    },
+    {
+      "external_id": "20424928",
+      "title": "Apex",
+      "authors": [
+        "Ramez Naam"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422812013l/20424928.jpg",
+      "rank": 16,
+      "votes": 1259,
+      "winner": false
+    },
+    {
+      "external_id": "24911173",
+      "title": "BrainWeb",
+      "authors": [
+        "Douglas E. Richards"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1423667292l/24911173.jpg",
+      "rank": 17,
+      "votes": 1036,
+      "winner": false
+    },
+    {
+      "external_id": "23470865",
+      "title": "Angles of Attack",
+      "authors": [
+        "Marko Kloos"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424277388l/23470865.jpg",
+      "rank": 18,
+      "votes": 938,
+      "winner": false
+    },
+    {
+      "external_id": "23431348",
+      "title": "King of Thieves",
+      "authors": [
+        "Evan Currie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422375003l/23431348.jpg",
+      "rank": 19,
+      "votes": 912,
+      "winner": false
+    },
+    {
+      "external_id": "23197269",
+      "title": "Aurora",
+      "authors": [
+        "Kim Stanley Robinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436300570l/23197269.jpg",
+      "rank": 20,
+      "votes": 826,
+      "winner": false
+    }
+  ]
+}

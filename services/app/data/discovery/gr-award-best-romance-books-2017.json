@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-romance-books-2017",
+  "kind": "award",
+  "title": "Romance",
+  "source_url": "https://www.goodreads.com/choiceawards/best-romance-books-2017",
+  "year": 2017,
+  "category": "Romance",
+  "genres": [
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:33.528336+00:00",
+  "books": [
+    {
+      "external_id": "34684620",
+      "title": "Without Merit",
+      "authors": [
+        "Colleen Hoover"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1667612061l/34684620.jpg",
+      "rank": 1,
+      "votes": 32241,
+      "winner": true
+    },
+    {
+      "external_id": "31415529",
+      "title": "Come Sundown",
+      "authors": [
+        "Nora Roberts"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483470298l/31415529.jpg",
+      "rank": 2,
+      "votes": 28646,
+      "winner": false
+    },
+    {
+      "external_id": "30166573",
+      "title": "Devil in Spring",
+      "authors": [
+        "Lisa Kleypas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470025305l/30166573.jpg",
+      "rank": 3,
+      "votes": 22527,
+      "winner": false
+    },
+    {
+      "external_id": "22303684",
+      "title": "White Hot",
+      "authors": [
+        "Ilona Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1477567905l/22303684.jpg",
+      "rank": 4,
+      "votes": 21249,
+      "winner": false
+    },
+    {
+      "external_id": "29496208",
+      "title": "Blood Vow",
+      "authors": [
+        "J.R. Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461428631l/29496208.jpg",
+      "rank": 5,
+      "votes": 18369,
+      "winner": false
+    },
+    {
+      "external_id": "33597147",
+      "title": "Wait For It",
+      "authors": [
+        "Mariana Zapata"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1482945930l/33597147.jpg",
+      "rank": 6,
+      "votes": 14337,
+      "winner": false
+    },
+    {
+      "external_id": "32848471",
+      "title": "Egomaniac",
+      "authors": [
+        "Vi Keeland"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479387807l/32848471._SY600_.jpg",
+      "rank": 7,
+      "votes": 11441,
+      "winner": false
+    },
+    {
+      "external_id": "34913174",
+      "title": "The Gravity of Us",
+      "authors": [
+        "Brittainy C. Cherry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492720059l/34913174._SY600_.jpg",
+      "rank": 8,
+      "votes": 10340,
+      "winner": false
+    },
+    {
+      "external_id": "31324863",
+      "title": "Royally Matched",
+      "authors": [
+        "Emma Chase"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1473345355l/31324863.jpg",
+      "rank": 9,
+      "votes": 10044,
+      "winner": false
+    },
+    {
+      "external_id": "32573185",
+      "title": "Silver Silence",
+      "authors": [
+        "Nalini Singh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1480973962l/32573185._SY600_.jpg",
+      "rank": 10,
+      "votes": 10013,
+      "winner": false
+    },
+    {
+      "external_id": "33785828",
+      "title": "Vicious",
+      "authors": [
+        "L.J. Shen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483465962l/33785828._SY600_.jpg",
+      "rank": 11,
+      "votes": 4720,
+      "winner": false
+    },
+    {
+      "external_id": "35173603",
+      "title": "Tease",
+      "authors": [
+        "Ella Frank"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1495226757l/35173603._SY600_.jpg",
+      "rank": 12,
+      "votes": 4080,
+      "winner": false
+    },
+    {
+      "external_id": "32145091",
+      "title": "Dirty Filthy Rich Men",
+      "authors": [
+        "Laurelin Paige"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1662604825l/32145091._SY600_.jpg",
+      "rank": 13,
+      "votes": 3382,
+      "winner": false
+    },
+    {
+      "external_id": "35920112",
+      "title": "Beard in Mind",
+      "authors": [
+        "Penny Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1501975137l/35920112._SY600_.jpg",
+      "rank": 14,
+      "votes": 3339,
+      "winner": false
+    },
+    {
+      "external_id": "34757023",
+      "title": "Dating-ish",
+      "authors": [
+        "Penny Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492331874l/34757023._SY600_.jpg",
+      "rank": 15,
+      "votes": 2643,
+      "winner": false
+    },
+    {
+      "external_id": "30166695",
+      "title": "Breathless",
+      "authors": [
+        "Beverly Jenkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1471639092l/30166695._SY600_.jpg",
+      "rank": 16,
+      "votes": 2524,
+      "winner": false
+    },
+    {
+      "external_id": "29095429",
+      "title": "Forged in Desire",
+      "authors": [
+        "Brenda Jackson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1475781104l/29095429.jpg",
+      "rank": 17,
+      "votes": 1562,
+      "winner": false
+    },
+    {
+      "external_id": "33296129",
+      "title": "The Duchess Deal",
+      "authors": [
+        "Tessa Dare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1490035454l/33296129._SY600_.jpg",
+      "rank": 18,
+      "votes": 1554,
+      "winner": false
+    },
+    {
+      "external_id": "36263943",
+      "title": "Damaged Like Us",
+      "authors": [
+        "Krista Ritchie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1505766052l/36263943._SY600_.jpg",
+      "rank": 19,
+      "votes": 1345,
+      "winner": false
+    },
+    {
+      "external_id": "34950852",
+      "title": "Drive",
+      "authors": [
+        "Kate  Stewart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1505666150l/34950852._SY600_.jpg",
+      "rank": 20,
+      "votes": 1272,
+      "winner": false
+    }
+  ]
+}

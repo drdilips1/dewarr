@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-readers-favorite-historical-fiction-books-2024",
+  "kind": "award",
+  "title": "Historical Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-historical-fiction-books-2024",
+  "year": 2024,
+  "category": "Historical Fiction",
+  "genres": [
+    "historical-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:40:28.566952+00:00",
+  "books": [
+    {
+      "external_id": "127305853",
+      "title": "The Women",
+      "authors": [
+        "Kristin Hannah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1733493019l/127305853._SY600_.jpg",
+      "rank": 1,
+      "votes": 253147,
+      "winner": true
+    },
+    {
+      "external_id": "173754979",
+      "title": "James",
+      "authors": [
+        "Percival Everett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1704107491l/173754979._SY600_.jpg",
+      "rank": 2,
+      "votes": 62431,
+      "winner": false
+    },
+    {
+      "external_id": "112975658",
+      "title": "The Frozen River",
+      "authors": [
+        "Ariel Lawhon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1730395034l/112975658._SY600_.jpg",
+      "rank": 3,
+      "votes": 47850,
+      "winner": false
+    },
+    {
+      "external_id": "207909446",
+      "title": "The Booklover's Library",
+      "authors": [
+        "Madeline  Martin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1711618665l/207909446.jpg",
+      "rank": 4,
+      "votes": 32873,
+      "winner": false
+    },
+    {
+      "external_id": "199798217",
+      "title": "The Lion Women of Tehran",
+      "authors": [
+        "Marjan Kamali"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1719409771l/199798217._SY600_.jpg",
+      "rank": 5,
+      "votes": 24781,
+      "winner": false
+    },
+    {
+      "external_id": "203164368",
+      "title": "By Any Other Name",
+      "authors": [
+        "Jodi Picoult"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1706723760l/203164368.jpg",
+      "rank": 6,
+      "votes": 24147,
+      "winner": false
+    },
+    {
+      "external_id": "181110045",
+      "title": "The Briar Club",
+      "authors": [
+        "Kate Quinn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1703605988l/181110045.jpg",
+      "rank": 7,
+      "votes": 23252,
+      "winner": false
+    },
+    {
+      "external_id": "199223201",
+      "title": "Husbands & Lovers",
+      "authors": [
+        "Beatriz Williams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1699456766l/199223201._SY600_.jpg",
+      "rank": 8,
+      "votes": 15892,
+      "winner": false
+    },
+    {
+      "external_id": "217362723",
+      "title": "The Seventh Veil of Salome",
+      "authors": [
+        "Silvia Moreno-Garcia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1723314288l/217362723._SY600_.jpg",
+      "rank": 9,
+      "votes": 14864,
+      "winner": false
+    },
+    {
+      "external_id": "127306192",
+      "title": "Anita de Monte Laughs Last",
+      "authors": [
+        "Xóchitl González"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1730395155l/127306192._SY600_.jpg",
+      "rank": 10,
+      "votes": 12716,
+      "winner": false
+    },
+    {
+      "external_id": "202468422",
+      "title": "There Are Rivers in the Sky",
+      "authors": [
+        "Elif Shafak"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1708964601l/202468422._SY600_.jpg",
+      "rank": 11,
+      "votes": 5334,
+      "winner": false
+    },
+    {
+      "external_id": "202257499",
+      "title": "Behind Every Good Man",
+      "authors": [
+        "Sara Goodman Confino"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1708200887l/202257499._SY600_.jpg",
+      "rank": 12,
+      "votes": 4345,
+      "winner": false
+    },
+    {
+      "external_id": "199798868",
+      "title": "Long Island",
+      "authors": [
+        "Colm Tóibín"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1715358955l/199798868._SY600_.jpg",
+      "rank": 13,
+      "votes": 4180,
+      "winner": false
+    },
+    {
+      "external_id": "195430688",
+      "title": "The Paris Novel",
+      "authors": [
+        "Ruth Reichl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1693835272l/195430688._SY600_.jpg",
+      "rank": 14,
+      "votes": 3692,
+      "winner": false
+    },
+    {
+      "external_id": "181110028",
+      "title": "The Great Divide",
+      "authors": [
+        "Cristina Henríquez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1709591099l/181110028._SY600_.jpg",
+      "rank": 15,
+      "votes": 3295,
+      "winner": false
+    },
+    {
+      "external_id": "203579107",
+      "title": "The Love Elixir of Augusta Stern",
+      "authors": [
+        "Lynda Cohen Loigman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1705086569l/203579107._SY600_.jpg",
+      "rank": 16,
+      "votes": 3263,
+      "winner": false
+    },
+    {
+      "external_id": "214944658",
+      "title": "The Storm We Made",
+      "authors": [
+        "Vanessa  Chan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718701455l/214944658._SY600_.jpg",
+      "rank": 17,
+      "votes": 3072,
+      "winner": false
+    },
+    {
+      "external_id": "123847255",
+      "title": "The Bullet Swallower",
+      "authors": [
+        "Elizabeth Gonzalez James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686091900l/123847255.jpg",
+      "rank": 18,
+      "votes": 3015,
+      "winner": false
+    },
+    {
+      "external_id": "64417401",
+      "title": "The Phoenix Crown",
+      "authors": [
+        "Kate Quinn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1681768422l/64417401.jpg",
+      "rank": 19,
+      "votes": 1968,
+      "winner": false
+    },
+    {
+      "external_id": "198563674",
+      "title": "Shelterwood",
+      "authors": [
+        "Lisa Wingate"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1699364475l/198563674._SY600_.jpg",
+      "rank": 20,
+      "votes": 1946,
+      "winner": false
+    }
+  ]
+}

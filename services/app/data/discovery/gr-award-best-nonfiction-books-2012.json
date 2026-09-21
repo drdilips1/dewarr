@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-nonfiction-books-2012",
+  "kind": "award",
+  "title": "Nonfiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-nonfiction-books-2012",
+  "year": 2012,
+  "category": "Nonfiction",
+  "genres": [
+    "non-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:14.746946+00:00",
+  "books": [
+    {
+      "external_id": "8520610",
+      "title": "Quiet",
+      "authors": [
+        "Susan Cain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328562861l/8520610.jpg",
+      "rank": 1,
+      "votes": 7532,
+      "winner": true
+    },
+    {
+      "external_id": "11869272",
+      "title": "Behind the Beautiful Forevers",
+      "authors": [
+        "Katherine Boo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1315601232l/11869272.jpg",
+      "rank": 2,
+      "votes": 5356,
+      "winner": false
+    },
+    {
+      "external_id": "12609433",
+      "title": "The Power of Habit",
+      "authors": [
+        "Charles Duhigg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545854312l/12609433._SY600_.jpg",
+      "rank": 3,
+      "votes": 3300,
+      "winner": false
+    },
+    {
+      "external_id": "13099738",
+      "title": "Steal Like an Artist",
+      "authors": [
+        "Austin Kleon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404576602l/13099738.jpg",
+      "rank": 4,
+      "votes": 2978,
+      "winner": false
+    },
+    {
+      "external_id": "13435889",
+      "title": "How Children Succeed",
+      "authors": [
+        "Paul Tough"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344730141l/13435889.jpg",
+      "rank": 5,
+      "votes": 2494,
+      "winner": false
+    },
+    {
+      "external_id": "13528350",
+      "title": "The Violinist's Thumb",
+      "authors": [
+        "Sam Kean"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336411690l/13528350.jpg",
+      "rank": 6,
+      "votes": 2191,
+      "winner": false
+    },
+    {
+      "external_id": "11910983",
+      "title": "Bringing Up Bébé",
+      "authors": [
+        "Pamela Druckerman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347956508l/11910983.jpg",
+      "rank": 7,
+      "votes": 2079,
+      "winner": false
+    },
+    {
+      "external_id": "11337189",
+      "title": "A Universe from Nothing",
+      "authors": [
+        "Lawrence M. Krauss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1365217267l/11337189.jpg",
+      "rank": 8,
+      "votes": 1974,
+      "winner": false
+    },
+    {
+      "external_id": "13533727",
+      "title": "Tiny Beautiful Things",
+      "authors": [
+        "Cheryl Strayed"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1339161628l/13533727.jpg",
+      "rank": 9,
+      "votes": 1969,
+      "winner": false
+    },
+    {
+      "external_id": "13259270",
+      "title": "Free Will",
+      "authors": [
+        "Sam Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1532072045l/13259270._SY600_.jpg",
+      "rank": 10,
+      "votes": 1547,
+      "winner": false
+    },
+    {
+      "external_id": "12158480",
+      "title": "Why Nations Fail",
+      "authors": [
+        "Daron Acemoğlu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348987396l/12158480.jpg",
+      "rank": 11,
+      "votes": 893,
+      "winner": false
+    },
+    {
+      "external_id": "11324722",
+      "title": "The Righteous Mind",
+      "authors": [
+        "Jonathan Haidt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1534528902l/11324722._SY600_.jpg",
+      "rank": 12,
+      "votes": 708,
+      "winner": false
+    },
+    {
+      "external_id": "13426082",
+      "title": "How Will You Measure Your Life?",
+      "authors": [
+        "Clayton M. Christensen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355039292l/13426082.jpg",
+      "rank": 13,
+      "votes": 683,
+      "winner": false
+    },
+    {
+      "external_id": "13152668",
+      "title": "Dream Team",
+      "authors": [
+        "Jack McCallum"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344619142l/13152668.jpg",
+      "rank": 14,
+      "votes": 657,
+      "winner": false
+    },
+    {
+      "external_id": "13187824",
+      "title": "Abundance",
+      "authors": [
+        "Peter H. Diamandis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344396582l/13187824.jpg",
+      "rank": 15,
+      "votes": 398,
+      "winner": false
+    },
+    {
+      "external_id": "13588394",
+      "title": "The Signal and the Noise",
+      "authors": [
+        "Nate Silver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355058876l/13588394.jpg",
+      "rank": 16,
+      "votes": 375,
+      "winner": false
+    },
+    {
+      "external_id": "12804425",
+      "title": "Green Illusions",
+      "authors": [
+        "Ozzie Zehner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1317844739l/12804425.jpg",
+      "rank": 17,
+      "votes": 341,
+      "winner": false
+    },
+    {
+      "external_id": "13167087",
+      "title": "This Is How",
+      "authors": [
+        "Augusten Burroughs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442367163l/13167087._SY600_.jpg",
+      "rank": 18,
+      "votes": 204,
+      "winner": false
+    },
+    {
+      "external_id": "13151179",
+      "title": "Twilight of the Elites",
+      "authors": [
+        "Christopher L. Hayes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1332529416l/13151179.jpg",
+      "rank": 19,
+      "votes": 121,
+      "winner": false
+    },
+    {
+      "external_id": "15823426",
+      "title": "The Secret Race",
+      "authors": [
+        "Tyler Hamilton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344963275l/15823426.jpg",
+      "rank": 20,
+      "votes": 121,
+      "winner": false
+    }
+  ]
+}

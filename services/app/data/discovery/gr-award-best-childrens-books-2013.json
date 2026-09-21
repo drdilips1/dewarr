@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-childrens-books-2013",
+  "kind": "award",
+  "title": "Middle Grade & Children's",
+  "source_url": "https://www.goodreads.com/choiceawards/best-childrens-books-2013",
+  "year": 2013,
+  "category": "Middle Grade & Children's",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:56.288491+00:00",
+  "books": [
+    {
+      "external_id": "12127810",
+      "title": "The House of Hades",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201430l/12127810._SY600_.jpg",
+      "rank": 1,
+      "votes": 42877,
+      "winner": true
+    },
+    {
+      "external_id": "17349203",
+      "title": "Fortunately, the Milk",
+      "authors": [
+        "Neil Gaiman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1380963103l/17349203.jpg",
+      "rank": 2,
+      "votes": 12860,
+      "winner": false
+    },
+    {
+      "external_id": "16074748",
+      "title": "Tales from a Not-So-Happy Heartbreaker",
+      "authors": [
+        "Rachel Renée Russell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418103694l/16074748.jpg",
+      "rank": 3,
+      "votes": 5835,
+      "winner": false
+    },
+    {
+      "external_id": "17722973",
+      "title": "The Enchantress Returns",
+      "authors": [
+        "Chris Colfer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1364843824l/17722973.jpg",
+      "rank": 4,
+      "votes": 5730,
+      "winner": false
+    },
+    {
+      "external_id": "15944406",
+      "title": "Doll Bones",
+      "authors": [
+        "Holly Black"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424981042l/15944406.jpg",
+      "rank": 5,
+      "votes": 5303,
+      "winner": false
+    },
+    {
+      "external_id": "15703770",
+      "title": "The Runaway King",
+      "authors": [
+        "Jennifer A. Nielsen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351133357l/15703770.jpg",
+      "rank": 6,
+      "votes": 4386,
+      "winner": false
+    },
+    {
+      "external_id": "15768989",
+      "title": "The Sun Trail",
+      "authors": [
+        "Erin Hunter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1350651402l/15768989.jpg",
+      "rank": 7,
+      "votes": 3946,
+      "winner": false
+    },
+    {
+      "external_id": "11984131",
+      "title": "Fyre",
+      "authors": [
+        "Angie Sage"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1341068936l/11984131.jpg",
+      "rank": 8,
+      "votes": 3422,
+      "winner": false
+    },
+    {
+      "external_id": "15937108",
+      "title": "Counting by 7s",
+      "authors": [
+        "Holly Goldberg Sloan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1396225872l/15937108.jpg",
+      "rank": 9,
+      "votes": 3233,
+      "winner": false
+    },
+    {
+      "external_id": "16054808",
+      "title": "Escape from Mr. Lemoncello's Library",
+      "authors": [
+        "Chris Grabenstein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1379335670l/16054808.jpg",
+      "rank": 10,
+      "votes": 2849,
+      "winner": false
+    },
+    {
+      "external_id": "13642663",
+      "title": "Navigating Early",
+      "authors": [
+        "Clare Vanderpool"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1340194887l/13642663.jpg",
+      "rank": 11,
+      "votes": 1443,
+      "winner": false
+    },
+    {
+      "external_id": "15801381",
+      "title": "Chasing the Prophecy",
+      "authors": [
+        "Brandon Mull"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356328161l/15801381.jpg",
+      "rank": 12,
+      "votes": 1232,
+      "winner": false
+    },
+    {
+      "external_id": "15756277",
+      "title": "Prisoner B-3087",
+      "authors": [
+        "Alan Gratz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351101941l/15756277.jpg",
+      "rank": 13,
+      "votes": 1157,
+      "winner": false
+    },
+    {
+      "external_id": "12107927",
+      "title": "Trust No One",
+      "authors": [
+        "Linda Sue Park"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358266266l/12107927.jpg",
+      "rank": 14,
+      "votes": 1049,
+      "winner": false
+    },
+    {
+      "external_id": "17428653",
+      "title": "The Screaming Staircase",
+      "authors": [
+        "Jonathan Stroud"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1411913616l/17428653.jpg",
+      "rank": 15,
+      "votes": 978,
+      "winner": false
+    },
+    {
+      "external_id": "16248113",
+      "title": "The School for Good and Evil",
+      "authors": [
+        "Soman Chainani"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1490529205l/16248113._SY600_.jpg",
+      "rank": 16,
+      "votes": 812,
+      "winner": false
+    },
+    {
+      "external_id": "17261183",
+      "title": "The Girl Who Soared Over Fairyland and Cut the Moon in Two",
+      "authors": [
+        "Catherynne M. Valente"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375931388l/17261183.jpg",
+      "rank": 17,
+      "votes": 562,
+      "winner": false
+    },
+    {
+      "external_id": "17465470",
+      "title": "The Royal Ranger",
+      "authors": [
+        "John Flanagan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389661638l/17465470.jpg",
+      "rank": 18,
+      "votes": 552,
+      "winner": false
+    },
+    {
+      "external_id": "11438693",
+      "title": "Loki's Wolves",
+      "authors": [
+        "K.L. Armstrong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351015670l/11438693.jpg",
+      "rank": 19,
+      "votes": 371,
+      "winner": false
+    },
+    {
+      "external_id": "15766776",
+      "title": "Rump",
+      "authors": [
+        "Liesl Shurtliff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1343071412l/15766776.jpg",
+      "rank": 20,
+      "votes": 210,
+      "winner": false
+    }
+  ]
+}

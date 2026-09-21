@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-horror-books-2011",
+  "kind": "award",
+  "title": "Horror",
+  "source_url": "https://www.goodreads.com/choiceawards/best-horror-books-2011",
+  "year": 2011,
+  "category": "Horror",
+  "genres": [
+    "horror"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:41.475943+00:00",
+  "books": [
+    {
+      "external_id": "5957313",
+      "title": "Graveminder",
+      "authors": [
+        "Melissa Marr"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348598634l/5957313.jpg",
+      "rank": 1,
+      "votes": 3264,
+      "winner": true
+    },
+    {
+      "external_id": "7830126",
+      "title": "What the Night Knows",
+      "authors": [
+        "Dean Koontz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1308459193l/7830126.jpg",
+      "rank": 2,
+      "votes": 2816,
+      "winner": false
+    },
+    {
+      "external_id": "8429687",
+      "title": "Deadline",
+      "authors": [
+        "Mira Grant"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408500444l/8429687.jpg",
+      "rank": 3,
+      "votes": 1985,
+      "winner": false
+    },
+    {
+      "external_id": "8718281",
+      "title": "Dreadfully Ever After",
+      "authors": [
+        "Steve Hockensmith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320547810l/8718281.jpg",
+      "rank": 4,
+      "votes": 1608,
+      "winner": false
+    },
+    {
+      "external_id": "10209997",
+      "title": "The Night Strangers",
+      "authors": [
+        "Chris Bohjalian"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1308866180l/10209997.jpg",
+      "rank": 5,
+      "votes": 1509,
+      "winner": false
+    },
+    {
+      "external_id": "9640626",
+      "title": "My Life as a White Trash Zombie",
+      "authors": [
+        "Diana Rowland"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1326145463l/9640626.jpg",
+      "rank": 6,
+      "votes": 1441,
+      "winner": false
+    },
+    {
+      "external_id": "9440171",
+      "title": "The President's Vampire",
+      "authors": [
+        "Christopher Farnsworth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442104707l/9440171._SY600_.jpg",
+      "rank": 7,
+      "votes": 1382,
+      "winner": false
+    },
+    {
+      "external_id": "9421748",
+      "title": "Eat Slay Love",
+      "authors": [
+        "Jesse Petersen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1604812971l/9421748._SY600_.jpg",
+      "rank": 8,
+      "votes": 1194,
+      "winner": false
+    },
+    {
+      "external_id": "10365343",
+      "title": "Zone One",
+      "authors": [
+        "Colson Whitehead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327888785l/10365343.jpg",
+      "rank": 9,
+      "votes": 1019,
+      "winner": false
+    },
+    {
+      "external_id": "9065272",
+      "title": "Aftertime",
+      "authors": [
+        "Sophie Littlefield"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1288994261l/9065272.jpg",
+      "rank": 10,
+      "votes": 596,
+      "winner": false
+    },
+    {
+      "external_id": "11422798",
+      "title": "Seed",
+      "authors": [
+        "Ania Ahlborn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1305997493l/11422798.jpg",
+      "rank": 11,
+      "votes": 309,
+      "winner": false
+    },
+    {
+      "external_id": "9532302",
+      "title": "The Last Werewolf",
+      "authors": [
+        "Glen Duncan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1287572224l/9532302.jpg",
+      "rank": 12,
+      "votes": 294,
+      "winner": false
+    },
+    {
+      "external_id": "10108463",
+      "title": "The Devil All the Time",
+      "authors": [
+        "Donald Ray Pollock"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320561517l/10108463.jpg",
+      "rank": 13,
+      "votes": 288,
+      "winner": false
+    },
+    {
+      "external_id": "6945530",
+      "title": "The Night Eternal",
+      "authors": [
+        "Guillermo del Toro"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327932900l/6945530.jpg",
+      "rank": 14,
+      "votes": 243,
+      "winner": false
+    },
+    {
+      "external_id": "8585317",
+      "title": "The Cypress House",
+      "authors": [
+        "Michael Koryta"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344264226l/8585317.jpg",
+      "rank": 15,
+      "votes": 240,
+      "winner": false
+    },
+    {
+      "external_id": "9120730",
+      "title": "The King of Plagues",
+      "authors": [
+        "Jonathan Maberry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388359918l/9120730.jpg",
+      "rank": 16,
+      "votes": 223,
+      "winner": false
+    },
+    {
+      "external_id": "9466865",
+      "title": "Raising Stony Mayhall",
+      "authors": [
+        "Daryl Gregory"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1326125621l/9466865.jpg",
+      "rank": 17,
+      "votes": 156,
+      "winner": false
+    },
+    {
+      "external_id": "11876043",
+      "title": "That Which Should Not Be",
+      "authors": [
+        "Brett J. Talley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1309323608l/11876043.jpg",
+      "rank": 18,
+      "votes": 136,
+      "winner": false
+    },
+    {
+      "external_id": "10644437",
+      "title": "An Apple For Zoë",
+      "authors": [
+        "Thomas Amo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1316127325l/10644437.jpg",
+      "rank": 19,
+      "votes": 135,
+      "winner": false
+    },
+    {
+      "external_id": "10772903",
+      "title": "Those Across the River",
+      "authors": [
+        "Christopher Buehlman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442798702l/10772903._SY600_.jpg",
+      "rank": 20,
+      "votes": 112,
+      "winner": false
+    }
+  ]
+}

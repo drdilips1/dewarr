@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-graphic-novels-comics-2022",
+  "kind": "award",
+  "title": "Graphic Novels & Comics",
+  "source_url": "https://www.goodreads.com/choiceawards/best-graphic-novels-comics-2022",
+  "year": 2022,
+  "category": "Graphic Novels & Comics",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:50.948878+00:00",
+  "books": [
+    {
+      "external_id": "56060300",
+      "title": "Heartstopper",
+      "authors": [
+        "Alice Oseman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1640745736l/56060300.jpg",
+      "rank": 1,
+      "votes": 138174,
+      "winner": true
+    },
+    {
+      "external_id": "57717417",
+      "title": "Lore Olympus",
+      "authors": [
+        "Rachel  Smythe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1656929870l/57717417.jpg",
+      "rank": 2,
+      "votes": 51059,
+      "winner": false
+    },
+    {
+      "external_id": "59785164",
+      "title": "Demon in the Wood",
+      "authors": [
+        "Leigh Bardugo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1639666490l/59785164.jpg",
+      "rank": 3,
+      "votes": 26096,
+      "winner": false
+    },
+    {
+      "external_id": "50898151",
+      "title": "Oddball",
+      "authors": [
+        "Sarah Andersen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1619366236l/50898151._SY600_.jpg",
+      "rank": 4,
+      "votes": 16882,
+      "winner": false
+    },
+    {
+      "external_id": "29237224",
+      "title": "Saga, Volume 10",
+      "authors": [
+        "Brian K. Vaughan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1648551390l/29237224.jpg",
+      "rank": 5,
+      "votes": 14160,
+      "winner": false
+    },
+    {
+      "external_id": "58739572",
+      "title": "Wash Day Diaries",
+      "authors": [
+        "Jamila Rowser"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1634635000l/58739572.jpg",
+      "rank": 6,
+      "votes": 13911,
+      "winner": false
+    },
+    {
+      "external_id": "60320130",
+      "title": "Everything Is OK",
+      "authors": [
+        "Debbie Tung"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1645369554l/60320130.jpg",
+      "rank": 7,
+      "votes": 11968,
+      "winner": false
+    },
+    {
+      "external_id": "57005205",
+      "title": "Huda F Are You?",
+      "authors": [
+        "Huda Fahmy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1618850103l/57005205.jpg",
+      "rank": 8,
+      "votes": 10726,
+      "winner": false
+    },
+    {
+      "external_id": "59069071",
+      "title": "Ducks",
+      "authors": [
+        "Kate Beaton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642101898l/59069071.jpg",
+      "rank": 9,
+      "votes": 8466,
+      "winner": false
+    },
+    {
+      "external_id": "55700840",
+      "title": "Fangirl, Vol. 2",
+      "authors": [
+        "Sam Maggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642112768l/55700840.jpg",
+      "rank": 10,
+      "votes": 8399,
+      "winner": false
+    },
+    {
+      "external_id": "58839343",
+      "title": "Crumbs",
+      "authors": [
+        "Danie Stirling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631103978l/58839343.jpg",
+      "rank": 11,
+      "votes": 2833,
+      "winner": false
+    },
+    {
+      "external_id": "60043514",
+      "title": "Killing Stalking",
+      "authors": [
+        "Koogi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1650587114l/60043514.jpg",
+      "rank": 12,
+      "votes": 2805,
+      "winner": false
+    },
+    {
+      "external_id": "60018573",
+      "title": "A Career in Books",
+      "authors": [
+        "Kate Gavino"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1648043047l/60018573._SY600_.jpg",
+      "rank": 13,
+      "votes": 2032,
+      "winner": false
+    },
+    {
+      "external_id": "58673883",
+      "title": "The Many Deaths of Laila Starr",
+      "authors": [
+        "Ram V"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628430031l/58673883.jpg",
+      "rank": 14,
+      "votes": 1980,
+      "winner": false
+    },
+    {
+      "external_id": "58437862",
+      "title": "Chef's Kiss",
+      "authors": [
+        "Jarrett Melendez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718956316l/58437862._SY600_.jpg",
+      "rank": 15,
+      "votes": 1977,
+      "winner": false
+    },
+    {
+      "external_id": "57992923",
+      "title": "Squire",
+      "authors": [
+        "Sara Alfageeh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1624900865l/57992923.jpg",
+      "rank": 16,
+      "votes": 1795,
+      "winner": false
+    },
+    {
+      "external_id": "58719265",
+      "title": "Welcome to St. Hell",
+      "authors": [
+        "Lewis Hancox"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1653533970l/58719265.jpg",
+      "rank": 17,
+      "votes": 1741,
+      "winner": false
+    },
+    {
+      "external_id": "60099713",
+      "title": "It Won't Always Be Like This",
+      "authors": [
+        "Malaka Gharib"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1646171447l/60099713.jpg",
+      "rank": 18,
+      "votes": 1318,
+      "winner": false
+    },
+    {
+      "external_id": "55867756",
+      "title": "Messy Roots",
+      "authors": [
+        "Laura Gao"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631506766l/55867756.jpg",
+      "rank": 19,
+      "votes": 966,
+      "winner": false
+    },
+    {
+      "external_id": "60665429",
+      "title": "Thieves",
+      "authors": [
+        "Lucie Bryon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1648722030l/60665429.jpg",
+      "rank": 20,
+      "votes": 879,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-picture-books-2019",
+  "kind": "award",
+  "title": "Picture Books",
+  "source_url": "https://www.goodreads.com/choiceawards/best-picture-books-2019",
+  "year": 2019,
+  "category": "Picture Books",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:51.076900+00:00",
+  "books": [
+    {
+      "external_id": "42616620",
+      "title": "A Beautiful Day in the Neighborhood",
+      "authors": [
+        "Fred Rogers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545418845l/42616620.jpg",
+      "rank": 1,
+      "votes": 29860,
+      "winner": true
+    },
+    {
+      "external_id": "42785750",
+      "title": "Sulwe",
+      "authors": [
+        "Lupita Nyong'o"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554153712l/42785750.jpg",
+      "rank": 2,
+      "votes": 26891,
+      "winner": false
+    },
+    {
+      "external_id": "40221498",
+      "title": "The Good Egg",
+      "authors": [
+        "Jory John"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1530030870l/40221498._SY600_.jpg",
+      "rank": 3,
+      "votes": 18586,
+      "winner": false
+    },
+    {
+      "external_id": "40944115",
+      "title": "Hair Love",
+      "authors": [
+        "Matthew A. Cherry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555477540l/40944115._SY600_.jpg",
+      "rank": 4,
+      "votes": 12925,
+      "winner": false
+    },
+    {
+      "external_id": "38595349",
+      "title": "Unicorn Day",
+      "authors": [
+        "Diana Murray"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545944648l/38595349._SY600_.jpg",
+      "rank": 5,
+      "votes": 8998,
+      "winner": false
+    },
+    {
+      "external_id": "42931503",
+      "title": "A Tiger Like Me",
+      "authors": [
+        "Michael Engler"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1564666035l/42931503._SY600_.jpg",
+      "rank": 6,
+      "votes": 7954,
+      "winner": false
+    },
+    {
+      "external_id": "38791999",
+      "title": "Because",
+      "authors": [
+        "Mo Willems"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1535502005l/38791999._SY600_.jpg",
+      "rank": 7,
+      "votes": 7396,
+      "winner": false
+    },
+    {
+      "external_id": "41451728",
+      "title": "We Are (Not) Friends",
+      "authors": [
+        "Anna Kang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1560770509l/41451728._SY600_.jpg",
+      "rank": 8,
+      "votes": 6069,
+      "winner": false
+    },
+    {
+      "external_id": "43671848",
+      "title": "Just Because",
+      "authors": [
+        "Mac Barnett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552872055l/43671848._SY600_.jpg",
+      "rank": 9,
+      "votes": 5807,
+      "winner": false
+    },
+    {
+      "external_id": "41183554",
+      "title": "A Piglet Named Mercy",
+      "authors": [
+        "Kate DiCamillo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546467777l/41183554._SY600_.jpg",
+      "rank": 10,
+      "votes": 5713,
+      "winner": false
+    },
+    {
+      "external_id": "41954472",
+      "title": "Pirates Don't Go to Kindergarten!",
+      "authors": [
+        "Lisa     Robinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1544906514l/41954472.jpg",
+      "rank": 11,
+      "votes": 2943,
+      "winner": false
+    },
+    {
+      "external_id": "43853210",
+      "title": "The Proudest Blue",
+      "authors": [
+        "Ibtihaj Muhammad"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1607554732l/43853210._SY600_.jpg",
+      "rank": 12,
+      "votes": 2875,
+      "winner": false
+    },
+    {
+      "external_id": "32335532",
+      "title": "How to Read a Book",
+      "authors": [
+        "Kwame Alexander"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1539773388l/32335532._SY600_.jpg",
+      "rank": 13,
+      "votes": 2604,
+      "winner": false
+    },
+    {
+      "external_id": "40607588",
+      "title": "It's Not Hansel and Gretel",
+      "authors": [
+        "Josh Funk"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1532702203l/40607588.jpg",
+      "rank": 14,
+      "votes": 1976,
+      "winner": false
+    },
+    {
+      "external_id": "42642044",
+      "title": "Fry Bread",
+      "authors": [
+        "Kevin Noble Maillard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552350029l/42642044._SY600_.jpg",
+      "rank": 15,
+      "votes": 1655,
+      "winner": false
+    },
+    {
+      "external_id": "41954471",
+      "title": "What If Everybody Thought That?",
+      "authors": [
+        "Ellen Javernick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554313139l/41954471._SY600_.jpg",
+      "rank": 16,
+      "votes": 1466,
+      "winner": false
+    },
+    {
+      "external_id": "41451729",
+      "title": "Vacation for Dexter!",
+      "authors": [
+        "Lindsay Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1541502318l/41451729.jpg",
+      "rank": 17,
+      "votes": 1459,
+      "winner": false
+    },
+    {
+      "external_id": "40796177",
+      "title": "The Undefeated",
+      "authors": [
+        "Kwame Alexander"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537505970l/40796177._SY600_.jpg",
+      "rank": 18,
+      "votes": 838,
+      "winner": false
+    },
+    {
+      "external_id": "41954470",
+      "title": "Rosie the Dragon and Charlie Make Waves",
+      "authors": [
+        "Lauren H. Kerstein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545560750l/41954470.jpg",
+      "rank": 19,
+      "votes": 823,
+      "winner": false
+    },
+    {
+      "external_id": "43662690",
+      "title": "Snow Globe Wishes",
+      "authors": [
+        "Erin Dealey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566099714l/43662690._SY600_.jpg",
+      "rank": 20,
+      "votes": 650,
+      "winner": false
+    }
+  ]
+}

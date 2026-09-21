@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-young-adult-fiction-books-2014",
+  "kind": "award",
+  "title": "Young Adult Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fiction-books-2014",
+  "year": 2014,
+  "category": "Young Adult Fiction",
+  "genres": [
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:23.791058+00:00",
+  "books": [
+    {
+      "external_id": "16143347",
+      "title": "We Were Liars",
+      "authors": [
+        "E. Lockhart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1402749479l/16143347.jpg",
+      "rank": 1,
+      "votes": 33943,
+      "winner": true
+    },
+    {
+      "external_id": "9627755",
+      "title": "Isla and the Happily Ever After",
+      "authors": [
+        "Stephanie Perkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362064564l/9627755.jpg",
+      "rank": 2,
+      "votes": 20352,
+      "winner": false
+    },
+    {
+      "external_id": "17565845",
+      "title": "Panic",
+      "authors": [
+        "Lauren Oliver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1374066076l/17565845.jpg",
+      "rank": 3,
+      "votes": 16713,
+      "winner": false
+    },
+    {
+      "external_id": "15749186",
+      "title": "To All the Boys I've Loved Before",
+      "authors": [
+        "Jenny Han"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1372086100l/15749186.jpg",
+      "rank": 4,
+      "votes": 14638,
+      "winner": false
+    },
+    {
+      "external_id": "18333898",
+      "title": "Take Me On",
+      "authors": [
+        "Katie McGarry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1392908659l/18333898.jpg",
+      "rank": 5,
+      "votes": 13660,
+      "winner": false
+    },
+    {
+      "external_id": "18140047",
+      "title": "Love Letters to the Dead",
+      "authors": [
+        "Ava Dellaira"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1497096111l/18140047._SY600_.jpg",
+      "rank": 6,
+      "votes": 13510,
+      "winner": false
+    },
+    {
+      "external_id": "18296030",
+      "title": "Don't Look Back",
+      "authors": [
+        "Jennifer L. Armentrout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1380803444l/18296030.jpg",
+      "rank": 7,
+      "votes": 12635,
+      "winner": false
+    },
+    {
+      "external_id": "18079527",
+      "title": "The Impossible Knife of Memory",
+      "authors": [
+        "Laurie Halse Anderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405786728l/18079527.jpg",
+      "rank": 8,
+      "votes": 10011,
+      "winner": false
+    },
+    {
+      "external_id": "20820994",
+      "title": "I'll Give You the Sun",
+      "authors": [
+        "Jandy Nelson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608612077l/20820994.jpg",
+      "rank": 9,
+      "votes": 9958,
+      "winner": false
+    },
+    {
+      "external_id": "18189606",
+      "title": "Since You've Been Gone",
+      "authors": [
+        "Morgan Matson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1377702326l/18189606.jpg",
+      "rank": 10,
+      "votes": 9314,
+      "winner": false
+    },
+    {
+      "external_id": "22402154",
+      "title": "Flat-Out Celeste",
+      "authors": [
+        "Jessica Park"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1406119104l/22402154.jpg",
+      "rank": 11,
+      "votes": 4997,
+      "winner": false
+    },
+    {
+      "external_id": "13580846",
+      "title": "My Life with the Walter Boys",
+      "authors": [
+        "Ali Novak"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1392909239l/13580846._SY600_.jpg",
+      "rank": 12,
+      "votes": 3981,
+      "winner": false
+    },
+    {
+      "external_id": "17228280",
+      "title": "Better Off Friends",
+      "authors": [
+        "Elizabeth Eulberg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386372561l/17228280.jpg",
+      "rank": 13,
+      "votes": 3858,
+      "winner": false
+    },
+    {
+      "external_id": "18298225",
+      "title": "On the Fence",
+      "authors": [
+        "Kasie West"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1383229604l/18298225.jpg",
+      "rank": 14,
+      "votes": 3173,
+      "winner": false
+    },
+    {
+      "external_id": "20579291",
+      "title": "Lies We Tell Ourselves",
+      "authors": [
+        "Robin Talley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1396886699l/20579291.jpg",
+      "rank": 15,
+      "votes": 2435,
+      "winner": false
+    },
+    {
+      "external_id": "18295852",
+      "title": "The Geography of You and Me",
+      "authors": [
+        "Jennifer E. Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1376408056l/18295852.jpg",
+      "rank": 16,
+      "votes": 1952,
+      "winner": false
+    },
+    {
+      "external_id": "22616635",
+      "title": "Puddle Jumping",
+      "authors": [
+        "Amber L.  Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404329003l/22616635.jpg",
+      "rank": 17,
+      "votes": 1439,
+      "winner": false
+    },
+    {
+      "external_id": "20726924",
+      "title": "Rumble",
+      "authors": [
+        "Ellen Hopkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395183969l/20726924.jpg",
+      "rank": 18,
+      "votes": 1140,
+      "winner": false
+    },
+    {
+      "external_id": "18163646",
+      "title": "Falling into Place",
+      "authors": [
+        "Amy    Zhang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1393613084l/18163646.jpg",
+      "rank": 19,
+      "votes": 953,
+      "winner": false
+    },
+    {
+      "external_id": "18667779",
+      "title": "Everything Leads to You",
+      "authors": [
+        "Nina LaCour"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389744233l/18667779.jpg",
+      "rank": 20,
+      "votes": 806,
+      "winner": false
+    }
+  ]
+}

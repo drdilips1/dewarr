@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-young-adult-fiction-books-2021",
+  "kind": "award",
+  "title": "Young Adult Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fiction-books-2021",
+  "year": 2021,
+  "category": "Young Adult Fiction",
+  "genres": [
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:19.974181+00:00",
+  "books": [
+    {
+      "external_id": "57812106",
+      "title": "Firekeeper's Daughter",
+      "authors": [
+        "Angeline Boulley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1619021348l/57812106._SY600_.jpg",
+      "rank": 1,
+      "votes": 35648,
+      "winner": true
+    },
+    {
+      "external_id": "56305028",
+      "title": "The Hawthorne Legacy",
+      "authors": [
+        "Jennifer Lynn Barnes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1610867212l/56305028.jpg",
+      "rank": 2,
+      "votes": 33974,
+      "winner": false
+    },
+    {
+      "external_id": "55518780",
+      "title": "Ace of Spades",
+      "authors": [
+        "Faridah Àbíké-Íyímídé"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605803414l/55518780.jpg",
+      "rank": 3,
+      "votes": 33442,
+      "winner": false
+    },
+    {
+      "external_id": "56980548",
+      "title": "Aristotle and Dante Dive into the Waters of the World",
+      "authors": [
+        "Benjamin Alire Sáenz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1614709171l/56980548.jpg",
+      "rank": 4,
+      "votes": 32298,
+      "winner": false
+    },
+    {
+      "external_id": "52822210",
+      "title": "Concrete Rose",
+      "authors": [
+        "Angie Thomas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585585629l/52822210.jpg",
+      "rank": 5,
+      "votes": 24346,
+      "winner": false
+    },
+    {
+      "external_id": "56905097",
+      "title": "As Good As Dead",
+      "authors": [
+        "Holly  Jackson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1623112782l/56905097.jpg",
+      "rank": 6,
+      "votes": 23624,
+      "winner": false
+    },
+    {
+      "external_id": "49111189",
+      "title": "The Cousins",
+      "authors": [
+        "Karen M. McManus"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1596430444l/49111189.jpg",
+      "rank": 7,
+      "votes": 22394,
+      "winner": false
+    },
+    {
+      "external_id": "35224992",
+      "title": "Last Night at the Telegraph Club",
+      "authors": [
+        "Malinda Lo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1593457992l/35224992.jpg",
+      "rank": 8,
+      "votes": 18241,
+      "winner": false
+    },
+    {
+      "external_id": "56643402",
+      "title": "Instructions for Dancing",
+      "authors": [
+        "Nicola Yoon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611790659l/56643402.jpg",
+      "rank": 9,
+      "votes": 17685,
+      "winner": false
+    },
+    {
+      "external_id": "54427168",
+      "title": "The Box in the Woods",
+      "authors": [
+        "Maureen Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1623668073l/54427168.jpg",
+      "rank": 10,
+      "votes": 13148,
+      "winner": false
+    },
+    {
+      "external_id": "58094337",
+      "title": "Tokyo Ever After",
+      "authors": [
+        "Emiko Jean"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1621415189l/58094337._SY600_.jpg",
+      "rank": 11,
+      "votes": 5526,
+      "winner": false
+    },
+    {
+      "external_id": "52515987",
+      "title": "She Drives Me Crazy",
+      "authors": [
+        "Kelly Quindlen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1593379332l/52515987.jpg",
+      "rank": 12,
+      "votes": 4966,
+      "winner": false
+    },
+    {
+      "external_id": "54238295",
+      "title": "A Pho Love Story",
+      "authors": [
+        "Loan Le"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1610894924l/54238295.jpg",
+      "rank": 13,
+      "votes": 4463,
+      "winner": false
+    },
+    {
+      "external_id": "50892313",
+      "title": "Yolk",
+      "authors": [
+        "Mary H.K. Choi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1595533696l/50892313.jpg",
+      "rank": 14,
+      "votes": 4463,
+      "winner": false
+    },
+    {
+      "external_id": "53138158",
+      "title": "You Have a Match",
+      "authors": [
+        "Emma    Lord"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1589256633l/53138158.jpg",
+      "rank": 15,
+      "votes": 4143,
+      "winner": false
+    },
+    {
+      "external_id": "54860459",
+      "title": "Hani and Ishu's Guide to Fake Dating",
+      "authors": [
+        "Adiba Jaigirdar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1603287082l/54860459.jpg",
+      "rank": 16,
+      "votes": 3769,
+      "winner": false
+    },
+    {
+      "external_id": "54998272",
+      "title": "The Girls I've Been",
+      "authors": [
+        "Tess Sharpe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1599851902l/54998272._SY600_.jpg",
+      "rank": 17,
+      "votes": 3584,
+      "winner": false
+    },
+    {
+      "external_id": "49204960",
+      "title": "Perfect on Paper",
+      "authors": [
+        "Sophie Gonzales"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1607324016l/49204960.jpg",
+      "rank": 18,
+      "votes": 3290,
+      "winner": false
+    },
+    {
+      "external_id": "49399658",
+      "title": "Counting Down with You",
+      "authors": [
+        "Tashie Bhuiyan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600705603l/49399658.jpg",
+      "rank": 19,
+      "votes": 3071,
+      "winner": false
+    },
+    {
+      "external_id": "53138093",
+      "title": "The Project",
+      "authors": [
+        "Courtney Summers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1589381478l/53138093.jpg",
+      "rank": 20,
+      "votes": 2478,
+      "winner": false
+    }
+  ]
+}

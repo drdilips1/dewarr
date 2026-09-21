@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-young-adult-fantasy-books-2022",
+  "kind": "award",
+  "title": "Young Adult Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fantasy-books-2022",
+  "year": 2022,
+  "category": "Young Adult Fantasy",
+  "genres": [
+    "fantasy",
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:56.554212+00:00",
+  "books": [
+    {
+      "external_id": "58064046",
+      "title": "Gallant",
+      "authors": [
+        "V.E. Schwab"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1635862579l/58064046.jpg",
+      "rank": 1,
+      "votes": 40467,
+      "winner": true
+    },
+    {
+      "external_id": "59365195",
+      "title": "Bloodmarked",
+      "authors": [
+        "Tracy Deonn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1665593512l/59365195.jpg",
+      "rank": 2,
+      "votes": 37691,
+      "winner": false
+    },
+    {
+      "external_id": "60021196",
+      "title": "Kingdom of the Feared",
+      "authors": [
+        "Kerri Maniscalco"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644386123l/60021196.jpg",
+      "rank": 3,
+      "votes": 34823,
+      "winner": false
+    },
+    {
+      "external_id": "59808071",
+      "title": "The Ballad of Never After",
+      "authors": [
+        "Stephanie Garber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716011416l/59808071._SY600_.jpg",
+      "rank": 4,
+      "votes": 32165,
+      "winner": false
+    },
+    {
+      "external_id": "56978100",
+      "title": "The Girl Who Fell Beneath the Sea",
+      "authors": [
+        "Axie Oh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1616788834l/56978100.jpg",
+      "rank": 5,
+      "votes": 28009,
+      "winner": false
+    },
+    {
+      "external_id": "57571215",
+      "title": "Cytonic",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1622045953l/57571215.jpg",
+      "rank": 6,
+      "votes": 19674,
+      "winner": false
+    },
+    {
+      "external_id": "60138097",
+      "title": "Foul Lady Fortune",
+      "authors": [
+        "Chloe Gong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642713115l/60138097.jpg",
+      "rank": 7,
+      "votes": 18638,
+      "winner": false
+    },
+    {
+      "external_id": "59227936",
+      "title": "Belladonna",
+      "authors": [
+        "Adalyn  Grace"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1633986670l/59227936.jpg",
+      "rank": 8,
+      "votes": 17662,
+      "winner": false
+    },
+    {
+      "external_id": "59251223",
+      "title": "Cursed",
+      "authors": [
+        "Marissa Meyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642700558l/59251223.jpg",
+      "rank": 9,
+      "votes": 17483,
+      "winner": false
+    },
+    {
+      "external_id": "57992931",
+      "title": "This Woven Kingdom",
+      "authors": [
+        "Tahereh Mafi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1634235410l/57992931.jpg",
+      "rank": 10,
+      "votes": 16678,
+      "winner": false
+    },
+    {
+      "external_id": "58311939",
+      "title": "These Twisted Bonds",
+      "authors": [
+        "Lexi Ryan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1638258882l/58311939.jpg",
+      "rank": 11,
+      "votes": 5038,
+      "winner": false
+    },
+    {
+      "external_id": "58329296",
+      "title": "All That’s Left in the World",
+      "authors": [
+        "Erik J. Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1624548105l/58329296.jpg",
+      "rank": 12,
+      "votes": 4973,
+      "winner": false
+    },
+    {
+      "external_id": "59251248",
+      "title": "The Sunbearer Trials",
+      "authors": [
+        "Aiden Thomas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1636368852l/59251248.jpg",
+      "rank": 13,
+      "votes": 4609,
+      "winner": false
+    },
+    {
+      "external_id": "55812605",
+      "title": "Hotel Magnifique",
+      "authors": [
+        "Emily J. Taylor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628095000l/55812605.jpg",
+      "rank": 14,
+      "votes": 4531,
+      "winner": false
+    },
+    {
+      "external_id": "56978089",
+      "title": "A Magic Steeped in Poison",
+      "authors": [
+        "Judy I. Lin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620317227l/56978089.jpg",
+      "rank": 15,
+      "votes": 4426,
+      "winner": false
+    },
+    {
+      "external_id": "58437818",
+      "title": "So This Is Ever After",
+      "authors": [
+        "F.T. Lukens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1646255863l/58437818.jpg",
+      "rank": 16,
+      "votes": 4408,
+      "winner": false
+    },
+    {
+      "external_id": "60099660",
+      "title": "If You Could See the Sun",
+      "authors": [
+        "Ann Liang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644595325l/60099660.jpg",
+      "rank": 17,
+      "votes": 4296,
+      "winner": false
+    },
+    {
+      "external_id": "58210340",
+      "title": "Only a Monster",
+      "authors": [
+        "Vanessa Len"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1624641211l/58210340.jpg",
+      "rank": 18,
+      "votes": 3169,
+      "winner": false
+    },
+    {
+      "external_id": "59709309",
+      "title": "The Dragon's Promise",
+      "authors": [
+        "Elizabeth Lim"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644936496l/59709309.jpg",
+      "rank": 19,
+      "votes": 2404,
+      "winner": false
+    },
+    {
+      "external_id": "59513138",
+      "title": "Violet Made of Thorns",
+      "authors": [
+        "Gina  Chen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1635781628l/59513138.jpg",
+      "rank": 20,
+      "votes": 2147,
+      "winner": false
+    }
+  ]
+}

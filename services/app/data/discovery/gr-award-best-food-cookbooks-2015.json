@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-food-cookbooks-2015",
+  "kind": "award",
+  "title": "Food & Cookbooks",
+  "source_url": "https://www.goodreads.com/choiceawards/best-food-cookbooks-2015",
+  "year": 2015,
+  "category": "Food & Cookbooks",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:46.309159+00:00",
+  "books": [
+    {
+      "external_id": "24903909",
+      "title": "The Pioneer Woman Cooks",
+      "authors": [
+        "Ree Drummond"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430337006l/24903909.jpg",
+      "rank": 1,
+      "votes": 12063,
+      "winner": true
+    },
+    {
+      "external_id": "25434355",
+      "title": "The Nerdy Nummies Cookbook",
+      "authors": [
+        "Rosanna Pansino"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1446397956l/25434355._SY600_.jpg",
+      "rank": 2,
+      "votes": 11288,
+      "winner": false
+    },
+    {
+      "external_id": "22217718",
+      "title": "Chocolate-Covered Katie",
+      "authors": [
+        "Katie Higgins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1401072741l/22217718.jpg",
+      "rank": 3,
+      "votes": 8352,
+      "winner": false
+    },
+    {
+      "external_id": "22716562",
+      "title": "Food52 Genius Recipes",
+      "authors": [
+        "Kristen Miglore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418772568l/22716562.jpg",
+      "rank": 4,
+      "votes": 6921,
+      "winner": false
+    },
+    {
+      "external_id": "20590683",
+      "title": "Life from Scratch",
+      "authors": [
+        "Sasha Martin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415586266l/20590683.jpg",
+      "rank": 5,
+      "votes": 6744,
+      "winner": false
+    },
+    {
+      "external_id": "23453036",
+      "title": "The Whole30",
+      "authors": [
+        "Melissa Urban"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1416873417l/23453036.jpg",
+      "rank": 6,
+      "votes": 6179,
+      "winner": false
+    },
+    {
+      "external_id": "24477075",
+      "title": "The Complete Vegetarian Cookbook",
+      "authors": [
+        "America's Test Kitchen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443909417l/24477075.jpg",
+      "rank": 7,
+      "votes": 6170,
+      "winner": false
+    },
+    {
+      "external_id": "20484545",
+      "title": "It Was Me All Along",
+      "authors": [
+        "Andie Mitchell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394857342l/20484545.jpg",
+      "rank": 8,
+      "votes": 6141,
+      "winner": false
+    },
+    {
+      "external_id": "22609354",
+      "title": "The Dorito Effect",
+      "authors": [
+        "Mark Schatzker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430942604l/22609354.jpg",
+      "rank": 9,
+      "votes": 5568,
+      "winner": false
+    },
+    {
+      "external_id": "20862694",
+      "title": "But I Could Never Go Vegan!",
+      "authors": [
+        "Kristy Turner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418104172l/20862694.jpg",
+      "rank": 10,
+      "votes": 5536,
+      "winner": false
+    },
+    {
+      "external_id": "22609287",
+      "title": "Deliciously Ella",
+      "authors": [
+        "Ella Woodward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410170440l/22609287.jpg",
+      "rank": 11,
+      "votes": 2678,
+      "winner": false
+    },
+    {
+      "external_id": "22716561",
+      "title": "Franklin Barbecue",
+      "authors": [
+        "Aaron Franklin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418769327l/22716561.jpg",
+      "rank": 12,
+      "votes": 2405,
+      "winner": false
+    },
+    {
+      "external_id": "23258002",
+      "title": "Vegan Richa's Indian Kitchen",
+      "authors": [
+        "Richa Hingle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430083854l/23258002.jpg",
+      "rank": 13,
+      "votes": 2184,
+      "winner": false
+    },
+    {
+      "external_id": "22529434",
+      "title": "Living the Farm Sanctuary Life",
+      "authors": [
+        "Gene Baur"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421837275l/22529434.jpg",
+      "rank": 14,
+      "votes": 2047,
+      "winner": false
+    },
+    {
+      "external_id": "18796085",
+      "title": "Epic Tomatoes",
+      "authors": [
+        "Craig Lehoullier"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1402586621l/18796085.jpg",
+      "rank": 15,
+      "votes": 1913,
+      "winner": false
+    },
+    {
+      "external_id": "23316499",
+      "title": "Pig Tales",
+      "authors": [
+        "Barry Estabrook"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413748703l/23316499.jpg",
+      "rank": 16,
+      "votes": 1651,
+      "winner": false
+    },
+    {
+      "external_id": "24861842",
+      "title": "The Food Lab",
+      "authors": [
+        "J. Kenji López-Alt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430990153l/24861842.jpg",
+      "rank": 17,
+      "votes": 1174,
+      "winner": false
+    },
+    {
+      "external_id": "22299976",
+      "title": "The Bulletproof Diet",
+      "authors": [
+        "Dave Asprey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410982532l/22299976.jpg",
+      "rank": 18,
+      "votes": 1111,
+      "winner": false
+    },
+    {
+      "external_id": "24388414",
+      "title": "My Kitchen Year",
+      "authors": [
+        "Ruth Reichl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441908447l/24388414.jpg",
+      "rank": 19,
+      "votes": 918,
+      "winner": false
+    },
+    {
+      "external_id": "22511157",
+      "title": "Bon Appetempt",
+      "authors": [
+        "Amelia P. Morris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403538807l/22511157.jpg",
+      "rank": 20,
+      "votes": 730,
+      "winner": false
+    }
+  ]
+}

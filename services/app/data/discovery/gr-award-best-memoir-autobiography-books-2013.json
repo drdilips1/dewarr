@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-memoir-autobiography-books-2013",
+  "kind": "award",
+  "title": "Memoir & Autobiography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-memoir-autobiography-books-2013",
+  "year": 2013,
+  "category": "Memoir & Autobiography",
+  "genres": [
+    "biography"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:42.088632+00:00",
+  "books": [
+    {
+      "external_id": "17851885",
+      "title": "I Am Malala",
+      "authors": [
+        "Malala Yousafzai"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375414895l/17851885.jpg",
+      "rank": 1,
+      "votes": 32926,
+      "winner": true
+    },
+    {
+      "external_id": "17455541",
+      "title": "Happy, Happy, Happy",
+      "authors": [
+        "Phil Robertson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362252767l/17455541.jpg",
+      "rank": 2,
+      "votes": 9916,
+      "winner": false
+    },
+    {
+      "external_id": "16101121",
+      "title": "The World's Strongest Librarian",
+      "authors": [
+        "Josh Hanagarne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355994752l/16101121.jpg",
+      "rank": 3,
+      "votes": 7961,
+      "winner": false
+    },
+    {
+      "external_id": "15802944",
+      "title": "Carry On, Warrior",
+      "authors": [
+        "Glennon Doyle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1359054516l/15802944.jpg",
+      "rank": 4,
+      "votes": 5028,
+      "winner": false
+    },
+    {
+      "external_id": "16113737",
+      "title": "The Reason I Jump",
+      "authors": [
+        "Naoki Higashida"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1384018847l/16113737.jpg",
+      "rank": 5,
+      "votes": 4847,
+      "winner": false
+    },
+    {
+      "external_id": "15833693",
+      "title": "Waiting to Be Heard",
+      "authors": [
+        "Amanda   Knox"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1367786694l/15833693.jpg",
+      "rank": 6,
+      "votes": 4463,
+      "winner": false
+    },
+    {
+      "external_id": "15798797",
+      "title": "Mom & Me & Mom",
+      "authors": [
+        "Maya Angelou"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344371038l/15798797.jpg",
+      "rank": 7,
+      "votes": 3883,
+      "winner": false
+    },
+    {
+      "external_id": "15827066",
+      "title": "Beyond Belief",
+      "authors": [
+        "Jenna Miscavige Hill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1354001608l/15827066.jpg",
+      "rank": 8,
+      "votes": 3349,
+      "winner": false
+    },
+    {
+      "external_id": "18039963",
+      "title": "A House in the Sky",
+      "authors": [
+        "Amanda Lindhout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1370379455l/18039963.jpg",
+      "rank": 9,
+      "votes": 2989,
+      "winner": false
+    },
+    {
+      "external_id": "17553448",
+      "title": "Until I Say Goodbye",
+      "authors": [
+        "Susan Spencer-Wendel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366214565l/17553448.jpg",
+      "rank": 10,
+      "votes": 2815,
+      "winner": false
+    },
+    {
+      "external_id": "15841863",
+      "title": "Sum It Up",
+      "authors": [
+        "Pat Summitt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1367256760l/15841863.jpg",
+      "rank": 11,
+      "votes": 1325,
+      "winner": false
+    },
+    {
+      "external_id": "16241141",
+      "title": "Fairyland",
+      "authors": [
+        "Alysia Abbott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1689721706l/16241141._SY600_.jpg",
+      "rank": 12,
+      "votes": 1177,
+      "winner": false
+    },
+    {
+      "external_id": "17287028",
+      "title": "My Story",
+      "authors": [
+        "Elizabeth   Smart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1367749530l/17287028.jpg",
+      "rank": 13,
+      "votes": 1112,
+      "winner": false
+    },
+    {
+      "external_id": "15798364",
+      "title": "The Spark",
+      "authors": [
+        "Kristine Barnett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1361254944l/15798364.jpg",
+      "rank": 14,
+      "votes": 1096,
+      "winner": false
+    },
+    {
+      "external_id": "15771862",
+      "title": "Wave",
+      "authors": [
+        "Sonali Deraniyagala"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362126716l/15771862.jpg",
+      "rank": 15,
+      "votes": 1024,
+      "winner": false
+    },
+    {
+      "external_id": "16131189",
+      "title": "Mo' Meta Blues",
+      "authors": [
+        "Ahmir Thompson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1368424961l/16131189.jpg",
+      "rank": 16,
+      "votes": 888,
+      "winner": false
+    },
+    {
+      "external_id": "13642929",
+      "title": "My Beloved World",
+      "authors": [
+        "Sonia Sotomayor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348791624l/13642929.jpg",
+      "rank": 17,
+      "votes": 453,
+      "winner": false
+    },
+    {
+      "external_id": "16218778",
+      "title": "Coming Clean",
+      "authors": [
+        "Kimberly Rae Miller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1381962759l/16218778.jpg",
+      "rank": 18,
+      "votes": 294,
+      "winner": false
+    },
+    {
+      "external_id": "15803014",
+      "title": "After Visiting Friends",
+      "authors": [
+        "Michael Hainey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511288570l/15803014._SY600_.jpg",
+      "rank": 19,
+      "votes": 220,
+      "winner": false
+    },
+    {
+      "external_id": "13547428",
+      "title": "Chanel Bonfire",
+      "authors": [
+        "Wendy Lawless"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1339514351l/13547428.jpg",
+      "rank": 20,
+      "votes": 214,
+      "winner": false
+    }
+  ]
+}

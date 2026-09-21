@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-science-technology-books-2019",
+  "kind": "award",
+  "title": "Science & Technology",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-technology-books-2019",
+  "year": 2019,
+  "category": "Science & Technology",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:14.602579+00:00",
+  "books": [
+    {
+      "external_id": "43785830",
+      "title": "Will My Cat Eat My Eyeballs? Big Questions from Tiny Mortals ...",
+      "authors": [
+        "Caitlin Doughty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554396038l/43785830.jpg",
+      "rank": 1,
+      "votes": 29594,
+      "winner": true
+    },
+    {
+      "external_id": "41104077",
+      "title": "Invisible Women",
+      "authors": [
+        "Caroline Criado Pérez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617113740l/41104077.jpg",
+      "rank": 2,
+      "votes": 28859,
+      "winner": false
+    },
+    {
+      "external_id": "43582376",
+      "title": "The Body",
+      "authors": [
+        "Bill  Bryson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565810646l/43582376.jpg",
+      "rank": 3,
+      "votes": 15466,
+      "winner": false
+    },
+    {
+      "external_id": "43852758",
+      "title": "How To",
+      "authors": [
+        "Randall Munroe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550145086l/43852758.jpg",
+      "rank": 4,
+      "votes": 13830,
+      "winner": false
+    },
+    {
+      "external_id": "40180060",
+      "title": "Mama's Last Hug",
+      "authors": [
+        "Frans de Waal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1543938852l/40180060.jpg",
+      "rank": 5,
+      "votes": 12407,
+      "winner": false
+    },
+    {
+      "external_id": "40405444",
+      "title": "Digital Minimalism",
+      "authors": [
+        "Cal Newport"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1544192948l/40405444.jpg",
+      "rank": 6,
+      "votes": 9468,
+      "winner": false
+    },
+    {
+      "external_id": "41552709",
+      "title": "The Uninhabitable Earth",
+      "authors": [
+        "David Wallace-Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1603323079l/41552709.jpg",
+      "rank": 7,
+      "votes": 8174,
+      "winner": false
+    },
+    {
+      "external_id": "41817481",
+      "title": "Underland",
+      "authors": [
+        "Robert Macfarlane"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1609087045l/41817481._SY600_.jpg",
+      "rank": 8,
+      "votes": 7023,
+      "winner": false
+    },
+    {
+      "external_id": "44526650",
+      "title": "Crisis in the Red Zone",
+      "authors": [
+        "Richard   Preston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558638009l/44526650._SY600_.jpg",
+      "rank": 9,
+      "votes": 6113,
+      "winner": false
+    },
+    {
+      "external_id": "43565381",
+      "title": "We Are the Weather",
+      "authors": [
+        "Jonathan Safran Foer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1561482223l/43565381.jpg",
+      "rank": 10,
+      "votes": 5890,
+      "winner": false
+    },
+    {
+      "external_id": "39999461",
+      "title": "Never Enough",
+      "authors": [
+        "Judith Grisel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1534081791l/39999461.jpg",
+      "rank": 11,
+      "votes": 2899,
+      "winner": false
+    },
+    {
+      "external_id": "40597264",
+      "title": "Hacking Darwin",
+      "authors": [
+        "Jamie Metzl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1548399156l/40597264.jpg",
+      "rank": 12,
+      "votes": 2275,
+      "winner": false
+    },
+    {
+      "external_id": "44595007",
+      "title": "Indistractable",
+      "authors": [
+        "Nir   Eyal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1559847987l/44595007.jpg",
+      "rank": 13,
+      "votes": 2202,
+      "winner": false
+    },
+    {
+      "external_id": "42397849",
+      "title": "Burnout",
+      "authors": [
+        "Emily Nagoski"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1551216612l/42397849.jpg",
+      "rank": 14,
+      "votes": 1866,
+      "winner": false
+    },
+    {
+      "external_id": "36739320",
+      "title": "Because Internet",
+      "authors": [
+        "Gretchen McCulloch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1547222587l/36739320._SY600_.jpg",
+      "rank": 15,
+      "votes": 1583,
+      "winner": false
+    },
+    {
+      "external_id": "43723901",
+      "title": "Lifespan",
+      "authors": [
+        "David A. Sinclair"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1563164003l/43723901.jpg",
+      "rank": 16,
+      "votes": 920,
+      "winner": false
+    },
+    {
+      "external_id": "36589701",
+      "title": "The Perfect Predator",
+      "authors": [
+        "Steffanie Strathdee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537629896l/36589701._SY600_.jpg",
+      "rank": 17,
+      "votes": 914,
+      "winner": false
+    },
+    {
+      "external_id": "44573628",
+      "title": "Super Pumped",
+      "authors": [
+        "Mike Isaac"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553648438l/44573628.jpg",
+      "rank": 18,
+      "votes": 833,
+      "winner": false
+    },
+    {
+      "external_id": "44065062",
+      "title": "Something Deeply Hidden",
+      "authors": [
+        "Sean Carroll"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550592276l/44065062.jpg",
+      "rank": 19,
+      "votes": 790,
+      "winner": false
+    },
+    {
+      "external_id": "40696923",
+      "title": "Blueprint",
+      "authors": [
+        "Nicholas A. Christakis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553421793l/40696923.jpg",
+      "rank": 20,
+      "votes": 788,
+      "winner": false
+    }
+  ]
+}

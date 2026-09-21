@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-fantasy-books-2011",
+  "kind": "award",
+  "title": "Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fantasy-books-2011",
+  "year": 2011,
+  "category": "Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:36.241399+00:00",
+  "books": [
+    {
+      "external_id": "10664113",
+      "title": "A Dance with Dragons",
+      "authors": [
+        "George R.R. Martin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1753059444l/10664113._SY600_.jpg",
+      "rank": 1,
+      "votes": 8530,
+      "winner": true
+    },
+    {
+      "external_id": "9361589",
+      "title": "The Night Circus",
+      "authors": [
+        "Erin Morgenstern"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1786033865l/9361589._SY600_.jpg",
+      "rank": 2,
+      "votes": 8519,
+      "winner": false
+    },
+    {
+      "external_id": "1215032",
+      "title": "The Wise Man's Fear",
+      "authors": [
+        "Patrick Rothfuss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1785688949l/1215032._SY600_.jpg",
+      "rank": 3,
+      "votes": 4962,
+      "winner": false
+    },
+    {
+      "external_id": "8785374",
+      "title": "Snuff",
+      "authors": [
+        "Terry Pratchett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1302694636l/8785374.jpg",
+      "rank": 4,
+      "votes": 2479,
+      "winner": false
+    },
+    {
+      "external_id": "9581507",
+      "title": "Don't Breathe a Word",
+      "authors": [
+        "Jennifer  McMahon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442378324l/9581507._SY600_.jpg",
+      "rank": 5,
+      "votes": 1894,
+      "winner": false
+    },
+    {
+      "external_id": "10079321",
+      "title": "The Magician King",
+      "authors": [
+        "Lev Grossman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1316177353l/10079321.jpg",
+      "rank": 6,
+      "votes": 1656,
+      "winner": false
+    },
+    {
+      "external_id": "8131227",
+      "title": "One of Our Thursdays Is Missing",
+      "authors": [
+        "Jasper Fforde"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1283363358l/8131227.jpg",
+      "rank": 7,
+      "votes": 1584,
+      "winner": false
+    },
+    {
+      "external_id": "8315340",
+      "title": "Twilight's Dawn",
+      "authors": [
+        "Anne Bishop"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1278614341l/8315340.jpg",
+      "rank": 8,
+      "votes": 1418,
+      "winner": false
+    },
+    {
+      "external_id": "9519912",
+      "title": "Naamah's Blessing",
+      "authors": [
+        "Jacqueline Carey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1438650813l/9519912._SY600_.jpg",
+      "rank": 9,
+      "votes": 1391,
+      "winner": false
+    },
+    {
+      "external_id": "9579634",
+      "title": "Prince of Thorns",
+      "authors": [
+        "Mark  Lawrence"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327917754l/9579634.jpg",
+      "rank": 10,
+      "votes": 1164,
+      "winner": false
+    },
+    {
+      "external_id": "8411749",
+      "title": "The Rogue",
+      "authors": [
+        "Trudi Canavan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328375255l/8411749.jpg",
+      "rank": 11,
+      "votes": 559,
+      "winner": false
+    },
+    {
+      "external_id": "8706185",
+      "title": "Among Others",
+      "authors": [
+        "Jo Walton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1317792367l/8706185.jpg",
+      "rank": 12,
+      "votes": 534,
+      "winner": false
+    },
+    {
+      "external_id": "10803121",
+      "title": "The Alloy of Law",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442889632l/10803121._SY600_.jpg",
+      "rank": 13,
+      "votes": 397,
+      "winner": false
+    },
+    {
+      "external_id": "8679140",
+      "title": "Cast in Ruin",
+      "authors": [
+        "Michelle Sagara"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1303045759l/8679140.jpg",
+      "rank": 14,
+      "votes": 358,
+      "winner": false
+    },
+    {
+      "external_id": "8694389",
+      "title": "Deathless",
+      "authors": [
+        "Catherynne M. Valente"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1316635864l/8694389.jpg",
+      "rank": 15,
+      "votes": 342,
+      "winner": false
+    },
+    {
+      "external_id": "9300768",
+      "title": "The Heroes",
+      "authors": [
+        "Joe Abercrombie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375671200l/9300768.jpg",
+      "rank": 16,
+      "votes": 329,
+      "winner": false
+    },
+    {
+      "external_id": "8396337",
+      "title": "Blackveil",
+      "authors": [
+        "Kristen Britain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1373992640l/8396337.jpg",
+      "rank": 17,
+      "votes": 297,
+      "winner": false
+    },
+    {
+      "external_id": "7923006",
+      "title": "The Kingdom of Gods",
+      "authors": [
+        "N.K. Jemisin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1313690257l/7923006.jpg",
+      "rank": 18,
+      "votes": 187,
+      "winner": false
+    },
+    {
+      "external_id": "10199908",
+      "title": "The Measure of the Magic",
+      "authors": [
+        "Terry Brooks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1437826213l/10199908._SY600_.jpg",
+      "rank": 19,
+      "votes": 167,
+      "winner": false
+    },
+    {
+      "external_id": "8598554",
+      "title": "The Omen Machine",
+      "authors": [
+        "Terry Goodkind"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320450369l/8598554.jpg",
+      "rank": 20,
+      "votes": 117,
+      "winner": false
+    }
+  ]
+}

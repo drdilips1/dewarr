@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-nonfiction-books-2020",
+  "kind": "award",
+  "title": "Nonfiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-nonfiction-books-2020",
+  "year": 2020,
+  "category": "Nonfiction",
+  "genres": [
+    "non-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:38.691837+00:00",
+  "books": [
+    {
+      "external_id": "52220686",
+      "title": "Stamped",
+      "authors": [
+        "Jason Reynolds"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1568739320l/52220686._SX318_SY475_.jpg",
+      "rank": 1,
+      "votes": 43685,
+      "winner": true
+    },
+    {
+      "external_id": "49614207",
+      "title": "Hood Feminism",
+      "authors": [
+        "Mikki Kendall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571889198l/49614207._SX318_SY475_.jpg",
+      "rank": 2,
+      "votes": 37418,
+      "winner": false
+    },
+    {
+      "external_id": "55851555",
+      "title": "Clanlands",
+      "authors": [
+        "Sam Heughan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1604612933l/55851555._SY600_.jpg",
+      "rank": 3,
+      "votes": 25127,
+      "winner": false
+    },
+    {
+      "external_id": "53317913",
+      "title": "Rage",
+      "authors": [
+        "Bob Woodward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1597575057l/53317913.jpg",
+      "rank": 4,
+      "votes": 24436,
+      "winner": false
+    },
+    {
+      "external_id": "46002342",
+      "title": "Me and White Supremacy",
+      "authors": [
+        "Layla F. Saad"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1576000059l/46002342.jpg",
+      "rank": 5,
+      "votes": 23675,
+      "winner": false
+    },
+    {
+      "external_id": "50088631",
+      "title": "Hidden Valley Road",
+      "authors": [
+        "Robert Kolker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1569289026l/50088631._SX318_SY475_.jpg",
+      "rank": 6,
+      "votes": 23277,
+      "winner": false
+    },
+    {
+      "external_id": "52686687",
+      "title": "Don't Overthink It",
+      "authors": [
+        "Anne Bogel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585640478l/52686687.jpg",
+      "rank": 7,
+      "votes": 17906,
+      "winner": false
+    },
+    {
+      "external_id": "52780142",
+      "title": "Get Out of Your Head",
+      "authors": [
+        "Jennie Allen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1567137631l/52780142._SX318_SY475_.jpg",
+      "rank": 8,
+      "votes": 16586,
+      "winner": false
+    },
+    {
+      "external_id": "46064076",
+      "title": "Buy Yourself the F*cking Lilies",
+      "authors": [
+        "Tara Schuster"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1568743976l/46064076._SY600_.jpg",
+      "rank": 9,
+      "votes": 15634,
+      "winner": false
+    },
+    {
+      "external_id": "51285456",
+      "title": "Why We Can't Sleep",
+      "authors": [
+        "Ada Calhoun"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1570112734l/51285456._SX318_SY475_.jpg",
+      "rank": 10,
+      "votes": 11394,
+      "winner": false
+    },
+    {
+      "external_id": "45892276",
+      "title": "You're Not Listening",
+      "authors": [
+        "Kate   Murphy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1650124222l/45892276._SY600_.jpg",
+      "rank": 11,
+      "votes": 4918,
+      "winner": false
+    },
+    {
+      "external_id": "52766000",
+      "title": "Big Friendship",
+      "authors": [
+        "Aminatou Sow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585300706l/52766000.jpg",
+      "rank": 12,
+      "votes": 4517,
+      "winner": false
+    },
+    {
+      "external_id": "45915136",
+      "title": "Here for It; Or, How to Save Your Soul in America",
+      "authors": [
+        "R. Eric Thomas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1575341409l/45915136.jpg",
+      "rank": 13,
+      "votes": 3964,
+      "winner": false
+    },
+    {
+      "external_id": "51794301",
+      "title": "Beyond the Gender Binary",
+      "authors": [
+        "Alok Vaid-Menon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1572445379l/51794301._SX318_SY475_.jpg",
+      "rank": 14,
+      "votes": 3605,
+      "winner": false
+    },
+    {
+      "external_id": "52845775",
+      "title": "Minor Feelings",
+      "authors": [
+        "Cathy Park Hong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1580788273l/52845775._SX318_SY475_.jpg",
+      "rank": 15,
+      "votes": 3526,
+      "winner": false
+    },
+    {
+      "external_id": "52041387",
+      "title": "We Keep the Dead Close",
+      "authors": [
+        "Becky Cooper"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585172862l/52041387.jpg",
+      "rank": 16,
+      "votes": 3495,
+      "winner": false
+    },
+    {
+      "external_id": "50945960",
+      "title": "Blackout",
+      "authors": [
+        "Candace Owens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1564946388l/50945960.jpg",
+      "rank": 17,
+      "votes": 3411,
+      "winner": false
+    },
+    {
+      "external_id": "45553638",
+      "title": "Tightrope",
+      "authors": [
+        "Nicholas D. Kristof"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565398610l/45553638.jpg",
+      "rank": 18,
+      "votes": 3029,
+      "winner": false
+    },
+    {
+      "external_id": "54358975",
+      "title": "Trust",
+      "authors": [
+        "Pete Buttigieg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594161214l/54358975.jpg",
+      "rank": 19,
+      "votes": 2501,
+      "winner": false
+    },
+    {
+      "external_id": "53008508",
+      "title": "Reading While Black",
+      "authors": [
+        "Esau McCaulley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1586830272l/53008508.jpg",
+      "rank": 20,
+      "votes": 1371,
+      "winner": false
+    }
+  ]
+}

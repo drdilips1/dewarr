@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-debut-goodreads-author-2016",
+  "kind": "award",
+  "title": "Debut Goodreads Author",
+  "source_url": "https://www.goodreads.com/choiceawards/best-debut-goodreads-author-2016",
+  "year": 2016,
+  "category": "Debut Goodreads Author",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:20.273929+00:00",
+  "books": [
+    {
+      "external_id": "25776221",
+      "title": "Rebel of the Sands",
+      "authors": [
+        "Alwyn Hamilton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1446655160l/25776221.jpg",
+      "rank": 1,
+      "votes": 24445,
+      "winner": true
+    },
+    {
+      "external_id": "25893693",
+      "title": "Lilac Girls",
+      "authors": [
+        "Martha Hall Kelly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462850258l/25893693.jpg",
+      "rank": 2,
+      "votes": 18767,
+      "winner": false
+    },
+    {
+      "external_id": "25203675",
+      "title": "The Star-Touched Queen",
+      "authors": [
+        "Roshani Chokshi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1446058438l/25203675.jpg",
+      "rank": 3,
+      "votes": 17345,
+      "winner": false
+    },
+    {
+      "external_id": "29437949",
+      "title": "Behind Closed Doors",
+      "authors": [
+        "B.A. Paris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1458854462l/29437949.jpg",
+      "rank": 4,
+      "votes": 17305,
+      "winner": false
+    },
+    {
+      "external_id": "27276262",
+      "title": "Lily and the Octopus",
+      "authors": [
+        "Steven  Rowley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1499086357l/27276262._SY600_.jpg",
+      "rank": 5,
+      "votes": 13705,
+      "winner": false
+    },
+    {
+      "external_id": "31115325",
+      "title": "Like a Boss",
+      "authors": [
+        "Logan Chance"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1468433533l/31115325._SY600_.jpg",
+      "rank": 6,
+      "votes": 9473,
+      "winner": false
+    },
+    {
+      "external_id": "21979832",
+      "title": "The Girl from Everywhere",
+      "authors": [
+        "Heidi Heilig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1434729653l/21979832.jpg",
+      "rank": 7,
+      "votes": 9389,
+      "winner": false
+    },
+    {
+      "external_id": "25739107",
+      "title": "The Serpent King",
+      "authors": [
+        "Jeff Zentner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435962447l/25739107.jpg",
+      "rank": 8,
+      "votes": 8624,
+      "winner": false
+    },
+    {
+      "external_id": "28815371",
+      "title": "The Mothers",
+      "authors": [
+        "Brit Bennett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460652458l/28815371.jpg",
+      "rank": 9,
+      "votes": 7596,
+      "winner": false
+    },
+    {
+      "external_id": "27015399",
+      "title": "A Promise of Fire",
+      "authors": [
+        "Amanda Bouchet"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470238554l/27015399._SY600_.jpg",
+      "rank": 10,
+      "votes": 5564,
+      "winner": false
+    },
+    {
+      "external_id": "25064648",
+      "title": "The Reader",
+      "authors": [
+        "Traci Chee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1448040202l/25064648.jpg",
+      "rank": 11,
+      "votes": 3479,
+      "winner": false
+    },
+    {
+      "external_id": "28251002",
+      "title": "The Nix",
+      "authors": [
+        "Nathan  Hill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474083394l/28251002._SY600_.jpg",
+      "rank": 12,
+      "votes": 3478,
+      "winner": false
+    },
+    {
+      "external_id": "30514112",
+      "title": "The Sister",
+      "authors": [
+        "Louise Jensen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1466799412l/30514112.jpg",
+      "rank": 13,
+      "votes": 3117,
+      "winner": false
+    },
+    {
+      "external_id": "26025588",
+      "title": "Behold the Dreamers",
+      "authors": [
+        "Imbolo Mbue"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439643293l/26025588.jpg",
+      "rank": 14,
+      "votes": 2383,
+      "winner": false
+    },
+    {
+      "external_id": "26530351",
+      "title": "Here Comes the Sun",
+      "authors": [
+        "Nicole Dennis-Benn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1463185922l/26530351.jpg",
+      "rank": 15,
+      "votes": 2042,
+      "winner": false
+    },
+    {
+      "external_id": "22929602",
+      "title": "What Belongs to You",
+      "authors": [
+        "Garth Greenwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1447384662l/22929602.jpg",
+      "rank": 16,
+      "votes": 1678,
+      "winner": false
+    },
+    {
+      "external_id": "26114523",
+      "title": "The Summer that Melted Everything",
+      "authors": [
+        "Tiffany   McDaniel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462949293l/26114523._SY600_.jpg",
+      "rank": 17,
+      "votes": 871,
+      "winner": false
+    },
+    {
+      "external_id": "28110139",
+      "title": "The City Baker's Guide to Country Living",
+      "authors": [
+        "Louise  Miller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1477907349l/28110139._SY600_.jpg",
+      "rank": 18,
+      "votes": 724,
+      "winner": false
+    },
+    {
+      "external_id": "27037954",
+      "title": "Center Ring",
+      "authors": [
+        "Nicole Waggoner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1449998021l/27037954.jpg",
+      "rank": 19,
+      "votes": 412,
+      "winner": false
+    },
+    {
+      "external_id": "29448966",
+      "title": "Beat the Rain",
+      "authors": [
+        "Nigel Jay Cooper"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1457453963l/29448966.jpg",
+      "rank": 20,
+      "votes": 252,
+      "winner": false
+    }
+  ]
+}

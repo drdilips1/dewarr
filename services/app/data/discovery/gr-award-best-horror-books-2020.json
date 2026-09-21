@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-horror-books-2020",
+  "kind": "award",
+  "title": "Horror",
+  "source_url": "https://www.goodreads.com/choiceawards/best-horror-books-2020",
+  "year": 2020,
+  "category": "Horror",
+  "genres": [
+    "horror"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:35.732184+00:00",
+  "books": [
+    {
+      "external_id": "53152636",
+      "title": "Mexican Gothic",
+      "authors": [
+        "Silvia Moreno-Garcia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1607462569l/53152636._SY600_.jpg",
+      "rank": 1,
+      "votes": 85626,
+      "winner": true
+    },
+    {
+      "external_id": "48838041",
+      "title": "If It Bleeds",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598366651l/48838041._SY600_.jpg",
+      "rank": 2,
+      "votes": 47552,
+      "winner": false
+    },
+    {
+      "external_id": "44077284",
+      "title": "The Southern Book Club's Guide to Slaying Vampires",
+      "authors": [
+        "Grady Hendrix"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1573175023l/44077284.jpg",
+      "rank": 3,
+      "votes": 41455,
+      "winner": false
+    },
+    {
+      "external_id": "49789629",
+      "title": "The Year of the Witching",
+      "authors": [
+        "Alexis  Henderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1576699031l/49789629.jpg",
+      "rank": 4,
+      "votes": 22173,
+      "winner": false
+    },
+    {
+      "external_id": "52180399",
+      "title": "The Only Good Indians",
+      "authors": [
+        "Stephen Graham Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601545259l/52180399._SY600_.jpg",
+      "rank": 5,
+      "votes": 17021,
+      "winner": false
+    },
+    {
+      "external_id": "52454426",
+      "title": "Devolution",
+      "authors": [
+        "Max Brooks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566875204l/52454426._SX318_SY475_.jpg",
+      "rank": 6,
+      "votes": 10152,
+      "winner": false
+    },
+    {
+      "external_id": "50892288",
+      "title": "The Hollow Places",
+      "authors": [
+        "T. Kingfisher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600022295l/50892288.jpg",
+      "rank": 7,
+      "votes": 8801,
+      "winner": false
+    },
+    {
+      "external_id": "50496875",
+      "title": "Plain Bad Heroines",
+      "authors": [
+        "Emily M. Danforth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1584977118l/50496875.jpg",
+      "rank": 8,
+      "votes": 8717,
+      "winner": false
+    },
+    {
+      "external_id": "44564972",
+      "title": "Malorie",
+      "authors": [
+        "Josh Malerman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585099052l/44564972.jpg",
+      "rank": 9,
+      "votes": 7216,
+      "winner": false
+    },
+    {
+      "external_id": "49090884",
+      "title": "Tender Is the Flesh",
+      "authors": [
+        "Agustina Bazterrica"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594563107l/49090884.jpg",
+      "rank": 10,
+      "votes": 6275,
+      "winner": false
+    },
+    {
+      "external_id": "52594581",
+      "title": "The Hollow Ones",
+      "authors": [
+        "Guillermo del Toro"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571698404l/52594581.jpg",
+      "rank": 11,
+      "votes": 2429,
+      "winner": false
+    },
+    {
+      "external_id": "52703177",
+      "title": "The Bright Lands",
+      "authors": [
+        "John Fram"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1574745711l/52703177.jpg",
+      "rank": 12,
+      "votes": 2282,
+      "winner": false
+    },
+    {
+      "external_id": "51166519",
+      "title": "Lakewood",
+      "authors": [
+        "Megan Giddings"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1579612241l/51166519._SX318_SY475_.jpg",
+      "rank": 13,
+      "votes": 2215,
+      "winner": false
+    },
+    {
+      "external_id": "52581895",
+      "title": "Survivor Song",
+      "authors": [
+        "Paul Tremblay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1575564155l/52581895.jpg",
+      "rank": 14,
+      "votes": 2096,
+      "winner": false
+    },
+    {
+      "external_id": "49247242",
+      "title": "Ring Shout",
+      "authors": [
+        "P. Djèlí Clark"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1580134382l/49247242.jpg",
+      "rank": 15,
+      "votes": 1305,
+      "winner": false
+    },
+    {
+      "external_id": "49295297",
+      "title": "The Loop",
+      "authors": [
+        "Jeremy Robert Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1599399820l/49295297.jpg",
+      "rank": 16,
+      "votes": 1114,
+      "winner": false
+    },
+    {
+      "external_id": "50607901",
+      "title": "The Ghost Tree",
+      "authors": [
+        "Christina Henry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1586544909l/50607901.jpg",
+      "rank": 17,
+      "votes": 672,
+      "winner": false
+    },
+    {
+      "external_id": "53869658",
+      "title": "Secret Santa",
+      "authors": [
+        "Andrew Shaffer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598985296l/53869658.jpg",
+      "rank": 18,
+      "votes": 427,
+      "winner": false
+    },
+    {
+      "external_id": "52622380",
+      "title": "World Departed",
+      "authors": [
+        "Sarah Lyons Fleming"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1584923508l/52622380._SY600_.jpg",
+      "rank": 19,
+      "votes": 383,
+      "winner": false
+    },
+    {
+      "external_id": "55456522",
+      "title": "Houndings of Hell",
+      "authors": [
+        "Hunter Holmes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601089713l/55456522._SY600_.jpg",
+      "rank": 20,
+      "votes": 161,
+      "winner": false
+    }
+  ]
+}

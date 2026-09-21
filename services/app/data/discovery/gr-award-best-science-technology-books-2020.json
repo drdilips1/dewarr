@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-science-technology-books-2020",
+  "kind": "award",
+  "title": "Science & Technology",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-technology-books-2020",
+  "year": 2020,
+  "category": "Science & Technology",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:43.083202+00:00",
+  "books": [
+    {
+      "external_id": "53916142",
+      "title": "A Life on Our Planet",
+      "authors": [
+        "David Attenborough"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608723131l/53916142._SY600_.jpg",
+      "rank": 1,
+      "votes": 35675,
+      "winner": true
+    },
+    {
+      "external_id": "50734400",
+      "title": "How to Argue With a Racist",
+      "authors": [
+        "Adam Rutherford"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1576438164l/50734400._SY600_.jpg",
+      "rank": 2,
+      "votes": 21152,
+      "winner": false
+    },
+    {
+      "external_id": "48890486",
+      "title": "Breath",
+      "authors": [
+        "James Nestor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1575339793l/48890486.jpg",
+      "rank": 3,
+      "votes": 13101,
+      "winner": false
+    },
+    {
+      "external_id": "52668915",
+      "title": "Entangled Life",
+      "authors": [
+        "Merlin Sheldrake"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1575341220l/52668915._SX318_SY475_.jpg",
+      "rank": 4,
+      "votes": 11411,
+      "winner": false
+    },
+    {
+      "external_id": "52767659",
+      "title": "The End of Everything",
+      "authors": [
+        "Katie  Mack"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1574199214l/52767659.jpg",
+      "rank": 5,
+      "votes": 10860,
+      "winner": false
+    },
+    {
+      "external_id": "50772888",
+      "title": "No Filter",
+      "authors": [
+        "Sarah Frier"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566404750l/50772888.jpg",
+      "rank": 6,
+      "votes": 10809,
+      "winner": false
+    },
+    {
+      "external_id": "52117860",
+      "title": "The Future We Choose",
+      "authors": [
+        "Christiana Figueres"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1577771399l/52117860._SX318_SY475_.jpg",
+      "rank": 7,
+      "votes": 8692,
+      "winner": false
+    },
+    {
+      "external_id": "50887097",
+      "title": "Why Fish Don’t Exist",
+      "authors": [
+        "Lulu Miller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565526670l/50887097.jpg",
+      "rank": 8,
+      "votes": 8167,
+      "winner": false
+    },
+    {
+      "external_id": "52905471",
+      "title": "Why We Swim",
+      "authors": [
+        "Bonnie Tsui"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585507220l/52905471._SX318_SY475_.jpg",
+      "rank": 9,
+      "votes": 7961,
+      "winner": false
+    },
+    {
+      "external_id": "48637750",
+      "title": "Vesper Flights",
+      "authors": [
+        "Helen Macdonald"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1582053771l/48637750.jpg",
+      "rank": 10,
+      "votes": 7883,
+      "winner": false
+    },
+    {
+      "external_id": "43889825",
+      "title": "That Wild Country",
+      "authors": [
+        "Mark Kenyon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1568726633l/43889825.jpg",
+      "rank": 11,
+      "votes": 3544,
+      "winner": false
+    },
+    {
+      "external_id": "49960370",
+      "title": "The Story of More",
+      "authors": [
+        "Hope Jahren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1574331253l/49960370.jpg",
+      "rank": 12,
+      "votes": 3333,
+      "winner": false
+    },
+    {
+      "external_id": "51938590",
+      "title": "The Book of Eels",
+      "authors": [
+        "Patrik Svensson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1582073834l/51938590._SX318_SY475_.jpg",
+      "rank": 13,
+      "votes": 3080,
+      "winner": false
+    },
+    {
+      "external_id": "51079278",
+      "title": "The Next Great Migration",
+      "authors": [
+        "Sonia Shah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1573000433l/51079278.jpg",
+      "rank": 14,
+      "votes": 2960,
+      "winner": false
+    },
+    {
+      "external_id": "46114262",
+      "title": "Until the End of Time",
+      "authors": [
+        "Brian Greene"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1578335799l/46114262._SY600_.jpg",
+      "rank": 15,
+      "votes": 2667,
+      "winner": false
+    },
+    {
+      "external_id": "51802456",
+      "title": "The Bird Way",
+      "authors": [
+        "Jennifer Ackerman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1577251095l/51802456._SX318_SY475_.jpg",
+      "rank": 16,
+      "votes": 1108,
+      "winner": false
+    },
+    {
+      "external_id": "50173134",
+      "title": "Apocalypse Never",
+      "authors": [
+        "Michael Shellenberger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585142428l/50173134.jpg",
+      "rank": 17,
+      "votes": 933,
+      "winner": false
+    },
+    {
+      "external_id": "51542211",
+      "title": "Owls of the Eastern Ice",
+      "authors": [
+        "Jonathan C. Slaght"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1569893852l/51542211._SX318_SY475_.jpg",
+      "rank": 18,
+      "votes": 833,
+      "winner": false
+    },
+    {
+      "external_id": "51199750",
+      "title": "Some Assembly Required",
+      "authors": [
+        "Neil Shubin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1581512190l/51199750._SY600_.jpg",
+      "rank": 19,
+      "votes": 789,
+      "winner": false
+    },
+    {
+      "external_id": "49128526",
+      "title": "T-Minus AI",
+      "authors": [
+        "Michael Kanaan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1592255773l/49128526.jpg",
+      "rank": 20,
+      "votes": 475,
+      "winner": false
+    }
+  ]
+}

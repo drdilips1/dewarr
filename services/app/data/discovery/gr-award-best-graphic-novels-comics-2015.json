@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-graphic-novels-comics-2015",
+  "kind": "award",
+  "title": "Graphic Novels & Comics",
+  "source_url": "https://www.goodreads.com/choiceawards/best-graphic-novels-comics-2015",
+  "year": 2015,
+  "category": "Graphic Novels & Comics",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:47.666567+00:00",
+  "books": [
+    {
+      "external_id": "23093367",
+      "title": "Saga, Volume 4",
+      "authors": [
+        "Brian K. Vaughan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642413536l/23093367.jpg",
+      "rank": 1,
+      "votes": 18578,
+      "winner": true
+    },
+    {
+      "external_id": "23131088",
+      "title": "Nimona",
+      "authors": [
+        "N.D. Stevenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1573366653l/23131088.jpg",
+      "rank": 2,
+      "votes": 17471,
+      "winner": false
+    },
+    {
+      "external_id": "22716573",
+      "title": "Attack on Titan, Vol. 15",
+      "authors": [
+        "Hajime Isayama"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421708306l/22716573.jpg",
+      "rank": 3,
+      "votes": 13751,
+      "winner": false
+    },
+    {
+      "external_id": "23017947",
+      "title": "Generation Why",
+      "authors": [
+        "G. Willow Wilson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1427559332l/23017947.jpg",
+      "rank": 4,
+      "votes": 12029,
+      "winner": false
+    },
+    {
+      "external_id": "23546848",
+      "title": "Thor, Vol. 1",
+      "authors": [
+        "Jason Aaron"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1447769968l/23546848._SY600_.jpg",
+      "rank": 5,
+      "votes": 10046,
+      "winner": false
+    },
+    {
+      "external_id": "22554204",
+      "title": "Lumberjanes, Vol. 1",
+      "authors": [
+        "N.D. Stevenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435843806l/22554204._SY600_.jpg",
+      "rank": 6,
+      "votes": 8529,
+      "winner": false
+    },
+    {
+      "external_id": "23294727",
+      "title": "Sunstone, Vol. 1",
+      "authors": [
+        "Stjepan Šejić"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518741109l/23294727._SY600_.jpg",
+      "rank": 7,
+      "votes": 7898,
+      "winner": false
+    },
+    {
+      "external_id": "23848561",
+      "title": "Step Aside, Pops",
+      "authors": [
+        "Kate Beaton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1446841265l/23848561._SY600_.jpg",
+      "rank": 8,
+      "votes": 7453,
+      "winner": false
+    },
+    {
+      "external_id": "22822839",
+      "title": "The Thrilling Adventures of Lovelace and Babbage",
+      "authors": [
+        "Sydney Padua"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1412530488l/22822839.jpg",
+      "rank": 9,
+      "votes": 6050,
+      "winner": false
+    },
+    {
+      "external_id": "22237290",
+      "title": "Hawkeye, Volume 4",
+      "authors": [
+        "Matt Fraction"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1525360678l/22237290._SY600_.jpg",
+      "rank": 10,
+      "votes": 4555,
+      "winner": false
+    },
+    {
+      "external_id": "23012877",
+      "title": "Rat Queens, Vol. 2",
+      "authors": [
+        "Kurtis J. Wiebe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1431019204l/23012877.jpg",
+      "rank": 11,
+      "votes": 2383,
+      "winner": false
+    },
+    {
+      "external_id": "23228585",
+      "title": "Sex Criminals, Vol. 2",
+      "authors": [
+        "Matt Fraction"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410891094l/23228585.jpg",
+      "rank": 12,
+      "votes": 2356,
+      "winner": false
+    },
+    {
+      "external_id": "18310944",
+      "title": "The Sandman",
+      "authors": [
+        "Neil Gaiman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1444878181l/18310944._SY600_.jpg",
+      "rank": 13,
+      "votes": 2001,
+      "winner": false
+    },
+    {
+      "external_id": "25898265",
+      "title": "Username",
+      "authors": [
+        "Joe Sugg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1437670419l/25898265.jpg",
+      "rank": 14,
+      "votes": 1980,
+      "winner": false
+    },
+    {
+      "external_id": "24666002",
+      "title": "The Wicked + The Divine, Vol. 2",
+      "authors": [
+        "Kieron Gillen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1758673210l/24666002.jpg",
+      "rank": 15,
+      "votes": 1939,
+      "winner": false
+    },
+    {
+      "external_id": "21535713",
+      "title": "Soppy",
+      "authors": [
+        "Philippa Rice"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400882237l/21535713.jpg",
+      "rank": 16,
+      "votes": 1833,
+      "winner": false
+    },
+    {
+      "external_id": "23732096",
+      "title": "The Unbeatable Squirrel Girl, Vol. 1",
+      "authors": [
+        "Ryan North"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1440092318l/23732096._SY600_.jpg",
+      "rank": 17,
+      "votes": 1537,
+      "winner": false
+    },
+    {
+      "external_id": "22504701",
+      "title": "Roller Girl",
+      "authors": [
+        "Victoria Jamieson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1447914095l/22504701._SY600_.jpg",
+      "rank": 18,
+      "votes": 1238,
+      "winner": false
+    },
+    {
+      "external_id": "22487952",
+      "title": "March",
+      "authors": [
+        "John             Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405865547l/22487952.jpg",
+      "rank": 19,
+      "votes": 1229,
+      "winner": false
+    },
+    {
+      "external_id": "22040598",
+      "title": "The Sculptor",
+      "authors": [
+        "Scott McCloud"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418629570l/22040598.jpg",
+      "rank": 20,
+      "votes": 1001,
+      "winner": false
+    }
+  ]
+}

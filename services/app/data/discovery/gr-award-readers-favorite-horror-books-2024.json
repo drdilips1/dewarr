@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-readers-favorite-horror-books-2024",
+  "kind": "award",
+  "title": "Horror",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-horror-books-2024",
+  "year": 2024,
+  "category": "Horror",
+  "genres": [
+    "horror"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:40:36.773497+00:00",
+  "books": [
+    {
+      "external_id": "201242757",
+      "title": "You Like It Darker",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1699311050l/201242757._SY600_.jpg",
+      "rank": 1,
+      "votes": 60901,
+      "winner": true
+    },
+    {
+      "external_id": "199798006",
+      "title": "We Used to Live Here",
+      "authors": [
+        "Marcus Kliewer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697756012l/199798006._SY600_.jpg",
+      "rank": 2,
+      "votes": 46932,
+      "winner": false
+    },
+    {
+      "external_id": "127306440",
+      "title": "What Feasts at Night",
+      "authors": [
+        "T. Kingfisher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1683668946l/127306440.jpg",
+      "rank": 3,
+      "votes": 24093,
+      "winner": false
+    },
+    {
+      "external_id": "196614815",
+      "title": "Murder Road",
+      "authors": [
+        "Simone St. James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1691937111l/196614815._SY600_.jpg",
+      "rank": 4,
+      "votes": 23553,
+      "winner": false
+    },
+    {
+      "external_id": "195790870",
+      "title": "Bury Your Gays",
+      "authors": [
+        "Chuck Tingle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697739086l/195790870._SY600_.jpg",
+      "rank": 5,
+      "votes": 20207,
+      "winner": false
+    },
+    {
+      "external_id": "195703882",
+      "title": "The Eyes Are the Best Part",
+      "authors": [
+        "Monika Kim"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1696808869l/195703882._SY600_.jpg",
+      "rank": 6,
+      "votes": 17400,
+      "winner": false
+    },
+    {
+      "external_id": "199757490",
+      "title": "Incidents Around the House",
+      "authors": [
+        "Josh Malerman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1704742096l/199757490._SY600_.jpg",
+      "rank": 7,
+      "votes": 15757,
+      "winner": false
+    },
+    {
+      "external_id": "199798522",
+      "title": "I Was a Teenage Slasher",
+      "authors": [
+        "Stephen Graham Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1720470227l/199798522._SY600_.jpg",
+      "rank": 8,
+      "votes": 15669,
+      "winner": false
+    },
+    {
+      "external_id": "157035866",
+      "title": "Diavola",
+      "authors": [
+        "Jennifer Marie Thorne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1687143177l/157035866.jpg",
+      "rank": 9,
+      "votes": 15154,
+      "winner": false
+    },
+    {
+      "external_id": "204294824",
+      "title": "Sleep Tight",
+      "authors": [
+        "J.H. Markert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1709801306l/204294824.jpg",
+      "rank": 10,
+      "votes": 12086,
+      "winner": false
+    },
+    {
+      "external_id": "203608552",
+      "title": "So Thirsty",
+      "authors": [
+        "Rachel   Harrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1710472635l/203608552._SY600_.jpg",
+      "rank": 11,
+      "votes": 5345,
+      "winner": false
+    },
+    {
+      "external_id": "205064706",
+      "title": "The Book of Witching",
+      "authors": [
+        "C.J.  Cooke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1715284321l/205064706._SY600_.jpg",
+      "rank": 12,
+      "votes": 5333,
+      "winner": false
+    },
+    {
+      "external_id": "193544852",
+      "title": "My Darling Dreadful Thing",
+      "authors": [
+        "Johanna van Veen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1695223152l/193544852._SY600_.jpg",
+      "rank": 13,
+      "votes": 5327,
+      "winner": false
+    },
+    {
+      "external_id": "203956643",
+      "title": "A Sunny Place for Shady People",
+      "authors": [
+        "Mariana Enriquez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1711734790l/203956643._SY600_.jpg",
+      "rank": 14,
+      "votes": 5159,
+      "winner": false
+    },
+    {
+      "external_id": "205673392",
+      "title": "The Bog Wife",
+      "authors": [
+        "Kay Chronister"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1705727772l/205673392._SY600_.jpg",
+      "rank": 15,
+      "votes": 4189,
+      "winner": false
+    },
+    {
+      "external_id": "178019710",
+      "title": "The Angel of Indian Lake",
+      "authors": [
+        "Stephen Graham Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1687711744l/178019710.jpg",
+      "rank": 16,
+      "votes": 3467,
+      "winner": false
+    },
+    {
+      "external_id": "192724951",
+      "title": "Indian Burial Ground",
+      "authors": [
+        "Nick Medina"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697246029l/192724951._SY600_.jpg",
+      "rank": 17,
+      "votes": 2969,
+      "winner": false
+    },
+    {
+      "external_id": "203163914",
+      "title": "House of Bone and Rain",
+      "authors": [
+        "Gabino Iglesias"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1706838866l/203163914._SY600_.jpg",
+      "rank": 18,
+      "votes": 1945,
+      "winner": false
+    },
+    {
+      "external_id": "205064715",
+      "title": "This Cursed House",
+      "authors": [
+        "Del Sandeen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1708704870l/205064715._SY600_.jpg",
+      "rank": 19,
+      "votes": 1690,
+      "winner": false
+    },
+    {
+      "external_id": "201632567",
+      "title": "Blood Like Mine",
+      "authors": [
+        "Stuart Neville"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1708461136l/201632567._SY600_.jpg",
+      "rank": 20,
+      "votes": 820,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-science-fiction-books-2013",
+  "kind": "award",
+  "title": "Science Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-fiction-books-2013",
+  "year": 2013,
+  "category": "Science Fiction",
+  "genres": [
+    "science-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:37.733797+00:00",
+  "books": [
+    {
+      "external_id": "17262203",
+      "title": "MaddAddam",
+      "authors": [
+        "Margaret Atwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366394020l/17262203.jpg",
+      "rank": 1,
+      "votes": 16481,
+      "winner": true
+    },
+    {
+      "external_id": "17855756",
+      "title": "Dust",
+      "authors": [
+        "Hugh Howey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369522849l/17855756.jpg",
+      "rank": 2,
+      "votes": 13802,
+      "winner": false
+    },
+    {
+      "external_id": "16059350",
+      "title": "Earth Afire",
+      "authors": [
+        "Orson Scott Card"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355974443l/16059350.jpg",
+      "rank": 3,
+      "votes": 8159,
+      "winner": false
+    },
+    {
+      "external_id": "16158596",
+      "title": "Lexicon",
+      "authors": [
+        "Max Barry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356080172l/16158596.jpg",
+      "rank": 4,
+      "votes": 4696,
+      "winner": false
+    },
+    {
+      "external_id": "15698479",
+      "title": "The Human Division",
+      "authors": [
+        "John Scalzi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1341582413l/15698479.jpg",
+      "rank": 5,
+      "votes": 4301,
+      "winner": false
+    },
+    {
+      "external_id": "16130537",
+      "title": "The Humans",
+      "authors": [
+        "Matt Haig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1353739654l/16130537.jpg",
+      "rank": 6,
+      "votes": 3750,
+      "winner": false
+    },
+    {
+      "external_id": "16046748",
+      "title": "Countdown City",
+      "authors": [
+        "Ben H. Winters"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366897800l/16046748.jpg",
+      "rank": 7,
+      "votes": 3482,
+      "winner": false
+    },
+    {
+      "external_id": "13573419",
+      "title": "Great North Road",
+      "authors": [
+        "Peter F. Hamilton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344371600l/13573419.jpg",
+      "rank": 8,
+      "votes": 3387,
+      "winner": false
+    },
+    {
+      "external_id": "16131032",
+      "title": "Abaddon’s Gate",
+      "authors": [
+        "James S.A. Corey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1407572059l/16131032.jpg",
+      "rank": 9,
+      "votes": 3004,
+      "winner": false
+    },
+    {
+      "external_id": "15981711",
+      "title": "The Lives of Tao",
+      "authors": [
+        "Wesley Chu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1361886088l/15981711.jpg",
+      "rank": 10,
+      "votes": 2995,
+      "winner": false
+    },
+    {
+      "external_id": "15984804",
+      "title": "Guardian",
+      "authors": [
+        "Jack Campbell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1361833025l/15984804.jpg",
+      "rank": 11,
+      "votes": 1473,
+      "winner": false
+    },
+    {
+      "external_id": "16127235",
+      "title": "The Darwin Elevator",
+      "authors": [
+        "Jason M. Hough"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1383580448l/16127235.jpg",
+      "rank": 12,
+      "votes": 1376,
+      "winner": false
+    },
+    {
+      "external_id": "17167572",
+      "title": "The Long War",
+      "authors": [
+        "Terry Pratchett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1368422103l/17167572.jpg",
+      "rank": 13,
+      "votes": 1195,
+      "winner": false
+    },
+    {
+      "external_id": "15802917",
+      "title": "Shadow of Freedom",
+      "authors": [
+        "David  Weber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1345678394l/15802917.jpg",
+      "rank": 14,
+      "votes": 1137,
+      "winner": false
+    },
+    {
+      "external_id": "13421230",
+      "title": "Perdition",
+      "authors": [
+        "Ann Aguirre"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1363629058l/13421230.jpg",
+      "rank": 15,
+      "votes": 1052,
+      "winner": false
+    },
+    {
+      "external_id": "15743440",
+      "title": "The Best of All Possible Worlds",
+      "authors": [
+        "Karen Lord"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347419499l/15743440.jpg",
+      "rank": 16,
+      "votes": 1038,
+      "winner": false
+    },
+    {
+      "external_id": "17619479",
+      "title": "Terms of Enlistment",
+      "authors": [
+        "Marko Kloos"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1365637085l/17619479.jpg",
+      "rank": 17,
+      "votes": 921,
+      "winner": false
+    },
+    {
+      "external_id": "17171909",
+      "title": "Brilliance",
+      "authors": [
+        "Marcus Sakey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1437159954l/17171909.jpg",
+      "rank": 18,
+      "votes": 921,
+      "winner": false
+    },
+    {
+      "external_id": "17699389",
+      "title": "CyberStorm",
+      "authors": [
+        "Matthew Mather"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1364500221l/17699389.jpg",
+      "rank": 19,
+      "votes": 569,
+      "winner": false
+    },
+    {
+      "external_id": "17333324",
+      "title": "Ancillary Justice",
+      "authors": [
+        "Ann Leckie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1397215917l/17333324._SY600_.jpg",
+      "rank": 20,
+      "votes": 389,
+      "winner": false
+    }
+  ]
+}

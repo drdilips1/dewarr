@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-young-adult-fantasy-books-2016",
+  "kind": "award",
+  "title": "Young Adult Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fantasy-books-2016",
+  "year": 2016,
+  "category": "Young Adult Fantasy",
+  "genres": [
+    "fantasy",
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:23.188845+00:00",
+  "books": [
+    {
+      "external_id": "26073150",
+      "title": "A Court of Mist and Fury",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1487592053l/26073150.jpg",
+      "rank": 1,
+      "votes": 57776,
+      "winner": true
+    },
+    {
+      "external_id": "25494343",
+      "title": "Lady Midnight",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460477682l/25494343.jpg",
+      "rank": 2,
+      "votes": 38636,
+      "winner": false
+    },
+    {
+      "external_id": "28260587",
+      "title": "Empire of Storms",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1463107108l/28260587.jpg",
+      "rank": 3,
+      "votes": 31665,
+      "winner": false
+    },
+    {
+      "external_id": "27840861",
+      "title": "Crooked Kingdom",
+      "authors": [
+        "Leigh Bardugo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677188895l/27840861._SY600_.jpg",
+      "rank": 4,
+      "votes": 28178,
+      "winner": false
+    },
+    {
+      "external_id": "17378527",
+      "title": "The Raven King",
+      "authors": [
+        "Maggie Stiefvater"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1477103790l/17378527.jpg",
+      "rank": 5,
+      "votes": 27120,
+      "winner": false
+    },
+    {
+      "external_id": "23174274",
+      "title": "Glass Sword",
+      "authors": [
+        "Victoria Aveyard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436460934l/23174274.jpg",
+      "rank": 6,
+      "votes": 26554,
+      "winner": false
+    },
+    {
+      "external_id": "26074181",
+      "title": "The Crown",
+      "authors": [
+        "Kiera Cass"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1446759650l/26074181.jpg",
+      "rank": 7,
+      "votes": 23686,
+      "winner": false
+    },
+    {
+      "external_id": "15704486",
+      "title": "Calamity",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1437098338l/15704486.jpg",
+      "rank": 8,
+      "votes": 16020,
+      "winner": false
+    },
+    {
+      "external_id": "18584855",
+      "title": "Heartless",
+      "authors": [
+        "Marissa Meyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1477740245l/18584855._SY600_.jpg",
+      "rank": 9,
+      "votes": 14138,
+      "winner": false
+    },
+    {
+      "external_id": "25558608",
+      "title": "A Torch Against the Night",
+      "authors": [
+        "Sabaa Tahir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1463675717l/25558608.jpg",
+      "rank": 10,
+      "votes": 10856,
+      "winner": false
+    },
+    {
+      "external_id": "27220730",
+      "title": "We Are the Ants",
+      "authors": [
+        "Shaun David Hutchinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445054079l/27220730.jpg",
+      "rank": 11,
+      "votes": 5214,
+      "winner": false
+    },
+    {
+      "external_id": "23308084",
+      "title": "The Rose & the Dagger",
+      "authors": [
+        "Renée Ahdieh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443797156l/23308084.jpg",
+      "rank": 12,
+      "votes": 3863,
+      "winner": false
+    },
+    {
+      "external_id": "20443235",
+      "title": "The Winner's Kiss",
+      "authors": [
+        "Marie Rutkoski"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1455809407l/20443235.jpg",
+      "rank": 13,
+      "votes": 3855,
+      "winner": false
+    },
+    {
+      "external_id": "27161189",
+      "title": "United as One",
+      "authors": [
+        "Pittacus Lore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1452924630l/27161189.jpg",
+      "rank": 14,
+      "votes": 3500,
+      "winner": false
+    },
+    {
+      "external_id": "25776221",
+      "title": "Rebel of the Sands",
+      "authors": [
+        "Alwyn Hamilton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1446655160l/25776221.jpg",
+      "rank": 15,
+      "votes": 2876,
+      "winner": false
+    },
+    {
+      "external_id": "29236299",
+      "title": "Gemina",
+      "authors": [
+        "Amie Kaufman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1480097137l/29236299._SY600_.jpg",
+      "rank": 16,
+      "votes": 1774,
+      "winner": false
+    },
+    {
+      "external_id": "26795352",
+      "title": "My Lady Jane",
+      "authors": [
+        "Cynthia Hand"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445097091l/26795352.jpg",
+      "rank": 17,
+      "votes": 1644,
+      "winner": false
+    },
+    {
+      "external_id": "28588345",
+      "title": "The Midnight Star",
+      "authors": [
+        "Marie Lu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461260409l/28588345.jpg",
+      "rank": 18,
+      "votes": 1164,
+      "winner": false
+    },
+    {
+      "external_id": "27190613",
+      "title": "And I Darken",
+      "authors": [
+        "Kiersten White"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1449153532l/27190613.jpg",
+      "rank": 19,
+      "votes": 893,
+      "winner": false
+    },
+    {
+      "external_id": "27064385",
+      "title": "Ivory and Bone",
+      "authors": [
+        "Julie Eshbaugh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445239856l/27064385.jpg",
+      "rank": 20,
+      "votes": 605,
+      "winner": false
+    }
+  ]
+}

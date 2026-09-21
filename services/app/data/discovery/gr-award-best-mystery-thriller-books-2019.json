@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-mystery-thriller-books-2019",
+  "kind": "award",
+  "title": "Mystery & Thriller",
+  "source_url": "https://www.goodreads.com/choiceawards/best-mystery-thriller-books-2019",
+  "year": 2019,
+  "category": "Mystery & Thriller",
+  "genres": [
+    "mystery"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:59.962406+00:00",
+  "books": [
+    {
+      "external_id": "40097951",
+      "title": "The Silent Patient",
+      "authors": [
+        "Alex Michaelides"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1668782119l/40097951._SY600_.jpg",
+      "rank": 1,
+      "votes": 68821,
+      "winner": true
+    },
+    {
+      "external_id": "38819868",
+      "title": "My Sister, the Serial Killer",
+      "authors": [
+        "Oyinkan Braithwaite"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523366732l/38819868._SY600_.jpg",
+      "rank": 2,
+      "votes": 52097,
+      "winner": false
+    },
+    {
+      "external_id": "42080142",
+      "title": "The Turn of the Key",
+      "authors": [
+        "Ruth Ware"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1548204800l/42080142.jpg",
+      "rank": 3,
+      "votes": 31822,
+      "winner": false
+    },
+    {
+      "external_id": "39863488",
+      "title": "The Lost Man",
+      "authors": [
+        "Jane Harper"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549469559l/39863488._SY600_.jpg",
+      "rank": 4,
+      "votes": 23526,
+      "winner": false
+    },
+    {
+      "external_id": "39863515",
+      "title": "An Anonymous Girl",
+      "authors": [
+        "Greer Hendricks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546956642l/39863515._SY600_.jpg",
+      "rank": 5,
+      "votes": 19692,
+      "winner": false
+    },
+    {
+      "external_id": "41940236",
+      "title": "The Whisper Man",
+      "authors": [
+        "Alex North"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1541864083l/41940236.jpg",
+      "rank": 6,
+      "votes": 19627,
+      "winner": false
+    },
+    {
+      "external_id": "40697540",
+      "title": "Run Away",
+      "authors": [
+        "Harlan Coben"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1533567545l/40697540.jpg",
+      "rank": 7,
+      "votes": 18561,
+      "winner": false
+    },
+    {
+      "external_id": "42368604",
+      "title": "Lock Every Door",
+      "authors": [
+        "Riley Sager"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1568860056l/42368604._SY600_.jpg",
+      "rank": 8,
+      "votes": 17079,
+      "winner": false
+    },
+    {
+      "external_id": "40121959",
+      "title": "Miracle Creek",
+      "authors": [
+        "Angie  Kim"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537287675l/40121959.jpg",
+      "rank": 9,
+      "votes": 14859,
+      "winner": false
+    },
+    {
+      "external_id": "39863405",
+      "title": "The Mother-in-Law",
+      "authors": [
+        "Sally Hepworth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546452406l/39863405._SY600_.jpg",
+      "rank": 10,
+      "votes": 13804,
+      "winner": false
+    },
+    {
+      "external_id": "44034500",
+      "title": "A Better Man",
+      "authors": [
+        "Louise Penny"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555112219l/44034500.jpg",
+      "rank": 11,
+      "votes": 7245,
+      "winner": false
+    },
+    {
+      "external_id": "43822820",
+      "title": "The Family Upstairs",
+      "authors": [
+        "Lisa Jewell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1564517337l/43822820.jpg",
+      "rank": 12,
+      "votes": 6743,
+      "winner": false
+    },
+    {
+      "external_id": "42779092",
+      "title": "The Chain",
+      "authors": [
+        "Adrian McKinty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601216004l/42779092._SY600_.jpg",
+      "rank": 13,
+      "votes": 6275,
+      "winner": false
+    },
+    {
+      "external_id": "34563821",
+      "title": "Disappearing Earth",
+      "authors": [
+        "Julia  Phillips"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1541103539l/34563821._SY600_.jpg",
+      "rank": 14,
+      "votes": 4940,
+      "winner": false
+    },
+    {
+      "external_id": "41716679",
+      "title": "Searching for Sylvie Lee",
+      "authors": [
+        "Jean Kwok"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1540310255l/41716679.jpg",
+      "rank": 15,
+      "votes": 3582,
+      "winner": false
+    },
+    {
+      "external_id": "41081925",
+      "title": "I'll Never Tell",
+      "authors": [
+        "Catherine McKenzie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1542635027l/41081925.jpg",
+      "rank": 16,
+      "votes": 3412,
+      "winner": false
+    },
+    {
+      "external_id": "43885041",
+      "title": "The Night Fire",
+      "authors": [
+        "Michael Connelly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552350288l/43885041.jpg",
+      "rank": 17,
+      "votes": 2806,
+      "winner": false
+    },
+    {
+      "external_id": "42599605",
+      "title": "The Last Widow",
+      "authors": [
+        "Karin Slaughter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555116218l/42599605._SY600_.jpg",
+      "rank": 18,
+      "votes": 2736,
+      "winner": false
+    },
+    {
+      "external_id": "39796904",
+      "title": "My Lovely Wife",
+      "authors": [
+        "Samantha  Downing"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1530546018l/39796904.jpg",
+      "rank": 19,
+      "votes": 2697,
+      "winner": false
+    },
+    {
+      "external_id": "38355304",
+      "title": "The Line Between",
+      "authors": [
+        "Tosca Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545519335l/38355304._SY600_.jpg",
+      "rank": 20,
+      "votes": 1772,
+      "winner": false
+    }
+  ]
+}

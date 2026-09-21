@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-romance-books-2023",
+  "kind": "award",
+  "title": "Romance",
+  "source_url": "https://www.goodreads.com/choiceawards/best-romance-books-2023",
+  "year": 2023,
+  "category": "Romance",
+  "genres": [
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:17.751762+00:00",
+  "books": [
+    {
+      "external_id": "61718053",
+      "title": "Happy Place",
+      "authors": [
+        "Emily Henry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1660145160l/61718053.jpg",
+      "rank": 1,
+      "votes": 157687,
+      "winner": true
+    },
+    {
+      "external_id": "61326735",
+      "title": "Love, Theoretically",
+      "authors": [
+        "Ali Hazelwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1681476644l/61326735._SY600_.jpg",
+      "rank": 2,
+      "votes": 96439,
+      "winner": false
+    },
+    {
+      "external_id": "61918816",
+      "title": "Yours Truly",
+      "authors": [
+        "Abby Jimenez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1751917536l/61918816._SY600_.jpg",
+      "rank": 3,
+      "votes": 57086,
+      "winner": false
+    },
+    {
+      "external_id": "62022434",
+      "title": "Things We Hide from the Light",
+      "authors": [
+        "Lucy Score"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718386717l/62022434._SY600_.jpg",
+      "rank": 4,
+      "votes": 46423,
+      "winner": false
+    },
+    {
+      "external_id": "62628727",
+      "title": "Romantic Comedy",
+      "authors": [
+        "Curtis Sittenfeld"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1679496983l/62628727._SY600_.jpg",
+      "rank": 5,
+      "votes": 39178,
+      "winner": false
+    },
+    {
+      "external_id": "61681786",
+      "title": "Final Offer",
+      "authors": [
+        "Lauren Asher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675342454l/61681786._SY600_.jpg",
+      "rank": 6,
+      "votes": 37873,
+      "winner": false
+    },
+    {
+      "external_id": "62994279",
+      "title": "King of Pride",
+      "authors": [
+        "Ana Huang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1680192054l/62994279._SY600_.jpg",
+      "rank": 7,
+      "votes": 37653,
+      "winner": false
+    },
+    {
+      "external_id": "84943172",
+      "title": "The Right Move",
+      "authors": [
+        "Liz Tomforde"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1674590603l/84943172._SY600_.jpg",
+      "rank": 8,
+      "votes": 36246,
+      "winner": false
+    },
+    {
+      "external_id": "62926938",
+      "title": "The Seven Year Slip",
+      "authors": [
+        "Ashley Poston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1685350807l/62926938.jpg",
+      "rank": 9,
+      "votes": 30820,
+      "winner": false
+    },
+    {
+      "external_id": "101145836",
+      "title": "Wildfire",
+      "authors": [
+        "Hannah  Grace"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1749069227l/101145836._SY600_.jpg",
+      "rank": 10,
+      "votes": 29205,
+      "winner": false
+    },
+    {
+      "external_id": "61797464",
+      "title": "Meet Me at the Lake",
+      "authors": [
+        "Carley Fortune"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664246880l/61797464.jpg",
+      "rank": 11,
+      "votes": 10557,
+      "winner": false
+    },
+    {
+      "external_id": "123194693",
+      "title": "Pucking Around",
+      "authors": [
+        "Emily Rath"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1678142180l/123194693._SY600_.jpg",
+      "rank": 12,
+      "votes": 10099,
+      "winner": false
+    },
+    {
+      "external_id": "62361081",
+      "title": "The True Love Experiment",
+      "authors": [
+        "Christina Lauren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677786623l/62361081.jpg",
+      "rank": 13,
+      "votes": 9492,
+      "winner": false
+    },
+    {
+      "external_id": "61897968",
+      "title": "Practice Makes Perfect",
+      "authors": [
+        "Sarah       Adams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659979546l/61897968.jpg",
+      "rank": 14,
+      "votes": 8518,
+      "winner": false
+    },
+    {
+      "external_id": "63031640",
+      "title": "Powerless",
+      "authors": [
+        "Elsie Silver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1750538973l/63031640._SY600_.jpg",
+      "rank": 15,
+      "votes": 8486,
+      "winner": false
+    },
+    {
+      "external_id": "127152907",
+      "title": "In the Likely Event",
+      "authors": [
+        "Rebecca Yarros"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1683338045l/127152907._SY600_.jpg",
+      "rank": 16,
+      "votes": 8421,
+      "winner": false
+    },
+    {
+      "external_id": "61884987",
+      "title": "Hello Stranger",
+      "authors": [
+        "Katherine Center"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1667138448l/61884987.jpg",
+      "rank": 17,
+      "votes": 8197,
+      "winner": false
+    },
+    {
+      "external_id": "75665887",
+      "title": "You, Again",
+      "authors": [
+        "Kate Goldbeck"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684512527l/75665887.jpg",
+      "rank": 18,
+      "votes": 5513,
+      "winner": false
+    },
+    {
+      "external_id": "62626163",
+      "title": "A Long Time Coming",
+      "authors": [
+        "Meghan Quinn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1672801457l/62626163._SY600_.jpg",
+      "rank": 19,
+      "votes": 3918,
+      "winner": false
+    },
+    {
+      "external_id": "101144869",
+      "title": "The Long Game",
+      "authors": [
+        "Elena  Armas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1687105546l/101144869.jpg",
+      "rank": 20,
+      "votes": 3790,
+      "winner": false
+    }
+  ]
+}

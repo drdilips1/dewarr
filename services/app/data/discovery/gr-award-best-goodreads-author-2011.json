@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-goodreads-author-2011",
+  "kind": "award",
+  "title": "Goodreads Author",
+  "source_url": "https://www.goodreads.com/choiceawards/best-goodreads-author-2011",
+  "year": 2011,
+  "category": "Goodreads Author",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:48:25.730519+00:00",
+  "books": [
+    {
+      "external_id": "6752378",
+      "title": "City of Fallen Angels",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369452302l/6752378.jpg",
+      "rank": 1,
+      "votes": 6097,
+      "winner": true
+    },
+    {
+      "external_id": "8559047",
+      "title": "Magic Slays",
+      "authors": [
+        "Ilona Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1288727226l/8559047._SY600_.jpg",
+      "rank": 2,
+      "votes": 5093,
+      "winner": false
+    },
+    {
+      "external_id": "8306857",
+      "title": "Divergent",
+      "authors": [
+        "Veronica Roth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327873996l/8306857.jpg",
+      "rank": 3,
+      "votes": 5070,
+      "winner": false
+    },
+    {
+      "external_id": "1215032",
+      "title": "The Wise Man's Fear",
+      "authors": [
+        "Patrick Rothfuss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1785688949l/1215032._SY600_.jpg",
+      "rank": 4,
+      "votes": 4242,
+      "winner": false
+    },
+    {
+      "external_id": "8667848",
+      "title": "A Discovery of Witches",
+      "authors": [
+        "Deborah Harkness"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1525097370l/8667848._SY600_.jpg",
+      "rank": 5,
+      "votes": 3611,
+      "winner": false
+    },
+    {
+      "external_id": "9583508",
+      "title": "Smokin' Seventeen",
+      "authors": [
+        "Janet Evanovich"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388285695l/9583508.jpg",
+      "rank": 6,
+      "votes": 2905,
+      "winner": false
+    },
+    {
+      "external_id": "9409458",
+      "title": "Forever",
+      "authors": [
+        "Maggie Stiefvater"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1285771367l/9409458.jpg",
+      "rank": 7,
+      "votes": 2810,
+      "winner": false
+    },
+    {
+      "external_id": "8685612",
+      "title": "The Iron Queen",
+      "authors": [
+        "Julie Kagawa"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1321070331l/8685612.jpg",
+      "rank": 8,
+      "votes": 2643,
+      "winner": false
+    },
+    {
+      "external_id": "7686667",
+      "title": "Delirium",
+      "authors": [
+        "Lauren Oliver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1298079937l/7686667.jpg",
+      "rank": 9,
+      "votes": 2513,
+      "winner": false
+    },
+    {
+      "external_id": "10637766",
+      "title": "Silence",
+      "authors": [
+        "Becca Fitzpatrick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362408152l/10637766.jpg",
+      "rank": 10,
+      "votes": 2326,
+      "winner": false
+    },
+    {
+      "external_id": "8683812",
+      "title": "The Paris Wife",
+      "authors": [
+        "Paula McLain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320545874l/8683812.jpg",
+      "rank": 11,
+      "votes": 1153,
+      "winner": false
+    },
+    {
+      "external_id": "9969571",
+      "title": "Ready Player One",
+      "authors": [
+        "Ernest Cline"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500930947l/9969571._SY600_.jpg",
+      "rank": 12,
+      "votes": 1032,
+      "winner": false
+    },
+    {
+      "external_id": "8235178",
+      "title": "Across the Universe",
+      "authors": [
+        "Beth Revis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1401852218l/8235178.jpg",
+      "rank": 13,
+      "votes": 864,
+      "winner": false
+    },
+    {
+      "external_id": "9369720",
+      "title": "Passion",
+      "authors": [
+        "Lauren Kate"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362339802l/9369720.jpg",
+      "rank": 14,
+      "votes": 843,
+      "winner": false
+    },
+    {
+      "external_id": "8428064",
+      "title": "Demonglass",
+      "authors": [
+        "Rachel Hawkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1287692542l/8428064.jpg",
+      "rank": 15,
+      "votes": 799,
+      "winner": false
+    },
+    {
+      "external_id": "8709527",
+      "title": "Bloodlines",
+      "authors": [
+        "Richelle Mead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1297199431l/8709527.jpg",
+      "rank": 16,
+      "votes": 796,
+      "winner": false
+    },
+    {
+      "external_id": "8058301",
+      "title": "Ghost Story",
+      "authors": [
+        "Jim  Butcher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1329104700l/8058301.jpg",
+      "rank": 17,
+      "votes": 628,
+      "winner": false
+    },
+    {
+      "external_id": "10140661",
+      "title": "Gabriel's Inferno",
+      "authors": [
+        "Sylvain Reynard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1301789770l/10140661.jpg",
+      "rank": 18,
+      "votes": 248,
+      "winner": false
+    },
+    {
+      "external_id": "11505797",
+      "title": "Beautiful Disaster",
+      "authors": [
+        "Jamie McGuire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358259032l/11505797.jpg",
+      "rank": 19,
+      "votes": 223,
+      "winner": false
+    },
+    {
+      "external_id": "9673936",
+      "title": "Basilisk",
+      "authors": [
+        "Rob Thurman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1296384051l/9673936.jpg",
+      "rank": 20,
+      "votes": 149,
+      "winner": false
+    }
+  ]
+}

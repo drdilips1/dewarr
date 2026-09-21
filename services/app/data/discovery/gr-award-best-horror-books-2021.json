@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-horror-books-2021",
+  "kind": "award",
+  "title": "Horror",
+  "source_url": "https://www.goodreads.com/choiceawards/best-horror-books-2021",
+  "year": 2021,
+  "category": "Horror",
+  "genres": [
+    "horror"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:08.704547+00:00",
+  "books": [
+    {
+      "external_id": "55829194",
+      "title": "The Final Girl Support Group",
+      "authors": [
+        "Grady Hendrix"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1614275199l/55829194.jpg",
+      "rank": 1,
+      "votes": 45960,
+      "winner": true
+    },
+    {
+      "external_id": "54798187",
+      "title": "Later",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1596448554l/54798187.jpg",
+      "rank": 2,
+      "votes": 40151,
+      "winner": false
+    },
+    {
+      "external_id": "54621094",
+      "title": "The Last House on Needless Street",
+      "authors": [
+        "Catriona Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1603323638l/54621094._SY600_.jpg",
+      "rank": 3,
+      "votes": 16934,
+      "winner": false
+    },
+    {
+      "external_id": "56666839",
+      "title": "A Dowry of Blood",
+      "authors": [
+        "S.T. Gibson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1610928271l/56666839.jpg",
+      "rank": 4,
+      "votes": 16608,
+      "winner": false
+    },
+    {
+      "external_id": "55711617",
+      "title": "My Heart Is a Chainsaw",
+      "authors": [
+        "Stephen Graham Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1623264202l/55711617.jpg",
+      "rank": 5,
+      "votes": 14389,
+      "winner": false
+    },
+    {
+      "external_id": "55782435",
+      "title": "The Book of Accidents",
+      "authors": [
+        "Chuck Wendig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1606934104l/55782435.jpg",
+      "rank": 6,
+      "votes": 11478,
+      "winner": false
+    },
+    {
+      "external_id": "53256108",
+      "title": "All's Well",
+      "authors": [
+        "Mona Awad"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1604887202l/53256108.jpg",
+      "rank": 7,
+      "votes": 10742,
+      "winner": false
+    },
+    {
+      "external_id": "54303987",
+      "title": "The Drowning Kind",
+      "authors": [
+        "Jennifer  McMahon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1615933931l/54303987.jpg",
+      "rank": 8,
+      "votes": 9720,
+      "winner": false
+    },
+    {
+      "external_id": "53290204",
+      "title": "Summer Sons",
+      "authors": [
+        "Lee Mandelo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611852989l/53290204.jpg",
+      "rank": 9,
+      "votes": 7989,
+      "winner": false
+    },
+    {
+      "external_id": "56637938",
+      "title": "Cackle",
+      "authors": [
+        "Rachel   Harrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1616026271l/56637938.jpg",
+      "rank": 10,
+      "votes": 7746,
+      "winner": false
+    },
+    {
+      "external_id": "56179382",
+      "title": "Comfort Me with Apples",
+      "authors": [
+        "Catherynne M. Valente"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611930168l/56179382.jpg",
+      "rank": 11,
+      "votes": 2837,
+      "winner": false
+    },
+    {
+      "external_id": "55711747",
+      "title": "Chasing the Boogeyman",
+      "authors": [
+        "Richard  Chizmar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1626009186l/55711747.jpg",
+      "rank": 12,
+      "votes": 2602,
+      "winner": false
+    },
+    {
+      "external_id": "51484449",
+      "title": "Bloodline",
+      "authors": [
+        "Jess Lourey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1589382072l/51484449._SY600_.jpg",
+      "rank": 13,
+      "votes": 2151,
+      "winner": false
+    },
+    {
+      "external_id": "54735151",
+      "title": "Near the Bone",
+      "authors": [
+        "Christina Henry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627151265l/54735151._SY600_.jpg",
+      "rank": 14,
+      "votes": 1999,
+      "winner": false
+    },
+    {
+      "external_id": "55941857",
+      "title": "The Hollows",
+      "authors": [
+        "Mark  Edwards"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617594018l/55941857.jpg",
+      "rank": 15,
+      "votes": 1931,
+      "winner": false
+    },
+    {
+      "external_id": "56269269",
+      "title": "This Thing Between Us",
+      "authors": [
+        "Gus Moreno"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1618452978l/56269269._SY600_.jpg",
+      "rank": 16,
+      "votes": 1911,
+      "winner": false
+    },
+    {
+      "external_id": "55425310",
+      "title": "When the Reckoning Comes",
+      "authors": [
+        "LaTanya McQueen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1610055983l/55425310.jpg",
+      "rank": 17,
+      "votes": 1653,
+      "winner": false
+    },
+    {
+      "external_id": "55479351",
+      "title": "The Whispering Dead",
+      "authors": [
+        "Darcy Coates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601469052l/55479351.jpg",
+      "rank": 18,
+      "votes": 1645,
+      "winner": false
+    },
+    {
+      "external_id": "56029579",
+      "title": "Come with Me",
+      "authors": [
+        "Ronald Malfi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1606214615l/56029579._SY600_.jpg",
+      "rank": 19,
+      "votes": 1303,
+      "winner": false
+    },
+    {
+      "external_id": "55540151",
+      "title": "Where They Wait",
+      "authors": [
+        "Scott  Carson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1632933310l/55540151.jpg",
+      "rank": 20,
+      "votes": 910,
+      "winner": false
+    }
+  ]
+}

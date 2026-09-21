@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-young-adult-fantasy-books-2023",
+  "kind": "award",
+  "title": "Young Adult Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fantasy-books-2023",
+  "year": 2023,
+  "category": "Young Adult Fantasy",
+  "genres": [
+    "fantasy",
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:24.975001+00:00",
+  "books": [
+    {
+      "external_id": "60784546",
+      "title": "Divine Rivals",
+      "authors": [
+        "Rebecca   Ross"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1655928079l/60784546.jpg",
+      "rank": 1,
+      "votes": 117671,
+      "winner": true
+    },
+    {
+      "external_id": "62816044",
+      "title": "A Curse for True Love",
+      "authors": [
+        "Stephanie Garber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1674501506l/62816044.jpg",
+      "rank": 2,
+      "votes": 57204,
+      "winner": false
+    },
+    {
+      "external_id": "61198133",
+      "title": "The Stolen Heir",
+      "authors": [
+        "Holly Black"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1654625328l/61198133.jpg",
+      "rank": 3,
+      "votes": 52089,
+      "winner": false
+    },
+    {
+      "external_id": "17699859",
+      "title": "Chain of Thorns",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1666441294l/17699859._SY600_.jpg",
+      "rank": 4,
+      "votes": 29780,
+      "winner": false
+    },
+    {
+      "external_id": "153283393",
+      "title": "Powerless",
+      "authors": [
+        "Lauren  Roberts"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1687711910l/153283393.jpg",
+      "rank": 5,
+      "votes": 28558,
+      "winner": false
+    },
+    {
+      "external_id": "65213381",
+      "title": "What the River Knows",
+      "authors": [
+        "Isabel Ibañez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1674234543l/65213381.jpg",
+      "rank": 6,
+      "votes": 25890,
+      "winner": false
+    },
+    {
+      "external_id": "75302266",
+      "title": "A Study in Drowning",
+      "authors": [
+        "Ava Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675782203l/75302266.jpg",
+      "rank": 7,
+      "votes": 21695,
+      "winner": false
+    },
+    {
+      "external_id": "63023639",
+      "title": "Foxglove",
+      "authors": [
+        "Adalyn  Grace"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1666104339l/63023639.jpg",
+      "rank": 8,
+      "votes": 13731,
+      "winner": false
+    },
+    {
+      "external_id": "61085769",
+      "title": "These Infinite Threads",
+      "authors": [
+        "Tahereh Mafi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1656264223l/61085769.jpg",
+      "rank": 9,
+      "votes": 13425,
+      "winner": false
+    },
+    {
+      "external_id": "101138075",
+      "title": "Foul Heart Huntsman",
+      "authors": [
+        "Chloe Gong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1678293837l/101138075._SY600_.jpg",
+      "rank": 10,
+      "votes": 11754,
+      "winner": false
+    },
+    {
+      "external_id": "58303740",
+      "title": "Song of Silver, Flame Like Night",
+      "authors": [
+        "Amélie Wen Zhao"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1661410548l/58303740._SY600_.jpg",
+      "rank": 11,
+      "votes": 3912,
+      "winner": false
+    },
+    {
+      "external_id": "62695377",
+      "title": "Threads That Bind",
+      "authors": [
+        "Kika Hatzopoulou"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1663941697l/62695377.jpg",
+      "rank": 12,
+      "votes": 3876,
+      "winner": false
+    },
+    {
+      "external_id": "61273084",
+      "title": "Delicious Monsters",
+      "authors": [
+        "Liselle Sambury"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675288895l/61273084.jpg",
+      "rank": 13,
+      "votes": 3691,
+      "winner": false
+    },
+    {
+      "external_id": "62649010",
+      "title": "House of Roots and Ruin",
+      "authors": [
+        "Erin A. Craig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1668687160l/62649010.jpg",
+      "rank": 14,
+      "votes": 3505,
+      "winner": false
+    },
+    {
+      "external_id": "61356465",
+      "title": "Spice Road",
+      "authors": [
+        "Maiya Ibrahim"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664245287l/61356465.jpg",
+      "rank": 15,
+      "votes": 3177,
+      "winner": false
+    },
+    {
+      "external_id": "60784432",
+      "title": "Blood Debts",
+      "authors": [
+        "Terry J. Benton-Walker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1660390164l/60784432.jpg",
+      "rank": 16,
+      "votes": 2889,
+      "winner": false
+    },
+    {
+      "external_id": "62031346",
+      "title": "Silver in the Bone",
+      "authors": [
+        "Alexandra Bracken"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664201158l/62031346.jpg",
+      "rank": 17,
+      "votes": 2581,
+      "winner": false
+    },
+    {
+      "external_id": "60386342",
+      "title": "The Scarlet Veil",
+      "authors": [
+        "Shelby Mahurin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1682578665l/60386342.jpg",
+      "rank": 18,
+      "votes": 2301,
+      "winner": false
+    },
+    {
+      "external_id": "62688758",
+      "title": "Bring Me Your Midnight",
+      "authors": [
+        "Rachel  Griffin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1668621714l/62688758.jpg",
+      "rank": 19,
+      "votes": 2199,
+      "winner": false
+    },
+    {
+      "external_id": "61745561",
+      "title": "House of Marionne",
+      "authors": [
+        "J. Elle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1676565627l/61745561.jpg",
+      "rank": 20,
+      "votes": 935,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-fiction-books-2020",
+  "kind": "award",
+  "title": "Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fiction-books-2020",
+  "year": 2020,
+  "category": "Fiction",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:27.077754+00:00",
+  "books": [
+    {
+      "external_id": "52578297",
+      "title": "The Midnight Library",
+      "authors": [
+        "Matt Haig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602190253l/52578297.jpg",
+      "rank": 1,
+      "votes": 72828,
+      "winner": true
+    },
+    {
+      "external_id": "49127718",
+      "title": "Anxious People",
+      "authors": [
+        "Fredrik Backman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1597575031l/49127718.jpg",
+      "rank": 2,
+      "votes": 72823,
+      "winner": false
+    },
+    {
+      "external_id": "50634450",
+      "title": "American Dirt",
+      "authors": [
+        "Jeanine Cummins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1579793054l/50634450._SY600_.jpg",
+      "rank": 3,
+      "votes": 67226,
+      "winner": false
+    },
+    {
+      "external_id": "43923951",
+      "title": "Such a Fun Age",
+      "authors": [
+        "Kiley Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1557181911l/43923951._SY600_.jpg",
+      "rank": 4,
+      "votes": 59356,
+      "winner": false
+    },
+    {
+      "external_id": "44890081",
+      "title": "My Dark Vanessa",
+      "authors": [
+        "Kate Elizabeth Russell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1583447793l/44890081._SY600_.jpg",
+      "rank": 5,
+      "votes": 48664,
+      "winner": false
+    },
+    {
+      "external_id": "45754981",
+      "title": "The Glass Hotel",
+      "authors": [
+        "Emily St. John Mandel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1564199892l/45754981.jpg",
+      "rank": 6,
+      "votes": 35614,
+      "winner": false
+    },
+    {
+      "external_id": "48570454",
+      "title": "Transcendent Kingdom",
+      "authors": [
+        "Yaa Gyasi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571925550l/48570454.jpg",
+      "rank": 7,
+      "votes": 31699,
+      "winner": false
+    },
+    {
+      "external_id": "50214741",
+      "title": "The Girl with the Louding Voice",
+      "authors": [
+        "Abi Daré"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1581128232l/50214741.jpg",
+      "rank": 8,
+      "votes": 28640,
+      "winner": false
+    },
+    {
+      "external_id": "45294613",
+      "title": "Dear Edward",
+      "authors": [
+        "Ann Napolitano"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1573865448l/45294613.jpg",
+      "rank": 9,
+      "votes": 25384,
+      "winner": false
+    },
+    {
+      "external_id": "52755548",
+      "title": "Big Summer",
+      "authors": [
+        "Jennifer Weiner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585287049l/52755548.jpg",
+      "rank": 10,
+      "votes": 22008,
+      "winner": false
+    },
+    {
+      "external_id": "52715989",
+      "title": "Writers & Lovers",
+      "authors": [
+        "Lily King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1580227762l/52715989._SX318_SY475_.jpg",
+      "rank": 11,
+      "votes": 7318,
+      "winner": false
+    },
+    {
+      "external_id": "52696537",
+      "title": "If I Had Your Face",
+      "authors": [
+        "Frances Cha"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1591107164l/52696537._SY600_.jpg",
+      "rank": 12,
+      "votes": 5607,
+      "winner": false
+    },
+    {
+      "external_id": "51792100",
+      "title": "A Burning",
+      "authors": [
+        "Megha Majumdar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1576019976l/51792100.jpg",
+      "rank": 13,
+      "votes": 4840,
+      "winner": false
+    },
+    {
+      "external_id": "51541496",
+      "title": "Luster",
+      "authors": [
+        "Raven Leilani"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1568668703l/51541496._SX318_SY475_.jpg",
+      "rank": 14,
+      "votes": 4109,
+      "winner": false
+    },
+    {
+      "external_id": "44281326",
+      "title": "In an Instant",
+      "authors": [
+        "Suzanne Redfearn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620723748l/44281326._SY600_.jpg",
+      "rank": 15,
+      "votes": 2680,
+      "winner": false
+    },
+    {
+      "external_id": "45046893",
+      "title": "Oona Out of Order",
+      "authors": [
+        "Margarita Montimore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562010569l/45046893.jpg",
+      "rank": 16,
+      "votes": 2414,
+      "winner": false
+    },
+    {
+      "external_id": "48595550",
+      "title": "The Death of Vivek Oji",
+      "authors": [
+        "Akwaeke Emezi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1579616999l/48595550._SY600_.jpg",
+      "rank": 17,
+      "votes": 1995,
+      "winner": false
+    },
+    {
+      "external_id": "50358133",
+      "title": "Homeland Elegies",
+      "authors": [
+        "Ayad Akhtar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1584627596l/50358133.jpg",
+      "rank": 18,
+      "votes": 1731,
+      "winner": false
+    },
+    {
+      "external_id": "46263943",
+      "title": "Real Life",
+      "authors": [
+        "Brandon  Taylor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1563301717l/46263943.jpg",
+      "rank": 19,
+      "votes": 1508,
+      "winner": false
+    },
+    {
+      "external_id": "42121525",
+      "title": "Migrations",
+      "authors": [
+        "Charlotte McConaghy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612818084l/42121525._SY600_.jpg",
+      "rank": 20,
+      "votes": 1305,
+      "winner": false
+    }
+  ]
+}

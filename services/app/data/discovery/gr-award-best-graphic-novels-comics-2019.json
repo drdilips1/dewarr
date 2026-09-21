@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-graphic-novels-comics-2019",
+  "kind": "award",
+  "title": "Graphic Novels & Comics",
+  "source_url": "https://www.goodreads.com/choiceawards/best-graphic-novels-comics-2019",
+  "year": 2019,
+  "category": "Graphic Novels & Comics",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:17.981110+00:00",
+  "books": [
+    {
+      "external_id": "40864790",
+      "title": "Pumpkinheads",
+      "authors": [
+        "Rainbow Rowell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537541596l/40864790.jpg",
+      "rank": 1,
+      "votes": 29624,
+      "winner": true
+    },
+    {
+      "external_id": "43307358",
+      "title": "Heartstopper",
+      "authors": [
+        "Alice Oseman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1564967250l/43307358._SY600_.jpg",
+      "rank": 2,
+      "votes": 28460,
+      "winner": false
+    },
+    {
+      "external_id": "40766383",
+      "title": "The Handmaid's Tale",
+      "authors": [
+        "Renée Nault"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1534048425l/40766383.jpg",
+      "rank": 3,
+      "votes": 23606,
+      "winner": false
+    },
+    {
+      "external_id": "42527866",
+      "title": "They Called Us Enemy",
+      "authors": [
+        "George Takei"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1541125895l/42527866.jpg",
+      "rank": 4,
+      "votes": 19574,
+      "winner": false
+    },
+    {
+      "external_id": "39296114",
+      "title": "Book Love",
+      "authors": [
+        "Debbie Tung"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537722936l/39296114.jpg",
+      "rank": 5,
+      "votes": 18200,
+      "winner": false
+    },
+    {
+      "external_id": "38452813",
+      "title": "Teen Titans",
+      "authors": [
+        "Kami Garcia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1528738829l/38452813._SY600_.jpg",
+      "rank": 6,
+      "votes": 17730,
+      "winner": false
+    },
+    {
+      "external_id": "38524301",
+      "title": "Shades of Magic Vol. 1",
+      "authors": [
+        "V.E. Schwab"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1536423241l/38524301.jpg",
+      "rank": 7,
+      "votes": 16832,
+      "winner": false
+    },
+    {
+      "external_id": "21801668",
+      "title": "The Umbrella Academy, Vol. 3",
+      "authors": [
+        "Gerard Way"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1547213152l/21801668.jpg",
+      "rank": 8,
+      "votes": 14237,
+      "winner": false
+    },
+    {
+      "external_id": "44774415",
+      "title": "Mooncakes",
+      "authors": [
+        "Suzanne  Walker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565183719l/44774415._SY600_.jpg",
+      "rank": 9,
+      "votes": 9005,
+      "winner": false
+    },
+    {
+      "external_id": "38812893",
+      "title": "Paper Girls, Volume 5",
+      "authors": [
+        "Brian K. Vaughan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1657101678l/38812893.jpg",
+      "rank": 10,
+      "votes": 8516,
+      "winner": false
+    },
+    {
+      "external_id": "39073378",
+      "title": "Kid Gloves",
+      "authors": [
+        "Lucy Knisley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1531208565l/39073378.jpg",
+      "rank": 11,
+      "votes": 4163,
+      "winner": false
+    },
+    {
+      "external_id": "39073387",
+      "title": "Bloom",
+      "authors": [
+        "Kevin Panetta"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1747174314l/39073387._SY600_.jpg",
+      "rank": 12,
+      "votes": 4075,
+      "winner": false
+    },
+    {
+      "external_id": "40864841",
+      "title": "Laura Dean Keeps Breaking Up with Me",
+      "authors": [
+        "Mariko Tamaki"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1539096588l/40864841.jpg",
+      "rank": 13,
+      "votes": 4028,
+      "winner": false
+    },
+    {
+      "external_id": "36700347",
+      "title": "Good Talk",
+      "authors": [
+        "Mira Jacob"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1534098775l/36700347.jpg",
+      "rank": 14,
+      "votes": 3543,
+      "winner": false
+    },
+    {
+      "external_id": "41391399",
+      "title": "Under the Moon",
+      "authors": [
+        "Lauren Myracle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556185721l/41391399.jpg",
+      "rank": 15,
+      "votes": 2954,
+      "winner": false
+    },
+    {
+      "external_id": "41812788",
+      "title": "The Adventure Zone Vol. 2",
+      "authors": [
+        "Clint McElroy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1539399890l/41812788.jpg",
+      "rank": 16,
+      "votes": 2452,
+      "winner": false
+    },
+    {
+      "external_id": "45899240",
+      "title": "Monstress, Volume 4",
+      "authors": [
+        "Marjorie M. Liu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729309269l/45899240.jpg",
+      "rank": 17,
+      "votes": 1939,
+      "winner": false
+    },
+    {
+      "external_id": "40538764",
+      "title": "Fence, Vol. 3",
+      "authors": [
+        "C.S. Pacat"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529625610l/40538764._SY600_.jpg",
+      "rank": 18,
+      "votes": 1370,
+      "winner": false
+    },
+    {
+      "external_id": "42835876",
+      "title": "The Wicked + The Divine, Vol. 9",
+      "authors": [
+        "Kieron Gillen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1788933947l/42835876.jpg",
+      "rank": 19,
+      "votes": 1168,
+      "winner": false
+    },
+    {
+      "external_id": "42667807",
+      "title": "Die, Vol. 1",
+      "authors": [
+        "Kieron Gillen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554395255l/42667807._SY600_.jpg",
+      "rank": 20,
+      "votes": 567,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-debut-goodreads-author-2013",
+  "kind": "award",
+  "title": "Debut Goodreads Author",
+  "source_url": "https://www.goodreads.com/choiceawards/best-debut-goodreads-author-2013",
+  "year": 2013,
+  "category": "Debut Goodreads Author",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:52.074242+00:00",
+  "books": [
+    {
+      "external_id": "18297707",
+      "title": "Tangled",
+      "authors": [
+        "Emma Chase"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375808439l/18297707.jpg",
+      "rank": 1,
+      "votes": 13929,
+      "winner": true
+    },
+    {
+      "external_id": "15819028",
+      "title": "The Golem and the Jinni",
+      "authors": [
+        "Helene Wecker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349205573l/15819028.jpg",
+      "rank": 2,
+      "votes": 10202,
+      "winner": false
+    },
+    {
+      "external_id": "15781725",
+      "title": "The House Girl",
+      "authors": [
+        "Tara Conklin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348172541l/15781725.jpg",
+      "rank": 3,
+      "votes": 9766,
+      "winner": false
+    },
+    {
+      "external_id": "12558285",
+      "title": "Splintered",
+      "authors": [
+        "A.G. Howard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1340134213l/12558285.jpg",
+      "rank": 4,
+      "votes": 8515,
+      "winner": false
+    },
+    {
+      "external_id": "17617277",
+      "title": "Real",
+      "authors": [
+        "Katy Evans"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1363442697l/17617277.jpg",
+      "rank": 5,
+      "votes": 8465,
+      "winner": false
+    },
+    {
+      "external_id": "12291438",
+      "title": "The Madman's Daughter",
+      "authors": [
+        "Megan Shepherd"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1354155885l/12291438.jpg",
+      "rank": 6,
+      "votes": 6268,
+      "winner": false
+    },
+    {
+      "external_id": "10859509",
+      "title": "Altered",
+      "authors": [
+        "Jennifer Rush"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344445982l/10859509.jpg",
+      "rank": 7,
+      "votes": 5710,
+      "winner": false
+    },
+    {
+      "external_id": "11044367",
+      "title": "Taken",
+      "authors": [
+        "Erin Bowman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1340110014l/11044367.jpg",
+      "rank": 8,
+      "votes": 4982,
+      "winner": false
+    },
+    {
+      "external_id": "15793231",
+      "title": "If You Find Me",
+      "authors": [
+        "Emily  Murdoch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369597694l/15793231.jpg",
+      "rank": 9,
+      "votes": 4357,
+      "winner": false
+    },
+    {
+      "external_id": "15790883",
+      "title": "Promise of Blood",
+      "authors": [
+        "Brian  McClellan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659903996l/15790883._SY600_.jpg",
+      "rank": 10,
+      "votes": 4150,
+      "winner": false
+    },
+    {
+      "external_id": "16158600",
+      "title": "The Other Typist",
+      "authors": [
+        "Suzanne Rindell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356071157l/16158600.jpg",
+      "rank": 11,
+      "votes": 2248,
+      "winner": false
+    },
+    {
+      "external_id": "16248223",
+      "title": "The Ghost Bride",
+      "authors": [
+        "Yangsze Choo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356671808l/16248223.jpg",
+      "rank": 12,
+      "votes": 2141,
+      "winner": false
+    },
+    {
+      "external_id": "17166702",
+      "title": "True Love Story",
+      "authors": [
+        "Willow Aster"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358169338l/17166702.jpg",
+      "rank": 13,
+      "votes": 2103,
+      "winner": false
+    },
+    {
+      "external_id": "15818343",
+      "title": "The Promise of Stardust",
+      "authors": [
+        "Priscille Sibley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344892448l/15818343.jpg",
+      "rank": 14,
+      "votes": 1908,
+      "winner": false
+    },
+    {
+      "external_id": "16127238",
+      "title": "Letters from Skye",
+      "authors": [
+        "Jessica Brockmole"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1364251232l/16127238.jpg",
+      "rank": 15,
+      "votes": 1869,
+      "winner": false
+    },
+    {
+      "external_id": "18090508",
+      "title": "Bully",
+      "authors": [
+        "Penelope Douglas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1371573537l/18090508.jpg",
+      "rank": 16,
+      "votes": 1399,
+      "winner": false
+    },
+    {
+      "external_id": "17158596",
+      "title": "Collide",
+      "authors": [
+        "Gail McHugh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1359831056l/17158596.jpg",
+      "rank": 17,
+      "votes": 1197,
+      "winner": false
+    },
+    {
+      "external_id": "11988046",
+      "title": "Pivot Point",
+      "authors": [
+        "Kasie West"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356020486l/11988046.jpg",
+      "rank": 18,
+      "votes": 945,
+      "winner": false
+    },
+    {
+      "external_id": "13547428",
+      "title": "Chanel Bonfire",
+      "authors": [
+        "Wendy Lawless"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1339514351l/13547428.jpg",
+      "rank": 19,
+      "votes": 706,
+      "winner": false
+    },
+    {
+      "external_id": "17978680",
+      "title": "Unteachable",
+      "authors": [
+        "Leah Raeder"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1370445739l/17978680.jpg",
+      "rank": 20,
+      "votes": 665,
+      "winner": false
+    }
+  ]
+}

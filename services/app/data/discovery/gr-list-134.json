@@ -1,0 +1,1116 @@
+{
+  "id": "gr-list-134",
+  "kind": "listopia",
+  "title": "Best Non-Fiction (no biographies)",
+  "source_url": "https://www.goodreads.com/list/show/134",
+  "year": null,
+  "category": null,
+  "genres": [
+    "non-fiction"
+  ],
+  "count": 6414,
+  "coverage": "partial",
+  "updated_at": "2026-09-20T19:04:36.269499+00:00",
+  "books": [
+    {
+      "external_id": "397483",
+      "title": "The Devil in the White City: Murder, Magic, and Madness at the Fair That Changed America",
+      "authors": [
+        "Erik Larson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1583433024i/397483._SY600_.jpg",
+      "rank": 1,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1202",
+      "title": "Freakonomics: A Rogue Economist Explores the Hidden Side of Everything",
+      "authors": [
+        "Steven D. Levitt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550917827i/1202._SY600_.jpg",
+      "rank": 2,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "21",
+      "title": "A Short History of Nearly Everything",
+      "authors": [
+        "Bill  Bryson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1433086293i/21._SY600_.jpg",
+      "rank": 3,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1842",
+      "title": "Guns, Germs, and Steel: The Fates of Human Societies",
+      "authors": [
+        "Jared Diamond"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453215833i/1842._SY600_.jpg",
+      "rank": 4,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3228917",
+      "title": "Outliers: The Story of Success",
+      "authors": [
+        "Malcolm Gladwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344266315i/3228917._SY600_.jpg",
+      "rank": 5,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2612",
+      "title": "The Tipping Point: How Little Things Can Make a Big Difference",
+      "authors": [
+        "Malcolm Gladwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1473396980i/2612._SY600_.jpg",
+      "rank": 6,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6493208",
+      "title": "The Immortal Life of Henrietta Lacks",
+      "authors": [
+        "Rebecca Skloot"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327878144i/6493208._SY600_.jpg",
+      "rank": 7,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1617",
+      "title": "Night",
+      "authors": [
+        "Elie Wiesel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1709507006i/1617._SY600_.jpg",
+      "rank": 8,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3109",
+      "title": "The Omnivore's Dilemma: A Natural History of Four Meals",
+      "authors": [
+        "Michael Pollan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1393804353i/3109._SY600_.jpg",
+      "rank": 9,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "56769575",
+      "title": "Stiff: The Curious Lives of Human Cadavers",
+      "authors": [
+        "Mary Roach"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1625851259i/56769575._SY600_.jpg",
+      "rank": 10,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "40102",
+      "title": "Blink: The Power of Thinking Without Thinking",
+      "authors": [
+        "Malcolm Gladwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1440763417i/40102._SY600_.jpg",
+      "rank": 11,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "386187",
+      "title": "Midnight in the Garden of Good and Evil",
+      "authors": [
+        "John Berendt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1427166915i/386187._SY600_.jpg",
+      "rank": 12,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "23692271",
+      "title": "Sapiens: A Brief History of Humankind",
+      "authors": [
+        "Yuval Noah Harari"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1703329310i/23692271._SY600_.jpg",
+      "rank": 13,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4069",
+      "title": "Man's Search for Meaning",
+      "authors": [
+        "Viktor E. Frankl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1535419394i/4069._SY600_.jpg",
+      "rank": 14,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1097",
+      "title": "Fast Food Nation: The Dark Side of the All-American Meal",
+      "authors": [
+        "Eric Schlosser"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554229727i/1097._SY600_.jpg",
+      "rank": 15,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "14743",
+      "title": "The God Delusion: A Study of Religious Belief and Skepticism",
+      "authors": [
+        "Richard Dawkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347220693i/14743._SY600_.jpg",
+      "rank": 16,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "10847",
+      "title": "Under the Banner of Heaven: A Story of Violent Faith",
+      "authors": [
+        "Jon Krakauer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356441391i/10847._SY600_.jpg",
+      "rank": 17,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2184798",
+      "title": "Blood River: A Journey to Africa’s Broken Heart",
+      "authors": [
+        "Tim Butcher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1531681288i/2184798._SY600_.jpg",
+      "rank": 18,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3869",
+      "title": "A Brief History of Time",
+      "authors": [
+        "Stephen W. Hawking"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333578746i/3869._SY600_.jpg",
+      "rank": 19,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "10569",
+      "title": "On Writing: A Memoir of the Craft",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436735207i/10569._SY600_.jpg",
+      "rank": 20,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1869",
+      "title": "Nickel and Dimed: On (Not) Getting By in America",
+      "authors": [
+        "Barbara Ehrenreich"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442378091i/1869._SY600_.jpg",
+      "rank": 21,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "63697",
+      "title": "The Man Who Mistook His Wife for a Hat and Other Clinical Tales",
+      "authors": [
+        "Oliver Sacks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1447047702i/63697._SY600_.jpg",
+      "rank": 22,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2767",
+      "title": "A People’s History of the United States: 1492 - Present",
+      "authors": [
+        "Howard Zinn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1494279423i/2767._SY600_.jpg",
+      "rank": 23,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "33313",
+      "title": "Kitchen Confidential: Adventures in the Culinary Underbelly",
+      "authors": [
+        "Anthony Bourdain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1433739086i/33313._SY600_.jpg",
+      "rank": 24,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "5632446",
+      "title": "Columbine",
+      "authors": [
+        "Dave Cullen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442939134i/5632446._SY600_.jpg",
+      "rank": 25,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "105992",
+      "title": "Helter Skelter: The True Story of the Manson Murders",
+      "authors": [
+        "Vincent Bugliosi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347694754i/105992._SY600_.jpg",
+      "rank": 26,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "61535",
+      "title": "The Selfish Gene",
+      "authors": [
+        "Richard Dawkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366758096i/61535._SY600_.jpg",
+      "rank": 27,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6289283",
+      "title": "Born to Run: A Hidden Tribe, Superathletes, and the Greatest Race the World Has Never Seen",
+      "authors": [
+        "Christopher McDougall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631519495i/6289283._SY600_.jpg",
+      "rank": 28,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "55030",
+      "title": "Cosmos",
+      "authors": [
+        "Carl Sagan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388620656i/55030._SY600_.jpg",
+      "rank": 29,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "139069",
+      "title": "Endurance: Shackleton's Incredible Voyage",
+      "authors": [
+        "Alfred Lansing"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391329559i/139069._SY600_.jpg",
+      "rank": 30,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "25019",
+      "title": "The Professor and the Madman: A Tale of Murder, Insanity and the Making of the Oxford English Dictionary",
+      "authors": [
+        "Simon Winchester"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1407110918i/25019._SY600_.jpg",
+      "rank": 31,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "22463",
+      "title": "The Origin of Species",
+      "authors": [
+        "Charles Darwin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1298417570i/22463._SY600_.jpg",
+      "rank": 32,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "475",
+      "title": "Collapse: How Societies Choose to Fail or Succeed",
+      "authors": [
+        "Jared Diamond"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441419222i/475._SY600_.jpg",
+      "rank": 33,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "11138",
+      "title": "Mere Christianity",
+      "authors": [
+        "C.S. Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1468102872i/11138._SY600_.jpg",
+      "rank": 34,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4865",
+      "title": "How to Win Friends & Influence People",
+      "authors": [
+        "Dale Carnegie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442726934i/4865._SY600_.jpg",
+      "rank": 35,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "8600",
+      "title": "Eats, Shoots & Leaves: The Zero Tolerance Approach to Punctuation",
+      "authors": [
+        "Lynne Truss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1473392595i/8600._SY600_.jpg",
+      "rank": 36,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "16213",
+      "title": "The Hot Zone: The Terrifying True Story of the Origins of the Ebola Virus",
+      "authors": [
+        "Richard   Preston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413747743i/16213._SY600_.jpg",
+      "rank": 37,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "17780",
+      "title": "In the Heart of the Sea: The Tragedy of the Whaleship Essex",
+      "authors": [
+        "Nathaniel Philbrick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1335902168i/17780._SY600_.jpg",
+      "rank": 38,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "25460",
+      "title": "Animal, Vegetable, Miracle: A Year of Food Life",
+      "authors": [
+        "Barbara Kingsolver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1480104279i/25460._SY600_.jpg",
+      "rank": 39,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "27333",
+      "title": "Silent Spring",
+      "authors": [
+        "Rachel Carson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442353674i/27333._SY600_.jpg",
+      "rank": 40,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "48855",
+      "title": "The Diary of a Young Girl",
+      "authors": [
+        "Anne Frank"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1560816565i/48855._SY600_.jpg",
+      "rank": 41,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "16902",
+      "title": "Walden or, Life in the Woods",
+      "authors": [
+        "Henry David Thoreau"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630470982i/16902._SY600_.jpg",
+      "rank": 42,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1067",
+      "title": "1776",
+      "authors": [
+        "David McCullough"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1306787560i/1067._SY600_.jpg",
+      "rank": 43,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "296662",
+      "title": "Lies My Teacher Told Me: Everything Your American History Textbook Got Wrong",
+      "authors": [
+        "James W. Loewen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1255592395i/296662._SY600_.jpg",
+      "rank": 44,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "8520610",
+      "title": "Quiet: The Power of Introverts in a World That Can't Stop Talking",
+      "authors": [
+        "Susan Cain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328562861i/8520610._SY600_.jpg",
+      "rank": 45,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1713426",
+      "title": "Predictably Irrational: The Hidden Forces That Shape Our Decisions",
+      "authors": [
+        "Dan Ariely"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1255573980i/1713426._SY600_.jpg",
+      "rank": 46,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "108229",
+      "title": "The Perfect Storm: A True Story of Men Against the Sea",
+      "authors": [
+        "Sebastian Junger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387738340i/108229._SY600_.jpg",
+      "rank": 47,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "315425",
+      "title": "In Defense of Food: An Eater's Manifesto",
+      "authors": [
+        "Michael Pollan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442538739i/315425._SY600_.jpg",
+      "rank": 48,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "40961608",
+      "title": "The Worst Hard Time: The Untold Story of Those Who Survived the Great American Dust Bowl",
+      "authors": [
+        "Timothy Egan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1532715955i/40961608._SY600_.jpg",
+      "rank": 49,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "18300212",
+      "title": "The Trigger: Hunting the Assassin Who Brought the World to War",
+      "authors": [
+        "Tim Butcher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388535774i/18300212._SY600_.jpg",
+      "rank": 50,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2715",
+      "title": "Salt: A World History",
+      "authors": [
+        "Mark Kurlansky"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414608893i/2715._SY600_.jpg",
+      "rank": 51,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1237300",
+      "title": "The Shock Doctrine: The Rise of Disaster Capitalism",
+      "authors": [
+        "Naomi Klein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442590618i/1237300._SY600_.jpg",
+      "rank": 52,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "40604846",
+      "title": "Nothing to Envy: Ordinary Lives in North Korea",
+      "authors": [
+        "Barbara Demick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529606621i/40604846._SY600_.jpg",
+      "rank": 53,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "11472",
+      "title": "We Wish to Inform You That Tomorrow We Will Be Killed With Our Families: Stories from Rwanda",
+      "authors": [
+        "Philip Gourevitch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442723264i/11472._SY600_.jpg",
+      "rank": 54,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "767171",
+      "title": "The Rise and Fall of the Third Reich: A History of Nazi Germany",
+      "authors": [
+        "William L. Shirer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331223772i/767171._SY600_.jpg",
+      "rank": 55,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "242472",
+      "title": "The Black Swan: The Impact of the Highly Improbable",
+      "authors": [
+        "Nassim Nicholas Taleb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1714172313i/242472._SY600_.jpg",
+      "rank": 56,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "12609",
+      "title": "The Spirit Catches You and You Fall Down: A Hmong Child, Her American Doctors, and the Collision of Two Cultures",
+      "authors": [
+        "Anne Fadiman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1432610033i/12609._SY600_.jpg",
+      "rank": 57,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7940583",
+      "title": "Chasing the Devil: The Search for Africa's Fighting Spirit",
+      "authors": [
+        "Tim Butcher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1310975260i/7940583._SY600_.jpg",
+      "rank": 58,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7170627",
+      "title": "The Emperor of All Maladies: A Biography of Cancer",
+      "authors": [
+        "Siddhartha Mukherjee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1280771091i/7170627._SY600_.jpg",
+      "rank": 59,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "33514",
+      "title": "The Elements of Style",
+      "authors": [
+        "William Strunk Jr."
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1682700068i/33514._SY600_.jpg",
+      "rank": 60,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "24",
+      "title": "In a Sunburned Country",
+      "authors": [
+        "Bill  Bryson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388176242i/24._SY600_.jpg",
+      "rank": 61,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "76401",
+      "title": "Bury My Heart at Wounded Knee: An Indian History of the American West",
+      "authors": [
+        "Dee Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1604058784i/76401._SY600_.jpg",
+      "rank": 62,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "239186",
+      "title": "Isaac's Storm: A Man, a Time, and the Deadliest Hurricane in History",
+      "authors": [
+        "Erik Larson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403179592i/239186._SY600_.jpg",
+      "rank": 63,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "39020",
+      "title": "1491: New Revelations of the Americas Before Columbus",
+      "authors": [
+        "Charles C. Mann"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545238592i/39020._SY600_.jpg",
+      "rank": 64,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1301",
+      "title": "Moneyball",
+      "authors": [
+        "Michael   Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388176510i/1301._SY600_.jpg",
+      "rank": 65,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "96123",
+      "title": "All the President’s Men",
+      "authors": [
+        "Carl Bernstein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347805228i/96123._SY600_.jpg",
+      "rank": 66,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "28212",
+      "title": "And the Band Played On: Politics, People, and the AIDS Epidemic",
+      "authors": [
+        "Randy Shilts"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1689721093i/28212._SY600_.jpg",
+      "rank": 67,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "248787",
+      "title": "The World Without Us",
+      "authors": [
+        "Alan Weisman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441986417i/248787._SY600_.jpg",
+      "rank": 68,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "347610",
+      "title": "King Leopold's Ghost: A Story of Greed, Terror, and Heroism in Colonial Africa",
+      "authors": [
+        "Adam Hochschild"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348621563i/347610._SY600_.jpg",
+      "rank": 69,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "17349",
+      "title": "The Demon-Haunted World: Science as a Candle in the Dark",
+      "authors": [
+        "Carl Sagan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553691804i/17349._SY600_.jpg",
+      "rank": 70,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "12543",
+      "title": "Bird by Bird",
+      "authors": [
+        "Anne Lamott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631772636i/12543._SY600_.jpg",
+      "rank": 71,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "9938498",
+      "title": "In the Garden of Beasts: Love, Terror, and an American Family in Hitler's Berlin",
+      "authors": [
+        "Erik Larson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327864303i/9938498._SY600_.jpg",
+      "rank": 72,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "36086",
+      "title": "The Ghost Map: The Story of London's Most Terrifying Epidemic—and How It Changed Science, Cities, and the Modern World",
+      "authors": [
+        "Steven Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430524696i/36086._SY600_.jpg",
+      "rank": 73,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "28862",
+      "title": "The Prince",
+      "authors": [
+        "Niccolò Machiavelli"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390055828i/28862._SY600_.jpg",
+      "rank": 74,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "36072",
+      "title": "The 7 Habits of Highly Effective People: Powerful Lessons in Personal Change",
+      "authors": [
+        "Stephen R. Covey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421842784i/36072._SY600_.jpg",
+      "rank": 75,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7603",
+      "title": "Reading Lolita in Tehran: A Memoir in Books",
+      "authors": [
+        "Azar Nafisi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1397751318i/7603._SY600_.jpg",
+      "rank": 76,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4806",
+      "title": "Longitude: The True Story of a Lone Genius Who Solved the Greatest Scientific Problem of His Time",
+      "authors": [
+        "Dava Sobel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388462711i/4806._SY600_.jpg",
+      "rank": 77,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "586472",
+      "title": "The Right Stuff",
+      "authors": [
+        "Tom Wolfe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1621005716i/586472._SY600_.jpg",
+      "rank": 78,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "30474",
+      "title": "The Communist Manifesto",
+      "authors": [
+        "Karl Marx"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1740105815i/30474._SY600_.jpg",
+      "rank": 79,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2199",
+      "title": "Team of Rivals: The Political Genius of Abraham Lincoln",
+      "authors": [
+        "Doris Kearns Goodwin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1676201263i/2199._SY600_.jpg",
+      "rank": 80,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2082136",
+      "title": "Bonk: The Curious Coupling of Science and Sex",
+      "authors": [
+        "Mary Roach"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348226205i/2082136._SY600_.jpg",
+      "rank": 81,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "38855",
+      "title": "Confederates in the Attic: Dispatches from the Unfinished Civil War (Vintage Departures)",
+      "authors": [
+        "Tony Horwitz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1428284996i/38855._SY600_.jpg",
+      "rank": 82,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6402364",
+      "title": "SuperFreakonomics: Global Cooling, Patriotic Prostitutes And Why Suicide Bombers Should Buy Life Insurance",
+      "authors": [
+        "Steven D. Levitt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1308117804i/6402364._SY600_.jpg",
+      "rank": 83,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13839",
+      "title": "The Botany of Desire: A Plant's-Eye View of the World",
+      "authors": [
+        "Michael Pollan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403642467i/13839._SY600_.jpg",
+      "rank": 84,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "29",
+      "title": "The Mother Tongue: English and How It Got That Way",
+      "authors": [
+        "Bill  Bryson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388209925i/29._SY600_.jpg",
+      "rank": 85,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "11468377",
+      "title": "Thinking, Fast and Slow",
+      "authors": [
+        "Daniel Kahneman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1317793965i/11468377._SY600_.jpg",
+      "rank": 86,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "568236",
+      "title": "A Distant Mirror: The Calamitous 14th Century",
+      "authors": [
+        "Barbara W. Tuchman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403200553i/568236._SY600_.jpg",
+      "rank": 87,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "11366",
+      "title": "The Guns of August",
+      "authors": [
+        "Barbara W. Tuchman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1431760956i/11366._SY600_.jpg",
+      "rank": 88,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "95784",
+      "title": "The Rape of Nanking: The Forgotten Holocaust of World War II",
+      "authors": [
+        "Iris Shun-Ru Chang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348687411i/95784._SY600_.jpg",
+      "rank": 89,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "18956",
+      "title": "Homicide: A Year on the Killing Streets",
+      "authors": [
+        "David Simon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1432402772i/18956._SY600_.jpg",
+      "rank": 90,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "236085292",
+      "title": "The CodeBreaker Mindset: The Unwritten Rules for Success",
+      "authors": [
+        "Chitra Nawbatt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1749849462i/236085292._SY600_.jpg",
+      "rank": 91,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "24113",
+      "title": "Gödel, Escher, Bach: An Eternal Golden Braid",
+      "authors": [
+        "Douglas R. Hofstadter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1547125681i/24113._SY600_.jpg",
+      "rank": 92,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3398625",
+      "title": "The Lost City of Z: A Tale of Deadly Obsession in the Amazon",
+      "authors": [
+        "David Grann"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320487318i/3398625._SY600_.jpg",
+      "rank": 93,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "26889576",
+      "title": "The Big Short: Inside the Doomsday Machine",
+      "authors": [
+        "Michael   Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1446581171i/26889576._SY600_.jpg",
+      "rank": 94,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "9530",
+      "title": "Shadow Divers",
+      "authors": [
+        "Robert Kurson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1782582248i/9530._SY600_.jpg",
+      "rank": 95,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4137",
+      "title": "Me Talk Pretty One Day",
+      "authors": [
+        "David Sedaris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1431013639i/4137._SY600_.jpg",
+      "rank": 96,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "16884",
+      "title": "The Making of the Atomic Bomb",
+      "authors": [
+        "Richard Rhodes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1440621221i/16884._SY600_.jpg",
+      "rank": 97,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1911",
+      "title": "The World Is Flat: A Brief History of the Twenty-first Century",
+      "authors": [
+        "Thomas L. Friedman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442191453i/1911._SY600_.jpg",
+      "rank": 98,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2318271",
+      "title": "The Last Lecture",
+      "authors": [
+        "Randy Pausch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631968383i/2318271._SY600_.jpg",
+      "rank": 99,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4820",
+      "title": "Mayflower: A Story of Courage, Community, and War",
+      "authors": [
+        "Nathaniel Philbrick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474488130i/4820._SY600_.jpg",
+      "rank": 100,
+      "votes": null,
+      "winner": false
+    }
+  ]
+}

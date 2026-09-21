@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-romance-books-2018",
+  "kind": "award",
+  "title": "Romance",
+  "source_url": "https://www.goodreads.com/choiceawards/best-romance-books-2018",
+  "year": 2018,
+  "category": "Romance",
+  "genres": [
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:01.326018+00:00",
+  "books": [
+    {
+      "external_id": "36577586",
+      "title": "The Kiss Quotient",
+      "authors": [
+        "Helen  Hoang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1527983720l/36577586._SY600_.jpg",
+      "rank": 1,
+      "votes": 43183,
+      "winner": true
+    },
+    {
+      "external_id": "37588357",
+      "title": "All Your Perfects",
+      "authors": [
+        "Colleen Hoover"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1516733818l/37588357.jpg",
+      "rank": 2,
+      "votes": 32027,
+      "winner": false
+    },
+    {
+      "external_id": "35259631",
+      "title": "The Wedding Date",
+      "authors": [
+        "Jasmine Guillory"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1515694480l/35259631._SY600_.jpg",
+      "rank": 3,
+      "votes": 28292,
+      "winner": false
+    },
+    {
+      "external_id": "35819729",
+      "title": "The Thief",
+      "authors": [
+        "J.R. Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510519301l/35819729.jpg",
+      "rank": 4,
+      "votes": 21806,
+      "winner": false
+    },
+    {
+      "external_id": "32024902",
+      "title": "Darker",
+      "authors": [
+        "E.L. James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507662994l/32024902._SY600_.jpg",
+      "rank": 5,
+      "votes": 20758,
+      "winner": false
+    },
+    {
+      "external_id": "37769929",
+      "title": "Pestilence",
+      "authors": [
+        "Laura Thalassa"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537316666l/37769929.jpg",
+      "rank": 6,
+      "votes": 15193,
+      "winner": false
+    },
+    {
+      "external_id": "38503484",
+      "title": "From Lukov with Love",
+      "authors": [
+        "Mariana Zapata"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518501101l/38503484._SY600_.jpg",
+      "rank": 7,
+      "votes": 15114,
+      "winner": false
+    },
+    {
+      "external_id": "34466910",
+      "title": "Roomies",
+      "authors": [
+        "Christina Lauren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492478146l/34466910._SY600_.jpg",
+      "rank": 8,
+      "votes": 13756,
+      "winner": false
+    },
+    {
+      "external_id": "36587905",
+      "title": "The Hookup",
+      "authors": [
+        "Kristen Ashley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510583919l/36587905._SY600_.jpg",
+      "rank": 9,
+      "votes": 13135,
+      "winner": false
+    },
+    {
+      "external_id": "35271196",
+      "title": "Hello Stranger",
+      "authors": [
+        "Lisa Kleypas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1516973492l/35271196.jpg",
+      "rank": 10,
+      "votes": 11957,
+      "winner": false
+    },
+    {
+      "external_id": "39862558",
+      "title": "Birthday Girl",
+      "authors": [
+        "Penelope Douglas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523890041l/39862558._SY600_.jpg",
+      "rank": 11,
+      "votes": 5050,
+      "winner": false
+    },
+    {
+      "external_id": "36593240",
+      "title": "Sex, Not Love",
+      "authors": [
+        "Vi Keeland"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510836886l/36593240._SY600_.jpg",
+      "rank": 12,
+      "votes": 4697,
+      "winner": false
+    },
+    {
+      "external_id": "35271238",
+      "title": "A Princess in Theory",
+      "authors": [
+        "Alyssa Cole"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1501702014l/35271238.jpg",
+      "rank": 13,
+      "votes": 4278,
+      "winner": false
+    },
+    {
+      "external_id": "39086215",
+      "title": "Robbie",
+      "authors": [
+        "Ella Frank"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520554362l/39086215._SY600_.jpg",
+      "rank": 14,
+      "votes": 3585,
+      "winner": false
+    },
+    {
+      "external_id": "36301036",
+      "title": "Wicked and the Wallflower",
+      "authors": [
+        "Sarah MacLean"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523725072l/36301036.jpg",
+      "rank": 15,
+      "votes": 3097,
+      "winner": false
+    },
+    {
+      "external_id": "40189670",
+      "title": "Josh and Hazel's Guide to Not Dating",
+      "authors": [
+        "Christina Lauren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1526941489l/40189670.jpg",
+      "rank": 16,
+      "votes": 2432,
+      "winner": false
+    },
+    {
+      "external_id": "36395874",
+      "title": "Dr. Strange Beard",
+      "authors": [
+        "Penny Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1516154026l/36395874._SY600_.jpg",
+      "rank": 17,
+      "votes": 2426,
+      "winner": false
+    },
+    {
+      "external_id": "36373564",
+      "title": "The Simple Wild",
+      "authors": [
+        "K.A. Tucker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1663601138l/36373564._SY600_.jpg",
+      "rank": 18,
+      "votes": 2332,
+      "winner": false
+    },
+    {
+      "external_id": "36395764",
+      "title": "Marriage of Inconvenience",
+      "authors": [
+        "Penny Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1513328902l/36395764.jpg",
+      "rank": 19,
+      "votes": 1940,
+      "winner": false
+    },
+    {
+      "external_id": "39655232",
+      "title": "Alphas Like Us",
+      "authors": [
+        "Krista Ritchie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523686000l/39655232.jpg",
+      "rank": 20,
+      "votes": 1256,
+      "winner": false
+    }
+  ]
+}

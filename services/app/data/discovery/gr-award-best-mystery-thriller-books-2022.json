@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-mystery-thriller-books-2022",
+  "kind": "award",
+  "title": "Mystery & Thriller",
+  "source_url": "https://www.goodreads.com/choiceawards/best-mystery-thriller-books-2022",
+  "year": 2022,
+  "category": "Mystery & Thriller",
+  "genres": [
+    "mystery"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:37.041975+00:00",
+  "books": [
+    {
+      "external_id": "55196813",
+      "title": "The Maid",
+      "authors": [
+        "Nita Prose"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1643228739l/55196813.jpg",
+      "rank": 1,
+      "votes": 78403,
+      "winner": true
+    },
+    {
+      "external_id": "58468990",
+      "title": "The Paris Apartment",
+      "authors": [
+        "Lucy Foley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1645550948l/58468990._SY600_.jpg",
+      "rank": 2,
+      "votes": 70346,
+      "winner": false
+    },
+    {
+      "external_id": "58957615",
+      "title": "The Bullet That Missed",
+      "authors": [
+        "Richard Osman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1649424135l/58957615._SY600_.jpg",
+      "rank": 3,
+      "votes": 45969,
+      "winner": false
+    },
+    {
+      "external_id": "57693172",
+      "title": "A Flicker in the Dark",
+      "authors": [
+        "Stacy Willingham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1621347398l/57693172._SY600_.jpg",
+      "rank": 4,
+      "votes": 36199,
+      "winner": false
+    },
+    {
+      "external_id": "58371432",
+      "title": "The Book of Cold Cases",
+      "authors": [
+        "Simone St. James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1624553583l/58371432.jpg",
+      "rank": 5,
+      "votes": 29557,
+      "winner": false
+    },
+    {
+      "external_id": "59947696",
+      "title": "Wrong Place Wrong Time",
+      "authors": [
+        "Gillian McAllister"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659457434l/59947696._SY600_.jpg",
+      "rank": 6,
+      "votes": 27574,
+      "winner": false
+    },
+    {
+      "external_id": "60149532",
+      "title": "Killers of a Certain Age",
+      "authors": [
+        "Deanna Raybourn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1649796916l/60149532._SY600_.jpg",
+      "rank": 7,
+      "votes": 27321,
+      "winner": false
+    },
+    {
+      "external_id": "59345249",
+      "title": "The It Girl",
+      "authors": [
+        "Ruth Ware"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1671400977l/59345249._SY600_.jpg",
+      "rank": 8,
+      "votes": 25406,
+      "winner": false
+    },
+    {
+      "external_id": "60142750",
+      "title": "All Good People Here",
+      "authors": [
+        "Ashley Flowers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642984407l/60142750.jpg",
+      "rank": 9,
+      "votes": 25174,
+      "winner": false
+    },
+    {
+      "external_id": "59808050",
+      "title": "Daisy Darker",
+      "authors": [
+        "Alice Feeney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1639604124l/59808050.jpg",
+      "rank": 10,
+      "votes": 24227,
+      "winner": false
+    },
+    {
+      "external_id": "61991328",
+      "title": "The Housemaid",
+      "authors": [
+        "Freida McFadden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1661176310l/61991328.jpg",
+      "rank": 11,
+      "votes": 9762,
+      "winner": false
+    },
+    {
+      "external_id": "57693416",
+      "title": "The Golden Couple",
+      "authors": [
+        "Greer Hendricks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1633973719l/57693416.jpg",
+      "rank": 12,
+      "votes": 7441,
+      "winner": false
+    },
+    {
+      "external_id": "58724802",
+      "title": "Things We Do in the Dark",
+      "authors": [
+        "Jennifer Hillier"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1678279886l/58724802._SY600_.jpg",
+      "rank": 13,
+      "votes": 7219,
+      "winner": false
+    },
+    {
+      "external_id": "58386733",
+      "title": "The Violin Conspiracy",
+      "authors": [
+        "Brendan Slocumb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628523857l/58386733.jpg",
+      "rank": 14,
+      "votes": 6208,
+      "winner": false
+    },
+    {
+      "external_id": "58855185",
+      "title": "The Family Remains",
+      "authors": [
+        "Lisa Jewell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1636568994l/58855185._SY600_.jpg",
+      "rank": 15,
+      "votes": 6070,
+      "winner": false
+    },
+    {
+      "external_id": "57693427",
+      "title": "The Night Shift",
+      "authors": [
+        "Alex Finlay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1639384101l/57693427.jpg",
+      "rank": 16,
+      "votes": 5840,
+      "winner": false
+    },
+    {
+      "external_id": "58756502",
+      "title": "Jackal",
+      "authors": [
+        "Erin E. Adams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1653086275l/58756502._SY600_.jpg",
+      "rank": 17,
+      "votes": 5193,
+      "winner": false
+    },
+    {
+      "external_id": "57649351",
+      "title": "The Overnight Guest",
+      "authors": [
+        "Heather Gudenkauf"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1668703870l/57649351._SY600_.jpg",
+      "rank": 18,
+      "votes": 4546,
+      "winner": false
+    },
+    {
+      "external_id": "60417443",
+      "title": "The Family Game",
+      "authors": [
+        "Catherine Steadman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1647133113l/60417443.jpg",
+      "rank": 19,
+      "votes": 3122,
+      "winner": false
+    },
+    {
+      "external_id": "58984701",
+      "title": "More Than You'll Ever Know",
+      "authors": [
+        "Katie  Gutierrez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1655402447l/58984701._SY600_.jpg",
+      "rank": 20,
+      "votes": 2739,
+      "winner": false
+    }
+  ]
+}

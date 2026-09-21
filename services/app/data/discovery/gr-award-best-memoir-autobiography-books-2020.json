@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-memoir-autobiography-books-2020",
+  "kind": "award",
+  "title": "Memoir & Autobiography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-memoir-autobiography-books-2020",
+  "year": 2020,
+  "category": "Memoir & Autobiography",
+  "genres": [
+    "biography"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:40.141780+00:00",
+  "books": [
+    {
+      "external_id": "55359022",
+      "title": "A Promised Land",
+      "authors": [
+        "Barack Obama"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1765095937l/55359022._SY600_.jpg",
+      "rank": 1,
+      "votes": 81284,
+      "winner": true
+    },
+    {
+      "external_id": "52129515",
+      "title": "Untamed",
+      "authors": [
+        "Glennon Doyle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585832694l/52129515.jpg",
+      "rank": 2,
+      "votes": 48921,
+      "winner": false
+    },
+    {
+      "external_id": "44280883",
+      "title": "All Boys Aren’t Blue",
+      "authors": [
+        "George M.   Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1559859817l/44280883.jpg",
+      "rank": 3,
+      "votes": 36162,
+      "winner": false
+    },
+    {
+      "external_id": "54899915",
+      "title": "The Answer Is…",
+      "authors": [
+        "Alex Trebek"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1597254371l/54899915._SY600_.jpg",
+      "rank": 4,
+      "votes": 28976,
+      "winner": false
+    },
+    {
+      "external_id": "54081499",
+      "title": "Too Much and Never Enough",
+      "authors": [
+        "Mary L. Trump"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594640055l/54081499._SY600_.jpg",
+      "rank": 5,
+      "votes": 21297,
+      "winner": false
+    },
+    {
+      "external_id": "41571753",
+      "title": "Open Book",
+      "authors": [
+        "Jessica Simpson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1575562439l/41571753.jpg",
+      "rank": 6,
+      "votes": 20086,
+      "winner": false
+    },
+    {
+      "external_id": "53265647",
+      "title": "The Meaning of Mariah Carey",
+      "authors": [
+        "Mariah Carey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594304711l/53265647.jpg",
+      "rank": 7,
+      "votes": 12901,
+      "winner": false
+    },
+    {
+      "external_id": "51822870",
+      "title": "Everything Beautiful in Its Time",
+      "authors": [
+        "Jenna Bush Hager"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1579614367l/51822870._SX318_SY475_.jpg",
+      "rank": 8,
+      "votes": 9262,
+      "winner": false
+    },
+    {
+      "external_id": "50043108",
+      "title": "The Beauty in Breaking",
+      "authors": [
+        "Michele Harper"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1574743008l/50043108._SX318_SY475_.jpg",
+      "rank": 9,
+      "votes": 8477,
+      "winner": false
+    },
+    {
+      "external_id": "49235526",
+      "title": "Hollywood Park",
+      "authors": [
+        "Mikel Jollett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601570535l/49235526._SY600_.jpg",
+      "rank": 10,
+      "votes": 8465,
+      "winner": false
+    },
+    {
+      "external_id": "52838315",
+      "title": "Greenlights",
+      "authors": [
+        "Matthew McConaughey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1604281659l/52838315._SY600_.jpg",
+      "rank": 11,
+      "votes": 4168,
+      "winner": false
+    },
+    {
+      "external_id": "49933185",
+      "title": "When Time Stopped",
+      "authors": [
+        "Ariana Neumann"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1575589886l/49933185.jpg",
+      "rank": 12,
+      "votes": 4099,
+      "winner": false
+    },
+    {
+      "external_id": "48717403",
+      "title": "Notes on a Silencing",
+      "authors": [
+        "Lacy Crawford"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1573675048l/48717403.jpg",
+      "rank": 13,
+      "votes": 3309,
+      "winner": false
+    },
+    {
+      "external_id": "51082172",
+      "title": "The Rural Diaries",
+      "authors": [
+        "Hilarie Burton Morgan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1581695312l/51082172.jpg",
+      "rank": 14,
+      "votes": 3237,
+      "winner": false
+    },
+    {
+      "external_id": "51231889",
+      "title": "Nobody Will Tell You This But Me",
+      "authors": [
+        "Bess Kalb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1567522860l/51231889._SX318_SY475_.jpg",
+      "rank": 15,
+      "votes": 3216,
+      "winner": false
+    },
+    {
+      "external_id": "45186565",
+      "title": "Uncanny Valley",
+      "authors": [
+        "Anna Wiener"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1559568004l/45186565.jpg",
+      "rank": 16,
+      "votes": 3132,
+      "winner": false
+    },
+    {
+      "external_id": "53358818",
+      "title": "I Have Something to Tell You",
+      "authors": [
+        "Chasten Glezman Buttigieg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1593356102l/53358818.jpg",
+      "rank": 17,
+      "votes": 2922,
+      "winner": false
+    },
+    {
+      "external_id": "46041442",
+      "title": "The Adventurer's Son",
+      "authors": [
+        "Roman Dial"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571076286l/46041442.jpg",
+      "rank": 18,
+      "votes": 2434,
+      "winner": false
+    },
+    {
+      "external_id": "52366322",
+      "title": "Conditional Citizens",
+      "authors": [
+        "Laila Lalami"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1574335667l/52366322.jpg",
+      "rank": 19,
+      "votes": 2250,
+      "winner": false
+    },
+    {
+      "external_id": "48613168",
+      "title": "Memorial Drive",
+      "authors": [
+        "Natasha Trethewey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1572991814l/48613168.jpg",
+      "rank": 20,
+      "votes": 1310,
+      "winner": false
+    }
+  ]
+}

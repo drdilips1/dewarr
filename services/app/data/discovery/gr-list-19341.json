@@ -1,0 +1,1116 @@
+{
+  "id": "gr-list-19341",
+  "kind": "listopia",
+  "title": "Best Science Fiction",
+  "source_url": "https://www.goodreads.com/list/show/19341",
+  "year": null,
+  "category": null,
+  "genres": [
+    "science-fiction"
+  ],
+  "count": 3893,
+  "coverage": "partial",
+  "updated_at": "2026-09-20T19:04:38.061069+00:00",
+  "books": [
+    {
+      "external_id": "375802",
+      "title": "Ender’s Game (Ender's Saga, #1)",
+      "authors": [
+        "Orson Scott Card"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408303130i/375802._SY600_.jpg",
+      "rank": 1,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "11",
+      "title": "The Hitchhiker's Guide to the Galaxy (Hitchhiker's Guide to the Galaxy, #1)",
+      "authors": [
+        "Douglas Adams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1531891848i/11._SY600_.jpg",
+      "rank": 2,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2927878",
+      "title": "Dune (Dune #1)",
+      "authors": [
+        "Frank Herbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1326922340i/2927878._SY600_.jpg",
+      "rank": 3,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "61439040",
+      "title": "1984",
+      "authors": [
+        "George Orwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1657781256i/61439040._SY600_.jpg",
+      "rank": 4,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13079982",
+      "title": "Fahrenheit 451",
+      "authors": [
+        "Ray Bradbury"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1383718290i/13079982._SY600_.jpg",
+      "rank": 5,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "29579",
+      "title": "Foundation (Foundation, #1)",
+      "authors": [
+        "Isaac Asimov"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417900846i/29579._SY600_.jpg",
+      "rank": 6,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "5129",
+      "title": "Brave New World",
+      "authors": [
+        "Aldous Huxley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1575509280i/5129._SY600_.jpg",
+      "rank": 7,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "77566",
+      "title": "Hyperion (Hyperion Cantos, #1)",
+      "authors": [
+        "Dan Simmons"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1746983261i/77566._SY600_.jpg",
+      "rank": 8,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "36402034",
+      "title": "Do Androids Dream of Electric Sheep?",
+      "authors": [
+        "Philip K. Dick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507838927i/36402034._SY600_.jpg",
+      "rank": 9,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "18007564",
+      "title": "The Martian",
+      "authors": [
+        "Andy Weir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413706054i/18007564._SY600_.jpg",
+      "rank": 10,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "70535",
+      "title": "2001: A Space Odyssey (Space Odyssey, #1)",
+      "authors": [
+        "Arthur C. Clarke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1432468943i/70535._SY600_.jpg",
+      "rank": 11,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "41804",
+      "title": "I, Robot (Robot, #0.1)",
+      "authors": [
+        "Isaac Asimov"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1609035271i/41804._SY600_.jpg",
+      "rank": 12,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "44767458",
+      "title": "Dune (Dune, #1)",
+      "authors": [
+        "Frank Herbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555447414i/44767458._SY600_.jpg",
+      "rank": 13,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4981",
+      "title": "Slaughterhouse-Five",
+      "authors": [
+        "Kurt Vonnegut Jr."
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1440319389i/4981._SY600_.jpg",
+      "rank": 14,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "9969571",
+      "title": "Ready Player One (Ready Player One, #1)",
+      "authors": [
+        "Ernest Cline"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500930947i/9969571._SY600_.jpg",
+      "rank": 15,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "46654",
+      "title": "The Foundation Trilogy (Foundation, #1-3)",
+      "authors": [
+        "Isaac Asimov"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1316412178i/46654._SY600_.jpg",
+      "rank": 16,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6088007",
+      "title": "Neuromancer (Sprawl, #1)",
+      "authors": [
+        "William Gibson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1752514552i/6088007._SY600_.jpg",
+      "rank": 17,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2767052",
+      "title": "The Hunger Games (The Hunger Games, #1)",
+      "authors": [
+        "Suzanne Collins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1586722975i/2767052._SY600_.jpg",
+      "rank": 18,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "350",
+      "title": "Stranger in a Strange Land",
+      "authors": [
+        "Robert A. Heinlein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1156897088i/350._SY600_.jpg",
+      "rank": 19,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "18423",
+      "title": "The Left Hand of Darkness",
+      "authors": [
+        "Ursula K. Le Guin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1488213612i/18423._SY600_.jpg",
+      "rank": 20,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "35031085",
+      "title": "Frankenstein",
+      "authors": [
+        "Mary Wollstonecraft Shelley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631088473i/35031085._SY600_.jpg",
+      "rank": 21,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "76778",
+      "title": "The Martian Chronicles",
+      "authors": [
+        "Ray Bradbury"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1661016554i/76778._SY600_.jpg",
+      "rank": 22,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "414999",
+      "title": "Childhood’s End",
+      "authors": [
+        "Arthur C. Clarke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320552628i/414999._SY600_.jpg",
+      "rank": 23,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "18373",
+      "title": "Flowers for Algernon",
+      "authors": [
+        "Daniel Keyes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1689071681i/18373._SY600_.jpg",
+      "rank": 24,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2493",
+      "title": "The Time Machine",
+      "authors": [
+        "H.G. Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327942880i/2493._SY600_.jpg",
+      "rank": 25,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "21611",
+      "title": "The Forever War (The Forever War, #1)",
+      "authors": [
+        "Joe Haldeman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386852511i/21611._SY600_.jpg",
+      "rank": 26,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "40604658",
+      "title": "Jurassic Park (Jurassic Park, #1)",
+      "authors": [
+        "Michael Crichton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529604411i/40604658._SY600_.jpg",
+      "rank": 27,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "38447",
+      "title": "The Handmaid’s Tale (The Handmaid's Tale, #1)",
+      "authors": [
+        "Margaret Atwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1496592764i/38447._SY600_.jpg",
+      "rank": 28,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "112537",
+      "title": "Rendezvous with Rama (Rama, #1)",
+      "authors": [
+        "Arthur C. Clarke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405456427i/112537._SY600_.jpg",
+      "rank": 29,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "17214",
+      "title": "Starship Troopers",
+      "authors": [
+        "Robert A. Heinlein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1614054412i/17214._SY600_.jpg",
+      "rank": 30,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "61240297",
+      "title": "Snow Crash",
+      "authors": [
+        "Neal Stephenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1656932283i/61240297._SY600_.jpg",
+      "rank": 31,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "8909",
+      "title": "The War of the Worlds",
+      "authors": [
+        "H.G. Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320391644i/8909._SY600_.jpg",
+      "rank": 32,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7967",
+      "title": "Speaker for the Dead (Ender's Saga, #2)",
+      "authors": [
+        "Orson Scott Card"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1295660894i/7967._SY600_.jpg",
+      "rank": 33,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "170448",
+      "title": "Animal Farm",
+      "authors": [
+        "George Orwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1325861570i/170448._SY600_.jpg",
+      "rank": 34,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "36510196",
+      "title": "Old Man's War (Old Man's War, #1)",
+      "authors": [
+        "John Scalzi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509467059i/36510196._SY600_.jpg",
+      "rank": 35,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "164154",
+      "title": "A Canticle for Leibowitz (St. Leibowitz, #1)",
+      "authors": [
+        "Walter M. Miller Jr."
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1450516880i/164154._SY600_.jpg",
+      "rank": 36,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "16690",
+      "title": "The Moon Is a Harsh Mistress",
+      "authors": [
+        "Robert A. Heinlein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348768309i/16690._SY600_.jpg",
+      "rank": 37,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "41817486",
+      "title": "A Clockwork Orange",
+      "authors": [
+        "Anthony Burgess"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549260060i/41817486._SY600_.jpg",
+      "rank": 38,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "33574273",
+      "title": "A Wrinkle in Time (Time Quintet, #1)",
+      "authors": [
+        "Madeleine L'Engle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507963312i/33574273._SY600_.jpg",
+      "rank": 39,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13651",
+      "title": "The Dispossessed: An Ambiguous Utopia",
+      "authors": [
+        "Ursula K. Le Guin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1353467455i/13651._SY600_.jpg",
+      "rank": 40,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "95558",
+      "title": "Solaris",
+      "authors": [
+        "Stanisław Lem"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498631519i/95558._SY600_.jpg",
+      "rank": 41,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "8855321",
+      "title": "Leviathan Wakes",
+      "authors": [
+        "James S.A. Corey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1411013134i/8855321._SY600_.jpg",
+      "rank": 42,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "61179",
+      "title": "Ringworld (Ringworld #1)",
+      "authors": [
+        "Larry Niven"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408793358i/61179._SY600_.jpg",
+      "rank": 43,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "149267",
+      "title": "The Stand",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1213131305i/149267._SY600_.jpg",
+      "rank": 44,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "29581",
+      "title": "Foundation and Empire (Foundation, #2)",
+      "authors": [
+        "Isaac Asimov"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391454612i/29581._SY600_.jpg",
+      "rank": 45,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "61666",
+      "title": "Contact",
+      "authors": [
+        "Carl Sagan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602082958i/61666._SY600_.jpg",
+      "rank": 46,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "77565",
+      "title": "The Fall of Hyperion (Hyperion Cantos, #2)",
+      "authors": [
+        "Dan Simmons"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1541174620i/77565._SY600_.jpg",
+      "rank": 47,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13",
+      "title": "The Ultimate Hitchhiker’s Guide to the Galaxy (Hitchhiker's Guide to the Galaxy, #1-5)",
+      "authors": [
+        "Douglas Adams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404613595i/13._SY600_.jpg",
+      "rank": 48,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "22590",
+      "title": "Ubik",
+      "authors": [
+        "Philip K. Dick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327995569i/22590._SY600_.jpg",
+      "rank": 49,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6288",
+      "title": "The Road",
+      "authors": [
+        "Cormac McCarthy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600241424i/6288._SY600_.jpg",
+      "rank": 50,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "77711",
+      "title": "A Fire Upon the Deep (Zones of Thought, #1)",
+      "authors": [
+        "Vernor Vinge"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1728332458i/77711._SY600_.jpg",
+      "rank": 51,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "52022378",
+      "title": "Sheever's Journal, Diary of a Poison Master",
+      "authors": [
+        "K.  Ritz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1583221123i/52022378._SY600_.jpg",
+      "rank": 52,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "29580",
+      "title": "Second Foundation (Foundation, #3)",
+      "authors": [
+        "Isaac Asimov"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1661015922i/29580._SY600_.jpg",
+      "rank": 53,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "216363",
+      "title": "The Man in the High Castle",
+      "authors": [
+        "Philip K. Dick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1448756803i/216363._SY600_.jpg",
+      "rank": 54,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "333867",
+      "title": "The Stars My Destination",
+      "authors": [
+        "Alfred Bester"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1433671750i/333867._SY600_.jpg",
+      "rank": 55,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "40940649",
+      "title": "I Am Legend",
+      "authors": [
+        "Richard Matheson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1532484265i/40940649._SY600_.jpg",
+      "rank": 56,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3636",
+      "title": "The Giver (Giver, #1)",
+      "authors": [
+        "Lois Lowry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1342493368i/3636._SY600_.jpg",
+      "rank": 57,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "242087002",
+      "title": "Prime Numbers (Prime Numbers Saga)",
+      "authors": [
+        "Geoffrey H. Wright"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1758866048i/242087002._SY600_.jpg",
+      "rank": 58,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "9532",
+      "title": "Ender's Shadow (The Shadow Series, #1)",
+      "authors": [
+        "Orson Scott Card"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424904668i/9532._SY600_.jpg",
+      "rank": 59,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "20518872",
+      "title": "The Three-Body Problem (Remembrance of Earth’s Past, #1)",
+      "authors": [
+        "Liu Cixin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415428227i/20518872._SY600_.jpg",
+      "rank": 60,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "236966519",
+      "title": "Bóvedas de acero (Robot, #1)",
+      "authors": [
+        "Isaac Asimov"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1750569859i/236966519._SY600_.jpg",
+      "rank": 61,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "8695",
+      "title": "The Restaurant at the End of the Universe (The Hitchhiker's Guide to the Galaxy, #2)",
+      "authors": [
+        "Douglas Adams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1521213881i/8695._SY600_.jpg",
+      "rank": 62,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "100365",
+      "title": "The Mote in God's Eye (Moties, #1)",
+      "authors": [
+        "Larry Niven"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1399490037i/100365._SY600_.jpg",
+      "rank": 63,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13821",
+      "title": "Lord of Light",
+      "authors": [
+        "Roger Zelazny"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1330127327i/13821._SY600_.jpg",
+      "rank": 64,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "135479",
+      "title": "Cat’s Cradle",
+      "authors": [
+        "Kurt Vonnegut Jr."
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327867150i/135479._SY600_.jpg",
+      "rank": 65,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "77507",
+      "title": "Red Mars (Mars Trilogy, #1)",
+      "authors": [
+        "Kim Stanley Robinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1660272828i/77507._SY600_.jpg",
+      "rank": 66,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "334176",
+      "title": "The Sparrow (The Sparrow, #1)",
+      "authors": [
+        "Mary Doria Russell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1230829367i/334176._SY600_.jpg",
+      "rank": 67,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "8908",
+      "title": "World War Z: An Oral History of the Zombie War",
+      "authors": [
+        "Max Brooks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1528312647i/8908._SY600_.jpg",
+      "rank": 68,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "51496",
+      "title": "Dr. Jekyll and Mr. Hyde",
+      "authors": [
+        "Robert Louis Stevenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1318116526i/51496._SY600_.jpg",
+      "rank": 69,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "18630",
+      "title": "The Player of Games (Culture, #2)",
+      "authors": [
+        "Iain M. Banks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386922873i/18630._SY600_.jpg",
+      "rank": 70,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "17333324",
+      "title": "Ancillary Justice (Imperial Radch, #1)",
+      "authors": [
+        "Ann Leckie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1397215917i/17333324._SY600_.jpg",
+      "rank": 71,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "25499718",
+      "title": "Children of Time (Children of Time, #1)",
+      "authors": [
+        "Adrian Tchaikovsky"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1431014197i/25499718._SY600_.jpg",
+      "rank": 72,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13453029",
+      "title": "Wool Omnibus (Silo, #1)",
+      "authors": [
+        "Hugh Howey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349614200i/13453029._SY600_.jpg",
+      "rank": 73,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "208430658",
+      "title": "Blood Over Bright Haven",
+      "authors": [
+        "M.L. Wang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1717354584i/208430658._SY600_.jpg",
+      "rank": 74,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6334",
+      "title": "Never Let Me Go",
+      "authors": [
+        "Kazuo Ishiguro"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1353048590i/6334._SY600_.jpg",
+      "rank": 75,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "101265124",
+      "title": "The Polymorph",
+      "authors": [
+        "Max Nowaz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675618392i/101265124._SY600_.jpg",
+      "rank": 76,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "32829",
+      "title": "Journey to the Center of the Earth",
+      "authors": [
+        "Jules Verne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389754903i/32829._SY600_.jpg",
+      "rank": 77,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "827",
+      "title": "The Diamond Age: Or, a Young Lady's Illustrated Primer",
+      "authors": [
+        "Neal Stephenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388180931i/827._SY600_.jpg",
+      "rank": 78,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "41821",
+      "title": "The Gods Themselves",
+      "authors": [
+        "Isaac Asimov"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351076141i/41821._SY600_.jpg",
+      "rank": 79,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "24983",
+      "title": "Doomsday Book (Oxford Time Travel, #1)",
+      "authors": [
+        "Connie Willis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403972500i/24983._SY600_.jpg",
+      "rank": 80,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "331256",
+      "title": "Roadside Picnic",
+      "authors": [
+        "Arkady Strugatsky"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1173812259i/331256._SY600_.jpg",
+      "rank": 81,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "530965",
+      "title": "The Day of the Triffids",
+      "authors": [
+        "John Wyndham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320530145i/530965._SY600_.jpg",
+      "rank": 82,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "218427",
+      "title": "Gateway (Heechee Saga, #1)",
+      "authors": [
+        "Frederik Pohl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441698400i/218427._SY600_.jpg",
+      "rank": 83,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "58388343",
+      "title": "Some Desperate Glory",
+      "authors": [
+        "Emily  Tesh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1668621616i/58388343._SY600_.jpg",
+      "rank": 84,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "24830",
+      "title": "The Illustrated Man",
+      "authors": [
+        "Ray Bradbury"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1374049820i/24830._SY600_.jpg",
+      "rank": 85,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "89187",
+      "title": "Revelation Space (The Inhibitor Sequence, #1)",
+      "authors": [
+        "Alastair Reynolds"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405532042i/89187._SY600_.jpg",
+      "rank": 86,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "59924",
+      "title": "The Lathe of Heaven",
+      "authors": [
+        "Ursula K. Le Guin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1433084322i/59924._SY600_.jpg",
+      "rank": 87,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "40792913",
+      "title": "Altered Carbon (Takeshi Kovacs, #1)",
+      "authors": [
+        "Richard K. Morgan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1531415180i/40792913._SY600_.jpg",
+      "rank": 88,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "201930181",
+      "title": "The Mercy of Gods (The Captive's War, #1)",
+      "authors": [
+        "James S.A. Corey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1725128722i/201930181._SY600_.jpg",
+      "rank": 89,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2845024",
+      "title": "Anathem",
+      "authors": [
+        "Neal Stephenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1488349209i/2845024._SY600_.jpg",
+      "rank": 90,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "33507",
+      "title": "Twenty Thousand Leagues Under the Sea",
+      "authors": [
+        "Jules Verne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1494979127i/33507._SY600_.jpg",
+      "rank": 91,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "14817",
+      "title": "A Scanner Darkly",
+      "authors": [
+        "Philip K. Dick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388737865i/14817._SY600_.jpg",
+      "rank": 92,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "840278",
+      "title": "Eon (The Way, #1)",
+      "authors": [
+        "Greg Bear"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388288738i/840278._SY600_.jpg",
+      "rank": 93,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "509784",
+      "title": "The End of Eternity",
+      "authors": [
+        "Isaac Asimov"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405527675i/509784._SY600_.jpg",
+      "rank": 94,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "37794149",
+      "title": "A Memory Called Empire (Teixcalaan, #1)",
+      "authors": [
+        "Arkady Martine"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1526486698i/37794149._SY600_.jpg",
+      "rank": 95,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "60215458",
+      "title": "The Oldest Dance (Wisdom Revolution, #2)",
+      "authors": [
+        "Misba"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1643167654i/60215458._SY600_.jpg",
+      "rank": 96,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7670",
+      "title": "The Andromeda Strain (Andromeda, #1)",
+      "authors": [
+        "Michael Crichton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1587497243i/7670._SY600_.jpg",
+      "rank": 97,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "60215314",
+      "title": "The High Auction (Wisdom Revolution, #1)",
+      "authors": [
+        "Misba"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1643167769i/60215314._SY600_.jpg",
+      "rank": 98,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "76683",
+      "title": "Foundation's Edge (Foundation, #4)",
+      "authors": [
+        "Isaac Asimov"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442311409i/76683._SY600_.jpg",
+      "rank": 99,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "15839976",
+      "title": "Red Rising (Red Rising Saga, #1)",
+      "authors": [
+        "Pierce Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461354651i/15839976._SY600_.jpg",
+      "rank": 100,
+      "votes": null,
+      "winner": false
+    }
+  ]
+}

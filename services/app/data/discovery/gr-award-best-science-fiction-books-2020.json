@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-science-fiction-books-2020",
+  "kind": "award",
+  "title": "Science Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-fiction-books-2020",
+  "year": 2020,
+  "category": "Science Fiction",
+  "genres": [
+    "science-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:34.340619+00:00",
+  "books": [
+    {
+      "external_id": "48829708",
+      "title": "To Sleep in a Sea of Stars",
+      "authors": [
+        "Christopher Paolini"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1583523112l/48829708.jpg",
+      "rank": 1,
+      "votes": 45833,
+      "winner": true
+    },
+    {
+      "external_id": "39325105",
+      "title": "Harrow the Ninth",
+      "authors": [
+        "Tamsyn Muir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602323622l/39325105._SY600_.jpg",
+      "rank": 2,
+      "votes": 32693,
+      "winner": false
+    },
+    {
+      "external_id": "52381770",
+      "title": "Network Effect",
+      "authors": [
+        "Martha Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1771826950l/52381770._SY600_.jpg",
+      "rank": 3,
+      "votes": 22971,
+      "winner": false
+    },
+    {
+      "external_id": "48848254",
+      "title": "The Space Between Worlds",
+      "authors": [
+        "Micaiah Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585839717l/48848254.jpg",
+      "rank": 4,
+      "votes": 20667,
+      "winner": false
+    },
+    {
+      "external_id": "49003616",
+      "title": "A Beautifully Foolish Endeavor",
+      "authors": [
+        "Hank Green"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1576697804l/49003616.jpg",
+      "rank": 5,
+      "votes": 16786,
+      "winner": false
+    },
+    {
+      "external_id": "51171377",
+      "title": "Axiom's End",
+      "authors": [
+        "Lindsay  Ellis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1579072263l/51171377.jpg",
+      "rank": 6,
+      "votes": 16502,
+      "winner": false
+    },
+    {
+      "external_id": "52163147",
+      "title": "The Hidden Girl and Other Stories",
+      "authors": [
+        "Ken Liu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565279404l/52163147._SX318_SY475_.jpg",
+      "rank": 7,
+      "votes": 14832,
+      "winner": false
+    },
+    {
+      "external_id": "44804077",
+      "title": "Riot Baby",
+      "authors": [
+        "Tochi Onyebuchi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556633932l/44804077.jpg",
+      "rank": 8,
+      "votes": 12429,
+      "winner": false
+    },
+    {
+      "external_id": "48836769",
+      "title": "The New Wilderness",
+      "authors": [
+        "Diane  Cook"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1597017220l/48836769.jpg",
+      "rank": 9,
+      "votes": 11039,
+      "winner": false
+    },
+    {
+      "external_id": "52669505",
+      "title": "The End of October",
+      "authors": [
+        "Lawrence Wright"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1572992062l/52669505.jpg",
+      "rank": 10,
+      "votes": 10652,
+      "winner": false
+    },
+    {
+      "external_id": "45046555",
+      "title": "The Last Emperox",
+      "authors": [
+        "John Scalzi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585292438l/45046555._SY600_.jpg",
+      "rank": 11,
+      "votes": 4833,
+      "winner": false
+    },
+    {
+      "external_id": "35019996",
+      "title": "Agency",
+      "authors": [
+        "William Gibson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1495684387l/35019996.jpg",
+      "rank": 12,
+      "votes": 4723,
+      "winner": false
+    },
+    {
+      "external_id": "45422268",
+      "title": "The Vanished Birds",
+      "authors": [
+        "Simon Jimenez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562699959l/45422268._SY600_.jpg",
+      "rank": 13,
+      "votes": 3794,
+      "winner": false
+    },
+    {
+      "external_id": "51285749",
+      "title": "The Book of Koli",
+      "authors": [
+        "M.R. Carey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1570049059l/51285749.jpg",
+      "rank": 14,
+      "votes": 3384,
+      "winner": false
+    },
+    {
+      "external_id": "49867430",
+      "title": "Hench",
+      "authors": [
+        "Natalie Zina Walschots"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594616305l/49867430.jpg",
+      "rank": 15,
+      "votes": 2890,
+      "winner": false
+    },
+    {
+      "external_id": "50121213",
+      "title": "The Mother Code",
+      "authors": [
+        "Carole Stivers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565438035l/50121213.jpg",
+      "rank": 16,
+      "votes": 2821,
+      "winner": false
+    },
+    {
+      "external_id": "49127471",
+      "title": "Zoey Punches the Future in the Dick",
+      "authors": [
+        "David  Wong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1596429943l/49127471.jpg",
+      "rank": 17,
+      "votes": 2038,
+      "winner": false
+    },
+    {
+      "external_id": "54554819",
+      "title": "Age of Deception",
+      "authors": [
+        "T.A. White"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594913183l/54554819._SY600_.jpg",
+      "rank": 18,
+      "votes": 1815,
+      "winner": false
+    },
+    {
+      "external_id": "52378525",
+      "title": "The First Sister",
+      "authors": [
+        "Linden A. Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1584211465l/52378525.jpg",
+      "rank": 19,
+      "votes": 1773,
+      "winner": false
+    },
+    {
+      "external_id": "52378682",
+      "title": "The Relentless Moon",
+      "authors": [
+        "Mary Robinette Kowal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1574326350l/52378682.jpg",
+      "rank": 20,
+      "votes": 1491,
+      "winner": false
+    }
+  ]
+}

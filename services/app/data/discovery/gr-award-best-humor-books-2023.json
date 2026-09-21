@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-humor-books-2023",
+  "kind": "award",
+  "title": "Humor",
+  "source_url": "https://www.goodreads.com/choiceawards/best-humor-books-2023",
+  "year": 2023,
+  "category": "Humor",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:32.861917+00:00",
+  "books": [
+    {
+      "external_id": "65215014",
+      "title": "Being Henry",
+      "authors": [
+        "Henry Winkler"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677855868l/65215014.jpg",
+      "rank": 1,
+      "votes": 36770,
+      "winner": true
+    },
+    {
+      "external_id": "123027172",
+      "title": "Leslie F*cking Jones",
+      "authors": [
+        "Leslie     Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1680721617l/123027172.jpg",
+      "rank": 2,
+      "votes": 27791,
+      "winner": false
+    },
+    {
+      "external_id": "112093865",
+      "title": "Sure, I'll Join Your Cult",
+      "authors": [
+        "Maria Bamford"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1683135532l/112093865.jpg",
+      "rank": 3,
+      "votes": 24792,
+      "winner": false
+    },
+    {
+      "external_id": "62873978",
+      "title": "Tough Titties",
+      "authors": [
+        "Laura Belgray"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1682978134l/62873978.jpg",
+      "rank": 4,
+      "votes": 18074,
+      "winner": false
+    },
+    {
+      "external_id": "62052300",
+      "title": "Quietly Hostile",
+      "authors": [
+        "Samantha Irby"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1663419469l/62052300.jpg",
+      "rank": 5,
+      "votes": 17350,
+      "winner": false
+    },
+    {
+      "external_id": "59903149",
+      "title": "Strong Female Character",
+      "authors": [
+        "Fern  Brady"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1670358571l/59903149._SY600_.jpg",
+      "rank": 6,
+      "votes": 15883,
+      "winner": false
+    },
+    {
+      "external_id": "150038752",
+      "title": "Unruly",
+      "authors": [
+        "David   Mitchell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1683348009l/150038752._SY600_.jpg",
+      "rank": 7,
+      "votes": 13352,
+      "winner": false
+    },
+    {
+      "external_id": "123226898",
+      "title": "XOXO, Cody",
+      "authors": [
+        "Cody Rigsby"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684815945l/123226898.jpg",
+      "rank": 8,
+      "votes": 13153,
+      "winner": false
+    },
+    {
+      "external_id": "60568490",
+      "title": "The World Record Book of Racist Stories",
+      "authors": [
+        "Amber Ruffin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1647264717l/60568490.jpg",
+      "rank": 9,
+      "votes": 12392,
+      "winner": false
+    },
+    {
+      "external_id": "56969544",
+      "title": "Black Friend",
+      "authors": [
+        "Ziwe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1682786321l/56969544.jpg",
+      "rank": 10,
+      "votes": 11858,
+      "winner": false
+    },
+    {
+      "external_id": "71872896",
+      "title": "Congratulations, the Best is Over!",
+      "authors": [
+        "R. Eric Thomas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684817432l/71872896.jpg",
+      "rank": 11,
+      "votes": 3913,
+      "winner": false
+    },
+    {
+      "external_id": "62919409",
+      "title": "How to Stay Married",
+      "authors": [
+        "Harrison Scott Key"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684547314l/62919409.jpg",
+      "rank": 12,
+      "votes": 3858,
+      "winner": false
+    },
+    {
+      "external_id": "61349388",
+      "title": "It Was an Ugly Couch Anyway",
+      "authors": [
+        "Elizabeth Passarella"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1662442622l/61349388.jpg",
+      "rank": 13,
+      "votes": 3759,
+      "winner": false
+    },
+    {
+      "external_id": "63184330",
+      "title": "Everybody's Favorite",
+      "authors": [
+        "Lillian Stone"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675644732l/63184330.jpg",
+      "rank": 14,
+      "votes": 3145,
+      "winner": false
+    },
+    {
+      "external_id": "65214162",
+      "title": "Surely You Can't Be Serious",
+      "authors": [
+        "David Zucker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1687142454l/65214162.jpg",
+      "rank": 15,
+      "votes": 2969,
+      "winner": false
+    },
+    {
+      "external_id": "65211790",
+      "title": "Misfit",
+      "authors": [
+        "Gary Gulman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684820892l/65211790.jpg",
+      "rank": 16,
+      "votes": 2533,
+      "winner": false
+    },
+    {
+      "external_id": "125930612",
+      "title": "Unreliable Narrator",
+      "authors": [
+        "Aparna Nancherla"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1680838326l/125930612._SY600_.jpg",
+      "rank": 17,
+      "votes": 2257,
+      "winner": false
+    },
+    {
+      "external_id": "60563720",
+      "title": "America the Beautiful?",
+      "authors": [
+        "Blythe Roberson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1646647646l/60563720.jpg",
+      "rank": 18,
+      "votes": 1866,
+      "winner": false
+    },
+    {
+      "external_id": "61089466",
+      "title": "Alexandra Petri's US History",
+      "authors": [
+        "Alexandra Petri"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1660366375l/61089466.jpg",
+      "rank": 19,
+      "votes": 1137,
+      "winner": false
+    },
+    {
+      "external_id": "61273783",
+      "title": "Not Funny",
+      "authors": [
+        "Jena Friedman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1679504102l/61273783.jpg",
+      "rank": 20,
+      "votes": 1072,
+      "winner": false
+    }
+  ]
+}

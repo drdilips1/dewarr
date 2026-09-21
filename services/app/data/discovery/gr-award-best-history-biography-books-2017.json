@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-history-biography-books-2017",
+  "kind": "award",
+  "title": "History & Biography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-history-biography-books-2017",
+  "year": 2017,
+  "category": "History & Biography",
+  "genres": [
+    "biography",
+    "history"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:42.433107+00:00",
+  "books": [
+    {
+      "external_id": "31409135",
+      "title": "The Radium Girls",
+      "authors": [
+        "Kate  Moore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1496007867l/31409135._SY600_.jpg",
+      "rank": 1,
+      "votes": 24696,
+      "winner": true
+    },
+    {
+      "external_id": "29496196",
+      "title": "Killers of the Flower Moon",
+      "authors": [
+        "David Grann"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474610956l/29496196.jpg",
+      "rank": 2,
+      "votes": 18988,
+      "winner": false
+    },
+    {
+      "external_id": "24212581",
+      "title": "Victoria The Queen",
+      "authors": [
+        "Julia Baird"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1458922199l/24212581.jpg",
+      "rank": 3,
+      "votes": 13124,
+      "winner": false
+    },
+    {
+      "external_id": "31450766",
+      "title": "Jane Austen at Home",
+      "authors": [
+        "Lucy Worsley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1506144874l/31450766._SY600_.jpg",
+      "rank": 4,
+      "votes": 12427,
+      "winner": false
+    },
+    {
+      "external_id": "31848288",
+      "title": "Apollo 8",
+      "authors": [
+        "Jeffrey Kluger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476475545l/31848288.jpg",
+      "rank": 5,
+      "votes": 11387,
+      "winner": false
+    },
+    {
+      "external_id": "34237826",
+      "title": "Grant",
+      "authors": [
+        "Ron Chernow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1639155527l/34237826._SY600_.jpg",
+      "rank": 6,
+      "votes": 10846,
+      "winner": false
+    },
+    {
+      "external_id": "30078650",
+      "title": "A Hope More Powerful Than the Sea",
+      "authors": [
+        "Melissa Fleming"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1482923026l/30078650.jpg",
+      "rank": 7,
+      "votes": 10651,
+      "winner": false
+    },
+    {
+      "external_id": "30334134",
+      "title": "The Undoing Project",
+      "authors": [
+        "Michael   Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464874845l/30334134.jpg",
+      "rank": 8,
+      "votes": 7772,
+      "winner": false
+    },
+    {
+      "external_id": "33917107",
+      "title": "On Tyranny",
+      "authors": [
+        "Timothy Snyder"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1484763736l/33917107.jpg",
+      "rank": 9,
+      "votes": 7582,
+      "winner": false
+    },
+    {
+      "external_id": "30753852",
+      "title": "The Blood of Emmett Till",
+      "authors": [
+        "Timothy B. Tyson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474198979l/30753852.jpg",
+      "rank": 10,
+      "votes": 7327,
+      "winner": false
+    },
+    {
+      "external_id": "30753828",
+      "title": "The Road to Jonestown",
+      "authors": [
+        "Jeff Guinn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1486855833l/30753828._SY600_.jpg",
+      "rank": 11,
+      "votes": 3019,
+      "winner": false
+    },
+    {
+      "external_id": "34684622",
+      "title": "Leonardo da Vinci",
+      "authors": [
+        "Walter Isaacson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523543570l/34684622._SY600_.jpg",
+      "rank": 12,
+      "votes": 2487,
+      "winner": false
+    },
+    {
+      "external_id": "30199426",
+      "title": "Get Well Soon",
+      "authors": [
+        "Jennifer   Wright"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479730657l/30199426.jpg",
+      "rank": 13,
+      "votes": 2283,
+      "winner": false
+    },
+    {
+      "external_id": "29635592",
+      "title": "Churchill's Ministry of Ungentlemanly Warfare",
+      "authors": [
+        "Giles Milton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1467049664l/29635592.jpg",
+      "rank": 14,
+      "votes": 1640,
+      "winner": false
+    },
+    {
+      "external_id": "31159759",
+      "title": "The Gatekeepers",
+      "authors": [
+        "Chris Whipple"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1471286724l/31159759.jpg",
+      "rank": 15,
+      "votes": 1558,
+      "winner": false
+    },
+    {
+      "external_id": "30107571",
+      "title": "All the Gallant Men",
+      "authors": [
+        "Donald Stratton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1468808263l/30107571.jpg",
+      "rank": 16,
+      "votes": 1253,
+      "winner": false
+    },
+    {
+      "external_id": "34928902",
+      "title": "Huế  1968",
+      "authors": [
+        "Mark Bowden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493242739l/34928902.jpg",
+      "rank": 17,
+      "votes": 1227,
+      "winner": false
+    },
+    {
+      "external_id": "34184069",
+      "title": "The Storm Before the Storm",
+      "authors": [
+        "Mike     Duncan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492585818l/34184069.jpg",
+      "rank": 18,
+      "votes": 1221,
+      "winner": false
+    },
+    {
+      "external_id": "34593560",
+      "title": "Killing England",
+      "authors": [
+        "Bill O'Reilly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1496242505l/34593560.jpg",
+      "rank": 19,
+      "votes": 1089,
+      "winner": false
+    },
+    {
+      "external_id": "30688762",
+      "title": "Last Hope Island",
+      "authors": [
+        "Lynne Olson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1494925114l/30688762._SY600_.jpg",
+      "rank": 20,
+      "votes": 550,
+      "winner": false
+    }
+  ]
+}

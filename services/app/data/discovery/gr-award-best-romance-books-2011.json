@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-romance-books-2011",
+  "kind": "award",
+  "title": "Romance",
+  "source_url": "https://www.goodreads.com/choiceawards/best-romance-books-2011",
+  "year": 2011,
+  "category": "Romance",
+  "genres": [
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:42.883486+00:00",
+  "books": [
+    {
+      "external_id": "8492319",
+      "title": "Lover Unleashed",
+      "authors": [
+        "J.R. Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1289343390l/8492319.jpg",
+      "rank": 1,
+      "votes": 5009,
+      "winner": true
+    },
+    {
+      "external_id": "10818853",
+      "title": "Fifty Shades of Grey",
+      "authors": [
+        "E.L. James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385207843l/10818853.jpg",
+      "rank": 2,
+      "votes": 3815,
+      "winner": false
+    },
+    {
+      "external_id": "10506237",
+      "title": "Hot Head",
+      "authors": [
+        "Damon Suede"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1307050057l/10506237.jpg",
+      "rank": 3,
+      "votes": 2830,
+      "winner": false
+    },
+    {
+      "external_id": "9571478",
+      "title": "Just Like Heaven",
+      "authors": [
+        "Julia Quinn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388292051l/9571478.jpg",
+      "rank": 4,
+      "votes": 2778,
+      "winner": false
+    },
+    {
+      "external_id": "9410421",
+      "title": "Chasing Fire",
+      "authors": [
+        "Nora Roberts"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1302982596l/9410421.jpg",
+      "rank": 5,
+      "votes": 2724,
+      "winner": false
+    },
+    {
+      "external_id": "9650938",
+      "title": "Kiss of Snow",
+      "authors": [
+        "Nalini Singh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1289026688l/9650938.jpg",
+      "rank": 6,
+      "votes": 2322,
+      "winner": false
+    },
+    {
+      "external_id": "8437379",
+      "title": "Call Me Irresistible",
+      "authors": [
+        "Susan Elizabeth Phillips"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327880626l/8437379.jpg",
+      "rank": 7,
+      "votes": 1917,
+      "winner": false
+    },
+    {
+      "external_id": "9065265",
+      "title": "Retribution",
+      "authors": [
+        "Sherrilyn Kenyon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1315222730l/9065265.jpg",
+      "rank": 8,
+      "votes": 1850,
+      "winner": false
+    },
+    {
+      "external_id": "8038219",
+      "title": "The Darkest Surrender",
+      "authors": [
+        "Gena Showalter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327883317l/8038219.jpg",
+      "rank": 9,
+      "votes": 1672,
+      "winner": false
+    },
+    {
+      "external_id": "8534799",
+      "title": "Dreams of a Dark Warrior",
+      "authors": [
+        "Kresley Cole"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1285724086l/8534799.jpg",
+      "rank": 10,
+      "votes": 1441,
+      "winner": false
+    },
+    {
+      "external_id": "8449698",
+      "title": "When Beauty Tamed the Beast",
+      "authors": [
+        "Eloisa James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1282320694l/8449698.jpg",
+      "rank": 11,
+      "votes": 706,
+      "winner": false
+    },
+    {
+      "external_id": "8150317",
+      "title": "Deeper Than Midnight",
+      "authors": [
+        "Lara Adrian"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1433194408l/8150317._SY600_.jpg",
+      "rank": 12,
+      "votes": 500,
+      "winner": false
+    },
+    {
+      "external_id": "8843801",
+      "title": "Eternal Rider",
+      "authors": [
+        "Larissa Ione"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1305020644l/8843801.jpg",
+      "rank": 13,
+      "votes": 488,
+      "winner": false
+    },
+    {
+      "external_id": "9314304",
+      "title": "Breaking Point",
+      "authors": [
+        "Pamela Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1377473720l/9314304.jpg",
+      "rank": 14,
+      "votes": 440,
+      "winner": false
+    },
+    {
+      "external_id": "8074967",
+      "title": "Archangel's Blade",
+      "authors": [
+        "Nalini Singh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327877499l/8074967.jpg",
+      "rank": 15,
+      "votes": 439,
+      "winner": false
+    },
+    {
+      "external_id": "8538297",
+      "title": "Big Bad Beast",
+      "authors": [
+        "Shelly Laurenston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327271585l/8538297.jpg",
+      "rank": 16,
+      "votes": 434,
+      "winner": false
+    },
+    {
+      "external_id": "9637479",
+      "title": "Dragon Bound",
+      "authors": [
+        "Thea Harrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1312822853l/9637479.jpg",
+      "rank": 17,
+      "votes": 409,
+      "winner": false
+    },
+    {
+      "external_id": "8419428",
+      "title": "A Lot like Love",
+      "authors": [
+        "Julie James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1284384506l/8419428.jpg",
+      "rank": 18,
+      "votes": 291,
+      "winner": false
+    },
+    {
+      "external_id": "8111651",
+      "title": "The Orchid Affair",
+      "authors": [
+        "Lauren Willig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1286301124l/8111651.jpg",
+      "rank": 19,
+      "votes": 273,
+      "winner": false
+    },
+    {
+      "external_id": "10140661",
+      "title": "Gabriel's Inferno",
+      "authors": [
+        "Sylvain Reynard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1301789770l/10140661.jpg",
+      "rank": 20,
+      "votes": 186,
+      "winner": false
+    }
+  ]
+}

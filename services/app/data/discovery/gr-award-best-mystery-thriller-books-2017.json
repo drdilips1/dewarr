@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-mystery-thriller-books-2017",
+  "kind": "award",
+  "title": "Mystery & Thriller",
+  "source_url": "https://www.goodreads.com/choiceawards/best-mystery-thriller-books-2017",
+  "year": 2017,
+  "category": "Mystery & Thriller",
+  "genres": [
+    "mystery"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:29.143415+00:00",
+  "books": [
+    {
+      "external_id": "33151805",
+      "title": "Into the Water",
+      "authors": [
+        "Paula Hawkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1494055413l/33151805._SY600_.jpg",
+      "rank": 1,
+      "votes": 48247,
+      "winner": true
+    },
+    {
+      "external_id": "32283133",
+      "title": "Origin",
+      "authors": [
+        "Dan    Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1576370917l/32283133.jpg",
+      "rank": 2,
+      "votes": 48070,
+      "winner": false
+    },
+    {
+      "external_id": "33602101",
+      "title": "Glass Houses",
+      "authors": [
+        "Louise Penny"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493058503l/33602101.jpg",
+      "rank": 3,
+      "votes": 29772,
+      "winner": false
+    },
+    {
+      "external_id": "33199875",
+      "title": "The Good Daughter",
+      "authors": [
+        "Karin Slaughter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1490809654l/33199875._SY600_.jpg",
+      "rank": 4,
+      "votes": 27125,
+      "winner": false
+    },
+    {
+      "external_id": "28220971",
+      "title": "The Dry",
+      "authors": [
+        "Jane Harper"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1578416430l/28220971._SY600_.jpg",
+      "rank": 5,
+      "votes": 18296,
+      "winner": false
+    },
+    {
+      "external_id": "32835140",
+      "title": "Secrets in Death",
+      "authors": [
+        "J.D. Robb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1504766639l/32835140._SY600_.jpg",
+      "rank": 6,
+      "votes": 16233,
+      "winner": false
+    },
+    {
+      "external_id": "28016509",
+      "title": "The Girl Before",
+      "authors": [
+        "J.P. Delaney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1485972587l/28016509._SY600_.jpg",
+      "rank": 7,
+      "votes": 15931,
+      "winner": false
+    },
+    {
+      "external_id": "33398243",
+      "title": "Stillhouse Lake",
+      "authors": [
+        "Rachel Caine"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1486614182l/33398243._SY600_.jpg",
+      "rank": 8,
+      "votes": 13098,
+      "winner": false
+    },
+    {
+      "external_id": "30653828",
+      "title": "Mississippi Blood",
+      "authors": [
+        "Greg Iles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1473554178l/30653828.jpg",
+      "rank": 9,
+      "votes": 11868,
+      "winner": false
+    },
+    {
+      "external_id": "31450633",
+      "title": "The Breakdown",
+      "authors": [
+        "B.A. Paris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492234495l/31450633._SY600_.jpg",
+      "rank": 10,
+      "votes": 11109,
+      "winner": false
+    },
+    {
+      "external_id": "29939148",
+      "title": "Never Let You Go",
+      "authors": [
+        "Chevy Stevens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1467486445l/29939148.jpg",
+      "rank": 11,
+      "votes": 4067,
+      "winner": false
+    },
+    {
+      "external_id": "34061743",
+      "title": "Silent Child",
+      "authors": [
+        "Sarah A. Denzil"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1485970342l/34061743.jpg",
+      "rank": 12,
+      "votes": 3645,
+      "winner": false
+    },
+    {
+      "external_id": "31379212",
+      "title": "Golden Prey",
+      "authors": [
+        "John Sandford"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1471281757l/31379212.jpg",
+      "rank": 13,
+      "votes": 3629,
+      "winner": false
+    },
+    {
+      "external_id": "29095401",
+      "title": "The Marriage Lie",
+      "authors": [
+        "Kimberly Belle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462176251l/29095401._SY600_.jpg",
+      "rank": 14,
+      "votes": 3463,
+      "winner": false
+    },
+    {
+      "external_id": "30962267",
+      "title": "The Ghostwriter",
+      "authors": [
+        "A.R. Torre"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1573984476l/30962267.jpg",
+      "rank": 15,
+      "votes": 3314,
+      "winner": false
+    },
+    {
+      "external_id": "28965131",
+      "title": "Behind Her Eyes",
+      "authors": [
+        "Sarah Pinborough"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1485279813l/28965131._SY600_.jpg",
+      "rank": 16,
+      "votes": 2374,
+      "winner": false
+    },
+    {
+      "external_id": "31184479",
+      "title": "The Night Bird",
+      "authors": [
+        "Brian Freeman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474666349l/31184479._SY600_.jpg",
+      "rank": 17,
+      "votes": 2163,
+      "winner": false
+    },
+    {
+      "external_id": "34219801",
+      "title": "Righteous",
+      "authors": [
+        "Joe Ide"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509051142l/34219801._SY600_.jpg",
+      "rank": 18,
+      "votes": 1374,
+      "winner": false
+    },
+    {
+      "external_id": "34685945",
+      "title": "Last Breath",
+      "authors": [
+        "Robert Bryndza"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1490541424l/34685945._SY600_.jpg",
+      "rank": 19,
+      "votes": 1319,
+      "winner": false
+    },
+    {
+      "external_id": "31125554",
+      "title": "The Fourth Monkey",
+      "authors": [
+        "J.D. Barker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474820373l/31125554._SY600_.jpg",
+      "rank": 20,
+      "votes": 860,
+      "winner": false
+    }
+  ]
+}

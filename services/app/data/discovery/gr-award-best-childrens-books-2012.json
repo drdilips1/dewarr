@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-childrens-books-2012",
+  "kind": "award",
+  "title": "Middle Grade & Children's",
+  "source_url": "https://www.goodreads.com/choiceawards/best-childrens-books-2012",
+  "year": 2012,
+  "category": "Middle Grade & Children's",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:26.347734+00:00",
+  "books": [
+    {
+      "external_id": "12127750",
+      "title": "The Mark of Athena",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201354l/12127750._SY600_.jpg",
+      "rank": 1,
+      "votes": 16681,
+      "winner": true
+    },
+    {
+      "external_id": "13563669",
+      "title": "The Third Wheel",
+      "authors": [
+        "Jeff Kinney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366229038l/13563669.jpg",
+      "rank": 2,
+      "votes": 7912,
+      "winner": false
+    },
+    {
+      "external_id": "11387515",
+      "title": "Wonder",
+      "authors": [
+        "R.J. Palacio"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545695751l/11387515.jpg",
+      "rank": 3,
+      "votes": 6216,
+      "winner": false
+    },
+    {
+      "external_id": "9307674",
+      "title": "The Last Guardian",
+      "authors": [
+        "Eoin Colfer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522745526l/9307674.jpg",
+      "rank": 4,
+      "votes": 5590,
+      "winner": false
+    },
+    {
+      "external_id": "11607446",
+      "title": "The Wishing Spell",
+      "authors": [
+        "Chris Colfer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1326920505l/11607446.jpg",
+      "rank": 5,
+      "votes": 4311,
+      "winner": false
+    },
+    {
+      "external_id": "12893742",
+      "title": "The Serpent's Shadow",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366227982l/12893742.jpg",
+      "rank": 6,
+      "votes": 3715,
+      "winner": false
+    },
+    {
+      "external_id": "12432220",
+      "title": "The False Prince",
+      "authors": [
+        "Jennifer A. Nielsen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585683740l/12432220._SY600_.jpg",
+      "rank": 7,
+      "votes": 3074,
+      "winner": false
+    },
+    {
+      "external_id": "12902884",
+      "title": "The Extraordinary Education of Nicholas Benedict",
+      "authors": [
+        "Trenton Lee Stewart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331362608l/12902884.jpg",
+      "rank": 8,
+      "votes": 2394,
+      "winner": false
+    },
+    {
+      "external_id": "12081467",
+      "title": "Chomp",
+      "authors": [
+        "Carl Hiaasen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320532144l/12081467.jpg",
+      "rank": 9,
+      "votes": 2084,
+      "winner": false
+    },
+    {
+      "external_id": "11594337",
+      "title": "The One and Only Ivan",
+      "authors": [
+        "Katherine Applegate"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424981397l/11594337.jpg",
+      "rank": 10,
+      "votes": 1717,
+      "winner": false
+    },
+    {
+      "external_id": "11254850",
+      "title": "Seeds of Rebellion",
+      "authors": [
+        "Brandon Mull"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388247992l/11254850.jpg",
+      "rank": 11,
+      "votes": 880,
+      "winner": false
+    },
+    {
+      "external_id": "12384984",
+      "title": "See You at Harry's",
+      "authors": [
+        "Jo Knowles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333579098l/12384984.jpg",
+      "rank": 12,
+      "votes": 795,
+      "winner": false
+    },
+    {
+      "external_id": "12926804",
+      "title": "One for the Murphys",
+      "authors": [
+        "Lynda Mullaly Hunt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320344047l/12926804.jpg",
+      "rank": 13,
+      "votes": 776,
+      "winner": false
+    },
+    {
+      "external_id": "12822875",
+      "title": "The Council of Mirrors",
+      "authors": [
+        "Michael Buckley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1397787334l/12822875.jpg",
+      "rank": 14,
+      "votes": 736,
+      "winner": false
+    },
+    {
+      "external_id": "12926132",
+      "title": "Palace of Stone",
+      "authors": [
+        "Shannon Hale"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1345726316l/12926132.jpg",
+      "rank": 15,
+      "votes": 684,
+      "winner": false
+    },
+    {
+      "external_id": "11512688",
+      "title": "The Dead of Night",
+      "authors": [
+        "Peter Lerangis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331686275l/11512688.jpg",
+      "rank": 16,
+      "votes": 630,
+      "winner": false
+    },
+    {
+      "external_id": "13538708",
+      "title": "The Girl Who Fell Beneath Fairyland and Led the Revels There",
+      "authors": [
+        "Catherynne M. Valente"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1334547766l/13538708.jpg",
+      "rank": 17,
+      "votes": 474,
+      "winner": false
+    },
+    {
+      "external_id": "13477819",
+      "title": "Who Could That Be at This Hour?",
+      "authors": [
+        "Lemony Snicket"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333060600l/13477819.jpg",
+      "rank": 18,
+      "votes": 374,
+      "winner": false
+    },
+    {
+      "external_id": "13262061",
+      "title": "Liar & Spy",
+      "authors": [
+        "Rebecca Stead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336000458l/13262061.jpg",
+      "rank": 19,
+      "votes": 162,
+      "winner": false
+    },
+    {
+      "external_id": "12969560",
+      "title": "The Hero's Guide to Saving Your Kingdom",
+      "authors": [
+        "Christopher Healy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1334867348l/12969560.jpg",
+      "rank": 20,
+      "votes": 123,
+      "winner": false
+    }
+  ]
+}

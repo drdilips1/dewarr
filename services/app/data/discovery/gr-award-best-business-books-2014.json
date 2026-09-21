@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-business-books-2014",
+  "kind": "award",
+  "title": "Business Books",
+  "source_url": "https://www.goodreads.com/choiceawards/best-business-books-2014",
+  "year": 2014,
+  "category": "Business Books",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:15.926923+00:00",
+  "books": [
+    {
+      "external_id": "18667945",
+      "title": "#Girlboss",
+      "authors": [
+        "Sophia Amoruso"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390931472l/18667945.jpg",
+      "rank": 1,
+      "votes": 20112,
+      "winner": true
+    },
+    {
+      "external_id": "17331349",
+      "title": "Think Like a Freak",
+      "authors": [
+        "Steven D. Levitt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395610974l/17331349.jpg",
+      "rank": 2,
+      "votes": 9297,
+      "winner": false
+    },
+    {
+      "external_id": "18077903",
+      "title": "Creativity, Inc.",
+      "authors": [
+        "Ed Catmull"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400863577l/18077903.jpg",
+      "rank": 3,
+      "votes": 8725,
+      "winner": false
+    },
+    {
+      "external_id": "19598139",
+      "title": "The Promise of a Pencil",
+      "authors": [
+        "Adam Braun"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387675883l/19598139.jpg",
+      "rank": 4,
+      "votes": 8433,
+      "winner": false
+    },
+    {
+      "external_id": "20604826",
+      "title": "Flash Boys",
+      "authors": [
+        "Michael   Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404963230l/20604826.jpg",
+      "rank": 5,
+      "votes": 6913,
+      "winner": false
+    },
+    {
+      "external_id": "18290401",
+      "title": "Show Your Work!",
+      "authors": [
+        "Austin Kleon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404580714l/18290401.jpg",
+      "rank": 6,
+      "votes": 5689,
+      "winner": false
+    },
+    {
+      "external_id": "18736925",
+      "title": "Capital in the Twenty First Century",
+      "authors": [
+        "Thomas Piketty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390111547l/18736925.jpg",
+      "rank": 7,
+      "votes": 5671,
+      "winner": false
+    },
+    {
+      "external_id": "23158207",
+      "title": "How Google Works",
+      "authors": [
+        "Eric Schmidt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422538855l/23158207.jpg",
+      "rank": 8,
+      "votes": 5561,
+      "winner": false
+    },
+    {
+      "external_id": "17934399",
+      "title": "Overwhelmed",
+      "authors": [
+        "Brigid Schulte"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1396829837l/17934399.jpg",
+      "rank": 9,
+      "votes": 4558,
+      "winner": false
+    },
+    {
+      "external_id": "16144853",
+      "title": "Leaders Eat Last",
+      "authors": [
+        "Simon Sinek"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400881733l/16144853.jpg",
+      "rank": 10,
+      "votes": 3053,
+      "winner": false
+    },
+    {
+      "external_id": "22668729",
+      "title": "Hooked",
+      "authors": [
+        "Nir   Eyal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1407112405l/22668729.jpg",
+      "rank": 11,
+      "votes": 1710,
+      "winner": false
+    },
+    {
+      "external_id": "18774017",
+      "title": "Factory Man",
+      "authors": [
+        "Beth Macy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410755202l/18774017.jpg",
+      "rank": 12,
+      "votes": 1678,
+      "winner": false
+    },
+    {
+      "external_id": "18594634",
+      "title": "Thrive",
+      "authors": [
+        "Arianna Huffington"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400873884l/18594634.jpg",
+      "rank": 13,
+      "votes": 1488,
+      "winner": false
+    },
+    {
+      "external_id": "18176747",
+      "title": "The Hard Thing About Hard Things",
+      "authors": [
+        "Ben Horowitz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386609333l/18176747.jpg",
+      "rank": 14,
+      "votes": 1486,
+      "winner": false
+    },
+    {
+      "external_id": "19173266",
+      "title": "Write. Publish. Repeat. The No-Luck-Required Guide to Self-Pu...",
+      "authors": [
+        "Sean Platt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386152927l/19173266.jpg",
+      "rank": 15,
+      "votes": 1331,
+      "winner": false
+    },
+    {
+      "external_id": "18050143",
+      "title": "Zero to One",
+      "authors": [
+        "Peter Thiel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630663027l/18050143.jpg",
+      "rank": 16,
+      "votes": 1284,
+      "winner": false
+    },
+    {
+      "external_id": "20613671",
+      "title": "Economics",
+      "authors": [
+        "Ha-Joon Chang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405300949l/20613671.jpg",
+      "rank": 17,
+      "votes": 968,
+      "winner": false
+    },
+    {
+      "external_id": "18668059",
+      "title": "The Obstacle Is the Way",
+      "authors": [
+        "Ryan Holiday"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391440316l/18668059.jpg",
+      "rank": 18,
+      "votes": 967,
+      "winner": false
+    },
+    {
+      "external_id": "18077875",
+      "title": "Essentialism",
+      "authors": [
+        "Greg McKeown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403165375l/18077875.jpg",
+      "rank": 19,
+      "votes": 594,
+      "winner": false
+    },
+    {
+      "external_id": "17899438",
+      "title": "Young Money",
+      "authors": [
+        "Kevin Roose"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403177166l/17899438.jpg",
+      "rank": 20,
+      "votes": 366,
+      "winner": false
+    }
+  ]
+}

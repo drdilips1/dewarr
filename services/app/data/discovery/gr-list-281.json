@@ -1,0 +1,1116 @@
+{
+  "id": "gr-list-281",
+  "kind": "listopia",
+  "title": "Best Memoir / Biography / Autobiography",
+  "source_url": "https://www.goodreads.com/list/show/281",
+  "year": null,
+  "category": null,
+  "genres": [
+    "biography"
+  ],
+  "count": 6703,
+  "coverage": "partial",
+  "updated_at": "2026-09-20T19:04:37.253078+00:00",
+  "books": [
+    {
+      "external_id": "127441416",
+      "title": "The Diary of a Young Girl",
+      "authors": [
+        "Anne Frank"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1696989545i/127441416._SY600_.jpg",
+      "rank": 1,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7445",
+      "title": "The Glass Castle",
+      "authors": [
+        "Jeannette Walls"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523542886i/7445._SY600_.jpg",
+      "rank": 2,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1617",
+      "title": "Night",
+      "authors": [
+        "Elie Wiesel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1709507006i/1617._SY600_.jpg",
+      "rank": 3,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "252577",
+      "title": "Angela's Ashes (Frank McCourt, #1)",
+      "authors": [
+        "Frank McCourt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348317139i/252577._SY600_.jpg",
+      "rank": 4,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "19501",
+      "title": "Eat, Pray, Love",
+      "authors": [
+        "Elizabeth Gilbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1503066414i/19501._SY600_.jpg",
+      "rank": 5,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1898",
+      "title": "Into Thin Air: A Personal Account of the Mt. Everest Disaster",
+      "authors": [
+        "Jon Krakauer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631501298i/1898._SY600_.jpg",
+      "rank": 6,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6900",
+      "title": "Tuesdays with Morrie: An Old Man, a Young Man, and Life's Greatest Lesson",
+      "authors": [
+        "Mitch Albom"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1423763749i/6900._SY600_.jpg",
+      "rank": 7,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1845",
+      "title": "Into the Wild",
+      "authors": [
+        "Jon Krakauer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1634587789i/1845._SY600_.jpg",
+      "rank": 8,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "13214",
+      "title": "I Know Why the Caged Bird Sings (Maya Angelou's Autobiography, #1)",
+      "authors": [
+        "Maya Angelou"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327957927i/13214._SY600_.jpg",
+      "rank": 9,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "242006",
+      "title": "Running with Scissors",
+      "authors": [
+        "Augusten Burroughs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1690319656i/242006._SY600_.jpg",
+      "rank": 10,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "92057",
+      "title": "The Autobiography of Malcolm X",
+      "authors": [
+        "Malcolm X"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1434682864i/92057._SY600_.jpg",
+      "rank": 11,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4069",
+      "title": "Man's Search for Meaning",
+      "authors": [
+        "Viktor E. Frankl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1535419394i/4069._SY600_.jpg",
+      "rank": 12,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "9516",
+      "title": "Persepolis: The Story of a Childhood (Persepolis, #1)",
+      "authors": [
+        "Marjane Satrapi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1425871473i/9516._SY600_.jpg",
+      "rank": 13,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "32085",
+      "title": "All Creatures Great and Small (All Creatures Great and Small, #1-2)",
+      "authors": [
+        "James Herriot"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1393644607i/32085._SY600_.jpg",
+      "rank": 14,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "60748",
+      "title": "A Child Called \"It\" (Dave Pelzer, #1)",
+      "authors": [
+        "Dave Pelzer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1438400434i/60748._SY600_.jpg",
+      "rank": 15,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "240470970",
+      "title": "An Accidental Philanthropist: How A Small Family Foundation Made A Big Difference",
+      "authors": [
+        "Winsome Dunn McIntosh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1757239682i/240470970._SY600_.jpg",
+      "rank": 16,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "15196",
+      "title": "Maus I: A Survivor's Tale: My Father Bleeds History (Maus, #1)",
+      "authors": [
+        "Art Spiegelman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1633636988i/15196._SY600_.jpg",
+      "rank": 17,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "561909",
+      "title": "The Hiding Place: The Triumphant True Story of Corrie Ten Boom",
+      "authors": [
+        "Corrie ten Boom"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320418824i/561909._SY600_.jpg",
+      "rank": 18,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "35133922",
+      "title": "Educated",
+      "authors": [
+        "Tara Westover"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1774287363i/35133922._SY600_.jpg",
+      "rank": 19,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6978430",
+      "title": "Chickens, Mules and Two Old Fools: Tuck into a Slice of Andalucían Life (Old Fools, #1)",
+      "authors": [
+        "Victoria Twead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611110238i/6978430._SY600_.jpg",
+      "rank": 20,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "12262741",
+      "title": "Wild: From Lost to Found on the Pacific Crest Trail",
+      "authors": [
+        "Cheryl Strayed"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453189881i/12262741._SY600_.jpg",
+      "rank": 21,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4137",
+      "title": "Me Talk Pretty One Day",
+      "authors": [
+        "David Sedaris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1431013639i/4137._SY600_.jpg",
+      "rank": 22,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1848",
+      "title": "Wild Swans: Three Daughters of China",
+      "authors": [
+        "Jung Chang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1440643710i/1848._SY600_.jpg",
+      "rank": 23,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6493208",
+      "title": "The Immortal Life of Henrietta Lacks",
+      "authors": [
+        "Rebecca Skloot"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327878144i/6493208._SY600_.jpg",
+      "rank": 24,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "12691",
+      "title": "Marley and Me: Life and Love With the World’s Worst Dog",
+      "authors": [
+        "John Grogan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1308858322i/12691._SY600_.jpg",
+      "rank": 25,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "9418327",
+      "title": "Bossypants",
+      "authors": [
+        "Tina Fey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481509554i/9418327._SY600_.jpg",
+      "rank": 26,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "43015",
+      "title": "A Long Way Gone: Memoirs of a Boy Soldier",
+      "authors": [
+        "Ishmael Beah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1636774035i/43015._SY600_.jpg",
+      "rank": 27,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2203",
+      "title": "John Adams",
+      "authors": [
+        "David McCullough"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1478144278i/2203._SY600_.jpg",
+      "rank": 28,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "10569",
+      "title": "On Writing: A Memoir of the Craft",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436735207i/10569._SY600_.jpg",
+      "rank": 29,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2318271",
+      "title": "The Last Lecture",
+      "authors": [
+        "Randy Pausch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631968383i/2318271._SY600_.jpg",
+      "rank": 30,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "821611",
+      "title": "The Story of My Life",
+      "authors": [
+        "Helen Keller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320429331i/821611._SY600_.jpg",
+      "rank": 31,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "81227",
+      "title": "Infidel",
+      "authors": [
+        "Ayaan Hirsi Ali"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388256729i/81227._SY600_.jpg",
+      "rank": 32,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "8664353",
+      "title": "Unbroken: A World War II Story of Survival, Resilience and Redemption",
+      "authors": [
+        "Laura Hillenbrand"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327861115i/8664353._SY600_.jpg",
+      "rank": 33,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "123036114",
+      "title": "First Time Dad: The Ultimate 42-Week Pregnancy Handbook for Expecting Fathers: Support Your Partner, Prepare for Baby, and Build Confidence as a New Dad",
+      "authors": [
+        "James        Macdonald"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1678006528i/123036114._SY600_.jpg",
+      "rank": 34,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "341879",
+      "title": "Just Kids",
+      "authors": [
+        "Patti Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1259762407i/341879._SY600_.jpg",
+      "rank": 35,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "15195",
+      "title": "The Complete Maus",
+      "authors": [
+        "Art Spiegelman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1788759416i/15195._SY600_.jpg",
+      "rank": 36,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "254577367",
+      "title": "Greenhorn: Episodes in an Immigrant's Life",
+      "authors": [
+        "Alex Krieger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1782421562i/254577367._SY600_.jpg",
+      "rank": 37,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "49436",
+      "title": "Three Cups of Tea: One Man's Mission to Promote Peace ... One School at a Time",
+      "authors": [
+        "Greg Mortenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395407074i/49436._SY600_.jpg",
+      "rank": 38,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "82970",
+      "title": "Lucky",
+      "authors": [
+        "Alice Sebold"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631155279i/82970._SY600_.jpg",
+      "rank": 39,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "29209",
+      "title": "The Color of Water: A Black Man's Tribute to His White Mother",
+      "authors": [
+        "James   McBride"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1401311300i/29209._SY600_.jpg",
+      "rank": 40,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "991197",
+      "title": "The Complete Persepolis",
+      "authors": [
+        "Marjane Satrapi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327876995i/991197._SY600_.jpg",
+      "rank": 41,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "51411855",
+      "title": "Mary Edwards Walker: America's Only Female Medal of Honor Recipient",
+      "authors": [
+        "Ammar Habib"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1581995068i/51411855._SY600_.jpg",
+      "rank": 42,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "11084145",
+      "title": "Steve Jobs",
+      "authors": [
+        "Walter Isaacson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511288482i/11084145._SY600_.jpg",
+      "rank": 43,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7603",
+      "title": "Reading Lolita in Tehran: A Memoir in Books",
+      "authors": [
+        "Azar Nafisi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1397751318i/7603._SY600_.jpg",
+      "rank": 44,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "15749759",
+      "title": "Free Country: A Penniless Adventure the Length of Britain",
+      "authors": [
+        "George Mahood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1342700880i/15749759._SY600_.jpg",
+      "rank": 45,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "68783",
+      "title": "Girl, Interrupted",
+      "authors": [
+        "Susanna Kaysen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1475482930i/68783._SY600_.jpg",
+      "rank": 46,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "42603",
+      "title": "Black Like Me",
+      "authors": [
+        "John Howard Griffin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1311696842i/42603._SY600_.jpg",
+      "rank": 47,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "386187",
+      "title": "Midnight in the Garden of Good and Evil",
+      "authors": [
+        "John Berendt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1427166915i/386187._SY600_.jpg",
+      "rank": 48,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "7815",
+      "title": "The Year of Magical Thinking",
+      "authors": [
+        "Joan Didion"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1703310133i/7815._SY600_.jpg",
+      "rank": 49,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "16707686",
+      "title": "Two Old Fools on a Camel: From Spain to Bahrain and Back Again (Old Fools, #3)",
+      "authors": [
+        "Victoria Twead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398538297i/16707686._SY600_.jpg",
+      "rank": 50,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "88061",
+      "title": "Dreams from My Father: A Story of Race and Inheritance",
+      "authors": [
+        "Barack Obama"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1352340675i/88061._SY600_.jpg",
+      "rank": 51,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "57354942",
+      "title": "Dementia: A Love Story",
+      "authors": [
+        "Stephen                Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1615255552i/57354942._SY600_.jpg",
+      "rank": 52,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "228223224",
+      "title": "Lights in Cold Rooms: A Psychologist Reflects on Family, Aging, Love & Loss",
+      "authors": [
+        "Joan Cusack Handler"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742361321i/228223224._SY600_.jpg",
+      "rank": 53,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "15990739",
+      "title": "I Grew My Boobs in China (Sihpromatum #1)",
+      "authors": [
+        "Savannah Grace"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1346838783i/15990739._SY600_.jpg",
+      "rank": 54,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "246268440",
+      "title": "A Year Behind the Leash: Winning the battle on PTSD with the help, of my war dog partner",
+      "authors": [
+        "Jon T.  Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1767816342i/246268440._SY600_.jpg",
+      "rank": 55,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "247369419",
+      "title": "PASSAGES: A JOURNEY FROM SHAME & GUILT TO HEALING & HOPE",
+      "authors": [
+        "Maryann Lonergan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1770025025i/247369419._SY600_.jpg",
+      "rank": 56,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "38746485",
+      "title": "Becoming",
+      "authors": [
+        "Michelle Obama"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1528206996i/38746485._SY600_.jpg",
+      "rank": 57,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "781787",
+      "title": "Out of Africa",
+      "authors": [
+        "Isak Dinesen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1750989139i/781787._SY600_.jpg",
+      "rank": 58,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "40669887",
+      "title": "Cheaper by the Dozen (Cheaper by the Dozen, #1)",
+      "authors": [
+        "Frank B. Gilbreth Jr."
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1530288546i/40669887._SY600_.jpg",
+      "rank": 59,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "33313",
+      "title": "Kitchen Confidential: Adventures in the Culinary Underbelly",
+      "authors": [
+        "Anthony Bourdain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1433739086i/33313._SY600_.jpg",
+      "rank": 60,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "54777620",
+      "title": "Lost in Yaba: Down and Out in Laos",
+      "authors": [
+        "Walt Gleeson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1596295377i/54777620._SY600_.jpg",
+      "rank": 61,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "9791",
+      "title": "A Walk in the Woods: Rediscovering America on the Appalachian Trail",
+      "authors": [
+        "Bill  Bryson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388189974i/9791._SY600_.jpg",
+      "rank": 62,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "36529",
+      "title": "Narrative of the Life of Frederick Douglass",
+      "authors": [
+        "Frederick Douglass"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388234247i/36529._SY600_.jpg",
+      "rank": 63,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "202470606",
+      "title": "Playing Ball: Life Lessons from My Journey to the Super Bowl and Beyond",
+      "authors": [
+        "Vernon Davis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1700543097i/202470606._SY600_.jpg",
+      "rank": 64,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "29780253",
+      "title": "Born a Crime: Stories from a South African Childhood",
+      "authors": [
+        "Trevor Noah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1473867911i/29780253._SY600_.jpg",
+      "rank": 65,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "758153",
+      "title": "Born Free: A Lioness of Two Worlds (Story of Elsa, #1)",
+      "authors": [
+        "Joy Adamson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1406563918i/758153._SY600_.jpg",
+      "rank": 66,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "17851885",
+      "title": "I Am Malala: The Story of the Girl Who Stood Up for Education and Was Shot by the Taliban",
+      "authors": [
+        "Malala Yousafzai"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375414895i/17851885._SY600_.jpg",
+      "rank": 67,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1624",
+      "title": "West with the Night",
+      "authors": [
+        "Beryl Markham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1368204688i/1624._SY600_.jpg",
+      "rank": 68,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "818811",
+      "title": "Escape",
+      "authors": [
+        "Carolyn Jessop"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442640131i/818811._SY600_.jpg",
+      "rank": 69,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "18096567",
+      "title": "The Lullaby Illusion: A Journey of Awakening",
+      "authors": [
+        "Susan Joyce"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400018395i/18096567._SY600_.jpg",
+      "rank": 70,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4953",
+      "title": "A Heartbreaking Work of Staggering Genius",
+      "authors": [
+        "Dave Eggers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327714834i/4953._SY600_.jpg",
+      "rank": 71,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "35167685",
+      "title": "\"Surely You're Joking, Mr. Feynman!\": Adventures of a Curious Character",
+      "authors": [
+        "Richard P. Feynman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1504936953i/35167685._SY600_.jpg",
+      "rank": 72,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "14241",
+      "title": "The Liars' Club",
+      "authors": [
+        "Mary Karr"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1499665766i/14241._SY600_.jpg",
+      "rank": 73,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "193755",
+      "title": "The Diving Bell and the Butterfly: A Memoir of Life in Death",
+      "authors": [
+        "Jean-Dominique Bauby"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336930564i/193755._SY600_.jpg",
+      "rank": 74,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "32370",
+      "title": "Dry",
+      "authors": [
+        "Augusten Burroughs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442601868i/32370._SY600_.jpg",
+      "rank": 75,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1241",
+      "title": "A Million Little Pieces",
+      "authors": [
+        "James Frey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483206985i/1241._SY600_.jpg",
+      "rank": 75,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "9742",
+      "title": "The Audacity of Hope: Thoughts on Reclaiming the American Dream",
+      "authors": [
+        "Barack Obama"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386925614i/9742._SY600_.jpg",
+      "rank": 77,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "26135825",
+      "title": "Fun Home: A Family Tragicomic",
+      "authors": [
+        "Alison Bechdel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1440097020i/26135825._SY600_.jpg",
+      "rank": 78,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4912",
+      "title": "'Tis",
+      "authors": [
+        "Frank McCourt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375947803i/4912._SY600_.jpg",
+      "rank": 79,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "197514398",
+      "title": "The Yankee Way: The Untold Inside Story of the Brian Cashman Era",
+      "authors": [
+        "Andy Martino"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1709274753i/197514398._SY600_.jpg",
+      "rank": 80,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "24687",
+      "title": "Don't Let's Go to the Dogs Tonight: An African Childhood",
+      "authors": [
+        "Alexandra Fuller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388194903i/24687._SY600_.jpg",
+      "rank": 81,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "67920",
+      "title": "Sybil: The Classic True Story of a Woman Possessed by Sixteen Personalities",
+      "authors": [
+        "Flora Rheta Schreiber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388372325i/67920._SY600_.jpg",
+      "rank": 82,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "18885718",
+      "title": "Seriously Mum, What's an Alpaca?",
+      "authors": [
+        "Alan   Parks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385134603i/18885718._SY600_.jpg",
+      "rank": 83,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "2199",
+      "title": "Team of Rivals: The Political Genius of Abraham Lincoln",
+      "authors": [
+        "Doris Kearns Goodwin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1676201263i/2199._SY600_.jpg",
+      "rank": 84,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "1170636",
+      "title": "Browns Town 1964: The Cleveland Browns and the 1964 Championship",
+      "authors": [
+        "Terry Pluto"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348911510i/1170636._SY600_.jpg",
+      "rank": 85,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "3257136",
+      "title": "Dewey: The Small-Town Library Cat Who Touched the World",
+      "authors": [
+        "Vicki Myron"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398144610i/3257136._SY600_.jpg",
+      "rank": 86,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6174",
+      "title": "Survival in Auschwitz",
+      "authors": [
+        "Primo Levi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414374949i/6174._SY600_.jpg",
+      "rank": 87,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "227603",
+      "title": "Prozac Nation",
+      "authors": [
+        "Elizabeth Wurtzel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1282607176i/227603._SY600_.jpg",
+      "rank": 88,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "401514",
+      "title": "Alive: The Story of the Andes Survivors",
+      "authors": [
+        "Piers Paul Read"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404247131i/401514._SY600_.jpg",
+      "rank": 89,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "9670094",
+      "title": "Through My Eyes",
+      "authors": [
+        "Tim Tebow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348661769i/9670094._SY600_.jpg",
+      "rank": 90,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "4373",
+      "title": "First They Killed My Father: A Daughter of Cambodia Remembers",
+      "authors": [
+        "Loung Ung"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1407105580i/4373._SY600_.jpg",
+      "rank": 91,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "23014804",
+      "title": "Beneath the Surface: Killer Whales, SeaWorld, and the Truth Beyond Blackfish",
+      "authors": [
+        "John Hargrove"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1426127539i/23014804._SY600_.jpg",
+      "rank": 91,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "48132",
+      "title": "My Family and Other Animals (Corfu Trilogy, #1)",
+      "authors": [
+        "Gerald Durrell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327885239i/48132._SY600_.jpg",
+      "rank": 93,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "196764",
+      "title": "A Piece of Cake",
+      "authors": [
+        "Cupcake Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388360391i/196764._SY600_.jpg",
+      "rank": 94,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "38743",
+      "title": "All Things Bright and Beautiful (All Creatures Great and Small, #3-4)",
+      "authors": [
+        "James Herriot"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388197805i/38743._SY600_.jpg",
+      "rank": 95,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "23847960",
+      "title": "Montana: The Biography of Football's Joe Cool",
+      "authors": [
+        "Keith Dunnavant"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1437926483i/23847960._SY600_.jpg",
+      "rank": 96,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "773858",
+      "title": "Born Standing Up: A Comic's Life",
+      "authors": [
+        "Steve  Martin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348034328i/773858._SY600_.jpg",
+      "rank": 97,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "35488",
+      "title": "Cash",
+      "authors": [
+        "Johnny Cash"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422322302i/35488._SY600_.jpg",
+      "rank": 98,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "6342995",
+      "title": "The Score Takes Care of Itself: My Philosophy of Leadership",
+      "authors": [
+        "Bill   Walsh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441150227i/6342995._SY600_.jpg",
+      "rank": 99,
+      "votes": null,
+      "winner": false
+    },
+    {
+      "external_id": "128066",
+      "title": "The Pianist: The Extraordinary Story of One Man's Survival in Warsaw, 1939–45",
+      "authors": [
+        "Władysław Szpilman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1491050715i/128066._SY600_.jpg",
+      "rank": 100,
+      "votes": null,
+      "winner": false
+    }
+  ]
+}

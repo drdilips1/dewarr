@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-fantasy-books-2020",
+  "kind": "award",
+  "title": "Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fantasy-books-2020",
+  "year": 2020,
+  "category": "Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:31.490026+00:00",
+  "books": [
+    {
+      "external_id": "44778083",
+      "title": "House of Earth and Blood",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1559142847l/44778083.jpg",
+      "rank": 1,
+      "votes": 95084,
+      "winner": true
+    },
+    {
+      "external_id": "50623864",
+      "title": "The Invisible Life of Addie LaRue",
+      "authors": [
+        "V.E. Schwab"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1584633432l/50623864.jpg",
+      "rank": 2,
+      "votes": 93262,
+      "winner": false
+    },
+    {
+      "external_id": "45046567",
+      "title": "The House in the Cerulean Sea",
+      "authors": [
+        "T.J. Klune"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1657473994l/45046567._SY600_.jpg",
+      "rank": 3,
+      "votes": 45778,
+      "winner": false
+    },
+    {
+      "external_id": "49021976",
+      "title": "Rhythm of War",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1599911216l/49021976.jpg",
+      "rank": 4,
+      "votes": 34162,
+      "winner": false
+    },
+    {
+      "external_id": "43521693",
+      "title": "The City We Became",
+      "authors": [
+        "N.K. Jemisin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1567990738l/43521693.jpg",
+      "rank": 5,
+      "votes": 29105,
+      "winner": false
+    },
+    {
+      "external_id": "51987993",
+      "title": "The Once and Future Witches",
+      "authors": [
+        "Alix E. Harrow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598246043l/51987993.jpg",
+      "rank": 6,
+      "votes": 22697,
+      "winner": false
+    },
+    {
+      "external_id": "50202953",
+      "title": "Piranesi",
+      "authors": [
+        "Susanna Clarke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1773750050l/50202953._SY600_.jpg",
+      "rank": 7,
+      "votes": 19179,
+      "winner": false
+    },
+    {
+      "external_id": "50548197",
+      "title": "A Deadly Education",
+      "authors": [
+        "Naomi Novik"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1596909044l/50548197._SY600_.jpg",
+      "rank": 8,
+      "votes": 18109,
+      "winner": false
+    },
+    {
+      "external_id": "52166786",
+      "title": "The Empire of Gold",
+      "authors": [
+        "S.A. Chakraborty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1572578104l/52166786.jpg",
+      "rank": 9,
+      "votes": 15292,
+      "winner": false
+    },
+    {
+      "external_id": "49381341",
+      "title": "Peace Talks",
+      "authors": [
+        "Jim  Butcher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1579336858l/49381341.jpg",
+      "rank": 10,
+      "votes": 15245,
+      "winner": false
+    },
+    {
+      "external_id": "51475322",
+      "title": "The Burning God",
+      "authors": [
+        "R.F. Kuang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585284825l/51475322.jpg",
+      "rank": 11,
+      "votes": 5619,
+      "winner": false
+    },
+    {
+      "external_id": "50892360",
+      "title": "Black Sun",
+      "authors": [
+        "Rebecca Roanhorse"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601212809l/50892360.jpg",
+      "rank": 12,
+      "votes": 4780,
+      "winner": false
+    },
+    {
+      "external_id": "44571368",
+      "title": "Smoke Bitten",
+      "authors": [
+        "Patricia Briggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1563305478l/44571368.jpg",
+      "rank": 13,
+      "votes": 4283,
+      "winner": false
+    },
+    {
+      "external_id": "51277288",
+      "title": "The Girl and the Stars",
+      "authors": [
+        "Mark  Lawrence"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1588007578l/51277288._SY600_.jpg",
+      "rank": 14,
+      "votes": 3782,
+      "winner": false
+    },
+    {
+      "external_id": "49882356",
+      "title": "The Empress of Salt and Fortune",
+      "authors": [
+        "Nghi Vo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1604973382l/49882356._SY600_.jpg",
+      "rank": 15,
+      "votes": 3020,
+      "winner": false
+    },
+    {
+      "external_id": "23106013",
+      "title": "Battle Ground",
+      "authors": [
+        "Jim  Butcher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1587778549l/23106013.jpg",
+      "rank": 16,
+      "votes": 2496,
+      "winner": false
+    },
+    {
+      "external_id": "55551726",
+      "title": "Wintersteel",
+      "authors": [
+        "Will Wight"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601794336l/55551726._SY600_.jpg",
+      "rank": 17,
+      "votes": 2271,
+      "winner": false
+    },
+    {
+      "external_id": "50706646",
+      "title": "The Bone Shard Daughter",
+      "authors": [
+        "Andrea Stewart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1586229099l/50706646.jpg",
+      "rank": 18,
+      "votes": 2158,
+      "winner": false
+    },
+    {
+      "external_id": "50358101",
+      "title": "The Trouble With Peace",
+      "authors": [
+        "Joe Abercrombie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1591713497l/50358101.jpg",
+      "rank": 19,
+      "votes": 1671,
+      "winner": false
+    },
+    {
+      "external_id": "52359590",
+      "title": "Age of Empyre",
+      "authors": [
+        "Michael J. Sullivan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1569586964l/52359590._SX318_SY475_.jpg",
+      "rank": 20,
+      "votes": 1247,
+      "winner": false
+    }
+  ]
+}

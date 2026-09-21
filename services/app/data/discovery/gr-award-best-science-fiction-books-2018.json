@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-science-fiction-books-2018",
+  "kind": "award",
+  "title": "Science Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-fiction-books-2018",
+  "year": 2018,
+  "category": "Science Fiction",
+  "genres": [
+    "science-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:03.014981+00:00",
+  "books": [
+    {
+      "external_id": "37534835",
+      "title": "Vengeful",
+      "authors": [
+        "V.E. Schwab"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1519916984l/37534835.jpg",
+      "rank": 1,
+      "votes": 49563,
+      "winner": true
+    },
+    {
+      "external_id": "33257757",
+      "title": "Iron Gold",
+      "authors": [
+        "Pierce Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716325988l/33257757._SY600_.jpg",
+      "rank": 2,
+      "votes": 33032,
+      "winner": false
+    },
+    {
+      "external_id": "37796866",
+      "title": "Vox",
+      "authors": [
+        "Christina Dalcher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1521051148l/37796866._SY600_.jpg",
+      "rank": 3,
+      "votes": 23624,
+      "winner": false
+    },
+    {
+      "external_id": "35820656",
+      "title": "Only Human",
+      "authors": [
+        "Sylvain Neuvel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1502999023l/35820656.jpg",
+      "rank": 4,
+      "votes": 14134,
+      "winner": false
+    },
+    {
+      "external_id": "35099035",
+      "title": "Red Clocks",
+      "authors": [
+        "Leni Zumas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1494345016l/35099035.jpg",
+      "rank": 5,
+      "votes": 14104,
+      "winner": false
+    },
+    {
+      "external_id": "34386617",
+      "title": "The Night Masquerade",
+      "authors": [
+        "Nnedi Okorafor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1495725402l/34386617.jpg",
+      "rank": 6,
+      "votes": 13334,
+      "winner": false
+    },
+    {
+      "external_id": "33357930",
+      "title": "Persepolis Rising",
+      "authors": [
+        "James S.A. Corey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481562124l/33357930._SY600_.jpg",
+      "rank": 7,
+      "votes": 12414,
+      "winner": false
+    },
+    {
+      "external_id": "36223860",
+      "title": "Artificial Condition",
+      "authors": [
+        "Martha Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1788878240l/36223860._SY600_.jpg",
+      "rank": 8,
+      "votes": 12224,
+      "winner": false
+    },
+    {
+      "external_id": "35230913",
+      "title": "The Oracle Year",
+      "authors": [
+        "Charles Soule"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500953020l/35230913.jpg",
+      "rank": 9,
+      "votes": 10879,
+      "winner": false
+    },
+    {
+      "external_id": "35018901",
+      "title": "Head On",
+      "authors": [
+        "John Scalzi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1497994548l/35018901.jpg",
+      "rank": 10,
+      "votes": 10202,
+      "winner": false
+    },
+    {
+      "external_id": "36220698",
+      "title": "Record of a Spaceborn Few",
+      "authors": [
+        "Becky Chambers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1514308199l/36220698._SY600_.jpg",
+      "rank": 11,
+      "votes": 4274,
+      "winner": false
+    },
+    {
+      "external_id": "36385830",
+      "title": "Thrawn",
+      "authors": [
+        "Timothy Zahn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511385584l/36385830.jpg",
+      "rank": 12,
+      "votes": 3505,
+      "winner": false
+    },
+    {
+      "external_id": "36348525",
+      "title": "Severance",
+      "authors": [
+        "Ling  Ma"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507060524l/36348525._SY600_.jpg",
+      "rank": 13,
+      "votes": 3312,
+      "winner": false
+    },
+    {
+      "external_id": "33080122",
+      "title": "The Calculating Stars",
+      "authors": [
+        "Mary Robinette Kowal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1539850192l/33080122.jpg",
+      "rank": 14,
+      "votes": 2868,
+      "winner": false
+    },
+    {
+      "external_id": "38362809",
+      "title": "Rosewater",
+      "authors": [
+        "Tade Thompson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1534300082l/38362809.jpg",
+      "rank": 15,
+      "votes": 2043,
+      "winner": false
+    },
+    {
+      "external_id": "32076670",
+      "title": "Ball Lightning",
+      "authors": [
+        "Liu Cixin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1527049517l/32076670.jpg",
+      "rank": 16,
+      "votes": 2038,
+      "winner": false
+    },
+    {
+      "external_id": "35297390",
+      "title": "Space Opera",
+      "authors": [
+        "Catherynne M. Valente"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511902589l/35297390._SY600_.jpg",
+      "rank": 17,
+      "votes": 1628,
+      "winner": false
+    },
+    {
+      "external_id": "33413556",
+      "title": "The Gone World",
+      "authors": [
+        "Tom Sweterlitsch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500302928l/33413556.jpg",
+      "rank": 18,
+      "votes": 1614,
+      "winner": false
+    },
+    {
+      "external_id": "36373688",
+      "title": "Revenant Gun",
+      "authors": [
+        "Yoon Ha Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1527495995l/36373688._SY600_.jpg",
+      "rank": 19,
+      "votes": 1379,
+      "winner": false
+    },
+    {
+      "external_id": "37534901",
+      "title": "The Consuming Fire",
+      "authors": [
+        "John Scalzi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518470144l/37534901.jpg",
+      "rank": 20,
+      "votes": 1052,
+      "winner": false
+    }
+  ]
+}

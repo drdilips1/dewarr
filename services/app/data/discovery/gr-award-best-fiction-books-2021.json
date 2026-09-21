@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-fiction-books-2021",
+  "kind": "award",
+  "title": "Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fiction-books-2021",
+  "year": 2021,
+  "category": "Fiction",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:00.527900+00:00",
+  "books": [
+    {
+      "external_id": "56597885",
+      "title": "Beautiful World, Where Are You",
+      "authors": [
+        "Sally Rooney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1618329605l/56597885.jpg",
+      "rank": 1,
+      "votes": 69770,
+      "winner": true
+    },
+    {
+      "external_id": "53310061",
+      "title": "Dial A for Aunties",
+      "authors": [
+        "Jesse Q. Sutanto"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601307658l/53310061.jpg",
+      "rank": 2,
+      "votes": 43054,
+      "winner": false
+    },
+    {
+      "external_id": "56783258",
+      "title": "Cloud Cuckoo Land",
+      "authors": [
+        "Anthony Doerr"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1618589128l/56783258._SY600_.jpg",
+      "rank": 3,
+      "votes": 37952,
+      "winner": false
+    },
+    {
+      "external_id": "54860573",
+      "title": "Once There Were Wolves",
+      "authors": [
+        "Charlotte McConaghy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1606002779l/54860573.jpg",
+      "rank": 4,
+      "votes": 35102,
+      "winner": false
+    },
+    {
+      "external_id": "58698241",
+      "title": "The Paper Palace",
+      "authors": [
+        "Miranda Cowley Heller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628066374l/58698241._SY600_.jpg",
+      "rank": 5,
+      "votes": 28188,
+      "winner": false
+    },
+    {
+      "external_id": "56625098",
+      "title": "The Wish",
+      "authors": [
+        "Nicholas Sparks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1614769180l/56625098.jpg",
+      "rank": 6,
+      "votes": 27418,
+      "winner": false
+    },
+    {
+      "external_id": "54508798",
+      "title": "The Guncle",
+      "authors": [
+        "Steven  Rowley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594848421l/54508798.jpg",
+      "rank": 7,
+      "votes": 26688,
+      "winner": false
+    },
+    {
+      "external_id": "48890225",
+      "title": "Detransition, Baby",
+      "authors": [
+        "Torrey Peters"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1587480347l/48890225.jpg",
+      "rank": 8,
+      "votes": 23814,
+      "winner": false
+    },
+    {
+      "external_id": "55643278",
+      "title": "Golden Girl",
+      "authors": [
+        "Elin Hilderbrand"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617708625l/55643278.jpg",
+      "rank": 9,
+      "votes": 22824,
+      "winner": false
+    },
+    {
+      "external_id": "55276648",
+      "title": "The Reading List",
+      "authors": [
+        "Sara Nisha Adams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611366574l/55276648.jpg",
+      "rank": 10,
+      "votes": 20849,
+      "winner": false
+    },
+    {
+      "external_id": "55467800",
+      "title": "That Summer",
+      "authors": [
+        "Jennifer Weiner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605290558l/55467800.jpg",
+      "rank": 11,
+      "votes": 7096,
+      "winner": false
+    },
+    {
+      "external_id": "55169040",
+      "title": "We Are the Brennans",
+      "authors": [
+        "Tracey Lange"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628802754l/55169040._SY600_.jpg",
+      "rank": 12,
+      "votes": 6863,
+      "winner": false
+    },
+    {
+      "external_id": "55577668",
+      "title": "The One Hundred Years of Lenni and Margot",
+      "authors": [
+        "Marianne Cronin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602800262l/55577668.jpg",
+      "rank": 13,
+      "votes": 6764,
+      "winner": false
+    },
+    {
+      "external_id": "56607366",
+      "title": "Black Buck",
+      "authors": [
+        "Mateo Askaripour"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1635539922l/56607366.jpg",
+      "rank": 14,
+      "votes": 5978,
+      "winner": false
+    },
+    {
+      "external_id": "57290383",
+      "title": "Infinite Country",
+      "authors": [
+        "Patricia Engel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1614705851l/57290383._SY600_.jpg",
+      "rank": 15,
+      "votes": 5423,
+      "winner": false
+    },
+    {
+      "external_id": "56816904",
+      "title": "The Sentence",
+      "authors": [
+        "Louise Erdrich"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630063344l/56816904._SY600_.jpg",
+      "rank": 16,
+      "votes": 4751,
+      "winner": false
+    },
+    {
+      "external_id": "56084279",
+      "title": "This Close to Okay",
+      "authors": [
+        "Leesa Cross-Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1635539814l/56084279.jpg",
+      "rank": 17,
+      "votes": 4589,
+      "winner": false
+    },
+    {
+      "external_id": "56404444",
+      "title": "Bewilderment",
+      "authors": [
+        "Richard Powers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1632843882l/56404444._SY600_.jpg",
+      "rank": 18,
+      "votes": 4430,
+      "winner": false
+    },
+    {
+      "external_id": "56294820",
+      "title": "Oh William!",
+      "authors": [
+        "Elizabeth Strout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617988577l/56294820.jpg",
+      "rank": 19,
+      "votes": 3622,
+      "winner": false
+    },
+    {
+      "external_id": "42346406",
+      "title": "One Two Three",
+      "authors": [
+        "Laurie Frankel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1615874922l/42346406.jpg",
+      "rank": 20,
+      "votes": 3033,
+      "winner": false
+    }
+  ]
+}

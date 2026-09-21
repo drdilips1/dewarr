@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-food-cookbooks-2014",
+  "kind": "award",
+  "title": "Food & Cookbooks",
+  "source_url": "https://www.goodreads.com/choiceawards/best-food-cookbooks-2014",
+  "year": 2014,
+  "category": "Food & Cookbooks",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:18.127845+00:00",
+  "books": [
+    {
+      "external_id": "20697389",
+      "title": "Make It Ahead",
+      "authors": [
+        "Ina Garten"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1419179034l/20697389.jpg",
+      "rank": 1,
+      "votes": 12345,
+      "winner": true
+    },
+    {
+      "external_id": "18209508",
+      "title": "My Paris Kitchen",
+      "authors": [
+        "David Lebovitz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1378681129l/18209508.jpg",
+      "rank": 2,
+      "votes": 10883,
+      "winner": false
+    },
+    {
+      "external_id": "20696032",
+      "title": "Thug Kitchen",
+      "authors": [
+        "Thug Kitchen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408325061l/20696032.jpg",
+      "rank": 3,
+      "votes": 10794,
+      "winner": false
+    },
+    {
+      "external_id": "18090093",
+      "title": "100 Days of Real Food",
+      "authors": [
+        "Lisa Leake"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410761526l/18090093.jpg",
+      "rank": 4,
+      "votes": 10294,
+      "winner": false
+    },
+    {
+      "external_id": "17924086",
+      "title": "Nom Nom Paleo",
+      "authors": [
+        "Michelle Tam"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1420938255l/17924086.jpg",
+      "rank": 5,
+      "votes": 7984,
+      "winner": false
+    },
+    {
+      "external_id": "18079651",
+      "title": "The Oh She Glows Cookbook",
+      "authors": [
+        "Angela  Liddon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1393810176l/18079651.jpg",
+      "rank": 6,
+      "votes": 7791,
+      "winner": false
+    },
+    {
+      "external_id": "18693752",
+      "title": "Burnt Toast Makes You Sing Good",
+      "authors": [
+        "Kathleen Flinn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389590284l/18693752.jpg",
+      "rank": 7,
+      "votes": 7776,
+      "winner": false
+    },
+    {
+      "external_id": "18797098",
+      "title": "The How Can It Be Gluten Free Cookbook",
+      "authors": [
+        "America's Test Kitchen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394415382l/18797098.jpg",
+      "rank": 8,
+      "votes": 5653,
+      "winner": false
+    },
+    {
+      "external_id": "18142414",
+      "title": "Sous Chef",
+      "authors": [
+        "Michael Gibney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1383336895l/18142414.jpg",
+      "rank": 9,
+      "votes": 5383,
+      "winner": false
+    },
+    {
+      "external_id": "18144099",
+      "title": "Delancey",
+      "authors": [
+        "Molly Wizenberg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400948281l/18144099.jpg",
+      "rank": 10,
+      "votes": 5188,
+      "winner": false
+    },
+    {
+      "external_id": "18144094",
+      "title": "Eating Wildly",
+      "authors": [
+        "Ava Chin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394989868l/18144094.jpg",
+      "rank": 11,
+      "votes": 2952,
+      "winner": false
+    },
+    {
+      "external_id": "17383031",
+      "title": "The 21-Day Sugar Detox Cookbook",
+      "authors": [
+        "Diane Sanfilippo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400948848l/17383031.jpg",
+      "rank": 12,
+      "votes": 2881,
+      "winner": false
+    },
+    {
+      "external_id": "18667790",
+      "title": "The Third Plate",
+      "authors": [
+        "Dan Barber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394997914l/18667790.jpg",
+      "rank": 13,
+      "votes": 2812,
+      "winner": false
+    },
+    {
+      "external_id": "20740509",
+      "title": "10-Day Green Smoothie Cleanse",
+      "authors": [
+        "J.J. Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391655193l/20740509.jpg",
+      "rank": 14,
+      "votes": 2656,
+      "winner": false
+    },
+    {
+      "external_id": "18090101",
+      "title": "The Calorie Myth",
+      "authors": [
+        "Jonathan Bailor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390176437l/18090101.jpg",
+      "rank": 15,
+      "votes": 2485,
+      "winner": false
+    },
+    {
+      "external_id": "18054967",
+      "title": "Death by Food Pyramid",
+      "authors": [
+        "Denise Minger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1396834155l/18054967.jpg",
+      "rank": 16,
+      "votes": 2219,
+      "winner": false
+    },
+    {
+      "external_id": "18778878",
+      "title": "Eat the Yolks",
+      "authors": [
+        "Liz Wolfe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387146216l/18778878.jpg",
+      "rank": 17,
+      "votes": 1878,
+      "winner": false
+    },
+    {
+      "external_id": "20707953",
+      "title": "The Skinnytaste Cookbook",
+      "authors": [
+        "Gina Homolka"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1416180912l/20707953.jpg",
+      "rank": 18,
+      "votes": 1855,
+      "winner": false
+    },
+    {
+      "external_id": "20691056",
+      "title": "Plenty More",
+      "authors": [
+        "Yotam Ottolenghi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1411338166l/20691056.jpg",
+      "rank": 19,
+      "votes": 1265,
+      "winner": false
+    },
+    {
+      "external_id": "21412262",
+      "title": "The Pollan Family Table",
+      "authors": [
+        "Corky Pollan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415677381l/21412262.jpg",
+      "rank": 20,
+      "votes": 893,
+      "winner": false
+    }
+  ]
+}

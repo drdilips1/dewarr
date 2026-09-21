@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-debut-goodreads-author-2017",
+  "kind": "award",
+  "title": "Debut Goodreads Author",
+  "source_url": "https://www.goodreads.com/choiceawards/best-debut-goodreads-author-2017",
+  "year": 2017,
+  "category": "Debut Goodreads Author",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:49.640815+00:00",
+  "books": [
+    {
+      "external_id": "32075671",
+      "title": "The Hate U Give",
+      "authors": [
+        "Angie Thomas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476284759l/32075671._SY600_.jpg",
+      "rank": 1,
+      "votes": 74925,
+      "winner": true
+    },
+    {
+      "external_id": "27883214",
+      "title": "Caraval",
+      "authors": [
+        "Stephanie Garber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1465563623l/27883214.jpg",
+      "rank": 2,
+      "votes": 40849,
+      "winner": false
+    },
+    {
+      "external_id": "25489134",
+      "title": "The Bear and the Nightingale",
+      "authors": [
+        "Katherine Arden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611440212l/25489134._SY600_.jpg",
+      "rank": 3,
+      "votes": 23863,
+      "winner": false
+    },
+    {
+      "external_id": "30267929",
+      "title": "We Were the Lucky Ones",
+      "authors": [
+        "Georgia Hunter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1471282781l/30267929.jpg",
+      "rank": 4,
+      "votes": 13151,
+      "winner": false
+    },
+    {
+      "external_id": "32620349",
+      "title": "Midnight at the Bright Ideas Bookstore",
+      "authors": [
+        "Matthew J. Sullivan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498054963l/32620349._SY600_.jpg",
+      "rank": 5,
+      "votes": 12368,
+      "winner": false
+    },
+    {
+      "external_id": "28220971",
+      "title": "The Dry",
+      "authors": [
+        "Jane Harper"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1578416430l/28220971._SY600_.jpg",
+      "rank": 6,
+      "votes": 11918,
+      "winner": false
+    },
+    {
+      "external_id": "32283423",
+      "title": "American War",
+      "authors": [
+        "Omar El Akkad"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481494946l/32283423._SY600_.jpg",
+      "rank": 7,
+      "votes": 7326,
+      "winner": false
+    },
+    {
+      "external_id": "30269104",
+      "title": "The Chilbury Ladies' Choir",
+      "authors": [
+        "Jennifer    Ryan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1471277745l/30269104.jpg",
+      "rank": 8,
+      "votes": 6955,
+      "winner": false
+    },
+    {
+      "external_id": "33572350",
+      "title": "My Absolute Darling",
+      "authors": [
+        "Gabriel Tallent"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498911183l/33572350._SY600_.jpg",
+      "rank": 9,
+      "votes": 5250,
+      "winner": false
+    },
+    {
+      "external_id": "30753987",
+      "title": "The Leavers",
+      "authors": [
+        "Lisa Ko"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1618633434l/30753987.jpg",
+      "rank": 10,
+      "votes": 5166,
+      "winner": false
+    },
+    {
+      "external_id": "32969150",
+      "title": "Stay with Me",
+      "authors": [
+        "Ayọ̀bámi Adébáyọ̀"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481563711l/32969150._SY600_.jpg",
+      "rank": 11,
+      "votes": 2181,
+      "winner": false
+    },
+    {
+      "external_id": "30153293",
+      "title": "All Our Wrong Todays",
+      "authors": [
+        "Elan Mastai"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479757342l/30153293.jpg",
+      "rank": 12,
+      "votes": 2174,
+      "winner": false
+    },
+    {
+      "external_id": "27746288",
+      "title": "Goodbye, Vitamin",
+      "authors": [
+        "Rachel Khong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509043032l/27746288._SY600_.jpg",
+      "rank": 13,
+      "votes": 1897,
+      "winner": false
+    },
+    {
+      "external_id": "30090925",
+      "title": "The Animators",
+      "authors": [
+        "Kayla Rae Whitaker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462394905l/30090925._SY600_.jpg",
+      "rank": 14,
+      "votes": 1881,
+      "winner": false
+    },
+    {
+      "external_id": "29875926",
+      "title": "I Liked My Life",
+      "authors": [
+        "Abby Fabiaschi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1488877850l/29875926._SY600_.jpg",
+      "rank": 15,
+      "votes": 1468,
+      "winner": false
+    },
+    {
+      "external_id": "33280160",
+      "title": "What We Lose",
+      "authors": [
+        "Zinzi Clemmons"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492235781l/33280160.jpg",
+      "rank": 16,
+      "votes": 1221,
+      "winner": false
+    },
+    {
+      "external_id": "30841984",
+      "title": "Kings of the Wyld",
+      "authors": [
+        "Nicholas Eames"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1477027207l/30841984.jpg",
+      "rank": 17,
+      "votes": 1086,
+      "winner": false
+    },
+    {
+      "external_id": "34484359",
+      "title": "The Coppersmith Farmhouse",
+      "authors": [
+        "Devney Perry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1488995063l/34484359.jpg",
+      "rank": 18,
+      "votes": 1081,
+      "winner": false
+    },
+    {
+      "external_id": "31450913",
+      "title": "The Idea of You",
+      "authors": [
+        "Robinne Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620916971l/31450913._SY600_.jpg",
+      "rank": 19,
+      "votes": 864,
+      "winner": false
+    },
+    {
+      "external_id": "31212988",
+      "title": "The Caledonian Gambit",
+      "authors": [
+        "Dan Moren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1488254021l/31212988._SY600_.jpg",
+      "rank": 20,
+      "votes": 612,
+      "winner": false
+    }
+  ]
+}

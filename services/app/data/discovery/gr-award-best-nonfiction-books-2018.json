@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-nonfiction-books-2018",
+  "kind": "award",
+  "title": "Nonfiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-nonfiction-books-2018",
+  "year": 2018,
+  "category": "Nonfiction",
+  "genres": [
+    "non-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:07.589214+00:00",
+  "books": [
+    {
+      "external_id": "35271190",
+      "title": "I'll Be Gone in the Dark",
+      "authors": [
+        "Michelle McNamara"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1499177121l/35271190.jpg",
+      "rank": 1,
+      "votes": 46472,
+      "winner": true
+    },
+    {
+      "external_id": "35754629",
+      "title": "Girl, Wash Your Face",
+      "authors": [
+        "Rachel Hollis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1513038496l/35754629.jpg",
+      "rank": 2,
+      "votes": 40383,
+      "winner": false
+    },
+    {
+      "external_id": "41012533",
+      "title": "Fear",
+      "authors": [
+        "Bob Woodward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1534660010l/41012533._SY600_.jpg",
+      "rank": 3,
+      "votes": 26803,
+      "winner": false
+    },
+    {
+      "external_id": "40009804",
+      "title": "Whiskey in a Teacup",
+      "authors": [
+        "Reese Witherspoon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1525128935l/40009804._SY600_.jpg",
+      "rank": 4,
+      "votes": 21108,
+      "winner": false
+    },
+    {
+      "external_id": "39507318",
+      "title": "The Library Book",
+      "authors": [
+        "Susan Orlean"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1599591284l/39507318._SY600_.jpg",
+      "rank": 5,
+      "votes": 19857,
+      "winner": false
+    },
+    {
+      "external_id": "38820046",
+      "title": "21 Lessons for the 21st Century",
+      "authors": [
+        "Yuval Noah Harari"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1564577305l/38820046._SY600_.jpg",
+      "rank": 6,
+      "votes": 16541,
+      "winner": false
+    },
+    {
+      "external_id": "36381052",
+      "title": "Not That Bad",
+      "authors": [
+        "Roxane Gay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509748434l/36381052.jpg",
+      "rank": 7,
+      "votes": 16043,
+      "winner": false
+    },
+    {
+      "external_id": "35099718",
+      "title": "So You Want to Talk About Race",
+      "authors": [
+        "Ijeoma Oluo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1499224833l/35099718.jpg",
+      "rank": 8,
+      "votes": 15254,
+      "winner": false
+    },
+    {
+      "external_id": "30257963",
+      "title": "12 Rules for Life",
+      "authors": [
+        "Jordan B. Peterson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1512705866l/30257963.jpg",
+      "rank": 9,
+      "votes": 11707,
+      "winner": false
+    },
+    {
+      "external_id": "40933227",
+      "title": "Factfulness",
+      "authors": [
+        "Hans Rosling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1544964112l/40933227._SY600_.jpg",
+      "rank": 10,
+      "votes": 9668,
+      "winner": false
+    },
+    {
+      "external_id": "37976541",
+      "title": "Bad Blood",
+      "authors": [
+        "John Carreyrou"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523311515l/37976541.jpg",
+      "rank": 11,
+      "votes": 4609,
+      "winner": false
+    },
+    {
+      "external_id": "35820413",
+      "title": "Fascism",
+      "authors": [
+        "Madeleine K. Albright"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1513471346l/35820413.jpg",
+      "rank": 12,
+      "votes": 4099,
+      "winner": false
+    },
+    {
+      "external_id": "35181833",
+      "title": "All-American Murder",
+      "authors": [
+        "James  Patterson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1540866718l/35181833.jpg",
+      "rank": 13,
+      "votes": 4084,
+      "winner": false
+    },
+    {
+      "external_id": "35696171",
+      "title": "Enlightenment Now",
+      "authors": [
+        "Steven Pinker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1502223499l/35696171._SY600_.jpg",
+      "rank": 14,
+      "votes": 2191,
+      "winner": false
+    },
+    {
+      "external_id": "40121378",
+      "title": "Atomic Habits",
+      "authors": [
+        "James Clear"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1655988385l/40121378.jpg",
+      "rank": 15,
+      "votes": 1939,
+      "winner": false
+    },
+    {
+      "external_id": "36222733",
+      "title": "Russian Roulette",
+      "authors": [
+        "Michael Isikoff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518568008l/36222733._SY600_.jpg",
+      "rank": 16,
+      "votes": 1686,
+      "winner": false
+    },
+    {
+      "external_id": "37486540",
+      "title": "Dopesick",
+      "authors": [
+        "Beth Macy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1533010748l/37486540.jpg",
+      "rank": 17,
+      "votes": 1593,
+      "winner": false
+    },
+    {
+      "external_id": "35901186",
+      "title": "The Feather Thief",
+      "authors": [
+        "Kirk Wallace Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1501696324l/35901186._SY600_.jpg",
+      "rank": 18,
+      "votes": 1321,
+      "winner": false
+    },
+    {
+      "external_id": "36507099",
+      "title": "Skin in the Game",
+      "authors": [
+        "Nassim Nicholas Taleb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509420883l/36507099._SY600_.jpg",
+      "rank": 19,
+      "votes": 1248,
+      "winner": false
+    },
+    {
+      "external_id": "36638638",
+      "title": "The Path Between Us",
+      "authors": [
+        "Suzanne Stabile"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523433280l/36638638.jpg",
+      "rank": 20,
+      "votes": 772,
+      "winner": false
+    }
+  ]
+}

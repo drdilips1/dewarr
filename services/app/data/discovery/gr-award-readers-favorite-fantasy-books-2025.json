@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-readers-favorite-fantasy-books-2025",
+  "kind": "award",
+  "title": "Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-fantasy-books-2025",
+  "year": 2025,
+  "category": "Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:39:47.908740+00:00",
+  "books": [
+    {
+      "external_id": "213263148",
+      "title": "Bury Our Bones in the Midnight Soil",
+      "authors": [
+        "V.E. Schwab"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1732122609l/213263148._SY600_.jpg",
+      "rank": 1,
+      "votes": 102408,
+      "winner": true
+    },
+    {
+      "external_id": "210191671",
+      "title": "Katabasis",
+      "authors": [
+        "R.F. Kuang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1738769219l/210191671._SY600_.jpg",
+      "rank": 2,
+      "votes": 87125,
+      "winner": false
+    },
+    {
+      "external_id": "203578847",
+      "title": "Wind and Truth",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1724944713l/203578847._SY600_.jpg",
+      "rank": 3,
+      "votes": 50158,
+      "winner": false
+    },
+    {
+      "external_id": "222706197",
+      "title": "Alchemy of Secrets",
+      "authors": [
+        "Stephanie Garber"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1743617238l/222706197._SY600_.jpg",
+      "rank": 4,
+      "votes": 47888,
+      "winner": false
+    },
+    {
+      "external_id": "210411871",
+      "title": "The Sirens",
+      "authors": [
+        "Emilia Hart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716746064l/210411871.jpg",
+      "rank": 5,
+      "votes": 32082,
+      "winner": false
+    },
+    {
+      "external_id": "230272137",
+      "title": "The Strength of the Few",
+      "authors": [
+        "James Islington"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1743037510l/230272137._SY600_.jpg",
+      "rank": 6,
+      "votes": 30007,
+      "winner": false
+    },
+    {
+      "external_id": "233800039",
+      "title": "The Devils",
+      "authors": [
+        "Joe Abercrombie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1747022269l/233800039._SY600_.jpg",
+      "rank": 7,
+      "votes": 27429,
+      "winner": false
+    },
+    {
+      "external_id": "211479192",
+      "title": "Water Moon",
+      "authors": [
+        "Samantha Sotto Yambao"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1713235038l/211479192._SY600_.jpg",
+      "rank": 8,
+      "votes": 25469,
+      "winner": false
+    },
+    {
+      "external_id": "217182392",
+      "title": "The Raven Scholar",
+      "authors": [
+        "Antonia Hodgson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1727554288l/217182392._SY600_.jpg",
+      "rank": 9,
+      "votes": 24050,
+      "winner": false
+    },
+    {
+      "external_id": "211004176",
+      "title": "The River Has Roots",
+      "authors": [
+        "Amal El-Mohtar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1719522277l/211004176._SY600_.jpg",
+      "rank": 10,
+      "votes": 23389,
+      "winner": false
+    },
+    {
+      "external_id": "222376572",
+      "title": "Brigands & Breadknives",
+      "authors": [
+        "Travis Baldree"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1738162389l/222376572._SY600_.jpg",
+      "rank": 11,
+      "votes": 9577,
+      "winner": false
+    },
+    {
+      "external_id": "213618143",
+      "title": "A Drop of Corruption",
+      "authors": [
+        "Robert Jackson Bennett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1723703506l/213618143._SY600_.jpg",
+      "rank": 12,
+      "votes": 9524,
+      "winner": false
+    },
+    {
+      "external_id": "217582926",
+      "title": "Hemlock & Silver",
+      "authors": [
+        "T. Kingfisher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1738296278l/217582926._SY600_.jpg",
+      "rank": 13,
+      "votes": 9516,
+      "winner": false
+    },
+    {
+      "external_id": "219848293",
+      "title": "A Resistance of Witches",
+      "authors": [
+        "Morgan   Ryan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1731288127l/219848293.jpg",
+      "rank": 14,
+      "votes": 8227,
+      "winner": false
+    },
+    {
+      "external_id": "226850464",
+      "title": "The Everlasting",
+      "authors": [
+        "Alix E. Harrow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1747325267l/226850464._SY600_.jpg",
+      "rank": 15,
+      "votes": 8019,
+      "winner": false
+    },
+    {
+      "external_id": "223420465",
+      "title": "King Sorrow",
+      "authors": [
+        "Joe  Hill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1737022301l/223420465._SY600_.jpg",
+      "rank": 16,
+      "votes": 7738,
+      "winner": false
+    },
+    {
+      "external_id": "222631681",
+      "title": "Thief of Night",
+      "authors": [
+        "Holly Black"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1743537128l/222631681._SY600_.jpg",
+      "rank": 17,
+      "votes": 7055,
+      "winner": false
+    },
+    {
+      "external_id": "222765064",
+      "title": "Red City",
+      "authors": [
+        "Marie Lu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1739047379l/222765064._SY600_.jpg",
+      "rank": 18,
+      "votes": 5135,
+      "winner": false
+    },
+    {
+      "external_id": "221452815",
+      "title": "The Society of Unknowable Objects",
+      "authors": [
+        "Gareth  Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1731410395l/221452815._SY600_.jpg",
+      "rank": 19,
+      "votes": 4519,
+      "winner": false
+    },
+    {
+      "external_id": "217387935",
+      "title": "The Incandescent",
+      "authors": [
+        "Emily  Tesh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1723556679l/217387935._SY600_.jpg",
+      "rank": 20,
+      "votes": 2482,
+      "winner": false
+    }
+  ]
+}

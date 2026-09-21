@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-historical-fiction-books-2012",
+  "kind": "award",
+  "title": "Historical Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-historical-fiction-books-2012",
+  "year": 2012,
+  "category": "Historical Fiction",
+  "genres": [
+    "historical-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:03.543124+00:00",
+  "books": [
+    {
+      "external_id": "13158800",
+      "title": "The Light Between Oceans",
+      "authors": [
+        "M.L. Stedman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336683021l/13158800.jpg",
+      "rank": 1,
+      "votes": 6918,
+      "winner": true
+    },
+    {
+      "external_id": "13507212",
+      "title": "Bring Up the Bodies",
+      "authors": [
+        "Hilary Mantel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1330649655l/13507212.jpg",
+      "rank": 2,
+      "votes": 6516,
+      "winner": false
+    },
+    {
+      "external_id": "13508607",
+      "title": "The Secret Keeper",
+      "authors": [
+        "Kate Morton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1455089196l/13508607.jpg",
+      "rank": 3,
+      "votes": 5662,
+      "winner": false
+    },
+    {
+      "external_id": "11250053",
+      "title": "The Snow Child",
+      "authors": [
+        "Eowyn Ivey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327098624l/11250053.jpg",
+      "rank": 4,
+      "votes": 4956,
+      "winner": false
+    },
+    {
+      "external_id": "11940907",
+      "title": "Death of Kings",
+      "authors": [
+        "Bernard Cornwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349050590l/11940907.jpg",
+      "rank": 5,
+      "votes": 4360,
+      "winner": false
+    },
+    {
+      "external_id": "13127599",
+      "title": "The Shoemaker's Wife",
+      "authors": [
+        "Adriana Trigiani"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1329256279l/13127599.jpg",
+      "rank": 6,
+      "votes": 3889,
+      "winner": false
+    },
+    {
+      "external_id": "13623012",
+      "title": "The Prisoner of Heaven",
+      "authors": [
+        "Carlos Ruiz Zafón"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1335994402l/13623012.jpg",
+      "rank": 7,
+      "votes": 3633,
+      "winner": false
+    },
+    {
+      "external_id": "13056159",
+      "title": "The Chaperone",
+      "authors": [
+        "Laura Moriarty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442892878l/13056159._SY600_.jpg",
+      "rank": 8,
+      "votes": 2952,
+      "winner": false
+    },
+    {
+      "external_id": "12160906",
+      "title": "The Sins of the Father",
+      "authors": [
+        "Jeffrey Archer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442934235l/12160906._SY600_.jpg",
+      "rank": 9,
+      "votes": 2691,
+      "winner": false
+    },
+    {
+      "external_id": "13330603",
+      "title": "The Sandcastle Girls",
+      "authors": [
+        "Chris Bohjalian"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1332018541l/13330603.jpg",
+      "rank": 10,
+      "votes": 2564,
+      "winner": false
+    },
+    {
+      "external_id": "12002819",
+      "title": "The Flight of Gemma Hardy",
+      "authors": [
+        "Margot Livesey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1319761825l/12002819.jpg",
+      "rank": 11,
+      "votes": 1805,
+      "winner": false
+    },
+    {
+      "external_id": "12693886",
+      "title": "Half-Blood Blues",
+      "authors": [
+        "Esi Edugyan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1363434946l/12693886.jpg",
+      "rank": 12,
+      "votes": 1553,
+      "winner": false
+    },
+    {
+      "external_id": "12931629",
+      "title": "The Baker's Daughter",
+      "authors": [
+        "Sarah McCoy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333576573l/12931629.jpg",
+      "rank": 13,
+      "votes": 1274,
+      "winner": false
+    },
+    {
+      "external_id": "11890816",
+      "title": "The Gods of Gotham",
+      "authors": [
+        "Lyndsay Faye"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518152198l/11890816.jpg",
+      "rank": 14,
+      "votes": 1230,
+      "winner": false
+    },
+    {
+      "external_id": "12326644",
+      "title": "The Kingmaker's Daughter",
+      "authors": [
+        "Philippa Gregory"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1332688725l/12326644.jpg",
+      "rank": 15,
+      "votes": 1071,
+      "winner": false
+    },
+    {
+      "external_id": "12959233",
+      "title": "Winter of the World",
+      "authors": [
+        "Ken Follett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369453743l/12959233.jpg",
+      "rank": 16,
+      "votes": 1047,
+      "winner": false
+    },
+    {
+      "external_id": "12266595",
+      "title": "The Healing",
+      "authors": [
+        "Jonathan Odell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333578260l/12266595.jpg",
+      "rank": 17,
+      "votes": 726,
+      "winner": false
+    },
+    {
+      "external_id": "12384157",
+      "title": "The Dressmaker",
+      "authors": [
+        "Kate Alcott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1314819502l/12384157.jpg",
+      "rank": 18,
+      "votes": 419,
+      "winner": false
+    },
+    {
+      "external_id": "10553215",
+      "title": "The Second Empress",
+      "authors": [
+        "Michelle    Moran"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331587799l/10553215.jpg",
+      "rank": 19,
+      "votes": 243,
+      "winner": false
+    },
+    {
+      "external_id": "13540215",
+      "title": "The Orchardist",
+      "authors": [
+        "Amanda Coplin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1335562453l/13540215.jpg",
+      "rank": 20,
+      "votes": 166,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-fiction-books-2023",
+  "kind": "award",
+  "title": "Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fiction-books-2023",
+  "year": 2023,
+  "category": "Fiction",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:13.711704+00:00",
+  "books": [
+    {
+      "external_id": "62047984",
+      "title": "Yellowface",
+      "authors": [
+        "R.F. Kuang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1671336608l/62047984.jpg",
+      "rank": 1,
+      "votes": 200722,
+      "winner": true
+    },
+    {
+      "external_id": "61771675",
+      "title": "Hello Beautiful",
+      "authors": [
+        "Ann Napolitano"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1687803098l/61771675._SY600_.jpg",
+      "rank": 2,
+      "votes": 60171,
+      "winner": false
+    },
+    {
+      "external_id": "62926992",
+      "title": "The Wishing Game",
+      "authors": [
+        "Meg Shaffer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684817680l/62926992.jpg",
+      "rank": 3,
+      "votes": 57702,
+      "winner": false
+    },
+    {
+      "external_id": "63241104",
+      "title": "Tom Lake",
+      "authors": [
+        "Ann Patchett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1691084837l/63241104._SY600_.jpg",
+      "rank": 4,
+      "votes": 53470,
+      "winner": false
+    },
+    {
+      "external_id": "62873996",
+      "title": "The Five-Star Weekend",
+      "authors": [
+        "Elin Hilderbrand"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1680591253l/62873996.jpg",
+      "rank": 5,
+      "votes": 45859,
+      "winner": false
+    },
+    {
+      "external_id": "62971668",
+      "title": "Someone Else's Shoes",
+      "authors": [
+        "Jojo Moyes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1666822989l/62971668.jpg",
+      "rank": 6,
+      "votes": 44333,
+      "winner": false
+    },
+    {
+      "external_id": "62919793",
+      "title": "The Invisible Hour",
+      "authors": [
+        "Alice Hoffman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686761095l/62919793.jpg",
+      "rank": 7,
+      "votes": 24132,
+      "winner": false
+    },
+    {
+      "external_id": "60784605",
+      "title": "Maame",
+      "authors": [
+        "Jessica George"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1666031380l/60784605._SY600_.jpg",
+      "rank": 8,
+      "votes": 21854,
+      "winner": false
+    },
+    {
+      "external_id": "61214136",
+      "title": "The Collected Regrets of Clover",
+      "authors": [
+        "Mikki Brammer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1663608724l/61214136.jpg",
+      "rank": 9,
+      "votes": 18050,
+      "winner": false
+    },
+    {
+      "external_id": "61246258",
+      "title": "Pineapple Street",
+      "authors": [
+        "Jenny   Jackson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659404866l/61246258.jpg",
+      "rank": 10,
+      "votes": 17864,
+      "winner": false
+    },
+    {
+      "external_id": "60701439",
+      "title": "Big Swiss",
+      "authors": [
+        "Jen Beagin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1653958990l/60701439.jpg",
+      "rank": 11,
+      "votes": 7486,
+      "winner": false
+    },
+    {
+      "external_id": "62919375",
+      "title": "Shark Heart",
+      "authors": [
+        "Emily Habeck"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686092164l/62919375._SY600_.jpg",
+      "rank": 12,
+      "votes": 6218,
+      "winner": false
+    },
+    {
+      "external_id": "59381516",
+      "title": "Evil Eye",
+      "authors": [
+        "Etaf Rum"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1660158235l/59381516.jpg",
+      "rank": 13,
+      "votes": 5708,
+      "winner": false
+    },
+    {
+      "external_id": "62049729",
+      "title": "The Celebrants",
+      "authors": [
+        "Steven  Rowley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1685352566l/62049729.jpg",
+      "rank": 14,
+      "votes": 5282,
+      "winner": false
+    },
+    {
+      "external_id": "60784757",
+      "title": "Birnam Wood",
+      "authors": [
+        "Eleanor Catton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1653578326l/60784757.jpg",
+      "rank": 15,
+      "votes": 4425,
+      "winner": false
+    },
+    {
+      "external_id": "61815336",
+      "title": "The Connellys of County Down",
+      "authors": [
+        "Tracey Lange"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1665471122l/61815336.jpg",
+      "rank": 16,
+      "votes": 3589,
+      "winner": false
+    },
+    {
+      "external_id": "62039166",
+      "title": "The Bee Sting",
+      "authors": [
+        "Paul Murray"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1674502938l/62039166.jpg",
+      "rank": 17,
+      "votes": 3083,
+      "winner": false
+    },
+    {
+      "external_id": "65650229",
+      "title": "Wellness",
+      "authors": [
+        "Nathan  Hill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1695742140l/65650229._SY600_.jpg",
+      "rank": 18,
+      "votes": 2983,
+      "winner": false
+    },
+    {
+      "external_id": "65215321",
+      "title": "Blackouts",
+      "authors": [
+        "Justin Torres"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677161651l/65215321.jpg",
+      "rank": 19,
+      "votes": 2611,
+      "winner": false
+    },
+    {
+      "external_id": "123414019",
+      "title": "Family Meal",
+      "authors": [
+        "Bryan Washington"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1679494794l/123414019.jpg",
+      "rank": 20,
+      "votes": 2176,
+      "winner": false
+    }
+  ]
+}

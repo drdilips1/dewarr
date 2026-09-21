@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-picture-books-2012",
+  "kind": "award",
+  "title": "Picture Books",
+  "source_url": "https://www.goodreads.com/choiceawards/best-picture-books-2012",
+  "year": 2012,
+  "category": "Picture Books",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:27.799958+00:00",
+  "books": [
+    {
+      "external_id": "13546400",
+      "title": "Olivia and the Fairy Princesses",
+      "authors": [
+        "Ian Falconer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1340327711l/13546400.jpg",
+      "rank": 1,
+      "votes": 7699,
+      "winner": true
+    },
+    {
+      "external_id": "11556479",
+      "title": "The Duckling Gets a Cookie!?",
+      "authors": [
+        "Mo Willems"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1770890291l/11556479._SY600_.jpg",
+      "rank": 2,
+      "votes": 6971,
+      "winner": false
+    },
+    {
+      "external_id": "12875557",
+      "title": "Pete the Cat and His Four Groovy Buttons",
+      "authors": [
+        "Eric Litwin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389222385l/12875557.jpg",
+      "rank": 3,
+      "votes": 3712,
+      "winner": false
+    },
+    {
+      "external_id": "13531024",
+      "title": "This Is Not My Hat",
+      "authors": [
+        "Jon Klassen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1360096324l/13531024.jpg",
+      "rank": 4,
+      "votes": 3595,
+      "winner": false
+    },
+    {
+      "external_id": "13259987",
+      "title": "Creepy Carrots!",
+      "authors": [
+        "Aaron Reynolds"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424982083l/13259987.jpg",
+      "rank": 5,
+      "votes": 2330,
+      "winner": false
+    },
+    {
+      "external_id": "11867718",
+      "title": "Listen to My Trumpet!",
+      "authors": [
+        "Mo Willems"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1326317523l/11867718.jpg",
+      "rank": 6,
+      "votes": 2156,
+      "winner": false
+    },
+    {
+      "external_id": "12065943",
+      "title": "Extra Yarn",
+      "authors": [
+        "Mac Barnett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424982446l/12065943.jpg",
+      "rank": 7,
+      "votes": 1887,
+      "winner": false
+    },
+    {
+      "external_id": "12448586",
+      "title": "Boy + Bot",
+      "authors": [
+        "Ame Dyckman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320511825l/12448586.jpg",
+      "rank": 8,
+      "votes": 1803,
+      "winner": false
+    },
+    {
+      "external_id": "11737306",
+      "title": "One Cool Friend",
+      "authors": [
+        "Toni Buzzeo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424982383l/11737306.jpg",
+      "rank": 9,
+      "votes": 1636,
+      "winner": false
+    },
+    {
+      "external_id": "13617210",
+      "title": "Goldilocks and the Three Dinosaurs",
+      "authors": [
+        "Mo Willems"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1335396879l/13617210.jpg",
+      "rank": 10,
+      "votes": 1355,
+      "winner": false
+    },
+    {
+      "external_id": "12098668",
+      "title": "Chopsticks",
+      "authors": [
+        "Amy Krouse Rosenthal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1359124529l/12098668.jpg",
+      "rank": 11,
+      "votes": 844,
+      "winner": false
+    },
+    {
+      "external_id": "12159951",
+      "title": "Green",
+      "authors": [
+        "Laura Vaccaro Seeger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424982311l/12159951.jpg",
+      "rank": 12,
+      "votes": 775,
+      "winner": false
+    },
+    {
+      "external_id": "12576704",
+      "title": "Z Is for Moose",
+      "authors": [
+        "Kelly Bingham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349078804l/12576704.jpg",
+      "rank": 13,
+      "votes": 766,
+      "winner": false
+    },
+    {
+      "external_id": "11891485",
+      "title": "And Then It's Spring",
+      "authors": [
+        "Julie Fogliano"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1317794308l/11891485.jpg",
+      "rank": 14,
+      "votes": 645,
+      "winner": false
+    },
+    {
+      "external_id": "13083239",
+      "title": "The Fantastic Flying Books of Mr. Morris Lessmore",
+      "authors": [
+        "William Joyce"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1640813234l/13083239._SY600_.jpg",
+      "rank": 15,
+      "votes": 582,
+      "winner": false
+    },
+    {
+      "external_id": "12180277",
+      "title": "Chloe and the Lion",
+      "authors": [
+        "Mac Barnett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331633872l/12180277.jpg",
+      "rank": 16,
+      "votes": 494,
+      "winner": false
+    },
+    {
+      "external_id": "13260591",
+      "title": "Nightsong",
+      "authors": [
+        "Ari Berk"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347464587l/13260591.jpg",
+      "rank": 17,
+      "votes": 433,
+      "winner": false
+    },
+    {
+      "external_id": "13337050",
+      "title": "Dragons Love Tacos",
+      "authors": [
+        "Adam Rubin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1326100121l/13337050.jpg",
+      "rank": 18,
+      "votes": 329,
+      "winner": false
+    },
+    {
+      "external_id": "14742524",
+      "title": "Wheel-Mouse vs All The Crazy Robots",
+      "authors": [
+        "Celyn Lawrence"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1338462344l/14742524.jpg",
+      "rank": 19,
+      "votes": 259,
+      "winner": false
+    },
+    {
+      "external_id": "13591148",
+      "title": "Kel Gilligan's Daredevil Stunt Show",
+      "authors": [
+        "Michael Buckley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1340865294l/13591148.jpg",
+      "rank": 20,
+      "votes": 69,
+      "winner": false
+    }
+  ]
+}

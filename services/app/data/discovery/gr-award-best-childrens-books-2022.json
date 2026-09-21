@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-childrens-books-2022",
+  "kind": "award",
+  "title": "Middle Grade & Children's",
+  "source_url": "https://www.goodreads.com/choiceawards/best-childrens-books-2022",
+  "year": 2022,
+  "category": "Middle Grade & Children's",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:57.871598+00:00",
+  "books": [
+    {
+      "external_id": "57347345",
+      "title": "I Am Quiet",
+      "authors": [
+        "Andie Powers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1626175921l/57347345._SY600_.jpg",
+      "rank": 1,
+      "votes": 26266,
+      "winner": true
+    },
+    {
+      "external_id": "59773289",
+      "title": "Rise of the School for Good and Evil",
+      "authors": [
+        "Soman Chainani"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1638953590l/59773289.jpg",
+      "rank": 2,
+      "votes": 22822,
+      "winner": false
+    },
+    {
+      "external_id": "53023305",
+      "title": "Amari and the Great Game",
+      "authors": [
+        "B.B. Alston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1624900780l/53023305.jpg",
+      "rank": 3,
+      "votes": 20315,
+      "winner": false
+    },
+    {
+      "external_id": "58932372",
+      "title": "Small Town Pride",
+      "authors": [
+        "Phil Stamper"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644338790l/58932372.jpg",
+      "rank": 4,
+      "votes": 17263,
+      "winner": false
+    },
+    {
+      "external_id": "57468730",
+      "title": "Witchlings",
+      "authors": [
+        "Claribel A. Ortega"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1619465123l/57468730.jpg",
+      "rank": 5,
+      "votes": 15897,
+      "winner": false
+    },
+    {
+      "external_id": "58455872",
+      "title": "This Is (Not) Enough",
+      "authors": [
+        "Anna Kang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1636044731l/58455872._SY600_.jpg",
+      "rank": 6,
+      "votes": 15750,
+      "winner": false
+    },
+    {
+      "external_id": "58977856",
+      "title": "Stellarlune",
+      "authors": [
+        "Shannon Messenger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1645031892l/58977856.jpg",
+      "rank": 7,
+      "votes": 14894,
+      "winner": false
+    },
+    {
+      "external_id": "59365584",
+      "title": "Zachary Ying and the Dragon Emperor",
+      "authors": [
+        "Xiran Jay Zhao"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1649866448l/59365584.jpg",
+      "rank": 8,
+      "votes": 11387,
+      "winner": false
+    },
+    {
+      "external_id": "59568370",
+      "title": "The Elephant Girl",
+      "authors": [
+        "James  Patterson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1653942722l/59568370.jpg",
+      "rank": 9,
+      "votes": 11243,
+      "winner": false
+    },
+    {
+      "external_id": "58684442",
+      "title": "Aru Shah and the Nectar of Immortality",
+      "authors": [
+        "Roshani Chokshi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1636981625l/58684442.jpg",
+      "rank": 10,
+      "votes": 11104,
+      "winner": false
+    },
+    {
+      "external_id": "56896065",
+      "title": "The Marvellers",
+      "authors": [
+        "Dhonielle Clayton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620716941l/56896065.jpg",
+      "rank": 11,
+      "votes": 3658,
+      "winner": false
+    },
+    {
+      "external_id": "60245567",
+      "title": "Ravenfall",
+      "authors": [
+        "Kalyn Josephson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644886683l/60245567.jpg",
+      "rank": 12,
+      "votes": 3180,
+      "winner": false
+    },
+    {
+      "external_id": "58328436",
+      "title": "The Ogress and the Orphans",
+      "authors": [
+        "Kelly Barnhill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644818724l/58328436._SY600_.jpg",
+      "rank": 13,
+      "votes": 3069,
+      "winner": false
+    },
+    {
+      "external_id": "59917927",
+      "title": "The Best Gift for Bear",
+      "authors": [
+        "Jennifer A. Bell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1650241924l/59917927.jpg",
+      "rank": 14,
+      "votes": 2760,
+      "winner": false
+    },
+    {
+      "external_id": "58957681",
+      "title": "I Am Able to Shine",
+      "authors": [
+        "Korey Watari"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644453050l/58957681._SY600_.jpg",
+      "rank": 15,
+      "votes": 2734,
+      "winner": false
+    },
+    {
+      "external_id": "58201801",
+      "title": "New from Here",
+      "authors": [
+        "Kelly Yang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644190298l/58201801.jpg",
+      "rank": 16,
+      "votes": 2668,
+      "winner": false
+    },
+    {
+      "external_id": "60531094",
+      "title": "The Pennymores and the Curse of the Invisible Quill",
+      "authors": [
+        "Eric Koester"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1646149856l/60531094.jpg",
+      "rank": 17,
+      "votes": 2321,
+      "winner": false
+    },
+    {
+      "external_id": "61304987",
+      "title": "The Girl in White",
+      "authors": [
+        "Lindsay Currie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1655464320l/61304987._SY600_.jpg",
+      "rank": 18,
+      "votes": 2245,
+      "winner": false
+    },
+    {
+      "external_id": "59808314",
+      "title": "Bastille vs. the Evil Librarians",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1649373273l/59808314.jpg",
+      "rank": 19,
+      "votes": 2000,
+      "winner": false
+    },
+    {
+      "external_id": "60099657",
+      "title": "How to Heal a Gryphon",
+      "authors": [
+        "Meg Cannistra"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659426779l/60099657.jpg",
+      "rank": 20,
+      "votes": 1706,
+      "winner": false
+    }
+  ]
+}

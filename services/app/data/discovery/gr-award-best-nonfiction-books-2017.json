@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-nonfiction-books-2017",
+  "kind": "award",
+  "title": "Nonfiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-nonfiction-books-2017",
+  "year": 2017,
+  "category": "Nonfiction",
+  "genres": [
+    "non-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:39.565624+00:00",
+  "books": [
+    {
+      "external_id": "31202835",
+      "title": "How to Be a Bawse",
+      "authors": [
+        "Lilly Singh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1475608021l/31202835._SY600_.jpg",
+      "rank": 1,
+      "votes": 25891,
+      "winner": true
+    },
+    {
+      "external_id": "33585392",
+      "title": "Dear Ijeawele, or A Feminist Manifesto in Fifteen Suggestions",
+      "authors": [
+        "Chimamanda Ngozi Adichie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1743878805l/33585392._SY600_.jpg",
+      "rank": 2,
+      "votes": 21384,
+      "winner": false
+    },
+    {
+      "external_id": "30689330",
+      "title": "The Stranger in the Woods",
+      "authors": [
+        "Michael Finkel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1471283634l/30689330.jpg",
+      "rank": 3,
+      "votes": 20357,
+      "winner": false
+    },
+    {
+      "external_id": "30145126",
+      "title": "The Lost City of the Monkey God",
+      "authors": [
+        "Douglas Preston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479554057l/30145126.jpg",
+      "rank": 4,
+      "votes": 19039,
+      "winner": false
+    },
+    {
+      "external_id": "34068481",
+      "title": "From Here to Eternity",
+      "authors": [
+        "Caitlin Doughty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1505146488l/34068481._SY600_.jpg",
+      "rank": 5,
+      "votes": 17409,
+      "winner": false
+    },
+    {
+      "external_id": "33916061",
+      "title": "We Were Eight Years in Power",
+      "authors": [
+        "Ta-Nehisi Coates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507903203l/33916061._SY600_.jpg",
+      "rank": 6,
+      "votes": 15857,
+      "winner": false
+    },
+    {
+      "external_id": "32938155",
+      "title": "Option B",
+      "authors": [
+        "Sheryl Sandberg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630742136l/32938155._SY600_.jpg",
+      "rank": 7,
+      "votes": 10969,
+      "winner": false
+    },
+    {
+      "external_id": "33099371",
+      "title": "Of Mess and Moxie",
+      "authors": [
+        "Jen Hatmaker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1490298742l/33099371.jpg",
+      "rank": 8,
+      "votes": 9111,
+      "winner": false
+    },
+    {
+      "external_id": "30781490",
+      "title": "Word by Word",
+      "authors": [
+        "Kory Stamper"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1471282375l/30781490.jpg",
+      "rank": 9,
+      "votes": 8984,
+      "winner": false
+    },
+    {
+      "external_id": "31247643",
+      "title": "Hallelujah Anyway",
+      "authors": [
+        "Anne Lamott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474587434l/31247643.jpg",
+      "rank": 10,
+      "votes": 7002,
+      "winner": false
+    },
+    {
+      "external_id": "31421117",
+      "title": "Tears We Cannot Stop",
+      "authors": [
+        "Michael Eric Dyson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1481050942l/31421117.jpg",
+      "rank": 11,
+      "votes": 2637,
+      "winner": false
+    },
+    {
+      "external_id": "30820956",
+      "title": "Tools of Titans",
+      "authors": [
+        "Timothy Ferriss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1475307042l/30820956._SY600_.jpg",
+      "rank": 12,
+      "votes": 2457,
+      "winner": false
+    },
+    {
+      "external_id": "30629730",
+      "title": "A Colony in a Nation",
+      "authors": [
+        "Christopher L. Hayes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1466083450l/30629730.jpg",
+      "rank": 13,
+      "votes": 2203,
+      "winner": false
+    },
+    {
+      "external_id": "34565022",
+      "title": "Braving the Wilderness",
+      "authors": [
+        "Brené Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546075042l/34565022._SY600_.jpg",
+      "rank": 14,
+      "votes": 2012,
+      "winner": false
+    },
+    {
+      "external_id": "31920777",
+      "title": "American Kingpin",
+      "authors": [
+        "Nick Bilton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1578216397l/31920777._SY600_.jpg",
+      "rank": 15,
+      "votes": 2002,
+      "winner": false
+    },
+    {
+      "external_id": "33670466",
+      "title": "Paperbacks from Hell",
+      "authors": [
+        "Grady Hendrix"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1504436657l/33670466._SY600_.jpg",
+      "rank": 16,
+      "votes": 1794,
+      "winner": false
+    },
+    {
+      "external_id": "33965707",
+      "title": "Unshakeable",
+      "authors": [
+        "Anthony Robbins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1488206397l/33965707._SY600_.jpg",
+      "rank": 17,
+      "votes": 1676,
+      "winner": false
+    },
+    {
+      "external_id": "35105799",
+      "title": "No Is Not Enough",
+      "authors": [
+        "Naomi Klein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1494367593l/35105799._SY600_.jpg",
+      "rank": 18,
+      "votes": 1469,
+      "winner": false
+    },
+    {
+      "external_id": "32191677",
+      "title": "American Fire",
+      "authors": [
+        "Monica Hesse"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498056365l/32191677.jpg",
+      "rank": 19,
+      "votes": 1460,
+      "winner": false
+    },
+    {
+      "external_id": "33916342",
+      "title": "Daring to Hope",
+      "authors": [
+        "Katie Davis Majors"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529535556l/33916342._SY600_.jpg",
+      "rank": 20,
+      "votes": 1415,
+      "winner": false
+    }
+  ]
+}

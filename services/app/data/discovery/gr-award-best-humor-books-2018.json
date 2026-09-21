@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-humor-books-2018",
+  "kind": "award",
+  "title": "Humor",
+  "source_url": "https://www.goodreads.com/choiceawards/best-humor-books-2018",
+  "year": 2018,
+  "category": "Humor",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:06.144605+00:00",
+  "books": [
+    {
+      "external_id": "34974310",
+      "title": "The Last Black Unicorn",
+      "authors": [
+        "Tiffany Haddish"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1508059685l/34974310._SY600_.jpg",
+      "rank": 1,
+      "votes": 32252,
+      "winner": true
+    },
+    {
+      "external_id": "36341620",
+      "title": "Calypso",
+      "authors": [
+        "David Sedaris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518540740l/36341620.jpg",
+      "rank": 2,
+      "votes": 30382,
+      "winner": false
+    },
+    {
+      "external_id": "38919266",
+      "title": "The Greatest Love Story Ever Told",
+      "authors": [
+        "Megan Mullally"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1527694386l/38919266.jpg",
+      "rank": 3,
+      "votes": 14686,
+      "winner": false
+    },
+    {
+      "external_id": "40598936",
+      "title": "This Will Only Hurt a Little",
+      "authors": [
+        "Busy Philipps"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529513001l/40598936._SY600_.jpg",
+      "rank": 4,
+      "votes": 12403,
+      "winner": false
+    },
+    {
+      "external_id": "36875820",
+      "title": "Hope Never Dies",
+      "authors": [
+        "Andrew Shaffer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520866714l/36875820.jpg",
+      "rank": 5,
+      "votes": 11788,
+      "winner": false
+    },
+    {
+      "external_id": "36467874",
+      "title": "So Close to Being the Sh*t, Y’all Don’t Even Know",
+      "authors": [
+        "Retta"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1508836780l/36467874.jpg",
+      "rank": 6,
+      "votes": 10853,
+      "winner": false
+    },
+    {
+      "external_id": "38649805",
+      "title": "Everything's Trash, But It's Okay",
+      "authors": [
+        "Phoebe Robinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1527080689l/38649805.jpg",
+      "rank": 7,
+      "votes": 9015,
+      "winner": false
+    },
+    {
+      "external_id": "36261280",
+      "title": "I See Life Through Rosé-Colored Glasses",
+      "authors": [
+        "Lisa Scottoline"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1512658995l/36261280.jpg",
+      "rank": 8,
+      "votes": 8502,
+      "winner": false
+    },
+    {
+      "external_id": "35959613",
+      "title": "How to American",
+      "authors": [
+        "Jimmy O. Yang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1517784874l/35959613.jpg",
+      "rank": 9,
+      "votes": 7691,
+      "winner": false
+    },
+    {
+      "external_id": "40170039",
+      "title": "How Not to Get Shot",
+      "authors": [
+        "D.L. Hughley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1526677706l/40170039.jpg",
+      "rank": 10,
+      "votes": 7006,
+      "winner": false
+    },
+    {
+      "external_id": "38532145",
+      "title": "My Squirrel Days",
+      "authors": [
+        "Ellie Kemper"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1538916473l/38532145._SY600_.jpg",
+      "rank": 11,
+      "votes": 2796,
+      "winner": false
+    },
+    {
+      "external_id": "39022876",
+      "title": "Always Look on the Bright Side of Life",
+      "authors": [
+        "Eric Idle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1524610228l/39022876.jpg",
+      "rank": 12,
+      "votes": 2727,
+      "winner": false
+    },
+    {
+      "external_id": "36373406",
+      "title": "My Life as a Goddess",
+      "authors": [
+        "Guy Branum"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529179345l/36373406._SY600_.jpg",
+      "rank": 13,
+      "votes": 2557,
+      "winner": false
+    },
+    {
+      "external_id": "36220700",
+      "title": "Springfield Confidential",
+      "authors": [
+        "Mike Reiss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1517655972l/36220700.jpg",
+      "rank": 14,
+      "votes": 2357,
+      "winner": false
+    },
+    {
+      "external_id": "30531870",
+      "title": "Just the Funny Parts",
+      "authors": [
+        "Nell Scovell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1516963734l/30531870.jpg",
+      "rank": 15,
+      "votes": 2002,
+      "winner": false
+    },
+    {
+      "external_id": "36546633",
+      "title": "Hits and Misses",
+      "authors": [
+        "Simon Rich"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1528045531l/36546633.jpg",
+      "rank": 16,
+      "votes": 1891,
+      "winner": false
+    },
+    {
+      "external_id": "35259574",
+      "title": "Look Alive Out There",
+      "authors": [
+        "Sloane Crosley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1508416607l/35259574.jpg",
+      "rank": 17,
+      "votes": 1732,
+      "winner": false
+    },
+    {
+      "external_id": "36742998",
+      "title": "Your Dad Stole My Rake",
+      "authors": [
+        "Tom Papa"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1513184321l/36742998.jpg",
+      "rank": 18,
+      "votes": 1302,
+      "winner": false
+    },
+    {
+      "external_id": "37954228",
+      "title": "Feminasty",
+      "authors": [
+        "Erin Gibson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1522083222l/37954228.jpg",
+      "rank": 19,
+      "votes": 1295,
+      "winner": false
+    },
+    {
+      "external_id": "36906099",
+      "title": "Maeve in America",
+      "authors": [
+        "Maeve Higgins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1536182138l/36906099._SY600_.jpg",
+      "rank": 20,
+      "votes": 1145,
+      "winner": false
+    }
+  ]
+}

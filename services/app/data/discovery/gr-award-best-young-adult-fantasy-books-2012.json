@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-young-adult-fantasy-books-2012",
+  "kind": "award",
+  "title": "Young Adult Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fantasy-books-2012",
+  "year": 2012,
+  "category": "Young Adult Fantasy",
+  "genres": [
+    "fantasy",
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:24.940958+00:00",
+  "books": [
+    {
+      "external_id": "12643928",
+      "title": "Insurgent",
+      "authors": [
+        "Veronica Roth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389763072l/12643928.jpg",
+      "rank": 1,
+      "votes": 23827,
+      "winner": true
+    },
+    {
+      "external_id": "8755776",
+      "title": "City of Lost Souls",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460477703l/8755776.jpg",
+      "rank": 2,
+      "votes": 14814,
+      "winner": false
+    },
+    {
+      "external_id": "8709523",
+      "title": "The Golden Lily",
+      "authors": [
+        "Richelle Mead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1360599818l/8709523.jpg",
+      "rank": 3,
+      "votes": 7462,
+      "winner": false
+    },
+    {
+      "external_id": "11235712",
+      "title": "Cinder",
+      "authors": [
+        "Marissa Meyer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1470056948l/11235712._SY600_.jpg",
+      "rank": 4,
+      "votes": 7098,
+      "winner": false
+    },
+    {
+      "external_id": "13047090",
+      "title": "Onyx",
+      "authors": [
+        "Jennifer L. Armentrout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1329408511l/13047090.jpg",
+      "rank": 5,
+      "votes": 6072,
+      "winner": false
+    },
+    {
+      "external_id": "12680907",
+      "title": "Bitterblue",
+      "authors": [
+        "Kristin Cashore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331532273l/12680907.jpg",
+      "rank": 6,
+      "votes": 5952,
+      "winner": false
+    },
+    {
+      "external_id": "9593911",
+      "title": "Pandemonium",
+      "authors": [
+        "Lauren Oliver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1310371414l/9593911.jpg",
+      "rank": 7,
+      "votes": 5089,
+      "winner": false
+    },
+    {
+      "external_id": "10507293",
+      "title": "The Selection",
+      "authors": [
+        "Kiera Cass"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1322103400l/10507293.jpg",
+      "rank": 8,
+      "votes": 4689,
+      "winner": false
+    },
+    {
+      "external_id": "10194157",
+      "title": "Shadow and Bone",
+      "authors": [
+        "Leigh Bardugo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1339533695l/10194157.jpg",
+      "rank": 9,
+      "votes": 4373,
+      "winner": false
+    },
+    {
+      "external_id": "12971616",
+      "title": "The Rise of Nine",
+      "authors": [
+        "Pittacus Lore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331740153l/12971616.jpg",
+      "rank": 10,
+      "votes": 3836,
+      "winner": false
+    },
+    {
+      "external_id": "9275658",
+      "title": "Legend",
+      "authors": [
+        "Marie Lu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1501368160l/9275658.jpg",
+      "rank": 11,
+      "votes": 2384,
+      "winner": false
+    },
+    {
+      "external_id": "10756656",
+      "title": "Under the Never Sky",
+      "authors": [
+        "Veronica Rossi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456241156l/10756656._SY600_.jpg",
+      "rank": 12,
+      "votes": 2087,
+      "winner": false
+    },
+    {
+      "external_id": "10215349",
+      "title": "The Immortal Rules",
+      "authors": [
+        "Julie Kagawa"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677007850l/10215349._SY600_.jpg",
+      "rank": 13,
+      "votes": 1971,
+      "winner": false
+    },
+    {
+      "external_id": "11563110",
+      "title": "Hallowed",
+      "authors": [
+        "Cynthia Hand"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1332883896l/11563110.jpg",
+      "rank": 14,
+      "votes": 1452,
+      "winner": false
+    },
+    {
+      "external_id": "11808950",
+      "title": "Sweet Evil",
+      "authors": [
+        "Wendy Higgins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1337613719l/11808950.jpg",
+      "rank": 15,
+      "votes": 1434,
+      "winner": false
+    },
+    {
+      "external_id": "13449693",
+      "title": "The Raven Boys",
+      "authors": [
+        "Maggie Stiefvater"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415182004l/13449693.jpg",
+      "rank": 16,
+      "votes": 953,
+      "winner": false
+    },
+    {
+      "external_id": "12751687",
+      "title": "Finale",
+      "authors": [
+        "Becca Fitzpatrick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362408156l/12751687.jpg",
+      "rank": 17,
+      "votes": 936,
+      "winner": false
+    },
+    {
+      "external_id": "12394100",
+      "title": "Seraphina",
+      "authors": [
+        "Rachel Hartman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1325528367l/12394100.jpg",
+      "rank": 18,
+      "votes": 785,
+      "winner": false
+    },
+    {
+      "external_id": "7896527",
+      "title": "Throne of Glass",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1495278054l/7896527.jpg",
+      "rank": 19,
+      "votes": 603,
+      "winner": false
+    },
+    {
+      "external_id": "7728889",
+      "title": "The Diviners",
+      "authors": [
+        "Libba Bray"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555345561l/7728889._SY600_.jpg",
+      "rank": 20,
+      "votes": 523,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-historical-fiction-books-2011",
+  "kind": "award",
+  "title": "Historical Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-historical-fiction-books-2011",
+  "year": 2011,
+  "category": "Historical Fiction",
+  "genres": [
+    "historical-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:34.849617+00:00",
+  "books": [
+    {
+      "external_id": "8683812",
+      "title": "The Paris Wife",
+      "authors": [
+        "Paula McLain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320545874l/8683812.jpg",
+      "rank": 1,
+      "votes": 3123,
+      "winner": true
+    },
+    {
+      "external_id": "10950924",
+      "title": "The Dovekeepers",
+      "authors": [
+        "Alice Hoffman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1306253903l/10950924.jpg",
+      "rank": 2,
+      "votes": 2498,
+      "winner": false
+    },
+    {
+      "external_id": "9850443",
+      "title": "The Sisters Brothers",
+      "authors": [
+        "Patrick deWitt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1291999900l/9850443.jpg",
+      "rank": 3,
+      "votes": 2212,
+      "winner": false
+    },
+    {
+      "external_id": "8689913",
+      "title": "Madame Tussaud",
+      "authors": [
+        "Michelle    Moran"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320558120l/8689913.jpg",
+      "rank": 4,
+      "votes": 2196,
+      "winner": false
+    },
+    {
+      "external_id": "9500416",
+      "title": "Dreams of Joy",
+      "authors": [
+        "Lisa See"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442934242l/9500416._SY600_.jpg",
+      "rank": 5,
+      "votes": 1944,
+      "winner": false
+    },
+    {
+      "external_id": "8312896",
+      "title": "The Second Duchess",
+      "authors": [
+        "Elizabeth Loupas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1278544919l/8312896.jpg",
+      "rank": 6,
+      "votes": 1734,
+      "winner": false
+    },
+    {
+      "external_id": "9684523",
+      "title": "Caleb's Crossing",
+      "authors": [
+        "Geraldine Brooks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1303284000l/9684523._SY600_.jpg",
+      "rank": 7,
+      "votes": 1603,
+      "winner": false
+    },
+    {
+      "external_id": "10518423",
+      "title": "The Soldier's Wife",
+      "authors": [
+        "Margaret Leroy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442718986l/10518423._SY600_.jpg",
+      "rank": 8,
+      "votes": 1343,
+      "winner": false
+    },
+    {
+      "external_id": "10054335",
+      "title": "Rules of Civility",
+      "authors": [
+        "Amor Towles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1311705045l/10054335.jpg",
+      "rank": 9,
+      "votes": 1082,
+      "winner": false
+    },
+    {
+      "external_id": "10872085",
+      "title": "Only Time Will Tell",
+      "authors": [
+        "Jeffrey Archer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442866312l/10872085._SY600_.jpg",
+      "rank": 10,
+      "votes": 1065,
+      "winner": false
+    },
+    {
+      "external_id": "9542439",
+      "title": "The Lady of the Rivers",
+      "authors": [
+        "Philippa Gregory"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327946219l/9542439.jpg",
+      "rank": 11,
+      "votes": 604,
+      "winner": false
+    },
+    {
+      "external_id": "8911226",
+      "title": "Doc",
+      "authors": [
+        "Mary Doria Russell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320560135l/8911226.jpg",
+      "rank": 12,
+      "votes": 559,
+      "winner": false
+    },
+    {
+      "external_id": "9413657",
+      "title": "Letters from Home",
+      "authors": [
+        "Kristina McMorris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348594821l/9413657.jpg",
+      "rank": 13,
+      "votes": 554,
+      "winner": false
+    },
+    {
+      "external_id": "9689093",
+      "title": "The Autobiography of Mrs. Tom Thumb",
+      "authors": [
+        "Melanie Benjamin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320416504l/9689093.jpg",
+      "rank": 14,
+      "votes": 542,
+      "winner": false
+    },
+    {
+      "external_id": "10158657",
+      "title": "22 Britannia Road",
+      "authors": [
+        "Amanda Hodgkinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442934234l/10158657._SY600_.jpg",
+      "rank": 15,
+      "votes": 508,
+      "winner": false
+    },
+    {
+      "external_id": "10437680",
+      "title": "Lionheart",
+      "authors": [
+        "Sharon Kay Penman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1322869392l/10437680.jpg",
+      "rank": 16,
+      "votes": 334,
+      "winner": false
+    },
+    {
+      "external_id": "9933894",
+      "title": "The Dark Enquiry",
+      "authors": [
+        "Deanna Raybourn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1294201206l/9933894.jpg",
+      "rank": 17,
+      "votes": 331,
+      "winner": false
+    },
+    {
+      "external_id": "9951003",
+      "title": "Becoming Marie Antoinette",
+      "authors": [
+        "Juliet Grey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388202464l/9951003.jpg",
+      "rank": 18,
+      "votes": 255,
+      "winner": false
+    },
+    {
+      "external_id": "8582344",
+      "title": "Exit the Actress",
+      "authors": [
+        "Priya Parmar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1411957930l/8582344.jpg",
+      "rank": 19,
+      "votes": 215,
+      "winner": false
+    },
+    {
+      "external_id": "9464746",
+      "title": "The Wild Rose",
+      "authors": [
+        "Jennifer Donnelly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1303241097l/9464746.jpg",
+      "rank": 20,
+      "votes": 185,
+      "winner": false
+    }
+  ]
+}

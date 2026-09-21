@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-memoir-autobiography-books-2023",
+  "kind": "award",
+  "title": "Memoir & Autobiography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-memoir-autobiography-books-2023",
+  "year": 2023,
+  "category": "Memoir & Autobiography",
+  "genres": [
+    "biography"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:30.316954+00:00",
+  "books": [
+    {
+      "external_id": "63133205",
+      "title": "The Woman in Me",
+      "authors": [
+        "Britney Spears"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1689090540l/63133205._SY600_.jpg",
+      "rank": 1,
+      "votes": 132867,
+      "winner": true
+    },
+    {
+      "external_id": "62296528",
+      "title": "Spare",
+      "authors": [
+        "Prince Harry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673458354l/62296528._SY600_.jpg",
+      "rank": 2,
+      "votes": 71461,
+      "winner": false
+    },
+    {
+      "external_id": "61317637",
+      "title": "Pageboy",
+      "authors": [
+        "Elliot Page"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1670915463l/61317637.jpg",
+      "rank": 3,
+      "votes": 44624,
+      "winner": false
+    },
+    {
+      "external_id": "61273812",
+      "title": "You Could Make This Place Beautiful",
+      "authors": [
+        "Maggie  Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1678900098l/61273812.jpg",
+      "rank": 4,
+      "votes": 21286,
+      "winner": false
+    },
+    {
+      "external_id": "166175422",
+      "title": "Counting the Cost",
+      "authors": [
+        "Jill Duggar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686092283l/166175422._SY600_.jpg",
+      "rank": 5,
+      "votes": 20069,
+      "winner": false
+    },
+    {
+      "external_id": "61357133",
+      "title": "All My Knotted-Up Life",
+      "authors": [
+        "Beth Moore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1658829975l/61357133.jpg",
+      "rank": 6,
+      "votes": 18179,
+      "winner": false
+    },
+    {
+      "external_id": "61812425",
+      "title": "Paris",
+      "authors": [
+        "Paris Hilton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677603541l/61812425._SY600_.jpg",
+      "rank": 7,
+      "votes": 16020,
+      "winner": false
+    },
+    {
+      "external_id": "61812427",
+      "title": "Love, Pamela",
+      "authors": [
+        "Pamela Anderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664755254l/61812427.jpg",
+      "rank": 8,
+      "votes": 13235,
+      "winner": false
+    },
+    {
+      "external_id": "61111274",
+      "title": "Hijab Butch Blues",
+      "authors": [
+        "Lamya H."
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1669666445l/61111274.jpg",
+      "rank": 9,
+      "votes": 11555,
+      "winner": false
+    },
+    {
+      "external_id": "63033521",
+      "title": "The In-Between",
+      "authors": [
+        "Hadley Vlahos"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684817915l/63033521.jpg",
+      "rank": 10,
+      "votes": 11403,
+      "winner": false
+    },
+    {
+      "external_id": "88564046",
+      "title": "Thicker than Water",
+      "authors": [
+        "Kerry Washington"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1683573107l/88564046.jpg",
+      "rank": 11,
+      "votes": 4034,
+      "winner": false
+    },
+    {
+      "external_id": "128624877",
+      "title": "The Many Lives of Mama Love",
+      "authors": [
+        "Lara Love Hardin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1709223764l/128624877._SY600_.jpg",
+      "rank": 12,
+      "votes": 3924,
+      "winner": false
+    },
+    {
+      "external_id": "125253126",
+      "title": "The Witching Year",
+      "authors": [
+        "Diana Helmuth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1680713930l/125253126._SY600_.jpg",
+      "rank": 13,
+      "votes": 3340,
+      "winner": false
+    },
+    {
+      "external_id": "61885057",
+      "title": "While You Were Out",
+      "authors": [
+        "Meg Kissinger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673872767l/61885057.jpg",
+      "rank": 14,
+      "votes": 3258,
+      "winner": false
+    },
+    {
+      "external_id": "62919742",
+      "title": "How to Say Babylon",
+      "authors": [
+        "Safiya Sinclair"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1696364131l/62919742._SY600_.jpg",
+      "rank": 15,
+      "votes": 2979,
+      "winner": false
+    },
+    {
+      "external_id": "62971594",
+      "title": "Tell Me Everything",
+      "authors": [
+        "Minka Kelly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1690478701l/62971594._SY600_.jpg",
+      "rank": 16,
+      "votes": 2973,
+      "winner": false
+    },
+    {
+      "external_id": "62837289",
+      "title": "Becoming Free Indeed",
+      "authors": [
+        "Jinger Duggar Vuolo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1670269414l/62837289.jpg",
+      "rank": 17,
+      "votes": 2615,
+      "winner": false
+    },
+    {
+      "external_id": "124948662",
+      "title": "A Man of Two Faces",
+      "authors": [
+        "Viet Thanh Nguyen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1680602071l/124948662._SY600_.jpg",
+      "rank": 18,
+      "votes": 2151,
+      "winner": false
+    },
+    {
+      "external_id": "142601047",
+      "title": "They Called Us Exceptional",
+      "authors": [
+        "Prachi   Gupta"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684816016l/142601047.jpg",
+      "rank": 19,
+      "votes": 2121,
+      "winner": false
+    },
+    {
+      "external_id": "62050250",
+      "title": "A Living Remedy",
+      "authors": [
+        "Nicole Chung"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675641094l/62050250.jpg",
+      "rank": 20,
+      "votes": 1280,
+      "winner": false
+    }
+  ]
+}

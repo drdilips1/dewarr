@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-poetry-books-2018",
+  "kind": "award",
+  "title": "Poetry",
+  "source_url": "https://www.goodreads.com/choiceawards/best-poetry-books-2018",
+  "year": 2018,
+  "category": "Poetry",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:16.625773+00:00",
+  "books": [
+    {
+      "external_id": "35924698",
+      "title": "The Witch Doesn't Burn in This One",
+      "authors": [
+        "Amanda Lovelace"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675245431l/35924698._SY600_.jpg",
+      "rank": 1,
+      "votes": 25298,
+      "winner": true
+    },
+    {
+      "external_id": "35396841",
+      "title": "The Poet X",
+      "authors": [
+        "Elizabeth Acevedo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1514403838l/35396841._SY600_.jpg",
+      "rank": 2,
+      "votes": 20025,
+      "winner": false
+    },
+    {
+      "external_id": "38255339",
+      "title": "Useless Magic",
+      "authors": [
+        "Florence Welch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518758888l/38255339.jpg",
+      "rank": 3,
+      "votes": 15540,
+      "winner": false
+    },
+    {
+      "external_id": "38926449",
+      "title": "The Dark Between Stars",
+      "authors": [
+        "Atticus  ."
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1535883003l/38926449._SY600_.jpg",
+      "rank": 4,
+      "votes": 14265,
+      "winner": false
+    },
+    {
+      "external_id": "38532187",
+      "title": "Taking the Arrow Out of the Heart",
+      "authors": [
+        "Alice Walker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1538302751l/38532187.jpg",
+      "rank": 5,
+      "votes": 11579,
+      "winner": false
+    },
+    {
+      "external_id": "35999004",
+      "title": "Rebound",
+      "authors": [
+        "Kwame Alexander"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520606871l/35999004.jpg",
+      "rank": 6,
+      "votes": 8598,
+      "winner": false
+    },
+    {
+      "external_id": "36477795",
+      "title": "If They Come for Us",
+      "authors": [
+        "Fatimah Asghar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1516802057l/36477795.jpg",
+      "rank": 7,
+      "votes": 8031,
+      "winner": false
+    },
+    {
+      "external_id": "35260128",
+      "title": "Take Me With You",
+      "authors": [
+        "Andrea Gibson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1499727366l/35260128.jpg",
+      "rank": 8,
+      "votes": 6987,
+      "winner": false
+    },
+    {
+      "external_id": "36100966",
+      "title": "Sea of Strangers",
+      "authors": [
+        "Lang Leav"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1508668563l/36100966.jpg",
+      "rank": 9,
+      "votes": 6452,
+      "winner": false
+    },
+    {
+      "external_id": "36456129",
+      "title": "She Felt Like Feeling Nothing (Volume 1)",
+      "authors": [
+        "R.H. Sin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509280838l/36456129._SY600_.jpg",
+      "rank": 10,
+      "votes": 6388,
+      "winner": false
+    },
+    {
+      "external_id": "34594981",
+      "title": "Helium",
+      "authors": [
+        "Rudy Francisco"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492928546l/34594981.jpg",
+      "rank": 11,
+      "votes": 2974,
+      "winner": false
+    },
+    {
+      "external_id": "35297455",
+      "title": "For Every One",
+      "authors": [
+        "Jason Reynolds"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1536082301l/35297455._SY600_.jpg",
+      "rank": 12,
+      "votes": 2809,
+      "winner": false
+    },
+    {
+      "external_id": "35782247",
+      "title": "Wade in the Water",
+      "authors": [
+        "Tracy K. Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523365857l/35782247.jpg",
+      "rank": 13,
+      "votes": 2453,
+      "winner": false
+    },
+    {
+      "external_id": "36479694",
+      "title": "The Future",
+      "authors": [
+        "Neil Hilborn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509015076l/36479694.jpg",
+      "rank": 14,
+      "votes": 2237,
+      "winner": false
+    },
+    {
+      "external_id": "41241311",
+      "title": "A Love Letter from the Girls Who Feel Everything",
+      "authors": [
+        "Brittainy C. Cherry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1536183713l/41241311._SY600_.jpg",
+      "rank": 15,
+      "votes": 1632,
+      "winner": false
+    },
+    {
+      "external_id": "36036176",
+      "title": "Heart Talk",
+      "authors": [
+        "Cleo Wade"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520162364l/36036176._SY600_.jpg",
+      "rank": 16,
+      "votes": 1472,
+      "winner": false
+    },
+    {
+      "external_id": "36479356",
+      "title": "American Sonnets for My Past and Future Assassin",
+      "authors": [
+        "Terrance Hayes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1524528877l/36479356._SY600_.jpg",
+      "rank": 17,
+      "votes": 1444,
+      "winner": false
+    },
+    {
+      "external_id": "35540804",
+      "title": "Blood Water Paint",
+      "authors": [
+        "Joy McCullough"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1499696476l/35540804.jpg",
+      "rank": 18,
+      "votes": 1248,
+      "winner": false
+    },
+    {
+      "external_id": "37941942",
+      "title": "The Flame",
+      "authors": [
+        "Leonard Cohen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1528831218l/37941942.jpg",
+      "rank": 19,
+      "votes": 1217,
+      "winner": false
+    },
+    {
+      "external_id": "35356376",
+      "title": "Brown",
+      "authors": [
+        "Kevin     Young"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1514738770l/35356376.jpg",
+      "rank": 20,
+      "votes": 486,
+      "winner": false
+    }
+  ]
+}

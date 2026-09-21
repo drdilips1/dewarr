@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-historical-fiction-books-2017",
+  "kind": "award",
+  "title": "Historical Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-historical-fiction-books-2017",
+  "year": 2017,
+  "category": "Historical Fiction",
+  "genres": [
+    "historical-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:30.623884+00:00",
+  "books": [
+    {
+      "external_id": "32148570",
+      "title": "Before We Were Yours",
+      "authors": [
+        "Lisa Wingate"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498910914l/32148570._SY600_.jpg",
+      "rank": 1,
+      "votes": 29431,
+      "winner": true
+    },
+    {
+      "external_id": "29906980",
+      "title": "Lincoln in the Bardo",
+      "authors": [
+        "George Saunders"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492130850l/29906980.jpg",
+      "rank": 2,
+      "votes": 28865,
+      "winner": false
+    },
+    {
+      "external_id": "33571713",
+      "title": "A Column of Fire",
+      "authors": [
+        "Ken Follett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1597750114l/33571713._SY600_.jpg",
+      "rank": 3,
+      "votes": 24923,
+      "winner": false
+    },
+    {
+      "external_id": "32051912",
+      "title": "The Alice Network",
+      "authors": [
+        "Kate Quinn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492238040l/32051912.jpg",
+      "rank": 4,
+      "votes": 22604,
+      "winner": false
+    },
+    {
+      "external_id": "32487617",
+      "title": "Beneath a Scarlet Sky",
+      "authors": [
+        "Mark T. Sullivan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1485303988l/32487617._SY600_.jpg",
+      "rank": 5,
+      "votes": 18793,
+      "winner": false
+    },
+    {
+      "external_id": "32620332",
+      "title": "The Seven Husbands of Evelyn Hugo",
+      "authors": [
+        "Taylor Jenkins Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664458703l/32620332._SY600_.jpg",
+      "rank": 6,
+      "votes": 16733,
+      "winner": false
+    },
+    {
+      "external_id": "30753646",
+      "title": "The Tea Girl of Hummingbird Lane",
+      "authors": [
+        "Lisa See"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1476974359l/30753646._SY600_.jpg",
+      "rank": 7,
+      "votes": 16402,
+      "winner": false
+    },
+    {
+      "external_id": "29983711",
+      "title": "Pachinko",
+      "authors": [
+        "Min Jin Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462393298l/29983711.jpg",
+      "rank": 8,
+      "votes": 12970,
+      "winner": false
+    },
+    {
+      "external_id": "26795307",
+      "title": "Moonglow",
+      "authors": [
+        "Michael Chabon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1457526101l/26795307.jpg",
+      "rank": 9,
+      "votes": 12470,
+      "winner": false
+    },
+    {
+      "external_id": "29904278",
+      "title": "From Sand and Ash",
+      "authors": [
+        "Amy Harmon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1465588921l/29904278.jpg",
+      "rank": 10,
+      "votes": 10377,
+      "winner": false
+    },
+    {
+      "external_id": "33368917",
+      "title": "The Last Tudor",
+      "authors": [
+        "Philippa Gregory"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1497784079l/33368917.jpg",
+      "rank": 11,
+      "votes": 4673,
+      "winner": false
+    },
+    {
+      "external_id": "34467031",
+      "title": "Manhattan Beach",
+      "authors": [
+        "Jennifer Egan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1524162798l/34467031._SY600_.jpg",
+      "rank": 12,
+      "votes": 4644,
+      "winner": false
+    },
+    {
+      "external_id": "32336154",
+      "title": "The Stars are Fire",
+      "authors": [
+        "Anita Shreve"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492514844l/32336154._SY600_.jpg",
+      "rank": 13,
+      "votes": 4439,
+      "winner": false
+    },
+    {
+      "external_id": "33253215",
+      "title": "The Heart's Invisible Furies",
+      "authors": [
+        "John Boyne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1490803456l/33253215.jpg",
+      "rank": 14,
+      "votes": 3975,
+      "winner": false
+    },
+    {
+      "external_id": "30256224",
+      "title": "A Piece of the World",
+      "authors": [
+        "Christina Baker Kline"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1475685526l/30256224.jpg",
+      "rank": 15,
+      "votes": 3800,
+      "winner": false
+    },
+    {
+      "external_id": "30653967",
+      "title": "The Women in the Castle",
+      "authors": [
+        "Jessica Shattuck"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1472678686l/30653967._SY600_.jpg",
+      "rank": 16,
+      "votes": 2990,
+      "winner": false
+    },
+    {
+      "external_id": "30267929",
+      "title": "We Were the Lucky Ones",
+      "authors": [
+        "Georgia Hunter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1471282781l/30267929.jpg",
+      "rank": 17,
+      "votes": 2557,
+      "winner": false
+    },
+    {
+      "external_id": "30971664",
+      "title": "Salt Houses",
+      "authors": [
+        "Hala Alyan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474820735l/30971664._SY600_.jpg",
+      "rank": 18,
+      "votes": 2019,
+      "winner": false
+    },
+    {
+      "external_id": "33572784",
+      "title": "Love and Other Consolation Prizes",
+      "authors": [
+        "Jamie Ford"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498738492l/33572784.jpg",
+      "rank": 19,
+      "votes": 941,
+      "winner": false
+    },
+    {
+      "external_id": "31752152",
+      "title": "Lilli de Jong",
+      "authors": [
+        "Janet Benton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474481155l/31752152.jpg",
+      "rank": 20,
+      "votes": 618,
+      "winner": false
+    }
+  ]
+}

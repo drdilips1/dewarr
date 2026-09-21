@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-history-biography-books-2020",
+  "kind": "award",
+  "title": "History & Biography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-history-biography-books-2020",
+  "year": 2020,
+  "category": "History & Biography",
+  "genres": [
+    "biography",
+    "history"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:41.652230+00:00",
+  "books": [
+    {
+      "external_id": "51152447",
+      "title": "Caste",
+      "authors": [
+        "Isabel Wilkerson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1597267568l/51152447._SY600_.jpg",
+      "rank": 1,
+      "votes": 45806,
+      "winner": true
+    },
+    {
+      "external_id": "51227088",
+      "title": "The Splendid and the Vile",
+      "authors": [
+        "Erik Larson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1567638129l/51227088._SX318_SY475_.jpg",
+      "rank": 2,
+      "votes": 40761,
+      "winner": false
+    },
+    {
+      "external_id": "45153160",
+      "title": "A Black Women's History of the United States",
+      "authors": [
+        "Daina Ramey Berry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1575339748l/45153160.jpg",
+      "rank": 3,
+      "votes": 25786,
+      "winner": false
+    },
+    {
+      "external_id": "51285366",
+      "title": "The House of Kennedy",
+      "authors": [
+        "James  Patterson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1580195485l/51285366._SX318_SY475_.jpg",
+      "rank": 4,
+      "votes": 16409,
+      "winner": false
+    },
+    {
+      "external_id": "44909230",
+      "title": "999",
+      "authors": [
+        "Heather Dune Macadam"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1567776673l/44909230._SY600_.jpg",
+      "rank": 5,
+      "votes": 11762,
+      "winner": false
+    },
+    {
+      "external_id": "51239966",
+      "title": "You Never Forget Your First",
+      "authors": [
+        "Alexis Coe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1569627765l/51239966._SX318_SY475_.jpg",
+      "rank": 6,
+      "votes": 10308,
+      "winner": false
+    },
+    {
+      "external_id": "50092714",
+      "title": "Fight of the Century",
+      "authors": [
+        "Michael Chabon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1577621729l/50092714.jpg",
+      "rank": 7,
+      "votes": 9114,
+      "winner": false
+    },
+    {
+      "external_id": "45046690",
+      "title": "The Address Book",
+      "authors": [
+        "Deirdre Mask"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1567541521l/45046690.jpg",
+      "rank": 8,
+      "votes": 9025,
+      "winner": false
+    },
+    {
+      "external_id": "53431510",
+      "title": "His Truth Is Marching On",
+      "authors": [
+        "Jon Meacham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1591628149l/53431510.jpg",
+      "rank": 9,
+      "votes": 8921,
+      "winner": false
+    },
+    {
+      "external_id": "52863345",
+      "title": "The Lincoln Conspiracy",
+      "authors": [
+        "Brad Meltzer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585147221l/52863345._SX318_SY475_.jpg",
+      "rank": 10,
+      "votes": 8519,
+      "winner": false
+    },
+    {
+      "external_id": "52578861",
+      "title": "Agent Sonya",
+      "authors": [
+        "Ben Macintyre"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585320220l/52578861.jpg",
+      "rank": 11,
+      "votes": 3402,
+      "winner": false
+    },
+    {
+      "external_id": "48590165",
+      "title": "Countdown 1945",
+      "authors": [
+        "Chris Wallace"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1587305955l/48590165.jpg",
+      "rank": 12,
+      "votes": 2725,
+      "winner": false
+    },
+    {
+      "external_id": "48868613",
+      "title": "Dead Famous",
+      "authors": [
+        "Greg  Jenner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627580976l/48868613._SY600_.jpg",
+      "rank": 13,
+      "votes": 2674,
+      "winner": false
+    },
+    {
+      "external_id": "43908981",
+      "title": "Overground Railroad",
+      "authors": [
+        "Candacy A. Taylor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565443204l/43908981.jpg",
+      "rank": 14,
+      "votes": 2516,
+      "winner": false
+    },
+    {
+      "external_id": "45754985",
+      "title": "Begin Again",
+      "authors": [
+        "Eddie S. Glaude Jr."
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565180308l/45754985.jpg",
+      "rank": 15,
+      "votes": 1944,
+      "winner": false
+    },
+    {
+      "external_id": "51542229",
+      "title": "The Deviant's War",
+      "authors": [
+        "Eric Cervini"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1579056468l/51542229.jpg",
+      "rank": 16,
+      "votes": 1751,
+      "winner": false
+    },
+    {
+      "external_id": "51934207",
+      "title": "Wandering in Strange Lands",
+      "authors": [
+        "Morgan Jerkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1578436471l/51934207._SX318_SY475_.jpg",
+      "rank": 17,
+      "votes": 1648,
+      "winner": false
+    },
+    {
+      "external_id": "48925415",
+      "title": "Killing Crazy Horse",
+      "authors": [
+        "Bill O'Reilly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1576637384l/48925415.jpg",
+      "rank": 18,
+      "votes": 1198,
+      "winner": false
+    },
+    {
+      "external_id": "52879286",
+      "title": "Humankind",
+      "authors": [
+        "Rutger Bregman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1577251406l/52879286.jpg",
+      "rank": 19,
+      "votes": 972,
+      "winner": false
+    },
+    {
+      "external_id": "52048467",
+      "title": "How the South Won the Civil War",
+      "authors": [
+        "Heather Cox Richardson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571686420l/52048467.jpg",
+      "rank": 20,
+      "votes": 700,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-memoir-autobiography-books-2015",
+  "kind": "award",
+  "title": "Memoir & Autobiography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-memoir-autobiography-books-2015",
+  "year": 2015,
+  "category": "Memoir & Autobiography",
+  "genres": [
+    "biography"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:42.011737+00:00",
+  "books": [
+    {
+      "external_id": "22886113",
+      "title": "A Work in Progress",
+      "authors": [
+        "Connor Franta"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1426466460l/22886113.jpg",
+      "rank": 1,
+      "votes": 15992,
+      "winner": true
+    },
+    {
+      "external_id": "22886112",
+      "title": "In Real Life",
+      "authors": [
+        "Joey Graceffa"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1427161086l/22886112.jpg",
+      "rank": 2,
+      "votes": 11812,
+      "winner": false
+    },
+    {
+      "external_id": "23462662",
+      "title": "American Wife",
+      "authors": [
+        "Taya Kyle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1423605837l/23462662.jpg",
+      "rank": 3,
+      "votes": 11762,
+      "winner": false
+    },
+    {
+      "external_id": "25362017",
+      "title": "The Girl with Seven Names",
+      "authors": [
+        "Hyeonseo Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1760689918l/25362017._SY600_.jpg",
+      "rank": 4,
+      "votes": 11280,
+      "winner": false
+    },
+    {
+      "external_id": "24728470",
+      "title": "M Train",
+      "authors": [
+        "Patti Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1767989321l/24728470._SY600_.jpg",
+      "rank": 5,
+      "votes": 10547,
+      "winner": false
+    },
+    {
+      "external_id": "23280252",
+      "title": "My Fight / Your Fight",
+      "authors": [
+        "Ronda Rousey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430084109l/23280252.jpg",
+      "rank": 6,
+      "votes": 10488,
+      "winner": false
+    },
+    {
+      "external_id": "22571757",
+      "title": "It's What I Do",
+      "authors": [
+        "Lynsey Addario"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1407106685l/22571757.jpg",
+      "rank": 7,
+      "votes": 7738,
+      "winner": false
+    },
+    {
+      "external_id": "23399022",
+      "title": "Hope",
+      "authors": [
+        "Amanda     Berry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421708177l/23399022.jpg",
+      "rank": 8,
+      "votes": 7695,
+      "winner": false
+    },
+    {
+      "external_id": "23281694",
+      "title": "Every Day I Fight",
+      "authors": [
+        "Stuart  Scott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422811401l/23281694.jpg",
+      "rank": 9,
+      "votes": 7284,
+      "winner": false
+    },
+    {
+      "external_id": "23341862",
+      "title": "Blackout",
+      "authors": [
+        "Sarah Hepola"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1423750824l/23341862.jpg",
+      "rank": 10,
+      "votes": 5720,
+      "winner": false
+    },
+    {
+      "external_id": "22574709",
+      "title": "Searching for Sunday",
+      "authors": [
+        "Rachel Held Evans"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404480530l/22574709.jpg",
+      "rank": 11,
+      "votes": 2948,
+      "winner": false
+    },
+    {
+      "external_id": "22875097",
+      "title": "Born with Teeth",
+      "authors": [
+        "Kate Mulgrew"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418768551l/22875097.jpg",
+      "rank": 12,
+      "votes": 2345,
+      "winner": false
+    },
+    {
+      "external_id": "23846010",
+      "title": "If You Feel Too Much",
+      "authors": [
+        "Jamie Tworkowski"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1433625582l/23846010.jpg",
+      "rank": 13,
+      "votes": 2310,
+      "winner": false
+    },
+    {
+      "external_id": "25074727",
+      "title": "All I Know Now",
+      "authors": [
+        "Carrie Hope Fletcher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1437308872l/25074727._SY600_.jpg",
+      "rank": 14,
+      "votes": 2306,
+      "winner": false
+    },
+    {
+      "external_id": "22609522",
+      "title": "Red Notice",
+      "authors": [
+        "Bill Browder"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422848658l/22609522.jpg",
+      "rank": 15,
+      "votes": 2073,
+      "winner": false
+    },
+    {
+      "external_id": "23215469",
+      "title": "Down the Rabbit Hole",
+      "authors": [
+        "Holly Madison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1427158803l/23215469.jpg",
+      "rank": 16,
+      "votes": 1913,
+      "winner": false
+    },
+    {
+      "external_id": "22929741",
+      "title": "The Argonauts",
+      "authors": [
+        "Maggie Nelson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410981835l/22929741.jpg",
+      "rank": 17,
+      "votes": 1442,
+      "winner": false
+    },
+    {
+      "external_id": "22889766",
+      "title": "Spinster",
+      "authors": [
+        "Kate Bolick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1438054638l/22889766.jpg",
+      "rank": 18,
+      "votes": 1430,
+      "winner": false
+    },
+    {
+      "external_id": "22693211",
+      "title": "Girl in a Band",
+      "authors": [
+        "Kim  Gordon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1412840109l/22693211.jpg",
+      "rank": 19,
+      "votes": 1385,
+      "winner": false
+    },
+    {
+      "external_id": "17416934",
+      "title": "Scary Close",
+      "authors": [
+        "Donald Miller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413747451l/17416934.jpg",
+      "rank": 20,
+      "votes": 843,
+      "winner": false
+    }
+  ]
+}

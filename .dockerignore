@@ -26,3 +26,7 @@ REQUIREMENTS-TRACEABILITY.csv
 config
 compose.override.yaml
 compose.override.yml
+
+# Bundled public discovery collections are application assets.
+!services/app/data/
+!services/app/data/**

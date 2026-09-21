@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-fiction-books-2012",
+  "kind": "award",
+  "title": "Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fiction-books-2012",
+  "year": 2012,
+  "category": "Fiction",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:00.566208+00:00",
+  "books": [
+    {
+      "external_id": "13497818",
+      "title": "The Casual Vacancy",
+      "authors": [
+        "J.K. Rowling"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509893913l/13497818.jpg",
+      "rank": 1,
+      "votes": 11525,
+      "winner": true
+    },
+    {
+      "external_id": "12987977",
+      "title": "Where We Belong",
+      "authors": [
+        "Emily Giffin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1340320747l/12987977.jpg",
+      "rank": 2,
+      "votes": 7841,
+      "winner": false
+    },
+    {
+      "external_id": "12022079",
+      "title": "Home Front",
+      "authors": [
+        "Kristin Hannah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344319152l/12022079.jpg",
+      "rank": 3,
+      "votes": 6072,
+      "winner": false
+    },
+    {
+      "external_id": "12852666",
+      "title": "The Age of Miracles",
+      "authors": [
+        "Karen Thompson Walker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1345666831l/12852666.jpg",
+      "rank": 4,
+      "votes": 5531,
+      "winner": false
+    },
+    {
+      "external_id": "13503109",
+      "title": "This Is How You Lose Her",
+      "authors": [
+        "Junot Díaz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1342596676l/13503109.jpg",
+      "rank": 5,
+      "votes": 4913,
+      "winner": false
+    },
+    {
+      "external_id": "12875258",
+      "title": "Tell the Wolves I'm Home",
+      "authors": [
+        "Carol Rifka Brunt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1335450415l/12875258.jpg",
+      "rank": 6,
+      "votes": 4709,
+      "winner": false
+    },
+    {
+      "external_id": "13538873",
+      "title": "Mr. Penumbra's 24-Hour Bookstore",
+      "authors": [
+        "Robin Sloan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1345089845l/13538873.jpg",
+      "rank": 7,
+      "votes": 4590,
+      "winner": false
+    },
+    {
+      "external_id": "11447921",
+      "title": "Beautiful Ruins",
+      "authors": [
+        "Jess Walter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1338161553l/11447921.jpg",
+      "rank": 8,
+      "votes": 4140,
+      "winner": false
+    },
+    {
+      "external_id": "13538552",
+      "title": "Memoirs of an Imaginary Friend",
+      "authors": [
+        "Matthew Dicks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1343851908l/13538552.jpg",
+      "rank": 9,
+      "votes": 3889,
+      "winner": false
+    },
+    {
+      "external_id": "10960383",
+      "title": "A Grown-Up Kind of Pretty",
+      "authors": [
+        "Joshilyn Jackson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442347366l/10960383._SY600_.jpg",
+      "rank": 10,
+      "votes": 3878,
+      "winner": false
+    },
+    {
+      "external_id": "13227454",
+      "title": "The Unlikely Pilgrimage of Harold Fry",
+      "authors": [
+        "Rachel Joyce"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1335816092l/13227454.jpg",
+      "rank": 11,
+      "votes": 2731,
+      "winner": false
+    },
+    {
+      "external_id": "13330761",
+      "title": "The Dog Stars",
+      "authors": [
+        "Peter Heller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388122817l/13330761.jpg",
+      "rank": 12,
+      "votes": 2165,
+      "winner": false
+    },
+    {
+      "external_id": "13438524",
+      "title": "Flight Behavior",
+      "authors": [
+        "Barbara Kingsolver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1352212134l/13438524.jpg",
+      "rank": 13,
+      "votes": 1817,
+      "winner": false
+    },
+    {
+      "external_id": "13057939",
+      "title": "In the Shadow of the Banyan",
+      "authors": [
+        "Vaddey Ratner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1346714710l/13057939.jpg",
+      "rank": 14,
+      "votes": 1581,
+      "winner": false
+    },
+    {
+      "external_id": "11529868",
+      "title": "The Orphan Master's Son",
+      "authors": [
+        "Adam  Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327878601l/11529868.jpg",
+      "rank": 15,
+      "votes": 1554,
+      "winner": false
+    },
+    {
+      "external_id": "11092210",
+      "title": "Running the Rift",
+      "authors": [
+        "Naomi Benaron"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1306778174l/11092210.jpg",
+      "rank": 16,
+      "votes": 762,
+      "winner": false
+    },
+    {
+      "external_id": "11469379",
+      "title": "A Walk Across the Sun",
+      "authors": [
+        "Corban Addison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328767745l/11469379.jpg",
+      "rank": 17,
+      "votes": 472,
+      "winner": false
+    },
+    {
+      "external_id": "10756240",
+      "title": "Telegraph Avenue",
+      "authors": [
+        "Michael Chabon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1335716595l/10756240.jpg",
+      "rank": 18,
+      "votes": 392,
+      "winner": false
+    },
+    {
+      "external_id": "12872236",
+      "title": "Canada",
+      "authors": [
+        "Richard Ford"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327927048l/12872236.jpg",
+      "rank": 19,
+      "votes": 216,
+      "winner": false
+    },
+    {
+      "external_id": "13325079",
+      "title": "Billy Lynn's Long Halftime Walk",
+      "authors": [
+        "Ben Fountain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1336052759l/13325079.jpg",
+      "rank": 20,
+      "votes": 149,
+      "winner": false
+    }
+  ]
+}

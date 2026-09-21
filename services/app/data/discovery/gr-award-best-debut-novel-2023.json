@@ -1,0 +1,223 @@
+{
+  "id": "gr-award-best-debut-novel-2023",
+  "kind": "award",
+  "title": "Debut Novel",
+  "source_url": "https://www.goodreads.com/choiceawards/best-debut-novel-2023",
+  "year": 2023,
+  "category": "Debut Novel",
+  "genres": [],
+  "count": 19,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:27.612486+00:00",
+  "books": [
+    {
+      "external_id": "60654349",
+      "title": "Weyward",
+      "authors": [
+        "Emilia Hart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677756582l/60654349._SY600_.jpg",
+      "rank": 1,
+      "votes": 45420,
+      "winner": true
+    },
+    {
+      "external_id": "62854842",
+      "title": "Ink Blood Sister Scribe",
+      "authors": [
+        "Emma Törzs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1685457125l/62854842._SY600_.jpg",
+      "rank": 2,
+      "votes": 32924,
+      "winner": false
+    },
+    {
+      "external_id": "61246258",
+      "title": "Pineapple Street",
+      "authors": [
+        "Jenny   Jackson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659404866l/61246258.jpg",
+      "rank": 3,
+      "votes": 29199,
+      "winner": false
+    },
+    {
+      "external_id": "108491027",
+      "title": "Maame",
+      "authors": [
+        "Jessica George"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675970524l/108491027._SY600_.jpg",
+      "rank": 4,
+      "votes": 27680,
+      "winner": false
+    },
+    {
+      "external_id": "64623481",
+      "title": "The September House",
+      "authors": [
+        "Carissa Orlando"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686576214l/64623481.jpg",
+      "rank": 5,
+      "votes": 22346,
+      "winner": false
+    },
+    {
+      "external_id": "61273371",
+      "title": "Looking for Jane",
+      "authors": [
+        "Heather     Marshall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673499607l/61273371.jpg",
+      "rank": 6,
+      "votes": 20045,
+      "winner": false
+    },
+    {
+      "external_id": "60784312",
+      "title": "Adelaide",
+      "authors": [
+        "Genevieve Wheeler"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1671529625l/60784312.jpg",
+      "rank": 7,
+      "votes": 19745,
+      "winner": false
+    },
+    {
+      "external_id": "61796683",
+      "title": "Did You Hear About Kitty Karr?",
+      "authors": [
+        "Crystal Smith Paul"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1683223412l/61796683._SY600_.jpg",
+      "rank": 8,
+      "votes": 19698,
+      "winner": false
+    },
+    {
+      "external_id": "61065982",
+      "title": "The Bandit Queens",
+      "authors": [
+        "Parini Shroff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1653323706l/61065982._SY600_.jpg",
+      "rank": 9,
+      "votes": 18208,
+      "winner": false
+    },
+    {
+      "external_id": "61190770",
+      "title": "Chain-Gang All-Stars",
+      "authors": [
+        "Nana Kwame Adjei-Brenyah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1682956296l/61190770.jpg",
+      "rank": 10,
+      "votes": 7645,
+      "winner": false
+    },
+    {
+      "external_id": "61214136",
+      "title": "The Collected Regrets of Clover",
+      "authors": [
+        "Mikki Brammer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1663608724l/61214136.jpg",
+      "rank": 11,
+      "votes": 6979,
+      "winner": false
+    },
+    {
+      "external_id": "60784759",
+      "title": "Beyond That, the Sea",
+      "authors": [
+        "Laura Spence-Ash"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1668472304l/60784759.jpg",
+      "rank": 12,
+      "votes": 6605,
+      "winner": false
+    },
+    {
+      "external_id": "62919375",
+      "title": "Shark Heart",
+      "authors": [
+        "Emily Habeck"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686092164l/62919375._SY600_.jpg",
+      "rank": 13,
+      "votes": 6041,
+      "winner": false
+    },
+    {
+      "external_id": "59948520",
+      "title": "In Memoriam",
+      "authors": [
+        "Alice Winn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1670866445l/59948520._SY600_.jpg",
+      "rank": 14,
+      "votes": 5303,
+      "winner": false
+    },
+    {
+      "external_id": "61111298",
+      "title": "River Sing Me Home",
+      "authors": [
+        "Eleanor Shearer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675174045l/61111298._SY600_.jpg",
+      "rank": 15,
+      "votes": 4095,
+      "winner": false
+    },
+    {
+      "external_id": "62800971",
+      "title": "Banyan Moon",
+      "authors": [
+        "Thao Thai"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1687448161l/62800971.jpg",
+      "rank": 16,
+      "votes": 3597,
+      "winner": false
+    },
+    {
+      "external_id": "62888191",
+      "title": "Monstrilio",
+      "authors": [
+        "Gerardo Sámano Córdova"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664985853l/62888191.jpg",
+      "rank": 17,
+      "votes": 3391,
+      "winner": false
+    },
+    {
+      "external_id": "60679392",
+      "title": "I Keep My Exoskeletons to Myself",
+      "authors": [
+        "Marisa Crane"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1648063139l/60679392.jpg",
+      "rank": 18,
+      "votes": 3165,
+      "winner": false
+    },
+    {
+      "external_id": "72339682",
+      "title": "One Summer in Savannah",
+      "authors": [
+        "Terah Shelton Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675091148l/72339682.jpg",
+      "rank": 19,
+      "votes": 3049,
+      "winner": false
+    }
+  ]
+}

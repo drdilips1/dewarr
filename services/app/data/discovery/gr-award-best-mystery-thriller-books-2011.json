@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-mystery-thriller-books-2011",
+  "kind": "award",
+  "title": "Mystery & Thriller",
+  "source_url": "https://www.goodreads.com/choiceawards/best-mystery-thriller-books-2011",
+  "year": 2011,
+  "category": "Mystery & Thriller",
+  "genres": [
+    "mystery"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:33.600560+00:00",
+  "books": [
+    {
+      "external_id": "9583508",
+      "title": "Smokin' Seventeen",
+      "authors": [
+        "Janet Evanovich"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388285695l/9583508.jpg",
+      "rank": 1,
+      "votes": 3996,
+      "winner": true
+    },
+    {
+      "external_id": "10402992",
+      "title": "New York to Dallas",
+      "authors": [
+        "J.D. Robb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348514401l/10402992.jpg",
+      "rank": 2,
+      "votes": 3251,
+      "winner": false
+    },
+    {
+      "external_id": "9736930",
+      "title": "Before I Go to Sleep",
+      "authors": [
+        "S.J. Watson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358353512l/9736930.jpg",
+      "rank": 3,
+      "votes": 3114,
+      "winner": false
+    },
+    {
+      "external_id": "8517008",
+      "title": "A Red Herring Without Mustard",
+      "authors": [
+        "Alan Bradley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729494191l/8517008._SY600_.jpg",
+      "rank": 4,
+      "votes": 2827,
+      "winner": false
+    },
+    {
+      "external_id": "10552338",
+      "title": "Reamde",
+      "authors": [
+        "Neal Stephenson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1305993115l/10552338.jpg",
+      "rank": 5,
+      "votes": 2531,
+      "winner": false
+    },
+    {
+      "external_id": "9166559",
+      "title": "These Things Hidden",
+      "authors": [
+        "Heather Gudenkauf"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1296001564l/9166559.jpg",
+      "rank": 6,
+      "votes": 1989,
+      "winner": false
+    },
+    {
+      "external_id": "10169662",
+      "title": "Never Knowing",
+      "authors": [
+        "Chevy Stevens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1294615110l/10169662.jpg",
+      "rank": 7,
+      "votes": 1903,
+      "winner": false
+    },
+    {
+      "external_id": "7926569",
+      "title": "Now You See Her",
+      "authors": [
+        "James  Patterson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435387035l/7926569.jpg",
+      "rank": 8,
+      "votes": 1821,
+      "winner": false
+    },
+    {
+      "external_id": "8701129",
+      "title": "Love You More",
+      "authors": [
+        "Lisa Gardner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385141722l/8701129.jpg",
+      "rank": 9,
+      "votes": 1645,
+      "winner": false
+    },
+    {
+      "external_id": "9681098",
+      "title": "The Fifth Witness",
+      "authors": [
+        "Michael Connelly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439836790l/9681098._SY600_.jpg",
+      "rank": 10,
+      "votes": 1467,
+      "winner": false
+    },
+    {
+      "external_id": "10680329",
+      "title": "A Trick of the Light",
+      "authors": [
+        "Louise Penny"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327900478l/10680329.jpg",
+      "rank": 11,
+      "votes": 718,
+      "winner": false
+    },
+    {
+      "external_id": "9635495",
+      "title": "Fallen",
+      "authors": [
+        "Karin Slaughter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388240393l/9635495.jpg",
+      "rank": 12,
+      "votes": 672,
+      "winner": false
+    },
+    {
+      "external_id": "8437667",
+      "title": "Live Wire",
+      "authors": [
+        "Harlan Coben"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1395350143l/8437667.jpg",
+      "rank": 13,
+      "votes": 578,
+      "winner": false
+    },
+    {
+      "external_id": "10532477",
+      "title": "Heat Rises",
+      "authors": [
+        "Richard Castle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1531874070l/10532477.jpg",
+      "rank": 14,
+      "votes": 527,
+      "winner": false
+    },
+    {
+      "external_id": "9440448",
+      "title": "Buried Prey",
+      "authors": [
+        "John Sandford"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439147974l/9440448._SY600_.jpg",
+      "rank": 15,
+      "votes": 485,
+      "winner": false
+    },
+    {
+      "external_id": "10024937",
+      "title": "Iron House",
+      "authors": [
+        "John  Hart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442918881l/10024937._SY600_.jpg",
+      "rank": 16,
+      "votes": 384,
+      "winner": false
+    },
+    {
+      "external_id": "9970915",
+      "title": "Pirate King",
+      "authors": [
+        "Laurie R. King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1553707431l/9970915._SY600_.jpg",
+      "rank": 17,
+      "votes": 261,
+      "winner": false
+    },
+    {
+      "external_id": "9578677",
+      "title": "The Silent Girl",
+      "authors": [
+        "Tess Gerritsen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388460440l/9578677.jpg",
+      "rank": 18,
+      "votes": 222,
+      "winner": false
+    },
+    {
+      "external_id": "10627168",
+      "title": "The Affair",
+      "authors": [
+        "Lee Child"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320488512l/10627168.jpg",
+      "rank": 19,
+      "votes": 216,
+      "winner": false
+    },
+    {
+      "external_id": "9231999",
+      "title": "Claire DeWitt and the City of the Dead",
+      "authors": [
+        "Sara Gran"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1312909281l/9231999.jpg",
+      "rank": 20,
+      "votes": 88,
+      "winner": false
+    }
+  ]
+}

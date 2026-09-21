@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-readers-favorite-ya-fantasy-books-2024",
+  "kind": "award",
+  "title": "Young Adult Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-ya-fantasy-books-2024",
+  "year": 2024,
+  "category": "Young Adult Fantasy",
+  "genres": [
+    "fantasy",
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:04.998199+00:00",
+  "books": [
+    {
+      "external_id": "127280062",
+      "title": "Ruthless Vows",
+      "authors": [
+        "Rebecca   Ross"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684911482l/127280062.jpg",
+      "rank": 1,
+      "votes": 93230,
+      "winner": true
+    },
+    {
+      "external_id": "186631952",
+      "title": "Reckless",
+      "authors": [
+        "Lauren  Roberts"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1720540009l/186631952._SY600_.jpg",
+      "rank": 2,
+      "votes": 85070,
+      "winner": false
+    },
+    {
+      "external_id": "127305713",
+      "title": "Heartless Hunter",
+      "authors": [
+        "Kristen Ciccarelli"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1683734080l/127305713.jpg",
+      "rank": 3,
+      "votes": 62945,
+      "winner": false
+    },
+    {
+      "external_id": "75673879",
+      "title": "The Prisoner’s Throne",
+      "authors": [
+        "Holly Black"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686847098l/75673879.jpg",
+      "rank": 4,
+      "votes": 36108,
+      "winner": false
+    },
+    {
+      "external_id": "43606308",
+      "title": "Defiant",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677354665l/43606308.jpg",
+      "rank": 5,
+      "votes": 24158,
+      "winner": false
+    },
+    {
+      "external_id": "200982373",
+      "title": "Don't Let the Forest In",
+      "authors": [
+        "C.G. Drews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1699124610l/200982373._SY600_.jpg",
+      "rank": 6,
+      "votes": 23297,
+      "winner": false
+    },
+    {
+      "external_id": "203578814",
+      "title": "Where the Library Hides",
+      "authors": [
+        "Isabel Ibañez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1706196782l/203578814._SY600_.jpg",
+      "rank": 7,
+      "votes": 19417,
+      "winner": false
+    },
+    {
+      "external_id": "195820745",
+      "title": "Wisteria",
+      "authors": [
+        "Adalyn  Grace"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1698070459l/195820745._SY600_.jpg",
+      "rank": 8,
+      "votes": 17953,
+      "winner": false
+    },
+    {
+      "external_id": "206780522",
+      "title": "Heir",
+      "authors": [
+        "Sabaa Tahir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1708009510l/206780522.jpg",
+      "rank": 9,
+      "votes": 16771,
+      "winner": false
+    },
+    {
+      "external_id": "127823371",
+      "title": "All This Twisted Glory",
+      "authors": [
+        "Tahereh Mafi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1690577593l/127823371._SY600_.jpg",
+      "rank": 10,
+      "votes": 12633,
+      "winner": false
+    },
+    {
+      "external_id": "125201142",
+      "title": "Where the Dark Stands Still",
+      "authors": [
+        "A.B. Poranek"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686503489l/125201142.jpg",
+      "rank": 11,
+      "votes": 5634,
+      "winner": false
+    },
+    {
+      "external_id": "206119059",
+      "title": "Immortal Dark",
+      "authors": [
+        "Tigest Girma"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718723221l/206119059._SY600_.jpg",
+      "rank": 12,
+      "votes": 5369,
+      "winner": false
+    },
+    {
+      "external_id": "145624962",
+      "title": "So Let Them Burn",
+      "authors": [
+        "Kamilah Cole"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1704296910l/145624962._SY600_.jpg",
+      "rank": 13,
+      "votes": 3911,
+      "winner": false
+    },
+    {
+      "external_id": "59475768",
+      "title": "The Invocations",
+      "authors": [
+        "Krystal Sutherland"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1664553065l/59475768.jpg",
+      "rank": 14,
+      "votes": 3409,
+      "winner": false
+    },
+    {
+      "external_id": "157020041",
+      "title": "The Poisons We Drink",
+      "authors": [
+        "Bethany Baptiste"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1685561281l/157020041._SY600_.jpg",
+      "rank": 15,
+      "votes": 3180,
+      "winner": false
+    },
+    {
+      "external_id": "181325033",
+      "title": "Dragonfruit",
+      "authors": [
+        "Makiia Lucier"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1692372020l/181325033._SY600_.jpg",
+      "rank": 16,
+      "votes": 3138,
+      "winner": false
+    },
+    {
+      "external_id": "180634025",
+      "title": "The Darkness Within Us",
+      "authors": [
+        "Tricia Levenseller"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697642398l/180634025._SY600_.jpg",
+      "rank": 17,
+      "votes": 3007,
+      "winner": false
+    },
+    {
+      "external_id": "199087657",
+      "title": "Of Jade and Dragons",
+      "authors": [
+        "Amber Chen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1695390321l/199087657._SY600_.jpg",
+      "rank": 18,
+      "votes": 2650,
+      "winner": false
+    },
+    {
+      "external_id": "61070523",
+      "title": "For She Is Wrath",
+      "authors": [
+        "Emily  Varga"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1707413991l/61070523._SY600_.jpg",
+      "rank": 19,
+      "votes": 2404,
+      "winner": false
+    },
+    {
+      "external_id": "124932778",
+      "title": "Your Blood, My Bones",
+      "authors": [
+        "Kelly Andrew"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1688183344l/124932778.jpg",
+      "rank": 20,
+      "votes": 2136,
+      "winner": false
+    }
+  ]
+}

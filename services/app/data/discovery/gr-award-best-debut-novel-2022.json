@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-debut-novel-2022",
+  "kind": "award",
+  "title": "Debut Novel",
+  "source_url": "https://www.goodreads.com/choiceawards/best-debut-novel-2022",
+  "year": 2022,
+  "category": "Debut Novel",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:53.793221+00:00",
+  "books": [
+    {
+      "external_id": "58065033",
+      "title": "Lessons in Chemistry",
+      "authors": [
+        "Bonnie Garmus"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1634748496l/58065033._SY600_.jpg",
+      "rank": 1,
+      "votes": 64107,
+      "winner": true
+    },
+    {
+      "external_id": "57789637",
+      "title": "Daughter of the Moon Goddess",
+      "authors": [
+        "Sue Lynn Tan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627686439l/57789637.jpg",
+      "rank": 2,
+      "votes": 58601,
+      "winner": false
+    },
+    {
+      "external_id": "58014893",
+      "title": "Every Summer After",
+      "authors": [
+        "Carley Fortune"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630101647l/58014893.jpg",
+      "rank": 3,
+      "votes": 57167,
+      "winner": false
+    },
+    {
+      "external_id": "55196813",
+      "title": "The Maid",
+      "authors": [
+        "Nita Prose"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1643228739l/55196813.jpg",
+      "rank": 4,
+      "votes": 42474,
+      "winner": false
+    },
+    {
+      "external_id": "58733693",
+      "title": "Remarkably Bright Creatures",
+      "authors": [
+        "Shelby Van Pelt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1651600548l/58733693._SY600_.jpg",
+      "rank": 5,
+      "votes": 27231,
+      "winner": false
+    },
+    {
+      "external_id": "57693172",
+      "title": "A Flicker in the Dark",
+      "authors": [
+        "Stacy Willingham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1621347398l/57693172._SY600_.jpg",
+      "rank": 6,
+      "votes": 26728,
+      "winner": false
+    },
+    {
+      "external_id": "57926137",
+      "title": "Black Cake",
+      "authors": [
+        "Charmaine Wilkerson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1623664615l/57926137.jpg",
+      "rank": 7,
+      "votes": 19969,
+      "winner": false
+    },
+    {
+      "external_id": "60142750",
+      "title": "All Good People Here",
+      "authors": [
+        "Ashley Flowers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642984407l/60142750.jpg",
+      "rank": 8,
+      "votes": 19347,
+      "winner": false
+    },
+    {
+      "external_id": "57127277",
+      "title": "Kaikeyi",
+      "authors": [
+        "Vaishnavi Patel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1671146784l/57127277._SY600_.jpg",
+      "rank": 9,
+      "votes": 16741,
+      "winner": false
+    },
+    {
+      "external_id": "57693262",
+      "title": "Cleopatra and Frankenstein",
+      "authors": [
+        "Coco Mellors"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1621624081l/57693262.jpg",
+      "rank": 10,
+      "votes": 16093,
+      "winner": false
+    },
+    {
+      "external_id": "57840571",
+      "title": "The Hacienda",
+      "authors": [
+        "Isabel Cañas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1769548497l/57840571._SY600_.jpg",
+      "rank": 11,
+      "votes": 5499,
+      "winner": false
+    },
+    {
+      "external_id": "57850265",
+      "title": "How High We Go in the Dark",
+      "authors": [
+        "Sequoia Nagamatsu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627483822l/57850265.jpg",
+      "rank": 12,
+      "votes": 5219,
+      "winner": false
+    },
+    {
+      "external_id": "57693171",
+      "title": "Olga Dies Dreaming",
+      "authors": [
+        "Xóchitl González"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620085798l/57693171.jpg",
+      "rank": 13,
+      "votes": 4627,
+      "winner": false
+    },
+    {
+      "external_id": "60018639",
+      "title": "Thistlefoot",
+      "authors": [
+        "GennaRose Nethercott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1658241430l/60018639.jpg",
+      "rank": 14,
+      "votes": 4568,
+      "winner": false
+    },
+    {
+      "external_id": "58537371",
+      "title": "Nightcrawling",
+      "authors": [
+        "Leila Mottley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1654709397l/58537371._SY600_.jpg",
+      "rank": 15,
+      "votes": 4331,
+      "winner": false
+    },
+    {
+      "external_id": "58724816",
+      "title": "Our Wives Under the Sea",
+      "authors": [
+        "Julia Armfield"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1636047905l/58724816.jpg",
+      "rank": 16,
+      "votes": 3917,
+      "winner": false
+    },
+    {
+      "external_id": "58884736",
+      "title": "The Measure",
+      "authors": [
+        "Nikki Erlick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1656427584l/58884736._SY600_.jpg",
+      "rank": 17,
+      "votes": 3661,
+      "winner": false
+    },
+    {
+      "external_id": "52268640",
+      "title": "Memphis",
+      "authors": [
+        "Tara M. Stringfellow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1626515519l/52268640.jpg",
+      "rank": 18,
+      "votes": 3328,
+      "winner": false
+    },
+    {
+      "external_id": "58386733",
+      "title": "The Violin Conspiracy",
+      "authors": [
+        "Brendan Slocumb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628523857l/58386733.jpg",
+      "rank": 19,
+      "votes": 3302,
+      "winner": false
+    },
+    {
+      "external_id": "58756502",
+      "title": "Jackal",
+      "authors": [
+        "Erin E. Adams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1653086275l/58756502._SY600_.jpg",
+      "rank": 20,
+      "votes": 1789,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-poetry-books-2011",
+  "kind": "award",
+  "title": "Poetry",
+  "source_url": "https://www.goodreads.com/choiceawards/best-poetry-books-2011",
+  "year": 2011,
+  "category": "Poetry",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:48:24.333669+00:00",
+  "books": [
+    {
+      "external_id": "9315496",
+      "title": "Horoscopes for the Dead",
+      "authors": [
+        "Billy Collins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320550463l/9315496.jpg",
+      "rank": 1,
+      "votes": 1260,
+      "winner": true
+    },
+    {
+      "external_id": "10326288",
+      "title": "Broetry Poetry for Dudes",
+      "authors": [
+        "Brian McGackin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1401567845l/10326288.jpg",
+      "rank": 2,
+      "votes": 814,
+      "winner": false
+    },
+    {
+      "external_id": "9743885",
+      "title": "Money Shot",
+      "authors": [
+        "Rae Armantrout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347512941l/9743885.jpg",
+      "rank": 3,
+      "votes": 770,
+      "winner": false
+    },
+    {
+      "external_id": "9471417",
+      "title": "I Love a Broad Margin to My Life",
+      "authors": [
+        "Maxine Hong Kingston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347263803l/9471417.jpg",
+      "rank": 4,
+      "votes": 742,
+      "winner": false
+    },
+    {
+      "external_id": "9654817",
+      "title": "Lucky Fish",
+      "authors": [
+        "Aimee Nezhukumatathil"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328046060l/9654817.jpg",
+      "rank": 5,
+      "votes": 716,
+      "winner": false
+    },
+    {
+      "external_id": "11480960",
+      "title": "The Trees The Trees",
+      "authors": [
+        "Heather Christle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328156959l/11480960.jpg",
+      "rank": 6,
+      "votes": 612,
+      "winner": false
+    },
+    {
+      "external_id": "10441086",
+      "title": "Ordinary Sun",
+      "authors": [
+        "Matthew Henriksen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1329326529l/10441086.jpg",
+      "rank": 7,
+      "votes": 585,
+      "winner": false
+    },
+    {
+      "external_id": "9083996",
+      "title": "The Captain Asks for a Show of Hands",
+      "authors": [
+        "Nick Flynn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348394358l/9083996.jpg",
+      "rank": 8,
+      "votes": 467,
+      "winner": false
+    },
+    {
+      "external_id": "8329847",
+      "title": "The Book of Men",
+      "authors": [
+        "Dorianne Laux"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389766938l/8329847.jpg",
+      "rank": 9,
+      "votes": 391,
+      "winner": false
+    },
+    {
+      "external_id": "9763619",
+      "title": "Testify",
+      "authors": [
+        "Joseph Lease"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328752975l/9763619.jpg",
+      "rank": 10,
+      "votes": 369,
+      "winner": false
+    },
+    {
+      "external_id": "10858542",
+      "title": "Fall Higher",
+      "authors": [
+        "Dean Young"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328758109l/10858542.jpg",
+      "rank": 11,
+      "votes": 164,
+      "winner": false
+    },
+    {
+      "external_id": "9803013",
+      "title": "That This",
+      "authors": [
+        "Susan Howe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327959243l/9803013.jpg",
+      "rank": 12,
+      "votes": 144,
+      "winner": false
+    },
+    {
+      "external_id": "11687728",
+      "title": "She Returns to the Floating World",
+      "authors": [
+        "Jeannine Hall Gailey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1307983925l/11687728.jpg",
+      "rank": 13,
+      "votes": 141,
+      "winner": false
+    },
+    {
+      "external_id": "11065188",
+      "title": "The Angel in the Dream of Our Hangover",
+      "authors": [
+        "Mark Leidner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1305478293l/11065188.jpg",
+      "rank": 14,
+      "votes": 117,
+      "winner": false
+    },
+    {
+      "external_id": "9605240",
+      "title": "Flies",
+      "authors": [
+        "Michael Dickman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328758127l/9605240.jpg",
+      "rank": 15,
+      "votes": 105,
+      "winner": false
+    },
+    {
+      "external_id": "8431208",
+      "title": "Tonight No Poetry Will Serve",
+      "authors": [
+        "Adrienne Rich"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349054106l/8431208.jpg",
+      "rank": 16,
+      "votes": 103,
+      "winner": false
+    },
+    {
+      "external_id": "11521367",
+      "title": "Feasting at the Table of the Damned",
+      "authors": [
+        "Daniel Ames"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1331677415l/11521367.jpg",
+      "rank": 17,
+      "votes": 76,
+      "winner": false
+    },
+    {
+      "external_id": "8912427",
+      "title": "Destroyer and Preserver",
+      "authors": [
+        "Matthew Rohrer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327959583l/8912427.jpg",
+      "rank": 18,
+      "votes": 75,
+      "winner": false
+    },
+    {
+      "external_id": "12085850",
+      "title": "Beauty Was the Case That They Gave Me",
+      "authors": [
+        "Mark Leidner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1312648376l/12085850.jpg",
+      "rank": 19,
+      "votes": 39,
+      "winner": false
+    },
+    {
+      "external_id": "9870010",
+      "title": "The Chameleon Couch",
+      "authors": [
+        "Yusef Komunyakaa"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1317792413l/9870010.jpg",
+      "rank": 20,
+      "votes": 21,
+      "winner": false
+    }
+  ]
+}

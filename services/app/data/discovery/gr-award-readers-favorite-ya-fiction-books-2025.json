@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-readers-favorite-ya-fiction-books-2025",
+  "kind": "award",
+  "title": "Young Adult Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-ya-fiction-books-2025",
+  "year": 2025,
+  "category": "Young Adult Fiction",
+  "genres": [
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:39:56.027131+00:00",
+  "books": [
+    {
+      "external_id": "224004733",
+      "title": "Fake Skating",
+      "authors": [
+        "Lynn Painter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1738761212l/224004733._SY600_.jpg",
+      "rank": 1,
+      "votes": 46319,
+      "winner": true
+    },
+    {
+      "external_id": "216635092",
+      "title": "Glorious Rivals",
+      "authors": [
+        "Jennifer Lynn Barnes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1733448658l/216635092._SY600_.jpg",
+      "rank": 2,
+      "votes": 33821,
+      "winner": false
+    },
+    {
+      "external_id": "213197157",
+      "title": "Dating and Dragons",
+      "authors": [
+        "Kristy Boyce"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1719778334l/213197157._SY600_.jpg",
+      "rank": 3,
+      "votes": 28917,
+      "winner": false
+    },
+    {
+      "external_id": "218873208",
+      "title": "Falling Like Leaves",
+      "authors": [
+        "Misty  Wilson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1738012237l/218873208._SY600_.jpg",
+      "rank": 4,
+      "votes": 28799,
+      "winner": false
+    },
+    {
+      "external_id": "227970831",
+      "title": "We Fell Apart",
+      "authors": [
+        "E. Lockhart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741493119l/227970831._SY600_.jpg",
+      "rank": 5,
+      "votes": 28784,
+      "winner": false
+    },
+    {
+      "external_id": "199531917",
+      "title": "The Survivor Wants to Die at the End",
+      "authors": [
+        "Adam Silvera"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1737310101l/199531917._SY600_.jpg",
+      "rank": 6,
+      "votes": 23177,
+      "winner": false
+    },
+    {
+      "external_id": "61374793",
+      "title": "I Am Not Jessica Chen",
+      "authors": [
+        "Ann Liang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1721069346l/61374793._SY600_.jpg",
+      "rank": 7,
+      "votes": 22758,
+      "winner": false
+    },
+    {
+      "external_id": "217420712",
+      "title": "Nobody in Particular",
+      "authors": [
+        "Sophie Gonzales"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1726257267l/217420712._SY600_.jpg",
+      "rank": 8,
+      "votes": 20022,
+      "winner": false
+    },
+    {
+      "external_id": "223707918",
+      "title": "You've Found Oliver",
+      "authors": [
+        "Dustin Thao"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1737994901l/223707918._SY600_.jpg",
+      "rank": 9,
+      "votes": 16127,
+      "winner": false
+    },
+    {
+      "external_id": "217387802",
+      "title": "The Thrashers",
+      "authors": [
+        "Julie  Soto"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1736283557l/217387802._SY600_.jpg",
+      "rank": 10,
+      "votes": 16025,
+      "winner": false
+    },
+    {
+      "external_id": "225699546",
+      "title": "Sisters in the Wind",
+      "authors": [
+        "Angeline Boulley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1739337634l/225699546._SY600_.jpg",
+      "rank": 11,
+      "votes": 7056,
+      "winner": false
+    },
+    {
+      "external_id": "214438316",
+      "title": "And They Were Roommates",
+      "authors": [
+        "Page Powars"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1728069724l/214438316._SY600_.jpg",
+      "rank": 12,
+      "votes": 6459,
+      "winner": false
+    },
+    {
+      "external_id": "200982339",
+      "title": "Under the Same Stars",
+      "authors": [
+        "Libba Bray"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1715457702l/200982339._SY600_.jpg",
+      "rank": 13,
+      "votes": 6337,
+      "winner": false
+    },
+    {
+      "external_id": "214438358",
+      "title": "When Devils Sing",
+      "authors": [
+        "Xan Kaur"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1750870392l/214438358._SY600_.jpg",
+      "rank": 14,
+      "votes": 5432,
+      "winner": false
+    },
+    {
+      "external_id": "223338983",
+      "title": "The Scammer",
+      "authors": [
+        "Tiffany D. Jackson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1736912747l/223338983._SY600_.jpg",
+      "rank": 15,
+      "votes": 5187,
+      "winner": false
+    },
+    {
+      "external_id": "218372271",
+      "title": "Audre & Bash Are Just Friends",
+      "authors": [
+        "Tia Williams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1731550353l/218372271._SY600_.jpg",
+      "rank": 16,
+      "votes": 3873,
+      "winner": false
+    },
+    {
+      "external_id": "216594948",
+      "title": "A First Time for Everything",
+      "authors": [
+        "K.L. Walther"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1731689035l/216594948._SY600_.jpg",
+      "rank": 17,
+      "votes": 3703,
+      "winner": false
+    },
+    {
+      "external_id": "211004954",
+      "title": "Needy Little Things",
+      "authors": [
+        "Channelle Desamours"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1717787756l/211004954.jpg",
+      "rank": 18,
+      "votes": 3143,
+      "winner": false
+    },
+    {
+      "external_id": "214268970",
+      "title": "Say a Little Prayer",
+      "authors": [
+        "Jenna Voris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1717864141l/214268970._SY600_.jpg",
+      "rank": 19,
+      "votes": 2691,
+      "winner": false
+    },
+    {
+      "external_id": "217420633",
+      "title": "Wish You Were Her",
+      "authors": [
+        "Elle McNicoll"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1731547125l/217420633._SY600_.jpg",
+      "rank": 20,
+      "votes": 1953,
+      "winner": false
+    }
+  ]
+}

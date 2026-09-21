@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-young-adult-fiction-books-2022",
+  "kind": "award",
+  "title": "Young Adult Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fiction-books-2022",
+  "year": 2022,
+  "category": "Young Adult Fiction",
+  "genres": [
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:55.127702+00:00",
+  "books": [
+    {
+      "external_id": "59233594",
+      "title": "The Final Gambit",
+      "authors": [
+        "Jennifer Lynn Barnes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1634068432l/59233594.jpg",
+      "rank": 1,
+      "votes": 72606,
+      "winner": true
+    },
+    {
+      "external_id": "55977956",
+      "title": "Loveless",
+      "authors": [
+        "Alice Oseman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1645759203l/55977956._SY600_.jpg",
+      "rank": 2,
+      "votes": 41878,
+      "winner": false
+    },
+    {
+      "external_id": "58756420",
+      "title": "I Kissed Shara Wheeler",
+      "authors": [
+        "Casey McQuiston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644433190l/58756420._SY600_.jpg",
+      "rank": 3,
+      "votes": 30724,
+      "winner": false
+    },
+    {
+      "external_id": "59723790",
+      "title": "The First to Die at the End",
+      "authors": [
+        "Adam Silvera"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1647651404l/59723790.jpg",
+      "rank": 4,
+      "votes": 28871,
+      "winner": false
+    },
+    {
+      "external_id": "56970272",
+      "title": "I Must Betray You",
+      "authors": [
+        "Ruta Sepetys"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630107564l/56970272.jpg",
+      "rank": 5,
+      "votes": 26919,
+      "winner": false
+    },
+    {
+      "external_id": "57917042",
+      "title": "Anatomy",
+      "authors": [
+        "Dana Schwartz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1621454828l/57917042.jpg",
+      "rank": 6,
+      "votes": 26504,
+      "winner": false
+    },
+    {
+      "external_id": "57899793",
+      "title": "All My Rage",
+      "authors": [
+        "Sabaa Tahir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1629908086l/57899793.jpg",
+      "rank": 7,
+      "votes": 23683,
+      "winner": false
+    },
+    {
+      "external_id": "61713106",
+      "title": "I Fell in Love With Hope",
+      "authors": [
+        "Lancali"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1658767285l/61713106._SY600_.jpg",
+      "rank": 8,
+      "votes": 22486,
+      "winner": false
+    },
+    {
+      "external_id": "59586261",
+      "title": "Family of Liars",
+      "authors": [
+        "E. Lockhart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1636570306l/59586261._SY600_.jpg",
+      "rank": 9,
+      "votes": 22296,
+      "winner": false
+    },
+    {
+      "external_id": "58842731",
+      "title": "The Lesbiana's Guide to Catholic School",
+      "authors": [
+        "Sonora Reyes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1634305789l/58842731.jpg",
+      "rank": 10,
+      "votes": 17123,
+      "winner": false
+    },
+    {
+      "external_id": "57390604",
+      "title": "As Long as the Lemon Trees Grow",
+      "authors": [
+        "Zoulfa Katouh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642433141l/57390604.jpg",
+      "rank": 11,
+      "votes": 5750,
+      "winner": false
+    },
+    {
+      "external_id": "59816818",
+      "title": "The Weight of Blood",
+      "authors": [
+        "Tiffany D. Jackson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644435541l/59816818.jpg",
+      "rank": 12,
+      "votes": 5448,
+      "winner": false
+    },
+    {
+      "external_id": "56200366",
+      "title": "You'll Be the Death of Me",
+      "authors": [
+        "Karen M. McManus"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1615237524l/56200366.jpg",
+      "rank": 13,
+      "votes": 5344,
+      "winner": false
+    },
+    {
+      "external_id": "58437812",
+      "title": "She Gets the Girl",
+      "authors": [
+        "Rachael Lippincott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1646845024l/58437812.jpg",
+      "rank": 14,
+      "votes": 5274,
+      "winner": false
+    },
+    {
+      "external_id": "57911600",
+      "title": "Hell Followed With Us",
+      "authors": [
+        "Andrew Joseph White"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630498579l/57911600.jpg",
+      "rank": 15,
+      "votes": 4337,
+      "winner": false
+    },
+    {
+      "external_id": "59365594",
+      "title": "See You Yesterday",
+      "authors": [
+        "Rachel Lynn Solomon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1650470632l/59365594.jpg",
+      "rank": 16,
+      "votes": 4275,
+      "winner": false
+    },
+    {
+      "external_id": "58857822",
+      "title": "My Mechanical Romance",
+      "authors": [
+        "Alexene Farol Follmuth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1651585695l/58857822._SY600_.jpg",
+      "rank": 17,
+      "votes": 3892,
+      "winner": false
+    },
+    {
+      "external_id": "51559209",
+      "title": "Nothing More to Tell",
+      "authors": [
+        "Karen M. McManus"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1639380109l/51559209.jpg",
+      "rank": 18,
+      "votes": 3830,
+      "winner": false
+    },
+    {
+      "external_id": "56978109",
+      "title": "Ophelia After All",
+      "authors": [
+        "Racquel Marie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1615485431l/56978109.jpg",
+      "rank": 19,
+      "votes": 2165,
+      "winner": false
+    },
+    {
+      "external_id": "58543750",
+      "title": "A Show for Two",
+      "authors": [
+        "Tashie Bhuiyan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1630569490l/58543750.jpg",
+      "rank": 20,
+      "votes": 1272,
+      "winner": false
+    }
+  ]
+}

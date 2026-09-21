@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-debut-novel-2019",
+  "kind": "award",
+  "title": "Debut Novel",
+  "source_url": "https://www.goodreads.com/choiceawards/best-debut-novel-2019",
+  "year": 2019,
+  "category": "Debut Novel",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:45.150440+00:00",
+  "books": [
+    {
+      "external_id": "41150487",
+      "title": "Red, White & Royal Blue",
+      "authors": [
+        "Casey McQuiston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1566742512l/41150487._SY600_.jpg",
+      "rank": 1,
+      "votes": 60656,
+      "winner": true
+    },
+    {
+      "external_id": "40097951",
+      "title": "The Silent Patient",
+      "authors": [
+        "Alex Michaelides"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1668782119l/40097951._SY600_.jpg",
+      "rank": 2,
+      "votes": 44936,
+      "winner": false
+    },
+    {
+      "external_id": "38819868",
+      "title": "My Sister, the Serial Killer",
+      "authors": [
+        "Oyinkan Braithwaite"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523366732l/38819868._SY600_.jpg",
+      "rank": 3,
+      "votes": 26662,
+      "winner": false
+    },
+    {
+      "external_id": "43521657",
+      "title": "The Ten Thousand Doors of January",
+      "authors": [
+        "Alix E. Harrow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1548174710l/43521657.jpg",
+      "rank": 4,
+      "votes": 18657,
+      "winner": false
+    },
+    {
+      "external_id": "43982054",
+      "title": "The Water Dancer",
+      "authors": [
+        "Ta-Nehisi Coates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549993860l/43982054.jpg",
+      "rank": 5,
+      "votes": 18350,
+      "winner": false
+    },
+    {
+      "external_id": "40514431",
+      "title": "Evvie Drake Starts Over",
+      "authors": [
+        "Linda  Holmes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1538446504l/40514431._SY600_.jpg",
+      "rank": 6,
+      "votes": 16722,
+      "winner": false
+    },
+    {
+      "external_id": "41880609",
+      "title": "On Earth We're Briefly Gorgeous",
+      "authors": [
+        "Ocean Vuong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1615580168l/41880609._SY600_.jpg",
+      "rank": 7,
+      "votes": 13688,
+      "winner": false
+    },
+    {
+      "external_id": "34313931",
+      "title": "A Woman Is No Man",
+      "authors": [
+        "Etaf Rum"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1533072101l/34313931.jpg",
+      "rank": 8,
+      "votes": 12315,
+      "winner": false
+    },
+    {
+      "external_id": "43426115",
+      "title": "The Secrets We Kept",
+      "authors": [
+        "Lara Prescott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554225483l/43426115.jpg",
+      "rank": 9,
+      "votes": 11746,
+      "winner": false
+    },
+    {
+      "external_id": "40539165",
+      "title": "Queenie",
+      "authors": [
+        "Candice Carty-Williams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550417694l/40539165._SY600_.jpg",
+      "rank": 10,
+      "votes": 11242,
+      "winner": false
+    },
+    {
+      "external_id": "40024139",
+      "title": "Serpent & Dove",
+      "authors": [
+        "Shelby Mahurin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1549476128l/40024139.jpg",
+      "rank": 11,
+      "votes": 5457,
+      "winner": false
+    },
+    {
+      "external_id": "40121959",
+      "title": "Miracle Creek",
+      "authors": [
+        "Angie  Kim"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537287675l/40121959.jpg",
+      "rank": 12,
+      "votes": 5405,
+      "winner": false
+    },
+    {
+      "external_id": "41880044",
+      "title": "The Most Fun We Ever Had",
+      "authors": [
+        "Claire Lombardo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1559679977l/41880044.jpg",
+      "rank": 13,
+      "votes": 4648,
+      "winner": false
+    },
+    {
+      "external_id": "40696776",
+      "title": "Boy Swallows Universe",
+      "authors": [
+        "Trent Dalton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537281111l/40696776.jpg",
+      "rank": 14,
+      "votes": 4607,
+      "winner": false
+    },
+    {
+      "external_id": "39863464",
+      "title": "When All Is Said",
+      "authors": [
+        "Anne  Griffin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1542078980l/39863464.jpg",
+      "rank": 15,
+      "votes": 3697,
+      "winner": false
+    },
+    {
+      "external_id": "39679076",
+      "title": "House of Salt and Sorrows",
+      "authors": [
+        "Erin A. Craig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1544071699l/39679076.jpg",
+      "rank": 16,
+      "votes": 3674,
+      "winner": false
+    },
+    {
+      "external_id": "36492488",
+      "title": "We Hunt the Flame",
+      "authors": [
+        "Hafsah Faizal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1551185822l/36492488.jpg",
+      "rank": 17,
+      "votes": 3569,
+      "winner": false
+    },
+    {
+      "external_id": "42036538",
+      "title": "Gideon the Ninth",
+      "authors": [
+        "Tamsyn Muir"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546870952l/42036538.jpg",
+      "rank": 18,
+      "votes": 3145,
+      "winner": false
+    },
+    {
+      "external_id": "42785825",
+      "title": "The Friend Zone",
+      "authors": [
+        "Abby Jimenez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554144047l/42785825.jpg",
+      "rank": 19,
+      "votes": 3041,
+      "winner": false
+    },
+    {
+      "external_id": "41880602",
+      "title": "Fleishman Is in Trouble",
+      "authors": [
+        "Taffy Brodesser-Akner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556374309l/41880602._SY600_.jpg",
+      "rank": 20,
+      "votes": 2525,
+      "winner": false
+    }
+  ]
+}

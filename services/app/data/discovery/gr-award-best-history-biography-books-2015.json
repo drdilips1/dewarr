@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-history-biography-books-2015",
+  "kind": "award",
+  "title": "History & Biography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-history-biography-books-2015",
+  "year": 2015,
+  "category": "History & Biography",
+  "genres": [
+    "biography",
+    "history"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:43.470919+00:00",
+  "books": [
+    {
+      "external_id": "22551730",
+      "title": "Dead Wake",
+      "authors": [
+        "Erik Larson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408923747l/22551730.jpg",
+      "rank": 1,
+      "votes": 22427,
+      "winner": true
+    },
+    {
+      "external_id": "24819449",
+      "title": "The Witches",
+      "authors": [
+        "Stacy Schiff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1431533468l/24819449._SY600_.jpg",
+      "rank": 2,
+      "votes": 12805,
+      "winner": false
+    },
+    {
+      "external_id": "22609391",
+      "title": "The Wright Brothers",
+      "authors": [
+        "David McCullough"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430942575l/22609391.jpg",
+      "rank": 3,
+      "votes": 11820,
+      "winner": false
+    },
+    {
+      "external_id": "23287193",
+      "title": "Born Survivors",
+      "authors": [
+        "Wendy   Holden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422216343l/23287193.jpg",
+      "rank": 4,
+      "votes": 10027,
+      "winner": false
+    },
+    {
+      "external_id": "22212838",
+      "title": "Pioneer Girl",
+      "authors": [
+        "Laura Ingalls Wilder"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1416178689l/22212838.jpg",
+      "rank": 5,
+      "votes": 9784,
+      "winner": false
+    },
+    {
+      "external_id": "22715829",
+      "title": "When Books Went to War",
+      "authors": [
+        "Molly Guptill Manning"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1409807603l/22715829.jpg",
+      "rank": 6,
+      "votes": 7297,
+      "winner": false
+    },
+    {
+      "external_id": "22294061",
+      "title": "Romantic Outlaws",
+      "authors": [
+        "Charlotte  Gordon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1401077142l/22294061.jpg",
+      "rank": 7,
+      "votes": 6214,
+      "winner": false
+    },
+    {
+      "external_id": "20890478",
+      "title": "Ravensbrück",
+      "authors": [
+        "Sarah Helm"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400833322l/20890478.jpg",
+      "rank": 8,
+      "votes": 5587,
+      "winner": false
+    },
+    {
+      "external_id": "23492799",
+      "title": "The Oregon Trail",
+      "authors": [
+        "Rinker Buck"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435548347l/23492799._SY600_.jpg",
+      "rank": 9,
+      "votes": 4945,
+      "winner": false
+    },
+    {
+      "external_id": "23399020",
+      "title": "Nagasaki",
+      "authors": [
+        "Susan Southard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414350630l/23399020.jpg",
+      "rank": 10,
+      "votes": 4607,
+      "winner": false
+    },
+    {
+      "external_id": "22889768",
+      "title": "The Quartet",
+      "authors": [
+        "Joseph J. Ellis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422811159l/22889768.jpg",
+      "rank": 11,
+      "votes": 2436,
+      "winner": false
+    },
+    {
+      "external_id": "23463183",
+      "title": "The Billion Dollar Spy",
+      "authors": [
+        "David E. Hoffman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1428686782l/23463183.jpg",
+      "rank": 12,
+      "votes": 1764,
+      "winner": false
+    },
+    {
+      "external_id": "23019289",
+      "title": "Ashley's War",
+      "authors": [
+        "Gayle Tzemach Lemmon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1433353074l/23019289._SY600_.jpg",
+      "rank": 13,
+      "votes": 1735,
+      "winner": false
+    },
+    {
+      "external_id": "23719479",
+      "title": "Rosemary",
+      "authors": [
+        "Kate Clifford Larson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439253720l/23719479._SY600_.jpg",
+      "rank": 14,
+      "votes": 1717,
+      "winner": false
+    },
+    {
+      "external_id": "25622302",
+      "title": "The Dead Duke, His Secret Wife, and the Missing Corpse",
+      "authors": [
+        "Piu Marie Eatwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1433778395l/25622302.jpg",
+      "rank": 15,
+      "votes": 1701,
+      "winner": false
+    },
+    {
+      "external_id": "25630085",
+      "title": "Killing Reagan",
+      "authors": [
+        "Bill O'Reilly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1432976247l/25630085.jpg",
+      "rank": 16,
+      "votes": 1434,
+      "winner": false
+    },
+    {
+      "external_id": "22537682",
+      "title": "A Kim Jong-Il Production",
+      "authors": [
+        "Paul   Fischer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403430382l/22537682.jpg",
+      "rank": 17,
+      "votes": 1337,
+      "winner": false
+    },
+    {
+      "external_id": "22856189",
+      "title": "Legend",
+      "authors": [
+        "Eric Blehm"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1425054245l/22856189.jpg",
+      "rank": 18,
+      "votes": 1205,
+      "winner": false
+    },
+    {
+      "external_id": "24602886",
+      "title": "Lafayette in the Somewhat United States",
+      "authors": [
+        "Sarah Vowell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1429537612l/24602886.jpg",
+      "rank": 19,
+      "votes": 1108,
+      "winner": false
+    },
+    {
+      "external_id": "22693222",
+      "title": "The Residence",
+      "authors": [
+        "Kate Andersen Brower"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1406045992l/22693222.jpg",
+      "rank": 20,
+      "votes": 897,
+      "winner": false
+    }
+  ]
+}

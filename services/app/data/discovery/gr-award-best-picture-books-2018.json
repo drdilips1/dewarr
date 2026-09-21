@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-picture-books-2018",
+  "kind": "award",
+  "title": "Picture Books",
+  "source_url": "https://www.goodreads.com/choiceawards/best-picture-books-2018",
+  "year": 2018,
+  "category": "Picture Books",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:24.144248+00:00",
+  "books": [
+    {
+      "external_id": "35396839",
+      "title": "I Am Enough",
+      "authors": [
+        "Grace Byers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1497851625l/35396839._SY600_.jpg",
+      "rank": 1,
+      "votes": 25841,
+      "winner": true
+    },
+    {
+      "external_id": "39319247",
+      "title": "A Day in the Life of Marlon Bundo",
+      "authors": [
+        "Chronicle Books"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1521430302l/39319247._SY600_.jpg",
+      "rank": 2,
+      "votes": 25670,
+      "winner": false
+    },
+    {
+      "external_id": "35488059",
+      "title": "Little Leaders",
+      "authors": [
+        "Vashti Harrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1499170958l/35488059._SY600_.jpg",
+      "rank": 3,
+      "votes": 16644,
+      "winner": false
+    },
+    {
+      "external_id": "36341954",
+      "title": "We Don't Eat Our Classmates",
+      "authors": [
+        "Ryan T.  Higgins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1509512923l/36341954._SY600_.jpg",
+      "rank": 4,
+      "votes": 11438,
+      "winner": false
+    },
+    {
+      "external_id": "35138182",
+      "title": "Petra",
+      "authors": [
+        "Marianna Coppo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498840905l/35138182.jpg",
+      "rank": 5,
+      "votes": 10585,
+      "winner": false
+    },
+    {
+      "external_id": "35248504",
+      "title": "The Rabbit Listened",
+      "authors": [
+        "Cori Doerrfeld"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1501511316l/35248504._SY600_.jpg",
+      "rank": 6,
+      "votes": 9683,
+      "winner": false
+    },
+    {
+      "external_id": "35580105",
+      "title": "Hello Lighthouse",
+      "authors": [
+        "Sophie  Blackall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1515624086l/35580105._SY600_.jpg",
+      "rank": 7,
+      "votes": 9563,
+      "winner": false
+    },
+    {
+      "external_id": "36373562",
+      "title": "Ocean Meets Sky",
+      "authors": [
+        "Terry Fan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511798347l/36373562._SY600_.jpg",
+      "rank": 8,
+      "votes": 9242,
+      "winner": false
+    },
+    {
+      "external_id": "35356379",
+      "title": "Love",
+      "authors": [
+        "Matt de la Peña"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1513266890l/35356379._SY600_.jpg",
+      "rank": 9,
+      "votes": 8984,
+      "winner": false
+    },
+    {
+      "external_id": "26532714",
+      "title": "Julián Is a Mermaid",
+      "authors": [
+        "Jessica     Love"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1503977423l/26532714._SY600_.jpg",
+      "rank": 10,
+      "votes": 6513,
+      "winner": false
+    },
+    {
+      "external_id": "35566693",
+      "title": "The Word Collector",
+      "authors": [
+        "Peter H. Reynolds"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1503754239l/35566693._SY600_.jpg",
+      "rank": 11,
+      "votes": 2743,
+      "winner": false
+    },
+    {
+      "external_id": "35182933",
+      "title": "Baby Monkey, Private Eye",
+      "authors": [
+        "Brian Selznick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510409362l/35182933._SY600_.jpg",
+      "rank": 12,
+      "votes": 2675,
+      "winner": false
+    },
+    {
+      "external_id": "34791219",
+      "title": "Drawn Together",
+      "authors": [
+        "Minh Lê"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510025545l/34791219.jpg",
+      "rank": 13,
+      "votes": 2420,
+      "winner": false
+    },
+    {
+      "external_id": "35631757",
+      "title": "Islandborn",
+      "authors": [
+        "Junot Díaz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1501509374l/35631757.jpg",
+      "rank": 14,
+      "votes": 2374,
+      "winner": false
+    },
+    {
+      "external_id": "40524608",
+      "title": "Lulu is a Rhinoceros",
+      "authors": [
+        "Jason Flom"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1528923909l/40524608._SY600_.jpg",
+      "rank": 15,
+      "votes": 2073,
+      "winner": false
+    },
+    {
+      "external_id": "37506301",
+      "title": "The Day You Begin",
+      "authors": [
+        "Jacqueline Woodson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1525273235l/37506301._SY600_.jpg",
+      "rank": 16,
+      "votes": 1198,
+      "winner": false
+    },
+    {
+      "external_id": "34204247",
+      "title": "Prince & Knight",
+      "authors": [
+        "Daniel Haack"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1508286286l/34204247._SY600_.jpg",
+      "rank": 17,
+      "votes": 1133,
+      "winner": false
+    },
+    {
+      "external_id": "35833840",
+      "title": "They Say Blue",
+      "authors": [
+        "Jillian Tamaki"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520017963l/35833840._SY600_.jpg",
+      "rank": 18,
+      "votes": 1075,
+      "winner": false
+    },
+    {
+      "external_id": "41443051",
+      "title": "The Truth Pixie",
+      "authors": [
+        "Matt Haig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1535056705l/41443051._SY600_.jpg",
+      "rank": 19,
+      "votes": 956,
+      "winner": false
+    },
+    {
+      "external_id": "38495981",
+      "title": "Franklin and Luna Go to the Moon",
+      "authors": [
+        "Jen Campbell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520155590l/38495981._SY600_.jpg",
+      "rank": 20,
+      "votes": 888,
+      "winner": false
+    }
+  ]
+}

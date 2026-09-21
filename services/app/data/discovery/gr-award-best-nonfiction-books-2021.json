@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-nonfiction-books-2021",
+  "kind": "award",
+  "title": "Nonfiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-nonfiction-books-2021",
+  "year": 2021,
+  "category": "Nonfiction",
+  "genres": [
+    "non-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:11.468451+00:00",
+  "books": [
+    {
+      "external_id": "55145261",
+      "title": "The Anthropocene Reviewed",
+      "authors": [
+        "John  Green"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1616514130l/55145261.jpg",
+      "rank": 1,
+      "votes": 41649,
+      "winner": true
+    },
+    {
+      "external_id": "55825273",
+      "title": "The Comfort Book",
+      "authors": [
+        "Matt Haig"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1641142132l/55825273._SY600_.jpg",
+      "rank": 2,
+      "votes": 26813,
+      "winner": false
+    },
+    {
+      "external_id": "56268863",
+      "title": "The Book of Hope",
+      "authors": [
+        "Jane Goodall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1632157501l/56268863._SY600_.jpg",
+      "rank": 3,
+      "votes": 25012,
+      "winner": false
+    },
+    {
+      "external_id": "55338982",
+      "title": "Cultish",
+      "authors": [
+        "Amanda Montell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1762247387l/55338982._SY600_.jpg",
+      "rank": 4,
+      "votes": 19324,
+      "winner": false
+    },
+    {
+      "external_id": "53238858",
+      "title": "What Happened To You?",
+      "authors": [
+        "Bruce D. Perry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1653552093l/53238858._SY600_.jpg",
+      "rank": 5,
+      "votes": 15967,
+      "winner": false
+    },
+    {
+      "external_id": "53056522",
+      "title": "Mediocre",
+      "authors": [
+        "Ijeoma Oluo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1569299522l/53056522.jpg",
+      "rank": 6,
+      "votes": 15226,
+      "winner": false
+    },
+    {
+      "external_id": "55539565",
+      "title": "Think Again",
+      "authors": [
+        "Adam M. Grant"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602574232l/55539565.jpg",
+      "rank": 7,
+      "votes": 15080,
+      "winner": false
+    },
+    {
+      "external_id": "56769577",
+      "title": "Fuzz",
+      "authors": [
+        "Mary Roach"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1619615618l/56769577.jpg",
+      "rank": 8,
+      "votes": 12070,
+      "winner": false
+    },
+    {
+      "external_id": "53317339",
+      "title": "Last Call",
+      "authors": [
+        "Elon Green"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1591622750l/53317339.jpg",
+      "rank": 9,
+      "votes": 11758,
+      "winner": false
+    },
+    {
+      "external_id": "52275335",
+      "title": "How to Avoid a Climate Disaster",
+      "authors": [
+        "Bill  Gates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1609355352l/52275335._SY600_.jpg",
+      "rank": 10,
+      "votes": 10109,
+      "winner": false
+    },
+    {
+      "external_id": "56015023",
+      "title": "This Is Your Mind on Plants",
+      "authors": [
+        "Michael Pollan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1606111590l/56015023._SY600_.jpg",
+      "rank": 11,
+      "votes": 4199,
+      "winner": false
+    },
+    {
+      "external_id": "54895704",
+      "title": "Remember",
+      "authors": [
+        "Lisa Genova"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598831596l/54895704.jpg",
+      "rank": 12,
+      "votes": 4144,
+      "winner": false
+    },
+    {
+      "external_id": "55290026",
+      "title": "A Swim in a Pond in the Rain",
+      "authors": [
+        "George Saunders"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602190063l/55290026.jpg",
+      "rank": 13,
+      "votes": 3805,
+      "winner": false
+    },
+    {
+      "external_id": "56790170",
+      "title": "The Premonition",
+      "authors": [
+        "Michael   Lewis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611844095l/56790170.jpg",
+      "rank": 14,
+      "votes": 3791,
+      "winner": false
+    },
+    {
+      "external_id": "53231851",
+      "title": "The Sum of Us",
+      "authors": [
+        "Heather  McGhee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1606321459l/53231851.jpg",
+      "rank": 15,
+      "votes": 3744,
+      "winner": false
+    },
+    {
+      "external_id": "54455629",
+      "title": "The Disordered Cosmos",
+      "authors": [
+        "Chanda Prescod-Weinstein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594326004l/54455629.jpg",
+      "rank": 16,
+      "votes": 3639,
+      "winner": false
+    },
+    {
+      "external_id": "49247757",
+      "title": "A Little Devil in America",
+      "authors": [
+        "Hanif Abdurraqib"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1606110758l/49247757._SY600_.jpg",
+      "rank": 17,
+      "votes": 2722,
+      "winner": false
+    },
+    {
+      "external_id": "53330118",
+      "title": "Chatter",
+      "authors": [
+        "Ethan Kross"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1606106010l/53330118.jpg",
+      "rank": 18,
+      "votes": 2036,
+      "winner": false
+    },
+    {
+      "external_id": "56024292",
+      "title": "Paradise",
+      "authors": [
+        "Lizzie Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1607537605l/56024292.jpg",
+      "rank": 19,
+      "votes": 1802,
+      "winner": false
+    },
+    {
+      "external_id": "54814834",
+      "title": "Under a White Sky",
+      "authors": [
+        "Elizabeth Kolbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608039192l/54814834.jpg",
+      "rank": 20,
+      "votes": 1390,
+      "winner": false
+    }
+  ]
+}

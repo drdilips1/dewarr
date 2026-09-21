@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-historical-fiction-books-2023",
+  "kind": "award",
+  "title": "Historical Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-historical-fiction-books-2023",
+  "year": 2023,
+  "category": "Historical Fiction",
+  "genres": [
+    "historical-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:15.009963+00:00",
+  "books": [
+    {
+      "external_id": "60654349",
+      "title": "Weyward",
+      "authors": [
+        "Emilia Hart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677756582l/60654349._SY600_.jpg",
+      "rank": 1,
+      "votes": 62211,
+      "winner": true
+    },
+    {
+      "external_id": "180357146",
+      "title": "The Covenant of Water",
+      "authors": [
+        "Abraham   Verghese"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1687600746l/180357146._SY600_.jpg",
+      "rank": 2,
+      "votes": 46591,
+      "winner": false
+    },
+    {
+      "external_id": "62919732",
+      "title": "Lady Tan's Circle of Women",
+      "authors": [
+        "Lisa See"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1683735261l/62919732.jpg",
+      "rank": 3,
+      "votes": 35411,
+      "winner": false
+    },
+    {
+      "external_id": "65678550",
+      "title": "The Heaven & Earth Grocery Store",
+      "authors": [
+        "James   McBride"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1685350945l/65678550.jpg",
+      "rank": 4,
+      "votes": 33221,
+      "winner": false
+    },
+    {
+      "external_id": "62054146",
+      "title": "The Keeper of Hidden Books",
+      "authors": [
+        "Madeline  Martin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673627406l/62054146.jpg",
+      "rank": 5,
+      "votes": 30379,
+      "winner": false
+    },
+    {
+      "external_id": "62060274",
+      "title": "The Echo of Old Books",
+      "authors": [
+        "Barbara  Davis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1671274907l/62060274.jpg",
+      "rank": 6,
+      "votes": 29977,
+      "winner": false
+    },
+    {
+      "external_id": "61273858",
+      "title": "The House of Eve",
+      "authors": [
+        "Sadeqa  Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675909166l/61273858._SY600_.jpg",
+      "rank": 7,
+      "votes": 29087,
+      "winner": false
+    },
+    {
+      "external_id": "62583516",
+      "title": "The Wind Knows My Name",
+      "authors": [
+        "Isabel Allende"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684816057l/62583516.jpg",
+      "rank": 8,
+      "votes": 26549,
+      "winner": false
+    },
+    {
+      "external_id": "61796683",
+      "title": "Did You Hear About Kitty Karr?",
+      "authors": [
+        "Crystal Smith Paul"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1683223412l/61796683._SY600_.jpg",
+      "rank": 9,
+      "votes": 24150,
+      "winner": false
+    },
+    {
+      "external_id": "61273371",
+      "title": "Looking for Jane",
+      "authors": [
+        "Heather     Marshall"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673499607l/61273371.jpg",
+      "rank": 10,
+      "votes": 19468,
+      "winner": false
+    },
+    {
+      "external_id": "63922274",
+      "title": "Go as a River",
+      "authors": [
+        "Shelley Read"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1670147458l/63922274.jpg",
+      "rank": 11,
+      "votes": 7379,
+      "winner": false
+    },
+    {
+      "external_id": "62327255",
+      "title": "The Paris Daughter",
+      "authors": [
+        "Kristin Harmel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1683735305l/62327255.jpg",
+      "rank": 12,
+      "votes": 6708,
+      "winner": false
+    },
+    {
+      "external_id": "61964751",
+      "title": "The Secret Book of Flora Lea",
+      "authors": [
+        "Patti Callahan Henry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1680730634l/61964751.jpg",
+      "rank": 13,
+      "votes": 6568,
+      "winner": false
+    },
+    {
+      "external_id": "87556695",
+      "title": "Let Us Descend",
+      "authors": [
+        "Jesmyn Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1698173892l/87556695.jpg",
+      "rank": 14,
+      "votes": 6135,
+      "winner": false
+    },
+    {
+      "external_id": "61272702",
+      "title": "Hang the Moon",
+      "authors": [
+        "Jeannette Walls"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677786609l/61272702.jpg",
+      "rank": 15,
+      "votes": 5839,
+      "winner": false
+    },
+    {
+      "external_id": "60784759",
+      "title": "Beyond That, the Sea",
+      "authors": [
+        "Laura Spence-Ash"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1668472304l/60784759.jpg",
+      "rank": 16,
+      "votes": 5444,
+      "winner": false
+    },
+    {
+      "external_id": "61111298",
+      "title": "River Sing Me Home",
+      "authors": [
+        "Eleanor Shearer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675174045l/61111298._SY600_.jpg",
+      "rank": 17,
+      "votes": 4948,
+      "winner": false
+    },
+    {
+      "external_id": "62800971",
+      "title": "Banyan Moon",
+      "authors": [
+        "Thao Thai"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1687448161l/62800971.jpg",
+      "rank": 18,
+      "votes": 3762,
+      "winner": false
+    },
+    {
+      "external_id": "62952130",
+      "title": "The Vaster Wilds",
+      "authors": [
+        "Lauren Groff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1680169653l/62952130.jpg",
+      "rank": 19,
+      "votes": 3506,
+      "winner": false
+    },
+    {
+      "external_id": "71872930",
+      "title": "North Woods",
+      "authors": [
+        "Daniel       Mason"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684816182l/71872930.jpg",
+      "rank": 20,
+      "votes": 2988,
+      "winner": false
+    }
+  ]
+}

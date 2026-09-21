@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-readers-favorite-memoir-books-2025",
+  "kind": "award",
+  "title": "Memoir",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-memoir-books-2025",
+  "year": 2025,
+  "category": "Memoir",
+  "genres": [
+    "biography"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:50:42.255284+00:00",
+  "books": [
+    {
+      "external_id": "214151420",
+      "title": "The House of My Mother",
+      "authors": [
+        "Shari Franke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1728843692l/214151420._SY600_.jpg",
+      "rank": 1,
+      "votes": 57544,
+      "winner": true
+    },
+    {
+      "external_id": "235364773",
+      "title": "Finding My Way",
+      "authors": [
+        "Malala Yousafzai"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1750867005l/235364773._SY600_.jpg",
+      "rank": 2,
+      "votes": 44413,
+      "winner": false
+    },
+    {
+      "external_id": "193388653",
+      "title": "Nobody's Girl",
+      "authors": [
+        "Virginia Roberts Giuffre"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1756130705l/193388653._SY600_.jpg",
+      "rank": 3,
+      "votes": 42903,
+      "winner": false
+    },
+    {
+      "external_id": "219446263",
+      "title": "My Next Breath",
+      "authors": [
+        "Jeremy Renner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1737607859l/219446263._SY600_.jpg",
+      "rank": 4,
+      "votes": 39067,
+      "winner": false
+    },
+    {
+      "external_id": "232466984",
+      "title": "107 Days",
+      "authors": [
+        "Kamala Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1753912443l/232466984._SY600_.jpg",
+      "rank": 5,
+      "votes": 37540,
+      "winner": false
+    },
+    {
+      "external_id": "223436601",
+      "title": "Careless People",
+      "authors": [
+        "Sarah Wynn-Williams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742029683l/223436601._SY600_.jpg",
+      "rank": 6,
+      "votes": 27703,
+      "winner": false
+    },
+    {
+      "external_id": "213792608",
+      "title": "Cher - The Memoir",
+      "authors": [
+        "Cher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1727283267l/213792608._SY600_.jpg",
+      "rank": 7,
+      "votes": 24889,
+      "winner": false
+    },
+    {
+      "external_id": "225819054",
+      "title": "Vagabond",
+      "authors": [
+        "Tim Curry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1749828809l/225819054._SY600_.jpg",
+      "rank": 8,
+      "votes": 19760,
+      "winner": false
+    },
+    {
+      "external_id": "217387890",
+      "title": "Semi-Well-Adjusted Despite Literally Everything",
+      "authors": [
+        "Alyson Stoner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1730953976l/217387890._SY600_.jpg",
+      "rank": 9,
+      "votes": 18992,
+      "winner": false
+    },
+    {
+      "external_id": "219838010",
+      "title": "Big Dumb Eyes",
+      "authors": [
+        "Nate Bargatze"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1727948761l/219838010._SY600_.jpg",
+      "rank": 10,
+      "votes": 17689,
+      "winner": false
+    },
+    {
+      "external_id": "214269337",
+      "title": "Raising Hare",
+      "authors": [
+        "Chloe Dalton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1748353120l/214269337._SY600_.jpg",
+      "rank": 11,
+      "votes": 7750,
+      "winner": false
+    },
+    {
+      "external_id": "224004520",
+      "title": "Awake",
+      "authors": [
+        "Jen Hatmaker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1739571443l/224004520._SY600_.jpg",
+      "rank": 12,
+      "votes": 5641,
+      "winner": false
+    },
+    {
+      "external_id": "212806569",
+      "title": "Memorial Days",
+      "authors": [
+        "Geraldine Brooks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718997230l/212806569._SY600_.jpg",
+      "rank": 13,
+      "votes": 5342,
+      "winner": false
+    },
+    {
+      "external_id": "214537759",
+      "title": "The Tell",
+      "authors": [
+        "Amy   Griffin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741879955l/214537759._SY600_.jpg",
+      "rank": 14,
+      "votes": 5300,
+      "winner": false
+    },
+    {
+      "external_id": "223405886",
+      "title": "All the Way to the River",
+      "authors": [
+        "Elizabeth Gilbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1736999462l/223405886._SY600_.jpg",
+      "rank": 15,
+      "votes": 5032,
+      "winner": false
+    },
+    {
+      "external_id": "224004055",
+      "title": "Mother Mary Comes to Me",
+      "authors": [
+        "Arundhati Roy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1767714443l/224004055._SY600_.jpg",
+      "rank": 16,
+      "votes": 4315,
+      "winner": false
+    },
+    {
+      "external_id": "217044909",
+      "title": "Matriarch",
+      "authors": [
+        "Tina Knowles"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1730206535l/217044909._SY600_.jpg",
+      "rank": 17,
+      "votes": 3310,
+      "winner": false
+    },
+    {
+      "external_id": "223362031",
+      "title": "Paper Girl",
+      "authors": [
+        "Beth Macy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1740089964l/223362031._SY600_.jpg",
+      "rank": 18,
+      "votes": 2471,
+      "winner": false
+    },
+    {
+      "external_id": "221164555",
+      "title": "Things in Nature Merely Grow",
+      "authors": [
+        "Yiyun Li"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1740593371l/221164555._SY600_.jpg",
+      "rank": 19,
+      "votes": 2156,
+      "winner": false
+    },
+    {
+      "external_id": "224003864",
+      "title": "Joyride",
+      "authors": [
+        "Susan Orlean"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1745431576l/224003864._SY600_.jpg",
+      "rank": 20,
+      "votes": 715,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-fiction-books-2013",
+  "kind": "award",
+  "title": "Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fiction-books-2013",
+  "year": 2013,
+  "category": "Fiction",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:30.790401+00:00",
+  "books": [
+    {
+      "external_id": "16115612",
+      "title": "And the Mountains Echoed",
+      "authors": [
+        "Khaled Hosseini"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358190204l/16115612.jpg",
+      "rank": 1,
+      "votes": 24686,
+      "winner": true
+    },
+    {
+      "external_id": "15753740",
+      "title": "The Storyteller",
+      "authors": [
+        "Jodi Picoult"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356328634l/15753740.jpg",
+      "rank": 2,
+      "votes": 21269,
+      "winner": false
+    },
+    {
+      "external_id": "15507958",
+      "title": "Me Before You",
+      "authors": [
+        "Jojo Moyes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1357108762l/15507958.jpg",
+      "rank": 3,
+      "votes": 19656,
+      "winner": false
+    },
+    {
+      "external_id": "17333223",
+      "title": "The Goldfinch",
+      "authors": [
+        "Donna Tartt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1378710146l/17333223.jpg",
+      "rank": 4,
+      "votes": 9313,
+      "winner": false
+    },
+    {
+      "external_id": "17802724",
+      "title": "The Husband's Secret",
+      "authors": [
+        "Liane Moriarty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460577225l/17802724.jpg",
+      "rank": 5,
+      "votes": 8715,
+      "winner": false
+    },
+    {
+      "external_id": "15818107",
+      "title": "Orphan Train",
+      "authors": [
+        "Christina Baker Kline"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362409483l/15818107.jpg",
+      "rank": 6,
+      "votes": 8687,
+      "winner": false
+    },
+    {
+      "external_id": "16181775",
+      "title": "The Rosie Project",
+      "authors": [
+        "Graeme Simsion"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1371651741l/16181775.jpg",
+      "rank": 7,
+      "votes": 8078,
+      "winner": false
+    },
+    {
+      "external_id": "15781725",
+      "title": "The House Girl",
+      "authors": [
+        "Tara Conklin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348172541l/15781725.jpg",
+      "rank": 8,
+      "votes": 7472,
+      "winner": false
+    },
+    {
+      "external_id": "15811545",
+      "title": "A Tale for the Time Being",
+      "authors": [
+        "Ruth Ozeki"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1613060369l/15811545.jpg",
+      "rank": 9,
+      "votes": 5396,
+      "winner": false
+    },
+    {
+      "external_id": "13641208",
+      "title": "Tenth of December",
+      "authors": [
+        "George Saunders"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349967540l/13641208.jpg",
+      "rank": 10,
+      "votes": 4439,
+      "winner": false
+    },
+    {
+      "external_id": "17262100",
+      "title": "The Lowland",
+      "authors": [
+        "Jhumpa Lahiri"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366930267l/17262100.jpg",
+      "rank": 11,
+      "votes": 2594,
+      "winner": false
+    },
+    {
+      "external_id": "15797715",
+      "title": "A Constellation of Vital Phenomena",
+      "authors": [
+        "Anthony Marra"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1372046438l/15797715.jpg",
+      "rank": 12,
+      "votes": 2144,
+      "winner": false
+    },
+    {
+      "external_id": "17349023",
+      "title": "We Are Water",
+      "authors": [
+        "Wally Lamb"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1361329815l/17349023.jpg",
+      "rank": 13,
+      "votes": 2060,
+      "winner": false
+    },
+    {
+      "external_id": "16071745",
+      "title": "Someday, Someday, Maybe",
+      "authors": [
+        "Lauren Graham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1480527588l/16071745.jpg",
+      "rank": 14,
+      "votes": 1946,
+      "winner": false
+    },
+    {
+      "external_id": "17572903",
+      "title": "The Girl You Left Behind",
+      "authors": [
+        "Jojo Moyes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366558957l/17572903._SY600_.jpg",
+      "rank": 15,
+      "votes": 1936,
+      "winner": false
+    },
+    {
+      "external_id": "15796700",
+      "title": "Americanah",
+      "authors": [
+        "Chimamanda Ngozi Adichie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1356654499l/15796700.jpg",
+      "rank": 16,
+      "votes": 1767,
+      "winner": false
+    },
+    {
+      "external_id": "15815333",
+      "title": "The Interestings",
+      "authors": [
+        "Meg Wolitzer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1451446889l/15815333.jpg",
+      "rank": 17,
+      "votes": 576,
+      "winner": false
+    },
+    {
+      "external_id": "16130291",
+      "title": "The Silver Star",
+      "authors": [
+        "Jeannette Walls"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1379313690l/16130291.jpg",
+      "rank": 18,
+      "votes": 565,
+      "winner": false
+    },
+    {
+      "external_id": "15823461",
+      "title": "The Burgess Boys",
+      "authors": [
+        "Elizabeth Strout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351213545l/15823461.jpg",
+      "rank": 19,
+      "votes": 290,
+      "winner": false
+    },
+    {
+      "external_id": "15701217",
+      "title": "The Woman Upstairs",
+      "authors": [
+        "Claire Messud"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1345666863l/15701217.jpg",
+      "rank": 20,
+      "votes": 276,
+      "winner": false
+    }
+  ]
+}

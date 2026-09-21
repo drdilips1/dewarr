@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-fantasy-books-2021",
+  "kind": "award",
+  "title": "Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fantasy-books-2021",
+  "year": 2021,
+  "category": "Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:04.572344+00:00",
+  "books": [
+    {
+      "external_id": "53138095",
+      "title": "A ​Court of Silver Flames",
+      "authors": [
+        "Sarah J. Maas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1734440950l/53138095._SY600_.jpg",
+      "rank": 1,
+      "votes": 111498,
+      "winner": true
+    },
+    {
+      "external_id": "53205888",
+      "title": "Under the Whispering Door",
+      "authors": [
+        "T.J. Klune"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1652374208l/53205888._SY600_.jpg",
+      "rank": 2,
+      "votes": 56324,
+      "winner": false
+    },
+    {
+      "external_id": "55240343",
+      "title": "The ​Crown of Gilded Bones",
+      "authors": [
+        "Jennifer L. Armentrout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1606759553l/55240343._SY600_.jpg",
+      "rank": 3,
+      "votes": 47241,
+      "winner": false
+    },
+    {
+      "external_id": "55077538",
+      "title": "She Who Became the Sun",
+      "authors": [
+        "Shelley Parker-Chan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605538291l/55077538.jpg",
+      "rank": 4,
+      "votes": 28661,
+      "winner": false
+    },
+    {
+      "external_id": "54860614",
+      "title": "Ariadne",
+      "authors": [
+        "Jennifer Saint"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601959039l/54860614._SY600_.jpg",
+      "rank": 5,
+      "votes": 27730,
+      "winner": false
+    },
+    {
+      "external_id": "55559887",
+      "title": "The Last Graduate",
+      "authors": [
+        "Naomi Novik"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1604391810l/55559887.jpg",
+      "rank": 6,
+      "votes": 24089,
+      "winner": false
+    },
+    {
+      "external_id": "56898179",
+      "title": "The Book of Magic",
+      "authors": [
+        "Alice Hoffman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631120142l/56898179.jpg",
+      "rank": 7,
+      "votes": 17570,
+      "winner": false
+    },
+    {
+      "external_id": "53438195",
+      "title": "The Witch's Heart",
+      "authors": [
+        "Genevieve Gornichec"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1593104643l/53438195.jpg",
+      "rank": 8,
+      "votes": 15892,
+      "winner": false
+    },
+    {
+      "external_id": "56898076",
+      "title": "The Inheritance of Orquídea Divina",
+      "authors": [
+        "Zoraida Córdova"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1621011341l/56898076.jpg",
+      "rank": 9,
+      "votes": 14992,
+      "winner": false
+    },
+    {
+      "external_id": "52694527",
+      "title": "The Shadow of the Gods",
+      "authors": [
+        "John Gwynne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1610375894l/52694527._SY600_.jpg",
+      "rank": 10,
+      "votes": 14140,
+      "winner": false
+    },
+    {
+      "external_id": "53418394",
+      "title": "For the Wolf",
+      "authors": [
+        "Hannah Whitten"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602020995l/53418394.jpg",
+      "rank": 11,
+      "votes": 5306,
+      "winner": false
+    },
+    {
+      "external_id": "50523477",
+      "title": "The Jasmine Throne",
+      "authors": [
+        "Tasha Suri"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1603885729l/50523477._SY600_.jpg",
+      "rank": 12,
+      "votes": 4740,
+      "winner": false
+    },
+    {
+      "external_id": "55169019",
+      "title": "The Chosen and the Beautiful",
+      "authors": [
+        "Nghi Vo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1620400751l/55169019._SY600_.jpg",
+      "rank": 13,
+      "votes": 4185,
+      "winner": false
+    },
+    {
+      "external_id": "55077706",
+      "title": "A Master of Djinn",
+      "authors": [
+        "P. Djèlí Clark"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600715143l/55077706.jpg",
+      "rank": 14,
+      "votes": 3790,
+      "winner": false
+    },
+    {
+      "external_id": "51530580",
+      "title": "Malice",
+      "authors": [
+        "Heather   Walter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1597242210l/51530580.jpg",
+      "rank": 15,
+      "votes": 3212,
+      "winner": false
+    },
+    {
+      "external_id": "55276504",
+      "title": "The Hidden Palace",
+      "authors": [
+        "Helene Wecker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1606165680l/55276504.jpg",
+      "rank": 16,
+      "votes": 3082,
+      "winner": false
+    },
+    {
+      "external_id": "48915408",
+      "title": "The Wolf and the Woodsman",
+      "authors": [
+        "Ava Reid"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1614100814l/48915408._SY600_.jpg",
+      "rank": 17,
+      "votes": 2705,
+      "winner": false
+    },
+    {
+      "external_id": "56179356",
+      "title": "A Spindle Splintered",
+      "authors": [
+        "Alix E. Harrow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1691449530l/56179356._SY600_.jpg",
+      "rank": 18,
+      "votes": 2340,
+      "winner": false
+    },
+    {
+      "external_id": "48915089",
+      "title": "Sorrowland",
+      "authors": [
+        "Rivers Solomon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1750346696l/48915089._SY600_.jpg",
+      "rank": 19,
+      "votes": 2326,
+      "winner": false
+    },
+    {
+      "external_id": "54467051",
+      "title": "The Unbroken",
+      "authors": [
+        "C.L. Clark"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1595284077l/54467051.jpg",
+      "rank": 20,
+      "votes": 1451,
+      "winner": false
+    }
+  ]
+}

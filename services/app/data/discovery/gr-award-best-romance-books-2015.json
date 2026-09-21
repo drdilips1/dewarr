@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-romance-books-2015",
+  "kind": "award",
+  "title": "Romance",
+  "source_url": "https://www.goodreads.com/choiceawards/best-romance-books-2015",
+  "year": 2015,
+  "category": "Romance",
+  "genres": [
+    "romance"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:34.666275+00:00",
+  "books": [
+    {
+      "external_id": "22609310",
+      "title": "Confess",
+      "authors": [
+        "Colleen Hoover"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1412280173l/22609310.jpg",
+      "rank": 1,
+      "votes": 35264,
+      "winner": true
+    },
+    {
+      "external_id": "25644601",
+      "title": "Grey",
+      "authors": [
+        "E.L. James"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1433182986l/25644601._SY600_.jpg",
+      "rank": 2,
+      "votes": 24347,
+      "winner": false
+    },
+    {
+      "external_id": "22571583",
+      "title": "The Shadows",
+      "authors": [
+        "J.R. Ward"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405785703l/22571583.jpg",
+      "rank": 3,
+      "votes": 19945,
+      "winner": false
+    },
+    {
+      "external_id": "24920901",
+      "title": "The Deal",
+      "authors": [
+        "Elle Kennedy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1431282052l/24920901.jpg",
+      "rank": 4,
+      "votes": 16505,
+      "winner": false
+    },
+    {
+      "external_id": "17876893",
+      "title": "Captivated by You",
+      "authors": [
+        "Sylvia Day"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410020040l/17876893.jpg",
+      "rank": 5,
+      "votes": 16018,
+      "winner": false
+    },
+    {
+      "external_id": "23356038",
+      "title": "Wicked",
+      "authors": [
+        "Jennifer L. Armentrout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413064601l/23356038.jpg",
+      "rank": 6,
+      "votes": 14420,
+      "winner": false
+    },
+    {
+      "external_id": "23341855",
+      "title": "Ride Steady",
+      "authors": [
+        "Kristen Ashley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1424262600l/23341855.jpg",
+      "rank": 7,
+      "votes": 12954,
+      "winner": false
+    },
+    {
+      "external_id": "20665087",
+      "title": "The Secret of Pembrooke Park",
+      "authors": [
+        "Julie Klassen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413752734l/20665087.jpg",
+      "rank": 8,
+      "votes": 12927,
+      "winner": false
+    },
+    {
+      "external_id": "22717015",
+      "title": "Beautiful Redemption",
+      "authors": [
+        "Jamie McGuire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418155511l/22717015.jpg",
+      "rank": 9,
+      "votes": 11906,
+      "winner": false
+    },
+    {
+      "external_id": "17828895",
+      "title": "Never Judge a Lady by Her Cover",
+      "authors": [
+        "Sarah MacLean"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1402596750l/17828895.jpg",
+      "rank": 10,
+      "votes": 9928,
+      "winner": false
+    },
+    {
+      "external_id": "23281906",
+      "title": "The Liar",
+      "authors": [
+        "Nora Roberts"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415980586l/23281906.jpg",
+      "rank": 11,
+      "votes": 5044,
+      "winner": false
+    },
+    {
+      "external_id": "23252517",
+      "title": "The Law of Moses",
+      "authors": [
+        "Amy Harmon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415024195l/23252517.jpg",
+      "rank": 12,
+      "votes": 4430,
+      "winner": false
+    },
+    {
+      "external_id": "26072113",
+      "title": "Souls Unfractured",
+      "authors": [
+        "Tillie Cole"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439264789l/26072113._SY600_.jpg",
+      "rank": 13,
+      "votes": 4343,
+      "winner": false
+    },
+    {
+      "external_id": "21853679",
+      "title": "Deep",
+      "authors": [
+        "Kylie Scott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1405301073l/21853679.jpg",
+      "rank": 14,
+      "votes": 4251,
+      "winner": false
+    },
+    {
+      "external_id": "26137513",
+      "title": "Him",
+      "authors": [
+        "Sarina Bowen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1440120525l/26137513.jpg",
+      "rank": 15,
+      "votes": 3847,
+      "winner": false
+    },
+    {
+      "external_id": "23398680",
+      "title": "Hero",
+      "authors": [
+        "Samantha Young"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414349051l/23398680.jpg",
+      "rank": 16,
+      "votes": 3707,
+      "winner": false
+    },
+    {
+      "external_id": "26721257",
+      "title": "The Air He Breathes",
+      "authors": [
+        "Brittainy C. Cherry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442971175l/26721257._SY600_.jpg",
+      "rank": 17,
+      "votes": 1714,
+      "winner": false
+    },
+    {
+      "external_id": "26783347",
+      "title": "Hollywood Dirt",
+      "authors": [
+        "Alessandra Torre"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1444659089l/26783347.jpg",
+      "rank": 18,
+      "votes": 1213,
+      "winner": false
+    },
+    {
+      "external_id": "22675992",
+      "title": "Thoughtful",
+      "authors": [
+        "S.C. Stephens"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418772929l/22675992.jpg",
+      "rank": 19,
+      "votes": 1085,
+      "winner": false
+    },
+    {
+      "external_id": "25205070",
+      "title": "Consolation",
+      "authors": [
+        "Corinne Michaels"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1432851240l/25205070._SY600_.jpg",
+      "rank": 20,
+      "votes": 906,
+      "winner": false
+    }
+  ]
+}

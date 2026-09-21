@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-humor-books-2022",
+  "kind": "award",
+  "title": "Humor",
+  "source_url": "https://www.goodreads.com/choiceawards/best-humor-books-2022",
+  "year": 2022,
+  "category": "Humor",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:45.280334+00:00",
+  "books": [
+    {
+      "external_id": "57093755",
+      "title": "The Office BFFs",
+      "authors": [
+        "Jenna Fischer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642012719l/57093755._SY600_.jpg",
+      "rank": 1,
+      "votes": 37551,
+      "winner": true
+    },
+    {
+      "external_id": "58438562",
+      "title": "Girls Can Kiss Now",
+      "authors": [
+        "Jill Gutowitz"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1644782449l/58438562.jpg",
+      "rank": 2,
+      "votes": 22034,
+      "winner": false
+    },
+    {
+      "external_id": "58541424",
+      "title": "Hello, Molly!",
+      "authors": [
+        "Molly Shannon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627895749l/58541424.jpg",
+      "rank": 3,
+      "votes": 19443,
+      "winner": false
+    },
+    {
+      "external_id": "40588534",
+      "title": "Ten Steps to Nanette",
+      "authors": [
+        "Hannah Gadsby"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1637305486l/40588534._SY600_.jpg",
+      "rank": 4,
+      "votes": 19214,
+      "winner": false
+    },
+    {
+      "external_id": "58438584",
+      "title": "Idiots",
+      "authors": [
+        "Laura Clery"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642043066l/58438584.jpg",
+      "rank": 5,
+      "votes": 17979,
+      "winner": false
+    },
+    {
+      "external_id": "58989873",
+      "title": "Happy-Go-Lucky",
+      "authors": [
+        "David Sedaris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642710101l/58989873.jpg",
+      "rank": 6,
+      "votes": 17373,
+      "winner": false
+    },
+    {
+      "external_id": "58082714",
+      "title": "The Nineties",
+      "authors": [
+        "Chuck Klosterman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1695136161l/58082714.jpg",
+      "rank": 7,
+      "votes": 16716,
+      "winner": false
+    },
+    {
+      "external_id": "57008102",
+      "title": "The Field Guide to Dumb Birds of the Whole Stupid World",
+      "authors": [
+        "Matt Kracht"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1623820164l/57008102._SY600_.jpg",
+      "rank": 8,
+      "votes": 16648,
+      "winner": false
+    },
+    {
+      "external_id": "58537351",
+      "title": "All About Me! My Remarkable Life in Show Business",
+      "authors": [
+        "Mel Brooks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628180851l/58537351.jpg",
+      "rank": 9,
+      "votes": 16030,
+      "winner": false
+    },
+    {
+      "external_id": "58587872",
+      "title": "I'll Show Myself Out",
+      "authors": [
+        "Jessi Klein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642984196l/58587872.jpg",
+      "rank": 10,
+      "votes": 11929,
+      "winner": false
+    },
+    {
+      "external_id": "58078596",
+      "title": "Who Do I Think I Am?",
+      "authors": [
+        "Anjelah Johnson-Reyes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628537199l/58078596.jpg",
+      "rank": 11,
+      "votes": 3275,
+      "winner": false
+    },
+    {
+      "external_id": "57007950",
+      "title": "I'd Like to Play Alone, Please",
+      "authors": [
+        "Tom Segura"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642987905l/57007950.jpg",
+      "rank": 12,
+      "votes": 3260,
+      "winner": false
+    },
+    {
+      "external_id": "60168034",
+      "title": "Excuse Me While I Disappear",
+      "authors": [
+        "Laurie Notaro"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1652512793l/60168034.jpg",
+      "rank": 13,
+      "votes": 3019,
+      "winner": false
+    },
+    {
+      "external_id": "56347312",
+      "title": "Start Without Me",
+      "authors": [
+        "Gary Janetti"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1639229328l/56347312.jpg",
+      "rank": 14,
+      "votes": 2843,
+      "winner": false
+    },
+    {
+      "external_id": "58739606",
+      "title": "I'm More Dateable than a Plate of Refried Beans",
+      "authors": [
+        "Ginny Hogan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1639388004l/58739606.jpg",
+      "rank": 15,
+      "votes": 2594,
+      "winner": false
+    },
+    {
+      "external_id": "57678864",
+      "title": "Midlife Bites",
+      "authors": [
+        "Jen Mann"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1618000203l/57678864.jpg",
+      "rank": 16,
+      "votes": 2401,
+      "winner": false
+    },
+    {
+      "external_id": "59639080",
+      "title": "The World's Worst Assistant",
+      "authors": [
+        "Sona Movsesian"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1637092519l/59639080.jpg",
+      "rank": 17,
+      "votes": 2394,
+      "winner": false
+    },
+    {
+      "external_id": "59366125",
+      "title": "The World Deserves My Children",
+      "authors": [
+        "Natasha Leggero"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1666198293l/59366125.jpg",
+      "rank": 18,
+      "votes": 1861,
+      "winner": false
+    },
+    {
+      "external_id": "58784283",
+      "title": "Sicker in the Head",
+      "authors": [
+        "Judd Apatow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1646024694l/58784283.jpg",
+      "rank": 19,
+      "votes": 1420,
+      "winner": false
+    },
+    {
+      "external_id": "58065028",
+      "title": "In On the Joke",
+      "authors": [
+        "Shawn Levy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642403575l/58065028.jpg",
+      "rank": 20,
+      "votes": 1260,
+      "winner": false
+    }
+  ]
+}

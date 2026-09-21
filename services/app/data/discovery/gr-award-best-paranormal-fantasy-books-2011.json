@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-paranormal-fantasy-books-2011",
+  "kind": "award",
+  "title": "Paranormal Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-paranormal-fantasy-books-2011",
+  "year": 2011,
+  "category": "Paranormal Fantasy",
+  "genres": [
+    "fantasy"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:47:38.564178+00:00",
+  "books": [
+    {
+      "external_id": "7304203",
+      "title": "Shadowfever",
+      "authors": [
+        "Karen Marie Moning"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439940228l/7304203._SY600_.jpg",
+      "rank": 1,
+      "votes": 5849,
+      "winner": true
+    },
+    {
+      "external_id": "8667848",
+      "title": "A Discovery of Witches",
+      "authors": [
+        "Deborah Harkness"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1525097370l/8667848._SY600_.jpg",
+      "rank": 2,
+      "votes": 5842,
+      "winner": false
+    },
+    {
+      "external_id": "7981206",
+      "title": "Dead Reckoning",
+      "authors": [
+        "Charlaine Harris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1357679465l/7981206.jpg",
+      "rank": 3,
+      "votes": 5144,
+      "winner": false
+    },
+    {
+      "external_id": "8058301",
+      "title": "Ghost Story",
+      "authors": [
+        "Jim  Butcher"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1329104700l/8058301.jpg",
+      "rank": 4,
+      "votes": 5003,
+      "winner": false
+    },
+    {
+      "external_id": "8559047",
+      "title": "Magic Slays",
+      "authors": [
+        "Ilona Andrews"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1288727226l/8559047._SY600_.jpg",
+      "rank": 5,
+      "votes": 3877,
+      "winner": false
+    },
+    {
+      "external_id": "7802254",
+      "title": "Succubus Revealed",
+      "authors": [
+        "Richelle Mead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327892439l/7802254.jpg",
+      "rank": 6,
+      "votes": 2823,
+      "winner": false
+    },
+    {
+      "external_id": "6871617",
+      "title": "This Side of the Grave",
+      "authors": [
+        "Jeaniene Frost"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1282659107l/6871617.jpg",
+      "rank": 7,
+      "votes": 2586,
+      "winner": false
+    },
+    {
+      "external_id": "8138071",
+      "title": "Pale Demon",
+      "authors": [
+        "Kim Harrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1280381240l/8138071.jpg",
+      "rank": 8,
+      "votes": 2445,
+      "winner": false
+    },
+    {
+      "external_id": "8087906",
+      "title": "River Marked",
+      "authors": [
+        "Patricia Briggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1305738320l/8087906._SY600_.jpg",
+      "rank": 9,
+      "votes": 1690,
+      "winner": false
+    },
+    {
+      "external_id": "9581001",
+      "title": "Hard Bitten",
+      "authors": [
+        "Chloe Neill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1372850762l/9581001.jpg",
+      "rank": 10,
+      "votes": 1561,
+      "winner": false
+    },
+    {
+      "external_id": "9565045",
+      "title": "Second Grave on the Left",
+      "authors": [
+        "Darynda Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442767958l/9565045._SY600_.jpg",
+      "rank": 11,
+      "votes": 653,
+      "winner": false
+    },
+    {
+      "external_id": "8935153",
+      "title": "Hit List",
+      "authors": [
+        "Laurell K. Hamilton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1315176487l/8935153.jpg",
+      "rank": 12,
+      "votes": 600,
+      "winner": false
+    },
+    {
+      "external_id": "8356487",
+      "title": "Heartless",
+      "authors": [
+        "Gail Carriger"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430530496l/8356487.jpg",
+      "rank": 13,
+      "votes": 574,
+      "winner": false
+    },
+    {
+      "external_id": "10783217",
+      "title": "One Salt Sea",
+      "authors": [
+        "Seanan McGuire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1312045992l/10783217.jpg",
+      "rank": 14,
+      "votes": 498,
+      "winner": false
+    },
+    {
+      "external_id": "8926959",
+      "title": "Hunt the Moon",
+      "authors": [
+        "Karen Chance"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1688057184l/8926959._SY600_.jpg",
+      "rank": 15,
+      "votes": 471,
+      "winner": false
+    },
+    {
+      "external_id": "9533378",
+      "title": "Hounded",
+      "authors": [
+        "Kevin Hearne"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1660271491l/9533378._SY600_.jpg",
+      "rank": 16,
+      "votes": 336,
+      "winner": false
+    },
+    {
+      "external_id": "7797032",
+      "title": "Spell Bound",
+      "authors": [
+        "Kelley Armstrong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1292864599l/7797032.jpg",
+      "rank": 17,
+      "votes": 309,
+      "winner": false
+    },
+    {
+      "external_id": "9571401",
+      "title": "Blood Rights",
+      "authors": [
+        "Kristen Painter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1307380042l/9571401.jpg",
+      "rank": 18,
+      "votes": 148,
+      "winner": false
+    },
+    {
+      "external_id": "8105616",
+      "title": "Blood Challenge",
+      "authors": [
+        "Eileen Wilks"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1437967992l/8105616._SY600_.jpg",
+      "rank": 19,
+      "votes": 135,
+      "winner": false
+    },
+    {
+      "external_id": "9565574",
+      "title": "Grave Dance",
+      "authors": [
+        "Kalayna Price"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327953315l/9565574.jpg",
+      "rank": 20,
+      "votes": 92,
+      "winner": false
+    }
+  ]
+}

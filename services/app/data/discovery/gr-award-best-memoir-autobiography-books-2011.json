@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-memoir-autobiography-books-2011",
+  "kind": "award",
+  "title": "Memoir & Autobiography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-memoir-autobiography-books-2011",
+  "year": 2011,
+  "category": "Memoir & Autobiography",
+  "genres": [
+    "biography"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:48:12.926045+00:00",
+  "books": [
+    {
+      "external_id": "9484793",
+      "title": "Two Kisses for Maddy",
+      "authors": [
+        "Matthew Logelin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327983096l/9484793.jpg",
+      "rank": 1,
+      "votes": 4255,
+      "winner": true
+    },
+    {
+      "external_id": "11330361",
+      "title": "A Stolen Life",
+      "authors": [
+        "Jaycee Dugard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327928284l/11330361.jpg",
+      "rank": 2,
+      "votes": 2984,
+      "winner": false
+    },
+    {
+      "external_id": "10211494",
+      "title": "Stories I Only Tell My Friends",
+      "authors": [
+        "Rob Lowe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442283721l/10211494._SY600_.jpg",
+      "rank": 3,
+      "votes": 2016,
+      "winner": false
+    },
+    {
+      "external_id": "9580315",
+      "title": "My Lucky Life in and Out of Show Business",
+      "authors": [
+        "Dick Van Dyke"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320409453l/9580315.jpg",
+      "rank": 4,
+      "votes": 1689,
+      "winner": false
+    },
+    {
+      "external_id": "9862827",
+      "title": "The Reading Promise",
+      "authors": [
+        "Alice Ozma"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1291867045l/9862827.jpg",
+      "rank": 5,
+      "votes": 1547,
+      "winner": false
+    },
+    {
+      "external_id": "8483233",
+      "title": "The Pioneer Woman",
+      "authors": [
+        "Ree Drummond"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327898663l/8483233.jpg",
+      "rank": 6,
+      "votes": 1350,
+      "winner": false
+    },
+    {
+      "external_id": "8584951",
+      "title": "Girls Like Us",
+      "authors": [
+        "Rachel Lloyd"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347665260l/8584951.jpg",
+      "rank": 7,
+      "votes": 1342,
+      "winner": false
+    },
+    {
+      "external_id": "9739365",
+      "title": "SEAL Team Six",
+      "authors": [
+        "Howard E. Wasdin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442949773l/9739365._SY600_.jpg",
+      "rank": 8,
+      "votes": 1284,
+      "winner": false
+    },
+    {
+      "external_id": "8619825",
+      "title": "The Wilder Life",
+      "authors": [
+        "Wendy McClure"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1279830961l/8619825.jpg",
+      "rank": 9,
+      "votes": 1255,
+      "winner": false
+    },
+    {
+      "external_id": "9202591",
+      "title": "This Is Gonna Hurt",
+      "authors": [
+        "Nikki Sixx"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327925577l/9202591.jpg",
+      "rank": 10,
+      "votes": 1235,
+      "winner": false
+    },
+    {
+      "external_id": "8248617",
+      "title": "Townie",
+      "authors": [
+        "Andre Dubus III"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375206249l/8248617.jpg",
+      "rank": 11,
+      "votes": 399,
+      "winner": false
+    },
+    {
+      "external_id": "11500827",
+      "title": "Then They Came for Me",
+      "authors": [
+        "Maziar Bahari"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320560137l/11500827.jpg",
+      "rank": 12,
+      "votes": 361,
+      "winner": false
+    },
+    {
+      "external_id": "8979038",
+      "title": "Tiger, Tiger",
+      "authors": [
+        "Margaux Fragoso"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1312003033l/8979038.jpg",
+      "rank": 13,
+      "votes": 323,
+      "winner": false
+    },
+    {
+      "external_id": "9756135",
+      "title": "The End of Boys",
+      "authors": [
+        "Peter Brown Hoffmeister"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328753768l/9756135.jpg",
+      "rank": 14,
+      "votes": 271,
+      "winner": false
+    },
+    {
+      "external_id": "9476292",
+      "title": "Tolstoy and the Purple Chair",
+      "authors": [
+        "Nina Sankovitch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1366771140l/9476292.jpg",
+      "rank": 15,
+      "votes": 268,
+      "winner": false
+    },
+    {
+      "external_id": "7840833",
+      "title": "The Memory Palace",
+      "authors": [
+        "Mira Bartok"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327940873l/7840833.jpg",
+      "rank": 16,
+      "votes": 223,
+      "winner": false
+    },
+    {
+      "external_id": "10836585",
+      "title": "Life Itself",
+      "authors": [
+        "Roger Ebert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1699994895l/10836585.jpg",
+      "rank": 17,
+      "votes": 202,
+      "winner": false
+    },
+    {
+      "external_id": "9160695",
+      "title": "Battle Hymn of the Tiger Mother",
+      "authors": [
+        "Amy  Chua"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347794294l/9160695.jpg",
+      "rank": 18,
+      "votes": 164,
+      "winner": false
+    },
+    {
+      "external_id": "9214995",
+      "title": "The Chronology of Water",
+      "authors": [
+        "Lidia Yuknavitch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1532465262l/9214995._SY600_.jpg",
+      "rank": 19,
+      "votes": 152,
+      "winner": false
+    },
+    {
+      "external_id": "9428981",
+      "title": "Here Comes Trouble",
+      "authors": [
+        "Michael Moore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327895854l/9428981.jpg",
+      "rank": 20,
+      "votes": 118,
+      "winner": false
+    }
+  ]
+}

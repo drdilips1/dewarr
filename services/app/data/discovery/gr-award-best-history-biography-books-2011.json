@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-history-biography-books-2011",
+  "kind": "award",
+  "title": "History & Biography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-history-biography-books-2011",
+  "year": 2011,
+  "category": "History & Biography",
+  "genres": [
+    "biography",
+    "history"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:48:11.553225+00:00",
+  "books": [
+    {
+      "external_id": "11084145",
+      "title": "Steve Jobs",
+      "authors": [
+        "Walter Isaacson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511288482l/11084145._SY600_.jpg",
+      "rank": 1,
+      "votes": 5463,
+      "winner": true
+    },
+    {
+      "external_id": "9938498",
+      "title": "In the Garden of Beasts",
+      "authors": [
+        "Erik Larson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327864303l/9938498.jpg",
+      "rank": 2,
+      "votes": 3128,
+      "winner": false
+    },
+    {
+      "external_id": "10414941",
+      "title": "Catherine the Great",
+      "authors": [
+        "Robert K. Massie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403395276l/10414941.jpg",
+      "rank": 3,
+      "votes": 2097,
+      "winner": false
+    },
+    {
+      "external_id": "10340846",
+      "title": "The Eighty-Dollar Champion",
+      "authors": [
+        "Elizabeth Letts"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1333577658l/10340846.jpg",
+      "rank": 4,
+      "votes": 1371,
+      "winner": false
+    },
+    {
+      "external_id": "11305364",
+      "title": "Area 51",
+      "authors": [
+        "Annie Jacobsen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344265886l/11305364.jpg",
+      "rank": 5,
+      "votes": 1265,
+      "winner": false
+    },
+    {
+      "external_id": "8584913",
+      "title": "The Dressmaker of Khair Khana",
+      "authors": [
+        "Gayle Tzemach Lemmon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1279213493l/8584913.jpg",
+      "rank": 6,
+      "votes": 1129,
+      "winner": false
+    },
+    {
+      "external_id": "10131648",
+      "title": "The Greater Journey",
+      "authors": [
+        "David McCullough"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347613581l/10131648.jpg",
+      "rank": 7,
+      "votes": 943,
+      "winner": false
+    },
+    {
+      "external_id": "9729504",
+      "title": "Lost in Shangri-la",
+      "authors": [
+        "Mitchell Zuckoff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1524514103l/9729504._SY600_.jpg",
+      "rank": 8,
+      "votes": 843,
+      "winner": false
+    },
+    {
+      "external_id": "7940589",
+      "title": "Malcolm X",
+      "authors": [
+        "Manning Marable"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347690389l/7940589.jpg",
+      "rank": 9,
+      "votes": 767,
+      "winner": false
+    },
+    {
+      "external_id": "9775295",
+      "title": "The Murder of the Century",
+      "authors": [
+        "Paul  Collins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1469914641l/9775295.jpg",
+      "rank": 10,
+      "votes": 626,
+      "winner": false
+    },
+    {
+      "external_id": "10335318",
+      "title": "Destiny of the Republic",
+      "authors": [
+        "Candice Millard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1653156803l/10335318.jpg",
+      "rank": 11,
+      "votes": 268,
+      "winner": false
+    },
+    {
+      "external_id": "9315641",
+      "title": "To End All Wars",
+      "authors": [
+        "Adam Hochschild"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1519309163l/9315641._SY600_.jpg",
+      "rank": 12,
+      "votes": 261,
+      "winner": false
+    },
+    {
+      "external_id": "9578336",
+      "title": "1861",
+      "authors": [
+        "Adam Goodheart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347256967l/9578336.jpg",
+      "rank": 13,
+      "votes": 246,
+      "winner": false
+    },
+    {
+      "external_id": "8264505",
+      "title": "Endgame",
+      "authors": [
+        "Frank Brady"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320451699l/8264505.jpg",
+      "rank": 14,
+      "votes": 219,
+      "winner": false
+    },
+    {
+      "external_id": "8857310",
+      "title": "Unfamiliar Fishes",
+      "authors": [
+        "Sarah Vowell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1311706005l/8857310.jpg",
+      "rank": 15,
+      "votes": 204,
+      "winner": false
+    },
+    {
+      "external_id": "10263986",
+      "title": "The Man in the Rockefeller Suit",
+      "authors": [
+        "Mark Seal"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442871811l/10263986._SY600_.jpg",
+      "rank": 16,
+      "votes": 158,
+      "winner": false
+    },
+    {
+      "external_id": "10587120",
+      "title": "Killing Lincoln",
+      "authors": [
+        "Bill O'Reilly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1317793681l/10587120.jpg",
+      "rank": 17,
+      "votes": 157,
+      "winner": false
+    },
+    {
+      "external_id": "9862761",
+      "title": "1493",
+      "authors": [
+        "Charles C. Mann"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327900945l/9862761.jpg",
+      "rank": 18,
+      "votes": 80,
+      "winner": false
+    },
+    {
+      "external_id": "10400627",
+      "title": "A Singular Woman",
+      "authors": [
+        "Janny Scott"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348771749l/10400627.jpg",
+      "rank": 19,
+      "votes": 79,
+      "winner": false
+    },
+    {
+      "external_id": "11369904",
+      "title": "A Thousand Lives",
+      "authors": [
+        "Julia Scheeres"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1316729991l/11369904.jpg",
+      "rank": 20,
+      "votes": 73,
+      "winner": false
+    }
+  ]
+}

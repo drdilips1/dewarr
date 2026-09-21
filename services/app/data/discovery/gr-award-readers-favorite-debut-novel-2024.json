@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-readers-favorite-debut-novel-2024",
+  "kind": "award",
+  "title": "Debut Novel",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-debut-novel-2024",
+  "year": 2024,
+  "category": "Debut Novel",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:50:44.981164+00:00",
+  "books": [
+    {
+      "external_id": "212432167",
+      "title": "How to End a Love Story",
+      "authors": [
+        "Yulin Kuang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1714579180l/212432167._SY600_.jpg",
+      "rank": 1,
+      "votes": 63605,
+      "winner": true
+    },
+    {
+      "external_id": "199798179",
+      "title": "The Ministry of Time",
+      "authors": [
+        "Kaliane Bradley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716480921l/199798179._SY600_.jpg",
+      "rank": 2,
+      "votes": 44473,
+      "winner": false
+    },
+    {
+      "external_id": "199798006",
+      "title": "We Used to Live Here",
+      "authors": [
+        "Marcus Kliewer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697756012l/199798006._SY600_.jpg",
+      "rank": 3,
+      "votes": 43234,
+      "winner": false
+    },
+    {
+      "external_id": "156009464",
+      "title": "The Book of Doors",
+      "authors": [
+        "Gareth  Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1695839720l/156009464._SY600_.jpg",
+      "rank": 4,
+      "votes": 34967,
+      "winner": false
+    },
+    {
+      "external_id": "133938826",
+      "title": "Welcome to the Hyunam-Dong Bookshop",
+      "authors": [
+        "Hwang Bo-Reum"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1688424684l/133938826.jpg",
+      "rank": 5,
+      "votes": 33169,
+      "winner": false
+    },
+    {
+      "external_id": "139400713",
+      "title": "Martyr!",
+      "authors": [
+        "Kaveh Akbar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1683818219l/139400713.jpg",
+      "rank": 6,
+      "votes": 24186,
+      "winner": false
+    },
+    {
+      "external_id": "210298804",
+      "title": "Voyage of the Damned",
+      "authors": [
+        "Frances   White"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1722519099l/210298804._SY600_.jpg",
+      "rank": 7,
+      "votes": 18744,
+      "winner": false
+    },
+    {
+      "external_id": "195703882",
+      "title": "The Eyes Are the Best Part",
+      "authors": [
+        "Monika Kim"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1696808869l/195703882._SY600_.jpg",
+      "rank": 8,
+      "votes": 17609,
+      "winner": false
+    },
+    {
+      "external_id": "201752567",
+      "title": "The Truth According to Ember",
+      "authors": [
+        "Danica Nava"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1702928650l/201752567._SY600_.jpg",
+      "rank": 9,
+      "votes": 17134,
+      "winner": false
+    },
+    {
+      "external_id": "176443453",
+      "title": "Greta & Valdin",
+      "authors": [
+        "Rebecca K. Reilly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686503205l/176443453.jpg",
+      "rank": 10,
+      "votes": 11372,
+      "winner": false
+    },
+    {
+      "external_id": "214944658",
+      "title": "The Storm We Made",
+      "authors": [
+        "Vanessa  Chan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718701455l/214944658._SY600_.jpg",
+      "rank": 11,
+      "votes": 4833,
+      "winner": false
+    },
+    {
+      "external_id": "195888874",
+      "title": "Daughters of Shandong",
+      "authors": [
+        "Eve J. Chung"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1692281423l/195888874._SY600_.jpg",
+      "rank": 12,
+      "votes": 4517,
+      "winner": false
+    },
+    {
+      "external_id": "195790999",
+      "title": "Masquerade",
+      "authors": [
+        "O.O. Sangoyomi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1696755780l/195790999._SY600_.jpg",
+      "rank": 13,
+      "votes": 4344,
+      "winner": false
+    },
+    {
+      "external_id": "176442848",
+      "title": "The Things We Didn’t Know",
+      "authors": [
+        "Elba Iris Pérez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686501721l/176442848.jpg",
+      "rank": 14,
+      "votes": 3372,
+      "winner": false
+    },
+    {
+      "external_id": "182484361",
+      "title": "All We Were Promised",
+      "authors": [
+        "Ashton Lattimore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1691034071l/182484361._SY600_.jpg",
+      "rank": 15,
+      "votes": 3316,
+      "winner": false
+    },
+    {
+      "external_id": "127278133",
+      "title": "Glorious Exploits",
+      "authors": [
+        "Ferdia  Lennon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1691418622l/127278133._SY600_.jpg",
+      "rank": 16,
+      "votes": 3000,
+      "winner": false
+    },
+    {
+      "external_id": "207293815",
+      "title": "Sky Full of Elephants",
+      "authors": [
+        "Cebo Campbell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1707161023l/207293815._SY600_.jpg",
+      "rank": 17,
+      "votes": 1899,
+      "winner": false
+    },
+    {
+      "external_id": "197789783",
+      "title": "Fire Exit",
+      "authors": [
+        "Morgan Talty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1695910751l/197789783._SY600_.jpg",
+      "rank": 18,
+      "votes": 1672,
+      "winner": false
+    },
+    {
+      "external_id": "208107364",
+      "title": "Shred Sisters",
+      "authors": [
+        "Betsy Lerner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1708646505l/208107364._SY600_.jpg",
+      "rank": 19,
+      "votes": 1515,
+      "winner": false
+    },
+    {
+      "external_id": "177185976",
+      "title": "Victim",
+      "authors": [
+        "Andrew Boryga"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1690483570l/177185976._SY600_.jpg",
+      "rank": 20,
+      "votes": 986,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-humor-books-2021",
+  "kind": "award",
+  "title": "Humor",
+  "source_url": "https://www.goodreads.com/choiceawards/best-humor-books-2021",
+  "year": 2021,
+  "category": "Humor",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:42:10.143685+00:00",
+  "books": [
+    {
+      "external_id": "54305363",
+      "title": "Broken",
+      "authors": [
+        "Jenny  Lawson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1597856341l/54305363.jpg",
+      "rank": 1,
+      "votes": 26788,
+      "winner": true
+    },
+    {
+      "external_id": "55339007",
+      "title": "How Y'all Doing?",
+      "authors": [
+        "Leslie Jordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611776582l/55339007.jpg",
+      "rank": 2,
+      "votes": 21669,
+      "winner": false
+    },
+    {
+      "external_id": "57936600",
+      "title": "Where the Deer and the Antelope Play",
+      "authors": [
+        "Nick Offerman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1624828540l/57936600.jpg",
+      "rank": 3,
+      "votes": 19691,
+      "winner": false
+    },
+    {
+      "external_id": "44678031",
+      "title": "Yearbook",
+      "authors": [
+        "Seth Rogen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617146646l/44678031.jpg",
+      "rank": 4,
+      "votes": 19242,
+      "winner": false
+    },
+    {
+      "external_id": "57169049",
+      "title": "Please Don't Sit on My Bed in Your Outside Clothes",
+      "authors": [
+        "Phoebe Robinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627893745l/57169049.jpg",
+      "rank": 5,
+      "votes": 15261,
+      "winner": false
+    },
+    {
+      "external_id": "54817546",
+      "title": "You'll Never Believe What Happened to Lacey",
+      "authors": [
+        "Amber Ruffin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1604073776l/54817546.jpg",
+      "rank": 6,
+      "votes": 15171,
+      "winner": false
+    },
+    {
+      "external_id": "49203394",
+      "title": "Barely Functional Adult",
+      "authors": [
+        "Meichi Ng"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1590443512l/49203394.jpg",
+      "rank": 7,
+      "votes": 13094,
+      "winner": false
+    },
+    {
+      "external_id": "57190774",
+      "title": "A Carnival of Snackery",
+      "authors": [
+        "David Sedaris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1616690931l/57190774.jpg",
+      "rank": 8,
+      "votes": 12354,
+      "winner": false
+    },
+    {
+      "external_id": "55711661",
+      "title": "Well, This Is Exhausting",
+      "authors": [
+        "Sophia Benoit"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1623864845l/55711661.jpg",
+      "rank": 9,
+      "votes": 10969,
+      "winner": false
+    },
+    {
+      "external_id": "57044148",
+      "title": "Subpar Parks",
+      "authors": [
+        "Amber Share"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1613413572l/57044148.jpg",
+      "rank": 10,
+      "votes": 9701,
+      "winner": false
+    },
+    {
+      "external_id": "56269181",
+      "title": "Fan Fiction",
+      "authors": [
+        "Brent Spiner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611847011l/56269181.jpg",
+      "rank": 11,
+      "votes": 3492,
+      "winner": false
+    },
+    {
+      "external_id": "49567214",
+      "title": "She Memes Well",
+      "authors": [
+        "Quinta Brunson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1613704501l/49567214._SY600_.jpg",
+      "rank": 12,
+      "votes": 3200,
+      "winner": false
+    },
+    {
+      "external_id": "54798456",
+      "title": "The Wreckage of My Presence",
+      "authors": [
+        "Casey  Wilson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1607619738l/54798456.jpg",
+      "rank": 13,
+      "votes": 2477,
+      "winner": false
+    },
+    {
+      "external_id": "55738541",
+      "title": "Bring Your Baggage and Don't Pack Light",
+      "authors": [
+        "Helen Ellis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1606106898l/55738541.jpg",
+      "rank": 14,
+      "votes": 2396,
+      "winner": false
+    },
+    {
+      "external_id": "54304279",
+      "title": "We Had a Little Real Estate Problem",
+      "authors": [
+        "Kliph Nesteroff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611497620l/54304279.jpg",
+      "rank": 15,
+      "votes": 2160,
+      "winner": false
+    },
+    {
+      "external_id": "55711655",
+      "title": "Black Nerd Problems",
+      "authors": [
+        "William  Evans"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631736523l/55711655._SY600_.jpg",
+      "rank": 16,
+      "votes": 2025,
+      "winner": false
+    },
+    {
+      "external_id": "50999697",
+      "title": "The Particulars of Peter",
+      "authors": [
+        "Kelly Conaboy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1591020934l/50999697.jpg",
+      "rank": 17,
+      "votes": 1588,
+      "winner": false
+    },
+    {
+      "external_id": "55507046",
+      "title": "How to Survive America",
+      "authors": [
+        "D.L. Hughley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1617073123l/55507046.jpg",
+      "rank": 18,
+      "votes": 1541,
+      "winner": false
+    },
+    {
+      "external_id": "55867892",
+      "title": "New Teeth",
+      "authors": [
+        "Simon Rich"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1621245064l/55867892.jpg",
+      "rank": 19,
+      "votes": 836,
+      "winner": false
+    },
+    {
+      "external_id": "56257258",
+      "title": "Big Time",
+      "authors": [
+        "Jen Spyra"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1607768424l/56257258._SY600_.jpg",
+      "rank": 20,
+      "votes": 525,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-travel-outdoors-books-2011",
+  "kind": "award",
+  "title": "Travel & Outdoors",
+  "source_url": "https://www.goodreads.com/choiceawards/best-travel-outdoors-books-2011",
+  "year": 2011,
+  "category": "Travel & Outdoors",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:48:15.692424+00:00",
+  "books": [
+    {
+      "external_id": "8564644",
+      "title": "Little Princes",
+      "authors": [
+        "Conor Grennan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1279553857l/8564644.jpg",
+      "rank": 1,
+      "votes": 1874,
+      "winner": true
+    },
+    {
+      "external_id": "10111087",
+      "title": "Turn Right at Machu Picchu",
+      "authors": [
+        "Mark Adams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1311704972l/10111087.jpg",
+      "rank": 2,
+      "votes": 1023,
+      "winner": false
+    },
+    {
+      "external_id": "9514649",
+      "title": "The Good Girl's Guide to Getting Lost",
+      "authors": [
+        "Rachel Friedman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320522613l/9514649.jpg",
+      "rank": 3,
+      "votes": 903,
+      "winner": false
+    },
+    {
+      "external_id": "10401121",
+      "title": "You've Gone Too Far This Time, Sir!",
+      "authors": [
+        "Danny Bent"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408935780l/10401121.jpg",
+      "rank": 4,
+      "votes": 840,
+      "winner": false
+    },
+    {
+      "external_id": "10502301",
+      "title": "Maphead",
+      "authors": [
+        "Ken Jennings"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327938058l/10502301.jpg",
+      "rank": 5,
+      "votes": 828,
+      "winner": false
+    },
+    {
+      "external_id": "9105432",
+      "title": "The Foremost Good Fortune",
+      "authors": [
+        "Susan Conley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348103333l/9105432.jpg",
+      "rank": 6,
+      "votes": 740,
+      "winner": false
+    },
+    {
+      "external_id": "10179129",
+      "title": "Made for You and Me",
+      "authors": [
+        "Caitlin Shetterly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347560867l/10179129.jpg",
+      "rank": 7,
+      "votes": 652,
+      "winner": false
+    },
+    {
+      "external_id": "9524132",
+      "title": "Sideways on a Scooter",
+      "authors": [
+        "Miranda Kennedy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320409000l/9524132.jpg",
+      "rank": 8,
+      "votes": 645,
+      "winner": false
+    },
+    {
+      "external_id": "9869499",
+      "title": "The Ledge",
+      "authors": [
+        "Jim Davidson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320543960l/9869499.jpg",
+      "rank": 9,
+      "votes": 621,
+      "winner": false
+    },
+    {
+      "external_id": "9341909",
+      "title": "Fire Season",
+      "authors": [
+        "Philip Connors"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349010281l/9341909.jpg",
+      "rank": 10,
+      "votes": 425,
+      "winner": false
+    },
+    {
+      "external_id": "9190555",
+      "title": "The Tao of Travel",
+      "authors": [
+        "Paul Theroux"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1438469405l/9190555._SY600_.jpg",
+      "rank": 11,
+      "votes": 224,
+      "winner": false
+    },
+    {
+      "external_id": "9808172",
+      "title": "Wanderlust",
+      "authors": [
+        "Elisabeth Eaves"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328746890l/9808172.jpg",
+      "rank": 12,
+      "votes": 167,
+      "winner": false
+    },
+    {
+      "external_id": "10283324",
+      "title": "Kosher Chinese",
+      "authors": [
+        "Michael     Levy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1317067359l/10283324.jpg",
+      "rank": 13,
+      "votes": 155,
+      "winner": false
+    },
+    {
+      "external_id": "9463102",
+      "title": "Married to Bhutan",
+      "authors": [
+        "Linda Leaming"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328769028l/9463102.jpg",
+      "rank": 14,
+      "votes": 142,
+      "winner": false
+    },
+    {
+      "external_id": "9571766",
+      "title": "To a Mountain in Tibet",
+      "authors": [
+        "Colin Thubron"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348816412l/9571766.jpg",
+      "rank": 15,
+      "votes": 123,
+      "winner": false
+    },
+    {
+      "external_id": "9371993",
+      "title": "The View from Lazy Point",
+      "authors": [
+        "Carl Safina"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1317063755l/9371993.jpg",
+      "rank": 16,
+      "votes": 107,
+      "winner": false
+    },
+    {
+      "external_id": "8774573",
+      "title": "Big in China",
+      "authors": [
+        "Alan Paul"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347890100l/8774573.jpg",
+      "rank": 17,
+      "votes": 97,
+      "winner": false
+    },
+    {
+      "external_id": "9902621",
+      "title": "The Sinner's Grand Tour",
+      "authors": [
+        "Tony Perrottet"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320409448l/9902621.jpg",
+      "rank": 18,
+      "votes": 68,
+      "winner": false
+    },
+    {
+      "external_id": "9304907",
+      "title": "To Timbuktu",
+      "authors": [
+        "Steven  Weinberg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1312062007l/9304907.jpg",
+      "rank": 19,
+      "votes": 36,
+      "winner": false
+    },
+    {
+      "external_id": "11094626",
+      "title": "Crazy River",
+      "authors": [
+        "Richard Grant"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1314287498l/11094626.jpg",
+      "rank": 20,
+      "votes": 19,
+      "winner": false
+    }
+  ]
+}

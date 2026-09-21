@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-young-adult-fiction-books-2016",
+  "kind": "award",
+  "title": "Young Adult Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fiction-books-2016",
+  "year": 2016,
+  "category": "Young Adult Fiction",
+  "genres": [
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:21.797425+00:00",
+  "books": [
+    {
+      "external_id": "25614492",
+      "title": "Salt to the Sea",
+      "authors": [
+        "Ruta Sepetys"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1437084512l/25614492.jpg",
+      "rank": 1,
+      "votes": 29122,
+      "winner": true
+    },
+    {
+      "external_id": "26721568",
+      "title": "The Problem with Forever",
+      "authors": [
+        "Jennifer L. Armentrout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562769688l/26721568.jpg",
+      "rank": 2,
+      "votes": 20168,
+      "winner": false
+    },
+    {
+      "external_id": "28763485",
+      "title": "The Sun Is Also a Star",
+      "authors": [
+        "Nicola Yoon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459793538l/28763485.jpg",
+      "rank": 3,
+      "votes": 16780,
+      "winner": false
+    },
+    {
+      "external_id": "29559363",
+      "title": "A Thousand Boy Kisses",
+      "authors": [
+        "Tillie Cole"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1458483764l/29559363._SY600_.jpg",
+      "rank": 4,
+      "votes": 16261,
+      "winner": false
+    },
+    {
+      "external_id": "17838528",
+      "title": "The Unexpected Everything",
+      "authors": [
+        "Morgan Matson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443203227l/17838528._SY600_.jpg",
+      "rank": 5,
+      "votes": 16209,
+      "winner": false
+    },
+    {
+      "external_id": "24529123",
+      "title": "This Is Where It Ends",
+      "authors": [
+        "Marieke Nijkamp"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1431358364l/24529123.jpg",
+      "rank": 6,
+      "votes": 15983,
+      "winner": false
+    },
+    {
+      "external_id": "25486998",
+      "title": "P.S. I Like You",
+      "authors": [
+        "Kasie West"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442247987l/25486998.jpg",
+      "rank": 7,
+      "votes": 13754,
+      "winner": false
+    },
+    {
+      "external_id": "23272028",
+      "title": "A Study in Charlotte",
+      "authors": [
+        "Brittany Cavallaro"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435248277l/23272028.jpg",
+      "rank": 8,
+      "votes": 11144,
+      "winner": false
+    },
+    {
+      "external_id": "28686840",
+      "title": "Holding Up the Universe",
+      "authors": [
+        "Jennifer Niven"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1463377718l/28686840.jpg",
+      "rank": 9,
+      "votes": 8857,
+      "winner": false
+    },
+    {
+      "external_id": "26156987",
+      "title": "If I Was Your Girl",
+      "authors": [
+        "Meredith Russo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462088577l/26156987._SY600_.jpg",
+      "rank": 10,
+      "votes": 8066,
+      "winner": false
+    },
+    {
+      "external_id": "25739107",
+      "title": "The Serpent King",
+      "authors": [
+        "Jeff Zentner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435962447l/25739107.jpg",
+      "rank": 11,
+      "votes": 4956,
+      "winner": false
+    },
+    {
+      "external_id": "25785649",
+      "title": "The Way I Used to Be",
+      "authors": [
+        "Amber   Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435664960l/25785649._SY600_.jpg",
+      "rank": 12,
+      "votes": 3885,
+      "winner": false
+    },
+    {
+      "external_id": "22692740",
+      "title": "Symptoms of Being Human",
+      "authors": [
+        "Jeff Garvin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1434997054l/22692740.jpg",
+      "rank": 13,
+      "votes": 3872,
+      "winner": false
+    },
+    {
+      "external_id": "25756328",
+      "title": "Love & Gelato",
+      "authors": [
+        "Jenna Evans Welch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1708109640l/25756328.jpg",
+      "rank": 14,
+      "votes": 3628,
+      "winner": false
+    },
+    {
+      "external_id": "25893582",
+      "title": "Tell Me Three Things",
+      "authors": [
+        "Julie Buxbaum"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1448596179l/25893582._SY600_.jpg",
+      "rank": 15,
+      "votes": 3519,
+      "winner": false
+    },
+    {
+      "external_id": "17928147",
+      "title": "Walk the Edge",
+      "authors": [
+        "Katie McGarry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1456569089l/17928147.jpg",
+      "rank": 16,
+      "votes": 3470,
+      "winner": false
+    },
+    {
+      "external_id": "25663637",
+      "title": "When We Collided",
+      "authors": [
+        "Emery Lord"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1433602594l/25663637.jpg",
+      "rank": 17,
+      "votes": 3193,
+      "winner": false
+    },
+    {
+      "external_id": "28512548",
+      "title": "The Female of the Species",
+      "authors": [
+        "Mindy McGinnis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1472555662l/28512548._SY600_.jpg",
+      "rank": 18,
+      "votes": 1747,
+      "winner": false
+    },
+    {
+      "external_id": "30065209",
+      "title": "First Kiss",
+      "authors": [
+        "C.L. Stone"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462071109l/30065209.jpg",
+      "rank": 19,
+      "votes": 1426,
+      "winner": false
+    },
+    {
+      "external_id": "25022128",
+      "title": "Inferno",
+      "authors": [
+        "Catherine Doyle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1434703235l/25022128._SY600_.jpg",
+      "rank": 20,
+      "votes": 715,
+      "winner": false
+    }
+  ]
+}

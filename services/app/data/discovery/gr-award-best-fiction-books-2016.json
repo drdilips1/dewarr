@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-fiction-books-2016",
+  "kind": "award",
+  "title": "Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-fiction-books-2016",
+  "year": 2016,
+  "category": "Fiction",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:58.259695+00:00",
+  "books": [
+    {
+      "external_id": "26247008",
+      "title": "Truly Madly Guilty",
+      "authors": [
+        "Liane Moriarty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1491249206l/26247008.jpg",
+      "rank": 1,
+      "votes": 30154,
+      "winner": true
+    },
+    {
+      "external_id": "26114135",
+      "title": "All the Ugly and Wonderful Things",
+      "authors": [
+        "Bryn Greenwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500552983l/26114135._SY600_.jpg",
+      "rank": 2,
+      "votes": 27917,
+      "winner": false
+    },
+    {
+      "external_id": "26893819",
+      "title": "The Girls",
+      "authors": [
+        "Emma Cline"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492065338l/26893819.jpg",
+      "rank": 3,
+      "votes": 27595,
+      "winner": false
+    },
+    {
+      "external_id": "25781157",
+      "title": "The Nest",
+      "authors": [
+        "Cynthia D'Aprix Sweeney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461354827l/25781157.jpg",
+      "rank": 4,
+      "votes": 24848,
+      "winner": false
+    },
+    {
+      "external_id": "28587957",
+      "title": "Small Great Things",
+      "authors": [
+        "Jodi Picoult"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1468057481l/28587957._SY600_.jpg",
+      "rank": 5,
+      "votes": 23912,
+      "winner": false
+    },
+    {
+      "external_id": "25852870",
+      "title": "Eligible",
+      "authors": [
+        "Curtis Sittenfeld"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460477855l/25852870.jpg",
+      "rank": 6,
+      "votes": 17304,
+      "winner": false
+    },
+    {
+      "external_id": "28214365",
+      "title": "Commonwealth",
+      "authors": [
+        "Ann Patchett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1483278132l/28214365._SY600_.jpg",
+      "rank": 7,
+      "votes": 15626,
+      "winner": false
+    },
+    {
+      "external_id": "27276262",
+      "title": "Lily and the Octopus",
+      "authors": [
+        "Steven  Rowley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1499086357l/27276262._SY600_.jpg",
+      "rank": 8,
+      "votes": 15121,
+      "winner": false
+    },
+    {
+      "external_id": "25893709",
+      "title": "My Name Is Lucy Barton",
+      "authors": [
+        "Elizabeth Strout"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1450653428l/25893709.jpg",
+      "rank": 9,
+      "votes": 13786,
+      "winner": false
+    },
+    {
+      "external_id": "25810500",
+      "title": "What Is Not Yours Is Not Yours",
+      "authors": [
+        "Helen Oyeyemi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1447463920l/25810500.jpg",
+      "rank": 10,
+      "votes": 10343,
+      "winner": false
+    },
+    {
+      "external_id": "27213163",
+      "title": "Another Brooklyn",
+      "authors": [
+        "Jacqueline Woodson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1491253077l/27213163.jpg",
+      "rank": 11,
+      "votes": 4727,
+      "winner": false
+    },
+    {
+      "external_id": "28116847",
+      "title": "Here I Am",
+      "authors": [
+        "Jonathan Safran Foer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1473357062l/28116847.jpg",
+      "rank": 12,
+      "votes": 4617,
+      "winner": false
+    },
+    {
+      "external_id": "27068575",
+      "title": "Everybody's Fool",
+      "authors": [
+        "Richard Russo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1449609035l/27068575.jpg",
+      "rank": 13,
+      "votes": 4239,
+      "winner": false
+    },
+    {
+      "external_id": "28251002",
+      "title": "The Nix",
+      "authors": [
+        "Nathan  Hill"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1474083394l/28251002._SY600_.jpg",
+      "rank": 14,
+      "votes": 3645,
+      "winner": false
+    },
+    {
+      "external_id": "25688974",
+      "title": "Shelter",
+      "authors": [
+        "Jung Yun"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1452090043l/25688974.jpg",
+      "rank": 15,
+      "votes": 2303,
+      "winner": false
+    },
+    {
+      "external_id": "25810398",
+      "title": "The Association of Small Bombs",
+      "authors": [
+        "Karan Mahajan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441308136l/25810398.jpg",
+      "rank": 16,
+      "votes": 2134,
+      "winner": false
+    },
+    {
+      "external_id": "30008702",
+      "title": "Nutshell",
+      "authors": [
+        "Ian McEwan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1787326472l/30008702._SY600_.jpg",
+      "rank": 17,
+      "votes": 1808,
+      "winner": false
+    },
+    {
+      "external_id": "31246481",
+      "title": "Silver Threads",
+      "authors": [
+        "Bette Lee Crosby"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1469567450l/31246481._SY600_.jpg",
+      "rank": 18,
+      "votes": 1273,
+      "winner": false
+    },
+    {
+      "external_id": "26114523",
+      "title": "The Summer that Melted Everything",
+      "authors": [
+        "Tiffany   McDaniel"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1462949293l/26114523._SY600_.jpg",
+      "rank": 19,
+      "votes": 1201,
+      "winner": false
+    },
+    {
+      "external_id": "29776246",
+      "title": "An Ishmael of Syria",
+      "authors": [
+        "Asaad Almohammad"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459801350l/29776246._SY600_.jpg",
+      "rank": 20,
+      "votes": 1020,
+      "winner": false
+    }
+  ]
+}

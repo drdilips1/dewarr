@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-childrens-books-2016",
+  "kind": "award",
+  "title": "Middle Grade & Children's",
+  "source_url": "https://www.goodreads.com/choiceawards/best-childrens-books-2016",
+  "year": 2016,
+  "category": "Middle Grade & Children's",
+  "genres": [
+    "children"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:24.592759+00:00",
+  "books": [
+    {
+      "external_id": "26252859",
+      "title": "The Hidden Oracle",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1690967270l/26252859.jpg",
+      "rank": 1,
+      "votes": 46348,
+      "winner": true
+    },
+    {
+      "external_id": "22098550",
+      "title": "Pax",
+      "authors": [
+        "Sara Pennypacker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1434493048l/22098550._SY600_.jpg",
+      "rank": 2,
+      "votes": 17372,
+      "winner": false
+    },
+    {
+      "external_id": "27904311",
+      "title": "The Hammer of Thor",
+      "authors": [
+        "Rick Riordan"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1567236708l/27904311.jpg",
+      "rank": 3,
+      "votes": 17027,
+      "winner": false
+    },
+    {
+      "external_id": "27415451",
+      "title": "An Author's Odyssey",
+      "authors": [
+        "Chris Colfer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1460909499l/27415451.jpg",
+      "rank": 4,
+      "votes": 11775,
+      "winner": false
+    },
+    {
+      "external_id": "28110143",
+      "title": "Furthermore",
+      "authors": [
+        "Tahereh Mafi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1454343290l/28110143.jpg",
+      "rank": 5,
+      "votes": 9384,
+      "winner": false
+    },
+    {
+      "external_id": "17731927",
+      "title": "Summerlost",
+      "authors": [
+        "Ally Condie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453460319l/17731927.jpg",
+      "rank": 6,
+      "votes": 8635,
+      "winner": false
+    },
+    {
+      "external_id": "25387393",
+      "title": "Mr. Lemoncello's Library Olympics",
+      "authors": [
+        "Chris Grabenstein"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436876016l/25387393.jpg",
+      "rank": 7,
+      "votes": 8390,
+      "winner": false
+    },
+    {
+      "external_id": "25817353",
+      "title": "The Apprentice's Quest",
+      "authors": [
+        "Erin Hunter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1444610736l/25817353.jpg",
+      "rank": 8,
+      "votes": 7737,
+      "winner": false
+    },
+    {
+      "external_id": "25937866",
+      "title": "Raymie Nightingale",
+      "authors": [
+        "Kate DiCamillo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1446751148l/25937866.jpg",
+      "rank": 9,
+      "votes": 7114,
+      "winner": false
+    },
+    {
+      "external_id": "13612965",
+      "title": "The Bronze Key",
+      "authors": [
+        "Holly Black"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1526297100l/13612965.jpg",
+      "rank": 10,
+      "votes": 4369,
+      "winner": false
+    },
+    {
+      "external_id": "26026063",
+      "title": "Wolf Hollow",
+      "authors": [
+        "Lauren Wolk"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1485977210l/26026063._SY600_.jpg",
+      "rank": 11,
+      "votes": 3129,
+      "winner": false
+    },
+    {
+      "external_id": "25937857",
+      "title": "Hour of the Bees",
+      "authors": [
+        "Lindsay Eagar"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1458202428l/25937857._SY600_.jpg",
+      "rank": 12,
+      "votes": 2650,
+      "winner": false
+    },
+    {
+      "external_id": "23922381",
+      "title": "The Creeping Shadow",
+      "authors": [
+        "Jonathan Stroud"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1463500254l/23922381.jpg",
+      "rank": 13,
+      "votes": 2522,
+      "winner": false
+    },
+    {
+      "external_id": "26030734",
+      "title": "The Wild Robot",
+      "authors": [
+        "Peter  Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441052184l/26030734.jpg",
+      "rank": 14,
+      "votes": 2313,
+      "winner": false
+    },
+    {
+      "external_id": "23203257",
+      "title": "Lily and Dunkin",
+      "authors": [
+        "Donna Gephart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453060643l/23203257.jpg",
+      "rank": 15,
+      "votes": 1758,
+      "winner": false
+    },
+    {
+      "external_id": "25749841",
+      "title": "Death Weavers (4)",
+      "authors": [
+        "Brandon Mull"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1457907469l/25749841._SY600_.jpg",
+      "rank": 16,
+      "votes": 1595,
+      "winner": false
+    },
+    {
+      "external_id": "25779100",
+      "title": "Escaping Peril",
+      "authors": [
+        "Tui T. Sutherland"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435189061l/25779100._SY600_.jpg",
+      "rank": 17,
+      "votes": 1564,
+      "winner": false
+    },
+    {
+      "external_id": "25817074",
+      "title": "All Rise for the Honorable Perry T. Cook",
+      "authors": [
+        "Leslie Connor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453460806l/25817074._SY600_.jpg",
+      "rank": 18,
+      "votes": 1400,
+      "winner": false
+    },
+    {
+      "external_id": "26114421",
+      "title": "The Dark Talent",
+      "authors": [
+        "Brandon Sanderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443207060l/26114421.jpg",
+      "rank": 19,
+      "votes": 906,
+      "winner": false
+    },
+    {
+      "external_id": "27833683",
+      "title": "Dr. Fell and the Playground of Doom",
+      "authors": [
+        "David Neilsen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453060864l/27833683.jpg",
+      "rank": 20,
+      "votes": 453,
+      "winner": false
+    }
+  ]
+}

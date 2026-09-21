@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-science-fiction-books-2023",
+  "kind": "award",
+  "title": "Science Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-science-fiction-books-2023",
+  "year": 2023,
+  "category": "Science Fiction",
+  "genres": [
+    "science-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:21.799754+00:00",
+  "books": [
+    {
+      "external_id": "60784549",
+      "title": "In the Lives of Puppets",
+      "authors": [
+        "T.J. Klune"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1699617963l/60784549._SY600_.jpg",
+      "rank": 1,
+      "votes": 57535,
+      "winner": true
+    },
+    {
+      "external_id": "29227774",
+      "title": "Light Bringer",
+      "authors": [
+        "Pierce Brown"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1667655583l/29227774._SY600_.jpg",
+      "rank": 2,
+      "votes": 46836,
+      "winner": false
+    },
+    {
+      "external_id": "61885029",
+      "title": "Starter Villain",
+      "authors": [
+        "John Scalzi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1683564155l/61885029.jpg",
+      "rank": 3,
+      "votes": 31102,
+      "winner": false
+    },
+    {
+      "external_id": "62967873",
+      "title": "The Marriage Act",
+      "authors": [
+        "John Marrs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1671842825l/62967873.jpg",
+      "rank": 4,
+      "votes": 26052,
+      "winner": false
+    },
+    {
+      "external_id": "65211701",
+      "title": "System Collapse",
+      "authors": [
+        "Martha Wells"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1674575978l/65211701.jpg",
+      "rank": 5,
+      "votes": 25942,
+      "winner": false
+    },
+    {
+      "external_id": "61190770",
+      "title": "Chain-Gang All-Stars",
+      "authors": [
+        "Nana Kwame Adjei-Brenyah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1682956296l/61190770.jpg",
+      "rank": 6,
+      "votes": 25843,
+      "winner": false
+    },
+    {
+      "external_id": "60468332",
+      "title": "The Light Pirate",
+      "authors": [
+        "Lily Brooks-Dalton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1663783151l/60468332.jpg",
+      "rank": 7,
+      "votes": 18660,
+      "winner": false
+    },
+    {
+      "external_id": "61282437",
+      "title": "The Ferryman",
+      "authors": [
+        "Justin Cronin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1659983263l/61282437.jpg",
+      "rank": 8,
+      "votes": 17140,
+      "winner": false
+    },
+    {
+      "external_id": "123163147",
+      "title": "The Future",
+      "authors": [
+        "Naomi Alderman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741357673l/123163147._SY600_.jpg",
+      "rank": 9,
+      "votes": 15123,
+      "winner": false
+    },
+    {
+      "external_id": "61030535",
+      "title": "Children of Memory",
+      "authors": [
+        "Adrian Tchaikovsky"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1655929496l/61030535.jpg",
+      "rank": 10,
+      "votes": 13494,
+      "winner": false
+    },
+    {
+      "external_id": "101673225",
+      "title": "Land of Milk and Honey",
+      "authors": [
+        "C Pam Zhang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1683827919l/101673225.jpg",
+      "rank": 11,
+      "votes": 5464,
+      "winner": false
+    },
+    {
+      "external_id": "60679392",
+      "title": "I Keep My Exoskeletons to Myself",
+      "authors": [
+        "Marisa Crane"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1648063139l/60679392.jpg",
+      "rank": 12,
+      "votes": 3739,
+      "winner": false
+    },
+    {
+      "external_id": "61884842",
+      "title": "The Deep Sky",
+      "authors": [
+        "Yume Kitasei"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675082851l/61884842.jpg",
+      "rank": 13,
+      "votes": 3520,
+      "winner": false
+    },
+    {
+      "external_id": "64000639",
+      "title": "Bridge",
+      "authors": [
+        "Lauren Beukes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1670621774l/64000639.jpg",
+      "rank": 14,
+      "votes": 3196,
+      "winner": false
+    },
+    {
+      "external_id": "58388343",
+      "title": "Some Desperate Glory",
+      "authors": [
+        "Emily  Tesh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1668621616l/58388343._SY600_.jpg",
+      "rank": 15,
+      "votes": 3136,
+      "winner": false
+    },
+    {
+      "external_id": "62873999",
+      "title": "Translation State",
+      "authors": [
+        "Ann Leckie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1673303646l/62873999.jpg",
+      "rank": 16,
+      "votes": 2652,
+      "winner": false
+    },
+    {
+      "external_id": "61813107",
+      "title": "Ascension",
+      "authors": [
+        "Nicholas Binge"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1675642495l/61813107.jpg",
+      "rank": 17,
+      "votes": 2413,
+      "winner": false
+    },
+    {
+      "external_id": "60806778",
+      "title": "The Deluge",
+      "authors": [
+        "Stephen Markley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1671054157l/60806778.jpg",
+      "rank": 18,
+      "votes": 1746,
+      "winner": false
+    },
+    {
+      "external_id": "65211707",
+      "title": "The Jinn-Bot of Shantiport",
+      "authors": [
+        "Samit Basu"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1748734049l/65211707._SY600_.jpg",
+      "rank": 19,
+      "votes": 1388,
+      "winner": false
+    },
+    {
+      "external_id": "62919387",
+      "title": "The Great Transition",
+      "authors": [
+        "Nick Fuller Googins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1686092659l/62919387._SY600_.jpg",
+      "rank": 20,
+      "votes": 1337,
+      "winner": false
+    }
+  ]
+}

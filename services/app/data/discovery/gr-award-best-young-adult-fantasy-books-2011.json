@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-young-adult-fantasy-books-2011",
+  "kind": "award",
+  "title": "Young Adult Fantasy",
+  "source_url": "https://www.goodreads.com/choiceawards/best-young-adult-fantasy-books-2011",
+  "year": 2011,
+  "category": "Young Adult Fantasy",
+  "genres": [
+    "fantasy",
+    "young-adult"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:48:18.512236+00:00",
+  "books": [
+    {
+      "external_id": "8306857",
+      "title": "Divergent",
+      "authors": [
+        "Veronica Roth"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327873996l/8306857.jpg",
+      "rank": 1,
+      "votes": 8273,
+      "winner": true
+    },
+    {
+      "external_id": "6752378",
+      "title": "City of Fallen Angels",
+      "authors": [
+        "Cassandra Clare"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1369452302l/6752378.jpg",
+      "rank": 2,
+      "votes": 5655,
+      "winner": false
+    },
+    {
+      "external_id": "9460487",
+      "title": "Miss Peregrine's Home for Peculiar Children",
+      "authors": [
+        "Ransom Riggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1623449170l/9460487.jpg",
+      "rank": 3,
+      "votes": 4666,
+      "winner": false
+    },
+    {
+      "external_id": "8709527",
+      "title": "Bloodlines",
+      "authors": [
+        "Richelle Mead"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1297199431l/8709527.jpg",
+      "rank": 4,
+      "votes": 4509,
+      "winner": false
+    },
+    {
+      "external_id": "9659607",
+      "title": "The Iron Knight",
+      "authors": [
+        "Julie Kagawa"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375920888l/9659607.jpg",
+      "rank": 5,
+      "votes": 2718,
+      "winner": false
+    },
+    {
+      "external_id": "10637766",
+      "title": "Silence",
+      "authors": [
+        "Becca Fitzpatrick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362408152l/10637766.jpg",
+      "rank": 6,
+      "votes": 2690,
+      "winner": false
+    },
+    {
+      "external_id": "7686667",
+      "title": "Delirium",
+      "authors": [
+        "Lauren Oliver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1298079937l/7686667.jpg",
+      "rank": 7,
+      "votes": 2662,
+      "winner": false
+    },
+    {
+      "external_id": "9409458",
+      "title": "Forever",
+      "authors": [
+        "Maggie Stiefvater"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1285771367l/9409458.jpg",
+      "rank": 8,
+      "votes": 2620,
+      "winner": false
+    },
+    {
+      "external_id": "8235178",
+      "title": "Across the Universe",
+      "authors": [
+        "Beth Revis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1401852218l/8235178.jpg",
+      "rank": 9,
+      "votes": 2252,
+      "winner": false
+    },
+    {
+      "external_id": "8652190",
+      "title": "Awakened",
+      "authors": [
+        "P.C. Cast"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1307744664l/8652190.jpg",
+      "rank": 10,
+      "votes": 2218,
+      "winner": false
+    },
+    {
+      "external_id": "8525590",
+      "title": "Wither",
+      "authors": [
+        "Lauren DeStefano"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1341532430l/8525590.jpg",
+      "rank": 11,
+      "votes": 1114,
+      "winner": false
+    },
+    {
+      "external_id": "9369720",
+      "title": "Passion",
+      "authors": [
+        "Lauren Kate"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362339802l/9369720.jpg",
+      "rank": 12,
+      "votes": 973,
+      "winner": false
+    },
+    {
+      "external_id": "7488244",
+      "title": "Unearthly",
+      "authors": [
+        "Cynthia Hand"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1324782984l/7488244.jpg",
+      "rank": 13,
+      "votes": 965,
+      "winner": false
+    },
+    {
+      "external_id": "8428064",
+      "title": "Demonglass",
+      "authors": [
+        "Rachel Hawkins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1287692542l/8428064.jpg",
+      "rank": 14,
+      "votes": 934,
+      "winner": false
+    },
+    {
+      "external_id": "6368611",
+      "title": "Darkest Mercy",
+      "authors": [
+        "Melissa Marr"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1278717537l/6368611.jpg",
+      "rank": 15,
+      "votes": 715,
+      "winner": false
+    },
+    {
+      "external_id": "8490112",
+      "title": "Daughter of Smoke & Bone",
+      "authors": [
+        "Laini Taylor"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1461353773l/8490112.jpg",
+      "rank": 16,
+      "votes": 708,
+      "winner": false
+    },
+    {
+      "external_id": "9802372",
+      "title": "The Name of the Star",
+      "authors": [
+        "Maureen Johnson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327880449l/9802372.jpg",
+      "rank": 17,
+      "votes": 603,
+      "winner": false
+    },
+    {
+      "external_id": "2964700",
+      "title": "Mastiff",
+      "authors": [
+        "Tamora Pierce"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1302921347l/2964700.jpg",
+      "rank": 18,
+      "votes": 480,
+      "winner": false
+    },
+    {
+      "external_id": "9918083",
+      "title": "Goliath",
+      "authors": [
+        "Scott Westerfeld"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1299808712l/9918083.jpg",
+      "rank": 19,
+      "votes": 455,
+      "winner": false
+    },
+    {
+      "external_id": "7879278",
+      "title": "Waterfall",
+      "authors": [
+        "Lisa Tawn Bergren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1429307722l/7879278.jpg",
+      "rank": 20,
+      "votes": 216,
+      "winner": false
+    }
+  ]
+}

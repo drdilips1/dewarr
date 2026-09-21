@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-history-biography-books-2019",
+  "kind": "award",
+  "title": "History & Biography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-history-biography-books-2019",
+  "year": 2019,
+  "category": "History & Biography",
+  "genres": [
+    "biography",
+    "history"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:43:13.097919+00:00",
+  "books": [
+    {
+      "external_id": "37570548",
+      "title": "The Five",
+      "authors": [
+        "Hallie Rubenhold"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602343785l/37570548._SY600_.jpg",
+      "rank": 1,
+      "votes": 31783,
+      "winner": true
+    },
+    {
+      "external_id": "40538681",
+      "title": "Midnight in Chernobyl",
+      "authors": [
+        "Adam Higginbotham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545577007l/40538681.jpg",
+      "rank": 2,
+      "votes": 19711,
+      "winner": false
+    },
+    {
+      "external_id": "40163119",
+      "title": "Say Nothing",
+      "authors": [
+        "Patrick Radden Keefe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537315266l/40163119._SY600_.jpg",
+      "rank": 3,
+      "votes": 14733,
+      "winner": false
+    },
+    {
+      "external_id": "44908411",
+      "title": "Before and After",
+      "authors": [
+        "Judy Christie"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1563756285l/44908411.jpg",
+      "rank": 4,
+      "votes": 13545,
+      "winner": false
+    },
+    {
+      "external_id": "40595446",
+      "title": "A Woman of No Importance",
+      "authors": [
+        "Sonia Purnell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1539165474l/40595446.jpg",
+      "rank": 5,
+      "votes": 13252,
+      "winner": false
+    },
+    {
+      "external_id": "43821991",
+      "title": "The Only Plane in the Sky",
+      "authors": [
+        "Garrett M. Graff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565526203l/43821991.jpg",
+      "rank": 6,
+      "votes": 11383,
+      "winner": false
+    },
+    {
+      "external_id": "42201377",
+      "title": "The Pioneers",
+      "authors": [
+        "David McCullough"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1556447325l/42201377.jpg",
+      "rank": 7,
+      "votes": 10097,
+      "winner": false
+    },
+    {
+      "external_id": "40594422",
+      "title": "First",
+      "authors": [
+        "Evan Thomas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1544628438l/40594422.jpg",
+      "rank": 8,
+      "votes": 8874,
+      "winner": false
+    },
+    {
+      "external_id": "39863169",
+      "title": "The First Conspiracy",
+      "authors": [
+        "Brad Meltzer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1540921089l/39863169._SY600_.jpg",
+      "rank": 9,
+      "votes": 8788,
+      "winner": false
+    },
+    {
+      "external_id": "41574287",
+      "title": "The Heartbeat of Wounded Knee",
+      "authors": [
+        "David Treuer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1535688244l/41574287._SY600_.jpg",
+      "rank": 10,
+      "votes": 7711,
+      "winner": false
+    },
+    {
+      "external_id": "41796203",
+      "title": "Madame Fourcade's Secret War",
+      "authors": [
+        "Lynne Olson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1544627232l/41796203.jpg",
+      "rank": 11,
+      "votes": 3065,
+      "winner": false
+    },
+    {
+      "external_id": "40121985",
+      "title": "How to Hide an Empire",
+      "authors": [
+        "Daniel Immerwahr"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627757585l/40121985._SY600_.jpg",
+      "rank": 12,
+      "votes": 2561,
+      "winner": false
+    },
+    {
+      "external_id": "41219594",
+      "title": "Dutch Girl",
+      "authors": [
+        "Robert Matzen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1537033188l/41219594.jpg",
+      "rank": 13,
+      "votes": 2418,
+      "winner": false
+    },
+    {
+      "external_id": "40165912",
+      "title": "The Lady from the Black Lagoon",
+      "authors": [
+        "Mallory O'Meara"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1539883807l/40165912.jpg",
+      "rank": 14,
+      "votes": 2251,
+      "winner": false
+    },
+    {
+      "external_id": "40539126",
+      "title": "Code Name",
+      "authors": [
+        "Larry Loftis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1768704032l/40539126._SY600_.jpg",
+      "rank": 15,
+      "votes": 2092,
+      "winner": false
+    },
+    {
+      "external_id": "41716904",
+      "title": "Upheaval",
+      "authors": [
+        "Jared Diamond"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1544735124l/41716904.jpg",
+      "rank": 16,
+      "votes": 1772,
+      "winner": false
+    },
+    {
+      "external_id": "41812830",
+      "title": "The British Are Coming",
+      "authors": [
+        "Rick Atkinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1538524326l/41812830.jpg",
+      "rank": 17,
+      "votes": 1664,
+      "winner": false
+    },
+    {
+      "external_id": "40360266",
+      "title": "Spearhead",
+      "authors": [
+        "Adam Makos"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1543378126l/40360266.jpg",
+      "rank": 18,
+      "votes": 1483,
+      "winner": false
+    },
+    {
+      "external_id": "40121946",
+      "title": "The Death and Life of Aida Hernandez",
+      "authors": [
+        "Aaron Bobrow-Strain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1544249414l/40121946._SY600_.jpg",
+      "rank": 19,
+      "votes": 833,
+      "winner": false
+    },
+    {
+      "external_id": "42972023",
+      "title": "The Anarchy",
+      "authors": [
+        "William Dalrymple"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1565769891l/42972023.jpg",
+      "rank": 20,
+      "votes": 595,
+      "winner": false
+    }
+  ]
+}

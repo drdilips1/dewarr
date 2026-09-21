@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-poetry-books-2015",
+  "kind": "award",
+  "title": "Poetry",
+  "source_url": "https://www.goodreads.com/choiceawards/best-poetry-books-2015",
+  "year": 2015,
+  "category": "Poetry",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:49.098034+00:00",
+  "books": [
+    {
+      "external_id": "25784766",
+      "title": "The Dogs I Have Kissed",
+      "authors": [
+        "Trista Mateer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435125785l/25784766._SY600_.jpg",
+      "rank": 1,
+      "votes": 8725,
+      "winner": true
+    },
+    {
+      "external_id": "25330489",
+      "title": "Memories",
+      "authors": [
+        "Lang Leav"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1459143456l/25330489._SY600_.jpg",
+      "rank": 2,
+      "votes": 7517,
+      "winner": false
+    },
+    {
+      "external_id": "25241872",
+      "title": "Pop Sonnets",
+      "authors": [
+        "David Bodanis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435868021l/25241872.jpg",
+      "rank": 3,
+      "votes": 7328,
+      "winner": false
+    },
+    {
+      "external_id": "25384844",
+      "title": "Black Butterfly",
+      "authors": [
+        "Robert M. Drake"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1430317879l/25384844.jpg",
+      "rank": 4,
+      "votes": 6016,
+      "winner": false
+    },
+    {
+      "external_id": "25144676",
+      "title": "I Wrote This for You and Only You",
+      "authors": [
+        "pleasefindthis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1426385945l/25144676.jpg",
+      "rank": 5,
+      "votes": 5269,
+      "winner": false
+    },
+    {
+      "external_id": "23627418",
+      "title": "Dirty Pretty Things",
+      "authors": [
+        "Michael Faudet"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417162557l/23627418.jpg",
+      "rank": 6,
+      "votes": 5199,
+      "winner": false
+    },
+    {
+      "external_id": "23705600",
+      "title": "Catalog of Unabashed Gratitude",
+      "authors": [
+        "Ross Gay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418105218l/23705600.jpg",
+      "rank": 7,
+      "votes": 3196,
+      "winner": false
+    },
+    {
+      "external_id": "25052044",
+      "title": "Bipolar Cowboy",
+      "authors": [
+        "Noah Cicero"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1425265763l/25052044.jpg",
+      "rank": 8,
+      "votes": 3175,
+      "winner": false
+    },
+    {
+      "external_id": "23522212",
+      "title": "Mouthful of Forevers",
+      "authors": [
+        "Clementine von Radics"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418614931l/23522212.jpg",
+      "rank": 9,
+      "votes": 3174,
+      "winner": false
+    },
+    {
+      "external_id": "21936830",
+      "title": "Dark Sparkler",
+      "authors": [
+        "Amber Tamblyn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1409778441l/21936830.jpg",
+      "rank": 10,
+      "votes": 2771,
+      "winner": false
+    },
+    {
+      "external_id": "21532793",
+      "title": "War of the Foxes",
+      "authors": [
+        "Richard Siken"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1426378241l/21532793.jpg",
+      "rank": 11,
+      "votes": 1392,
+      "winner": false
+    },
+    {
+      "external_id": "24611522",
+      "title": "Felicity",
+      "authors": [
+        "Mary Oliver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445383628l/24611522.jpg",
+      "rank": 12,
+      "votes": 1350,
+      "winner": false
+    },
+    {
+      "external_id": "22571682",
+      "title": "How to Be Drawn",
+      "authors": [
+        "Terrance Hayes"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1406510263l/22571682.jpg",
+      "rank": 13,
+      "votes": 1325,
+      "winner": false
+    },
+    {
+      "external_id": "23333016",
+      "title": "Pansy",
+      "authors": [
+        "Andrea Gibson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1425168295l/23333016.jpg",
+      "rank": 14,
+      "votes": 1208,
+      "winner": false
+    },
+    {
+      "external_id": "24611612",
+      "title": "All the Words Are Yours",
+      "authors": [
+        "Tyler Knott Gregson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443657057l/24611612.jpg",
+      "rank": 15,
+      "votes": 1021,
+      "winner": false
+    },
+    {
+      "external_id": "23678552",
+      "title": "Psychaotic",
+      "authors": [
+        "Irum Zahra"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1447098646l/23678552._SY600_.jpg",
+      "rank": 16,
+      "votes": 631,
+      "winner": false
+    },
+    {
+      "external_id": "25410663",
+      "title": "Naked Human",
+      "authors": [
+        "Christopher Poindexter"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1429753650l/25410663.jpg",
+      "rank": 17,
+      "votes": 575,
+      "winner": false
+    },
+    {
+      "external_id": "23129928",
+      "title": "What About This",
+      "authors": [
+        "Frank Stanford"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421890213l/23129928.jpg",
+      "rank": 18,
+      "votes": 506,
+      "winner": false
+    },
+    {
+      "external_id": "23526332",
+      "title": "The Robot Scientist's Daughter",
+      "authors": [
+        "Jeannine Hall Gailey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1415676377l/23526332.jpg",
+      "rank": 19,
+      "votes": 416,
+      "winner": false
+    },
+    {
+      "external_id": "24924948",
+      "title": "Dark Desires",
+      "authors": [
+        "Delicious David"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1423831164l/24924948.jpg",
+      "rank": 20,
+      "votes": 235,
+      "winner": false
+    }
+  ]
+}

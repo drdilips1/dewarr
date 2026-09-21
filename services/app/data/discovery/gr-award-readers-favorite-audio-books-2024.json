@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-readers-favorite-audio-books-2024",
+  "kind": "award",
+  "title": "Audiobook",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-audio-books-2024",
+  "year": 2024,
+  "category": "Audiobook",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:03.718820+00:00",
+  "books": [
+    {
+      "external_id": "196890737",
+      "title": "Funny Story",
+      "authors": [
+        "Emily Henry"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1692101276l/196890737._SY600_.jpg",
+      "rank": 1,
+      "votes": 72571,
+      "winner": true
+    },
+    {
+      "external_id": "193752824",
+      "title": "The Women",
+      "authors": [
+        "Kristin Hannah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1689874194l/193752824._SY600_.jpg",
+      "rank": 2,
+      "votes": 61305,
+      "winner": false
+    },
+    {
+      "external_id": "203802230",
+      "title": "Just for the Summer",
+      "authors": [
+        "Abby Jimenez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1702576205l/203802230._SY600_.jpg",
+      "rank": 3,
+      "votes": 54828,
+      "winner": false
+    },
+    {
+      "external_id": "203695802",
+      "title": "Listen for the Lie",
+      "authors": [
+        "Amy Tintera"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1702409857l/203695802._SY600_.jpg",
+      "rank": 4,
+      "votes": 36352,
+      "winner": false
+    },
+    {
+      "external_id": "211864049",
+      "title": "1984",
+      "authors": [
+        "George Orwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1778327153l/211864049._SY600_.jpg",
+      "rank": 5,
+      "votes": 35733,
+      "winner": false
+    },
+    {
+      "external_id": "199415631",
+      "title": "Somewhere Beyond the Sea",
+      "authors": [
+        "T.J. Klune"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1697053181l/199415631._SY600_.jpg",
+      "rank": 6,
+      "votes": 30449,
+      "winner": false
+    },
+    {
+      "external_id": "202692462",
+      "title": "First Lie Wins",
+      "authors": [
+        "Ashley Elston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1704403012l/202692462._SY600_.jpg",
+      "rank": 7,
+      "votes": 26530,
+      "winner": false
+    },
+    {
+      "external_id": "212063063",
+      "title": "James",
+      "authors": [
+        "Percival Everett"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1713906798l/212063063._SY600_.jpg",
+      "rank": 8,
+      "votes": 20610,
+      "winner": false
+    },
+    {
+      "external_id": "219507018",
+      "title": "The Small and the Mighty",
+      "authors": [
+        "Sharon McMahon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1727192486l/219507018._SY600_.jpg",
+      "rank": 9,
+      "votes": 18334,
+      "winner": false
+    },
+    {
+      "external_id": "210230679",
+      "title": "We Solve Murders",
+      "authors": [
+        "Richard Osman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1711032184l/210230679._SY600_.jpg",
+      "rank": 10,
+      "votes": 16739,
+      "winner": false
+    },
+    {
+      "external_id": "219576778",
+      "title": "Be Ready When the Luck Happens",
+      "authors": [
+        "Ina Garten"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1727365254l/219576778._SY600_.jpg",
+      "rank": 11,
+      "votes": 6540,
+      "winner": false
+    },
+    {
+      "external_id": "220267535",
+      "title": "From Here to the Great Unknown",
+      "authors": [
+        "Lisa Marie Presley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1728511863l/220267535._SY600_.jpg",
+      "rank": 12,
+      "votes": 6167,
+      "winner": false
+    },
+    {
+      "external_id": "212972620",
+      "title": "The Anxious Generation",
+      "authors": [
+        "Jonathan Haidt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1715044407l/212972620._SY600_.jpg",
+      "rank": 13,
+      "votes": 5792,
+      "winner": false
+    },
+    {
+      "external_id": "215616671",
+      "title": "Intermezzo",
+      "authors": [
+        "Sally Rooney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1719678193l/215616671._SY600_.jpg",
+      "rank": 14,
+      "votes": 5588,
+      "winner": false
+    },
+    {
+      "external_id": "213305503",
+      "title": "Bits and Pieces",
+      "authors": [
+        "Whoopi Goldberg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1715613767l/213305503._SY600_.jpg",
+      "rank": 15,
+      "votes": 4123,
+      "winner": false
+    },
+    {
+      "external_id": "213807005",
+      "title": "Here One Moment",
+      "authors": [
+        "Liane Moriarty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716490944l/213807005._SY600_.jpg",
+      "rank": 16,
+      "votes": 4101,
+      "winner": false
+    },
+    {
+      "external_id": "219580039",
+      "title": "It's Not You",
+      "authors": [
+        "Ramani Durvasula"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1727373211l/219580039._SY600_.jpg",
+      "rank": 17,
+      "votes": 3214,
+      "winner": false
+    },
+    {
+      "external_id": "203298142",
+      "title": "Oath and Honor",
+      "authors": [
+        "Liz Cheney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1701822608l/203298142._SY600_.jpg",
+      "rank": 18,
+      "votes": 3180,
+      "winner": false
+    },
+    {
+      "external_id": "211109423",
+      "title": "Maybe This Time",
+      "authors": [
+        "Cara Bastone"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1712688983l/211109423._SY600_.jpg",
+      "rank": 19,
+      "votes": 3174,
+      "winner": false
+    },
+    {
+      "external_id": "219576703",
+      "title": "Revenge of the Tipping Point",
+      "authors": [
+        "Malcolm Gladwell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1727365121l/219576703._SY600_.jpg",
+      "rank": 20,
+      "votes": 2422,
+      "winner": false
+    }
+  ]
+}

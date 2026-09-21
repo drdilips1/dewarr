@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-readers-favorite-horror-books-2025",
+  "kind": "award",
+  "title": "Horror",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-horror-books-2025",
+  "year": 2025,
+  "category": "Horror",
+  "genres": [
+    "horror"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:39:50.609602+00:00",
+  "books": [
+    {
+      "external_id": "207611566",
+      "title": "Witchcraft for Wayward Girls",
+      "authors": [
+        "Grady Hendrix"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1728319448l/207611566._SY600_.jpg",
+      "rank": 1,
+      "votes": 59603,
+      "winner": true
+    },
+    {
+      "external_id": "221633230",
+      "title": "Never Flinch",
+      "authors": [
+        "Stephen  King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1732728644l/221633230._SY600_.jpg",
+      "rank": 2,
+      "votes": 57375,
+      "winner": false
+    },
+    {
+      "external_id": "214565614",
+      "title": "The Buffalo Hunter Hunter",
+      "authors": [
+        "Stephen Graham Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1779114576l/214565614._SY600_.jpg",
+      "rank": 3,
+      "votes": 39229,
+      "winner": false
+    },
+    {
+      "external_id": "220458657",
+      "title": "The Bewitching",
+      "authors": [
+        "Silvia Moreno-Garcia"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1733380797l/220458657._SY600_.jpg",
+      "rank": 4,
+      "votes": 34740,
+      "winner": false
+    },
+    {
+      "external_id": "222419303",
+      "title": "Play Nice",
+      "authors": [
+        "Rachel   Harrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1755269292l/222419303._SY600_.jpg",
+      "rank": 5,
+      "votes": 31285,
+      "winner": false
+    },
+    {
+      "external_id": "218185743",
+      "title": "Bat Eater and Other Names for Cora Zeng",
+      "authors": [
+        "Kylie Lee Baker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1724867496l/218185743._SY600_.jpg",
+      "rank": 6,
+      "votes": 20936,
+      "winner": false
+    },
+    {
+      "external_id": "212342605",
+      "title": "Hungerstone",
+      "authors": [
+        "Kat Dunn"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1724718900l/212342605._SY600_.jpg",
+      "rank": 7,
+      "votes": 18190,
+      "winner": false
+    },
+    {
+      "external_id": "220595449",
+      "title": "We Love You, Bunny",
+      "authors": [
+        "Mona Awad"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1739832230l/220595449._SY600_.jpg",
+      "rank": 8,
+      "votes": 16896,
+      "winner": false
+    },
+    {
+      "external_id": "221502398",
+      "title": "The Possession of Alba Díaz",
+      "authors": [
+        "Isabel Cañas"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1732311886l/221502398._SY600_.jpg",
+      "rank": 9,
+      "votes": 15178,
+      "winner": false
+    },
+    {
+      "external_id": "211143113",
+      "title": "The Lamb",
+      "authors": [
+        "Lucy   Rose"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1725117431l/211143113._SY600_.jpg",
+      "rank": 10,
+      "votes": 15159,
+      "winner": false
+    },
+    {
+      "external_id": "211640295",
+      "title": "When the Wolf Comes Home",
+      "authors": [
+        "Nat Cassidy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716854450l/211640295._SY600_.jpg",
+      "rank": 11,
+      "votes": 6873,
+      "winner": false
+    },
+    {
+      "external_id": "224004327",
+      "title": "You Weren't Meant to Be Human",
+      "authors": [
+        "Andrew Joseph White"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1756129048l/224004327._SY600_.jpg",
+      "rank": 12,
+      "votes": 6765,
+      "winner": false
+    },
+    {
+      "external_id": "214009189",
+      "title": "Blood on Her Tongue",
+      "authors": [
+        "Johanna van Veen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1717789038l/214009189._SY600_.jpg",
+      "rank": 13,
+      "votes": 5895,
+      "winner": false
+    },
+    {
+      "external_id": "222377103",
+      "title": "The Haunting of Paynes Hollow",
+      "authors": [
+        "Kelley Armstrong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1737399973l/222377103._SY600_.jpg",
+      "rank": 14,
+      "votes": 4782,
+      "winner": false
+    },
+    {
+      "external_id": "217387953",
+      "title": "Lucky Day",
+      "authors": [
+        "Chuck Tingle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1737780925l/217387953._SY600_.jpg",
+      "rank": 15,
+      "votes": 4600,
+      "winner": false
+    },
+    {
+      "external_id": "220481345",
+      "title": "How Bad Things Can Get",
+      "authors": [
+        "Darcy Coates"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1738658596l/220481345._SY600_.jpg",
+      "rank": 16,
+      "votes": 4255,
+      "winner": false
+    },
+    {
+      "external_id": "217453576",
+      "title": "Immaculate Conception",
+      "authors": [
+        "Ling Ling Huang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1728663685l/217453576._SY600_.jpg",
+      "rank": 17,
+      "votes": 3814,
+      "winner": false
+    },
+    {
+      "external_id": "220161193",
+      "title": "What Hunger",
+      "authors": [
+        "Catherine Dang"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1731109508l/220161193._SY600_.jpg",
+      "rank": 18,
+      "votes": 3672,
+      "winner": false
+    },
+    {
+      "external_id": "222419255",
+      "title": "Coffin Moon",
+      "authors": [
+        "Keith Rosson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741279925l/222419255._SY600_.jpg",
+      "rank": 19,
+      "votes": 1922,
+      "winner": false
+    },
+    {
+      "external_id": "221893981",
+      "title": "Breathe In, Bleed Out",
+      "authors": [
+        "Brian  McAuley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1738796119l/221893981._SY600_.jpg",
+      "rank": 20,
+      "votes": 1223,
+      "winner": false
+    }
+  ]
+}

@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-readers-favorite-history-bio-books-2025",
+  "kind": "award",
+  "title": "History & Biography",
+  "source_url": "https://www.goodreads.com/choiceawards/readers-favorite-history-bio-books-2025",
+  "year": 2025,
+  "category": "History & Biography",
+  "genres": [
+    "biography",
+    "history"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:40:24.503060+00:00",
+  "books": [
+    {
+      "external_id": "222476092",
+      "title": "How to Kill a Witch",
+      "authors": [
+        "Zoe Venditozzi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1746641921l/222476092._SY600_.jpg",
+      "rank": 1,
+      "votes": 45858,
+      "winner": true
+    },
+    {
+      "external_id": "214152206",
+      "title": "Jane Austen's Bookshelf",
+      "authors": [
+        "Rebecca Romney"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1719020957l/214152206._SY600_.jpg",
+      "rank": 2,
+      "votes": 28598,
+      "winner": false
+    },
+    {
+      "external_id": "203747797",
+      "title": "Sisters in Science",
+      "authors": [
+        "Olivia Campbell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1719786736l/203747797._SY600_.jpg",
+      "rank": 3,
+      "votes": 28524,
+      "winner": false
+    },
+    {
+      "external_id": "217387674",
+      "title": "Baldwin",
+      "authors": [
+        "Nicholas Boggs"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1760526681l/217387674._SY600_.jpg",
+      "rank": 4,
+      "votes": 19929,
+      "winner": false
+    },
+    {
+      "external_id": "211003699",
+      "title": "Propaganda Girls",
+      "authors": [
+        "Lisa Rogak"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718938507l/211003699._SY600_.jpg",
+      "rank": 5,
+      "votes": 16840,
+      "winner": false
+    },
+    {
+      "external_id": "219158874",
+      "title": "Mark Twain",
+      "authors": [
+        "Ron Chernow"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1726282923l/219158874._SY600_.jpg",
+      "rank": 6,
+      "votes": 16298,
+      "winner": false
+    },
+    {
+      "external_id": "220239083",
+      "title": "A Marriage at Sea",
+      "authors": [
+        "Sophie Elmhirst"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1731041831l/220239083._SY600_.jpg",
+      "rank": 7,
+      "votes": 14612,
+      "winner": false
+    },
+    {
+      "external_id": "203578826",
+      "title": "The Cure for Women",
+      "authors": [
+        "Lydia Reeder"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716904743l/203578826._SY600_.jpg",
+      "rank": 8,
+      "votes": 13606,
+      "winner": false
+    },
+    {
+      "external_id": "211004064",
+      "title": "The JFK Conspiracy",
+      "authors": [
+        "Brad Meltzer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718938524l/211004064._SY600_.jpg",
+      "rank": 9,
+      "votes": 13227,
+      "winner": false
+    },
+    {
+      "external_id": "198563691",
+      "title": "Original Sins",
+      "authors": [
+        "Eve L. Ewing"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1729455599l/198563691._SY600_.jpg",
+      "rank": 10,
+      "votes": 12303,
+      "winner": false
+    },
+    {
+      "external_id": "228142780",
+      "title": "1929",
+      "authors": [
+        "Andrew Ross Sorkin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1755785045l/228142780._SY600_.jpg",
+      "rank": 11,
+      "votes": 4324,
+      "winner": false
+    },
+    {
+      "external_id": "220161038",
+      "title": "A Flower Traveled in My Blood",
+      "authors": [
+        "Haley Cohen Gilliland"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1736355509l/220161038._SY600_.jpg",
+      "rank": 12,
+      "votes": 4230,
+      "winner": false
+    },
+    {
+      "external_id": "223736225",
+      "title": "We the People",
+      "authors": [
+        "Jill Lepore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1738432343l/223736225._SY600_.jpg",
+      "rank": 13,
+      "votes": 3758,
+      "winner": false
+    },
+    {
+      "external_id": "216818681",
+      "title": "Lorne",
+      "authors": [
+        "Susan    Morrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1728331961l/216818681._SY600_.jpg",
+      "rank": 14,
+      "votes": 3522,
+      "winner": false
+    },
+    {
+      "external_id": "222376731",
+      "title": "The Zorg",
+      "authors": [
+        "Siddharth Kara"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1733848451l/222376731._SY600_.jpg",
+      "rank": 15,
+      "votes": 3272,
+      "winner": false
+    },
+    {
+      "external_id": "220160123",
+      "title": "The Devil Reached Toward the Sky",
+      "authors": [
+        "Garrett M. Graff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1753471262l/220160123._SY600_.jpg",
+      "rank": 16,
+      "votes": 2149,
+      "winner": false
+    },
+    {
+      "external_id": "216971226",
+      "title": "The Fate of the Day",
+      "authors": [
+        "Rick Atkinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1722308418l/216971226._SY600_.jpg",
+      "rank": 17,
+      "votes": 2010,
+      "winner": false
+    },
+    {
+      "external_id": "211003941",
+      "title": "Realm of Ice and Sky",
+      "authors": [
+        "Buddy Levy"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718938520l/211003941._SY600_.jpg",
+      "rank": 18,
+      "votes": 1999,
+      "winner": false
+    },
+    {
+      "external_id": "223736238",
+      "title": "Dark Renaissance",
+      "authors": [
+        "Stephen Greenblatt"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1748634362l/223736238.jpg",
+      "rank": 19,
+      "votes": 1700,
+      "winner": false
+    },
+    {
+      "external_id": "221251857",
+      "title": "King of Kings",
+      "authors": [
+        "Scott Anderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1732139359l/221251857._SY600_.jpg",
+      "rank": 20,
+      "votes": 1161,
+      "winner": false
+    }
+  ]
+}

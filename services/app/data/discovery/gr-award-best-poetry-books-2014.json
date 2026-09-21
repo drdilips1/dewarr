@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-poetry-books-2014",
+  "kind": "award",
+  "title": "Poetry",
+  "source_url": "https://www.goodreads.com/choiceawards/best-poetry-books-2014",
+  "year": 2014,
+  "category": "Poetry",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:46:21.025126+00:00",
+  "books": [
+    {
+      "external_id": "22151696",
+      "title": "Lullabies",
+      "authors": [
+        "Lang Leav"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404192714l/22151696.jpg",
+      "rank": 1,
+      "votes": 9571,
+      "winner": true
+    },
+    {
+      "external_id": "20483085",
+      "title": "Poisoned Apples",
+      "authors": [
+        "Christine Heppermann"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391531802l/20483085.jpg",
+      "rank": 2,
+      "votes": 8761,
+      "winner": false
+    },
+    {
+      "external_id": "20175409",
+      "title": "His Day Is Done",
+      "authors": [
+        "Maya Angelou"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388376250l/20175409.jpg",
+      "rank": 3,
+      "votes": 8692,
+      "winner": false
+    },
+    {
+      "external_id": "18144035",
+      "title": "Poems That Make Grown Men Cry",
+      "authors": [
+        "Anthony Holden"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398190492l/18144035.jpg",
+      "rank": 4,
+      "votes": 7220,
+      "winner": false
+    },
+    {
+      "external_id": "20821097",
+      "title": "Chasers of the Light",
+      "authors": [
+        "Tyler Knott Gregson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398025020l/20821097.jpg",
+      "rank": 5,
+      "votes": 6688,
+      "winner": false
+    },
+    {
+      "external_id": "18288210",
+      "title": "No Matter the Wreckage",
+      "authors": [
+        "Sarah Kay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1394597872l/18288210.jpg",
+      "rank": 6,
+      "votes": 5968,
+      "winner": false
+    },
+    {
+      "external_id": "20821239",
+      "title": "Blue Horses",
+      "authors": [
+        "Mary Oliver"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1398032287l/20821239.jpg",
+      "rank": 7,
+      "votes": 5335,
+      "winner": false
+    },
+    {
+      "external_id": "21327039",
+      "title": "You Can Make Anything Sad",
+      "authors": [
+        "Spencer Madsen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1432985130l/21327039.jpg",
+      "rank": 8,
+      "votes": 4872,
+      "winner": false
+    },
+    {
+      "external_id": "18722774",
+      "title": "Motherland Fatherland Homelandsexuals",
+      "authors": [
+        "Patricia Lockwood"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1385964943l/18722774.jpg",
+      "rank": 9,
+      "votes": 3961,
+      "winner": false
+    },
+    {
+      "external_id": "17934511",
+      "title": "I Am the Beggar of the World",
+      "authors": [
+        "Eliza Griswold"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1375932399l/17934511.jpg",
+      "rank": 10,
+      "votes": 3596,
+      "winner": false
+    },
+    {
+      "external_id": "19230408",
+      "title": "I Wrote This For You",
+      "authors": [
+        "pleasefindthis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386325273l/19230408.jpg",
+      "rank": 11,
+      "votes": 1923,
+      "winner": false
+    },
+    {
+      "external_id": "22618173",
+      "title": "What We Buried",
+      "authors": [
+        "Caitlyn Siehl"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404485608l/22618173.jpg",
+      "rank": 12,
+      "votes": 1664,
+      "winner": false
+    },
+    {
+      "external_id": "20613761",
+      "title": "Citizen",
+      "authors": [
+        "Claudia Rankine"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1420944502l/20613761.jpg",
+      "rank": 13,
+      "votes": 1631,
+      "winner": false
+    },
+    {
+      "external_id": "18295863",
+      "title": "Letter Composed During a Lull in the Fighting",
+      "authors": [
+        "Kevin   Powers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1379896856l/18295863.jpg",
+      "rank": 14,
+      "votes": 1542,
+      "winner": false
+    },
+    {
+      "external_id": "21852315",
+      "title": "Jessica's Journal",
+      "authors": [
+        "Kathryn Perez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1396769682l/21852315.jpg",
+      "rank": 15,
+      "votes": 1143,
+      "winner": false
+    },
+    {
+      "external_id": "22523971",
+      "title": "Nejma",
+      "authors": [
+        "Nayyirah Waheed"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403054929l/22523971.jpg",
+      "rank": 16,
+      "votes": 670,
+      "winner": false
+    },
+    {
+      "external_id": "20702539",
+      "title": "Prelude to Bruise",
+      "authors": [
+        "Saeed Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417624280l/20702539.jpg",
+      "rank": 17,
+      "votes": 569,
+      "winner": false
+    },
+    {
+      "external_id": "18406279",
+      "title": "The Pedestrians",
+      "authors": [
+        "Rachel Zucker"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1380699864l/18406279.jpg",
+      "rank": 18,
+      "votes": 552,
+      "winner": false
+    },
+    {
+      "external_id": "17937655",
+      "title": "Seam",
+      "authors": [
+        "Tarfia Faizullah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387569330l/17937655.jpg",
+      "rank": 19,
+      "votes": 452,
+      "winner": false
+    },
+    {
+      "external_id": "19288242",
+      "title": "Gabriel",
+      "authors": [
+        "Edward Hirsch"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404483661l/19288242.jpg",
+      "rank": 20,
+      "votes": 232,
+      "winner": false
+    }
+  ]
+}

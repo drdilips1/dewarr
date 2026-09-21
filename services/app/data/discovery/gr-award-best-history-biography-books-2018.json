@@ -1,0 +1,237 @@
+{
+  "id": "gr-award-best-history-biography-books-2018",
+  "kind": "award",
+  "title": "History & Biography",
+  "source_url": "https://www.goodreads.com/choiceawards/best-history-biography-books-2018",
+  "year": 2018,
+  "category": "History & Biography",
+  "genres": [
+    "biography",
+    "history"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:10.427874+00:00",
+  "books": [
+    {
+      "external_id": "38656999",
+      "title": "The Good Neighbor",
+      "authors": [
+        "Maxwell King"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520605183l/38656999._SY600_.jpg",
+      "rank": 1,
+      "votes": 44826,
+      "winner": true
+    },
+    {
+      "external_id": "37534762",
+      "title": "Robin",
+      "authors": [
+        "Dave Itzkoff"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1690237680l/37534762._SY600_.jpg",
+      "rank": 2,
+      "votes": 19394,
+      "winner": false
+    },
+    {
+      "external_id": "35959199",
+      "title": "Barracoon",
+      "authors": [
+        "Zora Neale Hurston"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1525214902l/35959199.jpg",
+      "rank": 3,
+      "votes": 12486,
+      "winner": false
+    },
+    {
+      "external_id": "36369872",
+      "title": "House of Dreams",
+      "authors": [
+        "Liz Rosenberg"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518623634l/36369872._SY600_.jpg",
+      "rank": 4,
+      "votes": 11097,
+      "winner": false
+    },
+    {
+      "external_id": "35743037",
+      "title": "The Woman's Hour",
+      "authors": [
+        "Elaine F. Weiss"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1519920562l/35743037._SY600_.jpg",
+      "rank": 5,
+      "votes": 10471,
+      "winner": false
+    },
+    {
+      "external_id": "34859714",
+      "title": "Jefferson's Daughters",
+      "authors": [
+        "Catherine Kerrison"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492222278l/34859714.jpg",
+      "rank": 6,
+      "votes": 10279,
+      "winner": false
+    },
+    {
+      "external_id": "37488430",
+      "title": "Fly Girls",
+      "authors": [
+        "Keith  O'Brien"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520608010l/37488430._SY600_.jpg",
+      "rank": 7,
+      "votes": 10244,
+      "winner": false
+    },
+    {
+      "external_id": "35414997",
+      "title": "Rocket Men",
+      "authors": [
+        "Robert Kurson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1502143372l/35414997.jpg",
+      "rank": 8,
+      "votes": 7084,
+      "winner": false
+    },
+    {
+      "external_id": "38363272",
+      "title": "In the Hurricane's Eye",
+      "authors": [
+        "Nathaniel Philbrick"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1519820510l/38363272._SY600_.jpg",
+      "rank": 9,
+      "votes": 6177,
+      "winner": false
+    },
+    {
+      "external_id": "35342927",
+      "title": "The Monk of Mokha",
+      "authors": [
+        "Dave Eggers"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511804274l/35342927._SY600_.jpg",
+      "rank": 10,
+      "votes": 5770,
+      "winner": false
+    },
+    {
+      "external_id": "38657386",
+      "title": "Leadership",
+      "authors": [
+        "Doris Kearns Goodwin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1519455513l/38657386.jpg",
+      "rank": 11,
+      "votes": 2753,
+      "winner": false
+    },
+    {
+      "external_id": "36743867",
+      "title": "Lincoln's Last Trial",
+      "authors": [
+        "Dan Abrams"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1512348208l/36743867.jpg",
+      "rank": 12,
+      "votes": 2431,
+      "winner": false
+    },
+    {
+      "external_id": "36204285",
+      "title": "Origin Story",
+      "authors": [
+        "David Christian"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523466867l/36204285.jpg",
+      "rank": 13,
+      "votes": 2074,
+      "winner": false
+    },
+    {
+      "external_id": "38212158",
+      "title": "These Truths",
+      "authors": [
+        "Jill Lepore"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520028664l/38212158._SY600_.jpg",
+      "rank": 14,
+      "votes": 1568,
+      "winner": false
+    },
+    {
+      "external_id": "33598223",
+      "title": "Rise and Kill First",
+      "authors": [
+        "Ronen Bergman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1495743181l/33598223.jpg",
+      "rank": 15,
+      "votes": 1535,
+      "winner": false
+    },
+    {
+      "external_id": "22318476",
+      "title": "Boom Town",
+      "authors": [
+        "Sam Anderson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1513955802l/22318476._SY600_.jpg",
+      "rank": 16,
+      "votes": 1326,
+      "winner": false
+    },
+    {
+      "external_id": "35457359",
+      "title": "God Save Texas",
+      "authors": [
+        "Lawrence Wright"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1513714856l/35457359._SY600_.jpg",
+      "rank": 17,
+      "votes": 1296,
+      "winner": false
+    },
+    {
+      "external_id": "38714362",
+      "title": "Killing the SS",
+      "authors": [
+        "Bill O'Reilly"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1524496931l/38714362.jpg",
+      "rank": 18,
+      "votes": 1232,
+      "winner": false
+    },
+    {
+      "external_id": "36373560",
+      "title": "Indianapolis",
+      "authors": [
+        "Lynn Vincent"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1517227407l/36373560.jpg",
+      "rank": 19,
+      "votes": 1105,
+      "winner": false
+    },
+    {
+      "external_id": "38525349",
+      "title": "The Soul of America",
+      "authors": [
+        "Jon Meacham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1521839684l/38525349.jpg",
+      "rank": 20,
+      "votes": 1020,
+      "winner": false
+    }
+  ]
+}

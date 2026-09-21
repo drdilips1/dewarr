@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-food-cookbooks-2018",
+  "kind": "award",
+  "title": "Food & Cookbooks",
+  "source_url": "https://www.goodreads.com/choiceawards/best-food-cookbooks-2018",
+  "year": 2018,
+  "category": "Food & Cookbooks",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:13.549565+00:00",
+  "books": [
+    {
+      "external_id": "40004097",
+      "title": "Cravings",
+      "authors": [
+        "Chrissy Teigen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529940061l/40004097._SY600_.jpg",
+      "rank": 1,
+      "votes": 36003,
+      "winner": true
+    },
+    {
+      "external_id": "36381100",
+      "title": "Magnolia Table",
+      "authors": [
+        "Joanna Gaines"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1515541604l/36381100._SY600_.jpg",
+      "rank": 2,
+      "votes": 25225,
+      "winner": false
+    },
+    {
+      "external_id": "36627287",
+      "title": "Tasty Latest and Greatest",
+      "authors": [
+        "Tasty"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511149382l/36627287._SY600_.jpg",
+      "rank": 3,
+      "votes": 19249,
+      "winner": false
+    },
+    {
+      "external_id": "35804613",
+      "title": "A Literary Tea Party",
+      "authors": [
+        "Alison  Walsh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1518842140l/35804613.jpg",
+      "rank": 4,
+      "votes": 11578,
+      "winner": false
+    },
+    {
+      "external_id": "40006421",
+      "title": "Cook Like a Pro",
+      "authors": [
+        "Ina Garten"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1525120690l/40006421._SY600_.jpg",
+      "rank": 5,
+      "votes": 10916,
+      "winner": false
+    },
+    {
+      "external_id": "38502290",
+      "title": "Are You There God? It's Me, Margarita",
+      "authors": [
+        "Tim Federle"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1528935099l/38502290.jpg",
+      "rank": 6,
+      "votes": 8875,
+      "winner": false
+    },
+    {
+      "external_id": "35306053",
+      "title": "Hot for Food Vegan Comfort Classics",
+      "authors": [
+        "Lauren Toyota"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510743858l/35306053.jpg",
+      "rank": 7,
+      "votes": 8474,
+      "winner": false
+    },
+    {
+      "external_id": "36001408",
+      "title": "Sweet Revenge",
+      "authors": [
+        "Heather Kim"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1502460874l/36001408._SY600_.jpg",
+      "rank": 8,
+      "votes": 7848,
+      "winner": false
+    },
+    {
+      "external_id": "35741051",
+      "title": "Giada's Italy",
+      "authors": [
+        "Giada De Laurentiis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1512421287l/35741051._SY600_.jpg",
+      "rank": 9,
+      "votes": 6345,
+      "winner": false
+    },
+    {
+      "external_id": "35398011",
+      "title": "Vegan 100",
+      "authors": [
+        "Gaz Oakley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1508755739l/35398011.jpg",
+      "rank": 10,
+      "votes": 5683,
+      "winner": false
+    },
+    {
+      "external_id": "33656178",
+      "title": "Bobby Flay Fit",
+      "authors": [
+        "Bobby Flay"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498794559l/33656178.jpg",
+      "rank": 11,
+      "votes": 2520,
+      "winner": false
+    },
+    {
+      "external_id": "38532190",
+      "title": "Baking All Year Round",
+      "authors": [
+        "Rosanna Pansino"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1532867905l/38532190.jpg",
+      "rank": 12,
+      "votes": 2139,
+      "winner": false
+    },
+    {
+      "external_id": "35342935",
+      "title": "The Food Explorer",
+      "authors": [
+        "Daniel         Stone"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1517467691l/35342935.jpg",
+      "rank": 13,
+      "votes": 2125,
+      "winner": false
+    },
+    {
+      "external_id": "35592077",
+      "title": "Buttermilk Graffiti",
+      "authors": [
+        "Edward       Lee"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1512073320l/35592077.jpg",
+      "rank": 14,
+      "votes": 1722,
+      "winner": false
+    },
+    {
+      "external_id": "38121211",
+      "title": "Skinnytaste One and Done",
+      "authors": [
+        "Gina Homolka"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1540694439l/38121211._SY600_.jpg",
+      "rank": 15,
+      "votes": 1569,
+      "winner": false
+    },
+    {
+      "external_id": "39797678",
+      "title": "Ottolenghi Simple",
+      "authors": [
+        "Yotam Ottolenghi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1524067502l/39797678.jpg",
+      "rank": 16,
+      "votes": 1553,
+      "winner": false
+    },
+    {
+      "external_id": "36711236",
+      "title": "Milk! A 10,000-Year Food Fracas",
+      "authors": [
+        "Mark Kurlansky"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1513711958l/36711236.jpg",
+      "rank": 17,
+      "votes": 1526,
+      "winner": false
+    },
+    {
+      "external_id": "36856216",
+      "title": "Killing It",
+      "authors": [
+        "Camas Davis"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1515429377l/36856216.jpg",
+      "rank": 18,
+      "votes": 1431,
+      "winner": false
+    },
+    {
+      "external_id": "34017050",
+      "title": "Hippie Food",
+      "authors": [
+        "Jonathan Kauffman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492873926l/34017050.jpg",
+      "rank": 19,
+      "votes": 1341,
+      "winner": false
+    },
+    {
+      "external_id": "37826508",
+      "title": "Now & Again",
+      "authors": [
+        "Julia  Turshen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523463004l/37826508.jpg",
+      "rank": 20,
+      "votes": 585,
+      "winner": false
+    }
+  ]
+}

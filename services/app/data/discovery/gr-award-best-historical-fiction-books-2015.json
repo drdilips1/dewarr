@@ -1,0 +1,236 @@
+{
+  "id": "gr-award-best-historical-fiction-books-2015",
+  "kind": "award",
+  "title": "Historical Fiction",
+  "source_url": "https://www.goodreads.com/choiceawards/best-historical-fiction-books-2015",
+  "year": 2015,
+  "category": "Historical Fiction",
+  "genres": [
+    "historical-fiction"
+  ],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:45:31.920709+00:00",
+  "books": [
+    {
+      "external_id": "21853621",
+      "title": "The Nightingale",
+      "authors": [
+        "Kristin Hannah"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1681839850l/21853621._SY600_.jpg",
+      "rank": 1,
+      "votes": 57328,
+      "winner": true
+    },
+    {
+      "external_id": "3722183",
+      "title": "A God in Ruins",
+      "authors": [
+        "Kate Atkinson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1451442002l/3722183.jpg",
+      "rank": 2,
+      "votes": 16425,
+      "winner": false
+    },
+    {
+      "external_id": "23209927",
+      "title": "At the Water's Edge",
+      "authors": [
+        "Sara Gruen"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1412194706l/23209927.jpg",
+      "rank": 3,
+      "votes": 13228,
+      "winner": false
+    },
+    {
+      "external_id": "22609433",
+      "title": "Rebel Queen",
+      "authors": [
+        "Michelle    Moran"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1419212676l/22609433.jpg",
+      "rank": 4,
+      "votes": 11819,
+      "winner": false
+    },
+    {
+      "external_id": "23899174",
+      "title": "In the Unlikely Event",
+      "authors": [
+        "Judy Blume"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421711380l/23899174.jpg",
+      "rank": 5,
+      "votes": 11523,
+      "winner": false
+    },
+    {
+      "external_id": "22450859",
+      "title": "The Boston Girl",
+      "authors": [
+        "Anita Diamant"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1418103945l/22450859.jpg",
+      "rank": 6,
+      "votes": 11036,
+      "winner": false
+    },
+    {
+      "external_id": "22544024",
+      "title": "Secrets of a Charmed Life",
+      "authors": [
+        "Susan Meissner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403809486l/22544024.jpg",
+      "rank": 7,
+      "votes": 9679,
+      "winner": false
+    },
+    {
+      "external_id": "23492741",
+      "title": "The Marriage of Opposites",
+      "authors": [
+        "Alice Hoffman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1438581390l/23492741._SY600_.jpg",
+      "rank": 8,
+      "votes": 8691,
+      "winner": false
+    },
+    {
+      "external_id": "23995231",
+      "title": "Circling the Sun",
+      "authors": [
+        "Paula McLain"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1426531608l/23995231.jpg",
+      "rank": 9,
+      "votes": 7671,
+      "winner": false
+    },
+    {
+      "external_id": "22221136",
+      "title": "A Desperate Fortune",
+      "authors": [
+        "Susanna Kearsley"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1434396165l/22221136._SY600_.jpg",
+      "rank": 10,
+      "votes": 7208,
+      "winner": false
+    },
+    {
+      "external_id": "22571629",
+      "title": "The Architect's Apprentice",
+      "authors": [
+        "Elif Shafak"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404484149l/22571629.jpg",
+      "rank": 11,
+      "votes": 3576,
+      "winner": false
+    },
+    {
+      "external_id": "25106953",
+      "title": "The Taming of the Queen",
+      "authors": [
+        "Philippa Gregory"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1433348496l/25106953._SY600_.jpg",
+      "rank": 12,
+      "votes": 3076,
+      "winner": false
+    },
+    {
+      "external_id": "22609128",
+      "title": "The Lake House",
+      "authors": [
+        "Kate Morton"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439316953l/22609128._SY600_.jpg",
+      "rank": 13,
+      "votes": 3051,
+      "winner": false
+    },
+    {
+      "external_id": "23014759",
+      "title": "Letters to the Lost",
+      "authors": [
+        "Iona Grey"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410981946l/23014759.jpg",
+      "rank": 14,
+      "votes": 2806,
+      "winner": false
+    },
+    {
+      "external_id": "22635858",
+      "title": "The Bookseller",
+      "authors": [
+        "Cynthia Swanson"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421854932l/22635858.jpg",
+      "rank": 15,
+      "votes": 2538,
+      "winner": false
+    },
+    {
+      "external_id": "22543480",
+      "title": "Epitaph",
+      "authors": [
+        "Mary Doria Russell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1404411518l/22543480.jpg",
+      "rank": 16,
+      "votes": 2418,
+      "winner": false
+    },
+    {
+      "external_id": "24611868",
+      "title": "The Gilded Hour",
+      "authors": [
+        "Sara Donati"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1425245254l/24611868.jpg",
+      "rank": 17,
+      "votes": 2044,
+      "winner": false
+    },
+    {
+      "external_id": "22585891",
+      "title": "Mademoiselle Chanel",
+      "authors": [
+        "C.W. Gortner"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1407339340l/22585891.jpg",
+      "rank": 18,
+      "votes": 1997,
+      "winner": false
+    },
+    {
+      "external_id": "23719378",
+      "title": "Girl Waits with Gun",
+      "authors": [
+        "Amy  Stewart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500687846l/23719378.jpg",
+      "rank": 19,
+      "votes": 1604,
+      "winner": false
+    },
+    {
+      "external_id": "22929476",
+      "title": "Flood of Fire",
+      "authors": [
+        "Amitav Ghosh"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1412064905l/22929476.jpg",
+      "rank": 20,
+      "votes": 1547,
+      "winner": false
+    }
+  ]
+}

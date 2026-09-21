@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-humor-books-2017",
+  "kind": "award",
+  "title": "Humor",
+  "source_url": "https://www.goodreads.com/choiceawards/best-humor-books-2017",
+  "year": 2017,
+  "category": "Humor",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:44:38.043620+00:00",
+  "books": [
+    {
+      "external_id": "30253864",
+      "title": "Talking as Fast as I Can",
+      "authors": [
+        "Lauren Graham"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492797634l/30253864._SY600_.jpg",
+      "rank": 1,
+      "votes": 48077,
+      "winner": true
+    },
+    {
+      "external_id": "33347428",
+      "title": "I Can't Make This Up",
+      "authors": [
+        "Kevin  Hart"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493503674l/33347428.jpg",
+      "rank": 2,
+      "votes": 20807,
+      "winner": false
+    },
+    {
+      "external_id": "34130008",
+      "title": "Unqualified",
+      "authors": [
+        "Anna Faris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498797632l/34130008.jpg",
+      "rank": 3,
+      "votes": 14393,
+      "winner": false
+    },
+    {
+      "external_id": "33381433",
+      "title": "We Are Never Meeting in Real Life.",
+      "authors": [
+        "Samantha Irby"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1530160228l/33381433._SY600_.jpg",
+      "rank": 4,
+      "votes": 13285,
+      "winner": false
+    },
+    {
+      "external_id": "30971731",
+      "title": "This Is Just My Face",
+      "authors": [
+        "Gabourey Sidibe"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1484360203l/30971731.jpg",
+      "rank": 5,
+      "votes": 12557,
+      "winner": false
+    },
+    {
+      "external_id": "29214727",
+      "title": "The Daily Show",
+      "authors": [
+        "Chris    Smith"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1475830499l/29214727.jpg",
+      "rank": 6,
+      "votes": 12241,
+      "winner": false
+    },
+    {
+      "external_id": "32498038",
+      "title": "Theft by Finding",
+      "authors": [
+        "David Sedaris"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492298272l/32498038._SY600_.jpg",
+      "rank": 7,
+      "votes": 12212,
+      "winner": false
+    },
+    {
+      "external_id": "24612045",
+      "title": "Believe Me",
+      "authors": [
+        "Eddie Izzard"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1492012178l/24612045.jpg",
+      "rank": 8,
+      "votes": 10794,
+      "winner": false
+    },
+    {
+      "external_id": "30658435",
+      "title": "One Day We'll All Be Dead and None of This Will Matter",
+      "authors": [
+        "Scaachi Koul"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1469411966l/30658435.jpg",
+      "rank": 9,
+      "votes": 10771,
+      "winner": false
+    },
+    {
+      "external_id": "32337904",
+      "title": "The Awkward Thoughts of W. Kamau Bell",
+      "authors": [
+        "W. Kamau Bell"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1480796912l/32337904.jpg",
+      "rank": 10,
+      "votes": 6402,
+      "winner": false
+    },
+    {
+      "external_id": "31934379",
+      "title": "Al Franken",
+      "authors": [
+        "Al Franken"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493483633l/31934379._SY600_.jpg",
+      "rank": 11,
+      "votes": 2882,
+      "winner": false
+    },
+    {
+      "external_id": "34427199",
+      "title": "I'm Fine...And Other Lies",
+      "authors": [
+        "Whitney Cummings"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1498828762l/34427199.jpg",
+      "rank": 12,
+      "votes": 2195,
+      "winner": false
+    },
+    {
+      "external_id": "34947549",
+      "title": "Rhett & Link's Book of Mythicality",
+      "authors": [
+        "Rhett McLaughlin"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493040148l/34947549._SY600_.jpg",
+      "rank": 13,
+      "votes": 1879,
+      "winner": false
+    },
+    {
+      "external_id": "30653928",
+      "title": "Revolution for Dummies",
+      "authors": [
+        "Bassem Youssef"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1488561253l/30653928._SY600_.jpg",
+      "rank": 14,
+      "votes": 1875,
+      "winner": false
+    },
+    {
+      "external_id": "34347433",
+      "title": "Vacationland",
+      "authors": [
+        "John Hodgman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1500032088l/34347433._SY600_.jpg",
+      "rank": 15,
+      "votes": 1545,
+      "winner": false
+    },
+    {
+      "external_id": "34853119",
+      "title": "Stephen Colbert's Midnight Confessions",
+      "authors": [
+        "Stephen Colbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1499340603l/34853119._SY600_.jpg",
+      "rank": 16,
+      "votes": 1381,
+      "winner": false
+    },
+    {
+      "external_id": "31450739",
+      "title": "I Need a Lifeguard Everywhere But the Pool",
+      "authors": [
+        "Lisa Scottoline"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1487793373l/31450739.jpg",
+      "rank": 17,
+      "votes": 1220,
+      "winner": false
+    },
+    {
+      "external_id": "31707101",
+      "title": "This Is Really Happening",
+      "authors": [
+        "Erin Chack"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1485339276l/31707101._SY600_.jpg",
+      "rank": 18,
+      "votes": 1082,
+      "winner": false
+    },
+    {
+      "external_id": "34466893",
+      "title": "Everything Is Awful",
+      "authors": [
+        "Matt Bellassai"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1495645379l/34466893._SY600_.jpg",
+      "rank": 19,
+      "votes": 1022,
+      "winner": false
+    },
+    {
+      "external_id": "33898867",
+      "title": "Waiting for the Punch",
+      "authors": [
+        "Marc Maron"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1495478616l/33898867._SY600_.jpg",
+      "rank": 20,
+      "votes": 981,
+      "winner": false
+    }
+  ]
+}

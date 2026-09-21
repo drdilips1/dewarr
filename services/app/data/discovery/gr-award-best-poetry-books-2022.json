@@ -1,0 +1,234 @@
+{
+  "id": "gr-award-best-poetry-books-2022",
+  "kind": "award",
+  "title": "Poetry",
+  "source_url": "https://www.goodreads.com/choiceawards/best-poetry-books-2022",
+  "year": 2022,
+  "category": "Poetry",
+  "genres": [],
+  "count": 20,
+  "coverage": "complete",
+  "updated_at": "2026-09-20T18:41:52.462076+00:00",
+  "books": [
+    {
+      "external_id": "56805404",
+      "title": "Call Us What We Carry",
+      "authors": [
+        "Amanda Gorman"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1627672473l/56805404.jpg",
+      "rank": 1,
+      "votes": 44813,
+      "winner": true
+    },
+    {
+      "external_id": "58582927",
+      "title": "Time Is a Mother",
+      "authors": [
+        "Ocean Vuong"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1626846358l/58582927.jpg",
+      "rank": 2,
+      "votes": 27726,
+      "winner": false
+    },
+    {
+      "external_id": "58439971",
+      "title": "Unlock Your Storybook Heart",
+      "authors": [
+        "Amanda Lovelace"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1632912205l/58439971.jpg",
+      "rank": 3,
+      "votes": 13617,
+      "winner": false
+    },
+    {
+      "external_id": "58439983",
+      "title": "Serenity",
+      "authors": [
+        "F.S. Yousaf"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1632325858l/58439983.jpg",
+      "rank": 4,
+      "votes": 13223,
+      "winner": false
+    },
+    {
+      "external_id": "59921489",
+      "title": "On Sun Swallowing",
+      "authors": [
+        "Dakota Warren"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1640333309l/59921489._SY600_.jpg",
+      "rank": 5,
+      "votes": 11747,
+      "winner": false
+    },
+    {
+      "external_id": "60409981",
+      "title": "And Yet",
+      "authors": [
+        "Kate Baer"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1648819433l/60409981.jpg",
+      "rank": 6,
+      "votes": 11588,
+      "winner": false
+    },
+    {
+      "external_id": "60147181",
+      "title": "The World Keeps Ending, and the World Goes On",
+      "authors": [
+        "Franny Choi"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1646648354l/60147181.jpg",
+      "rank": 7,
+      "votes": 10086,
+      "winner": false
+    },
+    {
+      "external_id": "55835966",
+      "title": "Bless the Daughter Raised by a Voice in Her Head",
+      "authors": [
+        "Warsan Shire"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1639379677l/55835966.jpg",
+      "rank": 8,
+      "votes": 8870,
+      "winner": false
+    },
+    {
+      "external_id": "59679549",
+      "title": "Woman Without Shame",
+      "authors": [
+        "Sandra Cisneros"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1648411459l/59679549.jpg",
+      "rank": 9,
+      "votes": 8560,
+      "winner": false
+    },
+    {
+      "external_id": "59900080",
+      "title": "Musical Tables",
+      "authors": [
+        "Billy Collins"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1647260105l/59900080.jpg",
+      "rank": 10,
+      "votes": 8441,
+      "winner": false
+    },
+    {
+      "external_id": "59382078",
+      "title": "Poukahangatus",
+      "authors": [
+        "Tayi Tibble"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1639201380l/59382078.jpg",
+      "rank": 11,
+      "votes": 2651,
+      "winner": false
+    },
+    {
+      "external_id": "59571658",
+      "title": "The Hurting Kind",
+      "authors": [
+        "Ada Limon"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1651701028l/59571658._SY600_.jpg",
+      "rank": 12,
+      "votes": 2596,
+      "winner": false
+    },
+    {
+      "external_id": "60320135",
+      "title": "The Shift",
+      "authors": [
+        "Melody Godfred"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1649384231l/60320135._SY600_.jpg",
+      "rank": 13,
+      "votes": 2521,
+      "winner": false
+    },
+    {
+      "external_id": "60165457",
+      "title": "Weaving Sundown in a Scarlet Light",
+      "authors": [
+        "Joy Harjo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1645247346l/60165457.jpg",
+      "rank": 14,
+      "votes": 1909,
+      "winner": false
+    },
+    {
+      "external_id": "60753258",
+      "title": "Alive at the End of the World",
+      "authors": [
+        "Saeed Jones"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1653949775l/60753258.jpg",
+      "rank": 15,
+      "votes": 1907,
+      "winner": false
+    },
+    {
+      "external_id": "59788399",
+      "title": "Girls That Never Die",
+      "authors": [
+        "Safia Elhillo"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1642872394l/59788399.jpg",
+      "rank": 16,
+      "votes": 1831,
+      "winner": false
+    },
+    {
+      "external_id": "59576068",
+      "title": "Walking Gentry Home",
+      "authors": [
+        "Alora Young"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1652694705l/59576068.jpg",
+      "rank": 17,
+      "votes": 1737,
+      "winner": false
+    },
+    {
+      "external_id": "60059700",
+      "title": "Normal Distance",
+      "authors": [
+        "Elisa Gabbert"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1641617007l/60059700._SY600_.jpg",
+      "rank": 18,
+      "votes": 1561,
+      "winner": false
+    },
+    {
+      "external_id": "58393241",
+      "title": "All the Flowers Kneeling",
+      "authors": [
+        "Paul Tran"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1637617829l/58393241._SY600_.jpg",
+      "rank": 19,
+      "votes": 1090,
+      "winner": false
+    },
+    {
+      "external_id": "58984757",
+      "title": "Golden Ax",
+      "authors": [
+        "Rio Cortez"
+      ],
+      "cover_url": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1639202488l/58984757.jpg",
+      "rank": 20,
+      "votes": 707,
+      "winner": false
+    }
+  ]
+}
