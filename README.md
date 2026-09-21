@@ -22,103 +22,133 @@ Early release. Automatic downloads are off by default. Goodreads RSS imports can
 
 ## Quick start
 
-Requires Docker with Compose v2, Git, and Python 3. No Node.js installation is needed for Docker.
+Run **Dewarr + PostgreSQL**. Dewarr handles migrations and background jobs automatically. No Git, Python, setup script, or `.env` file is required.
 
-```sh
-git clone https://github.com/logabell/dewarr.git
-cd dewarr
-python3 scripts/init_env.py --mode compose
-docker compose up -d
-```
+Choose an option below. Set both database passwords to the same value. For access from another computer, change `PUBLIC_URL` to `http://your-server:8000`.
 
-Open [localhost:8000](http://localhost:8000). Create your first administrator account directly on the welcome page. After that, only an administrator can add more users.
+<details open>
+<summary><strong>Docker Compose — recommended</strong></summary>
 
-The included `compose.yaml` runs Dewarr, its worker, and PostgreSQL:
+Save this as `compose.yaml`. Adjust `PUID`, `PGID`, and the folders to match your server.
 
 ```yaml
 name: dewarr
 
-x-application: &application
-  image: ${DEWARR_IMAGE:-ghcr.io/logabell/dewarr:latest}
-  env_file: .env
-  user: "${BOOK_UID:-1000}:${BOOK_GID:-1000}"
-  secrets:
-    - app_key
-  read_only: true
-  tmpfs:
-    - /tmp
-  security_opt:
-    - no-new-privileges:true
-  cap_drop:
-    - ALL
-
 services:
-  postgres:
-    image: postgres:18.3-bookworm@sha256:80630f83606d8db77d30b3851b16a9f78be2d0d4dda6f7b82a1fdca5ebe3acba
+  dewarr:
+    image: ghcr.io/logabell/dewarr:latest
     environment:
-      POSTGRES_USER: book
-      POSTGRES_DB: book
-      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
-    secrets:
-      - postgres_password
+      PUID: 1000
+      PGID: 1000
+      TZ: Etc/UTC
+      PUBLIC_URL: http://localhost:8000
+      DB_HOST: postgres
+      DB_NAME: dewarr
+      DB_USER: dewarr
+      DB_PASSWORD: change-me
+    volumes:
+      - ./config:/config
+      - ./data:/data
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    stop_grace_period: 35s
+
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: dewarr
+      POSTGRES_USER: dewarr
+      POSTGRES_PASSWORD: change-me
     volumes:
       - postgres:/var/lib/postgresql
     healthcheck:
-      test: [CMD-SHELL, "pg_isready -U book -d book"]
+      test: ["CMD-SHELL", "pg_isready -U dewarr -d dewarr"]
       interval: 5s
       timeout: 5s
       retries: 12
     restart: unless-stopped
 
-  migrate:
-    <<: *application
-    command: [alembic, upgrade, head]
-    depends_on:
-      postgres:
-        condition: service_healthy
-
-  api:
-    <<: *application
-    ports:
-      - "${DEWARR_BIND:-127.0.0.1}:${DEWARR_PORT:-8000}:8000"
-    depends_on:
-      migrate:
-        condition: service_completed_successfully
-    healthcheck:
-      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health/ready', timeout=3)"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
-
-  worker:
-    <<: *application
-    command: [python, -m, app.jobs.worker]
-    depends_on:
-      migrate:
-        condition: service_completed_successfully
-    restart: unless-stopped
-
 volumes:
   postgres:
-
-secrets:
-  app_key:
-    file: .local/secrets/app_key
-  postgres_password:
-    file: .local/secrets/postgres_password
 ```
 
-Then open **Settings**:
+```sh
+mkdir -p config data
+docker compose up -d
+```
 
-1. Connect your Audiobookshelf server and libraries.
-2. Connect Goodreads and/or Hardcover and choose lists to track.
-3. Add download sources and qBittorrent if you want downloads.
-4. Configure shared folders and verify your library routes before enabling automation.
+</details>
 
-Dewarr runs an API/UI container, a background worker, and PostgreSQL. A short-lived migration container prepares the database.
+<details>
+<summary><strong>Docker CLI — download the Compose file</strong></summary>
 
-**More setups:** [Docker guide](docs/DOCKER.md) · [Build from source](docs/DOCKER.md#build-from-source) · [Shared media folders](docs/DOCKER.md#shared-media-folders) · [Audiobookshelf stack](docs/DOCKER.md#add-audiobookshelf) · [Native development](docs/DEVELOPMENT.md)
+```sh
+mkdir dewarr
+cd dewarr
+curl -fsSL https://raw.githubusercontent.com/logabell/dewarr/main/compose.yaml -o compose.yaml
+```
+
+Edit the passwords, `PUBLIC_URL`, and folder paths in `compose.yaml`, then start:
+
+```sh
+mkdir -p config data
+docker compose up -d
+```
+
+</details>
+
+<details>
+<summary><strong>Docker run — without Compose</strong></summary>
+
+Change both `change-me` passwords to the same value before running these commands.
+
+```sh
+mkdir -p config data
+docker network create dewarr
+docker volume create dewarr-postgres
+
+docker run -d \
+  --name dewarr-postgres \
+  --network dewarr \
+  -e POSTGRES_DB=dewarr \
+  -e POSTGRES_USER=dewarr \
+  -e POSTGRES_PASSWORD=change-me \
+  -v dewarr-postgres:/var/lib/postgresql \
+  --restart unless-stopped \
+  postgres:18
+
+docker run -d \
+  --name dewarr \
+  --network dewarr \
+  -e PUID=1000 \
+  -e PGID=1000 \
+  -e TZ=Etc/UTC \
+  -e PUBLIC_URL=http://localhost:8000 \
+  -e DB_HOST=dewarr-postgres \
+  -e DB_NAME=dewarr \
+  -e DB_USER=dewarr \
+  -e DB_PASSWORD=change-me \
+  -p 8000:8000 \
+  -v "$PWD/config:/config" \
+  -v "$PWD/data:/data" \
+  --stop-timeout 35 \
+  --restart unless-stopped \
+  ghcr.io/logabell/dewarr:latest
+```
+
+Already have PostgreSQL? Skip its container and use your existing database host, name, user, and password in the Dewarr command.
+
+</details>
+
+Open [localhost:8000](http://localhost:8000), or your server's address, and create your first account. Connect Audiobookshelf, Goodreads, Hardcover, and download clients in **Settings**.
+
+Dewarr creates its encryption key in `/config` on first start. Keep that folder and the PostgreSQL volume when updating.
+
+[Settings, folders, backups, and upgrades](docs/DOCKER.md) · [Contributing](docs/DEVELOPMENT.md)
 
 ## Screenshots
 
@@ -146,11 +176,10 @@ Actual Dewarr UI captured with an isolated demo account. Connected services and 
 
 ```sh
 docker compose pull
-docker compose stop api worker
 docker compose up -d
 ```
 
-Back up PostgreSQL and `.local/secrets` before updating. Keep the encryption key with your backups. [Backup and restore instructions](docs/DOCKER.md#backups).
+Back up `config` and PostgreSQL first. Dewarr applies database migrations automatically. [Backup instructions](docs/DOCKER.md#backups).
 
 ## License
 

@@ -35,7 +35,13 @@ uv run python -m app.jobs.worker
 
 Open http://localhost:8000 and create the first account. For UI hot reload, use `npm --prefix apps/web run dev` and set `BOOK_PUBLIC_URL=http://localhost:5173` before restarting the API. Vite proxies API requests to port 8000.
 
-For a container development build, follow [Docker setup](DOCKER.md#build-from-source).
+For a container development build:
+
+```sh
+docker compose -f compose.yaml -f deploy/compose.build.yaml up -d --build
+```
+
+This uses the same two-service layout with a locally built app image. The container entrypoint initializes `/config`, waits for PostgreSQL, runs migrations, and supervises the API and worker. Unit tests in `tests/unit/test_container.py` cover startup and process lifecycle behavior.
 
 ## Checks
 

@@ -1,6 +1,6 @@
 # Backup and recovery
 
-Keep the database, `.local/secrets/app_key`, and library media together in your backup plan. The app key decrypts saved integration credentials; losing it makes those credentials unrecoverable.
+Keep the database, `config/app_key`, and library media together in your backup plan. The app key decrypts saved integration credentials; losing it makes those credentials unrecoverable.
 
 The [Docker guide](DOCKER.md#backups) describes a stopped-writer PostgreSQL backup. Keep backups private and outside the repository.
 
@@ -12,7 +12,7 @@ uv run python -m app.state_bundle backup --help
 uv run python -m app.state_bundle restore --help
 ```
 
-Stop the API and worker before backup or restore. Use the same Dewarr version that created the bundle and restore into a new database. Keep the source database and backup until you have verified the restored installation.
+Stop the Dewarr container (or both native API and worker processes) before backup or restore. Use the same Dewarr version that created the bundle and restore into a new database. Keep the source database and backup until you have verified the restored installation.
 
 A restored bundle enters recovery review. Ordinary jobs and historical download approvals remain blocked, and only the designated administrator can sign in. The recovery worker performs supported reconciliation tasks:
 

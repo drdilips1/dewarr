@@ -1,159 +1,113 @@
 # Docker setup
 
-## Standard installation
+Start with the [README examples](../README.md#quick-start). A normal install uses two containers: Dewarr and PostgreSQL. The Dewarr image includes the web app, background worker, migrations, and health check.
 
-The root `compose.yaml` pulls `ghcr.io/logabell/dewarr:latest`. It runs the web/API server, background worker, PostgreSQL, and database migrations. API and worker must use the same image.
+## Settings
+
+Edit these values directly in Compose or pass them with `docker run -e`.
+
+| Setting | Default | Purpose |
+| --- | --- | --- |
+| `PUID` | `1000` | User ID that owns your config and media folders. Find it with `id -u`. |
+| `PGID` | `1000` | Group ID for those folders. Find it with `id -g`. |
+| `TZ` | `Etc/UTC` | Your time zone, such as `America/New_York`. |
+| `PUBLIC_URL` | `http://localhost:8000` | The exact browser address, including port. Use your server's hostname or IP for LAN access. |
+| `DB_HOST` | `postgres` | PostgreSQL hostname reachable from the container. |
+| `DB_PORT` | `5432` | PostgreSQL port. |
+| `DB_NAME` | `dewarr` | Database name. |
+| `DB_USER` | `dewarr` | Database user. |
+| `DB_PASSWORD` | Required | The same password configured for PostgreSQL. |
+
+To use another external port, change `8000:8000` to, for example, `8085:8000`, then set `PUBLIC_URL=http://your-server:8085`.
+
+Most configuration belongs in the app: connect libraries, reading accounts, sources, and download clients through **Settings**. To permit download dispatch after configuring routes and policies, add `BOOK_DOWNLOAD_DISPATCH_ENABLED: "true"` to Dewarr's environment and recreate the container.
+
+## Folders
+
+| Mount | What it stores |
+| --- | --- |
+| `./config:/config` | Dewarr's encryption key. Keep it with database backups. |
+| `./data:/data` | Shared downloads and library files. Replace `./data` with your existing media parent folder. |
+| `postgres:/var/lib/postgresql` | PostgreSQL 18 data in a persistent Docker volume. |
+
+Dewarr initializes `/config` and runs the app as `PUID:PGID`. It does not change ownership of existing media. Give that user/group access to your shared folders.
+
+Use the same paths in Dewarr, qBittorrent, and Audiobookshelf when possible. For example:
+
+```text
+/data/downloads
+/data/audiobooks
+/data/staging
+```
+
+Choose those folders in Settings and verify your library routes. If Audiobookshelf sees `/audiobooks` while Dewarr sees `/data/audiobooks`, set that mapping in Dewarr. A shared parent mount allows hardlinks when the filesystem supports them.
+
+## Existing PostgreSQL
+
+Remove the `postgres` service and Dewarr's `depends_on` section, then set `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD` to your existing database. Dewarr waits for the database and applies migrations before starting.
+
+Create the database/user first. The user must be able to create tables and schemas. Use a hostname reachable from the container; `localhost` refers to the container itself.
+
+## Optional .env
+
+Inline settings are sufficient. To keep the database password in one place, put this in a private `.env` file:
+
+```dotenv
+DB_PASSWORD=your-chosen-password
+```
+
+Then use `DB_PASSWORD: ${DB_PASSWORD}` in Dewarr and `POSTGRES_PASSWORD: ${DB_PASSWORD}` in PostgreSQL. Leave ports, user IDs, and folders inline. `.env` is ignored by Git.
+
+Existing `BOOK_DATABASE_URL`, `BOOK_SECRET_KEY`, and `BOOK_SECRET_KEY_FILE` overrides remain supported for advanced installations. Prefer the simpler settings above for new installations.
+
+## HTTPS / reverse proxy
+
+Proxy to port 8000 and set `PUBLIC_URL=https://books.example.com`. Secure cookies are enabled automatically for HTTPS. Keep the browser's original Host header. A proxy on the Compose network can use `http://dewarr:8000` as its upstream.
+
+## Updating
 
 ```sh
-git clone https://github.com/logabell/dewarr.git
-cd dewarr
-python3 scripts/init_env.py --mode compose
+docker compose pull
 docker compose up -d
-docker compose ps
 ```
 
-Open http://localhost:8000. Create your first administrator account on the welcome page. No setup token or default login is needed. Once an account exists, public registration closes.
-
-The setup script creates random credentials and refuses to overwrite an existing `.env`. It uses Python's standard library. Keep `.env` and `.local/secrets` private.
-
-## Build from source
-
-```sh
-docker compose -f compose.yaml -f deploy/compose.build.yaml up -d --build
-```
-
-Use the same `-f` arguments for future updates, logs, and stop commands. Building requires no local Python packages or Node.js: both build stages run inside Docker.
-
-## Image versions
-
-`latest` follows the main branch. Tagged releases use tags such as `v0.1.0`; commit builds have `sha-` tags. Pin a published tag or digest in `.env` to control upgrades:
-
-```dotenv
-DEWARR_IMAGE=ghcr.io/logabell/dewarr:v0.1.0
-```
-
-Container publishing runs in [GitHub Actions](../.github/workflows/container.yml) for Linux amd64 and arm64. If a new image is still building, use the source-build setup above.
-
-## LAN or reverse proxy
-
-The default port binds to loopback. To access the app from your LAN, edit `.env`:
-
-```dotenv
-DEWARR_BIND=0.0.0.0
-DEWARR_PORT=8000
-BOOK_PUBLIC_URL=http://your-server:8000
-BOOK_COOKIE_SECURE=false
-```
-
-`BOOK_PUBLIC_URL` must exactly match the browser origin, without a path. Apply changes with `docker compose up -d`.
-
-For HTTPS, point your reverse proxy to port 8000, set the public URL to `https://books.example.com`, and set `BOOK_COOKIE_SECURE=true`. Forward the original Host header. If the proxy is another container on this Compose network, its upstream is `http://api:8000`; loopback refers to the proxy container itself.
-
-## Shared media folders
-
-API and worker both need access to download and library paths. This example mounts one common parent so hardlinks can work when the filesystem supports them.
-
-```sh
-mkdir -p data/downloads data/audiobooks data/staging
-docker compose -f compose.yaml -f deploy/compose.media.yaml up -d
-```
-
-Set `BOOK_UID` and `BOOK_GID` in `.env` to the user/group that owns these folders. The setup script uses your current IDs. On Linux, files and secret mounts must be readable by that container user; media folders must be writable. Containers run without root privileges.
-
-In **Settings → Libraries**, connect Audiobookshelf and choose `/data/audiobooks` as the path Dewarr sees. If Audiobookshelf sees `/audiobooks`, map that to `/data/audiobooks` in Dewarr. Configure staging under `/data/staging`. In downloader settings, map qBittorrent's completed-download path to `/data/downloads`.
-
-For environment-managed routes, the equivalent optional `.env` values are:
-
-```dotenv
-BOOK_IMPORT_SOURCES={"downloads":"/data/downloads"}
-BOOK_IMPORT_DESTINATIONS={"audiobooks":"/data/audiobooks"}
-BOOK_IMPORT_STAGING_ROOT=/data/staging
-```
-
-The path keys identify roots; configure and verify the matching routes in the UI. Mounts alone do not enable importing. Do not point staging at a library folder.
-
-## Add Audiobookshelf
-
-For a new Audiobookshelf instance alongside Dewarr:
-
-```sh
-mkdir -p data/downloads data/audiobooks data/staging
-docker compose -f compose.yaml -f deploy/compose.media.yaml -f deploy/compose.audiobookshelf.yaml up -d
-```
-
-Open http://localhost:13378 and set up Audiobookshelf. Add its library at `/audiobooks`. In Dewarr, connect to `http://audiobookshelf:80` and use an Audiobookshelf API token. Dewarr sees the same files at `/data/audiobooks`.
-
-Already have Audiobookshelf? Connect its reachable URL instead. Do not use `localhost` for a different container. On Docker Desktop, `host.docker.internal` reaches a service on the host. On Linux, use a reachable host address or a shared Docker network.
-
-## Existing qBittorrent
-
-Connect qBittorrent's Web UI URL and credentials in **Settings → Downloaders**. Give it access to the same download directory. A downloader path such as `/downloads` needs a mapping to Dewarr's `/data/downloads`.
-
-Dewarr does not need qBittorrent to browse books or sync lists. Configure sources, verify a destination, and choose download policies first. To allow dispatch, set:
-
-```dotenv
-BOOK_DOWNLOAD_DISPATCH_ENABLED=true
-```
-
-Recreate API and worker with `docker compose up -d`, then enable the desired list or request automation in the UI. Connecting a reading account does not enable automatic downloading.
-
-## Docker run with an existing PostgreSQL server
-
-Compose is the easiest option. For an existing PostgreSQL installation, create a database/user, generate secrets with the setup script, and change `BOOK_DATABASE_URL` in `.env` to a database address reachable from containers. The database user must be able to create tables and the worker's queue schema.
-
-```sh
-docker network create dewarr
-docker run --rm --network dewarr --user "$(id -u):$(id -g)" --env-file .env \
-  --mount type=bind,src="$PWD/.local/secrets",dst=/run/secrets,readonly \
-  ghcr.io/logabell/dewarr:latest alembic upgrade head
-
-docker run -d --name dewarr-api --network dewarr --restart unless-stopped \
-  --user "$(id -u):$(id -g)" --env-file .env \
-  --read-only --tmpfs /tmp --cap-drop ALL --security-opt no-new-privileges \
-  -p 127.0.0.1:8000:8000 \
-  --mount type=bind,src="$PWD/.local/secrets",dst=/run/secrets,readonly \
-  ghcr.io/logabell/dewarr:latest
-
-docker run -d --name dewarr-worker --network dewarr --restart unless-stopped \
-  --user "$(id -u):$(id -g)" --env-file .env \
-  --read-only --tmpfs /tmp --cap-drop ALL --security-opt no-new-privileges \
-  --mount type=bind,src="$PWD/.local/secrets",dst=/run/secrets,readonly \
-  ghcr.io/logabell/dewarr:latest python -m app.jobs.worker
-```
-
-Add `--mount type=bind,src="$PWD/data",dst=/data` to both API and worker when importing media. Container `.env` values are literal: use plain JSON for path settings, without surrounding shell quotes.
+The app stops both services together and runs migrations before restarting. If either service fails, the container exits so Docker can restart it. For manual `docker run` installations, pull the image, stop/remove only the Dewarr container, and recreate it using the same command and volumes.
 
 ## Backups
-
-Stop writers, dump PostgreSQL, and copy the encryption key and configuration to a private backup location:
 
 ```sh
 mkdir -p backups
 chmod 700 backups
-docker compose stop api worker
-docker compose exec -T postgres pg_dump -U book -d book -Fc > backups/dewarr.dump
-cp -R .local/secrets backups/secrets
-cp .env backups/install.env
-docker compose start api worker
+docker compose stop dewarr
+docker compose exec -T postgres pg_dump -U dewarr -d dewarr -Fc > backups/dewarr.dump
+cp -R config backups/config
+docker compose start dewarr
 ```
 
-Also back up library media. A database dump cannot decrypt saved integration credentials without the original app key. Protect backups like passwords. For application-aware backup/restore and paused recovery review, see [Recovery](RECOVERY.md); do not directly activate an old worker queue after restoring a dump.
+Use your configured database user/name if different. Also back up library media. The encryption key in `config/app_key` is required to decrypt saved integration credentials. See [Recovery](RECOVERY.md) before restoring an old database.
 
-## Updates and troubleshooting
+`docker compose down` keeps the database volume. `docker compose down -v` deletes it.
 
-```sh
-docker compose pull
-docker compose stop api worker
-docker compose up -d
-docker compose ps
-docker compose logs --tail=100 api worker migrate
-```
+## Upgrade from the original four-service setup
 
-- **Setup cannot connect:** check PostgreSQL health and migration logs.
-- **Sign-in/origin error:** match `BOOK_PUBLIC_URL` to the URL in your browser.
-- **Lists stop refreshing:** keep the worker running and check the reading-account connection.
-- **Permission denied:** verify container UID/GID, secret readability, and shared-folder permissions.
-- **Downloads do not start:** check dispatch, policies, source connection, capacity, and verified routes.
-- **Registry denies a pull:** confirm the container workflow has finished and the package is public; use a local build in the meantime.
+Preserve your existing database and encryption key. Before replacing the old Compose file:
 
-`docker compose down` stops the stack and keeps its named database volume. `docker compose down -v` deletes that volume.
+1. Stop the old API and worker: `docker compose stop api worker`.
+2. Back up PostgreSQL and `.local/secrets/app_key`.
+3. Create `config` and copy `.local/secrets/app_key` to `config/app_key`.
+4. Run `docker compose down` without `-v` to remove the old containers while retaining the database volume.
+5. Replace Compose with the new two-service example. Keep the old project name and PostgreSQL volume, database name, user, and password. Existing installations commonly use `book` for the database/user. Update the database health-check command to match too.
+6. Preserve your public URL and media mounts, then run `docker compose up -d`.
+
+Changing `POSTGRES_PASSWORD` in Compose does not change an existing database password. Reuse the original value. Never replace an existing installation's key with a newly generated one.
+
+## Troubleshooting
+
+- **Cannot sign in:** make `PUBLIC_URL` exactly match the browser address.
+- **Permission denied:** check `PUID`, `PGID`, and shared-folder ownership.
+- **Database unavailable:** check the database host and matching passwords.
+- **Existing database / missing key:** restore the original key to `config/app_key`.
+- **Migrations waiting:** stop any old API/worker containers using the same database.
+- **Inspect startup:** run `docker compose logs --tail=100 dewarr`.
+
+For a local source build, see [Contributing](DEVELOPMENT.md).

@@ -22,3 +22,7 @@ IMPLEMENTATION-*.md
 PRODUCT-ARCHITECTURE.md
 PRD.md
 REQUIREMENTS-TRACEABILITY.csv
+
+config
+compose.override.yaml
+compose.override.yml

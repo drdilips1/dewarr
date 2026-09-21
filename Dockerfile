@@ -14,7 +14,7 @@ COPY docs/notices/ ./docs/notices/
 RUN uv sync --frozen --no-dev --no-editable
 
 FROM python:3.13.14-slim-bookworm@sha256:67a1e1f215ccda113cfc024e8639049257e88f273898f595b61476d128d387e8 AS runtime
-RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg tini tzdata && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 ARG BOOK_BUILD_VERSION=
 ARG BOOK_RELEASE_REPOSITORY=logabell/dewarr
@@ -30,6 +30,8 @@ LABEL org.opencontainers.image.title="Dewarr" \
       org.opencontainers.image.description="Audiobook discovery, reading lists and downloads" \
       org.opencontainers.image.source="https://github.com/logabell/dewarr" \
       org.opencontainers.image.licenses="MIT"
-USER 1000:1000
 EXPOSE 8000
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--no-proxy-headers"]
+ENV PUID=1000 PGID=1000 TZ=Etc/UTC
+HEALTHCHECK --interval=15s --timeout=5s --start-period=90s --retries=3 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health/ready', timeout=3)"
+ENTRYPOINT ["/usr/bin/tini", "--", "python", "-m", "app.container"]

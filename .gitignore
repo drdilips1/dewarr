@@ -58,3 +58,8 @@ service-account*.json
 *.backup
 *.log
 coverage/
+
+# Persistent container configuration
+/config/
+/compose.override.yaml
+/compose.override.yml
