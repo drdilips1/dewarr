@@ -41,6 +41,11 @@ class User(Identity, Base):
     role: Mapped[str] = mapped_column(String(20), default="member")
     active: Mapped[bool] = mapped_column(Boolean, default=True)
     can_automate: Mapped[bool] = mapped_column(Boolean, default=False)
+    onboarding: Mapped[dict[str, Any]] = mapped_column(
+        JSONB,
+        default=lambda: {"status": "pending", "step": 0, "skipped": []},
+        server_default='{"status":"pending","step":0,"skipped":[]}',
+    )
 
 
 class LoginSession(Base):
@@ -575,6 +580,15 @@ class CatalogAccount(Base):
     last_success_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
+class GoodreadsAccount(Base):
+    __tablename__ = "goodreads_accounts"
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    encrypted_config: Mapped[str] = mapped_column(Text)
+    discovered_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
 class MetadataSettings(Base):
     __tablename__ = "metadata_settings"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -865,6 +879,13 @@ class FrozenImportPlan(Identity, Base):
     document: Mapped[dict[str, Any]] = mapped_column(JSONB)
 
 
+class ImportStorageSettings(Base):
+    __tablename__ = "import_storage_settings"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    destinations: Mapped[dict[str, str]] = mapped_column(JSONB, default=dict)
+    staging_root: Mapped[str | None] = mapped_column(String(1024))
+
+
 class ImportDestination(Identity, Base):
     __tablename__ = "import_destinations"
     __table_args__ = (
@@ -971,3 +992,25 @@ class ImportEntry(Identity, Base):
     confirmed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     asset_id: Mapped[UUID | None] = mapped_column(ForeignKey("library_assets.id"))
     next_check_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), index=True)
+
+
+class DiscoveryLayout(Base):
+    __tablename__ = "discovery_layouts"
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    preferences: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+
+
+class DiscoveryFollow(Base):
+    __tablename__ = "discovery_follows"
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    collection_id: Mapped[str] = mapped_column(String(200), primary_key=True)
+    snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    pinned: Mapped[bool] = mapped_column(Boolean, default=True)
+    tracking: Mapped[bool] = mapped_column(Boolean, default=True)
+    generation: Mapped[int] = mapped_column(Integer, default=0)
+    next_check_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    error: Mapped[str | None] = mapped_column(String(600))

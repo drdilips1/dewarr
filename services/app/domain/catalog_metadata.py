@@ -28,6 +28,7 @@ class MetadataPreferences(BaseModel):
     automatic_enrichment: bool = True
     automatic_edition_lookup: bool = True
     language: str = Field(default="en", min_length=2, max_length=20)
+    filter_language: bool = False
     covers: Literal["automatic", "hardcover", "openlibrary"] = "automatic"
     field_providers: dict[str, Provider] = Field(default_factory=dict)
 
@@ -97,7 +98,7 @@ async def resolve_fields(db, work, settings):
     work.match_key = None if uncertain else work_key(work.title, work.authors)
 
 
-async def attach_source(db, work, book, *, explicit=False):
+async def attach_source(db, work, book, *, explicit=False, verified_match=False):
     work = await db.get(Work, work.id, with_for_update=True, populate_existing=True)
     if work.redirect_to:
         raise HTTPException(
@@ -124,7 +125,7 @@ async def attach_source(db, work, book, *, explicit=False):
                 409,
                 "The provider changed this book's identity. Review the match before refreshing.",
             )
-    elif not link and not explicit and not same_work(work, book):
+    elif not link and not explicit and not verified_match and not same_work(work, book):
         raise HTTPException(409, "This catalog result needs an explicit match confirmation.")
     if book.canonical_id and book.canonical_id != book.external_id:
         raise HTTPException(

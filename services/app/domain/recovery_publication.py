@@ -11,7 +11,6 @@ from fastapi import HTTPException
 from sqlalchemy import select
 
 from app.adapters.audiobookshelf import ABSItem, Audiobookshelf
-from app.config import get_settings
 from app.db.models import (
     AuditEvent,
     ImportDestination,
@@ -34,6 +33,7 @@ from app.importing.destinations import destination_configuration
 from app.importing.execution import confirm_observation, matches, observe_cover
 from app.importing.publication import PublicationError, PublicationSpec
 from app.importing.recovery import read_publication
+from app.importing.storage import storage_settings
 from app.importing.versioning import version_revision
 from app.security import decrypt_secrets
 
@@ -234,7 +234,7 @@ async def fresh_publications(identifier, token, payload):
         await reviews.pulse(identifier, token)
         async with session_factory()() as db:
             entry = await db.get(ImportEntry, UUID(item["entry_id"]))
-            roots = get_settings().model_dump(
+            roots = (await storage_settings(db)).model_dump(
                 mode="json",
                 include={"import_sources", "import_destinations", "import_staging_root"},
             )

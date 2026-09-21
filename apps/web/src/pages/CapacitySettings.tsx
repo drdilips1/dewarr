@@ -21,18 +21,9 @@ export default function CapacitySettings() {
       onToggle={(event) => setOpen(event.currentTarget.open)}
     >
       <summary>Transfer and storage limits</summary>
-      <p>
-        Limits apply across this installation. Downloads wait for capacity;
-        retries keep their existing transfer identity. Lowering a limit does not
-        stop transfers already submitted.
-      </p>
+      <p>Applies to new transfers. Active downloads are not stopped.</p>
       <Notice error={settings.error} />
-      {saved && (
-        <p role="status">
-          Capacity limits saved. Queued work will use these limits at its next
-          check.
-        </p>
-      )}
+      {saved && <p role="status">Limits saved.</p>}
       {settings.data && (
         <>
           <p>

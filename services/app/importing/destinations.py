@@ -1,4 +1,5 @@
 import asyncio
+import os
 from datetime import UTC, datetime
 from pathlib import Path
 from uuid import UUID, uuid4
@@ -14,9 +15,10 @@ from app.db.models import AuditEvent, ImportDestination, Integration, Library, O
 from app.db.session import session_factory
 from app.domain.downloaders import mapped_path
 from app.importing.backend import verify_backend
-from app.importing.filesystem import InspectionError
+from app.importing.filesystem import InspectionError, directory
 from app.importing.naming import fingerprint
 from app.importing.publication import PublishFile, probe_destination, probe_download_folder
+from app.importing.storage import storage_settings
 from app.security import decrypt_secrets
 
 
@@ -27,7 +29,7 @@ async def destination_configuration(db, destination):
         if library
         else None
     )
-    settings = get_settings()
+    settings = await storage_settings(db)
     root = settings.import_destinations.get(destination.root_key)
     return {
         "backend": {
@@ -48,7 +50,22 @@ async def destination_configuration(db, destination):
         "backend_path": destination.backend_path,
         "mode": destination.mode,
         "enabled": destination.enabled,
-        "watched_paths": sorted(str(path) for path in settings.import_destinations.values()),
+        # Independent valid library choices must not invalidate another medium's route.
+        # Include any unsafe root so later mount changes still invalidate verification.
+        "watched_paths": sorted(
+            {
+                str(path)
+                for path in settings.import_destinations.values()
+                if path == root
+                or any(
+                    path.is_relative_to(external) or external.is_relative_to(path)
+                    for external in [
+                        *settings.import_sources.values(),
+                        *([settings.import_staging_root] if settings.import_staging_root else []),
+                    ]
+                )
+            }
+        ),
     }
 
 
@@ -147,12 +164,14 @@ async def probe_route(operation_id: UUID, *, client_factory=None):
             return
     try:
         configuration = payload["configuration"]
-        for watched in get_settings().import_destinations.values():
+        for watched in configuration["watched_paths"]:
+            watched = Path(watched)
             for external in (Path(payload["source_path"]), Path(configuration["staging_path"])):
                 if external.is_relative_to(watched) or watched.is_relative_to(external):
                     raise InspectionError(
                         "Download and staging roots must be outside all library roots"
                     )
+        await asyncio.to_thread(prepare_staging, Path(configuration["staging_path"]))
         if payload.get("setup_downloader"):
             report = await asyncio.to_thread(
                 probe_download_folder,
@@ -240,3 +259,14 @@ async def probe_route(operation_id: UUID, *, client_factory=None):
                 detail={"verified": bool(ok)},
             )
         )
+
+
+def prepare_staging(path):
+    """Create only our private sibling staging directory; never follow symlinks."""
+    if path.name != ".book-search-staging":
+        return  # Existing explicitly configured staging keeps its previous contract.
+    with directory(path.parent) as parent:
+        try:
+            os.mkdir(path.name, mode=0o700, dir_fd=parent)
+        except FileExistsError:
+            pass  # private_staging subsequently verifies ownership, mode and no symlinks.

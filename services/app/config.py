@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     cookie_secure: bool = True
     session_hours: int = 168
     web_dist: Path = Path("apps/web/dist")
+    build_version: str = ""
+    release_repository: str = ""
     recovery_mode: bool = False
     download_dispatch_enabled: bool = False
     db_pool_size: int = 5
@@ -47,6 +49,15 @@ class Settings(BaseSettings):
         if path is not None and (not path.is_absolute() or str(path) == "/" or ".." in path.parts):
             raise ValueError("Use an absolute staging directory below /")
         return path
+
+    @field_validator("release_repository")
+    @classmethod
+    def validate_release_repository(cls, value: str) -> str:
+        import re
+
+        if value and not re.fullmatch(r"[A-Za-z0-9_-]+/[A-Za-z0-9_.-]+", value):
+            raise ValueError("Use a GitHub owner/repository name")
+        return value
 
     @field_validator("public_url")
     @classmethod

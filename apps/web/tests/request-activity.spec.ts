@@ -17,9 +17,16 @@ test("activity requests preserve independent reasons and route missing media to 
   await page
     .getByLabel("Password", { exact: true })
     .fill("browser test password");
-  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  if (await page.getByLabel("Your name").isVisible()) {
+    await page.getByLabel("Your name").fill("Test Reader");
+    await page.getByLabel("Setup token").fill("browser-test-bootstrap-token");
+    await page.getByRole("button", { name: "Create administrator" }).click();
+    await page.getByRole("button", { name: "Skip setup", exact: true }).click();
+  } else {
+    await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  }
   await expect(
-    page.getByRole("heading", { name: "Your catalog" }),
+    page.getByRole("navigation", { name: "Main navigation" }),
   ).toBeVisible();
   const auth = await (await page.request.get("/api/auth/me")).json();
   const headers = {
@@ -76,16 +83,16 @@ test("activity requests preserve independent reasons and route missing media to 
     if (!["GET", "HEAD", "OPTIONS"].includes(request.method()))
       writes.push(request.url());
   });
-  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  await page.getByRole("link", { name: "Requests", exact: true }).click();
   const requests = page.getByRole("region", {
     name: "Your media requests",
     exact: true,
   });
-  await expect(requests.getByRole("article")).toHaveCount(10);
+  await expect(requests.locator("tbody > tr")).toHaveCount(10);
   await requests
     .getByRole("button", { name: "Next requests", exact: true })
     .click();
-  const card = requests.getByRole("article", {
+  const card = requests.getByRole("row", {
     name: "Activity Journey Alpha request",
     exact: true,
   });
@@ -108,17 +115,19 @@ test("activity requests preserve independent reasons and route missing media to 
   await expect(
     page.getByRole("region", { name: "Book download sources" }),
   ).toBeVisible();
-  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  await page.getByRole("link", { name: "Requests", exact: true }).click();
   await requests
     .getByRole("button", { name: "Next requests", exact: true })
     .click();
   await expect(card).toBeVisible();
-  await card.screenshot({
+  await page.screenshot({
     path: testInfo.outputPath("request-activity-desktop.png"),
+    fullPage: true,
   });
   await page.setViewportSize({ width: 390, height: 844 });
-  await card.screenshot({
+  await page.screenshot({
     path: testInfo.outputPath("request-activity-mobile.png"),
+    fullPage: true,
   });
   expect(
     await page.evaluate(
@@ -160,7 +169,7 @@ test("activity requests preserve independent reasons and route missing media to 
   await expect(
     requests.getByText("Synthetic request activity outage", { exact: true }),
   ).toBeVisible({ timeout: 20_000 });
-  await expect(requests.getByRole("article")).toHaveCount(0);
+  await expect(requests.locator("tbody > tr")).toHaveCount(0);
   await page.unroute("**/api/requests?*");
   await requests.getByRole("button", { name: "Retry requests" }).click();
   await expect(card).toBeVisible();
@@ -176,5 +185,21 @@ test("activity requests preserve independent reasons and route missing media to 
   expect(
     (await (await page.request.get("/api/library/assets")).json()).total,
   ).toBe(inventory.total);
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  const tabs = page.getByRole("navigation", { name: "Request views" });
+  const tabPositions = await tabs
+    .getByRole("link")
+    .evaluateAll((links) =>
+      links.map((link) => link.getBoundingClientRect().top),
+    );
+  expect(new Set(tabPositions).size).toBe(1);
+  await tabs.getByRole("link", { name: "Download queue" }).click();
+  await expect(
+    page.getByRole("region", { name: "Downloads", exact: true }),
+  ).toBeVisible();
+  await tabs.getByRole("link", { name: "Import reviews" }).click();
+  await expect(
+    page.getByRole("region", { name: "Download import reviews", exact: true }),
+  ).toBeVisible();
   expect(errors).toEqual([]);
 });

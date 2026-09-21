@@ -11,7 +11,6 @@ from uuid import uuid4
 from fastapi import HTTPException
 from sqlalchemy import delete, select, text
 
-from app.config import get_settings
 from app.db.models import (
     AcquisitionIntent,
     AcquisitionReason,
@@ -59,6 +58,7 @@ from app.db.models import (
 )
 from app.db.session import session_factory
 from app.domain.operations import transaction_lock
+from app.importing.storage import storage_settings
 from app.jobs.queue import enqueue
 from app.jobs.retry import ShelfRetry
 
@@ -189,7 +189,7 @@ async def context(db):
         }
         for op in sorted(list_operations, key=lambda op: str(op.id))
     ]
-    result["roots"] = get_settings().model_dump(
+    result["roots"] = (await storage_settings(db)).model_dump(
         mode="json",
         include={
             "import_sources",

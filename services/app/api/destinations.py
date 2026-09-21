@@ -23,6 +23,7 @@ from app.importing.destination_view import DestinationView, view
 from app.importing.destinations import destination_configuration, permitted
 from app.importing.filesystem import relative_parts
 from app.importing.naming import StrictModel
+from app.importing.storage import storage_settings
 from app.jobs.queue import enqueue
 
 router = APIRouter(prefix="/organization", tags=["organization"])
@@ -45,8 +46,8 @@ class DestinationInput(StrictModel):
 
 
 @router.get("/destination-roots", response_model=list[str])
-async def destination_roots(admin: Admin):
-    return sorted(get_settings().import_destinations)
+async def destination_roots(admin: Admin, db: Database):
+    return sorted((await storage_settings(db)).import_destinations)
 
 
 @router.get("/destinations", response_model=list[DestinationView])
@@ -61,7 +62,7 @@ async def destinations(admin: Admin, db: Database):
 
 @router.put("/destinations/{root_key}", response_model=DestinationView)
 async def save_destination(root_key: str, body: DestinationInput, admin: Admin, db: Database):
-    if root_key not in get_settings().import_destinations:
+    if root_key not in (await storage_settings(db)).import_destinations:
         raise HTTPException(422, "Select a library root configured on the worker")
     await transaction_lock(db, f"destination:{root_key}")
     await assert_admin(db, admin.id)

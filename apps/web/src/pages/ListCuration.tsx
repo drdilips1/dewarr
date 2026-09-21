@@ -3,7 +3,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { ArrowDown, ArrowUp, X } from "lucide-react";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
-import { BookCard, Empty, Loading, Notice } from "../components";
+import { Empty, Loading, Notice } from "../components";
+import EnrichedBookCard from "../components/EnrichedBookCard";
 
 type Detail = components["schemas"]["ListDetail"];
 type Input = components["schemas"]["CurationInput"];
@@ -209,7 +210,7 @@ export default function ListCuration({
                   Select
                 </label>
               )}
-              <BookCard work={work} />
+              <EnrichedBookCard work={work} />
               {editable && (
                 <div className="card-actions">
                   <button

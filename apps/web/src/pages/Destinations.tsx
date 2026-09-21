@@ -1,378 +1,486 @@
 import { useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import {
+  BookOpen,
+  CheckCircle2,
+  Folder,
+  Headphones,
+  LoaderCircle,
+} from "lucide-react";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
+import SettingHelp from "../components/SettingHelp";
+import BookDialog from "../components/BookDialog";
 import AutomaticImportPolicy from "./AutomaticImportPolicy";
+import {
+  useLibraryFolderSettings,
+  selectLibraryDestination,
+} from "./libraryFolderSettings";
 
 type Destination = components["schemas"]["DestinationView"];
-type Library = components["schemas"]["LibraryView"];
-type Downloader = components["schemas"]["DownloaderView"];
+type Medium = "ebook" | "audio";
+const names = { ebook: "Ebooks", audio: "Audiobooks" };
 
-export default function Destinations() {
-  const [params] = useSearchParams();
-  const planId = params.get("plan");
-  const query = useQuery({
-    queryKey: ["destination-setup"],
-    queryFn: async () => {
-      const [roots, libraries, destinations, downloaders] = await Promise.all([
-        api.GET("/api/organization/destination-roots").then(result),
-        api.GET("/api/library/libraries").then(result),
-        api.GET("/api/organization/destinations").then(result),
-        api.GET("/api/downloaders").then(result),
-      ]);
-      return { roots, libraries, destinations, downloaders };
-    },
-  });
-  if (query.isPending) return <Loading />;
-  if (!query.data) return <Notice error={query.error} />;
+export default function Destinations({
+  embedded = false,
+}: {
+  embedded?: boolean;
+}) {
+  const [editing, setEditing] = useState<Medium | null>(null);
+  const query = useLibraryFolderSettings();
+  const selected = (medium: Medium) =>
+    selectLibraryDestination(
+      query.data?.destinations || [],
+      query.data?.defaults.effective?.[`${medium}_destination_id`],
+      medium,
+    );
   return (
-    <>
-      <Link to="/organization">← Naming settings</Link>
-      <div className="page-heading">
-        <div>
-          <p className="eyebrow">Library setup</p>
-          <h1>Library destinations</h1>
-          <p className="muted">
-            Choose where future ebook and audiobook items will be organized.
-          </p>
+    <div className="library-folder-settings">
+      {!embedded && <h1>Library folders</h1>}
+      <p className="muted">
+        Choose an Audiobookshelf folder for each format. Your naming rules build
+        the folders inside it; original downloads stay available for seeding.
+      </p>
+      <Notice error={query.error} />
+      {query.isPending ? (
+        <Loading />
+      ) : (
+        query.data && (
+          <div className="media-folder-list">
+            {(["ebook", "audio"] as const).map((medium) => {
+              const destination = selected(medium);
+              const library = query.data.libraries.find(
+                (l) => l.id === destination?.library_id,
+              );
+              return (
+                <section
+                  className="media-folder-card"
+                  key={medium}
+                  aria-label={`${names[medium]} destination`}
+                >
+                  <div className="media-folder-row">
+                    {medium === "ebook" ? (
+                      <BookOpen size={21} />
+                    ) : (
+                      <Headphones size={21} />
+                    )}
+                    <div className="media-folder-copy">
+                      <h3>{names[medium]}</h3>
+                      <p>
+                        {destination
+                          ? `${library?.name || "Library"} · Audiobookshelf`
+                          : "No folder selected"}
+                      </p>
+                      {destination && (
+                        <code className="library-root-path">
+                          {destination.backend_path}
+                        </code>
+                      )}
+                      {destination?.local_path &&
+                        destination.local_path !== destination.backend_path && (
+                          <p className="library-local-path">
+                            Dewarr sees <code>{destination.local_path}</code>
+                          </p>
+                        )}
+                      {destination && (
+                        <small
+                          className={
+                            destination.publication_available
+                              ? "success"
+                              : "muted"
+                          }
+                        >
+                          {destination.publication_available &&
+                          destination.mode === "hardlink" ? (
+                            <>
+                              <CheckCircle2 size={12} /> Hardlinks verified
+                            </>
+                          ) : destination.mode === "copy" ? (
+                            "Copy mode · choose a folder to use hardlinks"
+                          ) : (
+                            "Needs verification"
+                          )}
+                        </small>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => setEditing(medium)}
+                      aria-label={`${destination ? "Change" : "Choose"} ${names[medium].toLowerCase()} folder`}
+                    >
+                      <Folder size={15} />
+                      {destination ? "Change" : "Choose folder"}
+                    </button>
+                  </div>
+                  {destination && (
+                    <div className="media-folder-automation">
+                      <AutomaticImportPolicy
+                        destinationId={destination.id}
+                        revision={destination.revision}
+                        verified={destination.publication_available}
+                        unsaved={false}
+                      />
+                    </div>
+                  )}
+                </section>
+              );
+            })}
+          </div>
+        )
+      )}
+      <div className="library-folder-guide">
+        <p>
+          <strong>Hardlinks save space.</strong> Downloads and library folders
+          must share a filesystem. Changes to file contents affect both
+          locations.
+        </p>
+        <div className="button-row">
+          <Link to="/settings#naming">Edit file naming →</Link>
+          <Link to="/settings#downloaders">Download paths &amp; mapping →</Link>
         </div>
       </div>
-      <p className="notice">
-        Verify the filesystem route and Audiobookshelf folder mapping before
-        importing a saved plan. Each book is confirmed in Audiobookshelf after
-        publication.
-      </p>
-      {!query.data.roots.length && (
-        <p className="notice">
-          Configure BOOK_IMPORT_DESTINATIONS and a private
-          BOOK_IMPORT_STAGING_ROOT on the worker to add a destination.
-        </p>
+      {editing && (
+        <FolderPicker
+          medium={editing}
+          saved={selected(editing)}
+          close={() => setEditing(null)}
+        />
       )}
-      {!planId && (
-        <p className="muted">
-          You can test an empty download folder before acquiring your first
-          book. Connect and test qBittorrent, save a destination, then test the
-          route below.
-        </p>
-      )}
-      {query.data.roots.map((root) => {
-        const saved = query.data.destinations.find(
-          (row) => row.root_key === root,
-        );
-        return (
-          <DestinationEditor
-            key={`${root}:${saved?.revision || "new"}`}
-            root={root}
-            saved={saved}
-            libraries={query.data.libraries}
-            planId={planId}
-            downloaders={query.data.downloaders}
-          />
-        );
-      })}
-    </>
+    </div>
   );
 }
 
-function DestinationEditor({
-  root,
+function FolderPicker({
+  medium,
   saved,
-  libraries,
-  planId,
-  downloaders,
+  close,
 }: {
-  root: string;
+  medium: Medium;
   saved?: Destination;
-  libraries: Library[];
-  planId: string | null;
-  downloaders: Downloader[];
+  close: () => void;
 }) {
   const cache = useQueryClient();
-  const [libraryId, setLibraryId] = useState(saved?.library_id || "");
-  const [medium, setMedium] = useState<"ebook" | "audio">(
-    (saved?.medium as "ebook" | "audio") || "ebook",
+  const current = useRef(saved);
+  const [choice, setChoice] = useState(
+    saved ? `${saved.library_id}|${saved.backend_path}` : "",
   );
-  const [mode, setMode] = useState<"hardlink" | "copy">(
-    (saved?.mode as "hardlink" | "copy") || "hardlink",
+  const [localPath, setLocalPath] = useState(
+    saved?.local_path || saved?.backend_path || "",
   );
-  const [backendPath, setBackendPath] = useState(saved?.backend_path || "");
-  const [enabled, setEnabled] = useState(saved?.enabled ?? true);
-  const [operationId, setOperationId] = useState<string | null>(null);
+  const [otherPath, setOtherPath] = useState(
+    !!saved?.local_path && saved.local_path !== saved.backend_path,
+  );
   const [downloaderId, setDownloaderId] = useState("");
-  const candidates = downloaders.filter(
-    (item) =>
-      item.enabled && item.status === "connected" && item.mappings_current,
-  );
-  const downloader =
-    candidates.find((item) => item.id === downloaderId) ||
-    (!downloaderId && candidates.length === 1 ? candidates[0] : undefined);
-  const attempt = useRef<{ payload: string; key: string } | null>(null);
-  const status = useQuery({
-    queryKey: ["destination-operation", operationId],
-    enabled: !!operationId,
+  const [automaticChoice, setAutomatic] = useState<boolean | null>(null);
+  const policy = useQuery({
+    queryKey: [
+      "automatic-import-policy",
+      saved?.id,
+      saved?.revision,
+      saved?.publication_available,
+    ],
+    enabled: !!saved,
+    queryFn: async () =>
+      result(
+        await api.GET(
+          "/api/organization/destinations/{destination_id}/automatic-import",
+          { params: { path: { destination_id: saved!.id } } },
+        ),
+      ),
+  });
+  const automatic = automaticChoice ?? policy.data?.enabled ?? true;
+  const [progress, setProgress] = useState("");
+  const options = useQuery({
+    queryKey: ["library-folder-options"],
     queryFn: async () => {
-      const [activity, destinations] = await Promise.all([
-        api.GET("/api/activity").then(result),
-        api.GET("/api/organization/destinations").then(result),
+      const [libraries, downloaders] = await Promise.all([
+        api.GET("/api/organization/library-folders").then(result),
+        api.GET("/api/downloaders").then(result),
       ]);
       return {
-        operation: activity.find((row) => row.id === operationId),
-        destination: destinations.find((row) => row.id === saved?.id),
+        libraries,
+        downloaders: downloaders.filter(
+          (d) => d.enabled && d.status === "connected" && d.mappings_current,
+        ),
       };
     },
-    refetchInterval: (query) =>
-      !query.state.data ||
-      ["queued", "running"].includes(query.state.data.operation?.status || "")
-        ? 1500
-        : false,
   });
+  const downloader =
+    options.data?.downloaders.find((d) => d.id === downloaderId) ||
+    (options.data?.downloaders.length === 1
+      ? options.data.downloaders[0]
+      : undefined);
+  const folders = (options.data?.libraries || [])
+    .filter((item) => medium === "audio" || item.ebooks_allowed)
+    .flatMap((item) =>
+      item.folders.map((path) => ({
+        ...item,
+        path,
+        key: `${item.library_id}|${path}`,
+      })),
+    )
+    .sort((a, b) =>
+      medium === "audio"
+        ? Number(a.ebooks_allowed) - Number(b.ebooks_allowed)
+        : 0,
+    );
+  const selectedChoice = choice || folders[0]?.key || "";
+  const selectedFolder = folders.find(
+    (folder) => folder.key === selectedChoice,
+  );
+  const library = selectedFolder;
+  const backendPath = selectedFolder?.path || "";
+  const eligible = !!selectedFolder;
+  const workerPath = otherPath ? localPath : backendPath;
   const save = useMutation({
-    mutationFn: async () =>
-      result(
-        await api.PUT("/api/organization/destinations/{root_key}", {
-          params: { path: { root_key: root } },
+    mutationFn: async () => {
+      if (!library || !downloader || !eligible)
+        throw new Error("Choose a folder and connect a download client first.");
+      setProgress("Saving folder…");
+      const destination = result(
+        await api.PUT("/api/organization/library-folders/{medium}", {
+          params: { path: { medium } },
           body: {
-            library_id: libraryId,
-            medium,
-            mode,
+            library_id: library.library_id,
             backend_path: backendPath,
-            enabled,
-            expected_revision: saved?.revision,
+            local_path: workerPath,
+            destination_id: current.current?.id,
+            expected_revision: current.current?.revision,
           },
         }),
-      ),
-    onSuccess: () =>
-      cache.invalidateQueries({ queryKey: ["destination-setup"] }),
-  });
-  const probe = useMutation({
-    mutationFn: async () => {
-      const payload = JSON.stringify([
-        saved!.id,
-        planId,
-        saved!.revision,
-        !planId && downloader?.id,
-        !planId && downloader?.generation,
-      ]);
-      if (attempt.current?.payload !== payload) {
-        attempt.current = { payload, key: crypto.randomUUID() };
-      }
-      if (!planId)
-        return result(
-          await api.POST(
-            "/api/organization/destinations/{destination_id}/setup-probe",
-            {
-              params: {
-                path: { destination_id: saved!.id },
-                header: { "idempotency-key": attempt.current.key },
-              },
-              body: {
-                downloader_id: downloader!.id,
-                downloader_generation: downloader!.generation,
-                expected_revision: saved!.revision,
-              },
-            },
-          ),
-        );
-      return result(
+      );
+      current.current = destination;
+      setProgress("Checking hardlinks and Audiobookshelf access…");
+      const operation = result(
         await api.POST(
-          "/api/organization/destinations/{destination_id}/probe",
+          "/api/organization/destinations/{destination_id}/setup-probe",
           {
             params: {
-              path: { destination_id: saved!.id },
-              header: { "idempotency-key": attempt.current.key },
+              path: { destination_id: destination.id },
+              header: { "idempotency-key": crypto.randomUUID() },
             },
-            body: { plan_id: planId!, expected_revision: saved!.revision },
+            body: {
+              downloader_id: downloader.id,
+              downloader_generation: downloader.generation,
+              expected_revision: destination.revision,
+            },
           },
         ),
       );
+      for (let attempt = 0; attempt < 80; attempt++) {
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        const activity = result(await api.GET("/api/activity"));
+        const status = activity.find((entry) => entry.id === operation.id);
+        if (
+          status?.status === "failed" ||
+          status?.status === "needs-review" ||
+          status?.status === "cancelled"
+        )
+          throw new Error(status.message || "Folder verification failed.");
+        if (status?.status === "completed") {
+          setProgress("Setting your library destination…");
+          return result(
+            await api.POST(
+              "/api/organization/library-folders/{destination_id}/activate",
+              {
+                params: { path: { destination_id: destination.id } },
+                body: { expected_revision: destination.revision, automatic },
+              },
+            ),
+          );
+        }
+      }
+      throw new Error(
+        "The worker has not finished checking this folder. Check the download client and worker, then try again.",
+      );
     },
-    onSuccess: (operation) => {
-      setOperationId(operation.id);
-      attempt.current = null;
+    onSuccess: async () => {
+      await Promise.all([
+        cache.invalidateQueries({ queryKey: ["library-folder-settings"] }),
+        cache.invalidateQueries({ queryKey: ["download-defaults"] }),
+        cache.invalidateQueries({ queryKey: ["selection-options"] }),
+        cache.invalidateQueries({ queryKey: ["automatic-import-policy"] }),
+      ]);
+      close();
     },
+    onSettled: () =>
+      cache.invalidateQueries({ queryKey: ["library-folder-settings"] }),
   });
-  const changed =
-    !saved ||
-    saved.library_id !== libraryId ||
-    saved.medium !== medium ||
-    saved.mode !== mode ||
-    saved.backend_path !== backendPath ||
-    saved.enabled !== enabled;
-  const busy =
-    save.isPending ||
-    probe.isPending ||
-    (operationId &&
-      (!status.data ||
-        ["queued", "running"].includes(status.data.operation?.status || "")));
-  const report = operationId ? status.data?.destination?.probe : saved?.probe;
   return (
-    <section className="panel editor" aria-label={`Destination ${root}`}>
-      <h2>{root}</h2>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          save.mutate();
-        }}
-      >
-        <label>
-          Audiobookshelf library
-          <select
-            value={libraryId}
-            disabled={!!busy}
-            onChange={(event) => setLibraryId(event.target.value)}
-            required
-          >
-            <option value="">Choose a library</option>
-            {libraries
-              .filter((library) => library.accessible)
-              .map((library) => (
-                <option key={library.id} value={library.id}>
-                  {library.name}
-                </option>
-              ))}
-          </select>
-        </label>
-        <label>
-          Media type
-          <select
-            value={medium}
-            disabled={!!busy}
-            onChange={(event) =>
-              setMedium(event.target.value as "ebook" | "audio")
-            }
-          >
-            <option value="ebook">Ebooks</option>
-            <option value="audio">Audiobooks</option>
-          </select>
-        </label>
-        <label>
-          Audiobookshelf folder path
-          <input
-            value={backendPath}
-            maxLength={1024}
-            disabled={!!busy}
-            onChange={(event) => setBackendPath(event.target.value)}
-            placeholder="/books"
-            required
-          />
-        </label>
+    <BookDialog
+      title={`Choose ${names[medium].toLowerCase()} folder`}
+      close={() => {
+        if (!save.isPending) close();
+      }}
+      className="folder-picker-dialog"
+    >
+      <div className="settings-section-body folder-picker-body">
         <p className="muted">
-          The absolute folder root configured in Audiobookshelf. The test
-          verifies that Audiobookshelf and the worker see the same directory.
+          Start with your Audiobookshelf folder. If Dewarr uses a different
+          mount path, choose Other path to map the same folder.
         </p>
-        <label>
-          Import method
-          <select
-            value={mode}
-            disabled={!!busy}
-            onChange={(event) =>
-              setMode(event.target.value as "hardlink" | "copy")
-            }
+        <Notice error={options.error} />
+        {options.isPending && <Loading />}
+        {options.data && (
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              save.mutate();
+            }}
           >
-            <option value="hardlink">Hardlink required</option>
-            <option value="copy">Copy files — uses additional storage</option>
-          </select>
-        </label>
-        <p className="muted">
-          Hardlinks keep the original download in place. An unavailable hardlink
-          route will not silently switch to copying.
-        </p>
-        <label className="check-label">
-          <input
-            type="checkbox"
-            checked={enabled}
-            disabled={!!busy}
-            onChange={(event) => setEnabled(event.target.checked)}
-          />
-          Destination enabled
-        </label>
-        <Notice error={save.error} />
-        <button
-          className="primary"
-          disabled={!!busy || !changed || !libraryId || !backendPath}
-        >
-          {save.isPending ? "Saving…" : "Save destination"}
-        </button>
-      </form>
-      {saved && (
-        <AutomaticImportPolicy
-          destinationId={saved.id}
-          revision={saved.revision}
-          verified={
-            (operationId ? status.data?.destination : saved)
-              ?.publication_available ?? false
-          }
-          unsaved={changed || !!busy}
-        />
-      )}
-      <div className="form-actions">
-        {!planId ? (
-          <label>
-            Downloader to test
-            <select
-              value={downloader?.id || ""}
-              disabled={!!busy}
-              onChange={(event) => setDownloaderId(event.target.value)}
-            >
-              <option value="">Choose a tested downloader</option>
-              {candidates.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name}
-                </option>
+            <fieldset className="abs-folder-options" disabled={save.isPending}>
+              <legend className="sr-only">Destination path</legend>
+              {folders.map((folder, index) => (
+                <label className="abs-folder-option" key={folder.key}>
+                  <input
+                    type="radio"
+                    name="folder"
+                    aria-label={`${folder.library_name}: ${folder.path}`}
+                    checked={!otherPath && selectedChoice === folder.key}
+                    onChange={() => {
+                      setChoice(folder.key);
+                      setOtherPath(false);
+                    }}
+                  />
+                  <span className="folder-option-copy">
+                    <span className="folder-option-title">
+                      {folders.length === 1
+                        ? "Audiobookshelf folder"
+                        : folder.library_name}
+                      {index === 0 && <small>Default</small>}
+                    </span>
+                    <span className="folder-option-path">{folder.path}</span>
+                  </span>
+                </label>
               ))}
-            </select>
-          </label>
-        ) : null}
-        <button
-          disabled={
-            !!busy ||
-            changed ||
-            !saved?.configured ||
-            !enabled ||
-            (!planId && !downloader)
-          }
-          onClick={() => probe.mutate()}
-        >
-          Test destination route
-        </button>
-      </div>
-      <p className="muted">
-        The test creates and removes its own temporary files and empty folders.
-        {planId
-          ? " It checks the selected file's link route"
-          : " It writes a small temporary file in the downloader's save folder and checks its link route"}{" "}
-        and verifies the folder mapping through Audiobookshelf. The ABS
-        connection needs upload permission for its path check; no book is
-        uploaded.
-      </p>
-      {!planId && downloader ? (
-        <p className="muted break-text">
-          qBittorrent save folder: {downloader.save_path}. The mapped folder
-          must already exist and be writable by the worker. Downloaded files are
-          checked again during import.
-        </p>
-      ) : null}
-      {!planId && !candidates.length ? (
-        <p>
-          <Link to="/downloaders">Connect and test a downloader</Link> with
-          current path mappings to test this route.
-        </p>
-      ) : null}
-      <Notice error={probe.error || status.error} />
-      {status.data?.operation &&
-        status.data.operation.message !== report?.message && (
-          <p role="status">{status.data.operation.message}</p>
+              {!!folders.length && (
+                <label className="abs-folder-option folder-other-option">
+                  <input
+                    type="radio"
+                    name="folder"
+                    aria-label="Other path"
+                    checked={otherPath}
+                    onChange={() => {
+                      setChoice(selectedChoice);
+                      setOtherPath(true);
+                      if (!localPath) setLocalPath(backendPath);
+                    }}
+                  />
+                  <span className="folder-option-copy">
+                    <span className="folder-option-title">Other path</span>
+                  </span>
+                </label>
+              )}
+              {otherPath && !!folders.length && (
+                <div className="folder-other-field">
+                  <label>
+                    <span className="sr-only">Dewarr folder path</span>
+                    <input
+                      value={localPath}
+                      onChange={(event) => setLocalPath(event.target.value)}
+                      placeholder="/data/library/ebooks"
+                      required
+                    />
+                  </label>
+                  <p className="muted">
+                    Same Audiobookshelf folder, using its path in Dewarr.
+                  </p>
+                  {folders.length > 1 && (
+                    <p className="muted">
+                      {selectedFolder?.library_name} · {backendPath}
+                    </p>
+                  )}
+                </div>
+              )}
+              {!folders.length && (
+                <p className="muted">
+                  {options.data.libraries.length
+                    ? "No compatible folders found. Check your Audiobookshelf library settings."
+                    : "Connect Audiobookshelf to choose a folder."}
+                </p>
+              )}
+              {options.data.libraries
+                .filter((item) => item.error)
+                .map((item) => (
+                  <p className="notice error" key={item.library_id}>
+                    {item.library_name}: {item.error}
+                  </p>
+                ))}
+              {choice && !eligible && (
+                <p className="notice">
+                  The saved folder is no longer available. Choose another
+                  Audiobookshelf folder.
+                </p>
+              )}
+            </fieldset>
+            {options.data.downloaders.length > 1 && (
+              <label>
+                Download client
+                <select
+                  value={downloaderId}
+                  onChange={(e) => setDownloaderId(e.target.value)}
+                  disabled={save.isPending}
+                >
+                  <option value="">Choose a client</option>
+                  {options.data.downloaders.map((d) => (
+                    <option value={d.id} key={d.id}>
+                      {d.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            {!options.data.downloaders.length && (
+              <p className="notice">
+                Set up a{" "}
+                <Link to="/settings#downloaders" onClick={close}>
+                  download client
+                </Link>{" "}
+                to verify hardlinks.
+              </p>
+            )}
+            <label className="check-label">
+              <input
+                type="checkbox"
+                checked={automatic}
+                onChange={(e) => setAutomatic(e.target.checked)}
+                disabled={save.isPending}
+              />
+              Auto-organize downloads
+              <SettingHelp label="automatic organization">
+                Hardlink completed downloads into this folder using your file
+                naming settings. Originals stay available for seeding. Uncertain
+                matches stay in review.
+              </SettingHelp>
+            </label>
+            <Notice error={save.error || policy.error} />
+            {save.isPending && (
+              <p role="status" className="folder-save-progress">
+                <LoaderCircle size={15} />
+                {progress}
+              </p>
+            )}
+            <footer className="folder-picker-footer">
+              <button type="button" disabled={save.isPending} onClick={close}>
+                Cancel
+              </button>
+              <button
+                className="primary"
+                disabled={
+                  save.isPending ||
+                  (!!saved && !policy.data) ||
+                  !eligible ||
+                  !downloader ||
+                  !workerPath.trim()
+                }
+              >
+                {save.isPending ? "Checking…" : "Use this folder"}
+              </button>
+            </footer>
+          </form>
         )}
-      {report && (
-        <p className={report.status === "verified" ? "success" : "notice"}>
-          {String(report.message)}
-        </p>
-      )}
-      {changed && (
-        <p className="muted">Save changes before testing this destination.</p>
-      )}
-    </section>
+      </div>
+    </BookDialog>
   );
 }

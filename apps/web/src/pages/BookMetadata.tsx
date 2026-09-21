@@ -1,11 +1,16 @@
+import { Check, Image, LockKeyhole, Pencil, RefreshCw } from "lucide-react";
+import { languageName } from "../components/LanguageSelect";
+import { usePagedQuery } from "../hooks/usePagedQuery";
+import InfiniteScroll from "../components/InfiniteScroll";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Work } from "../api/client";
 import type { components } from "../api/schema";
 import { api, result } from "../api/client";
 import { Loading, Notice } from "../components";
-import ProviderSearch, { providerName } from "./ProviderSearch";
+import { providerName } from "./ProviderSearch";
+import BookMatch from "./BookMatch";
 import { fieldLabel } from "./MetadataSettings";
 import IdentityHistory, { useRefreshIdentity } from "./IdentityHistory";
 import VersionReviews from "./VersionReview";
@@ -23,30 +28,41 @@ export default function BookMetadata({
   work,
   admin,
   onWantVersion,
+  toolsOnly = false,
 }: {
   work: Work;
+  toolsOnly?: boolean;
   admin: boolean;
   onWantVersion?: (version: components["schemas"]["VersionView"]) => void;
 }) {
   const client = useQueryClient();
-  const [offset, setOffset] = useState(0);
-  const [matching, setMatching] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [reviewingEditions, setReviewingEditions] = useState(false);
   const [unmatching, setUnmatching] = useState<
     components["schemas"]["SourceView"] | null
   >(null);
   const refreshIdentity = useRefreshIdentity();
-  const metadata = useQuery({
-    queryKey: ["work-metadata", work.id, offset],
-    queryFn: async () =>
-      result(
+  const metadata = usePagedQuery({
+    queryKey: ["work-metadata", work.id],
+    queryFn: async (offset, signal) => {
+      const data = result(
         await api.GET("/api/metadata/works/{work_id}", {
           params: { path: { work_id: work.id }, query: { offset, limit: 20 } },
+          signal,
         }),
-      ),
+      );
+      return { ...data, items: data.versions };
+    },
+    initial: 0,
+    next: (last, pages) => {
+      const count = pages.reduce((n, p) => n + p.items.length, 0);
+      return last.items.length && count < last.versions_total
+        ? count
+        : undefined;
+    },
     refetchInterval: (query) =>
       ["queued", "running", "retrying"].includes(
-        query.state.data?.enrichment?.status || "",
+        query.state.data?.pages[0]?.enrichment?.status || "",
       )
         ? 3000
         : false,
@@ -71,7 +87,10 @@ export default function BookMetadata({
   });
   const updated = () => {
     client.invalidateQueries({ queryKey: ["work", work.id] });
+    client.invalidateQueries({ queryKey: ["work-reader-match", work.id] });
+    client.invalidateQueries({ queryKey: ["library-groups"] });
     client.invalidateQueries({ queryKey: ["work-metadata", work.id] });
+    client.invalidateQueries({ queryKey: ["reader-work-metadata", work.id] });
     client.invalidateQueries({ queryKey: ["works"] });
     client.invalidateQueries({ queryKey: ["version-reviews", work.id] });
     client.invalidateQueries({ queryKey: ["identity-history"] });
@@ -132,15 +151,138 @@ export default function BookMetadata({
     },
   });
   return (
-    <section className="library-access">
-      <div className="section-heading">
-        <h2>Editions and recordings</h2>
-        {admin && (
-          <button onClick={() => setMatching(!matching)}>
-            {matching ? "Close catalog matching" : "Match a catalog source"}
-          </button>
-        )}
-      </div>
+    <section
+      className="library-access metadata-workflow"
+      aria-label="Manage book metadata"
+    >
+      <header className="metadata-page-heading">
+        <div>
+          <h2>Book metadata</h2>
+          <p className="muted">
+            Keep the right match, details and cover for this book.
+          </p>
+        </div>
+        {!admin && <span className="status">Read-only</span>}
+      </header>
+      {metadata.data && (
+        <BookMatch
+          key={work.id}
+          work={work}
+          admin={admin}
+          source={metadata.data.sources.find(
+            (source) => source.provider === "hardcover",
+          )}
+          updated={updated}
+        />
+      )}
+      <section
+        className="metadata-card"
+        aria-labelledby="metadata-details-heading"
+      >
+        <div className="metadata-edit-row">
+          <div>
+            <h3 id="metadata-details-heading">Book details</h3>
+            <p className="muted">
+              Your edits stay protected when catalog details refresh.
+            </p>
+          </div>
+          {admin && (
+            <button
+              disabled={edit.isPending}
+              onClick={() => {
+                edit.reset();
+                setEditing(!editing);
+              }}
+              aria-expanded={editing}
+              aria-controls="metadata-details-content"
+            >
+              <Pencil size={14} /> {editing ? "Close editor" : "Edit details"}
+            </button>
+          )}
+        </div>
+        <div id="metadata-details-content">
+          {editing ? (
+            <EditForm
+              work={work}
+              pending={edit.isPending}
+              cancel={() => {
+                edit.reset();
+                setEditing(false);
+              }}
+              save={(values) => edit.mutate({ values })}
+            />
+          ) : (
+            <>
+              <dl className="metadata-details-grid">
+                {(
+                  [
+                    ["title", "Title", work.title],
+                    [
+                      "authors",
+                      "Authors",
+                      work.authors.join(", ") || "Not supplied",
+                    ],
+                    [
+                      "publication_year",
+                      "Published",
+                      work.publication_year ?? "Not supplied",
+                    ],
+                    [
+                      "language",
+                      "Language",
+                      languageName(work.language) || "Not supplied",
+                    ],
+                  ] as const
+                ).map(([field, label, value]) => (
+                  <div key={field}>
+                    <dt>
+                      {label}
+                      {(
+                        metadata.data?.fields[field] as
+                          { locked?: boolean } | undefined
+                      )?.locked && (
+                        <span className="metadata-protected">
+                          <LockKeyhole size={11} /> Protected
+                        </span>
+                      )}
+                    </dt>
+                    <dd>{value}</dd>
+                  </div>
+                ))}
+              </dl>
+              <details className="metadata-description">
+                <summary>
+                  Description{" "}
+                  {(
+                    metadata.data?.fields.description as
+                      { locked?: boolean } | undefined
+                  )?.locked && (
+                    <span className="metadata-protected">
+                      <LockKeyhole size={11} /> Protected
+                    </span>
+                  )}
+                </summary>
+                <p className="reader-prose">
+                  {work.description ||
+                    (admin
+                      ? "No description yet. Edit details to add one."
+                      : "No description available.")}
+                </p>
+              </details>
+            </>
+          )}
+        </div>
+      </section>
+      {edit.isSuccess && (
+        <p className="metadata-feedback success" role="status">
+          <Check size={16} /> Book details updated.
+        </p>
+      )}
+      {refresh.isSuccess && (
+        <p className="metadata-feedback success" role="status">
+          <Check size={16} /> Catalog details refreshed.
+        </p>
+      )}
       <Notice
         error={
           metadata.error ||
@@ -151,7 +293,6 @@ export default function BookMetadata({
           enrich.error
         }
       />
-      {admin && <VersionReviews workId={work.id} />}
       {unmatching && (
         <section className="panel editor" aria-label="Remove catalog source">
           <h3>
@@ -177,22 +318,10 @@ export default function BookMetadata({
           </div>
         </section>
       )}
-      {matching && (
-        <div className="panel">
-          <ProviderSearch
-            canEdit
-            matchWorkId={work.id}
-            onMatched={() => {
-              updated();
-              setMatching(false);
-            }}
-          />
-        </div>
-      )}
       {metadata.isPending && <Loading />}
       {metadata.data && (
         <>
-          {metadata.data.enrichment && (
+          {!toolsOnly && metadata.data.enrichment && (
             <div
               className="source-attribution"
               aria-label="Automatic metadata lookup"
@@ -212,220 +341,245 @@ export default function BookMetadata({
               )}
             </div>
           )}
-          {metadata.data.versions.length === 0 && (
-            <p className="muted">
-              No catalog editions have been linked yet. Library copies appear
-              below.
-            </p>
-          )}
-          <div className="edition-grid">
-            {metadata.data.versions.map((version) => (
-              <article className="panel edition-card" key={version.id}>
-                <div className="section-heading">
-                  <strong>
-                    {version.medium === "audio"
-                      ? "Audiobook"
-                      : version.medium === "ebook"
-                        ? "Ebook"
-                        : version.medium === "print"
-                          ? "Print edition"
-                          : "Format unknown"}
-                  </strong>
-                  {version.owned && (
-                    <span className="status owned">In library</span>
-                  )}
-                </div>
-                <h3>{version.title || work.title}</h3>
-                <p>
-                  {version.narrators.length
-                    ? `Narrated by ${version.narrators.join(", ")}`
-                    : version.medium === "audio"
-                      ? "Narrator unknown"
-                      : ""}
-                </p>
+          {!toolsOnly && (
+            <>
+              {metadata.data.items.length === 0 && (
                 <p className="muted">
-                  {[version.language, version.publication_year]
-                    .filter(Boolean)
-                    .join(" · ") || "Edition details unavailable"}
+                  No catalog editions have been linked yet. Library copies
+                  appear below.
                 </p>
-                {version.needs_review && (
-                  <p className="notice">
-                    Provider details changed. The existing version was preserved
-                    for review.
-                  </p>
-                )}
-                {onWantVersion &&
-                  ["ebook", "audio"].includes(version.medium) && (
-                    <button
-                      type="button"
-                      onClick={() => onWantVersion(version)}
-                    >
-                      Request this{" "}
-                      {version.medium === "audio" ? "recording" : "edition"}
-                    </button>
-                  )}
-              </article>
-            ))}
-          </div>
-          <div className="pagination">
-            {offset > 0 && (
-              <button onClick={() => setOffset(Math.max(0, offset - 20))}>
-                Previous editions
-              </button>
-            )}
-            {offset + 20 < metadata.data.versions_total && (
-              <button onClick={() => setOffset(offset + 20)}>
-                Next editions
-              </button>
-            )}
-          </div>
-          {metadata.data.sources.some((source) => source.editions_more) && (
-            <p className="muted">
-              This catalog contains more editions than have been loaded. Listed
-              editions are not a complete catalog.
-            </p>
-          )}
-          {metadata.data.sources.map((source) => (
-            <div
-              className="source-attribution"
-              key={`${source.provider}:${source.external_id}`}
-            >
-              <span>
-                <strong>{providerName(source.provider)}</strong> ·{" "}
-                {source.title}
-                <small>
-                  Fetched {new Date(source.fetched_at).toLocaleString()}
-                </small>
-                {source.series.map((series) => (
-                  <small key={series.external_id}>
-                    {source.provider === "hardcover" ? (
-                      <Link to={`/series/hardcover/${series.external_id}`}>
-                        {series.name}
-                      </Link>
-                    ) : (
-                      series.name
+              )}
+              <div className="edition-grid">
+                {metadata.data.items.map((version) => (
+                  <article className="panel edition-card" key={version.id}>
+                    <div className="section-heading">
+                      <strong>
+                        {version.medium === "audio"
+                          ? "Audiobook"
+                          : version.medium === "ebook"
+                            ? "Ebook"
+                            : version.medium === "print"
+                              ? "Print edition"
+                              : "Format unknown"}
+                      </strong>
+                      {version.owned && (
+                        <span className="status owned">In library</span>
+                      )}
+                    </div>
+                    <h3>{version.title || work.title}</h3>
+                    <p>
+                      {version.narrators.length
+                        ? `Narrated by ${version.narrators.join(", ")}`
+                        : version.medium === "audio"
+                          ? "Narrator unknown"
+                          : ""}
+                    </p>
+                    <p className="muted">
+                      {[version.language, version.publication_year]
+                        .filter(Boolean)
+                        .join(" · ") || "Edition details unavailable"}
+                    </p>
+                    {version.needs_review && (
+                      <p className="notice">
+                        Provider details changed. The existing version was
+                        preserved for review.
+                      </p>
                     )}
-                    {series.position ? ` · Book ${series.position}` : ""}
-                  </small>
+                    {onWantVersion &&
+                      ["ebook", "audio"].includes(version.medium) && (
+                        <button
+                          type="button"
+                          onClick={() => onWantVersion(version)}
+                        >
+                          Request this{" "}
+                          {version.medium === "audio" ? "recording" : "edition"}
+                        </button>
+                      )}
+                  </article>
                 ))}
-              </span>
-              {admin && (
-                <button
-                  disabled={refresh.isPending || more.isPending}
-                  onClick={() => refresh.mutate(source)}
-                >
-                  Refresh {providerName(source.provider)}
-                </button>
+              </div>
+              <InfiniteScroll query={metadata} />
+              {metadata.data.sources.some((source) => source.editions_more) && (
+                <p className="muted">
+                  This catalog contains more editions than have been loaded.
+                  Listed editions are not a complete catalog.
+                </p>
               )}
-              {admin && source.editions_more && (
+            </>
+          )}
+          <section
+            className="metadata-card metadata-covers"
+            aria-labelledby="metadata-covers-heading"
+          >
+            <div className="metadata-card-heading">
+              <div>
+                <h3 id="metadata-covers-heading">Book cover</h3>
+                <p className="muted">
+                  {admin
+                    ? "Choose the cover you want to see in your library."
+                    : "The cover used for this book in your library."}
+                </p>
+              </div>
+              <Image size={18} aria-hidden="true" />
+            </div>
+            <div className="metadata-cover-options">
+              {[
+                ...new Set(
+                  [...metadata.data.cover_choices, work.cover_url].filter(
+                    (cover): cover is string => !!cover,
+                  ),
+                ),
+              ].map((cover, index) => (
                 <button
-                  disabled={more.isPending || refresh.isPending}
-                  onClick={() => more.mutate(source)}
+                  key={cover}
+                  className="metadata-cover-option"
+                  aria-label={`Use cover ${index + 1}`}
+                  aria-pressed={work.cover_url === cover}
+                  disabled={!admin || edit.isPending}
+                  onClick={() => edit.mutate({ values: { cover_url: cover } })}
                 >
-                  {more.isPending
-                    ? "Loading editions…"
-                    : `Load more ${providerName(source.provider)} editions`}
+                  <img
+                    src={cover}
+                    alt={`Cover option ${index + 1}`}
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                  />
+                  <span>
+                    {work.cover_url === cover ? (
+                      <>
+                        <Check size={12} /> Current
+                      </>
+                    ) : (
+                      `Cover ${index + 1}`
+                    )}
+                  </span>
                 </button>
-              )}
-              {admin && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    unmatch.reset();
-                    setUnmatching(source);
-                  }}
-                >
-                  Unmatch {providerName(source.provider)}
-                </button>
+              ))}
+              {!work.cover_url && !metadata.data.cover_choices.length && (
+                <p className="muted">
+                  No covers available. Connect a catalog match or refresh its
+                  details to look for a cover.
+                </p>
               )}
             </div>
-          ))}
-          <details className="panel provenance">
-            <summary>Metadata sources and protected edits</summary>
-            {Object.entries(metadata.data.fields).length === 0 && (
-              <p className="muted">No provider metadata has been selected.</p>
+            {admin && work.cover_url && (
+              <button
+                disabled={edit.isPending}
+                onClick={() => edit.mutate({ values: { cover_url: null } })}
+              >
+                Hide cover
+              </button>
             )}
-            {Object.entries(metadata.data.fields).map(([field, raw]) => {
-              const value = raw as {
-                provider?: string;
-                reason?: string;
-                locked?: boolean;
-              };
-              return (
-                <div className="source-attribution" key={field}>
-                  <span>
-                    <strong>{fieldLabel(field)}</strong>
-                    <small>
-                      {value.provider === "unmatched"
-                        ? "Unmatched source"
-                        : value.provider === "manual"
-                          ? "Your edit"
-                          : providerName(value.provider || "")}
-                      {value.locked ? " · Protected" : ""}
-                    </small>
-                    <small>{value.reason}</small>
-                  </span>
-                  {admin && value.locked && (
-                    <button
-                      onClick={() => edit.mutate({ unlock: [field as Field] })}
-                      disabled={edit.isPending}
-                    >
-                      Use provider {fieldLabel(field).toLowerCase()}
-                    </button>
-                  )}
-                </div>
-              );
-            })}
+          </section>
+          <details className="catalog-source-tools">
+            <summary>Advanced metadata options</summary>
             {admin && (
-              <>
-                <div className="button-row">
-                  <button onClick={() => setEditing(!editing)}>
-                    {editing ? "Close editor" : "Edit book details"}
+              <details
+                onToggle={(event) =>
+                  setReviewingEditions(event.currentTarget.open)
+                }
+              >
+                <summary>Edition matching</summary>
+                {reviewingEditions && <VersionReviews workId={work.id} />}
+              </details>
+            )}
+            {metadata.data.sources.map((source) => (
+              <div
+                className="source-attribution"
+                key={`${source.provider}:${source.external_id}`}
+              >
+                <span>
+                  <strong>{providerName(source.provider)}</strong> ·{" "}
+                  {source.title}
+                  <small>
+                    Fetched {new Date(source.fetched_at).toLocaleString()}
+                  </small>
+                  {source.series.map((series) => (
+                    <small key={series.external_id}>
+                      {source.provider === "hardcover" ? (
+                        <Link to={`/series/hardcover/${series.external_id}`}>
+                          {series.name}
+                        </Link>
+                      ) : (
+                        series.name
+                      )}
+                      {series.position ? ` · Book ${series.position}` : ""}
+                    </small>
+                  ))}
+                </span>
+                {admin && (
+                  <button
+                    disabled={refresh.isPending || more.isPending}
+                    onClick={() => refresh.mutate(source)}
+                  >
+                    <RefreshCw size={14} /> Refresh{" "}
+                    {providerName(source.provider)}
                   </button>
-                </div>
-                {editing && (
-                  <EditForm
-                    work={work}
-                    pending={edit.isPending}
-                    save={(values) => edit.mutate({ values })}
-                  />
                 )}
-                {metadata.data.cover_choices.length > 0 && (
-                  <>
-                    <h3>Choose a cover</h3>
-                    <div className="cover-choices">
-                      {metadata.data.cover_choices.map((cover, index) => (
-                        <button
-                          key={cover}
-                          aria-label={`Use cover ${index + 1}`}
-                          onClick={() =>
-                            edit.mutate({ values: { cover_url: cover } })
-                          }
-                          disabled={edit.isPending}
-                        >
-                          <img
-                            src={cover}
-                            alt={`Cover option ${index + 1}`}
-                            loading="lazy"
-                            referrerPolicy="no-referrer"
-                          />
-                        </button>
-                      ))}
+                {admin && source.editions_more && (
+                  <button
+                    disabled={more.isPending || refresh.isPending}
+                    onClick={() => more.mutate(source)}
+                  >
+                    {more.isPending
+                      ? "Loading editions…"
+                      : `Load more ${providerName(source.provider)} editions`}
+                  </button>
+                )}
+                {admin && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      unmatch.reset();
+                      setUnmatching(source);
+                    }}
+                  >
+                    Unmatch {providerName(source.provider)}
+                  </button>
+                )}
+              </div>
+            ))}
+            <details className="panel provenance">
+              <summary>Metadata sources and protected edits</summary>
+              {Object.entries(metadata.data.fields).length === 0 && (
+                <p className="muted">No provider metadata has been selected.</p>
+              )}
+              {Object.entries(metadata.data.fields).map(([field, raw]) => {
+                const value = raw as {
+                  provider?: string;
+                  reason?: string;
+                  locked?: boolean;
+                };
+                return (
+                  <div className="source-attribution" key={field}>
+                    <span>
+                      <strong>{fieldLabel(field)}</strong>
+                      <small>
+                        {value.provider === "unmatched"
+                          ? "Unmatched source"
+                          : value.provider === "manual"
+                            ? "Your edit"
+                            : providerName(value.provider || "")}
+                        {value.locked ? " · Protected" : ""}
+                      </small>
+                      <small>{value.reason}</small>
+                    </span>
+                    {admin && value.locked && (
                       <button
                         onClick={() =>
-                          edit.mutate({ values: { cover_url: null } })
+                          edit.mutate({ unlock: [field as Field] })
                         }
                         disabled={edit.isPending}
                       >
-                        Hide cover
+                        Use provider {fieldLabel(field).toLowerCase()}
                       </button>
-                    </div>
-                  </>
-                )}
-              </>
-            )}
+                    )}
+                  </div>
+                );
+              })}
+            </details>
+            {admin && <IdentityHistory workId={work.id} />}
           </details>
-          {admin && <IdentityHistory workId={work.id} />}
         </>
       )}
     </section>
@@ -436,14 +590,16 @@ function EditForm({
   work,
   pending,
   save,
+  cancel,
 }: {
+  cancel: () => void;
   work: Work;
   pending: boolean;
   save: (values: Edit) => void;
 }) {
   return (
     <form
-      className="editor"
+      className="editor metadata-editor"
       onSubmit={(event) => {
         event.preventDefault();
         const form = new FormData(event.currentTarget);
@@ -470,55 +626,68 @@ function EditForm({
         Changed fields are protected from future provider refreshes. Your
         library files and Audiobookshelf metadata stay unchanged.
       </p>
-      <label>
-        Book title
-        <input
-          name="title"
-          defaultValue={work.title}
-          required
-          maxLength={600}
-        />
-      </label>
-      <label>
-        Authors, one per line
-        <textarea
-          name="authors"
-          defaultValue={work.authors.join("\n")}
-          rows={3}
-        />
-      </label>
-      <label>
-        Book description
-        <textarea
-          name="description"
-          defaultValue={work.description || ""}
-          rows={5}
-          maxLength={30000}
-        />
-      </label>
-      <div className="form-row">
+      <div className="metadata-editor-grid">
         <label>
-          Publication year
+          Book title
           <input
-            name="year"
-            type="number"
-            min={0}
-            max={9999}
-            defaultValue={work.publication_year ?? ""}
+            name="title"
+            autoFocus
+            defaultValue={work.title}
+            required
+            maxLength={600}
           />
         </label>
         <label>
-          Book language
-          <input
-            name="language"
-            defaultValue={work.language || ""}
-            maxLength={20}
+          Authors, one per line
+          <textarea
+            name="authors"
+            defaultValue={work.authors.join("\n")}
+            rows={3}
           />
         </label>
+        <label className="metadata-editor-description">
+          Book description
+          <textarea
+            name="description"
+            defaultValue={work.description || ""}
+            rows={5}
+            maxLength={30000}
+          />
+        </label>
+        <div className="form-row">
+          <label>
+            Publication year
+            <input
+              name="year"
+              type="number"
+              min={0}
+              max={9999}
+              defaultValue={work.publication_year ?? ""}
+            />
+          </label>
+          <label>
+            Book language
+            <input
+              name="language"
+              defaultValue={work.language || ""}
+              maxLength={20}
+            />
+          </label>
+        </div>
       </div>
-      <button className="primary" disabled={pending}>
-        Save protected edits
-      </button>
+      <div className="metadata-editor-footer">
+        <span className="muted">
+          <LockKeyhole size={13} /> Only changed fields are protected.
+        </span>
+        <div className="button-row">
+          <button type="button" disabled={pending} onClick={cancel}>
+            Cancel
+          </button>
+          <button className="primary" disabled={pending}>
+            {pending ? "Saving…" : "Save protected edits"}
+          </button>
+        </div>
+      </div>
     </form>
   );
 }

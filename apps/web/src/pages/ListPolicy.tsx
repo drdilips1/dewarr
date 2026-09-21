@@ -192,9 +192,7 @@ function PolicyEditor({
     delete values.preferred_medium;
     return values;
   });
-  const [profileId, setProfileId] = useState(
-    policy?.configuration.profile.id || "",
-  );
+  const [profileId] = useState(policy?.configuration.profile.id || "");
   const [downloaderId, setDownloaderId] = useState(
     (policy?.configuration.route_options || policy?.configuration)
       ?.downloader_id || "",
@@ -387,7 +385,7 @@ function PolicyEditor({
                   changed();
                 }}
               >
-                <option value="">Use profile or personal default</option>
+                <option value="">Use my download settings</option>
                 <option value="ebook">Ebook</option>
                 <option value="audio">Audiobook</option>
                 <option value="both">Both</option>
@@ -409,25 +407,6 @@ function PolicyEditor({
                 </select>
               </label>
             )}
-            <label>
-              Download profile
-              <select
-                value={profileId}
-                onChange={(e) => {
-                  setProfileId(e.target.value);
-                  changed();
-                }}
-              >
-                <option value="">Balanced defaults</option>
-                {profiles.data
-                  ?.filter((p) => p.id)
-                  .map((p) => (
-                    <option key={p.id} value={p.id || ""}>
-                      {p.name}
-                    </option>
-                  ))}
-              </select>
-            </label>
             {profile && (
               <details>
                 <summary>List download overrides</summary>
@@ -548,7 +527,7 @@ function PolicyEditor({
             withdraws only this list’s request.
           </p>
           <p>
-            Profile: {receipt.data.configuration.profile.name} ·{" "}
+            Preferences: {receipt.data.configuration.profile.name} ·{" "}
             {receipt.data.configuration.specification.mode}
           </p>
           <DownloadConstraints

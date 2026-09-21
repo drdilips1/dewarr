@@ -1,17 +1,25 @@
-"""Read-only first-use evidence. This is not an acquisition authorization check."""
+"""Setup readiness and per-user onboarding progress."""
 
 from datetime import UTC, datetime
+from typing import Annotated, Literal
 from uuid import UUID
 
 from fastapi import APIRouter
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy import select
 
-from app.api.dependencies import Admin, Database
-from app.config import get_settings
-from app.db.models import CatalogAccount, ImportDestination, Integration, Library, SourceConnection
+from app.api.dependencies import Admin, CurrentUser, Database
+from app.db.models import (
+    CatalogAccount,
+    ImportDestination,
+    Integration,
+    Library,
+    SourceConnection,
+    User,
+)
 from app.domain.downloaders import mappings_current
 from app.importing.destination_view import view as destination_view
+from app.importing.storage import storage_settings
 
 router = APIRouter(prefix="/setup", tags=["setup"])
 
@@ -71,7 +79,7 @@ def service(row, name):
 
 @router.get("/readiness", response_model=SetupReadiness)
 async def readiness(admin: Admin, db: Database):
-    settings = get_settings()
+    settings = await storage_settings(db)
     integrations = (
         await db.scalars(
             select(Integration)
@@ -139,3 +147,22 @@ async def readiness(admin: Admin, db: Database):
         destination_roots=len(settings.import_destinations),
         staging_configured=settings.import_staging_root is not None,
     )
+
+
+class OnboardingProgress(BaseModel):
+    status: Literal["pending", "deferred", "completed", "skipped"] = "pending"
+    step: int = Field(default=0, ge=0, le=6)
+    skipped: list[Annotated[int, Field(ge=0, le=6)]] = Field(default_factory=list, max_length=7)
+
+
+@router.get("/onboarding", response_model=OnboardingProgress)
+async def get_onboarding(user: CurrentUser):
+    return OnboardingProgress.model_validate(user.onboarding or {})
+
+
+@router.put("/onboarding", response_model=OnboardingProgress)
+async def save_onboarding(body: OnboardingProgress, user: CurrentUser, db: Database):
+    account = await db.scalar(select(User).where(User.id == user.id).with_for_update())
+    account.onboarding = body.model_dump()
+    await db.commit()
+    return body

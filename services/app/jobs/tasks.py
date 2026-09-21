@@ -409,3 +409,25 @@ async def reuse_completed_transfer(continuation_id: str) -> None:
     from app.importing.reuse import run
 
     await run(UUID(continuation_id))
+
+
+@tasks.periodic(cron="*/10 * * * *")
+@tasks.task(name="discovery.schedule", queue="metadata", retry=3)
+async def schedule_discovery(timestamp: int) -> None:
+    from app.domain.discovery_catalog import schedule
+
+    await schedule()
+
+
+@tasks.task(name="discovery.refresh", queue="metadata", retry=3)
+async def refresh_discovery(user_id: str, collection_id: str, generation: int) -> None:
+    from app.domain.discovery_catalog import refresh
+
+    await refresh(UUID(user_id), collection_id, generation)
+
+
+@tasks.task(name="acquisition.quick-add", queue="sources", retry=3)
+async def quick_add_book(operation_id: str) -> None:
+    from app.domain.quick_add import run
+
+    await run(UUID(operation_id))

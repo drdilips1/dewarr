@@ -1,5 +1,6 @@
+import { usePagedQuery } from "../hooks/usePagedQuery";
+import InfiniteScroll from "../components/InfiniteScroll";
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { api, result } from "../api/client";
 import { Loading, Notice } from "../components";
 
@@ -21,13 +22,13 @@ export default function ListBookPicker({
   onRevisionChange: (revision: string | undefined) => void;
 }) {
   const [search, setSearch] = useState("");
-  const [offset, setOffset] = useState(0);
   const [revision, setRevision] = useState<string>();
-  const books = useQuery({
-    queryKey: ["list-books", listId, search, offset, revision],
-    queryFn: async () =>
+  const books = usePagedQuery({
+    queryKey: ["list-books", listId, search, revision],
+    queryFn: async (offset, signal) =>
       result(
         await api.GET("/api/lists/{list_id}", {
+          signal,
           params: {
             path: { list_id: listId },
             query: {
@@ -42,6 +43,11 @@ export default function ListBookPicker({
     staleTime: 0,
     gcTime: 0,
     refetchInterval: 15_000,
+    initial: 0,
+    next: (last, pages) => {
+      const count = pages.reduce((n, p) => n + p.items.length, 0);
+      return last.items.length && count < last.matched ? count : undefined;
+    },
   });
   const valid = books.isSuccess && !books.isFetching;
   useEffect(() => {
@@ -66,7 +72,6 @@ export default function ListBookPicker({
           value={search}
           onChange={(event) => {
             setSearch(event.target.value);
-            setOffset(0);
           }}
         />
       </label>
@@ -81,7 +86,7 @@ export default function ListBookPicker({
           }
           onClick={() => change(combined)}
         >
-          Select this page
+          Select loaded books
         </button>
         <button
           type="button"
@@ -97,7 +102,6 @@ export default function ListBookPicker({
           type="button"
           onClick={() => {
             change([]);
-            setOffset(0);
             void books.refetch();
           }}
         >
@@ -128,26 +132,7 @@ export default function ListBookPicker({
             </label>
           ))}
           {!books.data.items.length && <p>No matching books in this list.</p>}
-          <div className="pagination">
-            <button
-              type="button"
-              disabled={!offset || !valid}
-              onClick={() => setOffset(offset - 25)}
-            >
-              Previous books
-            </button>
-            <span>
-              Page {Math.floor(offset / 25) + 1} of{" "}
-              {Math.max(1, Math.ceil(books.data.matched / 25))}
-            </span>
-            <button
-              type="button"
-              disabled={offset + 25 >= books.data.matched || !valid}
-              onClick={() => setOffset(offset + 25)}
-            >
-              Next books
-            </button>
-          </div>
+          <InfiniteScroll query={books} />
         </>
       )}
     </section>

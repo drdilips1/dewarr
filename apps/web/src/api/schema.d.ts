@@ -4,6 +4,23 @@
  */
 
 export interface paths {
+  "/api/application/release": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Application Release */
+    get: operations["application_release_api_application_release_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/health/live": {
     parameters: {
       query?: never;
@@ -168,6 +185,24 @@ export interface paths {
     /** Readiness */
     get: operations["readiness_api_setup_readiness_get"];
     put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/setup/onboarding": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get Onboarding */
+    get: operations["get_onboarding_api_setup_onboarding_get"];
+    /** Save Onboarding */
+    put: operations["save_onboarding_api_setup_onboarding_put"];
     post?: never;
     delete?: never;
     options?: never;
@@ -788,6 +823,75 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/catalog/works/{work_id}/cover": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Cover */
+    get: operations["cover_api_catalog_works__work_id__cover_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/catalog/cover-image": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Cover Image */
+    get: operations["cover_image_api_catalog_cover_image_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/catalog/works/{work_id}/grouping": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Grouping */
+    get: operations["grouping_api_catalog_works__work_id__grouping_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** Edit Grouping */
+    patch: operations["edit_grouping_api_catalog_works__work_id__grouping_patch"];
+    trace?: never;
+  };
+  "/api/catalog/works/{work_id}/primary-edition": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** Primary Edition */
+    patch: operations["primary_edition_api_catalog_works__work_id__primary_edition_patch"];
+    trace?: never;
+  };
   "/api/discovery/local": {
     parameters: {
       query?: never;
@@ -848,6 +952,178 @@ export interface paths {
     };
     /** Related */
     get: operations["related_api_discovery_related__work_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/discovery/layout": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Layout */
+    get: operations["layout_api_discovery_layout_get"];
+    /** Save Layout */
+    put: operations["save_layout_api_discovery_layout_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/discovery/collections": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Collections */
+    get: operations["collections_api_discovery_collections_get"];
+    put?: never;
+    /** Add Collection */
+    post: operations["add_collection_api_discovery_collections_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/discovery/collections/preview": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Preview */
+    post: operations["preview_api_discovery_collections_preview_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/discovery/collections/{collection_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Collection */
+    get: operations["collection_api_discovery_collections__collection_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/discovery/collections/{collection_id}/follow": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Follow */
+    put: operations["follow_api_discovery_collections__collection_id__follow_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/discovery/browse": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Browse Books */
+    get: operations["browse_books_api_discovery_browse_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/discovery/collections/{collection_id}/refresh": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Refresh Collection */
+    post: operations["refresh_collection_api_discovery_collections__collection_id__refresh_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/discovery/personal-list/preview": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Preview Personal */
+    post: operations["preview_personal_api_discovery_personal_list_preview_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/discovery/personal-list": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Add Personal */
+    post: operations["add_personal_api_discovery_personal_list_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/discovery/goodreads/{external_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Resolve Goodreads Book */
+    get: operations["resolve_goodreads_book_api_discovery_goodreads__external_id__get"];
     put?: never;
     post?: never;
     delete?: never;
@@ -1543,6 +1819,75 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/reading-accounts/goodreads": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Goodreads Account */
+    get: operations["goodreads_account_api_reading_accounts_goodreads_get"];
+    /** Connect Goodreads */
+    put: operations["connect_goodreads_api_reading_accounts_goodreads_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/reading-accounts/goodreads/discover": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Discover Goodreads */
+    post: operations["discover_goodreads_api_reading_accounts_goodreads_discover_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/reading-accounts/subscriptions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Subscriptions */
+    get: operations["subscriptions_api_reading_accounts_subscriptions_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/reading-accounts/follow": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Follow */
+    post: operations["follow_api_reading_accounts_follow_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/lists/{list_id}/requests/preview": {
     parameters: {
       query?: never;
@@ -1748,6 +2093,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/integrations/check": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Check Connection */
+    post: operations["check_connection_api_integrations_check_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/integrations/{integration_id}": {
     parameters: {
       query?: never;
@@ -1799,6 +2161,40 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/library/groups/{kind}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Groups */
+    get: operations["groups_api_library_groups__kind__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/library/groups/{kind}/books": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Group Books */
+    get: operations["group_books_api_library_groups__kind__books_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/library/libraries": {
     parameters: {
       query?: never;
@@ -1826,6 +2222,23 @@ export interface paths {
     get?: never;
     /** Replace Grants */
     put: operations["replace_grants_api_library_libraries__library_id__grants_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/library/books": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Library Books */
+    get: operations["library_books_api_library_books_get"];
+    put?: never;
     post?: never;
     delete?: never;
     options?: never;
@@ -1971,6 +2384,40 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/metadata/books/hardcover/{external_id}/reader-details": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Reader Details */
+    get: operations["reader_details_api_metadata_books_hardcover__external_id__reader_details_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/metadata/authors/hardcover/{external_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Author Details */
+    get: operations["author_details_api_metadata_authors_hardcover__external_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/metadata/books/{provider}/{external_id}/import": {
     parameters: {
       query?: never;
@@ -1982,6 +2429,49 @@ export interface paths {
     put?: never;
     /** Add Catalog Book */
     post: operations["add_catalog_book_api_metadata_books__provider___external_id__import_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/metadata/works/{work_id}/reader-match": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Reader Match
+     * @description Read-only reader metadata for inventory books without a provider binding.
+     *
+     *     Never creates catalog identities or claims edition ownership from a search result.
+     *     Provider calls use the same account-scoped cache and fences as Discover.
+     */
+    get: operations["reader_match_api_metadata_works__work_id__reader_match_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/metadata/works/{work_id}/match-hardcover": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Save Hardcover Match
+     * @description Persist only a freshly verified match, with an evidence fence and audit trail.
+     */
+    post: operations["save_hardcover_match_api_metadata_works__work_id__match_hardcover_post"];
     delete?: never;
     options?: never;
     head?: never;
@@ -2187,6 +2677,40 @@ export interface paths {
     put?: never;
     /** Merge */
     post: operations["merge_api_identity_works_merge_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/requests/quick-add": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Quick Add */
+    post: operations["quick_add_api_requests_quick_add_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/requests/quick-add/latest/{work_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Latest Quick Add */
+    get: operations["latest_quick_add_api_requests_quick_add_latest__work_id__get"];
+    put?: never;
+    post?: never;
     delete?: never;
     options?: never;
     head?: never;
@@ -2710,6 +3234,57 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organization/library-folders": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Folders */
+    get: operations["folders_api_organization_library_folders_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organization/library-folders/{medium}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Choose */
+    put: operations["choose_api_organization_library_folders__medium__put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organization/library-folders/{destination_id}/activate": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Activate */
+    post: operations["activate_api_organization_library_folders__destination_id__activate_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organization/destinations/{destination_id}/automatic-import": {
     parameters: {
       query?: never;
@@ -2883,6 +3458,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/sources/mam/network/test": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Test Network */
+    post: operations["test_network_api_sources_mam_network_test_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/catalog/works/{work_id}/source-searches": {
     parameters: {
       query?: never;
@@ -2945,6 +3537,23 @@ export interface paths {
     put?: never;
     /** Inspect */
     post: operations["inspect_api_source_searches__search_id__results__result_id__artifact_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/source-searches/{search_id}/results/{result_id}/download": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Download Release */
+    post: operations["download_release_api_source_searches__search_id__results__result_id__download_post"];
     delete?: never;
     options?: never;
     head?: never;
@@ -3253,6 +3862,23 @@ export interface paths {
     };
     /** Get Artifact */
     get: operations["get_artifact_api_source_artifacts__artifact_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/source-artifacts/{artifact_id}/torrent": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Save Torrent */
+    get: operations["save_torrent_api_source_artifacts__artifact_id__torrent_get"];
     put?: never;
     post?: never;
     delete?: never;
@@ -3680,6 +4306,16 @@ export interface components {
       /** Last Success At */
       last_success_at?: string | null;
     };
+    /** ActivateInput */
+    ActivateInput: {
+      /** Expected Revision */
+      expected_revision: string;
+      /**
+       * Automatic
+       * @default true
+       */
+      automatic: boolean;
+    };
     /** ActivationRecord */
     ActivationRecord: {
       /**
@@ -3770,6 +4406,45 @@ export interface components {
       /** Kinds */
       kinds: string[];
     };
+    /** AddCollection */
+    AddCollection: {
+      /**
+       * Pinned
+       * @default true
+       */
+      pinned: boolean;
+      /**
+       * Tracking
+       * @default true
+       */
+      tracking: boolean;
+      /** Url */
+      url: string;
+    };
+    /** ApplicationRelease */
+    ApplicationRelease: {
+      /** Installed Version */
+      installed_version: string;
+      /** Installed Url */
+      installed_url: string | null;
+      /** Latest Version */
+      latest_version: string | null;
+      /** Release Url */
+      release_url: string | null;
+      /** Update Available */
+      update_available: boolean;
+      /** Status */
+      status: string;
+    };
+    /** AssetFileView */
+    AssetFileView: {
+      /** Path */
+      path: string;
+      /** Format */
+      format: string;
+      /** Size */
+      size?: number | null;
+    };
     /** AssetPage */
     AssetPage: {
       /** Items */
@@ -3819,6 +4494,8 @@ export interface components {
       last_seen_at: string | null;
       /** Open Url */
       open_url: string;
+      /** Files */
+      files?: components["schemas"]["AssetFileView"][];
       /** Match Revision */
       match_revision?: string | null;
       /**
@@ -3870,6 +4547,8 @@ export interface components {
       work_title: string;
       /** Release Title */
       release_title: string;
+      /** Source */
+      source?: string | null;
       /** Message */
       message: string;
       /** External May Exist */
@@ -3902,6 +4581,43 @@ export interface components {
        */
       recovery: boolean;
     };
+    /** AuthorDetails */
+    AuthorDetails: {
+      /** External Id */
+      external_id: string;
+      /** Name */
+      name: string;
+      /** Slug */
+      slug?: string | null;
+      /** Bio */
+      bio?: string | null;
+      /** Image Url */
+      image_url?: string | null;
+    };
+    /** AuthorPreview */
+    AuthorPreview: {
+      author: components["schemas"]["AuthorDetails"];
+      /** Books */
+      books: components["schemas"]["BookData"][];
+      /** Page */
+      page: number;
+      /**
+       * Has More
+       * @default false
+       */
+      has_more: boolean;
+      /**
+       * Stale
+       * @default false
+       */
+      stale: boolean;
+      /** Warning */
+      warning?: string | null;
+      /** Known Works */
+      known_works?: {
+        [key: string]: components["schemas"]["WorkView"];
+      };
+    };
     /** AutomaticRoutes */
     AutomaticRoutes: {
       /** Downloader Id */
@@ -3927,6 +4643,8 @@ export interface components {
        * Format: uuid
        */
       search_id: string;
+      /** Result Id */
+      result_id?: string | null;
       /**
        * Downloader Id
        * Format: uuid
@@ -4018,6 +4736,32 @@ export interface components {
        * @default false
        */
       in_collection: boolean;
+      /**
+       * Ebook Versions
+       * @default 0
+       */
+      ebook_versions: number;
+      /**
+       * Audio Versions
+       * @default 0
+       */
+      audio_versions: number;
+      /**
+       * Ebook Stale
+       * @default false
+       */
+      ebook_stale: boolean;
+      /**
+       * Audio Stale
+       * @default false
+       */
+      audio_stale: boolean;
+      /** Primary Ebook Version Id */
+      primary_ebook_version_id?: string | null;
+      /** Primary Audio Version Id */
+      primary_audio_version_id?: string | null;
+      /** Primary Audio Narrators */
+      primary_audio_narrators?: string[];
     };
     /** BatchInput */
     BatchInput: {
@@ -4114,6 +4858,8 @@ export interface components {
     };
     /** BookData */
     BookData: {
+      /** Rating */
+      rating?: number | null;
       /**
        * Provider
        * @enum {string}
@@ -4163,6 +4909,21 @@ export interface components {
       /** Warning */
       warning?: string | null;
       work?: components["schemas"]["WorkView"] | null;
+    };
+    /** BookReview */
+    BookReview: {
+      /** External Id */
+      external_id: string;
+      /** Username */
+      username: string;
+      /** Rating */
+      rating?: number | null;
+      /** Text */
+      text: string;
+      /** Spoilers */
+      spoilers: boolean;
+      /** Reviewed At */
+      reviewed_at?: string | null;
     };
     /** BookSearchView */
     BookSearchView: {
@@ -4338,6 +5099,129 @@ export interface components {
        */
       evidence: "claimed";
     };
+    /** CollectionCard */
+    CollectionCard: {
+      /** Id */
+      id: string;
+      /**
+       * Kind
+       * @enum {string}
+       */
+      kind: "award" | "listopia";
+      /** Title */
+      title: string;
+      /** Source Url */
+      source_url: string;
+      /** Year */
+      year?: number | null;
+      /** Category */
+      category?: string | null;
+      /** Genres */
+      genres: string[];
+      /** Count */
+      count: number;
+      /**
+       * Coverage
+       * @enum {string}
+       */
+      coverage: "complete" | "partial";
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+      /** Covers */
+      covers: string[];
+      /**
+       * Pinned
+       * @default false
+       */
+      pinned: boolean;
+      /**
+       * Tracking
+       * @default false
+       */
+      tracking: boolean;
+      /**
+       * Saved
+       * @default false
+       */
+      saved: boolean;
+      /** Warning */
+      warning?: string | null;
+    };
+    /** CollectionDetail */
+    CollectionDetail: {
+      collection: components["schemas"]["CollectionCard"];
+      /** Items */
+      items: components["schemas"]["CollectionEntry"][];
+      /** Total */
+      total: number;
+      /** Page */
+      page: number;
+      /** Has More */
+      has_more: boolean;
+    };
+    /** CollectionEntry */
+    CollectionEntry: {
+      /** Rating */
+      rating?: number | null;
+      /** External Id */
+      external_id: string;
+      /** Title */
+      title: string;
+      /** Authors */
+      authors?: string[];
+      /** Cover Url */
+      cover_url?: string | null;
+      /** Identifiers */
+      identifiers?: {
+        [key: string]: string;
+      };
+      /** Rank */
+      rank?: number | null;
+      /** Votes */
+      votes?: number | null;
+      /**
+       * Winner
+       * @default false
+       */
+      winner: boolean;
+      work?: components["schemas"]["WorkView"] | null;
+    };
+    /** CollectionFollowInput */
+    CollectionFollowInput: {
+      /**
+       * Pinned
+       * @default true
+       */
+      pinned: boolean;
+      /**
+       * Tracking
+       * @default true
+       */
+      tracking: boolean;
+    };
+    /** CollectionIndex */
+    CollectionIndex: {
+      /** Items */
+      items: components["schemas"]["CollectionCard"][];
+      /** Total */
+      total: number;
+      /** Years */
+      years: number[];
+      /** Genres */
+      genres: string[];
+      /** Categories */
+      categories: string[];
+      /** Archive Gaps */
+      archive_gaps: number[];
+    };
+    /** CollectionURL */
+    CollectionURL: {
+      /** Url */
+      url: string;
+    };
     /** CommandReconciliationItemView */
     CommandReconciliationItemView: {
       /**
@@ -4439,6 +5323,15 @@ export interface components {
       next_cursor: number | null;
       /** Warning */
       warning?: string | null;
+    };
+    /** ConnectionCheck */
+    ConnectionCheck: {
+      /** Library Count */
+      library_count: number;
+      /** Book Count */
+      book_count: number;
+      /** Version */
+      version: string | null;
     };
     /** ConnectionChoice */
     ConnectionChoice: {
@@ -4572,6 +5465,10 @@ export interface components {
       last_error: string | null;
       /** Last Success At */
       last_success_at: string | null;
+      /** Library Count */
+      library_count?: number | null;
+      /** Book Count */
+      book_count?: number | null;
     };
     /** ContainedBookView */
     ContainedBookView: {
@@ -4865,6 +5762,8 @@ export interface components {
       medium: string;
       /** Backend Path */
       backend_path: string;
+      /** Local Path */
+      local_path?: string | null;
       /** Mode */
       mode: string;
       /** Enabled */
@@ -4883,12 +5782,30 @@ export interface components {
        */
       publication_available: boolean;
     };
+    /** DiscoveryBookPage */
+    DiscoveryBookPage: {
+      /** Items */
+      items: components["schemas"]["CollectionEntry"][];
+      /** Total */
+      total: number;
+      /** Page */
+      page: number;
+      /** Has More */
+      has_more: boolean;
+    };
     /** DiscoveryItem */
     DiscoveryItem: {
       book: components["schemas"]["DiscoveryTitle"];
       work?: components["schemas"]["WorkView"] | null;
       /** Reason */
       reason: string;
+    };
+    /** DiscoveryPreferences */
+    DiscoveryPreferences: {
+      /** Hidden */
+      hidden?: string[];
+      /** Order */
+      order?: string[];
     };
     /** DiscoveryShelf */
     DiscoveryShelf: {
@@ -4926,6 +5843,8 @@ export interface components {
     };
     /** DiscoveryTitle */
     DiscoveryTitle: {
+      /** Rating */
+      rating?: number | null;
       /**
        * Provider
        * @enum {string}
@@ -5014,14 +5933,14 @@ export interface components {
       /** Password */
       password?: string | null;
       /** Save Path */
-      save_path: string;
+      save_path?: string | null;
       /**
        * Category
-       * @default book-search
+       * @default
        */
       category: string;
       /** Mappings */
-      mappings: components["schemas"]["DownloadMapping"][];
+      mappings?: components["schemas"]["DownloadMapping"][] | null;
       /**
        * Enabled
        * @default true
@@ -5127,6 +6046,13 @@ export interface components {
       /** Abridged */
       abridged?: boolean | null;
     };
+    /** EgressResult */
+    EgressResult: {
+      /** Ip */
+      ip?: string | null;
+      /** Error */
+      error?: string | null;
+    };
     /** EntryInput */
     EntryInput: {
       /**
@@ -5185,6 +6111,33 @@ export interface components {
       /** Reason */
       reason: string;
     };
+    /** ExistingCopyHint */
+    ExistingCopyHint: {
+      /**
+       * Asset Id
+       * Format: uuid
+       */
+      asset_id: string;
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /** Version Id */
+      version_id: string | null;
+      /** Title */
+      title: string;
+      /** Medium */
+      medium: string;
+      /** Narrators */
+      narrators: string[];
+      /** Language */
+      language: string | null;
+      /** State */
+      state: string;
+      /** Meets Requirements */
+      meets_requirements: boolean;
+    };
     /** FileMapping */
     FileMapping: {
       /** Source */
@@ -5228,10 +6181,65 @@ export interface components {
       /** Next Offset */
       next_offset: number | null;
     };
+    /** FolderInput */
+    FolderInput: {
+      /**
+       * Library Id
+       * Format: uuid
+       */
+      library_id: string;
+      /** Backend Path */
+      backend_path: string;
+      /** Local Path */
+      local_path: string;
+      /** Destination Id */
+      destination_id?: string | null;
+      /** Expected Revision */
+      expected_revision?: string | null;
+    };
+    /** FolderOption */
+    FolderOption: {
+      /**
+       * Library Id
+       * Format: uuid
+       */
+      library_id: string;
+      /** Library Name */
+      library_name: string;
+      /** Server Name */
+      server_name: string;
+      /**
+       * Folders
+       * @default []
+       */
+      folders: string[];
+      /**
+       * Ebooks Allowed
+       * @default true
+       */
+      ebooks_allowed: boolean;
+      /** Error */
+      error?: string | null;
+    };
     /** FollowInput */
     FollowInput: {
       /** Name */
       name?: string | null;
+    };
+    /** FollowReadingList */
+    FollowReadingList: {
+      /**
+       * Provider
+       * @enum {string}
+       */
+      provider: "goodreads" | "hardcover";
+      /** External Id */
+      external_id: string;
+      /**
+       * Interval Minutes
+       * @default 60
+       */
+      interval_minutes: number;
     };
     /** FollowResult */
     FollowResult: {
@@ -5395,6 +6403,45 @@ export interface components {
       /** Available Now */
       available_now: boolean;
     };
+    /** GoodreadsAccountView */
+    GoodreadsAccountView: {
+      /** User Id */
+      user_id: string;
+      /** Name */
+      name: string;
+      /** Profile Url */
+      profile_url: string;
+      /** Selected */
+      selected: string | null;
+      /** Shelves */
+      shelves: components["schemas"]["GoodreadsShelf"][];
+      /**
+       * Discovered At
+       * Format: date-time
+       */
+      discovered_at: string;
+      /** Warning */
+      warning: string | null;
+    };
+    /** GoodreadsBookResolution */
+    GoodreadsBookResolution: {
+      entry: components["schemas"]["CollectionEntry"];
+      match: components["schemas"]["MatchResult"];
+    };
+    /** GoodreadsConnect */
+    GoodreadsConnect: {
+      /** Profile */
+      profile: string;
+    };
+    /** GoodreadsShelf */
+    GoodreadsShelf: {
+      /** External Id */
+      external_id: string;
+      /** Name */
+      name: string;
+      /** Count */
+      count: number | null;
+    };
     /** GrantInput */
     GrantInput: {
       /** User Ids */
@@ -5421,6 +6468,14 @@ export interface components {
        * @default false
        */
       truncated: boolean;
+      /** Revision */
+      revision: string;
+    };
+    /** GroupMember */
+    GroupMember: {
+      work: components["schemas"]["WorkView"];
+      /** Separate */
+      separate: boolean;
       /** Revision */
       revision: string;
     };
@@ -5457,6 +6512,13 @@ export interface components {
       /** Excluded */
       excluded: components["schemas"]["ExcludedFile"][];
     };
+    /** GroupingEdit */
+    GroupingEdit: {
+      /** Separate */
+      separate: boolean;
+      /** Expected Revision */
+      expected_revision: string;
+    };
     /** GroupingInput */
     GroupingInput: {
       /** Inspection Revision */
@@ -5473,14 +6535,6 @@ export interface components {
       groups?: components["schemas"]["ReviewedGroup"][];
       /** Excluded */
       excluded?: components["schemas"]["ExcludedFile"][];
-    };
-    /** GroupingView */
-    GroupingView: {
-      /** Revision */
-      revision: string;
-      /** Position */
-      position: number;
-      content: components["schemas"]["GroupingContent"];
     };
     /** HTTPValidationError */
     HTTPValidationError: {
@@ -5799,6 +6853,32 @@ export interface components {
       warning?: string | null;
       /** Retry After */
       retry_after?: number | null;
+    };
+    /** LibraryGroup */
+    LibraryGroup: {
+      /** Name */
+      name: string;
+      /** Key */
+      key: string;
+      /** Book Count */
+      book_count: number;
+      /** External Id */
+      external_id?: string | null;
+      /** Books */
+      books: components["schemas"]["WorkView"][];
+      /** Hardcover Book Id */
+      hardcover_book_id?: string | null;
+    };
+    /** LibraryGroupPage */
+    LibraryGroupPage: {
+      /** Items */
+      items: components["schemas"]["LibraryGroup"][];
+      /** Total */
+      total: number;
+      /** Offset */
+      offset: number;
+      /** Limit */
+      limit: number;
     };
     /** LibraryView */
     LibraryView: {
@@ -6235,6 +7315,25 @@ export interface components {
       /** Route */
       route: string;
     };
+    /** MAMNetworkView */
+    MAMNetworkView: {
+      connection: components["schemas"]["MAMConnectionView"];
+      /**
+       * Checked At
+       * Format: date-time
+       */
+      checked_at: string;
+      /** Status */
+      status: string;
+      /** Cookie Status */
+      cookie_status: string;
+      /** Proxy Status */
+      proxy_status: string;
+      proxy: components["schemas"]["EgressResult"] | null;
+      direct: components["schemas"]["EgressResult"];
+      /** Message */
+      message: string;
+    };
     /** MAMRelease */
     MAMRelease: {
       /**
@@ -6480,6 +7579,24 @@ export interface components {
        */
       matcher_version: number;
     };
+    /** MatchResult */
+    MatchResult: {
+      book?: components["schemas"]["BookData"] | null;
+      /** Candidates */
+      candidates?: components["schemas"]["BookData"][];
+      /**
+       * Status
+       * @default unmatched
+       */
+      status: string;
+      /** Basis */
+      basis?: string | null;
+      /**
+       * Reason
+       * @default No confident Hardcover match was found.
+       */
+      reason: string;
+    };
     /** MergeCommand */
     MergeCommand: {
       /**
@@ -6571,6 +7688,11 @@ export interface components {
        * @default en
        */
       language: string;
+      /**
+       * Filter Language
+       * @default false
+       */
+      filter_language: boolean;
       /**
        * Covers
        * @default automatic
@@ -6826,6 +7948,22 @@ export interface components {
       /** Reason */
       reason: string;
     };
+    /** OnboardingProgress */
+    OnboardingProgress: {
+      /**
+       * Status
+       * @default pending
+       * @enum {string}
+       */
+      status: "pending" | "deferred" | "completed" | "skipped";
+      /**
+       * Step
+       * @default 0
+       */
+      step: number;
+      /** Skipped */
+      skipped?: number[];
+    };
     /** OperationView */
     OperationView: {
       /**
@@ -7010,6 +8148,27 @@ export interface components {
        */
       filesystem_verified: boolean;
     };
+    /** PersonalListPreview */
+    PersonalListPreview: {
+      /** Name */
+      name: string;
+      /** Count */
+      count: number;
+      /** Titles */
+      titles: string[];
+      /** List Id */
+      list_id?: string | null;
+    };
+    /** PersonalListURL */
+    PersonalListURL: {
+      /** Url */
+      url: string;
+      /**
+       * Tracking
+       * @default true
+       */
+      tracking: boolean;
+    };
     /** PlannedItem */
     PlannedItem: {
       /**
@@ -7192,6 +8351,8 @@ export interface components {
     };
     /** PreviewView */
     PreviewView: {
+      /** Existing Copies */
+      existing_copies?: components["schemas"]["ExistingCopyHint"][];
       specification: components["schemas"]["RequestSpec"];
       /** Targets */
       targets: components["schemas"]["TargetView"][];
@@ -7202,6 +8363,15 @@ export interface components {
       download_available: boolean;
       release_policy?: components["schemas"]["ProfileSnapshot"] | null;
       series_scope?: components["schemas"]["SeriesPlanView"] | null;
+    };
+    /** PrimaryEditionEdit */
+    PrimaryEditionEdit: {
+      /** Medium */
+      medium: string;
+      /** Version Id */
+      version_id?: string | null;
+      /** Expected Revision */
+      expected_revision: string;
     };
     /** ProbeInput */
     ProbeInput: {
@@ -7504,6 +8674,15 @@ export interface components {
       /** Approvals Protected */
       approvals_protected: boolean;
     };
+    /** QuickAddInput */
+    QuickAddInput: {
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      specification?: components["schemas"]["RequestOptions"];
+    };
     /** RankedReleaseView */
     RankedReleaseView: {
       /**
@@ -7526,6 +8705,80 @@ export interface components {
       current_connection: boolean;
       /** Query Keys */
       query_keys?: string[];
+    };
+    /** ReaderDetails */
+    ReaderDetails: {
+      /** External Id */
+      external_id: string;
+      /** Slug */
+      slug?: string | null;
+      /** Rating */
+      rating?: number | null;
+      /**
+       * Ratings Count
+       * @default 0
+       */
+      ratings_count: number;
+      /** Pages */
+      pages?: number | null;
+      /** Audio Seconds */
+      audio_seconds?: number | null;
+      /** Release Date */
+      release_date?: string | null;
+      /** Authors */
+      authors?: components["schemas"]["AuthorDetails"][];
+      /** Reviews */
+      reviews?: components["schemas"]["BookReview"][];
+      /** Reviews Warning */
+      reviews_warning?: string | null;
+      /**
+       * Stale
+       * @default false
+       */
+      stale: boolean;
+      /** Warning */
+      warning?: string | null;
+    };
+    /** ReaderMatch */
+    ReaderMatch: {
+      /** Candidates */
+      candidates?: components["schemas"]["BookData"][];
+      book?: components["schemas"]["BookData"] | null;
+      /**
+       * Status
+       * @default unmatched
+       * @enum {string}
+       */
+      status: "matched" | "unmatched" | "disabled";
+      /** Basis */
+      basis?: string | null;
+      /** Reason */
+      reason?: string | null;
+    };
+    /** ReadingFollowResult */
+    ReadingFollowResult: {
+      /**
+       * List Id
+       * Format: uuid
+       */
+      list_id: string;
+      /** Reused */
+      reused: boolean;
+    };
+    /** ReadingSubscription */
+    ReadingSubscription: {
+      /**
+       * List Id
+       * Format: uuid
+       */
+      list_id: string;
+      /** Name */
+      name: string;
+      /** External Id */
+      external_id: string;
+      /** Account Id */
+      account_id: string | null;
+      subscription: components["schemas"]["SubscriptionView"];
     };
     /** ReasonView */
     ReasonView: {
@@ -9015,6 +10268,8 @@ export interface components {
        * Format: uuid
        */
       id: string;
+      /** Work Id */
+      work_id?: string | null;
       /** Revision */
       revision?: string | null;
       /**
@@ -9037,6 +10292,7 @@ export interface components {
       editions_more: boolean;
       /** Series */
       series: components["schemas"]["SeriesData"][];
+      book?: components["schemas"]["BookData"] | null;
     };
     /** StartInput */
     StartInput: {
@@ -9208,6 +10464,11 @@ export interface components {
       role: string;
       /** Can Automate */
       can_automate: boolean;
+      /**
+       * Onboarding Status
+       * @default pending
+       */
+      onboarding_status: string;
     };
     /** ValidationError */
     ValidationError: {
@@ -9265,6 +10526,10 @@ export interface components {
        * Format: uuid
        */
       id: string;
+      /** Work Id */
+      work_id?: string | null;
+      /** Abridged */
+      abridged?: boolean | null;
       /** Medium */
       medium: string;
       /** Title */
@@ -9485,10 +10750,25 @@ export interface components {
        */
       action: "apply_local" | "keep_remote";
     };
+    /** GroupingView */
+    app__api__catalog_grouping__GroupingView: {
+      /** Reason */
+      reason: string;
+      /** Members */
+      members: components["schemas"]["GroupMember"][];
+    };
     /** RevisionInput */
     app__api__identity__RevisionInput: {
       /** Expected Revision */
       expected_revision: string;
+    };
+    /** GroupingView */
+    app__api__inspection_groupings__GroupingView: {
+      /** Revision */
+      revision: string;
+      /** Position */
+      position: number;
+      content: components["schemas"]["GroupingContent"];
     };
     /** MatchInput */
     app__api__library__MatchInput: {
@@ -9526,6 +10806,26 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+  application_release_api_application_release_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationRelease"];
+        };
+      };
+    };
+  };
   liveness_api_health_live_get: {
     parameters: {
       query?: never;
@@ -9796,6 +11096,59 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["SetupReadiness"];
+        };
+      };
+    };
+  };
+  get_onboarding_api_setup_onboarding_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OnboardingProgress"];
+        };
+      };
+    };
+  };
+  save_onboarding_api_setup_onboarding_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["OnboardingProgress"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OnboardingProgress"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
         };
       };
     };
@@ -10936,6 +12289,7 @@ export interface operations {
         q?: string;
         offset?: number;
         limit?: number;
+        medium?: "any" | "ebook" | "audio";
       };
       header?: never;
       path?: never;
@@ -11015,6 +12369,163 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["WorkView"];
         };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  cover_api_catalog_works__work_id__cover_get: {
+    parameters: {
+      query?: {
+        medium?: "ebook" | "audio";
+      };
+      header?: never;
+      path: {
+        work_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  cover_image_api_catalog_cover_image_get: {
+    parameters: {
+      query: {
+        url: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  grouping_api_catalog_works__work_id__grouping_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        work_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["app__api__catalog_grouping__GroupingView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  edit_grouping_api_catalog_works__work_id__grouping_patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        work_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["GroupingEdit"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  primary_edition_api_catalog_works__work_id__primary_edition_patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        work_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PrimaryEditionEdit"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
       /** @description Validation Error */
       422: {
@@ -11131,6 +12642,399 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["DiscoveryShelf"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  layout_api_discovery_layout_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DiscoveryPreferences"];
+        };
+      };
+    };
+  };
+  save_layout_api_discovery_layout_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DiscoveryPreferences"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DiscoveryPreferences"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  collections_api_discovery_collections_get: {
+    parameters: {
+      query?: {
+        kind?: "all" | "award" | "listopia";
+        q?: string;
+        genre?: string;
+        category?: string;
+        year?: number | null;
+        saved?: boolean;
+        page?: number;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CollectionIndex"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  add_collection_api_discovery_collections_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddCollection"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CollectionCard"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  preview_api_discovery_collections_preview_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CollectionURL"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CollectionDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  collection_api_discovery_collections__collection_id__get: {
+    parameters: {
+      query?: {
+        page?: number;
+        winners?: boolean;
+        full?: boolean;
+        q?: string;
+      };
+      header?: never;
+      path: {
+        collection_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CollectionDetail"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  follow_api_discovery_collections__collection_id__follow_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        collection_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CollectionFollowInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CollectionCard"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  browse_books_api_discovery_browse_get: {
+    parameters: {
+      query?: {
+        q?: string;
+        genre?: string;
+        category?: string;
+        year?: number | null;
+        winners?: boolean;
+        page?: number;
+        owned?: boolean;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DiscoveryBookPage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  refresh_collection_api_discovery_collections__collection_id__refresh_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        collection_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CollectionCard"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  preview_personal_api_discovery_personal_list_preview_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PersonalListURL"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PersonalListPreview"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  add_personal_api_discovery_personal_list_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PersonalListURL"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PersonalListPreview"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  resolve_goodreads_book_api_discovery_goodreads__external_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        external_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GoodreadsBookResolution"];
         };
       };
       /** @description Validation Error */
@@ -11752,6 +13656,7 @@ export interface operations {
         offset?: number;
         limit?: number;
         q?: string;
+        sort?: "position" | "newest";
         expected_revision?: string | null;
       };
       header?: never;
@@ -12735,6 +14640,133 @@ export interface operations {
       };
     };
   };
+  goodreads_account_api_reading_accounts_goodreads_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json":
+            components["schemas"]["GoodreadsAccountView"] | null;
+        };
+      };
+    };
+  };
+  connect_goodreads_api_reading_accounts_goodreads_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["GoodreadsConnect"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GoodreadsAccountView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  discover_goodreads_api_reading_accounts_goodreads_discover_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GoodreadsAccountView"];
+        };
+      };
+    };
+  };
+  subscriptions_api_reading_accounts_subscriptions_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ReadingSubscription"][];
+        };
+      };
+    };
+  };
+  follow_api_reading_accounts_follow_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["FollowReadingList"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ReadingFollowResult"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   preview_api_lists__list_id__requests_preview_post: {
     parameters: {
       query?: never;
@@ -13159,6 +15191,41 @@ export interface operations {
       };
     };
   };
+  check_connection_api_integrations_check_post: {
+    parameters: {
+      query?: {
+        integration_id?: string | null;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ABSConnectionInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ConnectionCheck"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   update_connection_api_integrations__integration_id__put: {
     parameters: {
       query?: never;
@@ -13258,6 +15325,80 @@ export interface operations {
       };
     };
   };
+  groups_api_library_groups__kind__get: {
+    parameters: {
+      query?: {
+        q?: string;
+        medium?: "any" | "ebook" | "audio";
+        library_id?: string | null;
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        kind: "authors" | "series";
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["LibraryGroupPage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  group_books_api_library_groups__kind__books_get: {
+    parameters: {
+      query: {
+        name: string;
+        medium?: "any" | "ebook" | "audio";
+        library_id?: string | null;
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        kind: "authors" | "series";
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["WorkPage"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   libraries_api_library_libraries_get: {
     parameters: {
       query?: never;
@@ -13299,6 +15440,50 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  library_books_api_library_books_get: {
+    parameters: {
+      query?: {
+        library_id?: string | null;
+        q?: string;
+        medium?: "any" | "ebook" | "audio";
+        state?:
+          | "any"
+          | "present"
+          | "stale"
+          | "missing-suspected"
+          | "missing-confirmed"
+          | "scope-unavailable"
+          | "moved";
+        sort?: "title" | "recent";
+        offset?: number;
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["WorkPage"];
+        };
       };
       /** @description Validation Error */
       422: {
@@ -13614,6 +15799,70 @@ export interface operations {
       };
     };
   };
+  reader_details_api_metadata_books_hardcover__external_id__reader_details_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        external_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ReaderDetails"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  author_details_api_metadata_authors_hardcover__external_id__get: {
+    parameters: {
+      query?: {
+        page?: number;
+      };
+      header?: never;
+      path: {
+        external_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AuthorPreview"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   add_catalog_book_api_metadata_books__provider___external_id__import_post: {
     parameters: {
       query?: never;
@@ -13646,11 +15895,74 @@ export interface operations {
       };
     };
   };
+  reader_match_api_metadata_works__work_id__reader_match_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        work_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ReaderMatch"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  save_hardcover_match_api_metadata_works__work_id__match_hardcover_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        work_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ReaderMatch"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   work_metadata_api_metadata_works__work_id__get: {
     parameters: {
       query?: {
         offset?: number;
         limit?: number;
+        scope?: "identity" | "display";
       };
       header?: never;
       path: {
@@ -14072,6 +16384,72 @@ export interface operations {
       };
     };
   };
+  quick_add_api_requests_quick_add_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["QuickAddInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OperationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  latest_quick_add_api_requests_quick_add_latest__work_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        work_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OperationView"] | null;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
   preview_api_requests_preview_post: {
     parameters: {
       query?: never;
@@ -14241,6 +16619,7 @@ export interface operations {
     parameters: {
       query?: {
         selection_id?: string | null;
+        work_id?: string | null;
         offset?: number;
         limit?: number;
       };
@@ -14841,7 +17220,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["GroupingView"];
+          "application/json": components["schemas"]["app__api__inspection_groupings__GroupingView"];
         };
       };
       /** @description Validation Error */
@@ -14876,7 +17255,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["GroupingView"];
+          "application/json": components["schemas"]["app__api__inspection_groupings__GroupingView"];
         };
       };
       /** @description Validation Error */
@@ -15224,6 +17603,96 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["OperationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  folders_api_organization_library_folders_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FolderOption"][];
+        };
+      };
+    };
+  };
+  choose_api_organization_library_folders__medium__put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        medium: "ebook" | "audio";
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["FolderInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DestinationView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  activate_api_organization_library_folders__destination_id__activate_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        destination_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ActivateInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DestinationView"];
         };
       };
       /** @description Validation Error */
@@ -15623,6 +18092,26 @@ export interface operations {
       };
     };
   };
+  test_network_api_sources_mam_network_test_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MAMNetworkView"];
+        };
+      };
+    };
+  };
   begin_api_catalog_works__work_id__source_searches_post: {
     parameters: {
       query?: never;
@@ -15743,6 +18232,40 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["SourceArtifactView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  download_release_api_source_searches__search_id__results__result_id__download_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        search_id: string;
+        result_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OperationView"];
         };
       };
       /** @description Validation Error */
@@ -16373,6 +18896,35 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["SourceArtifactView"];
         };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  save_torrent_api_source_artifacts__artifact_id__torrent_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        artifact_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
       /** @description Validation Error */
       422: {

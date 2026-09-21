@@ -619,15 +619,63 @@ async def catalog(request: Request, authorization: str = Header(default="")):
                 ]
             }
         }
+    if "ReaderBookDetails(" in query:
+        return {
+            "data": {
+                "books": [
+                    {
+                        "id": body["variables"]["id"],
+                        "slug": "the-discovered-harbor",
+                        "rating": 4.25,
+                        "ratings_count": 123,
+                        "pages": 320,
+                        "contributions": [
+                            {
+                                "contribution": "Author",
+                                "author": {
+                                    "id": 42,
+                                    "name": "Discovery Writer",
+                                    "slug": "discovery-writer",
+                                    "bio": "A writer of coastal mysteries and distant journeys.",
+                                },
+                            }
+                        ],
+                    }
+                ]
+            }
+        }
+    if "ReaderBookReviews(" in query:
+        return {
+            "data": {
+                "user_books": [
+                    {
+                        "id": 101,
+                        "rating": 4.5,
+                        "review_raw": "A thoughtful journey by the sea.",
+                        "review_has_spoilers": False,
+                        "user": {"username": "harbor_reader"},
+                    },
+                    {
+                        "id": 102,
+                        "rating": 4,
+                        "review_raw": "The lighthouse keeper returns home.",
+                        "review_has_spoilers": True,
+                        "user": {"username": "coastal_reader"},
+                    },
+                ]
+            }
+        }
     if "CatalogBook(" in query:
-        if body["variables"]["id"] in {9001, 9002}:
+        if body["variables"]["id"] in {9001, 9002, 9010}:
             key = body["variables"]["id"]
             return {
                 "data": {
                     "books": [
                         {
                             "id": key,
-                            "title": "The Discovered Harbor" if key == 9001 else "A New Chapter",
+                            "title": "The Discovered Harbor"
+                            if key in {9001, 9010}
+                            else "A New Chapter",
                             "description": "A synthetic discovery title.",
                             "cached_contributors": [{"author": {"name": "Catalog Author"}}],
                         }
@@ -654,7 +702,7 @@ async def catalog(request: Request, authorization: str = Header(default="")):
             }
         }
     if "CatalogEditions(" in query:
-        if body["variables"]["id"] in {9001, 9002}:
+        if body["variables"]["id"] in {9001, 9002, 9010}:
             key = body["variables"]["id"]
             return {
                 "data": {

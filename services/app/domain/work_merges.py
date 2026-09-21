@@ -180,6 +180,10 @@ async def restore_merge(db, change):
     for row in change.before["works"]:
         work = await db.get(Work, UUID(row["id"]), with_for_update=True)
         work.redirect_to = UUID(row["redirect_to"]) if row["redirect_to"] else None
+        if work.id == change.entity_id and not work.redirect_to:
+            # Undo must remain visible even when title-based display grouping
+            # would otherwise immediately reunite the same two records.
+            work.metadata_fields = {**work.metadata_fields, "display_separate": True}
         ids.append(work.id)
     await db.flush()
     await reconcile_groups(db, ids)

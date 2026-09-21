@@ -23,7 +23,13 @@ def cover_url(value) -> str | None:
             url.scheme == "https"
             and not url.username
             and not url.password
-            and (host == "covers.openlibrary.org" or host == "assets.hardcover.app")
+            and host
+            in {
+                "covers.openlibrary.org",
+                "assets.hardcover.app",
+                "i.gr-assets.com",
+                "images.gr-assets.com",
+            }
         ):
             return value
     except ValueError:
@@ -53,6 +59,7 @@ class SeriesData(BaseModel):
 
 
 class BookData(BaseModel):
+    rating: float | None = Field(default=None, ge=0, le=5, allow_inf_nan=False)
     provider: Provider
     external_id: str = Field(min_length=1, max_length=200)
     title: str = Field(min_length=1, max_length=600)

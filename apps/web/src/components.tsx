@@ -1,7 +1,8 @@
+import BookLink from "./components/BookLink";
 import type { ReactNode } from "react";
-import { BookOpen, Check, Headphones } from "lucide-react";
-import { Link } from "react-router-dom";
+import { BookOpen } from "lucide-react";
 import type { Work } from "./api/client";
+import BookCover from "./components/BookCover";
 
 export function Notice({ error }: { error: Error | null }) {
   return error ? (
@@ -35,41 +36,36 @@ export function Loading() {
   );
 }
 
-export function BookCard({ work }: { work: Work }) {
+export function BookCard({
+  work,
+  to,
+  cover,
+  medium,
+  rating,
+}: {
+  work: Work;
+  rating?: number | null;
+  to?: string;
+  cover?: string | null;
+  medium?: "any" | "ebook" | "audio";
+}) {
   return (
-    <Link className="book-card" to={`/books/${work.id}`}>
-      <div className="book-cover">
-        {work.cover_url ? (
-          <img src={work.cover_url} alt="" loading="lazy" />
-        ) : (
-          <div className="type-cover">
-            <BookOpen size={22} aria-hidden="true" />
-            <span>{work.title}</span>
-            <small>{work.authors.join(" · ")}</small>
-          </div>
-        )}
-        {work.availability.owned ? (
-          <span className="owned-badge">
-            <Check size={12} /> In library
-          </span>
-        ) : null}
-      </div>
-      <h3>{work.title}</h3>
-      <p>{work.authors.join(", ") || "Author unknown"}</p>
-      <div className="media-badges">
-        {work.availability.ebook ? (
-          <span>
-            <BookOpen size={12} /> Ebook
-          </span>
-        ) : null}
-        {work.availability.audio ? (
-          <span>
-            <Headphones size={12} /> Audio
-          </span>
-        ) : null}
-        {work.availability.stale ? <span>Last known availability</span> : null}
-        {work.availability.in_collection ? <span>In collection</span> : null}
-      </div>
-    </Link>
+    <BookLink
+      aria-label={`View ${work.title}`}
+      className="book-card"
+      to={to || `/books/${work.id}`}
+    >
+      <BookCover
+        title={work.title}
+        work={work}
+        cover={cover}
+        medium={medium}
+        rating={rating}
+      />
+      <h3 title={work.title}>{work.title}</h3>
+      <p title={work.authors.join(", ")}>
+        {work.authors.join(", ") || "Author unknown"}
+      </p>
+    </BookLink>
   );
 }

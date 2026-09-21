@@ -284,6 +284,7 @@ async def catalog_match(db, owner, record, *, previous=True, create=True):
     work = Work(
         title=record["title"],
         authors=record["authors"],
+        cover_url=record.get("cover_url"),
         provisional=True,
         catalog_public=False,
         catalog_owner_id=owner.id,
@@ -370,6 +371,10 @@ async def apply_records(db, row, owner, items):
             observation.present = True
         if not observation.excluded and observation.present:
             root = await canonical_work(db, observation.work_id)
+            # Backfill older RSS imports without replacing curated artwork or
+            # clearing a saved cover when a later feed omits it.
+            if not root.cover_url and record.get("cover_url"):
+                root.cover_url = record["cover_url"]
             if root.id not in listed:
                 position += 1
                 db.add(
@@ -426,7 +431,9 @@ async def run(operation_id):
         raise ShelfRetry(wait)
     try:
         response = await fetch_feed(
-            config["url"], etag=config.get("etag"), modified=config.get("modified")
+            config["url"],
+            etag=config.get("etag") if config.get("cover_metadata_version") == 1 else None,
+            modified=config.get("modified") if config.get("cover_metadata_version") == 1 else None,
         )
     except AdapterError as error:
         async with session_factory()() as db, db.begin():
@@ -453,7 +460,12 @@ async def run(operation_id):
         added = 0 if response.not_modified else await apply_records(db, row, owner, response.items)
         now = datetime.now(UTC)
         row.encrypted_config = encrypt_secrets(
-            {**config, "etag": response.etag, "modified": response.modified}
+            {
+                **config,
+                "etag": response.etag,
+                "modified": response.modified,
+                "cover_metadata_version": 1,
+            }
         )
         row.baseline_at = row.baseline_at or now
         row.last_success_at, row.next_sync_at = now, next_due(row, now)

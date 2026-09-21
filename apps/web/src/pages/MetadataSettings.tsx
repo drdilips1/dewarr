@@ -1,8 +1,11 @@
+import { connectionLabel } from "./settingLabels";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
+import LanguageSelect from "../components/LanguageSelect";
+import SettingHelp from "../components/SettingHelp";
 
 type Preferences = components["schemas"]["MetadataPreferences"];
 const fields = [
@@ -11,13 +14,18 @@ const fields = [
   "description",
   "publication_year",
   "language",
-  "cover_url",
 ];
 export const fieldLabel = (field: string) =>
   ({ publication_year: "Publication year", cover_url: "Cover" })[field] ||
   field.charAt(0).toUpperCase() + field.slice(1);
 
-export default function MetadataSettings({ admin }: { admin: boolean }) {
+export default function MetadataSettings({
+  admin,
+  embedded = false,
+}: {
+  admin: boolean;
+  embedded?: boolean;
+}) {
   const client = useQueryClient();
   const [token, setToken] = useState("");
   const [message, setMessage] = useState("");
@@ -39,6 +47,7 @@ export default function MetadataSettings({ admin }: { admin: boolean }) {
     onSuccess: (value) => {
       client.setQueryData(["metadata-account"], value);
       client.removeQueries({ queryKey: ["discovery"] });
+      client.resetQueries({ queryKey: ["reading-hardcover-lists"] });
       setToken("");
       setMessage("Your catalog connection was saved.");
     },
@@ -57,27 +66,31 @@ export default function MetadataSettings({ admin }: { admin: boolean }) {
   });
   return (
     <>
-      <div className="page-heading">
-        <div>
-          <p className="eyebrow">YOUR CATALOG</p>
-          <h1>Metadata settings</h1>
-          <p className="muted">
-            Useful defaults, with control where you need it.
-          </p>
+      {!embedded && (
+        <div className="page-heading">
+          <div>
+            <p className="eyebrow">YOUR CATALOG</p>
+            <h1>Metadata settings</h1>
+            <p className="muted">
+              Useful defaults, with control where you need it.
+            </p>
+          </div>
         </div>
-      </div>
-      <section className="panel editor">
-        <h2>Your Hardcover account</h2>
-        <p className="muted">
-          This token is private to your account. Open Library search works
-          without a token.
-        </p>
+      )}
+      <section className="settings-block">
+        <div className="setting-subheading">
+          <h3>Hardcover</h3>
+          <SettingHelp label="Hardcover">
+            Optional. Open Library works without an account. Your token is
+            private to your account.
+          </SettingHelp>
+        </div>
         <Notice error={account.error || save.error || test.error} />
         {account.isPending && <Loading />}
         {account.data && (
           <>
-            <p>
-              Connection: <strong>{account.data.status}</strong>
+            <p className="connection-state">
+              {connectionLabel(account.data.status)}
             </p>
             {account.data.last_error && (
               <p className="notice error">{account.data.last_error}</p>
@@ -98,15 +111,13 @@ export default function MetadataSettings({ admin }: { admin: boolean }) {
                   required={!account.data.configured}
                   maxLength={8192}
                   placeholder={
-                    account.data.configured
-                      ? "Leave blank to keep the saved token"
-                      : "Enter your token"
+                    account.data.configured ? "••••••••" : "Enter your token"
                   }
                 />
               </label>
               <div className="button-row">
                 <button className="primary" disabled={save.isPending}>
-                  Save catalog connection
+                  Save connection
                 </button>
                 {account.data.configured && (
                   <>
@@ -115,7 +126,7 @@ export default function MetadataSettings({ admin }: { admin: boolean }) {
                       onClick={() => test.mutate()}
                       disabled={!account.data.enabled || test.isPending}
                     >
-                      {test.isPending ? "Testing…" : "Test catalog connection"}
+                      {test.isPending ? "Testing…" : "Test connection"}
                     </button>
                     <button
                       type="button"
@@ -166,18 +177,15 @@ function PreferenceForm({ value }: { value: Preferences }) {
   });
   return (
     <form
-      className="panel editor"
+      className="settings-block editor"
+      onChange={() => setSaved(false)}
       onSubmit={(e) => {
         e.preventDefault();
         save.mutate();
       }}
     >
-      <h2>Automatic metadata</h2>
-      <p className="muted">
-        The primary provider supplies book details. Matched secondary sources
-        fill gaps. Protected edits always stay in place.
-      </p>
-      <div className="form-row">
+      <h3>Catalog defaults</h3>
+      <div className="settings-fields">
         <label>
           Primary catalog
           <select
@@ -195,75 +203,86 @@ function PreferenceForm({ value }: { value: Preferences }) {
           </select>
         </label>
         <label>
-          Preferred language
-          <input
+          Primary language
+          <LanguageSelect
             value={settings.language}
-            onChange={(e) =>
-              setSettings({ ...settings, language: e.target.value })
-            }
-            minLength={2}
-            maxLength={20}
-            required
+            onChange={(language) => {
+              setSaved(false);
+              setSettings({ ...settings, language });
+            }}
           />
-          <small>
-            Editions matching this language code appear first. Their original
-            language metadata stays unchanged.
-          </small>
         </label>
       </div>
-      <details>
-        <summary>Advanced provider preferences</summary>
-        <label>
-          <input
-            type="checkbox"
-            checked={settings.automatic_enrichment ?? true}
-            onChange={(event) =>
-              setSettings({
-                ...settings,
-                automatic_enrichment: event.target.checked,
-              })
-            }
-          />
-          Fill missing Hardcover details from Open Library automatically
-          <small>
-            Checks a matching book in the background. Ambiguous matches stay
-            available for review; protected edits are preserved.
-          </small>
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={settings.automatic_edition_lookup ?? true}
-            onChange={(event) =>
-              setSettings({
-                ...settings,
-                automatic_edition_lookup: event.target.checked,
-              })
-            }
-          />
-          Look up missing editions before automatic import
-          <small>
-            Uses the requesting reader's connected catalog and compatible public
-            sources. Uncertain editions stay for review.
-          </small>
-        </label>
-        <label>
-          Cover provider
-          <select
-            value={settings.covers}
-            onChange={(e) =>
-              setSettings({
-                ...settings,
-                covers: e.target.value as Preferences["covers"],
-              })
-            }
-          >
-            <option value="automatic">Use primary catalog</option>
-            <option value="hardcover">Hardcover</option>
-            <option value="openlibrary">Open Library</option>
-          </select>
-        </label>
-        <div className="form-row">
+      <label className="check-label">
+        <input
+          type="checkbox"
+          checked={settings.filter_language ?? false}
+          onChange={(event) => {
+            setSaved(false);
+            setSettings({ ...settings, filter_language: event.target.checked });
+          }}
+        />
+        Only search books available in this language
+      </label>
+      <details className="settings-disclosure metadata-advanced">
+        <summary>Advanced metadata</summary>
+        <div className="metadata-automation">
+          <label className="check-label">
+            <input
+              type="checkbox"
+              checked={settings.automatic_enrichment ?? true}
+              onChange={(event) =>
+                setSettings({
+                  ...settings,
+                  automatic_enrichment: event.target.checked,
+                })
+              }
+            />
+            Fill missing details from Open Library
+          </label>
+          <label className="check-label">
+            <input
+              type="checkbox"
+              checked={settings.automatic_edition_lookup ?? true}
+              onChange={(event) =>
+                setSettings({
+                  ...settings,
+                  automatic_edition_lookup: event.target.checked,
+                })
+              }
+            />
+            Look up missing editions before import
+          </label>
+        </div>
+        <div className="settings-fields">
+          <label>
+            Cover provider
+            <select
+              value={settings.field_providers?.cover_url || settings.covers}
+              onChange={(e) => {
+                const next = { ...settings.field_providers };
+                delete next.cover_url;
+                setSettings({
+                  ...settings,
+                  covers: e.target.value as Preferences["covers"],
+                  field_providers: next,
+                });
+              }}
+            >
+              <option value="automatic">Use primary catalog</option>
+              <option value="hardcover">Hardcover</option>
+              <option value="openlibrary">Open Library</option>
+            </select>
+          </label>
+        </div>
+        <div className="setting-subheading">
+          <h3>Field overrides</h3>
+          <SettingHelp label="field overrides">
+            Override the primary catalog for individual details. Fields without
+            an override use the primary catalog.
+          </SettingHelp>
+        </div>
+        <div className="settings-fields metadata-provider-grid">
           {fields.map((field) => (
             <label key={field}>
               {fieldLabel(field)}
@@ -277,7 +296,7 @@ function PreferenceForm({ value }: { value: Preferences }) {
                   setSettings({ ...settings, field_providers: next });
                 }}
               >
-                <option value="">Inherit provider preference</option>
+                <option value="">Primary catalog</option>
                 <option value="hardcover">Hardcover</option>
                 <option value="openlibrary">Open Library</option>
               </select>
@@ -299,14 +318,12 @@ function PreferenceForm({ value }: { value: Preferences }) {
           Reset advanced preferences
         </button>
       </details>
-      <p className="muted">
-        Changes apply on metadata refresh. They do not rename files or start
-        downloads.
-      </p>
       <Notice error={save.error} />
-      <button className="primary" disabled={save.isPending}>
-        Save metadata defaults
-      </button>
+      <div className="button-row">
+        <button className="primary" disabled={save.isPending}>
+          Save metadata defaults
+        </button>
+      </div>
       {saved && (
         <p className="success" role="status">
           Metadata defaults saved.

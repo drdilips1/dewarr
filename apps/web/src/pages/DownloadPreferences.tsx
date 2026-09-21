@@ -3,11 +3,22 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
-import PreferenceFields, { EffectivePreferences } from "./PreferenceFields";
+import RouteFields from "./RouteFields";
+import { Link } from "react-router-dom";
+import ScopeFields from "./ScopeFields";
+import PreferenceFields from "./PreferenceFields";
 type Defaults = components["schemas"]["DefaultsView"];
 type Scope = "personal" | "installation";
 
-export default function DownloadPreferences({ admin }: { admin: boolean }) {
+export default function DownloadPreferences({
+  admin,
+  embedded = false,
+  librariesOnly = false,
+}: {
+  admin: boolean;
+  embedded?: boolean;
+  librariesOnly?: boolean;
+}) {
   const [saved, setSaved] = useState(false);
   const [scope, setScope] = useState<Scope>("personal");
   const current = useQuery({
@@ -20,16 +31,12 @@ export default function DownloadPreferences({ admin }: { admin: boolean }) {
       ),
   });
   return (
-    <section aria-label="Download defaults">
-      <h1>Download defaults</h1>
-      <p>
-        Set your usual release preferences once. Saved profiles can override
-        individual values. Changes apply when you search or activate a list
-        again; existing downloads keep their saved settings.
-      </p>
+    <section className="download-defaults" aria-label="Download defaults">
+      {!embedded && <h1>Download preferences</h1>}
+
       {admin && (
-        <label>
-          Defaults scope
+        <label className="settings-scope-picker">
+          Apply to
           <select
             value={scope}
             onChange={(event) => {
@@ -37,18 +44,25 @@ export default function DownloadPreferences({ admin }: { admin: boolean }) {
               setScope(event.target.value as Scope);
             }}
           >
-            <option value="personal">Personal defaults</option>
-            <option value="installation">Installation defaults</option>
+            <option value="personal">Only me</option>
+            <option value="installation">Everyone on this server</option>
           </select>
         </label>
       )}
       <Notice error={current.error} />
-      {saved && <p role="status">Download defaults saved.</p>}
-      {current.isFetching && <Loading />}
-      {current.data && !current.isFetching && (
+      {saved && (
+        <p className="success" role="status">
+          {librariesOnly
+            ? "Library defaults saved."
+            : "Download defaults saved."}
+        </p>
+      )}
+      {current.isPending && <Loading />}
+      {current.data && (
         <Editor
           key={`${scope}:${current.data.revision}`}
           scope={scope}
+          librariesOnly={librariesOnly}
           current={current.data}
           onSaved={() => setSaved(true)}
           onEdit={() => setSaved(false)}
@@ -60,11 +74,13 @@ export default function DownloadPreferences({ admin }: { admin: boolean }) {
 
 function Editor({
   scope,
+  librariesOnly,
   current,
   onSaved,
   onEdit,
 }: {
   scope: Scope;
+  librariesOnly: boolean;
   current: Defaults;
   onSaved: () => void;
   onEdit: () => void;
@@ -97,40 +113,78 @@ function Editor({
         save.mutate();
       }}
     >
-      <PreferenceFields
-        overrides={overrides}
-        inherited={current.inherited}
-        origins={current.inherited_origins}
-        onChange={(value) => {
-          onEdit();
-          setOverrides(value);
-        }}
-      />
-      <EffectivePreferences
-        preferences={current.effective}
-        origins={current.origins}
-      />
+      {librariesOnly ? (
+        <>
+          <ScopeFields
+            librariesOnly
+            defaults
+            overrides={overrides}
+            inherited={current.inherited}
+            origins={current.inherited_origins}
+            onChange={(value) => {
+              onEdit();
+              setOverrides(value);
+            }}
+          />
+          <RouteFields
+            overrides={overrides}
+            inherited={current.inherited}
+            origins={current.inherited_origins}
+            onChange={(value) => {
+              onEdit();
+              setOverrides(value);
+            }}
+          />
+        </>
+      ) : (
+        <PreferenceFields
+          defaults
+          overrides={overrides}
+          inherited={current.inherited}
+          origins={current.inherited_origins}
+          onChange={(value) => {
+            onEdit();
+            setOverrides(value);
+          }}
+        />
+      )}
+      {!librariesOnly && (
+        <Link className="settings-inline-link" to="/settings#libraries">
+          Library folders & download routes →
+        </Link>
+      )}
       <Notice error={save.error} />
       <div className="button-row">
-        <button className="primary" disabled={save.isPending}>
-          Save download defaults
+        <button
+          className="primary"
+          disabled={
+            save.isPending ||
+            JSON.stringify(overrides) === JSON.stringify(current.overrides)
+          }
+        >
+          {librariesOnly ? "Save library defaults" : "Save download defaults"}
         </button>
         <button
           type="button"
           onClick={() => {
             onEdit();
-            setOverrides({});
+            const libraryKeys = new Set([
+              "audio_library_id",
+              "ebook_library_id",
+              "downloader_id",
+              "ebook_destination_id",
+              "audio_destination_id",
+            ]);
+            setOverrides(
+              Object.fromEntries(
+                Object.entries(overrides).filter(([key]) =>
+                  librariesOnly ? !libraryKeys.has(key) : libraryKeys.has(key),
+                ),
+              ),
+            );
           }}
         >
           Use inherited defaults
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            cache.invalidateQueries({ queryKey: ["download-defaults", scope] })
-          }
-        >
-          Reload defaults
         </button>
       </div>
     </form>

@@ -163,8 +163,6 @@ async def test_changed_worker_root_invalidates_mapping_until_saved(
         },
         {"save_path": "/elsewhere/books"},
         {"save_path": "/data/../secret"},
-        {"username": None},
-        {"password": None},
         {"base_url": "http://private-qbit-password@qbit.test"},
         {"category": "one,two"},
     ],
@@ -185,14 +183,6 @@ async def test_stale_edits_endpoint_replacement_and_duplicate_creation(
     url = f"/api/downloaders/{record['id']}"
     assert (await client.post("/api/downloaders", json=config())).status_code == 409
     assert (await client.put(url, json=config())).status_code == 409
-    assert (
-        await client.put(
-            url,
-            json=config(
-                base_url="http://new.test", username=None, password=None, expected_generation=1
-            ),
-        )
-    ).status_code == 422
     updated = await client.put(
         url,
         json=config(
@@ -356,3 +346,81 @@ async def test_overall_diagnostic_timeout_releases_lease_and_records_failure(
         row = await db.get(Integration, UUID(record["id"]))
         assert row.status == "timeout" and row.lease_token is None
         assert not row.capabilities and row.next_sync_at > datetime.now(UTC)
+
+
+async def test_simple_connection_needs_no_credentials_or_worker_roots(
+    client, admin, database, monkeypatch
+):
+    monkeypatch.setattr(get_settings(), "import_sources", {})
+    response = await client.post(
+        "/api/downloaders", json={"base_url": "10.0.0.2:8080", "category": "books"}
+    )
+    assert response.status_code == 201, response.text
+    record = response.json()
+    assert record["base_url"] == "http://10.0.0.2:8080"
+    assert not record["has_credentials"]
+    assert record["mappings"] == []
+    async with database() as db:
+        row = await db.get(Integration, UUID(record["id"]))
+        assert row.config["client_managed"]
+        assert decrypt_secrets(row.encrypted_secrets) == {"username": "", "password": ""}
+
+
+async def test_changing_endpoint_drops_saved_credentials(client, admin, database, downloader_http):
+    record = await create(client)
+    response = await client.put(
+        f"/api/downloaders/{record['id']}",
+        json={
+            "base_url": "http://other.test",
+            "expected_generation": 1,
+        },
+    )
+    assert response.status_code == 200, response.text
+    assert not response.json()["has_credentials"]
+
+
+async def test_simple_connection_test_reads_folder_without_requiring_mounts(
+    client, admin, monkeypatch
+):
+    monkeypatch.setattr(get_settings(), "import_sources", {})
+    calls = []
+
+    async def handler(request):
+        calls.append(request)
+        responses = {
+            "app/version": httpx.Response(200, text="v5.2.3"),
+            "app/webapiVersion": httpx.Response(200, text="2.15.1"),
+            "app/preferences": httpx.Response(
+                200,
+                json={
+                    "save_path": "/remote/downloads",
+                    "auto_tmm_enabled": True,
+                },
+            ),
+            "torrents/categories": httpx.Response(
+                200,
+                json={
+                    "books": {"savePath": "/remote/books"},
+                },
+            ),
+        }
+        return responses[request.url.path.removeprefix("/api/v2/")]
+
+    monkeypatch.setattr(
+        downloaders,
+        "QbitClient",
+        lambda *args: QbitClient(
+            *args,
+            transport=httpx.MockTransport(handler),
+        ),
+    )
+    response = await client.post(
+        "/api/downloaders", json={"base_url": "qbit.test:8080", "category": "books"}
+    )
+    record = response.json()
+    tested = await client.post(f"/api/downloaders/{record['id']}/test")
+    assert tested.status_code == 200, tested.text
+    assert tested.json()["status"] == "connected"
+    assert tested.json()["save_path"] == "/remote/books"
+    assert not tested.json()["mappings_current"]
+    assert all(request.method == "GET" for request in calls)

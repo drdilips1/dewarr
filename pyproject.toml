@@ -1,5 +1,5 @@
 [project]
-name = "book-search"
+name = "dewarr"
 version = "0.1.0"
 description = "Self-hosted book discovery, curation and acquisition"
 requires-python = ">=3.13,<3.14"
@@ -45,6 +45,7 @@ packages = ["services/app"]
 "docs/notices/OpenSSL-3-LICENSE.txt" = "app/notices/OpenSSL-3-LICENSE.txt"
 
 [tool.pytest.ini_options]
+addopts = "--import-mode=importlib"
 testpaths = ["tests"]
 pythonpath = ["."]
 asyncio_mode = "auto"

@@ -1,125 +1,88 @@
-# Book discovery app — planning workspace
+<p align="center"><img src="apps/web/public/assets/dewarr.png" width="88" alt="Dewarr logo"></p>
+<h1 align="center">Dewarr</h1>
+<p align="center">Your reading lists, audiobook library, and downloads in one place.</p>
 
-For actual use and feedback, start with the [internal alpha guide and outstanding-work register](docs/INTERNAL-ALPHA.md). The native app is available at http://localhost:8000; initial account/service setup and controlled live qualification are still required.
+## Features
 
-Current recovery work includes [account permission review](docs/RECOVERY-ACCESS.md) and [library/downloader connection repair](docs/RECOVERY-CONNECTIONS.md): explicit permission, credential and path-mapping corrections while the restore pause remains active. [Source recovery](docs/RECOVERY-SOURCES.md) now adds MAM/session/proxy, Prowlarr and AudiobookBay settings review with separate durable verification. See [implementation status](docs/IMPLEMENTATION-STATUS.md) for measured evidence and remaining full-PRD work.
+- **Audiobookshelf integration** — browse your library, see what you own, and import completed downloads into verified library folders.
+- **Goodreads sync** — follow shelves, import CSV exports, and check for new books automatically.
+- **Hardcover sync** — track your lists and lists you follow, including private lists your account can access.
+- **Custom Goodreads lists** — add public lists, track changes, and pin them to your discovery page.
+- **For you** — personalize shelves with followed lists, recommendations, trending books, and new releases.
+- **Auto download** — find and select eligible releases using list policies and approved import routes.
+- **Download priorities** — rank sources and formats, apply size and seed preferences, and control download capacity.
+- **Book discovery** — browse collections, awards, authors, and series.
+- **Download sources** — connect MyAnonamouse, Prowlarr, and AudiobookBay; send transfers to qBittorrent.
+- **Shared library** — individual accounts, reading lists, permissions, and download activity.
+- **Self-hosted** — Docker, PostgreSQL, and an MIT license.
 
+Early release. Automatic downloads are off by default. Goodreads RSS imports can be partial; CSV import fills historical gaps. See [reading accounts](docs/READING-ACCOUNTS.md) for sync behavior.
 
-Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md), then use these development deliverables:
+## Quick start
 
-[Durable restored-queue protection](docs/RECOVERY-QUEUE.md) prevents historical jobs and newly queued references to restored records from executing. [Saved-approval protection](docs/RECOVERY-APPROVALS.md) also prevents old selections and previews from authorizing new work. Deploy matching builds on schema 0044; controlled resume and fresh-authority activation remain pending. The planning scope and stage gates below remain unchanged.
+Requires Docker with Compose v2, Git, and Python 3. No Node.js installation is needed for Docker.
 
-[Saved automation review](docs/RECOVERY-AUTOMATION.md) now lets the recovery operator selectively pause automatic imports, list syncing and Hardcover write-back while retaining uncertain effects for reconciliation. Historical route probes require fresh verification before qualifying new automatic-import approval.
+```sh
+git clone https://github.com/logabell/dewarr.git
+cd dewarr
+python3 scripts/init_env.py --mode compose
+docker compose up -d
+```
 
-The latest recovery increment adds [read-only external observations](docs/RECOVERY-OBSERVATIONS.md) to the [versioned backup and paused restore review](docs/RECOVERY.md). A restricted worker reports current transfers, library contents, lists and publication evidence while automation stays paused. [Reviewed matching-transfer recovery](docs/RECOVERY-RECONCILIATION.md) now records freshly verified associations without dispatching or importing. [Reviewed inventory recovery](docs/RECOVERY-INVENTORY.md) now refreshes current ABS evidence while preserving grants and holding missing media. [Reviewed publication recovery](docs/RECOVERY-PUBLICATION.md) now records existing published children and confirms exact ABS versions when fresh evidence agrees, without changing files or resuming automation. [Reviewed external-list baselines](docs/RECOVERY-LISTS.md) now record current membership without acquiring a historical backlog or replaying outbound writes. Other reconciliation, controlled resume and full release qualification remain open.
+Open [localhost:8000](http://localhost:8000). Create your administrator account using the setup token stored in `.local/secrets/bootstrap_token`.
 
-| Deliverable | Purpose |
-|---|---|
-| [Full PRD](PRD.md) | Product boundary, UX, defaults, ownership/version rules and 54 tracked requirements |
-| [Staged implementation plan](IMPLEMENTATION-PLAN.md) | S00–S10 sequence, dependencies, 61 work packages and stage exit gates |
-| [Acceptance plan](ACCEPTANCE-PLAN.md) | 35 scenarios covering user journeys, integrations, failure recovery and release qualification |
-| [P0/P1 implementation decisions](IMPLEMENTATION-DECISIONS.md) | Researched architecture, integration contracts, reuse boundaries and remaining compatibility checks |
-| [Development backlog](DEVELOPMENT-BACKLOG.csv) and [requirement traceability](REQUIREMENTS-TRACEABILITY.csv) | Portable tickets and requirement-to-acceptance mappings |
+Then open **Settings**:
 
-Delivery milestones are manual acquisition at S05, list automation at S07, complete discovery and curation at S08, and production v1 at S09. S10 contains separately scoped extensions. The documents describe required outcomes; [implementation status](docs/IMPLEMENTATION-STATUS.md) records what has actually been verified.
+1. Connect your Audiobookshelf server and libraries.
+2. Connect Goodreads and/or Hardcover and choose lists to track.
+3. Add download sources and qBittorrent if you want downloads.
+4. Configure shared folders and verify your library routes before enabling automation.
 
-[Local list curation](docs/LIST-CURATION.md) now adds name/description/sharing edits, atomic catalog additions and removals, replay receipts, conflict-aware ordering and household-view revocation. [Large-list pagination](docs/LIST-PAGINATION.md) and [optional Hardcover write-back](docs/LIST-WRITEBACK.md), including [existing-list difference review](docs/LIST-COMPARISONS.md), now have bounded implementation evidence; live provider qualification and full S08 acceptance remain open.
+Dewarr runs an API/UI container, a background worker, and PostgreSQL. A short-lived migration container prepares the database.
 
-[Discovery shelves and related books](docs/DISCOVERY.md) now connect attributed Hardcover trending/recent publications, scoped library badges and local fallback to the existing catalog/list/request flows. [Community lists](docs/COMMUNITY-LISTS.md) adds public-list search, library-aware previews and private subscriptions feeding the existing list automation. [Series continuation](docs/SERIES-DISCOVERY.md) adds published gaps from loaded series, with medium filters and links to existing curation/acquisition. Whole-library series enrichment, complete curation and full S08 acceptance remain open.
+**More setups:** [Docker guide](docs/DOCKER.md) · [Build from source](docs/DOCKER.md#build-from-source) · [Shared media folders](docs/DOCKER.md#shared-media-folders) · [Audiobookshelf stack](docs/DOCKER.md#add-audiobookshelf) · [Native development](docs/DEVELOPMENT.md)
 
-The current planning handoff includes reviewed packs and collection imports. Follow the roadmap's [remaining development batches](DEVELOPMENT-ROADMAP.md#9-remaining-development-batches-from-the-current-checkpoint) for execution order. The checkpoint descriptions below record successive increments; their older statements about unfinished work do not override the current handoff. Exact verification remains in implementation status.
+## Screenshots
 
-Native AudiobookBay now has [source search, metadata inspection and shared acquisition](docs/AUDIOBOOKBAY-INTEGRATION.md), including an explicit automatic-selection option for unknown seed counts. Actual public-host/qBittorrent certification and the full S06 stage remain open.
+Actual Dewarr UI captured with an isolated demo account. Connected services and library contents depend on your setup.
 
-Administrators can now [verify complete books in one library collection](docs/COLLECTION-CONTENTS.md) or [freeze reviewed contents in an import plan](docs/COLLECTION-IMPORT.md). One confirmed ABS item supplies shared ownership, with correction history and review when file evidence changes. Unattended omnibus discovery/verification remains pending.
+### For you
+![Personalized discovery](docs/images/for-you.png)
 
-Exact audiobook requests can now use [corroborated recording selection](docs/EXACT-VERSION-ACQUISITION.md): an explicit matching ISBN and full narrator credits qualify the candidate, frozen catalog evidence protects dispatch, and downloaded-file inspection still decides whether it matches. Generic constrained packs and broader version reconciliation remain open.
+### Browse books
+![Browse discovery shelves](docs/images/browse.png)
 
-Latest manual-pack increment: [Review additional pack books](docs/MANUAL-PACKS.md) prepares finite reviewed children from a saved manual selection and hands them to the shared-download action. Preparation is atomic and does not start the download. Broader version/omnibus, source-surface and actual-service qualification remain open; exact verification is recorded in implementation status.
+### Collections and awards
+![Book collections](docs/images/collections.png)
+![Reading awards](docs/images/awards.png)
 
-Latest Prefer-pack increment: [Additional books from a preferred pack](docs/PACK-EXPANSION.md) connects a selected automatic torrent to additional covered, reviewed books in the same medium. It reuses the saved artifact and shared transfer, checks each child independently, and exposes per-book progress. The manual path has the separate contract above.
+### Reading accounts
+![Goodreads and Hardcover connections](docs/images/reading-accounts.png)
 
-Latest list/series checkpoint: [Inherited series scope and automatic lists](docs/LIST-SERIES.md) lets an automatic list acquire a finite reviewed main-book set, with previews, per-child progress and originating-list links. Membership episodes fence old authority after removal/re-addition; import publication rechecks that origin. The subsequent Prefer-pack increment is described above; broader version/omnibus behavior and full stage qualification remain open.
+### Download preferences
+![Download preferences and priorities](docs/images/download-preferences.png)
 
-Latest defaults checkpoint: [Inherited downloader and destinations](docs/ROUTE-DEFAULTS.md) apply the same preference hierarchy to manual selection and list/series automation. Defaults retain explicit clearing, access checks and frozen approval. Full inherited series expansion and remaining PRD stages are still open.
+### Library connections
+![Audiobookshelf library settings](docs/images/library-settings.png)
 
-Latest series checkpoint: [Automatic reviewed-series acquisition](docs/SERIES-ACQUISITION.md) connects a finite accepted set to source search, shared transfers and confirmed imports, with per-book progress, cancellation and retry. Inherited Complete series/list expansion and broader version/omnibus behavior remain pending; route defaults have a separate checkpoint above.
+<details>
+<summary>Downloads and mobile</summary>
 
-Latest pack-eligibility checkpoint: [Automatic series-pack coverage](docs/AUTOMATIC-PACK-COVERAGE.md) replaces blanket collection rejection with bounded catalog/manifest matching, inherited pack preference and target-specific format ranking. Manual automatic requests and list automation can acquire the requested book from a qualifying pack. Multi-target automatic grouping/expansion and full series fulfillment remain required.
+![Download requests](docs/images/downloads.png)
+<img src="docs/images/mobile.png" width="320" alt="Dewarr on mobile">
 
-A self-hosted ebook/audiobook discovery, curation and acquisition application above Audiobookshelf, with native MAM/AudiobookBay, optional Prowlarr, direct qBittorrent, and Hardcover/Goodreads list automation.
+</details>
 
-**Status:** implementation is in progress. Accounts, catalog/lists and durable workers are implemented; Audiobookshelf inventory/grants and metadata provider search, editions, protected edits, reversible corrections, canonical book grouping/undo and automatic secondary enrichment have fixture-tested API/UI flows. Wanted requests support media/version requirements, independent reasons, compatible reservations and inventory reconciliation; saving a request does not download it. Organization supports naming presets, inspection, collection-group correction, catalog-version mapping, frozen plans, verified destinations and reviewed per-book publication with initial OPF/cover export and ABS confirmation. Pending imports can be stopped through journaled cleanup; unresolved collection children can be replanned beside unchanged completed siblings. PDF/CBZ inspection, reviewed equivalent ebook formats and PDF companions are implemented. Eight real ABS scanner/API cases and eight application import workflows pass with synthetic media, including inventory refresh without phantom editions or lost reviewed formats. Native MAM acquisition now has an opt-in durable qBittorrent submission/monitoring path with inspection handoff. Bounded list policies now feed the shared acquisition/import pipeline. Complete source-to-library compatibility, series/recording coverage and full external-list qualification remain pending. See [Implementation Status](docs/IMPLEMENTATION-STATUS.md) for precise coverage and evidence, and [Development Guide](docs/DEVELOPMENT.md) to run the current build. The full PRD remains the goal.
+## Updates
 
-## Development handoff
+```sh
+docker compose pull
+docker compose stop api worker
+docker compose up -d
+```
 
-Latest shared-pack checkpoint: [Reviewed shared downloads](docs/SHARED-DOWNLOADS.md) add explicit selections for several books on one physical transfer, atomic grouping, per-book Activity/fulfillment and independent import of qualified children. Owned children are skipped and ambiguous children can be reviewed beside successful siblings. Automatic pack coverage selection, inherited series policies, later/cross-owner reuse and omnibus fulfillment remain pending.
+Back up PostgreSQL and `.local/secrets` before updating. Keep the encryption key with your backups. [Backup and restore instructions](docs/DOCKER.md#backups).
 
-Latest preference checkpoint: [Download preferences](docs/DOWNLOAD-PREFERENCES.md) resolve request overrides over list overrides, sparse saved profiles, personal and installation defaults. Previews, saved requests, manual list batches and automatic acquisition retain effective values and origins. Request-bound source searches preserve the same policy through polling and selection; independent restrictions still apply to shared transfers. Full media/language/narrator/series/destination inheritance and policy edits for unsatisfied requests remain pending.
+## License
 
-Latest list checkpoint: [Goodreads shelf subscriptions](docs/GOODREADS-SUBSCRIPTIONS.md) bring RSS additions into private local lists through scheduled workers, retain omitted books, remember exclusions and reuse corroborated catalog identities with existing library availability. [Reviewed CSV snapshots](docs/CSV-LIST-IMPORT.md) now add column mapping, shelf/subset selection, private identity dedupe and durable import receipts. [Hardcover subscriptions](docs/HARDCOVER-LISTS.md) now add account-backed list selection, fresh two-pass membership verification, source-only removals and persistent exclusions. [Reviewed list requests](docs/LIST-REQUESTS.md) now preview selected media, reuse compatible wanted requests and retain independent list reasons with durable receipts. [List acquisition policies](docs/LIST-POLICIES.md) now add versioned future-only activation, explicit backlog/catch-up selection, inherited manual media/limits, scheduled searches and automatic dispatch through approved routes. Full series/recording and live-list qualification remain pending.
-
-List monitoring now follows removal/re-addition and canonical merge/undo while retaining original request histories. Re-additions reuse compatible transfers, paused additions require catch-up selection, and merged books appear once under their current title. See [List acquisition policies](docs/LIST-POLICIES.md) for scope and evidence boundaries.
-
-Latest import checkpoint: [single-file imports](docs/SINGLE-FILE-IMPORTS.md) handle standalone downloads without scanning neighboring files, preserve existing directory receipts, and pass real ABS ebook/audio workflows. [Catalog matching](docs/IMPORT-MATCHING.md) resolves embedded edition identifiers against the local catalog, exposes conflicts for review and saves revalidated evidence without asserting file completeness or ownership.
-
-Latest lifecycle checkpoint: [download fulfillment](docs/DOWNLOAD-FULFILLMENT.md) links satisfied targets to confirmed assets and import entries, retires completed request reservations, retains transfer identity claims and shows current library availability separately from historical fulfillment. [Reviewed connection repair](docs/DOWNLOAD-REPAIRS.md) validates updated credentials against the existing transfer while preserving the original selection and file routes. [Administrator import reviews](docs/DOWNLOAD-REVIEWS.md) let members' completed downloads reach the reviewed importer while preserving requester permissions through publication. [Automatic import](docs/AUTOMATIC-IMPORTS.md) now continues qualifying EPUB/M4B/MP3 downloads through that shared importer under an administrator-approved route. [Provider edition resolution](docs/IMPORT-CATALOG-RESOLUTION.md) now fills missing local editions through the requester's catalog connection and resumes qualifying imports. Resolution without embedded identifiers, broader collection coverage, changed-endpoint/path reconciliation, shared-pack reuse and full external-list qualification remain pending.
-
-Latest capacity checkpoint: [Transfer and storage limits](docs/CAPACITY.md) adds installation-wide downloader slots, rolling automatic-transfer budgets and filesystem reservations to the shared downloader/importer. Waiting work resumes through existing schedulers; verified staging recovery avoids reserving a second copy. Settings are administrator-only. Standing list policies now use these same limits; full unattended series/recording acquisition remains pending.
-
-Latest automatic-selection checkpoint: [Automatic release selection and download](docs/AUTOMATIC-SELECTION.md) ranks fetched source results, inspects up to five torrent manifests and saves the best eligible candidate through the shared selector. Preparation-only and explicit automatic-download actions share that service. Automatic selection and dispatch commit together under a current approved import route, with persistent receipts, shared capacity limits and permission checks before submission. Real EPUB/audio fixtures reach confirmed library availability. Standing list-to-search automation now has a separate checkpoint; complete collection/recording coverage remains pending.
-
-Latest aggregation checkpoint: [Book Sources](docs/BOOK-SOURCES.md) combines durable MAM/Prowlarr searches on a title page, keeps source failures independent, saves private format/source/seed preferences and carries the chosen release into the shared acquisition path. [Series source search](docs/SERIES-SOURCE-SEARCH.md) adds bounded catalog aliases, independent query progress and deduplicated release provenance. Complete series/recording eligibility, native ABB and full policy inheritance remain pending.
-
-Latest additional source checkpoint: [Prowlarr](docs/PROWLARR-INTEGRATION.md) adds per-indexer browsing and private torrent-file resolution into the shared acquisition engine, with incremental results and native-MAM overlap prevention. Complete ranking/series automation and live certification remain pending.
-
-Latest native source checkpoint: [native MAM search](docs/MAM-INTEGRATION.md) adds rich release browsing, source details, encrypted session settings and required proxy routing. It is fixture verified; live account compatibility remains pending.
-
-Latest acquisition preparation: [saved torrent manifests](docs/SOURCE-ARTIFACTS.md) resolve MAM artifacts, validate native v1/v2/hybrid identity and safe file layouts, encrypt original bytes and provide owner-only manifest views. Inspecting a manifest does not start a download or establish ownership.
-
-Latest request checkpoint: [request download restrictions](docs/ACQUISITION-FOUNDATION.md#request-download-restrictions) preserve each request's blocked formats and whole-transfer size limit, combine compatible requirements, and enforce them through selection and file validation. Existing owned media remain available. [Reviewed release selection](docs/RELEASE-SELECTION.md) connects a wanted title to its saved torrent and verified library route; the opt-in download lifecycle consumes its frozen decision. Standing policies are documented in [List acquisition policies](docs/LIST-POLICIES.md).
-
-Latest downloader checkpoint: [qBittorrent integration](docs/QBITTORRENT-INTEGRATION.md) includes encrypted administrator settings, read-only connection tests, path mappings and preview, plus submission acknowledgements, transfer/file observations and strict attempt association. Settings and adapter behavior have fixture/browser coverage. [Durable download attempts](docs/DOWNLOAD-ATTEMPTS.md) now add persisted submission, recovery, identity claims and Activity controls. Dispatch is disabled by default pending the remaining integration gates; repair and full source-to-library certification remain unfinished.
-
-Automatic pack-group checkpoint: [Independently authorized pack groups](docs/AUTOMATIC-PACK-GROUPS.md) coalesce compatible automatic selections before dispatch. Each requested book retains its own list/request proof and fulfillment; overlapping list workflows share one transfer. Later/submitted-transfer reuse remains pending.
-
-Series preparation checkpoint: [Automatic metadata preparation](docs/SERIES-PREPARATION.md) loads missing or stale Hardcover series catalogs before source queries, shares active observations, exposes fallback reasons and excludes stale catalogs from automatic pack eligibility. [Automatic pack groups](docs/AUTOMATIC-PACK-GROUPS.md) now coalesce independently authorized compatible selections before dispatch.
-
-Saved-transfer reuse checkpoint: [Later pack requests](docs/DOWNLOAD-REUSE.md) can join compatible same-owner transfers and import additional authorized books through separate continuations. Original receipts and earlier imports remain intact; Activity exposes verification and repair. Migration `0037_download_joins` is required. Cross-owner/mixed-route reuse, full series/version/omnibus handling and the remaining PRD stages are still open.
-
-Series checkpoint: [Series catalog and curation](docs/SERIES-CATALOG.md) adds durable Hardcover series observations, book-linked browsing, distinct ownership counts and selected additions to existing lists. [Reviewed series requests](docs/SERIES-REQUESTS.md) now add finite previews, frozen scope, independent request reasons, cancellation and durable receipts. Automatic series policy inheritance and pack fulfillment remain pending.
-
-Start with the [Product and Development Roadmap](DEVELOPMENT-ROADMAP.md) for the product boundary, end-to-end journey, P0/P1 decisions, stage summary and release milestones.
-
-Series-scope checkpoint: [Reusable main-book reviews](docs/SERIES-SCOPE-REVIEW.md) save explicit finite membership evidence without acquiring anything. Reviewed series requests can reuse the current proof; replacement/withdrawal invalidates unaccepted previews while accepted requests retain their independent authority. Inherited series policies and list-derived expansion remain next work.
-
-The [release delivery contract](IMPLEMENTATION-PLAN.md#16-release-delivery-contract) defines milestone owners, demonstrations and the next bounded increment. The PRD includes [eight launch journeys](PRD.md#20-launch-journey-checklist) spanning connected inventory, discovery, acquisition, lists, packs and restore.
-
-The [stage closure plan](IMPLEMENTATION-PLAN.md#17-stage-closure-and-implementation-packets) provides the current end-to-end execution handoff: remaining S00–S10 gates, shared-pack implementation packets, automation and discovery dependencies, and production acceptance. It is a plan, not a claim that those features have shipped.
-
-The roadmap's [requirements-to-delivery checklist](DEVELOPMENT-ROADMAP.md#7-your-requirements-mapped-to-delivery) maps the requested user experience to PRD requirements, development stages and acceptance scenarios.
-
-1. [Product Requirements](PRD.md): v1.9 purpose, scope, user journeys, UX, 36 v1 functional requirements, six post-v1 requirements and 12 nonfunctional requirements. Includes ownership decision tables, list lifecycle, ranking/series rules, settings precedence, in-flight changes, resolved P0/P1 decisions, an integrated list-to-library walkthrough, acquisition closure/repair and unattended operation with scoped exception review.
-2. [End-to-End Development Plan](IMPLEMENTATION-PLAN.md): S00–S10 stages, 61 work packages, dependencies, engineering boundaries, ownership and exit gates. Includes module handoffs, API delivery map, milestone demonstrations the earlier dependency slices and a refreshed execution order from the current checkpoint.
-3. [Acceptance Plan](ACCEPTANCE-PLAN.md): requirement coverage, scenario matrix, fixtures, crash recovery, compatibility, stage-specific evidence scopes and full release evidence.
-4. [Implementation Decisions](IMPLEMENTATION-DECISIONS.md): researched technical choices D01–D13 and primary-source evidence.
-5. [Product Architecture](PRODUCT-ARCHITECTURE.md): system overview, integration responsibilities and code-reuse direction.
-6. [Development Backlog](DEVELOPMENT-BACKLOG.csv): 61 portable work-package records with stage dependencies, responsible roles, deliverables and exit criteria. Progress remains in Implementation Status; the export does not imply completion.
-7. [Requirement Traceability](REQUIREMENTS-TRACEABILITY.csv): all 54 requirements mapped to their acceptance scenarios and delivery scope.
-
-The PRD controls product behavior; the implementation decisions control the researched technical baseline; the development plan controls sequencing; the acceptance plan controls verification. User instructions take precedence over all documents. Update dependent documents together when a decision changes.
-
-## Supporting research
-
-- [Metadata and collections](research/metadata-and-collections.md)
-- [Audiobookshelf import layouts](research/audiobookshelf-import-layout.md)
-- [Initial discovery research](research/book-discovery-architecture.md) — historical; its earlier acquisition-manager recommendation is superseded.
-- [Source snapshot](research/source-snapshot.json)
-
-For a new checkout, begin with S00. For this existing implementation, use the plan's [execution and handoff contracts](IMPLEMENTATION-PLAN.md#8-execution-and-handoff-contracts) and verified status to continue incomplete work. The first full manual acquisition milestone is S05, list-driven automation is S07, and production v1 requires S09. S10 capabilities are separate later releases.
-
-[List pagination](docs/LIST-PAGINATION.md) now bounds list/catalog hydration, supports cross-page curation and searches all authorized destinations and memberships. Request and policy previews reject selections made against changed membership revisions. Full performance and release qualification remain open.
-
-[Outbound recovery](docs/RECOVERY-OUTBOUND.md) records reviewed Hardcover command outcomes without resending list changes; uncertain effects and automation remain held.
-
-[Historical command review](docs/RECOVERY-COMMANDS.md) retires selected stale approvals and pauses acquisition controllers while preserving wanted books and reservations.
+[MIT](LICENSE). Third-party libraries and assets retain their own licenses; see [notices](docs/notices/).

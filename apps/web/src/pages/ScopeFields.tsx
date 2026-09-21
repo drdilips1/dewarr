@@ -1,3 +1,5 @@
+import LanguageSelect from "../components/LanguageSelect";
+import SettingHelp from "../components/SettingHelp";
 import { useQuery } from "@tanstack/react-query";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
@@ -34,164 +36,189 @@ export default function ScopeFields({
   origins,
   onChange,
   includeMedia = true,
+  librariesOnly = false,
+  defaults = false,
 }: {
   overrides: Overrides;
   inherited: Preferences;
   origins: Record<string, string>;
   onChange: (value: Overrides) => void;
   includeMedia?: boolean;
+  librariesOnly?: boolean;
+  defaults?: boolean;
 }) {
   const libraries = useLibraries();
   const values = { ...inherited, ...overrides };
-  const origin = (field: keyof typeof scopeLabels) => (
-    <p className="muted">
-      {Object.hasOwn(overrides, field)
-        ? "Custom value"
-        : `Inherited · ${origins[field] || "default"}`}
-      {Object.hasOwn(overrides, field) && (
-        <button
-          type="button"
-          onClick={() => {
-            const next = { ...overrides };
-            delete next[field];
-            onChange(next);
-          }}
-        >
-          Use inherited {scopeLabels[field]}
-        </button>
-      )}
-    </p>
-  );
+  const origin = (field: keyof typeof scopeLabels) =>
+    Object.hasOwn(overrides, field) ? (
+      <div className="preference-origin">
+        <SettingHelp label="inherited value">
+          {Object.hasOwn(overrides, field)
+            ? "Custom value"
+            : `Inherited · ${origins[field] || "default"}`}
+        </SettingHelp>
+        {Object.hasOwn(overrides, field) && (
+          <button
+            type="button"
+            aria-label={`Use inherited ${scopeLabels[field]}`}
+            onClick={() => {
+              const next = { ...overrides };
+              delete next[field];
+              onChange(next);
+            }}
+          >
+            Reset
+          </button>
+        )}
+      </div>
+    ) : null;
   return (
-    <details>
-      <summary>Media, language and library defaults</summary>
-      <p className="muted">
-        Used when a request leaves the corresponding choice inherited. Existing
-        requests keep their accepted scope. Library choices still require
-        current access and a verified import route.
-      </p>
+    <section className="scope-fields">
+      <div className="setting-subheading">
+        <h3>{librariesOnly ? "Default libraries" : "Media & language"}</h3>
+        <SettingHelp label="download preferences">
+          Used when a request leaves the corresponding choice inherited.
+          Existing requests keep their accepted scope. Library choices still
+          require current access and a verified import route.
+        </SettingHelp>
+      </div>
       <Notice error={libraries.error} />
-      {includeMedia && (
+      {!librariesOnly && (
         <>
+          {includeMedia && (
+            <>
+              <label>
+                {scopeLabels.desired_media}
+                <select
+                  aria-label={scopeLabels.desired_media}
+                  value={values.desired_media || ""}
+                  onChange={(e) =>
+                    onChange({
+                      ...overrides,
+                      desired_media:
+                        (e.target.value as Preferences["desired_media"]) ||
+                        null,
+                    })
+                  }
+                >
+                  <option value="">Choose on each request</option>
+                  {Object.entries(media).map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              {origin("desired_media")}
+              {values.desired_media === "either" && (
+                <>
+                  <label>
+                    Search first
+                    <select
+                      aria-label="Search first"
+                      value={values.preferred_medium}
+                      onChange={(e) =>
+                        onChange({
+                          ...overrides,
+                          preferred_medium: e.target.value as "ebook" | "audio",
+                        })
+                      }
+                    >
+                      <option value="audio">Audiobook</option>
+                      <option value="ebook">Ebook</option>
+                    </select>
+                  </label>
+                  {origin("preferred_medium")}
+                </>
+              )}
+            </>
+          )}
           <label>
-            {scopeLabels.desired_media}
+            {scopeLabels.language}
+            <LanguageSelect
+              allowAny
+              value={values.language || ""}
+              onChange={(language) =>
+                onChange({ ...overrides, language: language || null })
+              }
+            />
+          </label>
+          {origin("language")}
+          <label>
+            {scopeLabels.abridged}
             <select
-              value={values.desired_media || ""}
+              value={values.abridged == null ? "" : String(values.abridged)}
               onChange={(e) =>
                 onChange({
                   ...overrides,
-                  desired_media:
-                    (e.target.value as Preferences["desired_media"]) || null,
+                  abridged:
+                    e.target.value === "" ? null : e.target.value === "true",
                 })
               }
             >
-              <option value="">Choose on each request</option>
-              {Object.entries(media).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
+              <option value="">Any abridgment</option>
+              <option value="false">Unabridged only</option>
+              <option value="true">Abridged only</option>
             </select>
           </label>
-          {origin("desired_media")}
-          <label>
-            {scopeLabels.preferred_medium}
-            <select
-              value={values.preferred_medium}
+          {origin("abridged")}
+          {!defaults && (
+            <>
+              <NarratorNamesField
+                label={scopeLabels.required_narrators}
+                values={values.required_narrators || []}
+                onChange={(required_narrators) =>
+                  onChange({ ...overrides, required_narrators })
+                }
+              />
+              {origin("required_narrators")}
+            </>
+          )}
+          <label className="check-label">
+            <input
+              type="checkbox"
+              checked={values.standalone || false}
               onChange={(e) =>
-                onChange({
-                  ...overrides,
-                  preferred_medium: e.target.value as "ebook" | "audio",
-                })
+                onChange({ ...overrides, standalone: e.target.checked })
               }
-            >
-              <option value="audio">Audiobook</option>
-              <option value="ebook">Ebook</option>
-            </select>
+            />
+            Require standalone copies
           </label>
-          {origin("preferred_medium")}
+          {origin("standalone")}
         </>
       )}
-      <label>
-        {scopeLabels.language}
-        <input
-          value={values.language || ""}
-          placeholder="Any language"
-          maxLength={20}
-          pattern="[a-zA-Z]{2,3}([-_][a-zA-Z0-9]{2,8})*"
-          onChange={(e) =>
-            onChange({ ...overrides, language: e.target.value || null })
-          }
-        />
-      </label>
-      {origin("language")}
-      <label>
-        {scopeLabels.abridged}
-        <select
-          value={values.abridged == null ? "" : String(values.abridged)}
-          onChange={(e) =>
-            onChange({
-              ...overrides,
-              abridged:
-                e.target.value === "" ? null : e.target.value === "true",
-            })
-          }
-        >
-          <option value="">Any abridgment</option>
-          <option value="false">Unabridged only</option>
-          <option value="true">Abridged only</option>
-        </select>
-      </label>
-      {origin("abridged")}
-      <NarratorNamesField
-        label={scopeLabels.required_narrators}
-        values={values.required_narrators || []}
-        onChange={(required_narrators) =>
-          onChange({ ...overrides, required_narrators })
-        }
-      />
-      {origin("required_narrators")}
-      <label className="check-label">
-        <input
-          type="checkbox"
-          checked={values.standalone || false}
-          onChange={(e) =>
-            onChange({ ...overrides, standalone: e.target.checked })
-          }
-        />
-        Require standalone copies
-      </label>
-      {origin("standalone")}
-      {(["ebook_library_id", "audio_library_id"] as const).map((field) => (
-        <div key={field}>
-          <label>
-            {scopeLabels[field]}
-            <select
-              value={values[field] || ""}
-              onChange={(e) =>
-                onChange({ ...overrides, [field]: e.target.value || null })
-              }
-            >
-              <option value="">Choose during acquisition</option>
-              {values[field] &&
-                !libraries.data?.some((l) => l.id === values[field]) && (
-                  <option value={values[field]!}>
-                    Unavailable saved library
-                  </option>
-                )}
-              {libraries.data
-                ?.filter((l) => l.accessible)
-                .map((l) => (
-                  <option key={l.id} value={l.id}>
-                    {l.name}
-                  </option>
-                ))}
-            </select>
-          </label>
-          {origin(field)}
-        </div>
-      ))}
-    </details>
+      {(!defaults || librariesOnly) &&
+        (["ebook_library_id", "audio_library_id"] as const).map((field) => (
+          <div key={field}>
+            <label>
+              {scopeLabels[field]}
+              <select
+                aria-label={scopeLabels[field]}
+                value={values[field] || ""}
+                onChange={(e) =>
+                  onChange({ ...overrides, [field]: e.target.value || null })
+                }
+              >
+                <option value="">Choose during acquisition</option>
+                {values[field] &&
+                  !libraries.data?.some((l) => l.id === values[field]) && (
+                    <option value={values[field]!}>
+                      Unavailable saved library
+                    </option>
+                  )}
+                {libraries.data
+                  ?.filter((l) => l.accessible)
+                  .map((l) => (
+                    <option key={l.id} value={l.id}>
+                      {l.name}
+                    </option>
+                  ))}
+              </select>
+            </label>
+            {origin(field)}
+          </div>
+        ))}
+    </section>
   );
 }
 export function EffectiveScope({

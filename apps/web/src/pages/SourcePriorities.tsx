@@ -1,3 +1,4 @@
+import SettingHelp from "../components/SettingHelp";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -67,6 +68,14 @@ export default function SourcePriorities({
     <section aria-label="Source preference editor">
       <Order
         label="Source preference"
+        help={
+          <SettingHelp label="source priority">
+            This order sets download preferences. Source settings control which
+            indexers are searched. A Prowlarr fallback entry ranks indexers
+            without their own entry. Sources omitted from this list have lowest
+            preference.
+          </SettingHelp>
+        }
         values={values}
         names={names}
         onChange={onChange}
@@ -74,11 +83,6 @@ export default function SourcePriorities({
           onChange(values.filter((entry) => entry !== value))
         }
       />
-      <p className="muted">
-        This order sets download preferences. Source settings control which
-        indexers are searched. A Prowlarr fallback entry ranks indexers without
-        their own entry. Sources omitted from this list have lowest preference.
-      </p>
       <div className="button-row">
         {Object.entries(standard)
           .filter(([key]) => !values.includes(key))
@@ -89,17 +93,19 @@ export default function SourcePriorities({
               disabled={values.length >= 100}
               onClick={() => onChange([...values, key])}
             >
-              Add {name} to source preference
+              Add {name}
             </button>
           ))}
       </div>
       <details>
         <summary>Individual Prowlarr priorities</summary>
-        <p className="muted">
-          Load your connected indexers, then add the ones you want to rank
-          individually. Loading contacts Prowlarr; editing these priorities
-          takes effect when you save this form.
-        </p>
+        <div className="setting-help-row">
+          <SettingHelp label="source priority">
+            Load your connected indexers, then add the ones you want to rank
+            individually. Loading contacts Prowlarr; editing these priorities
+            takes effect when you save this form.
+          </SettingHelp>
+        </div>
         <button
           type="button"
           disabled={indexers.isFetching}
@@ -111,17 +117,21 @@ export default function SourcePriorities({
         </button>
         <Notice error={indexers.error} />
         {indexers.isError && (
-          <p className="muted">
-            Current indexers could not be loaded. Saved priorities are retained
-            and can still be reordered or removed.
-          </p>
+          <div className="setting-help-row">
+            <SettingHelp label="source priority">
+              Current indexers could not be loaded. Saved priorities are
+              retained and can still be reordered or removed.
+            </SettingHelp>
+          </div>
         )}
         {indexers.data && (
           <>
-            <p className="muted">
-              Last loaded {new Date(indexers.dataUpdatedAt).toLocaleString()}.
-              Reload to check current names and availability.
-            </p>
+            <div className="setting-help-row">
+              <SettingHelp label="source priority">
+                Last loaded {new Date(indexers.dataUpdatedAt).toLocaleString()}.
+                Reload to check current names and availability.
+              </SettingHelp>
+            </div>
             <label>
               Indexer to prioritize
               <select
@@ -183,7 +193,7 @@ export default function SourcePriorities({
             The source preference list has reached its 100-entry limit.
           </p>
         )}
-        <Link to="/sources/prowlarr">Prowlarr search and settings</Link>
+        <Link to="/settings#sources">Configure Prowlarr</Link>
       </details>
     </section>
   );

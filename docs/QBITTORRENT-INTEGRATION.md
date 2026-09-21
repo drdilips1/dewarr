@@ -4,13 +4,17 @@ Implementation checkpoint: the adapter, association rules, administrator setting
 
 ## Configure a downloader
 
-Open **Connections → Downloaders → Connect qBittorrent**. Enter its Web UI URL and credentials, choose the save folder as qBittorrent sees it, and map that folder to a named worker download root. The default category is `book-search`; advanced settings allow a different category. Save, then test the saved connection. Editing retains credentials when both credential fields are blank; changing the endpoint requires a replacement pair. Disable the connection without removing its configuration or any files.
+Open **Settings → Downloaders → Connect qBittorrent**. Enter its Web UI URL or IP address, optional username and password, and optional category (blank by default). Addresses without a scheme use HTTP. Save, then test the saved connection. Editing retains credentials when both fields are blank; changing the endpoint clears saved credentials unless replacements are supplied.
+
+Download folders, layout, automatic torrent management, and other torrent preferences belong in qBittorrent. The connection form does not expose storage settings or require worker download roots. Connection testing reads qBittorrent's selected download location for later import planning, without changing server preferences.
 
 Connection records use the existing generic integration table with kind `qbittorrent`. Library connection endpoints and inventory scheduling exclude them. No schema migration is needed for this checkpoint. Credentials are encrypted and never returned by the API, included in audit details or populated into the browser after reload. Reads, writes, tests and previews require administrator access; writes additionally require the existing session/origin/CSRF checks.
 
 Settings use an optimistic generation and serialized writes. A concurrent edit cannot silently overwrite another edit, and a test of an old generation cannot mark new settings connected. Diagnostic calls run outside database transactions, have a total deadline and a persisted lease, and impose a cooldown after failures. Cancellation leaves a lease that expires before another test can authenticate. Configuration edits retain active leases and cooldowns. A diagnostic never queries or changes torrents. A connected status confirms API access only, not acquisition or filesystem readiness.
 
-### Path mappings
+### Import storage compatibility
+
+Legacy API clients and existing import bindings retain path-mapping compatibility. New connections automatically recognize a configured worker root when qBittorrent uses the same absolute path. Different container mounts still require deployment-level storage alignment before importing; this does not block saving or testing a connection.
 
 For example, qBittorrent root `/data/downloads` can map to the configured worker root `downloads`, whose host/container path is `/storage/downloads`. Then `/data/downloads/Series/Book` previews as `/storage/downloads/Series/Book`, with inspection-relative path `Series/Book`. Prefixes are matched on directory boundaries, so `/data/downloads-other` is not inside `/data/downloads`.
 
@@ -34,13 +38,13 @@ These references describe external interfaces. No qBittorrent implementation is 
 
 Submission accepts one bounded torrent byte payload or one supported v1/v2/hybrid magnet. Remote torrent URLs must be resolved by their source adapter. Magnet identity validation rejects conflicting hashes and multiple-line inputs. The [source artifact parser](SOURCE-ARTIFACTS.md) now validates native MAM torrent descriptors; the opt-in download-attempt workflow now consumes that frozen evidence.
 
-Every add specifies the application attempt tag, category, save path, original content layout, enabled hash checking and disabled automatic torrent management. It does not set ratio/seeding limits, rename files, choose partial file priorities or copy MAM credentials into the downloader. This preserves the planned whole-pack and tracker-seeding behavior.
+Every add supplies the torrent artifact, application attempt tag, and category. It leaves save paths, content layout, automatic torrent management, start state, and other transfer preferences to qBittorrent. It does not copy MAM credentials into the downloader.
 
 `SubmissionReceipt` is an acknowledgement, not completion or association. Legacy acknowledgements provide no identifier; newer replies may contain a client key or report pending acceptance. The adapter validates that a structured response describes the one submitted artifact. Ambiguous responses, timeouts, connection loss, redirects, malformed receipts and server failures remain uncertain. It never retries an add automatically. Cancellation propagates; a durable caller must already have recorded that submission may have started.
 
 Lookup separately queries the attempt tag and known hash so an unrelated hash match cannot be hidden by a tag filter. Candidate counts and response sizes are bounded. Full v1 and v2 identities come from torrent properties; the client key can be a truncated v2 digest and is not automatically a v1 identity. Lookup reads each candidate's properties and files without modifying it.
 
-Association requires one candidate, the expected attempt tag, all known artifact identities, the frozen destination/category and disabled automatic torrent management. An untagged existing torrent, changed path/category, mismatched identity or multiple candidates produces an actionable conflict. No retagging, adoption, movement or deletion occurs. No observed candidate means only “not observed”; it does not authorize resubmitting an uncertain operation.
+Association requires one candidate, the expected attempt tag, all known artifact identities, the frozen destination/category. Automatic torrent management is accepted; changes to the observed destination still require reconciliation. An untagged existing torrent, changed path/category, mismatched identity or multiple candidates produces an actionable conflict. No retagging, adoption, movement or deletion occurs. No observed candidate means only “not observed”; it does not authorize resubmitting an uncertain operation.
 
 ## Completion evidence
 
@@ -52,7 +56,7 @@ This is client evidence only. The importer must still map paths, inspect actual 
 
 Seventy-six adapter cases cover the selected 5.2.3 response shapes, legacy and asynchronous receipts, session reuse, rejected login, expired access, lost submission response, cancellation, v2/hybrid identity, unrelated preexisting transfers, destination changes, partial files, unsafe paths, malformed data and bounded responses. Twenty-one PostgreSQL/API cases cover settings, encrypted credentials, authorization, path confinement and stale bindings, concurrent edits/tests, cooldowns, deadlines, account revocation and cancelled-test recovery. A stateful HTTP fixture models successful and response-lost adds followed by independent lookup. These are not live-client or crash-recoverable dispatch workflow tests.
 
-The integrated browser journey covers saving and testing a connection, mapped path preview, desktop/mobile layout, secret-free reload and disabling the saved connection. qBittorrent responses are synthetic; no personal client or torrents are used.
+The focused connection browser test covers the four-field form, saving without credentials, persistence after reload, mobile layout, and independence from worker-root queries. qBittorrent responses are synthetic; no personal client or torrents are used.
 
 The [durable attempt workflow](DOWNLOAD-ATTEMPTS.md) now persists full identity claims, freezes committed reservations, journals submission before the side effect, observes uncertain outcomes and queues administrator inspection of verified completed directory and single-file manifests. API/Activity controls and crash/concurrency fixtures cover that workflow. It is opt-in and fixture verified, not live-client certification.
 

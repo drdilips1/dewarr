@@ -5,21 +5,39 @@ import { api, result, type Work } from "../api/client";
 import { Notice } from "../components";
 import { useRefreshIdentity } from "./IdentityHistory";
 
-export default function WorkMerge({ work }: { work: Work }) {
+export default function WorkMerge({
+  work,
+  targetWork,
+}: {
+  work: Work;
+  targetWork?: Work;
+}) {
   const [open, setOpen] = useState(false);
   return open ? (
-    <MergeForm work={work} close={() => setOpen(false)} />
+    <MergeForm
+      work={work}
+      targetWork={targetWork}
+      close={() => setOpen(false)}
+    />
   ) : (
     <button type="button" onClick={() => setOpen(true)}>
-      Merge duplicate book
+      {targetWork ? "Confirm same book" : "Merge duplicate book"}
     </button>
   );
 }
 
-function MergeForm({ work, close }: { work: Work; close: () => void }) {
+function MergeForm({
+  work,
+  targetWork,
+  close,
+}: {
+  work: Work;
+  targetWork?: Work;
+  close: () => void;
+}) {
   const [input, setInput] = useState("");
   const [query, setQuery] = useState("");
-  const [target, setTarget] = useState<Work | null>(null);
+  const [target, setTarget] = useState<Work | null>(targetWork || null);
   const [confirmed, setConfirmed] = useState(false);
   const previewRegion = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);

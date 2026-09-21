@@ -7,7 +7,7 @@ from pydantic import BaseModel, ValidationError
 from app.adapters.catalog_providers import contributors, identifier, parse_failure
 from app.adapters.catalog_types import BookData, cover_url, year
 
-FIELDS = "id canonical_id title release_year release_date cached_image cached_contributors"
+FIELDS = "id canonical_id rating title release_year release_date cached_image cached_contributors"
 HC_TRENDING = """query DiscoveryTrending($offset: Int!) {
  books_trending(duration: month, limit: 21, offset: $offset) { ids error }
 }"""
@@ -49,6 +49,7 @@ def book(row):
         if row.get("canonical_id")
         else None,
         title=row["title"],
+        rating=row.get("rating"),
         authors=contributors(row.get("cached_contributors"), "Author"),
         publication_year=year(row.get("release_year")),
         release_date=row.get("release_date"),

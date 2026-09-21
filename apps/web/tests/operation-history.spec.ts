@@ -17,9 +17,16 @@ test("operation history filters real curation records and preserves navigation s
   await page
     .getByLabel("Password", { exact: true })
     .fill("browser test password");
-  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  if (await page.getByLabel("Your name").isVisible()) {
+    await page.getByLabel("Your name").fill("Test Reader");
+    await page.getByLabel("Setup token").fill("browser-test-bootstrap-token");
+    await page.getByRole("button", { name: "Create administrator" }).click();
+    await page.getByRole("button", { name: "Skip setup", exact: true }).click();
+  } else {
+    await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  }
   await expect(
-    page.getByRole("heading", { name: "Your catalog" }),
+    page.getByRole("navigation", { name: "Main navigation" }),
   ).toBeVisible();
   const auth = await (await page.request.get("/api/auth/me")).json();
   const headers = {
@@ -42,7 +49,7 @@ test("operation history filters real curation records and preserves navigation s
     name: "Operation history reading list",
   });
   let receipt: { id: string } = { id: "" };
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 60; i++) {
     receipt = await post(`/api/lists/${list.id}/curation`, {
       action: i % 2 ? "remove" : "add",
       work_ids: [work.id],
@@ -51,13 +58,13 @@ test("operation history filters real curation records and preserves navigation s
   const expected = await (
     await page.request.get("/api/activity/page?kind=lists.curate&limit=100")
   ).json();
-  expect(expected.total).toBeGreaterThanOrEqual(30);
+  expect(expected.total).toBeGreaterThanOrEqual(60);
   const writes: string[] = [];
   page.on("request", (request) => {
     if (!["GET", "HEAD", "OPTIONS"].includes(request.method()))
       writes.push(request.url());
   });
-  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  await page.goto("/settings#logs");
   const history = page.getByRole("region", {
     name: "Background activity",
     exact: true,
@@ -65,29 +72,43 @@ test("operation history filters real curation records and preserves navigation s
   await history
     .getByRole("combobox", { name: "Task type" })
     .selectOption("lists.curate");
-  await expect(history.getByRole("article")).toHaveCount(25);
+  await expect(history.locator(".logs-entry")).toHaveCount(50);
   await expect(history.getByRole("status")).toHaveText(
     `${expected.total} matching operations`,
   );
-  await history
-    .getByRole("button", { name: "Next activity", exact: true })
-    .click();
-  await expect(page).toHaveURL(/offset=25/);
-  await expect(history.getByText("Page 2", { exact: true })).toBeVisible();
+  await history.locator(".logs-entry").last().scrollIntoViewIfNeeded();
+  await expect(history.locator(".logs-entry")).toHaveCount(50);
+  await expect(
+    history.getByRole("button", { name: "Previous", exact: true }),
+  ).toBeDisabled();
+  await history.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page).toHaveURL(/offset=50/);
+  await expect(history.locator(".logs-entry")).toHaveCount(
+    Math.min(50, expected.total - 50),
+  );
   await page.reload();
-  await expect(history.getByText("Page 2", { exact: true })).toBeVisible();
+  await expect(history.getByText("Page 2 · 50 per page")).toBeVisible();
+  await history.getByRole("button", { name: "Previous", exact: true }).click();
+  await expect(history.locator(".logs-entry")).toHaveCount(50);
+  await history.getByRole("button", { name: "Next", exact: true }).click();
   await history
     .getByRole("combobox", { name: "Activity status" })
     .selectOption("completed");
-  await expect(history.getByText("Page 1", { exact: true })).toBeVisible();
   await expect(page).not.toHaveURL(/offset=/);
-  await history.getByLabel("Search activity", { exact: true }).fill(receipt.id);
+  await history
+    .getByRole("searchbox", { name: "Search activity", exact: true })
+    .fill(receipt.id);
   await history
     .getByRole("button", { name: "Search activity", exact: true })
     .click();
-  await expect(history.getByRole("article")).toHaveCount(1);
+  await expect(history.locator(".logs-entry")).toHaveCount(1);
   await expect(history.getByRole("status")).toHaveText("1 matching operation");
-  await history.getByText("Operation details", { exact: true }).click();
+  await history
+    .getByRole("button", {
+      name: "Operation details: List curation",
+      exact: true,
+    })
+    .click();
   await expect(
     history.getByText(`Operation ID: ${receipt.id}`, { exact: true }),
   ).toBeVisible();
@@ -112,9 +133,9 @@ test("operation history filters real curation records and preserves navigation s
   await expect(page).toHaveURL(`/lists/${list.id}`);
   await page.goBack();
   await expect(
-    history.getByLabel("Search activity", { exact: true }),
+    history.getByRole("searchbox", { name: "Search activity", exact: true }),
   ).toHaveValue(receipt.id);
-  await expect(history.getByRole("article")).toHaveCount(1);
+  await expect(history.locator(".logs-entry")).toHaveCount(1);
   await page.route("**/api/activity/page?*", (route) =>
     route.fulfill({
       status: 503,
@@ -125,14 +146,14 @@ test("operation history filters real curation records and preserves navigation s
     "Synthetic operation history outage",
     { timeout: 20_000 },
   );
-  await expect(history.getByRole("article")).toHaveCount(0);
+  await expect(history.locator(".logs-entry")).toHaveCount(0);
   await page.unroute("**/api/activity/page?*");
   await history
     .getByRole("button", { name: "Retry activity", exact: true })
     .click();
   await expect(context).toBeVisible();
   await history
-    .getByLabel("Search activity", { exact: true })
+    .getByRole("searchbox", { name: "Search activity", exact: true })
     .fill("missing_%_history");
   await history
     .getByRole("button", { name: "Search activity", exact: true })
@@ -142,12 +163,12 @@ test("operation history filters real curation records and preserves navigation s
   ).toBeVisible();
   await history.getByRole("button", { name: "Reset activity view" }).click();
   await expect(
-    history.getByLabel("Search activity", { exact: true }),
+    history.getByRole("searchbox", { name: "Search activity", exact: true }),
   ).toHaveValue("");
   await expect(
     history.getByRole("combobox", { name: "Task type" }),
   ).toHaveValue("");
-  await expect(history.getByRole("article")).toHaveCount(25);
+  await expect(history.locator(".logs-entry")).toHaveCount(50);
   expect(errors).toEqual([]);
   expect(writes).toEqual([]);
 });

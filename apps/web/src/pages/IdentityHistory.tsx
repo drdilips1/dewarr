@@ -1,5 +1,7 @@
+import { usePagedQuery } from "../hooks/usePagedQuery";
+import InfiniteScroll from "../components/InfiniteScroll";
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, result } from "../api/client";
 import { Loading, Notice } from "../components";
 
@@ -11,6 +13,10 @@ export function useRefreshIdentity() {
         "works",
         "work",
         "work-metadata",
+        "reader-work-metadata",
+        "work-grouping",
+        "library-books",
+        "discovery",
         "assets",
         "identity-history",
         "version-reviews",
@@ -34,19 +40,24 @@ export default function IdentityHistory({
   onChanged?: () => void;
 }) {
   const [open, setOpen] = useState(false);
-  const [offset, setOffset] = useState(0);
   const refresh = useRefreshIdentity();
-  const history = useQuery({
-    queryKey: ["identity-history", entityId, workId, offset],
-    queryFn: async () =>
+  const history = usePagedQuery({
+    queryKey: ["identity-history", entityId, workId],
+    queryFn: async (offset, signal) =>
       result(
         await api.GET("/api/identity/changes", {
+          signal,
           params: {
             query: { entity_id: entityId, work_id: workId, offset, limit: 10 },
           },
         }),
       ),
     enabled: open,
+    initial: 0,
+    next: (last, pages) => {
+      const count = pages.reduce((n, p) => n + p.items.length, 0);
+      return last.items.length && count < last.total ? count : undefined;
+    },
   });
   const undo = useMutation({
     mutationFn: async (id: string) =>
@@ -104,21 +115,7 @@ export default function IdentityHistory({
               )}
             </article>
           ))}
-          <div className="pagination">
-            {offset > 0 && (
-              <button
-                type="button"
-                onClick={() => setOffset(Math.max(0, offset - 10))}
-              >
-                Previous corrections
-              </button>
-            )}
-            {offset + 10 < history.data.total && (
-              <button type="button" onClick={() => setOffset(offset + 10)}>
-                Next corrections
-              </button>
-            )}
-          </div>
+          <InfiniteScroll query={history} />
         </>
       )}
     </details>

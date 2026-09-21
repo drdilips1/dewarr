@@ -1,4 +1,8 @@
-import { BookOpen } from "lucide-react";
+import ShelfViewAll from "./ShelfViewAll";
+import BookLink from "./BookLink";
+import type { ReactNode } from "react";
+import BookCover from "./BookCover";
+import ShelfPagination from "./ShelfPagination";
 import { Link } from "react-router-dom";
 import type { components } from "../api/schema";
 import { BookCard } from "../components";
@@ -8,19 +12,35 @@ export type DiscoveryItem = components["schemas"]["DiscoveryItem"];
 
 export default function DiscoveryShelf({
   shelf,
-  onPreview,
+  controls,
+  medium,
+  grid = false,
+  viewAll,
 }: {
   shelf: Shelf;
-  onPreview: (item: DiscoveryItem, button: HTMLButtonElement) => void;
+  grid?: boolean;
+  viewAll?: string;
+  controls?: ReactNode;
+  medium?: "any" | "ebook" | "audio";
 }) {
   const items = shelf.items || [];
   return (
     <>
       <div className="section-heading discovery-heading">
         <div>
-          <h2>{shelf.title}</h2>
-          <p className="muted">{shelf.attribution}</p>
+          <h2 title={shelf.attribution}>{shelf.title}</h2>
+          <span className="sr-only">{shelf.attribution}</span>
         </div>
+        {controls ||
+          (items.length > 0 && (
+            <ShelfPagination
+              page={1}
+              hasMore={false}
+              busy={false}
+              onPage={() => {}}
+              label={shelf.title}
+            />
+          ))}
         {shelf.stale && <span className="count">Cached shelf</span>}
       </div>
       {shelf.warning && (
@@ -29,7 +49,7 @@ export default function DiscoveryShelf({
         </p>
       )}
       {shelf.status === "not-connected" && (
-        <Link className="back-link" to="/metadata">
+        <Link className="back-link" to="/settings#catalog">
           Connect Hardcover
         </Link>
       )}
@@ -37,7 +57,10 @@ export default function DiscoveryShelf({
         <p className="muted">No titles available for this shelf yet.</p>
       )}
       {items.length > 0 && (
-        <ul className="discovery-shelf" aria-label={shelf.title}>
+        <ul
+          className={grid ? "explore-books" : "discovery-shelf"}
+          aria-label={shelf.title}
+        >
           {items.map((item) => (
             <li
               key={
@@ -46,45 +69,45 @@ export default function DiscoveryShelf({
               }
             >
               {item.work ? (
-                <BookCard work={item.work} />
+                <BookCard
+                  work={item.work}
+                  rating={item.book.rating}
+                  cover={item.book.cover_url}
+                  medium={medium}
+                />
               ) : (
-                <button
+                <BookLink
                   className="book-card discovery-book"
-                  onClick={(event) => onPreview(item, event.currentTarget)}
-                  aria-label={`Preview ${item.book.title}`}
+                  to={
+                    item.book.provider && item.book.external_id
+                      ? `/discover/books/${item.book.provider}/${encodeURIComponent(item.book.external_id)}`
+                      : `/search?q=${encodeURIComponent(item.book.title)}`
+                  }
+                  aria-label={`View ${item.book.title}`}
                 >
-                  <div className="book-cover">
-                    {item.book.cover_url ? (
-                      <img
-                        src={item.book.cover_url}
-                        alt=""
-                        loading="lazy"
-                        referrerPolicy="no-referrer"
-                      />
-                    ) : (
-                      <div className="type-cover">
-                        <BookOpen size={22} aria-hidden="true" />
-                        <span>{item.book.title}</span>
-                        <small>{item.book.authors.join(" · ")}</small>
-                      </div>
-                    )}
-                  </div>
-                  <h3>{item.book.title}</h3>
-                  <p>{item.book.authors.join(", ") || "Author unknown"}</p>
-                  <small className="muted">Library match not established</small>
-                </button>
+                  <BookCover
+                    title={item.book.title}
+                    providerBook={
+                      item.book.external_id
+                        ? {
+                            provider: item.book.provider,
+                            external_id: item.book.external_id,
+                          }
+                        : undefined
+                    }
+                    rating={item.book.rating}
+                    cover={item.book.cover_url}
+                    medium={medium}
+                  />
+                  <h3 title={item.book.title}>{item.book.title}</h3>
+                  <p title={item.book.authors.join(", ")}>
+                    {item.book.authors.join(", ") || "Author unknown"}
+                  </p>
+                </BookLink>
               )}
-              {item.book.release_date && (
-                <p className="discovery-date">
-                  Published {item.book.release_date}
-                </p>
-              )}
-              {item.reason !== shelf.attribution &&
-                item.reason !== shelf.title && (
-                  <p className="discovery-reason">{item.reason}</p>
-                )}
             </li>
           ))}
+          {viewAll && <ShelfViewAll to={viewAll} />}
         </ul>
       )}
     </>

@@ -1,10 +1,28 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Book Search",
+    "title": "Dewarr",
     "version": "0.1.0"
   },
   "paths": {
+    "/api/application/release": {
+      "get": {
+        "summary": "Application Release",
+        "operationId": "application_release_api_application_release_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationRelease"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/health/live": {
       "get": {
         "tags": [
@@ -318,6 +336,66 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SetupReadiness"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/setup/onboarding": {
+      "get": {
+        "tags": [
+          "setup"
+        ],
+        "summary": "Get Onboarding",
+        "operationId": "get_onboarding_api_setup_onboarding_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnboardingProgress"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "setup"
+        ],
+        "summary": "Save Onboarding",
+        "operationId": "save_onboarding_api_setup_onboarding_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnboardingProgress"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnboardingProgress"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -2163,6 +2241,21 @@
               "default": 40,
               "title": "Limit"
             }
+          },
+          {
+            "name": "medium",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "any",
+                "ebook",
+                "audio"
+              ],
+              "type": "string",
+              "default": "any",
+              "title": "Medium"
+            }
           }
         ],
         "responses": {
@@ -2257,6 +2350,225 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/catalog/works/{work_id}/cover": {
+      "get": {
+        "tags": [
+          "catalog"
+        ],
+        "summary": "Cover",
+        "operationId": "cover_api_catalog_works__work_id__cover_get",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          },
+          {
+            "name": "medium",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ebook",
+                "audio"
+              ],
+              "type": "string",
+              "default": "ebook",
+              "title": "Medium"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/catalog/cover-image": {
+      "get": {
+        "tags": [
+          "catalog"
+        ],
+        "summary": "Cover Image",
+        "operationId": "cover_image_api_catalog_cover_image_get",
+        "parameters": [
+          {
+            "name": "url",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 2000,
+              "title": "Url"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/catalog/works/{work_id}/grouping": {
+      "get": {
+        "tags": [
+          "catalog"
+        ],
+        "summary": "Grouping",
+        "operationId": "grouping_api_catalog_works__work_id__grouping_get",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__api__catalog_grouping__GroupingView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "catalog"
+        ],
+        "summary": "Edit Grouping",
+        "operationId": "edit_grouping_api_catalog_works__work_id__grouping_patch",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupingEdit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/catalog/works/{work_id}/primary-edition": {
+      "patch": {
+        "tags": [
+          "catalog"
+        ],
+        "summary": "Primary Edition",
+        "operationId": "primary_edition_api_catalog_works__work_id__primary_edition_patch",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrimaryEditionEdit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
           },
           "422": {
             "description": "Validation Error",
@@ -2448,6 +2760,687 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DiscoveryShelf"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/discovery/layout": {
+      "get": {
+        "tags": [
+          "discovery-collections"
+        ],
+        "summary": "Layout",
+        "operationId": "layout_api_discovery_layout_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscoveryPreferences"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "discovery-collections"
+        ],
+        "summary": "Save Layout",
+        "operationId": "save_layout_api_discovery_layout_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiscoveryPreferences"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscoveryPreferences"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/discovery/collections": {
+      "get": {
+        "tags": [
+          "discovery-collections"
+        ],
+        "summary": "Collections",
+        "operationId": "collections_api_discovery_collections_get",
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "all",
+                "award",
+                "listopia"
+              ],
+              "type": "string",
+              "default": "all",
+              "title": "Kind"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 150,
+              "default": "",
+              "title": "Q"
+            }
+          },
+          {
+            "name": "genre",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Genre"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Category"
+            }
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Year"
+            }
+          },
+          {
+            "name": "saved",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Saved"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 24,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionIndex"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "discovery-collections"
+        ],
+        "summary": "Add Collection",
+        "operationId": "add_collection_api_discovery_collections_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCollection"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionCard"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/discovery/collections/preview": {
+      "post": {
+        "tags": [
+          "discovery-collections"
+        ],
+        "summary": "Preview",
+        "operationId": "preview_api_discovery_collections_preview_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollectionURL"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/discovery/collections/{collection_id}": {
+      "get": {
+        "tags": [
+          "discovery-collections"
+        ],
+        "summary": "Collection",
+        "operationId": "collection_api_discovery_collections__collection_id__get",
+        "parameters": [
+          {
+            "name": "collection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Collection Id"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "winners",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Winners"
+            }
+          },
+          {
+            "name": "full",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Full"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 150,
+              "default": "",
+              "title": "Q"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/discovery/collections/{collection_id}/follow": {
+      "put": {
+        "tags": [
+          "discovery-collections"
+        ],
+        "summary": "Follow",
+        "operationId": "follow_api_discovery_collections__collection_id__follow_put",
+        "parameters": [
+          {
+            "name": "collection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Collection Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollectionFollowInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionCard"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/discovery/browse": {
+      "get": {
+        "tags": [
+          "discovery-collections"
+        ],
+        "summary": "Browse Books",
+        "operationId": "browse_books_api_discovery_browse_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 150,
+              "default": "",
+              "title": "Q"
+            }
+          },
+          {
+            "name": "genre",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Genre"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Category"
+            }
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Year"
+            }
+          },
+          {
+            "name": "winners",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Winners"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "owned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Owned"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscoveryBookPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/discovery/collections/{collection_id}/refresh": {
+      "post": {
+        "tags": [
+          "discovery-collections"
+        ],
+        "summary": "Refresh Collection",
+        "operationId": "refresh_collection_api_discovery_collections__collection_id__refresh_post",
+        "parameters": [
+          {
+            "name": "collection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Collection Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionCard"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/discovery/personal-list/preview": {
+      "post": {
+        "tags": [
+          "discovery-collections"
+        ],
+        "summary": "Preview Personal",
+        "operationId": "preview_personal_api_discovery_personal_list_preview_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonalListURL"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalListPreview"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/discovery/personal-list": {
+      "post": {
+        "tags": [
+          "discovery-collections"
+        ],
+        "summary": "Add Personal",
+        "operationId": "add_personal_api_discovery_personal_list_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonalListURL"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalListPreview"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/discovery/goodreads/{external_id}": {
+      "get": {
+        "tags": [
+          "discovery-collections"
+        ],
+        "summary": "Resolve Goodreads Book",
+        "operationId": "resolve_goodreads_book_api_discovery_goodreads__external_id__get",
+        "parameters": [
+          {
+            "name": "external_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "External Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GoodreadsBookResolution"
                 }
               }
             }
@@ -3566,6 +4559,20 @@
               "maxLength": 300,
               "default": "",
               "title": "Q"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "position",
+                "newest"
+              ],
+              "type": "string",
+              "default": "position",
+              "title": "Sort"
             }
           },
           {
@@ -5259,6 +6266,161 @@
         }
       }
     },
+    "/api/reading-accounts/goodreads": {
+      "get": {
+        "tags": [
+          "reading-accounts"
+        ],
+        "summary": "Goodreads Account",
+        "operationId": "goodreads_account_api_reading_accounts_goodreads_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/GoodreadsAccountView"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Goodreads Account Api Reading Accounts Goodreads Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "reading-accounts"
+        ],
+        "summary": "Connect Goodreads",
+        "operationId": "connect_goodreads_api_reading_accounts_goodreads_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoodreadsConnect"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GoodreadsAccountView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reading-accounts/goodreads/discover": {
+      "post": {
+        "tags": [
+          "reading-accounts"
+        ],
+        "summary": "Discover Goodreads",
+        "operationId": "discover_goodreads_api_reading_accounts_goodreads_discover_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GoodreadsAccountView"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reading-accounts/subscriptions": {
+      "get": {
+        "tags": [
+          "reading-accounts"
+        ],
+        "summary": "Subscriptions",
+        "operationId": "subscriptions_api_reading_accounts_subscriptions_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ReadingSubscription"
+                  },
+                  "type": "array",
+                  "title": "Response Subscriptions Api Reading Accounts Subscriptions Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reading-accounts/follow": {
+      "post": {
+        "tags": [
+          "reading-accounts"
+        ],
+        "summary": "Follow",
+        "operationId": "follow_api_reading_accounts_follow_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FollowReadingList"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadingFollowResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/lists/{list_id}/requests/preview": {
       "post": {
         "tags": [
@@ -5975,6 +7137,66 @@
         }
       }
     },
+    "/api/integrations/check": {
+      "post": {
+        "tags": [
+          "integrations"
+        ],
+        "summary": "Check Connection",
+        "operationId": "check_connection_api_integrations_check_post",
+        "parameters": [
+          {
+            "name": "integration_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Integration Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ABSConnectionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionCheck"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/integrations/{integration_id}": {
       "put": {
         "tags": [
@@ -6125,6 +7347,230 @@
         }
       }
     },
+    "/api/library/groups/{kind}": {
+      "get": {
+        "tags": [
+          "library"
+        ],
+        "summary": "Groups",
+        "operationId": "groups_api_library_groups__kind__get",
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "authors",
+                "series"
+              ],
+              "type": "string",
+              "title": "Kind"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 300,
+              "default": "",
+              "title": "Q"
+            }
+          },
+          {
+            "name": "medium",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "any",
+                "ebook",
+                "audio"
+              ],
+              "type": "string",
+              "default": "any",
+              "title": "Medium"
+            }
+          },
+          {
+            "name": "library_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Library Id"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 24,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LibraryGroupPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/library/groups/{kind}/books": {
+      "get": {
+        "tags": [
+          "library"
+        ],
+        "summary": "Group Books",
+        "operationId": "group_books_api_library_groups__kind__books_get",
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "authors",
+                "series"
+              ],
+              "type": "string",
+              "title": "Kind"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600,
+              "title": "Name"
+            }
+          },
+          {
+            "name": "medium",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "any",
+                "ebook",
+                "audio"
+              ],
+              "type": "string",
+              "default": "any",
+              "title": "Medium"
+            }
+          },
+          {
+            "name": "library_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Library Id"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 40,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/library/libraries": {
       "get": {
         "tags": [
@@ -6182,6 +7628,138 @@
         "responses": {
           "204": {
             "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/library/books": {
+      "get": {
+        "tags": [
+          "library"
+        ],
+        "summary": "Library Books",
+        "operationId": "library_books_api_library_books_get",
+        "parameters": [
+          {
+            "name": "library_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Library Id"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 300,
+              "default": "",
+              "title": "Q"
+            }
+          },
+          {
+            "name": "medium",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "any",
+                "ebook",
+                "audio"
+              ],
+              "type": "string",
+              "default": "any",
+              "title": "Medium"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "any",
+                "present",
+                "stale",
+                "missing-suspected",
+                "missing-confirmed",
+                "scope-unavailable",
+                "moved"
+              ],
+              "type": "string",
+              "default": "any",
+              "title": "State"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "title",
+                "recent"
+              ],
+              "type": "string",
+              "default": "title",
+              "title": "Sort"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 40,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkPage"
+                }
+              }
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -6714,6 +8292,102 @@
         }
       }
     },
+    "/api/metadata/books/hardcover/{external_id}/reader-details": {
+      "get": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Reader Details",
+        "operationId": "reader_details_api_metadata_books_hardcover__external_id__reader_details_get",
+        "parameters": [
+          {
+            "name": "external_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "External Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReaderDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metadata/authors/hardcover/{external_id}": {
+      "get": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Author Details",
+        "operationId": "author_details_api_metadata_authors_hardcover__external_id__get",
+        "parameters": [
+          {
+            "name": "external_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "External Id"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorPreview"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/metadata/books/{provider}/{external_id}/import": {
       "post": {
         "tags": [
@@ -6752,6 +8426,94 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/WorkView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metadata/works/{work_id}/reader-match": {
+      "get": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Reader Match",
+        "description": "Read-only reader metadata for inventory books without a provider binding.\n\nNever creates catalog identities or claims edition ownership from a search result.\nProvider calls use the same account-scoped cache and fences as Discover.",
+        "operationId": "reader_match_api_metadata_works__work_id__reader_match_get",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReaderMatch"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metadata/works/{work_id}/match-hardcover": {
+      "post": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Save Hardcover Match",
+        "description": "Persist only a freshly verified match, with an evidence fence and audit trail.",
+        "operationId": "save_hardcover_match_api_metadata_works__work_id__match_hardcover_post",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReaderMatch"
                 }
               }
             }
@@ -6808,6 +8570,20 @@
               "minimum": 1,
               "default": 40,
               "title": "Limit"
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "identity",
+                "display"
+              ],
+              "type": "string",
+              "default": "identity",
+              "title": "Scope"
             }
           }
         ],
@@ -7435,6 +9211,111 @@
         }
       }
     },
+    "/api/requests/quick-add": {
+      "post": {
+        "tags": [
+          "requests"
+        ],
+        "summary": "Quick Add",
+        "operationId": "quick_add_api_requests_quick_add_post",
+        "parameters": [
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 160,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuickAddInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/requests/quick-add/latest/{work_id}": {
+      "get": {
+        "tags": [
+          "requests"
+        ],
+        "summary": "Latest Quick Add",
+        "operationId": "latest_quick_add_api_requests_quick_add_latest__work_id__get",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/OperationView"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Latest Quick Add Api Requests Quick Add Latest  Work Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/requests/preview": {
       "post": {
         "tags": [
@@ -7782,6 +9663,23 @@
                 }
               ],
               "title": "Selection Id"
+            }
+          },
+          {
+            "name": "work_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Work Id"
             }
           },
           {
@@ -8597,7 +10495,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GroupingView"
+                  "$ref": "#/components/schemas/app__api__inspection_groupings__GroupingView"
                 }
               }
             }
@@ -8648,7 +10546,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GroupingView"
+                  "$ref": "#/components/schemas/app__api__inspection_groupings__GroupingView"
                 }
               }
             }
@@ -9230,6 +11128,140 @@
         }
       }
     },
+    "/api/organization/library-folders": {
+      "get": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Folders",
+        "operationId": "folders_api_organization_library_folders_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/FolderOption"
+                  },
+                  "type": "array",
+                  "title": "Response Folders Api Organization Library Folders Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organization/library-folders/{medium}": {
+      "put": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Choose",
+        "operationId": "choose_api_organization_library_folders__medium__put",
+        "parameters": [
+          {
+            "name": "medium",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "ebook",
+                "audio"
+              ],
+              "type": "string",
+              "title": "Medium"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FolderInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DestinationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organization/library-folders/{destination_id}/activate": {
+      "post": {
+        "tags": [
+          "organization"
+        ],
+        "summary": "Activate",
+        "operationId": "activate_api_organization_library_folders__destination_id__activate_post",
+        "parameters": [
+          {
+            "name": "destination_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Destination Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActivateInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DestinationView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/organization/destinations/{destination_id}/automatic-import": {
       "get": {
         "tags": [
@@ -9749,6 +11781,27 @@
         }
       }
     },
+    "/api/sources/mam/network/test": {
+      "post": {
+        "tags": [
+          "sources"
+        ],
+        "summary": "Test Network",
+        "operationId": "test_network_api_sources_mam_network_test_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MAMNetworkView"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/catalog/works/{work_id}/source-searches": {
       "post": {
         "tags": [
@@ -9960,6 +12013,70 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SourceArtifactView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/source-searches/{search_id}/results/{result_id}/download": {
+      "post": {
+        "tags": [
+          "book-sources"
+        ],
+        "summary": "Download Release",
+        "operationId": "download_release_api_source_searches__search_id__results__result_id__download_post",
+        "parameters": [
+          {
+            "name": "search_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Search Id"
+            }
+          },
+          {
+            "name": "result_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Result Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 160,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationView"
                 }
               }
             }
@@ -10777,6 +12894,42 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/source-artifacts/{artifact_id}/torrent": {
+      "get": {
+        "tags": [
+          "source-artifacts"
+        ],
+        "summary": "Save Torrent",
+        "operationId": "save_torrent_api_source_artifacts__artifact_id__torrent_get",
+        "parameters": [
+          {
+            "name": "artifact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Artifact Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
           },
           "422": {
             "description": "Validation Error",
@@ -12038,6 +14191,25 @@
         ],
         "title": "AccountView"
       },
+      "ActivateInput": {
+        "properties": {
+          "expected_revision": {
+            "type": "string",
+            "title": "Expected Revision"
+          },
+          "automatic": {
+            "type": "boolean",
+            "title": "Automatic",
+            "default": true
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_revision"
+        ],
+        "title": "ActivateInput"
+      },
       "ActivationRecord": {
         "properties": {
           "work_id": {
@@ -12258,6 +14430,119 @@
         ],
         "title": "ActivityPage"
       },
+      "AddCollection": {
+        "properties": {
+          "pinned": {
+            "type": "boolean",
+            "title": "Pinned",
+            "default": true
+          },
+          "tracking": {
+            "type": "boolean",
+            "title": "Tracking",
+            "default": true
+          },
+          "url": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "title": "AddCollection"
+      },
+      "ApplicationRelease": {
+        "properties": {
+          "installed_version": {
+            "type": "string",
+            "title": "Installed Version"
+          },
+          "installed_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Installed Url"
+          },
+          "latest_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latest Version"
+          },
+          "release_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Release Url"
+          },
+          "update_available": {
+            "type": "boolean",
+            "title": "Update Available"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "installed_version",
+          "installed_url",
+          "latest_version",
+          "release_url",
+          "update_available",
+          "status"
+        ],
+        "title": "ApplicationRelease"
+      },
+      "AssetFileView": {
+        "properties": {
+          "path": {
+            "type": "string",
+            "title": "Path"
+          },
+          "format": {
+            "type": "string",
+            "title": "Format"
+          },
+          "size": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size"
+          }
+        },
+        "type": "object",
+        "required": [
+          "path",
+          "format"
+        ],
+        "title": "AssetFileView"
+      },
       "AssetPage": {
         "properties": {
           "items": {
@@ -12382,6 +14667,13 @@
             "type": "string",
             "title": "Open Url"
           },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/AssetFileView"
+            },
+            "type": "array",
+            "title": "Files"
+          },
           "match_revision": {
             "anyOf": [
               {
@@ -12501,6 +14793,17 @@
           "release_title": {
             "type": "string",
             "title": "Release Title"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
           },
           "message": {
             "type": "string",
@@ -12624,6 +14927,110 @@
         ],
         "title": "AuthView"
       },
+      "AuthorDetails": {
+        "properties": {
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slug"
+          },
+          "bio": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bio"
+          },
+          "image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "external_id",
+          "name"
+        ],
+        "title": "AuthorDetails"
+      },
+      "AuthorPreview": {
+        "properties": {
+          "author": {
+            "$ref": "#/components/schemas/AuthorDetails"
+          },
+          "books": {
+            "items": {
+              "$ref": "#/components/schemas/BookData"
+            },
+            "type": "array",
+            "title": "Books"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More",
+            "default": false
+          },
+          "stale": {
+            "type": "boolean",
+            "title": "Stale",
+            "default": false
+          },
+          "warning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Warning"
+          },
+          "known_works": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/WorkView"
+            },
+            "type": "object",
+            "title": "Known Works"
+          }
+        },
+        "type": "object",
+        "required": [
+          "author",
+          "books",
+          "page"
+        ],
+        "title": "AuthorPreview"
+      },
       "AutomaticRoutes": {
         "properties": {
           "downloader_id": {
@@ -12684,6 +15091,18 @@
             "type": "string",
             "format": "uuid",
             "title": "Search Id"
+          },
+          "result_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result Id"
           },
           "downloader_id": {
             "type": "string",
@@ -12877,6 +15296,57 @@
             "type": "boolean",
             "title": "In Collection",
             "default": false
+          },
+          "ebook_versions": {
+            "type": "integer",
+            "title": "Ebook Versions",
+            "default": 0
+          },
+          "audio_versions": {
+            "type": "integer",
+            "title": "Audio Versions",
+            "default": 0
+          },
+          "ebook_stale": {
+            "type": "boolean",
+            "title": "Ebook Stale",
+            "default": false
+          },
+          "audio_stale": {
+            "type": "boolean",
+            "title": "Audio Stale",
+            "default": false
+          },
+          "primary_ebook_version_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Primary Ebook Version Id"
+          },
+          "primary_audio_version_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Primary Audio Version Id"
+          },
+          "primary_audio_narrators": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Primary Audio Narrators"
           }
         },
         "type": "object",
@@ -13129,6 +15599,19 @@
       },
       "BookData": {
         "properties": {
+          "rating": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 5.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rating"
+          },
           "provider": {
             "type": "string",
             "enum": [
@@ -13289,6 +15772,59 @@
           "book"
         ],
         "title": "BookPreview"
+      },
+      "BookReview": {
+        "properties": {
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          },
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "rating": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 5.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rating"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "spoilers": {
+            "type": "boolean",
+            "title": "Spoilers"
+          },
+          "reviewed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "external_id",
+          "username",
+          "text",
+          "spoilers"
+        ],
+        "title": "BookReview"
       },
       "BookSearchView": {
         "properties": {
@@ -13751,6 +16287,334 @@
         ],
         "title": "ClaimedFile"
       },
+      "CollectionCard": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "award",
+              "listopia"
+            ],
+            "title": "Kind"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "source_url": {
+            "type": "string",
+            "title": "Source Url"
+          },
+          "year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "genres": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Genres"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "coverage": {
+            "type": "string",
+            "enum": [
+              "complete",
+              "partial"
+            ],
+            "title": "Coverage"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "covers": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Covers"
+          },
+          "pinned": {
+            "type": "boolean",
+            "title": "Pinned",
+            "default": false
+          },
+          "tracking": {
+            "type": "boolean",
+            "title": "Tracking",
+            "default": false
+          },
+          "saved": {
+            "type": "boolean",
+            "title": "Saved",
+            "default": false
+          },
+          "warning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Warning"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "source_url",
+          "genres",
+          "count",
+          "coverage",
+          "updated_at",
+          "covers"
+        ],
+        "title": "CollectionCard"
+      },
+      "CollectionDetail": {
+        "properties": {
+          "collection": {
+            "$ref": "#/components/schemas/CollectionCard"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/CollectionEntry"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          }
+        },
+        "type": "object",
+        "required": [
+          "collection",
+          "items",
+          "total",
+          "page",
+          "has_more"
+        ],
+        "title": "CollectionDetail"
+      },
+      "CollectionEntry": {
+        "properties": {
+          "rating": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 5.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rating"
+          },
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Authors"
+          },
+          "cover_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cover Url"
+          },
+          "identifiers": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Identifiers"
+          },
+          "rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rank"
+          },
+          "votes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Votes"
+          },
+          "winner": {
+            "type": "boolean",
+            "title": "Winner",
+            "default": false
+          },
+          "work": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/WorkView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "external_id",
+          "title"
+        ],
+        "title": "CollectionEntry"
+      },
+      "CollectionFollowInput": {
+        "properties": {
+          "pinned": {
+            "type": "boolean",
+            "title": "Pinned",
+            "default": true
+          },
+          "tracking": {
+            "type": "boolean",
+            "title": "Tracking",
+            "default": true
+          }
+        },
+        "type": "object",
+        "title": "CollectionFollowInput"
+      },
+      "CollectionIndex": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/CollectionCard"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "years": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Years"
+          },
+          "genres": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Genres"
+          },
+          "categories": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Categories"
+          },
+          "archive_gaps": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Archive Gaps"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "years",
+          "genres",
+          "categories",
+          "archive_gaps"
+        ],
+        "title": "CollectionIndex"
+      },
+      "CollectionURL": {
+        "properties": {
+          "url": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "title": "CollectionURL"
+      },
       "CommandReconciliationItemView": {
         "properties": {
           "finding_id": {
@@ -14038,6 +16902,36 @@
         ],
         "title": "CommunityListPreview"
       },
+      "ConnectionCheck": {
+        "properties": {
+          "library_count": {
+            "type": "integer",
+            "title": "Library Count"
+          },
+          "book_count": {
+            "type": "integer",
+            "title": "Book Count"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "library_count",
+          "book_count",
+          "version"
+        ],
+        "title": "ConnectionCheck"
+      },
       "ConnectionChoice": {
         "properties": {
           "finding_id": {
@@ -14141,7 +17035,7 @@
             "anyOf": [
               {
                 "type": "string",
-                "pattern": "^[A-Za-z0-9_-]{1,100}$"
+                "pattern": "^[A-Za-z0-9_-]{0,100}$"
               },
               {
                 "type": "null"
@@ -14400,6 +17294,28 @@
               }
             ],
             "title": "Last Success At"
+          },
+          "library_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Library Count"
+          },
+          "book_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Book Count"
           }
         },
         "type": "object",
@@ -15188,6 +18104,17 @@
             "type": "string",
             "title": "Backend Path"
           },
+          "local_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Local Path"
+          },
           "mode": {
             "type": "string",
             "title": "Mode"
@@ -15238,6 +18165,37 @@
         ],
         "title": "DestinationView"
       },
+      "DiscoveryBookPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/CollectionEntry"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "has_more"
+        ],
+        "title": "DiscoveryBookPage"
+      },
       "DiscoveryItem": {
         "properties": {
           "book": {
@@ -15264,6 +18222,28 @@
           "reason"
         ],
         "title": "DiscoveryItem"
+      },
+      "DiscoveryPreferences": {
+        "properties": {
+          "hidden": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 200,
+            "title": "Hidden"
+          },
+          "order": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 200,
+            "title": "Order"
+          }
+        },
+        "type": "object",
+        "title": "DiscoveryPreferences"
       },
       "DiscoveryShelf": {
         "properties": {
@@ -15339,6 +18319,19 @@
       },
       "DiscoveryTitle": {
         "properties": {
+          "rating": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 5.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rating"
+          },
           "provider": {
             "type": "string",
             "enum": [
@@ -15615,23 +18608,37 @@
             "title": "Password"
           },
           "save_path": {
-            "type": "string",
-            "maxLength": 2000,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Save Path"
           },
           "category": {
             "type": "string",
-            "pattern": "^[A-Za-z0-9_-]{1,100}$",
+            "pattern": "^[A-Za-z0-9_-]{0,100}$",
             "title": "Category",
-            "default": "book-search"
+            "default": ""
           },
           "mappings": {
-            "items": {
-              "$ref": "#/components/schemas/DownloadMapping"
-            },
-            "type": "array",
-            "maxItems": 20,
-            "minItems": 1,
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/DownloadMapping"
+                },
+                "type": "array",
+                "maxItems": 20,
+                "minItems": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Mappings"
           },
           "enabled": {
@@ -15649,9 +18656,7 @@
         "additionalProperties": false,
         "type": "object",
         "required": [
-          "base_url",
-          "save_path",
-          "mappings"
+          "base_url"
         ],
         "title": "DownloaderInput"
       },
@@ -15992,6 +18997,34 @@
         ],
         "title": "EditionData"
       },
+      "EgressResult": {
+        "properties": {
+          "ip": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ip"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "type": "object",
+        "title": "EgressResult"
+      },
       "EntryInput": {
         "properties": {
           "work_id": {
@@ -16150,6 +19183,79 @@
         ],
         "title": "ExcludedFile"
       },
+      "ExistingCopyHint": {
+        "properties": {
+          "asset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Asset Id"
+          },
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "version_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "medium": {
+            "type": "string",
+            "title": "Medium"
+          },
+          "narrators": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Narrators"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "meets_requirements": {
+            "type": "boolean",
+            "title": "Meets Requirements"
+          }
+        },
+        "type": "object",
+        "required": [
+          "asset_id",
+          "work_id",
+          "version_id",
+          "title",
+          "medium",
+          "narrators",
+          "language",
+          "state",
+          "meets_requirements"
+        ],
+        "title": "ExistingCopyHint"
+      },
       "FileMapping": {
         "properties": {
           "source": {
@@ -16269,6 +19375,105 @@
         ],
         "title": "FindingsPage"
       },
+      "FolderInput": {
+        "properties": {
+          "library_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Library Id"
+          },
+          "backend_path": {
+            "type": "string",
+            "maxLength": 1024,
+            "title": "Backend Path"
+          },
+          "local_path": {
+            "type": "string",
+            "maxLength": 1024,
+            "title": "Local Path"
+          },
+          "destination_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Destination Id"
+          },
+          "expected_revision": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "library_id",
+          "backend_path",
+          "local_path"
+        ],
+        "title": "FolderInput"
+      },
+      "FolderOption": {
+        "properties": {
+          "library_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Library Id"
+          },
+          "library_name": {
+            "type": "string",
+            "title": "Library Name"
+          },
+          "server_name": {
+            "type": "string",
+            "title": "Server Name"
+          },
+          "folders": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Folders",
+            "default": []
+          },
+          "ebooks_allowed": {
+            "type": "boolean",
+            "title": "Ebooks Allowed",
+            "default": true
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "library_id",
+          "library_name",
+          "server_name"
+        ],
+        "title": "FolderOption"
+      },
       "FollowInput": {
         "properties": {
           "name": {
@@ -16289,6 +19494,37 @@
         "additionalProperties": false,
         "type": "object",
         "title": "FollowInput"
+      },
+      "FollowReadingList": {
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "goodreads",
+              "hardcover"
+            ],
+            "title": "Provider"
+          },
+          "external_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "External Id"
+          },
+          "interval_minutes": {
+            "type": "integer",
+            "maximum": 1440.0,
+            "minimum": 30.0,
+            "title": "Interval Minutes",
+            "default": 60
+          }
+        },
+        "type": "object",
+        "required": [
+          "provider",
+          "external_id"
+        ],
+        "title": "FollowReadingList"
       },
       "FollowResult": {
         "properties": {
@@ -16670,6 +19906,128 @@
         ],
         "title": "FulfillmentView"
       },
+      "GoodreadsAccountView": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "profile_url": {
+            "type": "string",
+            "title": "Profile Url"
+          },
+          "selected": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Selected"
+          },
+          "shelves": {
+            "items": {
+              "$ref": "#/components/schemas/GoodreadsShelf"
+            },
+            "type": "array",
+            "title": "Shelves"
+          },
+          "discovered_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Discovered At"
+          },
+          "warning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Warning"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "name",
+          "profile_url",
+          "selected",
+          "shelves",
+          "discovered_at",
+          "warning"
+        ],
+        "title": "GoodreadsAccountView"
+      },
+      "GoodreadsBookResolution": {
+        "properties": {
+          "entry": {
+            "$ref": "#/components/schemas/CollectionEntry"
+          },
+          "match": {
+            "$ref": "#/components/schemas/MatchResult"
+          }
+        },
+        "type": "object",
+        "required": [
+          "entry",
+          "match"
+        ],
+        "title": "GoodreadsBookResolution"
+      },
+      "GoodreadsConnect": {
+        "properties": {
+          "profile": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Profile"
+          }
+        },
+        "type": "object",
+        "required": [
+          "profile"
+        ],
+        "title": "GoodreadsConnect"
+      },
+      "GoodreadsShelf": {
+        "properties": {
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "external_id",
+          "name",
+          "count"
+        ],
+        "title": "GoodreadsShelf"
+      },
       "GrantInput": {
         "properties": {
           "user_ids": {
@@ -16750,6 +20108,28 @@
           "revision"
         ],
         "title": "GroupMatch"
+      },
+      "GroupMember": {
+        "properties": {
+          "work": {
+            "$ref": "#/components/schemas/WorkView"
+          },
+          "separate": {
+            "type": "boolean",
+            "title": "Separate"
+          },
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          }
+        },
+        "type": "object",
+        "required": [
+          "work",
+          "separate",
+          "revision"
+        ],
+        "title": "GroupMember"
       },
       "GroupSelection": {
         "properties": {
@@ -16834,6 +20214,25 @@
         ],
         "title": "GroupingContent"
       },
+      "GroupingEdit": {
+        "properties": {
+          "separate": {
+            "type": "boolean",
+            "title": "Separate"
+          },
+          "expected_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Expected Revision"
+          }
+        },
+        "type": "object",
+        "required": [
+          "separate",
+          "expected_revision"
+        ],
+        "title": "GroupingEdit"
+      },
       "GroupingInput": {
         "properties": {
           "inspection_revision": {
@@ -16879,29 +20278,6 @@
           "expected_revision"
         ],
         "title": "GroupingInput"
-      },
-      "GroupingView": {
-        "properties": {
-          "revision": {
-            "type": "string",
-            "title": "Revision"
-          },
-          "position": {
-            "type": "integer",
-            "title": "Position"
-          },
-          "content": {
-            "$ref": "#/components/schemas/GroupingContent"
-          }
-        },
-        "additionalProperties": false,
-        "type": "object",
-        "required": [
-          "revision",
-          "position",
-          "content"
-        ],
-        "title": "GroupingView"
       },
       "HTTPValidationError": {
         "properties": {
@@ -17642,6 +21018,90 @@
           "attribution"
         ],
         "title": "LibraryDiscoveryShelf"
+      },
+      "LibraryGroup": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "book_count": {
+            "type": "integer",
+            "title": "Book Count"
+          },
+          "external_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External Id"
+          },
+          "books": {
+            "items": {
+              "$ref": "#/components/schemas/WorkView"
+            },
+            "type": "array",
+            "title": "Books"
+          },
+          "hardcover_book_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hardcover Book Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "key",
+          "book_count",
+          "books"
+        ],
+        "title": "LibraryGroup"
+      },
+      "LibraryGroupPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/LibraryGroup"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "offset",
+          "limit"
+        ],
+        "title": "LibraryGroupPage"
       },
       "LibraryView": {
         "properties": {
@@ -18796,6 +22256,59 @@
         ],
         "title": "MAMConnectionView"
       },
+      "MAMNetworkView": {
+        "properties": {
+          "connection": {
+            "$ref": "#/components/schemas/MAMConnectionView"
+          },
+          "checked_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Checked At"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "cookie_status": {
+            "type": "string",
+            "title": "Cookie Status"
+          },
+          "proxy_status": {
+            "type": "string",
+            "title": "Proxy Status"
+          },
+          "proxy": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EgressResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "direct": {
+            "$ref": "#/components/schemas/EgressResult"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "connection",
+          "checked_at",
+          "status",
+          "cookie_status",
+          "proxy_status",
+          "proxy",
+          "direct",
+          "message"
+        ],
+        "title": "MAMNetworkView"
+      },
       "MAMRelease": {
         "properties": {
           "source": {
@@ -19519,6 +23032,50 @@
         ],
         "title": "MatchPage"
       },
+      "MatchResult": {
+        "properties": {
+          "book": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BookData"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/BookData"
+            },
+            "type": "array",
+            "title": "Candidates"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "unmatched"
+          },
+          "basis": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Basis"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason",
+            "default": "No confident Hardcover match was found."
+          }
+        },
+        "type": "object",
+        "title": "MatchResult"
+      },
       "MergeCommand": {
         "properties": {
           "source_id": {
@@ -19676,6 +23233,11 @@
             "minLength": 2,
             "title": "Language",
             "default": "en"
+          },
+          "filter_language": {
+            "type": "boolean",
+            "title": "Filter Language",
+            "default": false
           },
           "covers": {
             "type": "string",
@@ -20439,6 +24001,40 @@
         ],
         "title": "OmittedSeriesBook"
       },
+      "OnboardingProgress": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "deferred",
+              "completed",
+              "skipped"
+            ],
+            "title": "Status",
+            "default": "pending"
+          },
+          "step": {
+            "type": "integer",
+            "maximum": 6.0,
+            "minimum": 0.0,
+            "title": "Step",
+            "default": 0
+          },
+          "skipped": {
+            "items": {
+              "type": "integer",
+              "maximum": 6.0,
+              "minimum": 0.0
+            },
+            "type": "array",
+            "maxItems": 7,
+            "title": "Skipped"
+          }
+        },
+        "type": "object",
+        "title": "OnboardingProgress"
+      },
       "OperationView": {
         "properties": {
           "id": {
@@ -20856,6 +24452,63 @@
           "worker_path"
         ],
         "title": "PathPreviewView"
+      },
+      "PersonalListPreview": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "titles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Titles"
+          },
+          "list_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "List Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "count",
+          "titles"
+        ],
+        "title": "PersonalListPreview"
+      },
+      "PersonalListURL": {
+        "properties": {
+          "url": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Url"
+          },
+          "tracking": {
+            "type": "boolean",
+            "title": "Tracking",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "title": "PersonalListURL"
       },
       "PlannedItem": {
         "properties": {
@@ -21492,6 +25145,13 @@
       },
       "PreviewView": {
         "properties": {
+          "existing_copies": {
+            "items": {
+              "$ref": "#/components/schemas/ExistingCopyHint"
+            },
+            "type": "array",
+            "title": "Existing Copies"
+          },
           "specification": {
             "$ref": "#/components/schemas/RequestSpec"
           },
@@ -21534,6 +25194,38 @@
           "targets"
         ],
         "title": "PreviewView"
+      },
+      "PrimaryEditionEdit": {
+        "properties": {
+          "medium": {
+            "type": "string",
+            "pattern": "^(ebook|audio)$",
+            "title": "Medium"
+          },
+          "version_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Id"
+          },
+          "expected_revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Expected Revision"
+          }
+        },
+        "type": "object",
+        "required": [
+          "medium",
+          "expected_revision"
+        ],
+        "title": "PrimaryEditionEdit"
       },
       "ProbeInput": {
         "properties": {
@@ -22299,6 +25991,24 @@
         ],
         "title": "QueueFenceView"
       },
+      "QuickAddInput": {
+        "properties": {
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "specification": {
+            "$ref": "#/components/schemas/RequestOptions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "work_id"
+        ],
+        "title": "QuickAddInput"
+      },
       "RankedReleaseView": {
         "properties": {
           "id": {
@@ -22357,6 +26067,240 @@
           "current_connection"
         ],
         "title": "RankedReleaseView"
+      },
+      "ReaderDetails": {
+        "properties": {
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slug"
+          },
+          "rating": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 5.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rating"
+          },
+          "ratings_count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Ratings Count",
+            "default": 0
+          },
+          "pages": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pages"
+          },
+          "audio_seconds": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Seconds"
+          },
+          "release_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Release Date"
+          },
+          "authors": {
+            "items": {
+              "$ref": "#/components/schemas/AuthorDetails"
+            },
+            "type": "array",
+            "title": "Authors"
+          },
+          "reviews": {
+            "items": {
+              "$ref": "#/components/schemas/BookReview"
+            },
+            "type": "array",
+            "title": "Reviews"
+          },
+          "reviews_warning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviews Warning"
+          },
+          "stale": {
+            "type": "boolean",
+            "title": "Stale",
+            "default": false
+          },
+          "warning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Warning"
+          }
+        },
+        "type": "object",
+        "required": [
+          "external_id"
+        ],
+        "title": "ReaderDetails"
+      },
+      "ReaderMatch": {
+        "properties": {
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/BookData"
+            },
+            "type": "array",
+            "title": "Candidates"
+          },
+          "book": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BookData"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "matched",
+              "unmatched",
+              "disabled"
+            ],
+            "title": "Status",
+            "default": "unmatched"
+          },
+          "basis": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Basis"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "title": "ReaderMatch"
+      },
+      "ReadingFollowResult": {
+        "properties": {
+          "list_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "List Id"
+          },
+          "reused": {
+            "type": "boolean",
+            "title": "Reused"
+          }
+        },
+        "type": "object",
+        "required": [
+          "list_id",
+          "reused"
+        ],
+        "title": "ReadingFollowResult"
+      },
+      "ReadingSubscription": {
+        "properties": {
+          "list_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "List Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          },
+          "account_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Account Id"
+          },
+          "subscription": {
+            "$ref": "#/components/schemas/SubscriptionView"
+          }
+        },
+        "type": "object",
+        "required": [
+          "list_id",
+          "name",
+          "external_id",
+          "account_id",
+          "subscription"
+        ],
+        "title": "ReadingSubscription"
       },
       "ReasonView": {
         "properties": {
@@ -26423,6 +30367,18 @@
             "format": "uuid",
             "title": "Id"
           },
+          "work_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Work Id"
+          },
           "revision": {
             "anyOf": [
               {
@@ -26476,6 +30432,16 @@
             },
             "type": "array",
             "title": "Series"
+          },
+          "book": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BookData"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -26948,6 +30914,11 @@
           "can_automate": {
             "type": "boolean",
             "title": "Can Automate"
+          },
+          "onboarding_status": {
+            "type": "string",
+            "title": "Onboarding Status",
+            "default": "pending"
           }
         },
         "type": "object",
@@ -27112,6 +31083,29 @@
             "type": "string",
             "format": "uuid",
             "title": "Id"
+          },
+          "work_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Work Id"
+          },
+          "abridged": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Abridged"
           },
           "medium": {
             "type": "string",
@@ -27708,6 +31702,27 @@
         ],
         "title": "WritebackResolveInput"
       },
+      "app__api__catalog_grouping__GroupingView": {
+        "properties": {
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "members": {
+            "items": {
+              "$ref": "#/components/schemas/GroupMember"
+            },
+            "type": "array",
+            "title": "Members"
+          }
+        },
+        "type": "object",
+        "required": [
+          "reason",
+          "members"
+        ],
+        "title": "GroupingView"
+      },
       "app__api__identity__RevisionInput": {
         "properties": {
           "expected_revision": {
@@ -27721,6 +31736,29 @@
           "expected_revision"
         ],
         "title": "RevisionInput"
+      },
+      "app__api__inspection_groupings__GroupingView": {
+        "properties": {
+          "revision": {
+            "type": "string",
+            "title": "Revision"
+          },
+          "position": {
+            "type": "integer",
+            "title": "Position"
+          },
+          "content": {
+            "$ref": "#/components/schemas/GroupingContent"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "revision",
+          "position",
+          "content"
+        ],
+        "title": "GroupingView"
       },
       "app__api__library__MatchInput": {
         "properties": {

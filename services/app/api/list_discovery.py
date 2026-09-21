@@ -12,8 +12,8 @@ from app.api.catalog import WorkView, work_view
 from app.api.dependencies import CurrentUser, Database
 from app.db.models import BookList, LibraryAsset, ListEntry, ListSubscription, Work
 from app.domain.availability import availability_for, availability_rows
+from app.domain.catalog_display import display_map
 from app.domain.visibility import visible_work
-from app.domain.work_graph import canonical_map
 
 router = APIRouter(prefix="/discovery", tags=["discovery"])
 
@@ -69,7 +69,7 @@ async def followed_lists(
     if not rows:
         return FollowedListShelf(items=[], total=total or 0, offset=offset, limit=limit)
 
-    mapping = canonical_map()
+    mapping = display_map(user)
     roots = (
         select(ListEntry.list_id, mapping.c.work_id, func.min(ListEntry.position).label("position"))
         .join(mapping, mapping.c.origin_id == ListEntry.work_id)

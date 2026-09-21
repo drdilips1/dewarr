@@ -1,9 +1,16 @@
-import { useEffect } from "react";
+import { Fragment, useEffect, useState, type ReactNode } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link, useSearchParams } from "react-router-dom";
-import { Check, Clock, CircleAlert } from "lucide-react";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
+import { ChevronRight } from "lucide-react";
 import { api, result } from "../api/client";
 import { Empty, Loading, Notice } from "../components";
+
+const PAGE_SIZE = 50;
 
 const labels: Record<string, string> = {
   "acquisition.auto-select": "Automatic release preparation",
@@ -27,28 +34,38 @@ const labels: Record<string, string> = {
   "metadata.resolve-import": "Imported metadata lookup",
 };
 
-export default function OperationHistory() {
-  const [params, setParams] = useSearchParams();
+export default function OperationHistory({ actions }: { actions?: ReactNode }) {
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const q = (params.get("q") || "").slice(0, 300);
   const status = (params.get("status") || "").slice(0, 40);
   const kind = (params.get("kind") || "").slice(0, 60);
   const rawOffset = Number(params.get("offset") || 0);
   const offset =
-    Number.isSafeInteger(rawOffset) && rawOffset >= 0 ? rawOffset : 0;
+    Number.isSafeInteger(rawOffset) && rawOffset >= 0
+      ? Math.floor(rawOffset / PAGE_SIZE) * PAGE_SIZE
+      : 0;
   const cache = useQueryClient();
   function change(key: string, value: string) {
     const next = new URLSearchParams(params);
     if (value) next.set(key, value);
     else next.delete(key);
     if (key !== "offset") next.delete("offset");
-    setParams(next);
+    navigate({
+      pathname: location.pathname,
+      search: next.toString(),
+      hash: location.hash,
+    });
   }
   const activity = useQuery({
     queryKey: ["activity", "history", q, status, kind, offset],
-    queryFn: async () =>
+    queryFn: async ({ signal }) =>
       result(
         await api.GET("/api/activity/page", {
-          params: { query: { q, status, kind, offset, limit: 25 } },
+          signal,
+          params: { query: { q, status, kind, offset, limit: PAGE_SIZE } },
         }),
       ),
     refetchInterval: (query) =>
@@ -100,13 +117,15 @@ export default function OperationHistory() {
       className="operation-history"
       aria-labelledby="operation-history-title"
     >
-      <h2 id="operation-history-title">Background activity</h2>
-      <p className="muted">
-        Your operation history, newest first. Filters apply to this history;
-        requests and downloads above have their own status.
-      </p>
+      <div className="logs-heading">
+        <div>
+          <h2 id="operation-history-title">Background activity</h2>
+          <p className="muted">Jobs and library checks, newest first.</p>
+        </div>
+        {actions}
+      </div>
       <form
-        className="library-search"
+        className="logs-toolbar"
         aria-label="Search background activity"
         onSubmit={(event) => {
           event.preventDefault();
@@ -117,21 +136,21 @@ export default function OperationHistory() {
         }}
       >
         <label>
-          Search activity
+          <span className="sr-only">Search activity</span>
           <input
             key={q}
             name="q"
             type="search"
             maxLength={300}
             defaultValue={q}
-            placeholder="Message, task type or operation ID"
+            placeholder="Search logs…"
           />
         </label>
-        <button type="submit">Search activity</button>
-      </form>
-      <div className="library-filters">
+        <button type="submit" aria-label="Search activity">
+          Search
+        </button>
         <label>
-          Activity status
+          <span className="sr-only">Activity status</span>
           <select
             value={status}
             onChange={(event) => change("status", event.target.value)}
@@ -139,13 +158,13 @@ export default function OperationHistory() {
             <option value="">All statuses</option>
             {statuses.map((value) => (
               <option key={value} value={value}>
-                {value}
+                {value.charAt(0).toUpperCase() + value.slice(1)}
               </option>
             ))}
           </select>
         </label>
         <label>
-          Task type
+          <span className="sr-only">Task type</span>
           <select
             value={kind}
             onChange={(event) => change("kind", event.target.value)}
@@ -161,17 +180,22 @@ export default function OperationHistory() {
         {(filtered || offset > 0) && (
           <button
             type="button"
+            aria-label="Reset activity view"
             onClick={() => {
               const next = new URLSearchParams(params);
               for (const key of ["q", "status", "kind", "offset"])
                 next.delete(key);
-              setParams(next);
+              navigate({
+                pathname: location.pathname,
+                search: next.toString(),
+                hash: location.hash,
+              });
             }}
           >
-            Reset activity view
+            Clear
           </button>
         )}
-      </div>
+      </form>
       <Notice error={activity.error} />
       {activity.isPending && <Loading />}
       {activity.error && (
@@ -182,104 +206,163 @@ export default function OperationHistory() {
           Retry activity
         </button>
       )}
-      {!activity.error && activity.data && (
+      {activity.data && !activity.error && (
         <>
-          <p className="muted" role="status">
+          <p className="logs-count muted" role="status">
             {activity.data.total} matching{" "}
             {activity.data.total === 1 ? "operation" : "operations"}
           </p>
           {activity.data.items.length ? (
-            <div className="activity-list">
-              {activity.data.items.map((item) => (
-                <article
-                  className="activity-row"
-                  key={item.id}
-                  aria-label={`${labels[item.kind] || item.kind}: ${item.status}`}
-                >
-                  <div
-                    className={
-                      item.status === "completed"
-                        ? "activity-icon success"
-                        : "activity-icon"
-                    }
-                    aria-hidden="true"
-                  >
-                    {item.status === "completed" ? (
-                      <Check size={20} />
-                    ) : ["failed", "attention", "blocked"].includes(
-                        item.status,
-                      ) ? (
-                      <CircleAlert size={20} />
-                    ) : (
-                      <Clock size={20} />
-                    )}
-                  </div>
-                  <div className="grow">
-                    <h3>{labels[item.kind] || item.kind}</h3>
-                    <p>{item.message}</p>
-                    {item.context && (
-                      <Link className="back-link" to={item.context.href}>
-                        {item.context.label}
-                      </Link>
-                    )}
-                    <details className="operation-details">
-                      <summary>Operation details</summary>
-                      <p>
-                        Operation ID: <code>{item.id}</code>
-                      </p>
-                      <p>
-                        Last updated:{" "}
-                        <time dateTime={item.updated_at}>
-                          {new Date(item.updated_at).toLocaleString()}
-                        </time>
-                      </p>
-                    </details>
-                  </div>
-                  <div className="activity-meta">
-                    <span className="status">{item.status}</span>
-                    <time dateTime={item.created_at}>
-                      {new Date(item.created_at).toLocaleString()}
-                    </time>
-                  </div>
-                </article>
-              ))}
+            <div
+              className="logs-table-scroll"
+              role="region"
+              aria-label="Log entries"
+              tabIndex={0}
+            >
+              <table className="logs-table">
+                <caption className="sr-only">
+                  Background activity, newest first
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col" aria-label="Details" />
+                    <th scope="col">Time</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Task</th>
+                    <th scope="col">Message</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {activity.data.items.map((item) => (
+                    <Fragment key={item.id}>
+                      <tr className="logs-entry">
+                        <td>
+                          <button
+                            className="logs-expand"
+                            aria-label={`Operation details: ${labels[item.kind] || item.kind}`}
+                            aria-expanded={expanded === item.id}
+                            aria-controls={`log-${item.id}`}
+                            onClick={() =>
+                              setExpanded(expanded === item.id ? null : item.id)
+                            }
+                          >
+                            <ChevronRight size={14} aria-hidden="true" />
+                          </button>
+                        </td>
+                        <td className="logs-time">
+                          <time
+                            dateTime={item.created_at}
+                            title={new Date(item.created_at).toLocaleString()}
+                          >
+                            {new Date(item.created_at).toLocaleDateString(
+                              undefined,
+                              { month: "short", day: "numeric" },
+                            )}{" "}
+                            <span>
+                              {new Date(item.created_at).toLocaleTimeString(
+                                undefined,
+                                {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  second: "2-digit",
+                                  hour12: false,
+                                },
+                              )}
+                            </span>
+                          </time>
+                        </td>
+                        <td>
+                          <span
+                            className="logs-status"
+                            data-status={item.status}
+                          >
+                            {item.status}
+                          </span>
+                        </td>
+                        <td
+                          className="logs-task"
+                          title={labels[item.kind] || item.kind}
+                        >
+                          {labels[item.kind] || item.kind}
+                        </td>
+                        <td
+                          className="logs-message"
+                          title={item.message || undefined}
+                        >
+                          {item.message || "—"}
+                        </td>
+                      </tr>
+                      <tr
+                        id={`log-${item.id}`}
+                        hidden={expanded !== item.id}
+                        className="logs-detail-row"
+                      >
+                        <td colSpan={5}>
+                          <div className="logs-detail">
+                            <p>{item.message}</p>
+                            {item.context && (
+                              <Link to={item.context.href}>
+                                {item.context.label}
+                              </Link>
+                            )}
+                            <p>
+                              Operation ID: <code>{item.id}</code>
+                            </p>
+                            <p>Task type: {item.kind}</p>
+                            <p>
+                              Created:{" "}
+                              <time dateTime={item.created_at}>
+                                {new Date(item.created_at).toLocaleString()}
+                              </time>
+                            </p>
+                            <p>
+                              Last updated:{" "}
+                              <time dateTime={item.updated_at}>
+                                {new Date(item.updated_at).toLocaleString()}
+                              </time>
+                            </p>
+                          </div>
+                        </td>
+                      </tr>
+                    </Fragment>
+                  ))}
+                </tbody>
+              </table>
             </div>
           ) : (
             <Empty
               title={
-                filtered
-                  ? "No matching activity"
-                  : "No background activity on this page"
+                filtered ? "No matching activity" : "No background activity"
               }
             >
-              {offset > 0
-                ? "Go back to an earlier page or reset the view."
-                : filtered
-                  ? "Try another search or reset the filters."
-                  : "Your requests and background checks will appear here."}
+              {filtered
+                ? "Try another search or reset the filters."
+                : "Your requests and background checks will appear here."}
             </Empty>
           )}
-          {(offset > 0 || activity.data.total > 25) && (
-            <div className="pagination" aria-label="Activity history pages">
+          <nav className="logs-pagination" aria-label="Log pages">
+            <span className="muted">
+              Page {Math.floor(offset / PAGE_SIZE) + 1} · 50 per page
+            </span>
+            <div>
               <button
-                disabled={offset === 0 || activity.isFetching}
+                type="button"
+                disabled={offset === 0}
                 onClick={() =>
-                  change("offset", String(Math.max(0, offset - 25)))
+                  change("offset", String(Math.max(0, offset - PAGE_SIZE)))
                 }
               >
-                Previous activity
+                Previous
               </button>
-              <span>Page {Math.floor(offset / 25) + 1}</span>
               <button
-                disabled={
-                  offset + 25 >= activity.data.total || activity.isFetching
-                }
-                onClick={() => change("offset", String(offset + 25))}
+                type="button"
+                disabled={offset + PAGE_SIZE >= activity.data.total}
+                onClick={() => change("offset", String(offset + PAGE_SIZE))}
               >
-                Next activity
+                Next
               </button>
             </div>
-          )}
+          </nav>
         </>
       )}
     </section>

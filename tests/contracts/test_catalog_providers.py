@@ -61,7 +61,10 @@ async def test_hardcover_separates_authors_narrators_and_catalog_formats():
                     "results": (
                         '{"found": 1, "hits": [{"document": {"id": 42, "title": "A Book", '
                         '"author_names": ["Author One", "Reader One"], '
-                        '"contribution_types": ["Author", "Narrator"]}}]}'
+                        '"contribution_types": ["Author", "Narrator"], '
+                        '"contributions": ['
+                        '{"author": {"name": "Author One"}, "contribution": "Author"}, '
+                        '{"author": {"name": "Reader One"}, "contribution": "Narrator"}]}}]}'
                     )
                 }
             }
@@ -76,6 +79,56 @@ async def test_hardcover_separates_authors_narrators_and_catalog_formats():
     assert [edition.medium for edition in book.editions] == ["audio", "ebook", "print", "unknown"]
     assert book.editions[0].narrators == ["Reader One"]
     assert all(not edition.narrators for edition in book.editions[1:])
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("encoded", [False, True])
+@pytest.mark.parametrize(
+    "extra, expected",
+    [
+        ({"contribution_types": ["Author"]}, ["Writer One", "Writer Two"]),
+        (
+            {
+                "contribution_types": ["Narrator", "Author"],
+                "contributions": [
+                    {"author": {"name": "Writer One"}, "contribution": "Author"},
+                    {"author": {"name": "Writer Two"}, "contribution": None},
+                    {"author": {"name": "Reader"}, "contribution": "Narrator"},
+                    {"author": {"name": "Writer One"}, "contribution": "Author"},
+                ],
+            },
+            ["Writer One", "Writer Two"],
+        ),
+        ({"contributions": []}, []),
+        ({"contributions": None}, ["Writer One", "Writer Two"]),
+        ({"author_names": "Writer One"}, ["Writer One"]),
+    ],
+)
+async def test_hardcover_search_accepts_independent_contributor_facets(encoded, extra, expected):
+    import json
+
+    results = {
+        "found": 21,
+        "hits": [
+            {
+                "document": {
+                    "id": "42",
+                    "title": "Book",
+                    "author_names": ["Writer One", "Writer Two"],
+                    **extra,
+                }
+            }
+        ],
+    }
+
+    async def request(*args, **kwargs):
+        return {"data": {"search": {"results": json.dumps(results) if encoded else results}}}
+
+    adapter = Hardcover(request)
+    page = await adapter.search("Book", 1)
+    assert page.items[0].authors == expected
+    assert page.has_more
+    await adapter.test()
 
 
 @pytest.mark.asyncio
@@ -185,3 +238,33 @@ async def test_editions_use_lookahead_before_claiming_another_page(count, has_mo
     assert len(book.editions) == 50
     assert book.editions_more is has_more
     assert book.editions_offset == 50
+
+
+@pytest.mark.asyncio
+async def test_search_language_filters_provider_results():
+    async def open_request(method, path, *, params):
+        assert params["q"] == "(Dune) AND language:eng"
+        return {"docs": [], "numFound": 0}
+
+    assert not (await OpenLibrary(open_request).search("Dune", 1, "en")).items
+
+    async def hardcover_request(method, path, *, json):
+        if "SearchLanguage" in json["query"]:
+            assert json["variables"] == {"ids": [1, 2], "language": "en"}
+            return {"data": {"books": [{"id": 2}]}}
+        return {
+            "data": {
+                "search": {
+                    "results": {
+                        "found": 2,
+                        "hits": [
+                            {"document": {"id": i, "title": f"Book {i}", "author_names": []}}
+                            for i in [1, 2]
+                        ],
+                    }
+                }
+            }
+        }
+
+    result = await Hardcover(hardcover_request).search("Book", 1, "en")
+    assert [book.external_id for book in result.items] == ["2"]

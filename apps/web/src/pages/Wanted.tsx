@@ -1,3 +1,5 @@
+import { usePagedQuery } from "../hooks/usePagedQuery";
+import InfiniteScroll from "../components/InfiniteScroll";
 import { EffectiveScope } from "./ScopeFields";
 import RequestPreferences, { type Choice } from "./RequestPreferences";
 import { EffectivePreferences } from "./PreferenceFields";
@@ -43,7 +45,6 @@ export default function Wanted({
   );
   const [preferred, setPreferred] = useState<"ebook" | "audio">("ebook");
   const [preferences, setPreferences] = useState<Choice>({});
-  const [offset, setOffset] = useState(0);
   const key = useRef(crypto.randomUUID());
   useEffect(() => {
     if (version) heading.current?.focus();
@@ -80,14 +81,20 @@ export default function Wanted({
       ),
     enabled: valid,
   });
-  const requests = useQuery({
-    queryKey: ["requests", workId, offset],
-    queryFn: async () =>
+  const requests = usePagedQuery({
+    queryKey: ["requests", workId],
+    queryFn: async (offset, signal) =>
       result(
         await api.GET("/api/requests", {
+          signal,
           params: { query: { work_id: workId, offset, limit: 10 } },
         }),
       ),
+    initial: 0,
+    next: (last, pages) => {
+      const count = pages.reduce((n, p) => n + p.items.length, 0);
+      return last.items.length && count < last.total ? count : undefined;
+    },
   });
   const refresh = async () => {
     await Promise.all(
@@ -167,7 +174,7 @@ export default function Wanted({
               setMode(event.target.value as Spec["mode"]);
             }}
           >
-            <option value="">Use profile or personal default</option>
+            <option value="">Use my download settings</option>
             <option value="ebook">Ebook</option>
             <option value="audio">Audiobook</option>
             <option value="both">Both</option>
@@ -209,6 +216,34 @@ export default function Wanted({
       )}
       {valid && preview.data && (
         <div aria-label="Request preview">
+          {!!preview.data.existing_copies?.length && (
+            <aside className="notice" aria-label="Possible existing copies">
+              <strong>
+                Check these existing library copies before requesting another.
+              </strong>
+              <p>
+                They are displayed with this book, but their identities have not
+                been confirmed as the same book.
+              </p>
+              {preview.data.existing_copies.map((copy) => (
+                <p key={copy.asset_id}>
+                  <Link
+                    to={`/books/${copy.work_id}?tab=library&format=${copy.medium}`}
+                  >
+                    {copy.title} · {label(copy.medium)}
+                  </Link>
+                  {copy.narrators.length > 0 && (
+                    <> · {copy.narrators.join(", ")}</>
+                  )}
+                  <br />
+                  {copy.meets_requirements
+                    ? "Matches the edition requirements"
+                    : "Different or incomplete edition information"}
+                  {copy.state === "stale" && " · Last known availability"}
+                </p>
+              ))}
+            </aside>
+          )}
           <EffectiveScope
             specification={preview.data.specification}
             origins={preview.data.release_policy?.scope_origins}
@@ -321,18 +356,7 @@ export default function Wanted({
               ))}
             </article>
           ))}
-          <div className="pagination">
-            {offset > 0 && (
-              <button type="button" onClick={() => setOffset(offset - 10)}>
-                Previous requests
-              </button>
-            )}
-            {offset + 10 < requests.data.total && (
-              <button type="button" onClick={() => setOffset(offset + 10)}>
-                Next requests
-              </button>
-            )}
-          </div>
+          <InfiniteScroll query={requests} />
         </>
       )}
     </section>

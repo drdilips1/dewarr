@@ -12,9 +12,9 @@ from app.api.catalog import WorkView, work_view
 from app.api.dependencies import CurrentUser, Database
 from app.db.models import CatalogSeries, SeriesMembership, Work
 from app.domain.availability import availability_for, availability_rows
+from app.domain.catalog_display import display_map
 from app.domain.pack_coverage import CATALOG_FRESH_FOR
 from app.domain.visibility import visible_work
-from app.domain.work_graph import canonical_map
 
 router = APIRouter(prefix="/discovery", tags=["discovery"])
 Medium = Literal["any", "ebook", "audio"]
@@ -146,10 +146,10 @@ async def series_gaps(
     limit: int = Query(default=4, ge=1, le=12),
 ):
     now = datetime.now(UTC)
-    ownership = availability_rows(user, canonical_map()).subquery()
+    ownership = availability_rows(user, display_map(user)).subquery()
     owned = select(ownership.c.work_id).distinct()
     satisfied = owned if medium == "any" else owned.where(ownership.c.medium == medium)
-    mapping = canonical_map()
+    mapping = display_map(user)
     entries = entries_for(user, mapping)
     seed_series = entries.where(mapping.c.work_id.in_(owned))
     missing_series = entries.where(

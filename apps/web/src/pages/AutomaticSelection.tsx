@@ -186,7 +186,7 @@ export default function AutomaticSelection({
     >
       <h3>Prepare the best release</h3>
       <p>
-        Use this page’s results and saved profile to inspect up to five
+        Use this page’s results and download preferences to inspect up to five
         candidates for your wanted {medium === "ebook" ? "ebook" : "audiobook"}.
         {effectiveSeriesScope(search.profile.preferences) !== "just_book"
           ? " Eligible series packs are preferred when catalog and filenames establish coverage."
@@ -327,7 +327,7 @@ export default function AutomaticSelection({
               </Link>
             )}
             {receipt.data.download_id && (
-              <Link to="/activity">View automatic download</Link>
+              <Link to="/requests#downloads">View automatic download</Link>
             )}
           </div>
           {!!receipt.data.decisions.length && (

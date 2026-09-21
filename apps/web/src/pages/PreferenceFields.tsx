@@ -1,3 +1,4 @@
+import SettingHelp from "../components/SettingHelp";
 import Order from "./PreferenceOrder";
 import SourcePriorities from "./SourcePriorities";
 import ScopeFields from "./ScopeFields";
@@ -54,12 +55,14 @@ export default function PreferenceFields({
   origins,
   onChange,
   includeMedia = true,
+  defaults = false,
 }: {
   overrides: Overrides;
   inherited: Preferences;
   origins: Record<string, string>;
   onChange: (value: Overrides) => void;
   includeMedia?: boolean;
+  defaults?: boolean;
 }) {
   const effective = { ...inherited, ...overrides };
   if (
@@ -67,25 +70,29 @@ export default function PreferenceFields({
     !Object.hasOwn(overrides, "series_scope")
   )
     delete effective.series_scope;
-  const origin = (key: keyof Preferences) => (
-    <p className="muted">
-      {Object.hasOwn(overrides, key)
-        ? "Custom value"
-        : `Inherited · ${origins[key] || "default"}`}
-      {Object.hasOwn(overrides, key) && (
-        <button
-          type="button"
-          onClick={() => {
-            const next = { ...overrides };
-            delete next[key];
-            onChange(next);
-          }}
-        >
-          Use inherited {preferenceLabels[key]}
-        </button>
-      )}
-    </p>
-  );
+  const origin = (key: keyof Preferences) =>
+    Object.hasOwn(overrides, key) ? (
+      <div className="preference-origin">
+        <SettingHelp label="inherited value">
+          {Object.hasOwn(overrides, key)
+            ? "Custom value"
+            : `Inherited · ${origins[key] || "default"}`}
+        </SettingHelp>
+        {Object.hasOwn(overrides, key) && (
+          <button
+            type="button"
+            aria-label={`Use inherited ${preferenceLabels[key]}`}
+            onClick={() => {
+              const next = { ...overrides };
+              delete next[key];
+              onChange(next);
+            }}
+          >
+            Reset
+          </button>
+        )}
+      </div>
+    ) : null;
   const order = (
     key: "criteria" | "source_order" | "ebook_formats" | "audio_formats",
   ) => (
@@ -105,58 +112,94 @@ export default function PreferenceFields({
   );
   return (
     <>
-      <p className="muted">
-        Change only what matters to you. Other values follow their defaults.
-      </p>
       <ScopeFields
         overrides={overrides}
         inherited={inherited}
         origins={origins}
         onChange={onChange}
         includeMedia={includeMedia}
+        defaults={defaults}
       />
-      <RouteFields
-        overrides={overrides}
-        inherited={inherited}
-        origins={origins}
-        onChange={onChange}
-      />
-      {order("criteria")}
-      <details>
-        <summary>Source popularity</summary>
-        <p className="muted">
-          Prefer higher completed-download counts within the same tracker.
-          Currently MAM provides this count; other sources remain unknown.
-          Source preference must come before popularity. Each tracker/indexer is
-          grouped separately; equal source priorities use stable source IDs.
-        </p>
-        <button
-          type="button"
-          onClick={() => {
-            const criteria = effective.criteria || [
-              "format",
-              "source",
-              "seeders",
-            ];
-            if (criteria.includes("popularity"))
-              onChange({
-                ...overrides,
-                criteria: criteria.filter((value) => value !== "popularity"),
-              });
-            else {
-              const next = [...criteria];
-              next.splice(next.indexOf("source") + 1, 0, "popularity");
-              onChange({ ...overrides, criteria: next });
+      <div className="preference-ranking-grid">
+        <section className="priority-block">
+          {order("criteria")}{" "}
+          <div className="setting-inline-option">
+            <label className="check-label">
+              <input
+                type="checkbox"
+                checked={effective.allow_unknown_seeders ?? false}
+                onChange={(event) =>
+                  onChange({
+                    ...overrides,
+                    allow_unknown_seeders: event.target.checked,
+                  })
+                }
+              />
+              Allow AudiobookBay releases after torrent metadata resolves
+            </label>
+            <div className="setting-help-row">
+              <SettingHelp label="download preferences">
+                Off by default. Metadata resolution verifies the torrent
+                manifest, not a seeder count or guaranteed payload availability.
+                All identity, format, size and import checks still apply.
+              </SettingHelp>
+            </div>
+            {origin("allow_unknown_seeders")}
+          </div>
+          <div className="setting-inline-option">
+            <label className="check-label">
+              <input
+                type="checkbox"
+                checked={effective.criteria?.includes("popularity") || false}
+                onChange={(event) => {
+                  const criteria: Preferences["criteria"] = (
+                    effective.criteria || ["format", "source", "seeders"]
+                  ).filter((value) => value !== "popularity");
+                  if (event.target.checked)
+                    criteria.splice(
+                      criteria.indexOf("source") + 1,
+                      0,
+                      "popularity",
+                    );
+                  onChange({ ...overrides, criteria });
+                }}
+              />
+              Prefer popular releases
+            </label>
+            <SettingHelp label="source popularity">
+              Ranks popularity within each source, after source priority.
+            </SettingHelp>
+          </div>
+        </section>
+        <section className="priority-block">
+          {" "}
+          <SourcePriorities
+            values={effective.source_order || []}
+            onChange={(source_order) =>
+              onChange({ ...overrides, source_order })
             }
-          }}
-        >
-          {effective.criteria?.includes("popularity")
-            ? "Stop ranking by popularity"
-            : "Use source popularity in ranking"}
-        </button>
-      </details>
+          />
+          {origin("source_order")}
+        </section>
+      </div>
+      {!defaults && (
+        <RouteFields
+          overrides={overrides}
+          inherited={inherited}
+          origins={origins}
+          onChange={onChange}
+        />
+      )}
       <details>
-        <summary>Series search</summary>
+        <summary>
+          <span className="setting-subheading">
+            Series search
+            <SettingHelp label="download preferences">
+              Packs are limited to 20 additional books and 50 GiB, or your lower
+              size limit. Complete series uses a reviewed book list.
+            </SettingHelp>
+          </span>
+        </summary>
         <label className="check-label">
           <input
             type="checkbox"
@@ -193,105 +236,85 @@ export default function PreferenceFields({
         {origin(
           effective.series_scope ? "series_scope" : "prefer_series_packs",
         )}
-        <p className="muted">
-          Known published series books and torrent filenames must agree. Up to
-          20 additional books and 50 GiB per pack, subject to your lower size
-          limit. Complete reviewed series lets automatic lists request a finite,
-          saved main-book set. Manual complete-series requests use the series
-          page. Prefer packs imports independently requested books from a
-          qualifying pack.
-        </p>
-        <p className="muted">
-          Searches up to three names from accessible catalog evidence. Finding a
-          series release does not establish which books it contains.
-        </p>
       </details>
-      <details>
-        <summary>Narrator preferences</summary>
-        <NarratorNamesField
-          label="Preferred narrators"
-          ordered
-          values={effective.preferred_narrators || []}
-          onChange={(preferred_narrators) =>
-            onChange({ ...overrides, preferred_narrators })
-          }
-        />
-        {origin("preferred_narrators")}
-        {!effective.criteria?.includes("narrator") ? (
-          <>
-            <p className="muted">
-              Narrator preference breaks ties after the ranking priorities
-              above.
-            </p>
-            <button
-              type="button"
-              onClick={() =>
-                onChange({
-                  ...overrides,
-                  criteria: [
-                    "narrator",
-                    ...(effective.criteria || ["format", "source", "seeders"]),
-                  ],
-                })
-              }
-            >
-              Rank narrator preference first
-            </button>
-          </>
-        ) : (
-          <>
-            <p className="muted">
-              Move narrator in Ranking priorities to choose when this preference
-              applies.
-            </p>
-            <button
-              type="button"
-              onClick={() =>
-                onChange({
-                  ...overrides,
-                  criteria: effective.criteria?.filter(
-                    (criterion) => criterion !== "narrator",
-                  ),
-                })
-              }
-            >
-              Use narrator preference only to break ties
-            </button>
-          </>
-        )}
-      </details>
-      <SourcePriorities
-        values={effective.source_order || []}
-        onChange={(source_order) => onChange({ ...overrides, source_order })}
-      />
-      {origin("source_order")}
-      <details>
-        <summary>Unknown seed counts</summary>
-        <label className="check-label">
-          <input
-            type="checkbox"
-            checked={effective.allow_unknown_seeders ?? false}
-            onChange={(event) =>
-              onChange({
-                ...overrides,
-                allow_unknown_seeders: event.target.checked,
-              })
+      {!defaults && (
+        <details>
+          <summary>Narrator preferences</summary>
+          <NarratorNamesField
+            label="Preferred narrators"
+            ordered
+            values={effective.preferred_narrators || []}
+            onChange={(preferred_narrators) =>
+              onChange({ ...overrides, preferred_narrators })
             }
           />
-          Allow AudiobookBay releases after torrent metadata resolves
-        </label>
-        <p className="muted">
-          Off by default. Metadata resolution verifies the torrent manifest, not
-          a seeder count or guaranteed payload availability. All identity,
-          format, size and import checks still apply.
-        </p>
-        {origin("allow_unknown_seeders")}
-      </details>
+          {origin("preferred_narrators")}
+          {!effective.criteria?.includes("narrator") ? (
+            <>
+              <div className="setting-help-row">
+                <SettingHelp label="download preferences">
+                  Narrator preference breaks ties after the ranking priorities
+                  above.
+                </SettingHelp>
+              </div>
+              <button
+                type="button"
+                onClick={() =>
+                  onChange({
+                    ...overrides,
+                    criteria: [
+                      "narrator",
+                      ...(effective.criteria || [
+                        "format",
+                        "source",
+                        "seeders",
+                      ]),
+                    ],
+                  })
+                }
+              >
+                Rank narrator preference first
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="setting-help-row">
+                <SettingHelp label="download preferences">
+                  Move narrator in Ranking priorities to choose when this
+                  preference applies.
+                </SettingHelp>
+              </div>
+              <button
+                type="button"
+                onClick={() =>
+                  onChange({
+                    ...overrides,
+                    criteria: effective.criteria?.filter(
+                      (criterion) => criterion !== "narrator",
+                    ),
+                  })
+                }
+              >
+                Use narrator preference only to break ties
+              </button>
+            </>
+          )}
+        </details>
+      )}
       <details>
-        <summary>Formats and transfer limits</summary>
+        <summary>
+          <span className="setting-subheading">
+            Formats and transfer limits
+            <SettingHelp label="download preferences">
+              A blank custom limit means no custom size limit. Independent
+              request restrictions and installation capacity limits still apply.
+              Blocked formats apply to the whole transfer.
+            </SettingHelp>
+          </span>
+        </summary>
         {order("ebook_formats")}
         {order("audio_formats")}
-        <fieldset>
+        <fieldset className="format-checkbox-grid">
           <legend>Blocked formats</legend>
           {formats.map((format) => (
             <label className="check-label" key={format}>
@@ -337,11 +360,6 @@ export default function PreferenceFields({
           />
         </label>
         {origin("maximum_bytes")}
-        <p className="muted">
-          A blank custom limit means no profile size limit. Independent request
-          restrictions and installation capacity limits still apply. Blocked
-          formats apply to the whole transfer.
-        </p>
       </details>
     </>
   );
@@ -374,14 +392,14 @@ export function EffectivePreferences({
                         ? "Yes"
                         : "No"
                       : preferences[key] == null
-                        ? "No profile limit"
+                        ? "No custom limit"
                         : `${preferences[key]} bytes`}
                 <small>
                   {" "}
                   ·{" "}
                   {origins[key] ||
                     (key === "series_scope" && origins.prefer_series_packs) ||
-                    "Saved profile"}
+                    "Saved preferences"}
                 </small>
               </dd>
             </div>

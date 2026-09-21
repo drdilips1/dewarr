@@ -30,11 +30,13 @@ async def test_trending_keeps_rank_and_batches_hydration_without_editions():
     source, calls = adapter(
         {
             HC_TRENDING: {"books_trending": {"ids": list(range(21, 0, -1))}},
-            HC_DISCOVERY_BOOKS: {"books": [row(key) for key in range(2, 22)]},
+            HC_DISCOVERY_BOOKS: {"books": [row(key, rating=4.25) for key in range(2, 22)]},
         }
     )
     result = await source.discovery("trending", 2, date(2026, 9, 18))
     assert result.has_more
+    assert result.items[0].rating == 4.25
+    assert "rating" in calls[1]["query"]
     assert [b.external_id for b in result.items] == [str(key) for key in range(21, 1, -1)]
     assert len(calls) == 2 and calls[0]["variables"] == {"offset": 20}
     assert calls[1]["variables"]["ids"] == list(range(21, 1, -1))

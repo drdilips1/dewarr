@@ -1,30 +1,37 @@
+import { usePagedQuery } from "../hooks/usePagedQuery";
+import InfiniteScroll from "../components/InfiniteScroll";
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, X } from "lucide-react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import { BookCard, Empty, Loading, Notice } from "../components";
 
-export default function Catalog({
-  canEdit,
-  admin,
-}: {
-  canEdit: boolean;
-  admin: boolean;
-}) {
+export default function Catalog({ canEdit }: { canEdit: boolean }) {
   const [params, setParams] = useSearchParams();
   const q = params.get("q") || "";
-  const offset = Math.max(0, Number(params.get("offset")) || 0);
+  const medium =
+    params.get("medium") === "audio"
+      ? "audio"
+      : params.get("medium") === "ebook"
+        ? "ebook"
+        : "any";
   const client = useQueryClient();
   const [adding, setAdding] = useState(false);
-  const books = useQuery({
-    queryKey: ["works", q, offset],
-    queryFn: async () =>
+  const books = usePagedQuery({
+    queryKey: ["works", q, medium],
+    queryFn: async (offset, signal) =>
       result(
         await api.GET("/api/catalog/works", {
-          params: { query: { q, offset, limit: 30 } },
+          params: { query: { q, medium, offset, limit: 30 } },
+          signal,
         }),
       ),
+    initial: 0,
+    next: (last, pages) => {
+      const count = pages.reduce((n, p) => n + p.items.length, 0);
+      return last.items.length && count < last.total ? count : undefined;
+    },
   });
   const add = useMutation({
     mutationFn: async (form: HTMLFormElement) => {
@@ -50,10 +57,10 @@ export default function Catalog({
     <>
       <div className="page-heading">
         <div>
-          <p className="eyebrow">BOOKS, IN ONE PLACE</p>
-          <h1>{q ? `Results for “${q}”` : "Your catalog"}</h1>
+          <h2>{q ? `Results for “${q}”` : "All saved titles"}</h2>
           <p className="muted">
-            Keep the titles you love close, and your next read closer.
+            Includes books saved from search and lists, even if you do not own a
+            copy.
           </p>
         </div>
         {canEdit ? (
@@ -95,20 +102,52 @@ export default function Catalog({
           </button>
         </form>
       ) : null}
+      <form
+        className="library-search"
+        onSubmit={(event) => {
+          event.preventDefault();
+          const next = new URLSearchParams(params);
+          const query = String(
+            new FormData(event.currentTarget).get("q") || "",
+          ).trim();
+          if (query) next.set("q", query);
+          else next.delete("q");
+          next.delete("offset");
+          setParams(next);
+        }}
+      >
+        <label>
+          Search saved titles
+          <input
+            key={q}
+            name="q"
+            defaultValue={q}
+            type="search"
+            maxLength={300}
+            placeholder="Title or author"
+          />
+        </label>
+        <button type="submit">Search saved titles</button>
+      </form>
+      <div className="library-filters library-shelf-filters">
+        <label>
+          Format
+          <select
+            value={medium}
+            onChange={(event) => {
+              const next = new URLSearchParams(params);
+              next.set("medium", event.target.value);
+              next.delete("offset");
+              setParams(next);
+            }}
+          >
+            <option value="any">Ebooks and audiobooks</option>
+            <option value="ebook">Ebooks in library</option>
+            <option value="audio">Audiobooks in library</option>
+          </select>
+        </label>
+      </div>
       <Notice error={books.error} />
-      {admin && books.data?.total === 0 && !q && offset === 0 ? (
-        <section
-          className="panel setup-next"
-          aria-label="Set up your collection"
-        >
-          <h2>Bring your books into view</h2>
-          <p>
-            Connect your library or find your first title. Downloads can wait
-            until you are ready.
-          </p>
-          <Link to="/getting-started">Set up your collection →</Link>
-        </section>
-      ) : null}
       {books.isPending ? <Loading /> : null}
       {books.data ? (
         <>
@@ -121,7 +160,7 @@ export default function Catalog({
           {books.data.items.length ? (
             <div className="book-grid">
               {books.data.items.map((work) => (
-                <BookCard key={work.id} work={work} />
+                <BookCard key={work.id} work={work} medium={medium} />
               ))}
             </div>
           ) : (
@@ -135,24 +174,7 @@ export default function Catalog({
                 : "Add a title to start organizing your reading lists."}
             </Empty>
           )}
-          <div className="pagination">
-            {offset > 0 ? (
-              <button
-                onClick={() =>
-                  setParams({ q, offset: String(Math.max(0, offset - 30)) })
-                }
-              >
-                Previous
-              </button>
-            ) : null}
-            {offset + 30 < books.data.total ? (
-              <button
-                onClick={() => setParams({ q, offset: String(offset + 30) })}
-              >
-                Next
-              </button>
-            ) : null}
-          </div>
+          <InfiniteScroll query={books} />
         </>
       ) : null}
     </>

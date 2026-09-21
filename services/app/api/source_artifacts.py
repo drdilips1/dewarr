@@ -2,6 +2,7 @@ from datetime import datetime
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, Path
+from fastapi.responses import Response
 from pydantic import BaseModel
 
 from app.adapters.contracts import AdapterError
@@ -62,3 +63,17 @@ async def resolve_artifact(
 @router.get("/source-artifacts/{artifact_id}", response_model=SourceArtifactView)
 async def get_artifact(artifact_id: UUID, user: Member, db: Database):
     return await artifact_view(db, artifact_id, user.id)
+
+
+@router.get("/source-artifacts/{artifact_id}/torrent", response_class=Response)
+async def save_torrent(artifact_id: UUID, user: Member, db: Database):
+    from app.domain.source_artifacts import artifact_bytes
+
+    row = await db.get(SourceArtifact, artifact_id)
+    if not row or row.owner_id != user.id:
+        raise HTTPException(404, "Source artifact not found")
+    return Response(
+        content=artifact_bytes(row),
+        media_type="application/x-bittorrent",
+        headers={"Content-Disposition": f'attachment; filename="release-{row.id}.torrent"'},
+    )

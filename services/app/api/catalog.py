@@ -1,16 +1,18 @@
+from typing import Literal
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Response
 from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import func, select
 
 from app.api.dependencies import CurrentUser, Database, Member
 from app.db.models import AuditEvent, Work
 from app.domain.availability import Availability, availability_for
+from app.domain.catalog_display import display_map
 from app.domain.catalog_search import local_match
 from app.domain.identity import work_key
 from app.domain.visibility import visible_origin_work, visible_work
-from app.domain.work_graph import canonical_map, canonical_work
+from app.domain.work_graph import canonical_work
 
 router = APIRouter(prefix="/catalog", tags=["catalog"])
 
@@ -77,10 +79,22 @@ async def works(
     q: str = Query(default="", max_length=300),
     offset: int = Query(default=0, ge=0),
     limit: int = Query(default=40, ge=1, le=100),
+    medium: Literal["any", "ebook", "audio"] = "any",
 ):
-    conditions = [Work.redirect_to.is_(None), visible_work(user)]
+    mapping = display_map(user)
+    conditions = [Work.id.in_(select(mapping.c.work_id).distinct()), visible_work(user)]
+    if medium != "any":
+        from app.db.models import LibraryAsset
+        from app.domain.availability import availability_rows
+
+        conditions.append(
+            Work.id.in_(
+                availability_rows(user, mapping)
+                .with_only_columns(mapping.c.work_id)
+                .where(LibraryAsset.medium == medium)
+            )
+        )
     if q.strip():
-        mapping = canonical_map()
         from sqlalchemy.orm import aliased
 
         origin = aliased(Work)
@@ -138,8 +152,28 @@ async def add_work(body: WorkInput, user: Member, db: Database):
 @router.get("/works/{work_id}", response_model=WorkView)
 async def work_detail(work_id: UUID, user: CurrentUser, db: Database):
     canonical = await canonical_work(db, work_id)
+    # Display grouping chooses cards and covers, not the identity of a bookmark.
     work = await db.scalar(select(Work).where(Work.id == canonical.id, visible_work(user)))
     if not work:
         raise HTTPException(404, "Book not found")
     availability = await availability_for(db, user, [work.id])
     return work_view(work, availability[work.id])
+
+
+@router.get("/works/{work_id}/cover", response_class=Response)
+async def cover(
+    work_id: UUID,
+    user: CurrentUser,
+    db: Database,
+    medium: Literal["ebook", "audio"] = "ebook",
+):
+    from app.domain.library_covers import library_cover
+
+    return await library_cover(db, user, work_id, medium)
+
+
+@router.get("/cover-image", response_class=Response)
+async def cover_image(user: CurrentUser, db: Database, url: str = Query(max_length=2000)):
+    from app.domain.cover_cache import cached_cover
+
+    return await cached_cover(db, url)

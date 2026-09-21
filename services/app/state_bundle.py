@@ -24,7 +24,7 @@ from app.config import Settings, get_settings
 from app.db.models import Base
 from app.recovery import MAINTENANCE_LOCK
 
-SCHEMA = "0044_recovery_approvals"
+SCHEMA = "0048_import_storage"
 CONFIG_FIELDS = {
     "public_url",
     "cookie_secure",
@@ -223,6 +223,13 @@ def backup(settings: Settings, root: Path) -> Manifest:
         schema = connection.execute("SELECT version_num FROM alembic_version").fetchone()[0]
         if schema != SCHEMA:
             raise BundleError("Migrate to this command's schema before taking a supported backup")
+        from app.importing.storage import apply_storage
+
+        mounted = connection.execute(
+            "SELECT destinations, staging_root FROM import_storage_settings WHERE id = 1"
+        ).fetchone()
+        if mounted:
+            settings = apply_storage(settings, *mounted)
         if (
             settings.import_staging_root is None
             and connection.execute("SELECT EXISTS(SELECT 1 FROM import_entries)").fetchone()[0]

@@ -1,0 +1,17 @@
+/* Load page layouts once, then apply the shared controls consistently on every route. */
+@import "tailwindcss";
+@import "./styles.css" layer(app);
+@import "./settings.css" layer(app);
+@import "./entity-details.css" layer(app);
+@import "./sources.css" layer(app);
+@import "./discovery.css" layer(app);
+@import "./requests.css" layer(app);
+@import "./book-detail.css" layer(app);
+@import "./controls.css" layer(controls);
+
+.brand img {
+  border-radius: 8px;
+  background: #cf6b42;
+  object-fit: contain;
+  flex-shrink: 0;
+}

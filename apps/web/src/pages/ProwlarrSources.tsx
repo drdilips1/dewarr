@@ -1,3 +1,4 @@
+import SettingHelp from "../components/SettingHelp";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
@@ -134,23 +135,9 @@ export default function ProwlarrSources({
         </div>
       </header>
       {admin && (
-        <details>
-          <summary>
-            Prowlarr connection · {connection.data?.status || "loading"}
-          </summary>
-          <Notice error={connection.error} />
-          {connection.data && (
-            <ConnectionForm
-              key={connection.data.generation}
-              connection={connection.data}
-              onSaved={() => {
-                cache.invalidateQueries({ queryKey: ["prowlarr-connection"] });
-                cache.invalidateQueries({ queryKey: ["prowlarr-indexers"] });
-                setBatches([]);
-              }}
-            />
-          )}
-        </details>
+        <Link className="back-link" to="/settings#sources">
+          Source settings →
+        </Link>
       )}
       <Notice error={indexers.error} />
       <Notice error={inspect.error} />
@@ -284,7 +271,7 @@ export default function ProwlarrSources({
   );
 }
 
-function ConnectionForm({
+export function ProwlarrConnectionForm({
   connection,
   onSaved,
 }: {
@@ -355,11 +342,7 @@ function ConnectionForm({
           autoComplete="new-password"
           value={key}
           onChange={(event) => setKey(event.target.value)}
-          placeholder={
-            connection.has_api_key
-              ? "Stored; leave blank to keep"
-              : "Prowlarr API key"
-          }
+          placeholder={connection.has_api_key ? "••••••••" : "Prowlarr API key"}
           required={!connection.has_api_key}
         />
       </label>
@@ -374,16 +357,19 @@ function ConnectionForm({
       <details>
         <summary>Advanced</summary>
         <label>
-          Excluded indexer IDs
+          <span className="setting-subheading">
+            Excluded indexer IDs
+            <SettingHelp label="connection options">
+              Native MAM automatically excludes the corresponding Prowlarr
+              indexer while connected. Tracker proxies are configured in
+              Prowlarr.
+            </SettingHelp>
+          </span>
           <input
             value={excluded}
             onChange={(event) => setExcluded(event.target.value)}
           />
         </label>
-        <p className="muted">
-          Native MAM automatically excludes the corresponding Prowlarr indexer
-          while connected. Tracker proxies are configured in Prowlarr.
-        </p>
       </details>
       <Notice error={save.error || test.error} />
       {connection.last_error && (
@@ -403,7 +389,7 @@ function ConnectionForm({
           }
           onClick={() => test.mutate()}
         >
-          Test saved connection
+          Test connection
         </button>
       </div>
     </form>

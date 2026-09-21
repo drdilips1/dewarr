@@ -1,5 +1,6 @@
+import { usePagedQuery } from "../hooks/usePagedQuery";
+import InfiniteScroll from "../components/InfiniteScroll";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import { Notice } from "../components";
@@ -16,18 +17,23 @@ export default function ListChoice({
   disabled?: boolean;
 }) {
   const [search, setSearch] = useState("");
-  const [offset, setOffset] = useState(0);
   const [chosenName, setChosenName] = useState("");
-  const lists = useQuery({
-    queryKey: ["lists", "choice", search, offset],
-    queryFn: async () =>
+  const lists = usePagedQuery({
+    queryKey: ["lists", "choice", search],
+    queryFn: async (offset, signal) =>
       result(
         await api.GET("/api/lists/page", {
+          signal,
           params: { query: { editable: true, q: search, offset, limit: 25 } },
         }),
       ),
     staleTime: 0,
     gcTime: 0,
+    initial: 0,
+    next: (last, pages) => {
+      const count = pages.reduce((n, p) => n + p.items.length, 0);
+      return last.items.length && count < last.total ? count : undefined;
+    },
   });
   return (
     <div className="grow">
@@ -38,7 +44,6 @@ export default function ListChoice({
           disabled={disabled}
           onChange={(event) => {
             setSearch(event.target.value);
-            setOffset(0);
           }}
         />
       </label>
@@ -72,30 +77,7 @@ export default function ListChoice({
             ))}
         </select>
       </label>
-      {lists.data && !lists.error && (offset > 0 || lists.data.total > 25) && (
-        <div className="pagination">
-          <button
-            type="button"
-            disabled={disabled || !offset || lists.isFetching}
-            onClick={() => setOffset(offset - 25)}
-          >
-            Previous lists
-          </button>
-          <span>
-            {offset + 1}–{offset + lists.data.items.length} of{" "}
-            {lists.data.total}
-          </span>
-          <button
-            type="button"
-            disabled={
-              disabled || offset + 25 >= lists.data.total || lists.isFetching
-            }
-            onClick={() => setOffset(offset + 25)}
-          >
-            Next lists
-          </button>
-        </div>
-      )}
+      <InfiniteScroll query={lists} />
       {lists.data?.total === 0 && (
         <p>
           No matching lists. <Link to="/lists">Create or browse lists</Link>.

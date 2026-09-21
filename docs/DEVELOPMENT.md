@@ -2,13 +2,21 @@
 
 This is an early development build. The full [PRD](../PRD.md) remains the target; [Implementation Status](IMPLEMENTATION-STATUS.md) records actual coverage. Do not connect production acquisition automation until the relevant import and recovery gates pass.
 
-Current schema: `0044_recovery_approvals`. Stop API/worker processes, back up with the tool version matching the pre-upgrade schema, apply migrations and restart matching builds. [Restored queue protection](RECOVERY-QUEUE.md) seals historical jobs and referenced records; [saved-approval protection](RECOVERY-APPROVALS.md) prevents old previews from authorizing new commands. Neither enables resume. The request contract introduced at `0037_download_joins` remains in effect. [Saved-transfer reuse](DOWNLOAD-REUSE.md) adds independent join receipts and later import continuations. [Request restrictions](ACQUISITION-FOUNDATION.md#request-download-restrictions) preserve independent format and whole-transfer size limits across shared acquisitions. Populated history blocks lossy downgrade. Default dispatch remains disabled; this migration does not activate list automation.
+Current schema: `0048_import_storage`. Library folder choices now persist in the database; deploy matching API and worker builds. [Discovery collections](DISCOVERY.md) adds per-reader layouts and public collection tracking after the Goodreads accounts migration. The onboarding migration adds per-account setup progress; existing accounts are marked complete, while new accounts see optional onboarding once. Stop API/worker processes, back up with the tool version matching the pre-upgrade schema, apply migrations and restart matching builds. [Restored queue protection](RECOVERY-QUEUE.md) seals historical jobs and referenced records; [saved-approval protection](RECOVERY-APPROVALS.md) prevents old previews from authorizing new commands. Neither enables resume. The request contract introduced at `0037_download_joins` remains in effect. [Saved-transfer reuse](DOWNLOAD-REUSE.md) adds independent join receipts and later import continuations. [Request restrictions](ACQUISITION-FOUNDATION.md#request-download-restrictions) preserve independent format and whole-transfer size limits across shared acquisitions. Populated history blocks lossy downgrade. Default dispatch remains disabled; this migration does not activate list automation.
 
 [Automatic reviewed-series acquisition](SERIES-ACQUISITION.md) adds a durable `series.acquire` task without a new migration. Update API and worker together before accepting automatic series requests. Finite accepted sets retain their own scope and authority; this does not enable future-sequel monitoring or installation dispatch.
 
 [Reusable main-book reviews](SERIES-SCOPE-REVIEW.md) add finite owner-reviewed membership evidence and optional proof reuse in series requests. Deploy API and worker together before saving proof-backed requests; older binaries cannot interpret the new command field. No migration beyond `0037_download_joins` is needed, and saving a review creates no acquisition or job.
 
 [Route defaults](ROUTE-DEFAULTS.md) add inherited downloader and per-medium destination references to the existing JSON preferences. Deploy API and worker together before saving these fields; no new migration is required. Automatic acquisition still needs current route approval, and deployment does not enable dispatch.
+
+## Quick add and source comparison
+
+Book pages provide a Quick add split button. Its main action inherits personal/installation media and release preferences; Ebook only and Audiobook only override the medium for that request. The `acquisition.quick-add` worker searches once, hands each missing medium to the existing automatic selector, and starts eligible downloads through saved, verified routes. Existing copies and compatible acquisitions are reused. Uncertain matches, incomplete route setup, changed preferences, and missing releases remain visible as held outcomes; complete-series requests still use the reviewed series flow. Both media proceed independently.
+
+Deploy/restart the API and worker together for this change; no database migration is required. Quick add uses the existing automation permission, dispatch configuration, and automatic-import approvals. It does not enable those settings. Status survives page navigation and is visible in Requests activity.
+
+The Sources tab uses a sortable, filterable release table. Its details dialog refreshes MAM descriptions and media info on demand. Save torrent explicitly exports the inspected, owner-scoped torrent file, which may contain private tracker credentials; those bytes are never included in JSON responses. This export does not submit a downloader job.
 
 ## Native development
 
@@ -208,3 +216,28 @@ List detail now defaults to 50 books and exposes count/matched/offset/limit; app
 ## Historical request-command review
 
 [Recovery command retirement](RECOVERY-COMMANDS.md) adds an operator review for stale request approvals and acquisition controllers. It preserves already-recorded wanted books, reasons and reservations, retires selected workers/previews and requires fresh owner activation. Deploy matching API/worker/client on schema 0042. This action leaves other historical work and the persistent restore fence unresolved; it does not authorize resume.
+
+
+Library destinations can now be selected in Settings → Libraries using the ebook and audiobook folder pickers. Folder options come from the connected Audiobookshelf libraries. Migration `0048_import_storage` persists worker-visible destination paths and the private staging root; existing environment-configured roots continue to work. If container paths differ, select “Other path” and enter the same library folder as seen by the worker. Downloads, destinations and staging must have compatible mounts for hardlinks. The worker creates a private `.book-search-staging` sibling when no staging root was configured, then verifies actual hardlinks and the ABS folder mapping. A successful check activates the matching library and destination defaults together; automatic imports remain subject to the existing format, identity and ABS compatibility gates. Source torrent files retain their names and bytes. Persisted mounts are included in backup settings and recovery checks.
+
+### Sidebar release tracker
+
+The sidebar footer displays the installed build and links to its GitHub release.
+An orange **Update** link appears when GitHub's latest stable release has a higher
+`major.minor.patch` version, and opens that release's page. Checks run on the server
+and are cached for one hour, including failures. Offline/rate-limited checks are
+shown as unavailable, not up to date. Development builds are not treated as releases.
+
+Stamp release containers with the exact GitHub tag and public repository:
+
+```sh
+docker build --build-arg BOOK_BUILD_VERSION=v1.0.0 \
+  --build-arg BOOK_RELEASE_REPOSITORY=OWNER/REPO -t book-search:1.0.0 .
+```
+
+These values are baked into the container environment. `BOOK_RELEASE_REPOSITORY`
+may also be configured at runtime. Without a repository the footer explicitly
+reports that release tracking is not configured; unstamped builds show the package
+version with a `-dev` suffix. Use the exact tag (including `v` if present) so the
+installed-version link resolves to the correct release. No GitHub token is needed
+for public repositories.

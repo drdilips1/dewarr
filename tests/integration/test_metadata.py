@@ -421,7 +421,7 @@ async def test_changed_credentials_fence_inflight_provider_response(
 
     started, release = asyncio.Event(), asyncio.Event()
 
-    async def search(self, query, page):
+    async def search(self, query, page, filters=None):
         started.set()
         await release.wait()
         return SearchPage(provider="hardcover", items=[], page=page, has_more=False)
@@ -488,3 +488,29 @@ async def test_field_preferences_and_cover_locks_only_use_accepted_sources(
     fields = (await client.get(endpoint)).json()["fields"]
     assert fields["description"]["provider"] == "openlibrary"
     assert fields["cover_url"]["locked"]
+
+
+async def test_catalog_reader_exposes_accepted_snapshot_without_overwriting_local_fields(
+    client, admin, database, provider
+):
+    from app.db.models import WorkMetadataSource
+
+    await connect(client)
+    imported = await client.post("/api/metadata/books/hardcover/42/import")
+    assert imported.status_code == 200
+    work_id = UUID(imported.json()["id"])
+    async with database() as db:
+        work = await db.get(Work, work_id)
+        work.description = None
+        await db.commit()
+    response = await client.get(f"/api/metadata/works/{work_id}")
+    assert response.status_code == 200
+    source = response.json()["sources"][0]
+    assert source["book"]["description"] == "First description"
+    assert source["book"]["external_id"] == "42"
+    async with database() as db:
+        assert (await db.get(Work, work_id)).description is None
+        saved_source = await db.get(WorkMetadataSource, UUID(source["id"]))
+        saved_source.accepted = False
+        await db.commit()
+    assert (await client.get(f"/api/metadata/works/{work_id}")).json()["sources"] == []

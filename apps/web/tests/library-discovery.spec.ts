@@ -59,22 +59,33 @@ test("recent library additions show confirmed holdings and recover from shelf fa
   const book = shelf.getByRole("link", {
     name: new RegExp(first.title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
   });
-  await expect(book).toContainText("In library");
   await expect(
-    shelf.getByText(/Library copy first observed/).first(),
+    book.getByRole("img", { name: "In library", exact: true }),
   ).toBeVisible();
+  await expect(shelf.getByText(/Library copy first observed/)).toHaveCount(0);
+  await shelf.locator(".discovery-shelf").evaluate((element) => {
+    element.scrollLeft = element.scrollWidth;
+  });
   await shelf
     .getByRole("button", { name: "Next library page", exact: true })
     .click();
-  await expect(shelf.getByRole("status")).toHaveText("Page 2");
+  await expect(shelf.getByRole("status")).toHaveAttribute(
+    "aria-label",
+    "Page 2",
+  );
   expect(queries.at(-1)?.get("page")).toBe("2");
   await shelf
     .getByRole("combobox", { name: "Show library additions" })
     .selectOption("audio");
-  await expect(shelf.getByRole("status")).toHaveText("Page 1");
+  await expect(shelf.getByRole("status")).toHaveAttribute(
+    "aria-label",
+    "Page 1",
+  );
   expect(queries.at(-1)?.get("medium")).toBe("audio");
   for (const item of await shelf.locator(".book-card").all())
-    await expect(item).toContainText("Audio");
+    await expect(
+      item.getByRole("img", { name: /Audiobook: in library/ }),
+    ).toBeVisible();
   await shelf
     .getByRole("combobox", { name: "Show library additions" })
     .selectOption("ebook");
@@ -83,7 +94,9 @@ test("recent library additions show confirmed holdings and recover from shelf fa
   ).toBeEnabled();
   expect(queries.at(-1)?.get("medium")).toBe("ebook");
   for (const item of await shelf.locator(".book-card").all())
-    await expect(item).toContainText("Ebook");
+    await expect(
+      item.getByRole("img", { name: /Ebook: in library/ }),
+    ).toBeVisible();
   await shelf.screenshot({
     path: testInfo.outputPath("recent-library-desktop.png"),
   });

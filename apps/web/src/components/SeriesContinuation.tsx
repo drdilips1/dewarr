@@ -1,5 +1,8 @@
+import { usePagedQuery } from "../hooks/usePagedQuery";
+import BookLink from "./BookLink";
+import InfiniteScroll from "./InfiniteScroll";
+import BookCover from "./BookCover";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { BookOpen, Check, Headphones } from "lucide-react";
 import { api, result } from "../api/client";
@@ -11,14 +14,16 @@ type SeriesGap = components["schemas"]["SeriesGap"];
 const mediumLabel = { any: "books", ebook: "ebooks", audio: "audiobooks" };
 const singularLabel = { any: "book", ebook: "ebook", audio: "audiobook" };
 
-export default function SeriesContinuation() {
+export default function SeriesContinuation({
+  hideEmpty = false,
+}: { hideEmpty?: boolean } = {}) {
   const [medium, setMedium] = useState<Medium>("any");
-  const [page, setPage] = useState(1);
-  const query = useQuery({
-    queryKey: ["discovery", "series", medium, page],
-    queryFn: async () =>
+  const query = usePagedQuery({
+    queryKey: ["discovery", "series", medium],
+    queryFn: async (page, signal) =>
       result(
         await api.GET("/api/discovery/series", {
+          signal,
           params: { query: { medium, page, limit: 4 } },
         }),
       ),
@@ -26,8 +31,11 @@ export default function SeriesContinuation() {
     staleTime: 0,
     gcTime: 0,
     retry: false,
+    next: (last, pages) =>
+      last.has_more && pages.length < 100 ? pages.length + 1 : undefined,
   });
   const items = query.data?.items || [];
+  if (hideEmpty && medium === "any" && query.data && !items.length) return null;
   return (
     <section
       className="discovery-section"
@@ -36,26 +44,24 @@ export default function SeriesContinuation() {
       <div className="page-heading discovery-heading series-gap-heading">
         <div>
           <h2 id="series-continuation-title">Continue your series</h2>
-          <p className="muted">
-            Published books missing from series in your library. Based on the
-            Hardcover series catalogs you have loaded; most recently refreshed
-            first.
-          </p>
+          <p className="muted">Find the missing books in your series.</p>
         </div>
-        <label>
-          Find missing
-          <select
-            value={medium}
-            onChange={(event) => {
-              setMedium(event.target.value as Medium);
-              setPage(1);
-            }}
-          >
-            <option value="any">Books in either format</option>
-            <option value="ebook">Ebooks</option>
-            <option value="audio">Audiobooks</option>
-          </select>
-        </label>
+        <div className="shelf-controls">
+          {" "}
+          <label>
+            Find missing
+            <select
+              value={medium}
+              onChange={(event) => {
+                setMedium(event.target.value as Medium);
+              }}
+            >
+              <option value="any">Books in either format</option>
+              <option value="ebook">Ebooks</option>
+              <option value="audio">Audiobooks</option>
+            </select>
+          </label>
+        </div>
       </div>
       <Notice error={query.error} />
       {query.isPending && <Loading />}
@@ -64,7 +70,7 @@ export default function SeriesContinuation() {
           Retry series shelf
         </button>
       )}
-      {!query.error && query.data && (
+      {query.data && (
         <>
           {items.length ? (
             <div className="series-gap-grid">
@@ -91,32 +97,9 @@ export default function SeriesContinuation() {
               </Link>
             </div>
           )}
-          {(page > 1 || query.data.has_more) && (
-            <div
-              className="pagination discovery-pagination"
-              aria-label="Series shelf pages"
-            >
-              <button
-                disabled={page === 1 || query.isFetching}
-                onClick={() => setPage(page - 1)}
-              >
-                Previous series page
-              </button>
-              <span className="muted" role="status">
-                Page {page}
-              </span>
-              <button
-                disabled={
-                  !query.data.has_more || page >= 100 || query.isFetching
-                }
-                onClick={() => setPage(page + 1)}
-              >
-                Next series page
-              </button>
-            </div>
-          )}
         </>
       )}
+      <InfiniteScroll query={query} />
     </section>
   );
 }
@@ -149,13 +132,13 @@ function SeriesCard({ series, medium }: { series: SeriesGap; medium: Medium }) {
       <ol className="series-gap-books">
         {series.books.map(({ work, position, ambiguous_position }) => (
           <li key={work.id}>
-            <Link className="series-gap-book" to={`/books/${work.id}`}>
-              <div className="series-gap-cover" aria-hidden="true">
-                {work.cover_url ? (
-                  <img src={work.cover_url} alt="" loading="lazy" />
-                ) : (
-                  <BookOpen size={22} />
-                )}
+            <BookLink
+              aria-label={`View ${work.title}`}
+              className="series-gap-book"
+              to={`/books/${work.id}`}
+            >
+              <div className="series-gap-cover">
+                <BookCover title={work.title} work={work} medium={medium} />
               </div>
               <div className="series-gap-book-detail">
                 <span className="series-gap-note">
@@ -190,7 +173,7 @@ function SeriesCard({ series, medium }: { series: SeriesGap; medium: Medium }) {
                   )}
                 </div>
               </div>
-            </Link>
+            </BookLink>
           </li>
         ))}
       </ol>

@@ -4,12 +4,12 @@ import asyncio
 from datetime import UTC, datetime, timedelta
 from uuid import UUID, uuid4
 
-from app.config import get_settings
 from app.db.models import AuditEvent, ImportDestination, ImportEntry, ImportRun, Operation, User
 from app.db.session import session_factory
 from app.importing.cancel_files import cancel_files
 from app.importing.execution import RenameGuard, Superseded
 from app.importing.publication import PublicationBusy, PublicationError, PublicationSpec
+from app.importing.storage import storage_settings
 from app.jobs.queue import enqueue
 
 
@@ -29,7 +29,7 @@ class CancellationGuard(RenameGuard):
             await self.db.refresh(entry, with_for_update=True)
             if entry.run_token != self.token or entry.state != "cancelling":
                 raise Superseded("A newer attempt owns this cancellation")
-            settings = get_settings()
+            settings = await storage_settings(self.db)
             if settings.recovery_mode or not actor or not actor.active or actor.role != "admin":
                 raise PublicationError("Cancellation requires active administrator access")
             spec = PublicationSpec.model_validate(entry.specification)

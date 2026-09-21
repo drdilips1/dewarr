@@ -589,3 +589,23 @@ async def test_removed_attempt_tag_cannot_confirm_or_restart_transfer(
     assert attempt.state == "uncertain" and attempt.external_may_exist
     assert not attempt.inspection_id
     assert downloader.calls.count("submit") == 1
+
+
+async def test_download_history_is_filtered_by_book_and_account(client, selected, database):
+    from tests.integration.test_discovery import login_member
+
+    response = await start(client, selected)
+    assert response.status_code == 202, response.text
+    work_id = selected["work_id"]
+    history = await client.get("/api/acquisition/downloads", params={"work_id": work_id})
+    assert history.status_code == 200
+    assert history.json()["total"] == 1
+    async with database() as db:
+        selection = await db.get(AcquisitionSelection, UUID(selected["id"]))
+        assert history.json()["items"][0]["source"] == selection.frozen["release"]["source"]
+    unrelated = await client.get("/api/acquisition/downloads", params={"work_id": str(uuid4())})
+    assert unrelated.json()["total"] == 0
+    await login_member(client)
+    assert (await client.get("/api/acquisition/downloads", params={"work_id": work_id})).json()[
+        "total"
+    ] == 0

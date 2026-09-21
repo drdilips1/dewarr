@@ -1,15 +1,17 @@
+import asyncio
 from datetime import UTC, datetime
 from urllib.parse import urlsplit
 
 from fastapi import APIRouter, HTTPException, Path
 from pydantic import BaseModel, Field, SecretStr, field_validator, model_validator
 
-from app.adapters.contracts import AdapterError
+from app.adapters.contracts import AdapterError, FailureKind
 from app.adapters.http import configured_url
 from app.adapters.mam import MAMRelease, MAMSearch, ReleasePage, cookie_value
 from app.api.dependencies import Admin, CurrentUser, Database
 from app.api.metadata import adapter_http_error
 from app.db.models import AuditEvent, SourceConnection
+from app.domain.mam_diagnostics import EgressResult, probe_egress
 from app.domain.operations import transaction_lock
 from app.domain.source_network import source_call
 from app.security import decrypt_secrets, encrypt_secrets
@@ -154,3 +156,66 @@ async def detail(
     user_id = user.id
     await db.rollback()
     return await call(user_id, "detail", source_id)
+
+
+class MAMNetworkView(BaseModel):
+    connection: MAMConnectionView
+    checked_at: datetime
+    status: str
+    cookie_status: str
+    proxy_status: str
+    proxy: EgressResult | None
+    direct: EgressResult
+    message: str
+
+
+@router.post("/network/test", response_model=MAMNetworkView)
+async def test_network(admin: Admin, db: Database):
+    row = await db.get(SourceConnection, "mam")
+    if not row or not row.enabled:
+        raise HTTPException(409, "Connect and enable MAM before testing the network")
+    generation, proxy_url = row.generation, row.proxy_url
+    secrets = decrypt_secrets(row.encrypted_secrets)
+    user_id = admin.id
+    await db.rollback()
+
+    async def test_cookie():
+        try:
+            await source_call(user_id, "test", expected_generation=generation)
+            return None
+        except AdapterError as error:
+            return error
+
+    async def test_proxy():
+        if not proxy_url:
+            return None
+        return await probe_egress(
+            proxy_url, secrets.get("proxy_username"), secrets.get("proxy_password")
+        )
+
+    failure, proxy, direct = await asyncio.gather(test_cookie(), test_proxy(), probe_egress())
+    row = await db.get(SourceConnection, "mam", populate_existing=True)
+    if not row or row.generation != generation or not row.enabled:
+        raise HTTPException(409, "MAM settings changed during the network test. Test again.")
+    authenticated = failure is None
+    healthy = authenticated and bool(direct.ip) and (proxy is None or bool(proxy.ip))
+    return MAMNetworkView(
+        connection=view(row),
+        checked_at=datetime.now(UTC),
+        status="healthy" if healthy else "degraded" if authenticated else "unhealthy",
+        cookie_status="authenticated"
+        if authenticated
+        else ("rejected" if failure.kind == FailureKind.AUTHENTICATION else "unverified"),
+        proxy_status="not-configured"
+        if proxy is None
+        else ("healthy" if proxy.ip else "unavailable"),
+        proxy=proxy,
+        direct=direct,
+        message=str(failure)
+        if failure
+        else (
+            "MAM authenticated through the configured proxy."
+            if proxy_url
+            else "MAM authenticated through the direct connection."
+        ),
+    )

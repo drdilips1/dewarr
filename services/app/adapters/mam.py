@@ -6,6 +6,7 @@ and docs/notices; exact upstream revisions are in docs/REUSE-LEDGER.md.
 """
 
 import asyncio
+import errno
 import json
 import logging
 import re
@@ -231,6 +232,12 @@ def contributors(value):
     return list(dict.fromkeys(name for item in list(values)[:100] if (name := plain(item))))
 
 
+def flag(value):
+    if type(value) in {bool, int, str} and value in (0, 1, "0", "1"):
+        return value in (1, "1")
+    return None
+
+
 def release(row, observed_at):
     if not isinstance(row, dict) or not (identifier := integer(row.get("id"))):
         raise ValueError("Release ID is missing")
@@ -300,10 +307,8 @@ def release(row, observed_at):
         leechers=integer(row.get("leechers")),
         snatches=integer(row.get("times_completed")),
         uploaded_at=plain(row.get("added"), 100),
-        freeleech=bool(row["free"])
-        if type(row.get("free")) is int and row["free"] in {0, 1}
-        else None,
-        vip=bool(row["vip"]) if type(row.get("vip")) is int and row["vip"] in {0, 1} else None,
+        freeleech=flag(row.get("free")),
+        vip=flag(row.get("vip")),
         tags=[text for tag in tags[:100] if (text := plain(tag))],
         isbn=str(row["isbn"])[:200] if isinstance(row.get("isbn"), (str, int)) else None,
         description=plain(row.get("description"), 100000),
@@ -404,6 +409,7 @@ class MAMClient:
             transport=transport,
         )
         self.rotated_cookie = None
+        self.uses_proxy = bool(proxy_url)
         self.request_interval = request_interval
         self.cooldown = 0
 
@@ -495,9 +501,28 @@ class MAMClient:
         except (httpx.TimeoutException, TimeoutError) as error:
             raise AdapterError(FailureKind.TIMEOUT, "MAM did not respond in time.") from error
         except httpx.HTTPError as error:
+            message = "The configured MAM route could not be reached."
+            cause = error
+            while cause is not None:
+                if isinstance(cause, OSError) and cause.errno == errno.ECONNREFUSED:
+                    message = (
+                        "The configured MAM proxy refused the connection. Check that the proxy "
+                        "is running and its port is reachable from the app server."
+                        if self.uses_proxy
+                        else "The MAM server refused the connection. Check the MAM URL and port."
+                    )
+                    break
+                cause = cause.__cause__ or cause.__context__
+            if isinstance(error, httpx.ProxyError):
+                message = (
+                    "The MAM proxy rejected the HTTPS tunnel. Check proxy authentication "
+                    "and whether the proxy allows connections to MAM."
+                )
+            if self.uses_proxy:
+                message += " No direct fallback was attempted."
             raise AdapterError(
                 FailureKind.ROUTE,
-                "The configured MAM route could not be reached. No direct fallback was attempted.",
+                message,
             ) from error
 
     async def search(self, query):

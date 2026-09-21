@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, result } from "../api/client";
 import { Loading, Notice } from "../components";
 
-export default function Accounts() {
+export default function Accounts({ embedded = false }: { embedded?: boolean }) {
   const client = useQueryClient();
   const accounts = useQuery({
     queryKey: ["accounts"],
@@ -40,11 +40,15 @@ export default function Accounts() {
   return (
     <>
       <div className="page-heading">
-        <div>
-          <p className="eyebrow">YOUR HOUSEHOLD</p>
-          <h1>Accounts</h1>
-          <p className="muted">Give each reader their own lists and access.</p>
-        </div>
+        {!embedded && (
+          <div>
+            <p className="eyebrow">YOUR HOUSEHOLD</p>
+            <h1>Accounts</h1>
+            <p className="muted">
+              Give each reader their own lists and access.
+            </p>
+          </div>
+        )}
       </div>
       <form
         className="panel editor"
@@ -110,6 +114,7 @@ export default function Accounts() {
               <span className="status">{user.role}</span>
               {user.role === "member" && (
                 <button
+                  aria-label={`${user.can_automate ? "Revoke" : "Allow"} list automation for ${user.display_name}`}
                   disabled={automation.isPending}
                   onClick={() =>
                     automation.mutate({
@@ -118,8 +123,9 @@ export default function Accounts() {
                     })
                   }
                 >
-                  {user.can_automate ? "Revoke" : "Allow"} list automation for{" "}
-                  {user.display_name}
+                  {user.can_automate
+                    ? "Disable automation"
+                    : "Allow automation"}
                 </button>
               )}
             </div>

@@ -1,3 +1,5 @@
+import { usePagedQuery } from "../hooks/usePagedQuery";
+import InfiniteScroll from "../components/InfiniteScroll";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
@@ -54,18 +56,24 @@ export default function SeriesRequests({
   const [preferences, setPreferences] = useState<Choice>({});
   const [automatic, setAutomatic] = useState(false);
   const routes = useSeriesRoutes(automatic, spec.mode, preferences);
-  const [offset, setOffset] = useState(0);
+
   const key = useRef(crypto.randomUUID());
   const panel = useRef<HTMLElement>(null);
   const path = { external_id: externalId };
-  const history = useQuery({
-    queryKey: ["series-requests", externalId, offset],
-    queryFn: async () =>
+  const history = usePagedQuery({
+    queryKey: ["series-requests", externalId],
+    queryFn: async (offset, signal) =>
       result(
         await api.GET("/api/catalog/series/hardcover/{external_id}/requests", {
+          signal,
           params: { path, query: { offset, limit: 10 } },
         }),
       ),
+    initial: 0,
+    next: (last, pages) => {
+      const count = pages.reduce((n, p) => n + p.items.length, 0);
+      return last.items.length && count < last.total ? count : undefined;
+    },
   });
   const saved = useQuery({
     queryKey: ["series-request", externalId, id],
@@ -490,20 +498,7 @@ export default function SeriesRequests({
               <span>{item.status}</span>
             </div>
           ))}
-          <nav className="button-row" aria-label="Series request history pages">
-            <button
-              disabled={!offset || busy}
-              onClick={() => setOffset(Math.max(0, offset - 10))}
-            >
-              Previous history
-            </button>
-            <button
-              disabled={offset + 10 >= history.data.total || busy}
-              onClick={() => setOffset(offset + 10)}
-            >
-              Next history
-            </button>
-          </nav>
+          <InfiniteScroll query={history} />
         </details>
       )}
     </section>

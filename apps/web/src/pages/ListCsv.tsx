@@ -1,3 +1,4 @@
+import InfiniteScroll from "../components/InfiniteScroll";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -286,7 +287,7 @@ export default function ListCsv({ listId }: { listId: string }) {
                     </button>
                   </div>
                   <p>{rows.length} books selected across all shelves.</p>
-                  {filtered.slice(page * 20, page * 20 + 20).map((row) => (
+                  {filtered.slice(0, (page + 1) * 20).map((row) => (
                     <div className="panel" key={row.row_number}>
                       <label className="check-label">
                         <input
@@ -328,25 +329,14 @@ export default function ListCsv({ listId }: { listId: string }) {
                       )}
                     </div>
                   ))}
-                  {filtered.length > 20 ? (
-                    <div className="card-actions">
-                      <button
-                        disabled={page === 0}
-                        onClick={() => setPage(page - 1)}
-                      >
-                        Previous CSV rows
-                      </button>
-                      <span>
-                        Page {page + 1} of {Math.ceil(filtered.length / 20)}
-                      </span>
-                      <button
-                        disabled={(page + 1) * 20 >= filtered.length}
-                        onClick={() => setPage(page + 1)}
-                      >
-                        Next CSV rows
-                      </button>
-                    </div>
-                  ) : null}
+                  <InfiniteScroll
+                    query={{
+                      hasNextPage: (page + 1) * 20 < filtered.length,
+                      isFetching: false,
+                      isFetchNextPageError: false,
+                      fetchNextPage: async () => setPage((n) => n + 1),
+                    }}
+                  />
                   <button
                     className="primary"
                     disabled={

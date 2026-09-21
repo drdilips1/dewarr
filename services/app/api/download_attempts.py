@@ -3,7 +3,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Header, Query
 from pydantic import BaseModel, ConfigDict, Field
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 
 from app.adapters.contracts import AdapterError
 from app.api.dependencies import Admin, CurrentUser, Database, Member
@@ -25,6 +25,7 @@ from app.domain import download_memberships
 from app.domain import download_repairs as repairs
 from app.domain.acquisition import RequestSpec, assess
 from app.domain.acquisition_selection import configuration_current
+from app.domain.work_graph import family_ids
 
 router = APIRouter(prefix="/acquisition/downloads", tags=["downloads"])
 
@@ -88,6 +89,7 @@ class AttemptView(BaseModel):
     state: str
     work_title: str
     release_title: str
+    source: str | None = None
     message: str
     external_may_exist: bool
     can_recheck: bool
@@ -202,6 +204,7 @@ async def view(db, user, row, selection):
         state=row.state,
         work_title=selection.frozen["work_title"],
         release_title=selection.frozen["release"]["title"],
+        source=selection.frozen["release"].get("source"),
         message=message,
         external_may_exist=row.external_may_exist,
         can_cancel=not row.external_may_exist and row.state != "cancelled",
@@ -272,10 +275,27 @@ async def listing(
     user: CurrentUser,
     db: Database,
     selection_id: UUID | None = None,
+    work_id: UUID | None = None,
     offset: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
 ):
     where = [DownloadAttempt.owner_id == user.id]
+    if work_id:
+        selected = (
+            select(AcquisitionSelection.id)
+            .join(AcquisitionIntent, AcquisitionIntent.id == AcquisitionSelection.intent_id)
+            .where(AcquisitionIntent.work_id.in_(family_ids(work_id)))
+        )
+        where.append(
+            or_(
+                DownloadAttempt.selection_id.in_(selected),
+                DownloadAttempt.id.in_(
+                    select(DownloadMembership.attempt_id).where(
+                        DownloadMembership.selection_id.in_(selected)
+                    )
+                ),
+            )
+        )
     if selection_id:
         where.append(
             DownloadAttempt.id.in_(

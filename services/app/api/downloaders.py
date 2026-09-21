@@ -26,9 +26,9 @@ class DownloaderInput(BaseModel):
     base_url: str = Field(max_length=2000)
     username: SecretStr | None = Field(default=None, min_length=1, max_length=300)
     password: SecretStr | None = Field(default=None, min_length=1, max_length=1000)
-    save_path: str = Field(max_length=2000)
-    category: str = Field(default="book-search", pattern=r"^[A-Za-z0-9_-]{1,100}$")
-    mappings: list[DownloadMapping] = Field(min_length=1, max_length=20)
+    save_path: str | None = Field(default=None, max_length=2000)
+    category: str = Field(default="", pattern=r"^[A-Za-z0-9_-]{0,100}$")
+    mappings: list[DownloadMapping] | None = Field(default=None, min_length=1, max_length=20)
     enabled: bool = True
     expected_generation: int = Field(default=0, ge=0)
 
@@ -42,17 +42,18 @@ class DownloaderInput(BaseModel):
     @field_validator("base_url")
     @classmethod
     def endpoint(cls, value):
-        return configured_url(value)
+        value = value.strip()
+        return configured_url(value if "://" in value else "http://" + value)
 
     @field_validator("save_path")
     @classmethod
     def path(cls, value):
-        return absolute_path(value)
+        return absolute_path(value) if value is not None else None
 
     @model_validator(mode="after")
-    def credentials(self):
-        if bool(self.username) != bool(self.password):
-            raise ValueError("Enter both username and password when replacing credentials")
+    def legacy_storage(self):
+        if (self.save_path is None) != (self.mappings is None):
+            raise ValueError("Legacy storage settings must be supplied together")
         return self
 
 
@@ -102,7 +103,7 @@ def view(row):
         name=row.name,
         base_url=row.base_url,
         enabled=row.enabled,
-        has_credentials=bool(row.encrypted_secrets),
+        has_credentials=any(decrypt_secrets(row.encrypted_secrets).values()),
         generation=row.credential_generation,
         status=row.status,
         last_error=row.last_error,
@@ -138,8 +139,6 @@ async def save(body, admin, db, connection_id=None):
     row = await downloaders.connection_or_404(db, connection_id) if connection_id else None
     if (row.credential_generation if row else 0) != body.expected_generation:
         raise HTTPException(409, "Downloader settings changed. Reload before saving.")
-    if (not row or row.base_url != body.base_url) and not body.password:
-        raise HTTPException(422, "Enter new credentials when connecting a new downloader endpoint")
     duplicate = await db.scalar(
         select(Integration).where(
             Integration.kind == "qbittorrent", Integration.base_url == body.base_url
@@ -147,19 +146,32 @@ async def save(body, admin, db, connection_id=None):
     )
     if duplicate and (not row or duplicate.id != row.id):
         raise HTTPException(409, "This downloader endpoint already has a connection")
-    mappings = downloaders.bind_mappings(body.mappings, body.save_path)
-    secrets = decrypt_secrets(row.encrypted_secrets) if row else {}
-    if body.username and body.password:
+    mappings = (
+        downloaders.bind_mappings(body.mappings, body.save_path)
+        if body.mappings is not None
+        else (row.config.get("mappings", []) if row and row.base_url == body.base_url else [])
+    )
+    secrets = (
+        decrypt_secrets(row.encrypted_secrets)
+        if row and row.base_url == body.base_url
+        else {"username": "", "password": ""}
+    )
+    if body.username is not None or body.password is not None:
         secrets = {
-            "username": body.username.get_secret_value(),
-            "password": body.password.get_secret_value(),
+            "username": body.username.get_secret_value() if body.username else "",
+            "password": body.password.get_secret_value() if body.password else "",
         }
     if not row:
         row = Integration(kind="qbittorrent", credential_generation=0)
         db.add(row)
     row.name, row.base_url, row.enabled = body.name, body.base_url, body.enabled
     row.encrypted_secrets = encrypt_secrets(secrets)
-    row.config = {"save_path": body.save_path, "category": body.category, "mappings": mappings}
+    row.config = {
+        "save_path": body.save_path or (row.config or {}).get("save_path", ""),
+        "category": body.category,
+        "mappings": mappings,
+        "client_managed": body.save_path is None,
+    }
     row.credential_generation += 1
     row.capabilities = {}
     row.status, row.last_error, row.last_success_at = "untested", None, None

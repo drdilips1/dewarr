@@ -129,15 +129,10 @@ async def test_submission_and_independent_confirmation_use_one_session_and_exact
         assert status.completed and not status.association_verified
     assert server.adds == 1
     adds = [r for r in server.requests if r.url.path.endswith("torrents/add")]
-    assert parse_qs(adds[0].content.decode()) == {
+    assert parse_qs(adds[0].content.decode(), keep_blank_values=True) == {
         "urls": [MAGNET],
-        "savepath": ["/downloads/books"],
         "tags": [TAG],
-        "category": ["book-search"],
-        "autoTMM": ["false"],
-        "skip_checking": ["false"],
-        "stopped": ["false"],
-        "contentLayout": ["Original"],
+        "category": [""],
     }
     assert len([r for r in server.requests if r.url.path.endswith("auth/login")]) == 1
 
@@ -176,7 +171,6 @@ async def test_matching_hash_without_attempt_tag_is_returned_but_never_adopted_o
     [
         {"tags": {"different"}},
         {"category": "other"},
-        {"auto_managed": True},
         {"save_path": "/other/path"},
         {"infohash_v1": "c" * 40},
     ],
@@ -555,3 +549,35 @@ def test_padding_requires_manifest_evidence_before_confirming_complete():
     state = parse_state(row(total_size=24), properties(), files())
     assert state.reported_complete
     assert not state.completed  # The caller must reconcile the known padding/file manifest.
+
+
+@pytest.mark.parametrize("category_path", ["books", "", "/downloads/books"])
+async def test_credential_free_connection_uses_server_defaults_without_logging_in(category_path):
+    calls = []
+
+    async def handler(request):
+        calls.append(request)
+        path = request.url.path
+        if path.endswith("app/version"):
+            return httpx.Response(200, text="v5.2.3")
+        if path.endswith("app/webapiVersion"):
+            return httpx.Response(200, text="2.15.1")
+        if path.endswith("app/preferences"):
+            return httpx.Response(200, json={"save_path": "/downloads", "auto_tmm_enabled": True})
+        if path.endswith("torrents/categories"):
+            return httpx.Response(200, json={"books": {"savePath": category_path}})
+        raise AssertionError(path)
+
+    async with QbitClient(
+        "http://qbit.test", "", "", transport=httpx.MockTransport(handler)
+    ) as client:
+        await client.capabilities()
+        assert await client.download_location("books") == "/downloads/books"
+    assert all(request.method == "GET" for request in calls)
+
+
+def test_auto_managed_torrents_can_be_verified_without_changing_server_preferences():
+    state = parse_state(row(auto_tmm=True), properties(), files())
+    assert verify_association(
+        [state], tag=TAG, hashes={HASH}, save_path="/downloads/books", category="book-search"
+    ).association_verified

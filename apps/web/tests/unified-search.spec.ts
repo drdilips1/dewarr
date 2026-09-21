@@ -138,17 +138,15 @@ test("unified search keeps local ownership usable during a provider outage and o
   });
   await page.reload();
   await page
-    .getByRole("button", { name: /The Catalog Journey Catalog Author/ })
+    .getByRole("link", { name: /The Catalog Journey Catalog Author/ })
     .click();
-  const preview = page.getByRole("region", { name: "Catalog preview" });
-  await expect(preview).toContainText("In library");
-  await expect(
-    preview.getByRole("button", { name: "Add to catalog", exact: true }),
-  ).toHaveCount(0);
-  await preview.getByRole("link", { name: "Open existing book →" }).click();
   await expect(
     page.getByRole("heading", { name: "My protected catalog title", level: 1 }),
   ).toBeVisible();
+  await expect(page.getByText("In library", { exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Add to catalog", exact: true }),
+  ).toHaveCount(0);
   expect(writes).toEqual([]);
   expect(errors).toEqual([]);
 });

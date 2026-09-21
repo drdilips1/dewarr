@@ -7,7 +7,7 @@ import re
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from email.utils import parsedate_to_datetime
-from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+from urllib.parse import parse_qsl, urlencode, urljoin, urlsplit, urlunsplit
 
 import httpx
 from defusedxml import ElementTree
@@ -65,6 +65,8 @@ def feed_identity(value):
 
 
 def parse_feed(content):
+    from app.adapters.goodreads_discovery import image_url
+
     if len(content) > MAX_BYTES:
         raise AdapterError(FailureKind.PARSER, "The Goodreads feed exceeds the supported size")
     try:
@@ -96,6 +98,11 @@ def parse_feed(content):
                 "isbn": isbn_key(item.findtext("isbn") or ""),
                 "isbn13": isbn_key(item.findtext("isbn13") or ""),
             }
+            cover = image_url(
+                item.findtext("book_large_image_url") or item.findtext("book_image_url")
+            )
+            if cover:
+                record["cover_url"] = cover
             # Never retain reviews, private notes, ratings or arbitrary HTML/image URLs.
             if external_id in records and records[external_id] != record:
                 raise ValueError
@@ -132,8 +139,19 @@ def retry_delay(value):
     return max(60, min(seconds, 7 * 86400))
 
 
-async def fetch_feed(url, *, etag=None, modified=None, transport=None, resolver=public_addresses):
-    url = feed_url(url)
+async def fetch_document(
+    url,
+    *,
+    etag=None,
+    modified=None,
+    transport=None,
+    resolver=public_addresses,
+    profile_id=None,
+    collection_id=None,
+    collection_page=None,
+    html=False,
+    redirects_left=2,
+):
     host = urlsplit(url).hostname
     marker = _request.set(True)
     try:
@@ -145,7 +163,9 @@ async def fetch_feed(url, *, etag=None, modified=None, transport=None, resolver=
                 )
             headers = {
                 "Host": host,
-                "Accept": "application/rss+xml, application/xml, text/xml",
+                "Accept": "text/html"
+                if html or profile_id or collection_id
+                else "application/rss+xml, application/xml, text/xml",
                 "Accept-Encoding": "identity",
             }
             if validator(etag):
@@ -164,15 +184,52 @@ async def fetch_feed(url, *, etag=None, modified=None, transport=None, resolver=
                     "GET", target, extensions={"sni_hostname": host}
                 ) as response:
                     status = response.status_code
+                    if (
+                        status in {301, 302, 303, 307, 308}
+                        and (profile_id or collection_id)
+                        and redirects_left
+                    ):
+                        destination = urljoin(url, response.headers.get("location", ""))
+                        parts = urlsplit(destination)
+                        if (
+                            parts.scheme == "https"
+                            and parts.netloc == "www.goodreads.com"
+                            and (
+                                not parts.query
+                                if collection_page is None
+                                else parse_qsl(parts.query) == [("page", str(collection_page))]
+                            )
+                            and not parts.fragment
+                            and (
+                                profile_id
+                                and re.fullmatch(
+                                    rf"/user/show/{re.escape(profile_id)}(?:-[\w-]+)?", parts.path
+                                )
+                                or collection_id
+                                and re.fullmatch(
+                                    rf"/list/show/{re.escape(collection_id)}(?:\.[\w-]+)?",
+                                    parts.path,
+                                )
+                            )
+                        ):
+                            return await fetch_document(
+                                destination,
+                                transport=transport,
+                                resolver=resolver,
+                                profile_id=profile_id,
+                                collection_id=collection_id,
+                                collection_page=collection_page,
+                                html=html,
+                                redirects_left=redirects_left - 1,
+                            )
                     if status == 304:
                         if not etag and not modified:
                             raise AdapterError(
                                 FailureKind.PARSER,
                                 "Goodreads returned an unsolicited unchanged response",
                             )
-                        return FeedResult(
-                            [],
-                            True,
+                        return DocumentResult(
+                            None,
                             validator(response.headers.get("etag")) or etag,
                             validator(response.headers.get("last-modified")) or modified,
                         )
@@ -206,9 +263,8 @@ async def fetch_feed(url, *, etag=None, modified=None, transport=None, resolver=
                             raise AdapterError(
                                 FailureKind.PARSER, "The Goodreads feed exceeds the supported size"
                             )
-                    return FeedResult(
-                        parse_feed(bytes(content)),
-                        False,
+                    return DocumentResult(
+                        bytes(content),
                         validator(response.headers.get("etag")),
                         validator(response.headers.get("last-modified")),
                     )
@@ -218,3 +274,20 @@ async def fetch_feed(url, *, etag=None, modified=None, transport=None, resolver=
         ) from None
     finally:
         _request.reset(marker)
+
+
+@dataclass
+class DocumentResult:
+    content: bytes | None
+    etag: str | None = None
+    modified: str | None = None
+
+
+async def fetch_feed(url, **kwargs):
+    document = await fetch_document(feed_url(url), **kwargs)
+    return FeedResult(
+        parse_feed(document.content) if document.content is not None else [],
+        document.content is None,
+        document.etag,
+        document.modified,
+    )

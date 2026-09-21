@@ -81,6 +81,7 @@ class AutomaticSelectionInput(BaseModel):
     intent_id: UUID
     slot: str = Field(pattern="^(ebook|audio|either)$")
     search_id: UUID
+    result_id: UUID | None = None
     downloader_id: UUID
     downloader_generation: int = Field(ge=1)
     destination_id: UUID
@@ -216,6 +217,8 @@ async def begin(db, user, body, key, *, list_authority=None, series_authority=No
     await require_series(db, user.id, series_authority, intent_id=body.intent_id)
     await transaction_lock(db, f"operation:{user.id}:{key}")
     command = body.model_dump(mode="json")
+    if body.result_id is None:
+        command.pop("result_id")
     if not body.download_when_ready:
         command.pop("download_when_ready")  # Preserve earlier preparation-only command receipts.
     previous = await db.scalar(
@@ -344,6 +347,9 @@ async def candidates(db, operation, work, profile, rule, version):
     sources = {s.key: s for s in await db.scalars(select(SourceConnection))}
     ranked = []
     for row in rows:
+        pinned = operation.payload["command"].get("result_id")
+        if pinned and str(row.id) != pinned:
+            continue
         release = release_value(row)
         verified = operation.payload.get("verified", {}).get(str(row.id))
         if verified:

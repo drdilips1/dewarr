@@ -131,7 +131,6 @@ def verify_association(
         or not hashes.issubset(state.identities)
         or state.save_path != save_path
         or state.category != category
-        or state.auto_managed
     ):
         raise AdapterError(
             FailureKind.UNCERTAIN,
@@ -318,6 +317,9 @@ class QbitClient:
     async def _login(self):
         if self._authenticated:
             return
+        if not self._username and not self._password:
+            self._authenticated = True
+            return
         status, result = await self._request(
             "POST", "auth/login", data={"username": self._username, "password": self._password}
         )
@@ -345,6 +347,31 @@ class QbitClient:
         if version >= (5, 2):
             self._capabilities.operations.add("magnet-metadata")
         return self._capabilities
+
+    async def download_location(self, category: str) -> str:
+        """Read the server's destination without changing any qBittorrent settings."""
+        await self._login()
+        _, raw = await self._request("GET", "app/preferences")
+        _, categories_raw = await self._request("GET", "torrents/categories")
+        try:
+            preferences = json.loads(raw)
+            categories = json.loads(categories_raw)
+            path = absolute_path(preferences["save_path"])
+            if preferences.get("auto_tmm_enabled") or preferences.get(
+                "use_category_paths_in_manual_mode"
+            ):
+                category_path = categories.get(category, {}).get("savePath") or category
+                if category_path:
+                    path = absolute_path(
+                        category_path
+                        if category_path.startswith("/")
+                        else path.rstrip("/") + "/" + category_path
+                    )
+            return path
+        except (ValueError, KeyError, TypeError, AttributeError) as error:
+            raise AdapterError(
+                FailureKind.PARSER, "qBittorrent returned an invalid download location."
+            ) from error
 
     async def resolve_magnet(self, magnet: str, *, wait_seconds=40, interval=2) -> bytes:
         """Fetch metadata through qBit's network without adding or starting a transfer.
@@ -576,19 +603,15 @@ class QbitClient:
         *,
         attempt_tag: str,
         save_path: str,
-        category: str = "book-search",
+        category: str = "",
     ) -> SubmissionReceipt:
-        tag, path = validate_attempt_tag(attempt_tag), absolute_path(save_path)
-        if not re.fullmatch(r"[A-Za-z0-9_-]{1,100}", category):
+        tag = validate_attempt_tag(attempt_tag)
+        absolute_path(save_path)  # Observed destination is used for later reconciliation.
+        if not re.fullmatch(r"[A-Za-z0-9_-]{0,100}", category):
             raise ValueError("Use one simple download category")
         fields = {
             "tags": tag,
             "category": category,
-            "savepath": path,
-            "autoTMM": "false",
-            "skip_checking": "false",
-            "stopped": "false",
-            "contentLayout": "Original",
         }
         kwargs = {"data": fields}
         if isinstance(artifact, str):

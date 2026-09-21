@@ -1,3 +1,4 @@
+import SettingHelp from "../components/SettingHelp";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api, result } from "../api/client";
@@ -60,12 +61,17 @@ export default function RouteFields({
   const values = { ...inherited, ...overrides };
   return (
     <details onToggle={(event) => setOpen(event.currentTarget.open)}>
-      <summary>Downloader and destination defaults</summary>
-      <p className="muted">
-        Defaults select where future acquisitions go. Automatic imports still
-        require an approved, verified route. Saved requests keep their accepted
-        choices.
-      </p>
+      <summary>
+        <span className="setting-subheading">
+          Downloader and destination defaults
+          <SettingHelp label="download preferences">
+            Defaults select where future acquisitions go. Automatic imports
+            still require an approved, verified route. Saved requests keep their
+            accepted choices.
+          </SettingHelp>
+        </span>
+      </summary>
+
       <Notice error={options.error} />
       {(Object.keys(routeLabels) as Field[]).map((field) => {
         const choices =
@@ -105,23 +111,28 @@ export default function RouteFields({
                 ))}
               </select>
             </label>
-            <p className="muted">
-              {Object.hasOwn(overrides, field)
-                ? "Custom value"
-                : `Inherited · ${origins[field] || "no default"}`}
-              {Object.hasOwn(overrides, field) && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    const next = { ...overrides };
-                    delete next[field];
-                    onChange(next);
-                  }}
-                >
-                  Use inherited {routeLabels[field]}
-                </button>
-              )}
-            </p>
+            {Object.hasOwn(overrides, field) && (
+              <div className="preference-origin">
+                <SettingHelp label="inherited value">
+                  {Object.hasOwn(overrides, field)
+                    ? "Custom value"
+                    : `Inherited · ${origins[field] || "no default"}`}
+                </SettingHelp>
+                {Object.hasOwn(overrides, field) && (
+                  <button
+                    type="button"
+                    aria-label={`Use inherited ${routeLabels[field]}`}
+                    onClick={() => {
+                      const next = { ...overrides };
+                      delete next[field];
+                      onChange(next);
+                    }}
+                  >
+                    Reset
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         );
       })}

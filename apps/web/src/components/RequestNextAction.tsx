@@ -45,9 +45,9 @@ export default function RequestNextAction({
       ) : null;
     case "downloads":
       return inActivity ? (
-        <a href="#downloads">View download activity</a>
+        <a href="#downloads">View download queue</a>
       ) : (
-        <Link to="/activity#downloads">View download activity</Link>
+        <Link to="/requests#downloads">View download queue</Link>
       );
     case "book":
       return (

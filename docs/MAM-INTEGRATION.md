@@ -29,6 +29,7 @@ The rotated named cookie from an applicable response is encrypted before the lea
 | `GET /api/sources/mam/connection` | Administrator; redacted configuration and health |
 | `PUT /api/sources/mam/connection` | Administrator; generation-checked settings and encrypted secrets |
 | `POST /api/sources/mam/connection/test` | Administrator; authenticated account check, no account profile exposed |
+| `POST /api/sources/mam/network/test` | Administrator; cookie authentication, proxy health, proxy/direct public IPs, and check timestamp |
 | `POST /api/sources/mam/search` | Authenticated user; bounded query with CSRF/origin checks |
 | `GET /api/sources/mam/releases/{id}` | Authenticated user; exact-ID detail lookup |
 
@@ -41,3 +42,11 @@ Twenty-nine adapter tests and eleven PostgreSQL/API tests cover request fields, 
 The browser journey configures a synthetic MAM endpoint, verifies token-free reload, tests the account, searches, reads full details, checks plain-text rendering and exercises a valid empty response. Desktop/mobile screenshots are retained locally. All source fixtures are invented; no personal MAM account, tracker posting or download was used.
 
 Live account/IP/proxy certification, source-native provisional catalog creation, richer filters/autosuggest, cross-source aggregation, release ranking and qBittorrent dispatch remain pending. Artifact resolution/inspection now has its own fixture and native-parser evidence in the linked contract. Current source ordering is a browse control and does not change acquisition policies. This checkpoint does not satisfy the complete S05 manual acquisition gate.
+
+## Network diagnostics
+
+Settings → Download sources → MAM includes a Network panel. Test connection saves edits first, tests the cookie through the configured MAM route, and independently looks up the proxy and direct server public IPs. IP probes use credential-free clients against ipify, with icanhazip as a fallback resolver on the same route. They never send the MAM cookie. HTTP/HTTPS proxy authentication uses the separate encrypted username/password fields. A failed required proxy never triggers a direct MAM request.
+
+Diagnostics distinguish rejected cookies, unverified authentication, proxy lookup failures, and direct lookup failures. An authenticated MAM session with an unavailable IP lookup is degraded, not an authentication failure. Results include a check time, are held in the browser query cache for that settings generation, and are hidden while settings are edited. Reloading requires a fresh test. Equal proxy and direct IPs show a routing advisory rather than falsely declaring the proxy broken.
+
+The reference was MouseSearch's `build_mam_proxy_status_payload` and `/system/public_ip` in [app.py](https://github.com/sevenlayercookie/MouseSearch/blob/main/app.py), inspected September 20, 2026. This implementation retains Book Search's mandatory proxy routing and serialized cookie rotation.

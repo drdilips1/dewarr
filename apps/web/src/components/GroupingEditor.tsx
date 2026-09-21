@@ -5,7 +5,8 @@ import type { components } from "../api/schema";
 import { Notice } from "../components";
 
 type Inspection = components["schemas"]["InspectionView"];
-type Grouping = components["schemas"]["GroupingView"];
+type Grouping =
+  components["schemas"]["app__api__inspection_groupings__GroupingView"];
 type Assignment = {
   group: string;
   role: "media" | "supplement";

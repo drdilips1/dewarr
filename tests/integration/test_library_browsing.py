@@ -169,3 +169,16 @@ async def test_filters_never_expose_inaccessible_inventory_or_counts(client, adm
 )
 async def test_invalid_library_view_parameters(client, admin, params):
     assert (await client.get("/api/library/assets", params=params)).status_code == 422
+
+
+async def test_file_locations_only_appear_for_accessible_library_copies(client, admin, database):
+    async with database() as db, db.begin():
+        work, library, asset = await add(db, "Files and locations")
+        asset.files = [{"path": "/library/Author/Book/book.epub", "format": "epub", "size": 1234}]
+        work_id = str(work.id)
+    result = await browse(client, work_id=work_id)
+    assert result["items"][0]["files"] == [
+        {"path": "/library/Author/Book/book.epub", "format": "epub", "size": 1234}
+    ]
+    await login_member(client)
+    assert (await browse(client, work_id=work_id))["items"] == []

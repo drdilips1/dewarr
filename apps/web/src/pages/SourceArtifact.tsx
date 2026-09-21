@@ -1,12 +1,17 @@
+import InfiniteScroll from "../components/InfiniteScroll";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import { Loading, Notice } from "../components";
 import ReleaseSelection from "./ReleaseSelection";
 
 export default function SourceArtifact() {
   const { id = "" } = useParams();
+  const [params] = useSearchParams();
+  const workId = params.get("work");
+  const bookContext = new URLSearchParams(params);
+  bookContext.set("tab", "sources");
   const [page, setPage] = useState(0);
   const artifact = useQuery({
     queryKey: ["source-artifact", id],
@@ -20,7 +25,7 @@ export default function SourceArtifact() {
   if (artifact.isPending) return <Loading />;
   if (!artifact.data) return <Notice error={artifact.error} />;
   const { descriptor, release, current_connection, created_at } = artifact.data;
-  const files = descriptor.files.slice(page * 50, (page + 1) * 50);
+  const files = descriptor.files.slice(0, (page + 1) * 50);
   return (
     <>
       <header className="page-heading">
@@ -36,9 +41,13 @@ export default function SourceArtifact() {
           <h1>Torrent manifest</h1>
           <p>{release.title}</p>
           <Link
-            to={`/sources${release.source === "mam" ? "" : `/${release.source}`}?q=${encodeURIComponent(release.title)}`}
+            to={
+              workId
+                ? `/books/${encodeURIComponent(workId)}?${bookContext}`
+                : `/search?q=${encodeURIComponent(release.title)}`
+            }
           >
-            Return to source search
+            {workId ? "Return to book sources" : "Find book"}
           </Link>
         </div>
       </header>
@@ -73,25 +82,14 @@ export default function SourceArtifact() {
             </li>
           ))}
         </ul>
-        {descriptor.files.length > 50 && (
-          <div className="button-row">
-            <button
-              disabled={page === 0}
-              onClick={() => setPage((value) => value - 1)}
-            >
-              Previous files
-            </button>
-            <span>
-              Page {page + 1} of {Math.ceil(descriptor.files.length / 50)}
-            </span>
-            <button
-              disabled={(page + 1) * 50 >= descriptor.files.length}
-              onClick={() => setPage((value) => value + 1)}
-            >
-              More files
-            </button>
-          </div>
-        )}
+        <InfiniteScroll
+          query={{
+            hasNextPage: (page + 1) * 50 < descriptor.files.length,
+            isFetching: false,
+            isFetchNextPageError: false,
+            fetchNextPage: async () => setPage((n) => n + 1),
+          }}
+        />
         <details>
           <summary>Torrent identity</summary>
           <dl className="source-facts">

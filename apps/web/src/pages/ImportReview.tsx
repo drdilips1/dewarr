@@ -96,7 +96,7 @@ export default function ImportReview() {
   });
   return (
     <>
-      <Link to="/organization">← Naming settings</Link>
+      <Link to="/settings#naming">← Naming settings</Link>
       <div className="page-heading">
         <div>
           <p className="eyebrow">Library setup</p>

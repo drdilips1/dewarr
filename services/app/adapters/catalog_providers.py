@@ -20,7 +20,7 @@ HC_SEARCH = """query CatalogSearch($query: String!, $page: Int!) {
 }"""
 HC_BOOK = """query CatalogBook($id: Int!) {
  books(where: {id: {_eq: $id}}, limit: 1) {
-  id canonical_id title description release_year cached_image cached_contributors
+  id canonical_id rating title description release_year cached_image cached_contributors
   book_series(limit: 100, order_by: {id: asc}) { position compilation series { id name } }
  }
 }"""
@@ -65,6 +65,26 @@ def contributors(records, role: str) -> list[str]:
 class Hardcover:
     def __init__(self, request):
         self.request = request
+
+    async def author_details(self, external_id, page):
+        from app.adapters.hardcover_authors import detail
+
+        return await detail(self.query, external_id, page)
+
+    async def title_search(self, title):
+        from app.adapters.hardcover_identifiers import title_search
+
+        return await title_search(self.query, title)
+
+    async def identifier_search(self, identifiers):
+        from app.adapters.hardcover_identifiers import search
+
+        return await search(self.query, identifiers)
+
+    async def reader_details(self, external_id):
+        from app.adapters.hardcover_details import details
+
+        return await details(self.query, external_id)
 
     async def discovery(self, shelf, page, today):
         from app.adapters.hardcover_discovery import browse
@@ -125,7 +145,7 @@ class Hardcover:
         # Catalog-only token does not require access to private profile fields.
         await self.search("Dune", 1)
 
-    async def search(self, query: str, page: int) -> SearchPage:
+    async def search(self, query: str, page: int, language: str | None = None) -> SearchPage:
         data = await self.query(HC_SEARCH, {"query": query, "page": page})
         try:
             search = data["search"]
@@ -142,25 +162,35 @@ class Hardcover:
             books = []
             for hit in hits:
                 record = hit["document"]
-                names, roles = record.get("author_names", []), record.get("contribution_types", [])
-                if isinstance(names, str):
-                    names = [names]
-                if roles:
-                    names = [
-                        name
-                        for name, role in zip(names, roles, strict=True)
-                        if role in {"Author", None}
-                    ]
+                # Search facets are independently deduplicated, not parallel arrays.
+                # Only contribution records associate a person with their role.
+                if record.get("contributions") is not None:
+                    names = contributors(record["contributions"], "Author")
+                else:
+                    names = record.get("author_names") or []
+                    if isinstance(names, str):
+                        names = [names]
                 books.append(
                     BookData(
                         provider="hardcover",
                         external_id=identifier("hardcover", str(record["id"])),
                         title=record["title"],
+                        rating=record.get("rating"),
                         authors=names,
                         publication_year=year(record.get("release_year")),
                         cover_url=cover_url((record.get("image") or {}).get("url")),
                     )
                 )
+            if language and books:
+                matching = await self.query(
+                    """query SearchLanguage($ids: [Int!]!, $language: String!) {
+                  books(where: {id: {_in: $ids},
+                    editions: {language: {code2: {_eq: $language}}}}) { id }
+                }""",
+                    {"ids": [int(book.external_id) for book in books], "language": language},
+                )
+                allowed = {str(book["id"]) for book in matching["books"]}
+                books = [book for book in books if book.external_id in allowed]
             return SearchPage(
                 provider="hardcover", items=books, page=page, has_more=page * 20 < count
             )
@@ -183,6 +213,7 @@ class Hardcover:
                 provider="hardcover",
                 external_id=external_id,
                 title=record["title"],
+                rating=record.get("rating"),
                 authors=contributors(record.get("cached_contributors", []), "Author"),
                 description=record.get("description"),
                 publication_year=year(record.get("release_year")),
@@ -252,12 +283,12 @@ class OpenLibrary:
     def __init__(self, request):
         self.request = request
 
-    async def search(self, query: str, page: int) -> SearchPage:
+    async def search(self, query: str, page: int, language: str | None = None) -> SearchPage:
         data = await self.request(
             "GET",
             "search.json",
             params={
-                "q": query,
+                "q": f"({query}) AND language:{language_code(language)}" if language else query,
                 "page": page,
                 "limit": 20,
                 "fields": "key,title,author_name,first_publish_year,cover_i",
@@ -367,3 +398,22 @@ class OpenLibrary:
             ValidationError,
         ) as error:
             raise parse_failure() from error
+
+
+def language_code(value: str) -> str:
+    # Open Library uses ISO 639-2 bibliographic codes for its language facet.
+    pairs = (
+        "en:eng es:spa fr:fre de:ger it:ita pt:por nl:dut da:dan sv:swe no:nor fi:fin "
+        "is:ice pl:pol cs:cze sk:slo hu:hun ro:rum bg:bul el:gre uk:ukr ru:rus tr:tur "
+        "ar:ara he:heb fa:per hi:hin bn:ben ta:tam te:tel ur:urd id:ind ms:may vi:vie "
+        "th:tha ko:kor ja:jpn zh:chi sw:swa af:afr sq:alb am:amh hy:arm az:aze eu:baq "
+        "be:bel bs:bos ca:cat et:est fil:fil gl:glg ka:geo gu:guj hr:hrv kk:kaz km:khm "
+        "kn:kan ky:kir lo:lao lt:lit lv:lav mk:mac ml:mal mn:mon mr:mar my:bur ne:nep "
+        "pa:pan si:sin sl:slv sr:srp so:som uz:uzb zu:zul "
+    )
+    code = value.casefold().split("-")[0]
+    if not re.fullmatch(r"[a-z]{2,3}", code):
+        raise AdapterError(
+            FailureKind.PARSER, "Choose a supported search language in Metadata settings."
+        )
+    return dict(pair.split(":") for pair in pairs.split()).get(code, code)

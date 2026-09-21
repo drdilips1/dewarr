@@ -1,3 +1,4 @@
+from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Header, HTTPException, Query
@@ -71,7 +72,11 @@ def search_pattern(value):
 def ordered_roots(list_id):
     mapping = canonical_map()
     return (
-        select(mapping.c.work_id, func.min(ListEntry.position).label("position"))
+        select(
+            mapping.c.work_id,
+            func.min(ListEntry.position).label("position"),
+            func.min(ListEntry.created_at).label("added_at"),
+        )
         .select_from(ListEntry)
         .join(mapping, mapping.c.origin_id == ListEntry.work_id)
         .where(ListEntry.list_id == list_id)
@@ -212,6 +217,7 @@ async def detail(
     offset: int = Query(default=0, ge=0),
     limit: int = Query(default=50, ge=1, le=100),
     q: str = Query(default="", max_length=300),
+    sort: Literal["position", "newest"] = "position",
     expected_revision: str | None = Query(default=None, min_length=64, max_length=64),
 ):
     item = await visible_list(list_id, user, db, lock_read=True)
@@ -228,9 +234,10 @@ async def detail(
         pattern = search_pattern(q)
         base = base.where(or_(Work.title.ilike(pattern), cast(Work.authors, Text).ilike(pattern)))
     matched = await db.scalar(select(func.count()).select_from(base.subquery()))
-    works = (
-        await db.scalars(base.order_by(roots.c.position, Work.id).offset(offset).limit(limit))
-    ).all()
+    order = (roots.c.position, Work.id)
+    if sort == "newest":
+        order = (roots.c.added_at.desc(), *order)
+    works = (await db.scalars(base.order_by(*order).offset(offset).limit(limit))).all()
     availability = await availability_for(db, user, [work.id for work in works])
     return ListDetail(
         **list_view(item, count or 0, user.id).model_dump(),

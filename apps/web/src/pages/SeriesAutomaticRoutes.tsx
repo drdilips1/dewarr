@@ -166,7 +166,7 @@ export default function SeriesAutomaticRoutes({
       ))}
       <p className="muted">
         Only tested downloaders and administrator-approved import routes are
-        offered. Reusable profiles control format and source ranking.
+        offered. Your download settings control format and source ranking.
       </p>
     </fieldset>
   );

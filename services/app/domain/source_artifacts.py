@@ -82,7 +82,7 @@ async def persist_artifact(
 
 
 def artifact_bytes(row):
-    """Internal dispatch boundary; never serialize credentials or original bytes to the UI."""
+    """Verified bytes for internal dispatch or explicit owner-authorized torrent export."""
     try:
         content = base64.b64decode(decrypt_secrets(row.encrypted_content)["torrent"], validate=True)
         if hashlib.sha256(content).hexdigest() != row.sha256:

@@ -26,29 +26,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     .fill("browser test password");
   await page.getByLabel("Setup token").fill("browser-test-bootstrap-token");
   await page.getByRole("button", { name: "Create administrator" }).click();
-  await expect(
-    page.getByRole("heading", { name: "Your catalog" }),
-  ).toBeVisible();
-  await page.getByRole("link", { name: "Set up your collection →" }).click();
-  await expect(
-    page.getByRole("heading", { name: "Getting started" }),
-  ).toBeVisible();
-  await expect(page.getByLabel("Library setup")).toContainText(
-    "No library connection saved.",
-  );
-  await expect(page.getByLabel("Catalog setup")).toContainText(
-    "Hardcover is optional and not connected.",
-  );
-  await expect(page.getByLabel("Downloader setup")).toContainText(
-    "No downloader saved.",
-  );
-  await expect(page.getByLabel("Destination setup")).toContainText(
-    "No destinations saved.",
-  );
-  await page.screenshot({
-    path: testInfo.outputPath("getting-started-empty.png"),
-    fullPage: true,
-  });
+  await page.getByRole("button", { name: "Skip setup", exact: true }).click();
   await page.getByRole("link", { name: "Catalog", exact: true }).click();
   await page.getByRole("button", { name: "Add a title" }).click();
   await page.getByLabel("Title", { exact: true }).fill("The Synthetic Archive");
@@ -87,7 +65,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     path: testInfo.outputPath("reading-list-desktop.png"),
     fullPage: true,
   });
-  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  await page.goto("/settings#logs");
   await page.getByRole("button", { name: "Check background worker" }).click();
   await expect(
     page
@@ -98,36 +76,46 @@ test("setup, catalog, private list and durable worker are usable together", asyn
       })
       .getByText("completed", { exact: true }),
   ).toBeVisible({ timeout: 10_000 });
-  await page.getByRole("link", { name: "Connections", exact: true }).click();
+  await page.goto("/settings#libraries");
   await page
     .getByRole("button", { name: "Connect Audiobookshelf", exact: true })
     .click();
-  await page.getByLabel("Connection name").fill("Fixture ABS");
-  await page.getByLabel(/^Server URL/).fill("http://127.0.0.1:13379/abs");
+  await page
+    .getByRole("region", { name: "Libraries", exact: true })
+    .getByLabel("Connection name")
+    .fill("Fixture ABS");
+  await page
+    .getByRole("region", { name: "Libraries", exact: true })
+    .getByLabel(/^Server URL/)
+    .fill("http://127.0.0.1:13379/abs");
   await page
     .getByLabel("API token", { exact: true })
     .fill("browser-abs-fixture-token");
-  await page.getByRole("button", { name: "Save connection" }).click();
   await page
+    .getByRole("region", { name: "Libraries", exact: true })
+    .getByRole("button", { name: "Save connection", exact: true })
+    .click();
+  await page
+    .getByRole("region", { name: "Libraries", exact: true })
     .getByRole("button", { name: "Test connection", exact: true })
     .click();
-  await expect(page.getByRole("status")).toContainText("Fixture ABS connected");
+  await expect(
+    page
+      .getByRole("region", { name: "Libraries", exact: true })
+      .getByRole("status"),
+  ).toContainText("Fixture ABS connected");
   await page.getByRole("button", { name: "Sync library", exact: true }).click();
-  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  await page.goto("/settings#logs");
   const inventory = page.locator("article").filter({
     has: page.getByRole("heading", { name: "Audiobookshelf inventory sync" }),
   });
   await expect(inventory.getByText("completed", { exact: true })).toBeVisible({
     timeout: 15000,
   });
-  await page
-    .getByRole("link", { name: "Getting started", exact: true })
-    .click();
-  await expect(page.getByLabel("Library setup")).toContainText("Fixture ABS");
-  await expect(page.getByLabel("Library setup")).toContainText("connected");
-  await expect(page.getByLabel("Library setup")).not.toContainText(
-    "Review the connection and sync before relying on ownership.",
-  );
+  await page.goto("/settings#libraries");
+  await expect(
+    page.getByRole("region", { name: "Libraries", exact: true }),
+  ).toContainText("Fixture ABS");
   await page.getByRole("link", { name: "My Library", exact: true }).click();
   await expect(
     page.getByRole("link", { name: "The First Harbor", exact: true }),
@@ -169,18 +157,24 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     .getByRole("combobox", { name: "Book", exact: true })
     .selectOption({ label: "The Synthetic Archive — Example Author" });
   await page.getByRole("button", { name: "Confirm match" }).click();
-  await page.getByRole("link", { name: "Metadata", exact: true }).click();
+  await page.goto("/settings#catalog");
   await page.getByLabel("Hardcover API token").fill("browser-hardcover-token");
-  await page.getByRole("button", { name: "Save catalog connection" }).click();
-  await page.getByRole("button", { name: "Test catalog connection" }).click();
-  await expect(page.getByRole("status")).toHaveText(
-    "Hardcover catalog access verified.",
-  );
   await page
-    .getByText("Advanced provider preferences", { exact: true })
+    .getByRole("region", { name: "Catalog & metadata", exact: true })
+    .getByRole("button", { name: "Save connection", exact: true })
     .click();
+  await page
+    .getByRole("region", { name: "Catalog & metadata", exact: true })
+    .getByRole("button", { name: "Test connection", exact: true })
+    .click();
+  await expect(
+    page
+      .getByRole("region", { name: "Catalog & metadata", exact: true })
+      .getByRole("status"),
+  ).toHaveText("Hardcover catalog access verified.");
+  await page.getByText("Advanced metadata", { exact: true }).click();
   const editionLookup = page.getByRole("checkbox", {
-    name: /Look up missing editions before automatic import/,
+    name: /Look up missing editions before import/,
   });
   await expect(editionLookup).toBeChecked();
   await editionLookup.uncheck();
@@ -189,9 +183,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     page.getByText("Metadata defaults saved.", { exact: true }),
   ).toBeVisible();
   await page.reload();
-  await page
-    .getByText("Advanced provider preferences", { exact: true })
-    .click();
+  await page.getByText("Advanced metadata", { exact: true }).click();
   await expect(editionLookup).not.toBeChecked();
   await editionLookup.check();
   await page.getByRole("button", { name: "Save metadata defaults" }).click();
@@ -443,56 +435,41 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   ).toBeVisible();
   await page.goto(mainBookUrl);
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.getByRole("link", { name: "Organization", exact: true }).click();
+  await page.goto("/settings#naming");
   await expect(
-    page.getByRole("heading", { name: "File organization", exact: true }),
+    page.getByRole("heading", { name: "File naming", exact: true }),
   ).toBeVisible();
-  const examples = page.getByRole("region", { name: "Naming examples" });
-  await expect(examples).toContainText(
-    "5 planned item folders · 0 need attention",
-  );
-  await expect(examples).toContainText("2024 - The First Harbor - Casey Reed");
-  await page.getByText("Customize naming", { exact: true }).click();
-  await page
+  const naming = page.getByRole("region", { name: "File naming", exact: true });
+  const examples = naming.getByLabel("Folder preview");
+  await expect(examples).toContainText("Harry Potter");
+  await naming.getByRole("button", { name: "Ebook", exact: true }).click();
+  await naming
     .getByLabel("Ebook folder", { exact: true })
     .fill("{author}/{title}[ - {edition_year}]");
-  await expect(examples).toContainText(
-    "Library: ebooks/Alex Morgan/The First Harbor - 2017/The First Harbor.epub",
-  );
-  const namingSaved = page.waitForResponse(
-    (response) =>
-      response.url().endsWith("/organization/settings") &&
-      response.request().method() === "PUT",
-  );
-  await page.getByRole("button", { name: "Save naming settings" }).click();
-  expect((await namingSaved).status()).toBe(200);
+  await expect(examples).toContainText("Philosopher’s Stone - 1997");
+  await naming.getByRole("button", { name: "Save naming settings" }).click();
+  await expect(naming.getByRole("status")).toHaveText("Saved");
   await page.reload();
-  await page.getByText("Customize naming", { exact: true }).click();
-  await expect(page.getByLabel("Ebook folder", { exact: true })).toHaveValue(
+  await naming.getByRole("button", { name: "Ebook", exact: true }).click();
+  await expect(naming.getByLabel("Ebook folder", { exact: true })).toHaveValue(
     "{author}/{title}[ - {edition_year}]",
   );
-  await page.screenshot({
+  await naming.screenshot({
     path: testInfo.outputPath("organization-desktop.png"),
-    fullPage: true,
   });
   await page.setViewportSize({ width: 390, height: 844 });
   expect(
     await page.evaluate(
-      () => document.documentElement.scrollWidth <= window.innerWidth,
+      () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
-  await page.screenshot({
+  await naming.screenshot({
     path: testInfo.outputPath("organization-mobile.png"),
-    fullPage: true,
   });
-  await page.getByRole("button", { name: "Reset naming defaults" }).click();
-  const namingReset = page.waitForResponse(
-    (response) =>
-      response.url().endsWith("/organization/settings") &&
-      response.request().method() === "PUT",
-  );
-  await page.getByRole("button", { name: "Save naming settings" }).click();
-  expect((await namingReset).status()).toBe(200);
+  await naming.getByRole("button", { name: "Reset naming defaults" }).click();
+  await naming.getByRole("button", { name: "Save naming settings" }).click();
+  await expect(naming.getByRole("status")).toHaveText("Saved");
+  await page.goto("/requests#reviews");
   await page.getByRole("link", { name: "Inspect completed downloads" }).click();
   await page.getByLabel("Download path", { exact: true }).fill("completed");
   await page
@@ -915,12 +892,16 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     .click();
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.getByRole("link", { name: "Sources", exact: true }).click();
-  await page
-    .getByText("MAM connection · not-configured", { exact: true })
-    .click();
+  await page.goto("/settings#sources");
   const mamConnection = page.getByRole("form", {
     name: "MAM connection settings",
   });
+  if (!(await mamConnection.isVisible()))
+    await page
+      .getByRole("region", { name: "MAM settings", exact: true })
+      .locator("summary")
+      .first()
+      .click();
   await mamConnection
     .getByLabel("MAM URL", { exact: true })
     .fill("http://127.0.0.1:13379/mam");
@@ -928,15 +909,16 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     .getByLabel("mam_id", { exact: true })
     .fill("browser-mam-fixture");
   await mamConnection
-    .getByRole("button", { name: "Save MAM connection", exact: true })
+    .getByRole("button", { name: "Save connection", exact: true })
     .click();
   await expect(mamConnection.getByLabel("mam_id", { exact: true })).toHaveValue(
     "",
   );
   await mamConnection
-    .getByRole("button", { name: "Test saved connection", exact: true })
+    .getByRole("button", { name: "Test connection", exact: true })
     .click();
   await expect(mamConnection).toContainText("Connection: connected");
+  await page.goto("/sources");
   await page
     .getByLabel("Search title, author or series", { exact: true })
     .fill("Harbor Stories");
@@ -1028,13 +1010,13 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     .click();
   await expect(sourceResults).toContainText("No matching releases");
   await page.reload();
-  await page.getByText("MAM connection · connected", { exact: true }).click();
+  await page.goto("/settings#sources");
   await expect(mamConnection.getByLabel("mam_id", { exact: true })).toHaveValue(
     "",
   );
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.getByRole("link", { name: "Connections", exact: true }).click();
-  await page.getByRole("link", { name: "Downloaders", exact: true }).click();
+  await page.goto("/settings#libraries");
+  await page.goto("/settings#downloaders");
   await page
     .getByRole("button", { name: "Connect qBittorrent", exact: true })
     .click();
@@ -1453,8 +1435,8 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await page.unroute("**/api/acquisition/downloads?*");
   await page.setViewportSize({ width: 1440, height: 1000 });
 
-  await page.getByRole("link", { name: "Connections", exact: true }).click();
-  await page.getByRole("link", { name: "Downloaders", exact: true }).click();
+  await page.goto("/settings#libraries");
+  await page.goto("/settings#downloaders");
   await page.reload();
   await downloaderCard
     .getByRole("button", { name: "Edit downloader", exact: true })
@@ -1472,7 +1454,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     .getByRole("button", { name: "Test saved connection", exact: true })
     .click();
   await expect(downloaderCard).toContainText("connected");
-  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  await page.goto("/requests#downloads");
   await downloadActivity
     .getByRole("button", { name: "Review updated connections" })
     .click();
@@ -1503,8 +1485,8 @@ test("setup, catalog, private list and durable worker are usable together", asyn
   await expect(downloadActivity).toContainText("25% downloaded");
   await page.reload();
   await expect(downloadActivity).toContainText("no download was added");
-  await page.getByRole("link", { name: "Connections", exact: true }).click();
-  await page.getByRole("link", { name: "Downloaders", exact: true }).click();
+  await page.goto("/settings#libraries");
+  await page.goto("/settings#downloaders");
   await downloaderCard
     .getByRole("button", { name: "Edit downloader", exact: true })
     .click();
@@ -1522,7 +1504,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     }),
   ).toBeDisabled();
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.getByRole("link", { name: "Accounts", exact: true }).click();
+  await page.goto("/settings#accounts");
   await page.getByLabel("Name", { exact: true }).fill("Guest reader");
   await page.getByLabel("Username", { exact: true }).fill("guest");
   await page
@@ -1530,7 +1512,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     .fill("guest reader password");
   await page.getByRole("button", { name: "Create account" }).click();
   await expect(page.getByText("guest", { exact: true })).toBeVisible();
-  await page.getByRole("link", { name: "Connections", exact: true }).click();
+  await page.goto("/settings#libraries");
   await page.getByRole("checkbox", { name: "Guest reader" }).check();
   const granted = page.waitForResponse(
     (response) =>
@@ -1571,6 +1553,7 @@ test("setup, catalog, private list and durable worker are usable together", asyn
     .getByLabel("Password", { exact: true })
     .fill("guest reader password");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.getByRole("button", { name: "Skip setup", exact: true }).click();
   await page.getByRole("link", { name: "My Library", exact: true }).click();
   await expect(
     page.getByRole("link", { name: "Open in Audiobookshelf" }),
@@ -1625,8 +1608,8 @@ test("request scope inherits defaults, supports explicit clearing and remains fr
     .getByRole("combobox", { name: "Default requested media", exact: true })
     .selectOption("both");
   await settings
-    .getByRole("textbox", { name: "Required language", exact: true })
-    .fill("en");
+    .getByRole("combobox", { name: "Required language", exact: true })
+    .selectOption("en");
   await settings
     .getByRole("combobox", { name: "Audiobook abridgment", exact: true })
     .selectOption("false");
@@ -1978,7 +1961,7 @@ test("administrator review queue retries a command and shows its assigned inspec
     .getByLabel("Password", { exact: true })
     .fill("browser test password");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  await page.goto("/requests#reviews");
   const review = page.getByRole("region", { name: "Download import reviews" });
   await review.getByRole("button", { name: "Review this download" }).click();
   await expect(review).toContainText("Temporary review connection failure");
@@ -2010,7 +1993,7 @@ test("administrator review queue retries a command and shows its assigned inspec
     .getByLabel("Password", { exact: true })
     .fill("guest reader password");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  await page.goto("/requests");
   await expect(review).toHaveCount(0);
 });
 
@@ -2028,19 +2011,21 @@ test("Prowlarr sources retain successful results beside an outage and inspect th
     page.getByRole("heading", { name: "Your catalog", exact: true }),
   ).toBeVisible();
   await page.goto("/sources/prowlarr");
+  await page.goto("/settings#sources");
   await page
-    .getByText("Prowlarr connection · not-configured", { exact: true })
-    .click();
-  await page
+    .getByRole("region", { name: "Prowlarr settings", exact: true })
     .getByLabel("Server URL", { exact: true })
     .fill("http://127.0.0.1:13379/prowlarr");
   await page
+    .getByRole("region", { name: "Prowlarr settings", exact: true })
     .getByLabel("API key", { exact: true })
     .fill("browser-prowlarr-key");
   await page
+    .getByRole("region", { name: "Prowlarr settings", exact: true })
     .getByRole("button", { name: "Save connection", exact: true })
     .click();
   await expect(page.getByLabel("API key", { exact: true })).toHaveValue("");
+  await page.goto("/sources/prowlarr");
   await expect(page.getByLabel(/MAM duplicate/)).toBeDisabled();
   await page
     .getByLabel("Title, author or series", { exact: true })
@@ -2139,9 +2124,7 @@ test("book sources aggregate durable results and apply saved release preferences
   await expect(mam).toContainText("Jordan Lee");
   await page.reload();
   await expect(mam).toBeVisible();
-  await sources
-    .getByText("Customize download preferences", { exact: true })
-    .click();
+  await sources.getByText("Edit profile", { exact: true }).click();
   await sources
     .getByLabel("Profile name", { exact: true })
     .fill("Most seeded audio");
@@ -2629,8 +2612,8 @@ test("wanted list title prepares an eligible release and reloads its saved selec
     .getByLabel("Password", { exact: true })
     .fill("browser test password");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  await page.getByRole("link", { name: "Connections", exact: true }).click();
-  await page.getByRole("link", { name: "Downloaders", exact: true }).click();
+  await page.goto("/settings#libraries");
+  await page.goto("/settings#downloaders");
   const downloader = page.getByRole("article", {
     name: "qBittorrent",
     exact: true,
@@ -2736,8 +2719,8 @@ test("installation capacity limits persist and remain usable on mobile", async (
     .getByLabel("Password", { exact: true })
     .fill("browser test password");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  await page.getByRole("link", { name: "Connections", exact: true }).click();
-  await page.getByRole("link", { name: "Downloaders", exact: true }).click();
+  await page.goto("/settings#libraries");
+  await page.goto("/settings#downloaders");
   await page.getByText("Transfer and storage limits", { exact: true }).click();
   const settings = page.getByRole("form", {
     name: "Transfer and storage limits",
@@ -2936,7 +2919,7 @@ test("approved automatic selection queues one download and preserves its receipt
     .click();
   const activity = page
     .getByRole("region", { name: "Downloads", exact: true })
-    .getByRole("article")
+    .getByRole("row")
     .filter({
       has: page.getByRole("heading", {
         name: "Hardcover List Arrival",
@@ -3010,7 +2993,7 @@ test("list policy activates future additions and acquires a synced title without
   await expect(
     page.getByRole("button", { name: "Sign out", exact: true }),
   ).toBeVisible();
-  await page.getByRole("link", { name: "Accounts", exact: true }).click();
+  await page.goto("/settings#accounts");
   await page
     .getByRole("button", {
       name: "Allow list automation for Guest reader",
@@ -3029,8 +3012,8 @@ test("list policy activates future additions and acquires a synced title without
       exact: true,
     })
     .click();
-  await page.getByRole("link", { name: "Connections", exact: true }).click();
-  await page.getByRole("link", { name: "Downloaders", exact: true }).click();
+  await page.goto("/settings#libraries");
+  await page.goto("/settings#downloaders");
   // This focused journey must establish its own enabled downloader and import route.
   const downloader = page.getByRole("article", {
     name: "qBittorrent",
@@ -3164,11 +3147,11 @@ test("list policy activates future additions and acquires a synced title without
   });
   // Confirm the external transfer before pausing. A reservation alone can still
   // be awaiting dispatch, and pausing correctly blocks that unstarted action.
-  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  await page.goto("/requests#downloads");
   await expect(
     page
       .getByRole("region", { name: "Downloads", exact: true })
-      .getByRole("article")
+      .getByRole("row")
       .filter({
         has: page.getByRole("heading", {
           name: "List Policy Arrival",
@@ -3190,10 +3173,10 @@ test("list policy activates future additions and acquires a synced title without
     .getByRole("button", { name: "Acquisition policy", exact: true })
     .click();
   await expect(policy.getByRole("status")).toContainText("Acquisition paused");
-  await page.getByRole("link", { name: "Activity", exact: true }).click();
+  await page.goto("/requests#downloads");
   const download = page
     .getByRole("region", { name: "Downloads", exact: true })
-    .getByRole("article")
+    .getByRole("row")
     .filter({
       has: page.getByRole("heading", {
         name: "List Policy Arrival",
@@ -3596,8 +3579,9 @@ test("series catalog preserves uncertainty and curates selected books", async ({
     page.getByText("Publication date unknown", { exact: false }),
   ).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "3 · Journey Collection" }),
+    page.getByRole("heading", { name: "Journey Collection" }),
   ).toBeVisible();
+  await page.getByRole("tab", { name: "Lists & requests" }).click();
   const curation = page.getByRole("region", { name: "Curate series" });
   await curation
     .getByLabel("Destination list")
@@ -4041,21 +4025,20 @@ test("AudiobookBay settings, rich postings and metadata inspection use the share
     }),
   ).toBeEnabled();
   await page.goto("/sources/audiobookbay");
+  await page.goto("/settings#sources");
   await page
-    .getByText("AudiobookBay connection · not-configured", { exact: true })
-    .click();
-  await page
+    .getByRole("region", { name: "AudiobookBay settings", exact: true })
     .getByLabel("Site origin", { exact: true })
     .fill("http://127.0.0.1:13379");
   await page
+    .getByRole("region", { name: "AudiobookBay settings", exact: true })
     .getByLabel("Metadata downloader", { exact: true })
     .selectOption({ label: "qBittorrent" });
   await page
+    .getByRole("region", { name: "AudiobookBay settings", exact: true })
     .getByRole("button", { name: "Save connection", exact: true })
     .click();
-  await expect(
-    page.getByText("AudiobookBay connection · untested", { exact: true }),
-  ).toBeVisible();
+  await page.goto("/sources/audiobookbay");
   await page
     .getByLabel("Search title, author or series", { exact: true })
     .fill("Harbor");
@@ -4256,35 +4239,27 @@ test("discovery shelves connect provider previews, library ownership and list cu
     name: "Trending books",
     exact: true,
   });
-  await expect(
-    trending.getByText("Hardcover · trending over the last month", {
-      exact: true,
-    }),
-  ).toBeVisible();
+  await expect(trending.getByRole("heading", { level: 2 })).toHaveAttribute(
+    "title",
+    "Hardcover · trending over the last month",
+  );
   const owned = trending.getByRole("link", {
     name: /My protected catalog title/,
   });
   await expect(owned).toContainText("In library");
-  const previewButton = trending.getByRole("button", {
-    name: "Preview The Discovered Harbor",
+  const bookLink = trending.getByRole("link", {
+    name: "View The Discovered Harbor",
   });
-  await previewButton.focus();
+  await bookLink.focus();
   await page.keyboard.press("Enter");
-  const preview = page.getByRole("region", {
-    name: "Catalog preview",
-    exact: true,
-  });
-  await expect(preview).toBeFocused();
-  await expect(
-    preview.getByRole("heading", { name: "The Discovered Harbor" }),
-  ).toBeVisible();
-  await preview.getByRole("button", { name: "Close preview" }).click();
-  await expect(previewButton).toBeFocused();
-  await previewButton.click();
-  await preview.getByRole("button", { name: "Add to catalog" }).click();
+  await expect(page).toHaveURL(/\/discover\/books\/hardcover\/9001$/);
   await expect(
     page.getByRole("heading", { name: "The Discovered Harbor", level: 1 }),
-  ).toBeVisible();
+  ).toBeFocused();
+  await page
+    .getByRole("button", { name: "Add to catalog", exact: true })
+    .click();
+  await page.getByRole("link", { name: "Manage book", exact: true }).click();
   await expect(
     page.getByRole("region", { name: "Related books", exact: true }),
   ).toContainText("Suggested by Hardcover");
@@ -4308,7 +4283,7 @@ test("discovery shelves connect provider previews, library ownership and list cu
     page
       .getByRole("region", { name: "Recently published books" })
       .getByText(/Published \d/),
-  ).toBeVisible();
+  ).toHaveCount(0);
   await page.screenshot({
     path: testInfo.outputPath("discover-desktop.png"),
     fullPage: true,
@@ -4397,33 +4372,14 @@ test("community lists preview ownership and follow into private list automation"
   await expect(
     shelf.getByRole("link", { name: /My protected catalog title/ }),
   ).toContainText("In library");
-  const previewButton = shelf.getByRole("button", {
-    name: "Preview The Discovered Harbor",
-  });
-  if (await previewButton.isVisible()) {
-    await previewButton.focus();
-    await page.keyboard.press("Enter");
-    const preview = page.getByRole("region", {
-      name: "Catalog preview",
-      exact: true,
-    });
-    await expect(preview).toBeFocused();
-    await preview.getByRole("button", { name: "Close preview" }).click();
-    await expect(previewButton).toBeFocused();
-  } else {
-    // Earlier discovery can already have imported this title. Existing catalog
-    // cards open that same book instead of offering another import preview.
-    const knownBook = shelf.getByRole("link", {
-      name: /The Discovered Harbor/,
-    });
-    await knownBook.focus();
-    await page.keyboard.press("Enter");
-    await expect(
-      page.getByRole("heading", { name: "The Discovered Harbor", level: 1 }),
-    ).toBeVisible();
-    await page.goBack();
-    await expect(shelf).toBeVisible();
-  }
+  const bookLink = shelf.getByRole("link", { name: /The Discovered Harbor/ });
+  await bookLink.focus();
+  await page.keyboard.press("Enter");
+  await expect(
+    page.getByRole("heading", { name: "The Discovered Harbor", level: 1 }),
+  ).toBeVisible();
+  await page.goBack();
+  await expect(shelf).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   expect(
     await page.evaluate(
@@ -4556,6 +4512,7 @@ test("series discovery shows library gaps and preserves owned formats through cu
   await page
     .getByLabel("Select Hardcover List Arrival", { exact: true })
     .check();
+  await page.getByRole("tab", { name: "Lists & requests" }).click();
   const curation = page.getByRole("region", { name: "Curate series" });
   await curation
     .getByLabel("Destination list")
@@ -4728,7 +4685,7 @@ test("local list curation shares read-only views and clears them after revocatio
     path: testInfo.outputPath("list-curation-mobile.png"),
     fullPage: true,
   });
-  await page.getByRole("link", { name: "Accounts", exact: true }).click();
+  await page.goto("/settings#accounts");
   await page.getByLabel("Name", { exact: true }).fill("Shared list guest");
   await page.getByLabel("Username", { exact: true }).fill("listguest");
   await page

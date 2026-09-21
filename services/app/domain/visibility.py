@@ -46,13 +46,12 @@ def visible_origin_work(user: User, entity=Work):
     return or_(
         entity.catalog_public.is_(True),
         visible_owned_catalog(user, entity),
-        exists(
+        entity.id.in_(
             select(AssetContains.work_id)
             .join(LibraryAsset, AssetContains.asset_id == LibraryAsset.id)
             .join(Library, LibraryAsset.library_id == Library.id)
             .join(Integration, Library.integration_id == Integration.id)
             .where(
-                AssetContains.work_id == entity.id,
                 Library.accessible.is_(True),
                 Integration.enabled.is_(True),
                 visible_library(user),
@@ -68,24 +67,20 @@ def visible_work(user: User):
 
     mapping = canonical_map()
     origin = aliased(Work)
-    return or_(
-        Work.catalog_public.is_(True),
-        exists(
-            select(origin.id)
-            .join(mapping, mapping.c.origin_id == origin.id)
-            .where(mapping.c.work_id == Work.id, visible_owned_catalog(user, origin))
-        ),
-        exists(
-            select(AssetContains.work_id)
-            .join(mapping, mapping.c.origin_id == AssetContains.work_id)
-            .join(LibraryAsset, AssetContains.asset_id == LibraryAsset.id)
-            .join(Library, LibraryAsset.library_id == Library.id)
-            .join(Integration, Library.integration_id == Integration.id)
-            .where(
-                mapping.c.work_id == Work.id,
-                Library.accessible.is_(True),
-                Integration.enabled.is_(True),
-                visible_library(user),
-            )
-        ),
+    # Membership subqueries are evaluated as sets. Correlated EXISTS inside an
+    # OR forced repeated scans of the canonical map for every private work.
+    owned_roots = (
+        select(mapping.c.work_id)
+        .join(origin, mapping.c.origin_id == origin.id)
+        .where(visible_owned_catalog(user, origin))
     )
+    library_roots = (
+        select(mapping.c.work_id)
+        .select_from(AssetContains)
+        .join(mapping, mapping.c.origin_id == AssetContains.work_id)
+        .join(LibraryAsset, AssetContains.asset_id == LibraryAsset.id)
+        .join(Library, LibraryAsset.library_id == Library.id)
+        .join(Integration, Library.integration_id == Integration.id)
+        .where(Library.accessible.is_(True), Integration.enabled.is_(True), visible_library(user))
+    )
+    return or_(Work.catalog_public.is_(True), Work.id.in_(owned_roots), Work.id.in_(library_roots))

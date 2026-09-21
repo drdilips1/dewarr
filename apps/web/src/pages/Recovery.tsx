@@ -1,3 +1,5 @@
+import { usePagedQuery } from "../hooks/usePagedQuery";
+import InfiniteScroll from "../components/InfiniteScroll";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { api, result, setCsrf } from "../api/client";
@@ -215,7 +217,6 @@ function RecoveryChecks({
   const client = useQueryClient();
   const [key, setKey] = useState(() => crypto.randomUUID());
   const [domain, setDomain] = useState("");
-  const [offset, setOffset] = useState(0);
   const [selected, setSelected] = useState<string[]>([]);
   const [prepareKey, setPrepareKey] = useState(() => crypto.randomUUID());
   const reviews = [
@@ -267,22 +268,24 @@ function RecoveryChecks({
       ),
     onSuccess: () => {
       setKey(crypto.randomUUID());
-      setOffset(0);
       client.invalidateQueries({ queryKey: ["recovery"] });
     },
   });
-  const report = useQuery({
-    queryKey: ["recovery-findings", scanId, state, domain, offset],
+  const report = usePagedQuery({
+    queryKey: ["recovery-findings", scanId, state, domain],
     enabled: Boolean(scanId),
-    queryFn: async () =>
+    queryFn: async (offset, signal) =>
       result(
         await api.GET("/api/recovery/scans/{scan_id}", {
+          signal,
           params: {
             path: { scan_id: scanId! },
             query: { offset, ...(domain ? { domain } : {}) },
           },
         }),
       ),
+    initial: 0,
+    next: (last) => last.next_offset ?? undefined,
     refetchInterval: state === "queued" || state === "running" ? 2000 : false,
   });
   return (
@@ -332,7 +335,6 @@ function RecoveryChecks({
               value={domain}
               onChange={(event) => {
                 setDomain(event.target.value);
-                setOffset(0);
               }}
             >
               <option value="">All areas</option>
@@ -482,8 +484,7 @@ function RecoveryChecks({
               selected.length > 0) && (
               <div className="recovery-selection">
                 <p>
-                  {selected.length} matching transfers selected across pages
-                  (maximum 100).
+                  {selected.length} matching transfers selected (maximum 100).
                 </p>
                 <button
                   disabled={!selected.length || busy || preview.isPending}
@@ -496,20 +497,7 @@ function RecoveryChecks({
                 <Notice error={preview.error} />
               </div>
             )}
-          <div className="recovery-pagination">
-            <button
-              disabled={offset === 0}
-              onClick={() => setOffset(Math.max(0, offset - 50))}
-            >
-              Previous observations
-            </button>
-            <button
-              disabled={report.data.next_offset == null}
-              onClick={() => setOffset(report.data!.next_offset!)}
-            >
-              Next observations
-            </button>
-          </div>
+          <InfiniteScroll query={report} />
         </>
       )}
       {review && (

@@ -1,10 +1,16 @@
+import InfiniteScroll from "../components/InfiniteScroll";
+import SourceReleaseDownload from "../components/SourceReleaseDownload";
+import { Info, Search as SearchIcon } from "lucide-react";
+import SourceReleaseDetails, {
+  ReleaseTags,
+} from "../components/SourceReleaseDetails";
+import { transferSize } from "./DownloadConstraints";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
-import ReleaseProfiles from "./ReleaseProfiles";
 
 const AutomaticSelection = lazy(() => import("./AutomaticSelection"));
 
@@ -23,8 +29,7 @@ export default function BookSources({
   const [params] = useSearchParams();
   const [q, setQ] = useState(work.title.slice(0, 300));
   const [medium, setMedium] = useState("all");
-  const [seriesSearch, setSeriesSearch] = useState("inherit");
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+
   const initial = useRef(false);
   const key = useRef(crypto.randomUUID());
   const requestId = params.get("request");
@@ -63,10 +68,9 @@ export default function BookSources({
     profiles.data?.find(
       (p) =>
         (p.id || "") ===
-        (selectedId ??
-          (request.data?.release_policy
-            ? request.data.release_policy.id || ""
-            : (search.data?.profile.id ?? ""))),
+        (request.data?.release_policy
+          ? request.data.release_policy.id || ""
+          : (search.data?.profile.id ?? "")),
     ) || profiles.data?.[0];
   const begin = useMutation({
     mutationFn: async (offset: number) =>
@@ -84,10 +88,6 @@ export default function BookSources({
             profile_id: chosen?.id,
             profile_generation: chosen?.generation,
             profile_effective_revision: chosen?.effective_revision,
-            preference_overrides:
-              seriesSearch === "inherit"
-                ? undefined
-                : { search_series: seriesSearch === "include" },
           },
         }),
       ),
@@ -164,23 +164,7 @@ export default function BookSources({
   const data =
     !requestId || search.data?.request_id === requestId ? search.data : null;
   return (
-    <section aria-label="Book download sources">
-      <h2>Download sources</h2>
-      <p>
-        Compare releases for this title. Your catalog editions and library
-        availability stay separate.
-      </p>
-      <div className="button-row">
-        <Link to={`/sources?q=${encodeURIComponent(work.title)}`}>
-          Direct MAM search and settings
-        </Link>
-        <Link to={`/sources/prowlarr?q=${encodeURIComponent(work.title)}`}>
-          Prowlarr search and settings
-        </Link>
-        <Link to={`/sources/audiobookbay?q=${encodeURIComponent(work.title)}`}>
-          AudiobookBay search and settings
-        </Link>
-      </div>
+    <section className="book-sources" aria-label="Book download sources">
       <Notice
         error={
           search.error ||
@@ -191,7 +175,7 @@ export default function BookSources({
         }
       />
       <form
-        className="panel editor"
+        className="source-search-toolbar compact-source-search"
         onSubmit={(event) => {
           event.preventDefault();
           key.current = crypto.randomUUID();
@@ -199,7 +183,7 @@ export default function BookSources({
         }}
       >
         <label>
-          Release search query
+          <span className="sr-only">Release search query</span>
           <input
             value={q}
             onChange={(event) => setQ(event.target.value)}
@@ -208,7 +192,7 @@ export default function BookSources({
           />
         </label>
         <label>
-          Release medium
+          <span className="sr-only">Release medium</span>
           <select
             value={medium}
             onChange={(event) => setMedium(event.target.value)}
@@ -218,20 +202,8 @@ export default function BookSources({
             <option value="audio">Audiobook</option>
           </select>
         </label>
-        <label>
-          Download profile
-          <select
-            value={chosen?.id || ""}
-            onChange={(event) => setSelectedId(event.target.value)}
-          >
-            {profiles.data?.map((p) => (
-              <option key={p.id || "balanced"} value={p.id || ""}>
-                {p.name}
-              </option>
-            ))}
-          </select>
-        </label>
         <button
+          aria-label="Refresh source results"
           className="primary"
           disabled={
             !!busy ||
@@ -240,31 +212,9 @@ export default function BookSources({
             !q.trim()
           }
         >
-          Refresh source results
+          <SearchIcon size={16} /> Search
         </button>
-        <details>
-          <summary>Search options</summary>
-          <label>
-            Series search
-            <select
-              value={seriesSearch}
-              onChange={(event) => setSeriesSearch(event.target.value)}
-            >
-              <option value="inherit">Use inherited search preferences</option>
-              <option value="include">Title and known series names</option>
-              <option value="exclude">Entered query only</option>
-            </select>
-          </label>
-        </details>
       </form>
-      {chosen && canAcquire && (
-        <ReleaseProfiles
-          key={`${chosen.id}:${chosen.effective_revision}`}
-          profile={chosen}
-          defaults={profiles.data![0]}
-          onSaved={(p) => setSelectedId(p.id || "")}
-        />
-      )}
       {data && (
         <Results
           key={data.id}
@@ -314,6 +264,9 @@ function Results({
   onInspect: (id: string) => void;
 }) {
   const [pageIndex, setPageIndex] = useState(0);
+  const [detailId, setDetailId] = useState<string | null>(null);
+  const detailIndex = data.items.findIndex((item) => item.id === detailId);
+  const detailItem = data.items[detailIndex];
   const [sort, setSort] = useState("profile");
   const [text, setText] = useState("");
   const [source, setSource] = useState("");
@@ -373,107 +326,35 @@ function Results({
     return order || a.rank - b.rank;
   });
   const filteredView = !!(needle || source || format || hideBlocked);
-  const page = Math.min(
-    pageIndex,
-    Math.max(0, Math.ceil(filtered.length / 50) - 1),
-  );
-  const offset = page * 50;
+  const visibleCount = (pageIndex + 1) * 50;
   return (
     <>
-      <p role="status">{data.message}</p>
-      <p>
-        Results for “{data.query}” ·{" "}
-        {data.medium === "all" ? "ebook and audiobook" : data.medium} · page{" "}
-        {Math.floor(data.offset / 50) + 1}
-      </p>
+      {data.status !== "completed" && (
+        <p role="status" className="source-result-status">
+          {data.message}
+        </p>
+      )}
+      {data.sources
+        .filter((source) => source.state === "failed")
+        .map((source) => (
+          <p className="notice error" key={source.key}>
+            {source.name}: {source.message}
+          </p>
+        ))}
+      {!data.sources.length && (
+        <p className="notice">
+          Connect a download source in Settings to find releases.
+        </p>
+      )}
+      {data.status === "completed" && !data.items.length && (
+        <p className="notice">No releases found. Try a different search.</p>
+      )}
       {data.stale_identity && (
         <p className="notice error">
           The catalog identity or series evidence changed. Refresh the search
           before inspecting a result.
         </p>
       )}
-      {data.catalog_preparation && (
-        <details>
-          <summary>Series metadata · {data.catalog_preparation.state}</summary>
-          <p>{data.catalog_preparation.message}</p>
-          <ul>
-            {data.catalog_preparation.items.map((item) => (
-              <li key={item.external_id}>
-                {item.name}: {item.message}
-              </li>
-            ))}
-          </ul>
-          {data.catalog_preparation.warnings.map((warning) => (
-            <p className="notice" key={warning}>
-              {warning}
-            </p>
-          ))}
-        </details>
-      )}
-      {data.query_plan && (
-        <details>
-          <summary>Search queries ({data.query_plan.queries.length})</summary>
-          <p className="muted">
-            Series names broaden discovery. They do not confirm pack contents or
-            authorize additional downloads.
-          </p>
-          {data.query_plan.queries.map((query) => (
-            <div key={query.key}>
-              <p>
-                {query.kind === "series" ? "Series" : "Entered query"}:{" "}
-                {query.query}
-              </p>
-              {query.evidence.map((evidence, index) => (
-                <p className="muted" key={index}>
-                  {evidence.provider} · {evidence.external_id} · observed{" "}
-                  {new Date(evidence.observed_at).toLocaleString()}
-                </p>
-              ))}
-            </div>
-          ))}
-          {data.query_plan.warnings.map((message) => (
-            <p key={message} className="notice">
-              {message}
-            </p>
-          ))}
-        </details>
-      )}
-      <details>
-        <summary>
-          Source progress ·{" "}
-          {data.sources.filter((source) => source.state === "completed").length}
-          /{data.sources.length} complete
-          {data.sources.some((source) => source.state === "failed")
-            ? " · Some queries failed"
-            : ""}
-        </summary>
-        <ul aria-label="Source search progress">
-          {data.sources.map((source) => (
-            <li key={source.key}>
-              <strong>{source.name}</strong> · {source.state} · {source.count}{" "}
-              results
-              <p className="muted">
-                {source.message}
-                {source.query ? ` · “${source.query}”` : ""}
-                {source.observed_at
-                  ? ` · ${new Date(source.observed_at).toLocaleString()}`
-                  : ""}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </details>
-      {!data.sources.length && (
-        <p className="notice">
-          Connect MAM, AudiobookBay or Prowlarr to search for releases.
-        </p>
-      )}
-      <p className="muted">
-        Ranked with {data.profile.name}:{" "}
-        {(data.profile.preferences.criteria || []).join(" → ")}. This ranks the
-        fetched page, not every release on the trackers. Source claims require
-        file inspection; no automatic download starts here.
-      </p>
       {data.items.length > 0 && (
         <section
           className="panel release-comparison"
@@ -481,8 +362,9 @@ function Results({
         >
           <div className="library-filters">
             <label className="grow">
-              Filter title, author or narrator
+              <span className="sr-only">Filter title, author or narrator</span>
               <input
+                placeholder="Filter releases…"
                 value={text}
                 maxLength={300}
                 onChange={(event) => {
@@ -492,7 +374,7 @@ function Results({
               />
             </label>
             <label>
-              Sort this view
+              <span className="sr-only">Sort this view</span>
               <select
                 value={sort}
                 onChange={(event) => {
@@ -500,70 +382,62 @@ function Results({
                   setPageIndex(0);
                 }}
               >
-                <option value="profile">Profile ranking</option>
+                <option value="profile">Preferred order</option>
                 <option value="seeds">Most seeders</option>
                 <option value="smallest">Smallest download</option>
                 <option value="largest">Largest download</option>
                 <option value="title">Title A–Z</option>
               </select>
             </label>
+
+            <label>
+              <span className="sr-only">Result source</span>
+              <select
+                value={source}
+                onChange={(event) => {
+                  setSource(event.target.value);
+                  setPageIndex(0);
+                }}
+              >
+                <option value="">All sources</option>
+                {[...origins].map(([key, name]) => (
+                  <option key={key} value={key}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              <span className="sr-only">Reported format</span>
+              <select
+                value={format}
+                onChange={(event) => {
+                  setFormat(event.target.value);
+                  setPageIndex(0);
+                }}
+              >
+                <option value="">All formats</option>
+                {formats.map((value) => (
+                  <option key={value} value={value}>
+                    {value.toUpperCase()}
+                  </option>
+                ))}
+                <option value="unknown">Unknown format</option>
+              </select>
+            </label>
+            <label className="check-label">
+              <input
+                type="checkbox"
+                checked={hideBlocked}
+                onChange={(event) => {
+                  setHideBlocked(event.target.checked);
+                  setPageIndex(0);
+                }}
+              />
+              Hide blocked or expired results
+            </label>
           </div>
-          <details>
-            <summary>Filter loaded releases</summary>
-            <div className="library-filters">
-              <label>
-                Result source
-                <select
-                  value={source}
-                  onChange={(event) => {
-                    setSource(event.target.value);
-                    setPageIndex(0);
-                  }}
-                >
-                  <option value="">All sources</option>
-                  {[...origins].map(([key, name]) => (
-                    <option key={key} value={key}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                Reported format
-                <select
-                  value={format}
-                  onChange={(event) => {
-                    setFormat(event.target.value);
-                    setPageIndex(0);
-                  }}
-                >
-                  <option value="">All formats</option>
-                  {formats.map((value) => (
-                    <option key={value} value={value}>
-                      {value.toUpperCase()}
-                    </option>
-                  ))}
-                  <option value="unknown">Unknown format</option>
-                </select>
-              </label>
-              <label className="check-label">
-                <input
-                  type="checkbox"
-                  checked={hideBlocked}
-                  onChange={(event) => {
-                    setHideBlocked(event.target.checked);
-                    setPageIndex(0);
-                  }}
-                />
-                Hide blocked or expired results
-              </label>
-            </div>
-          </details>
-          <p className="muted">
-            Only loaded results are compared. Unknown seeds and sizes sort last.
-            View controls do not change your download profile or automatic
-            selection.
-          </p>
+
           {(filteredView || sort !== "profile") && (
             <button
               onClick={() => {
@@ -580,11 +454,16 @@ function Results({
           )}
         </section>
       )}
-      <p tabIndex={-1} ref={resultsHeading} aria-live="polite">
+      <p
+        className="source-count"
+        tabIndex={-1}
+        ref={resultsHeading}
+        aria-live="polite"
+      >
         {data.items.length} distinct releases
         {filteredView ? ` · ${filtered.length} match your filters` : ""}
         {filtered.length > 0
-          ? ` · showing ${offset + 1}–${Math.min(offset + 50, filtered.length)}`
+          ? ` · showing ${1}–${Math.min(visibleCount, filtered.length)}`
           : ""}
       </p>
       {filteredView && !filtered.length && (
@@ -593,140 +472,137 @@ function Results({
           other results.
         </p>
       )}
-      {filtered.slice(offset, offset + 50).map(({ item, rank }) => (
-        <article
-          className="panel editor source-release"
-          key={item.id}
-          aria-label={item.release.title}
+      {!!filtered.length && (
+        <div
+          className="source-table-scroll"
+          role="region"
+          aria-label="Source releases"
+          tabIndex={0}
         >
-          <div>
-            <p className="eyebrow">
-              {sourceName(item.release)} · Profile rank {rank + 1}
-            </p>
-            <h3>{item.release.title}</h3>
-            {!!item.query_keys?.length && data.query_plan && (
-              <p className="muted">
-                Found by:{" "}
-                {(item.query_keys || [])
-                  .map(
-                    (key) =>
-                      data.query_plan?.queries.find(
-                        (query) => query.key === key,
-                      )?.query,
-                  )
-                  .filter(Boolean)
-                  .join(" · ")}
-              </p>
-            )}
-            <p>
-              {(item.release.authors || []).join(", ") || "Author not supplied"}
-            </p>
-          </div>
-          <p>
-            {item.release.medium || "Unknown medium"} ·{" "}
-            {(item.release.formats || []).join(", ") || "Unknown format"} ·{" "}
-            {item.release.seeders == null
-              ? "Unknown seeds"
-              : `${item.release.seeders} seeders`}{" "}
-            ·{" "}
-            {item.release.size_bytes == null
-              ? "Unknown size"
-              : `${item.release.size_bytes.toLocaleString()} bytes`}
-          </p>
-          {(item.release.narrators || []).length > 0 && (
-            <p>Narrated by {(item.release.narrators || []).join(", ")}</p>
-          )}
-          {item.assessment.blocked.map((message) => (
-            <p key={message} className="notice error">
-              {message}
-            </p>
-          ))}
-          {item.assessment.review.map((message) => (
-            <p key={message} className="muted">
-              {message}
-            </p>
-          ))}
-          {!item.current_connection && (
-            <p className="notice">
-              This result expired or its source changed. Refresh the search.
-            </p>
-          )}
-          <details>
-            <summary>Why this ranking?</summary>
-            <ul>
-              {item.assessment.explanation.map((message) => (
-                <li key={message}>{message}</li>
+          <table className="source-table">
+            <thead>
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Author(s)</th>
+                <th scope="col">Narrators</th>
+                <th scope="col">Size</th>
+                <th scope="col">Format</th>
+                <th scope="col">Seeds</th>
+                <th scope="col">Tags</th>
+                <th scope="col">
+                  <span className="sr-only">Details</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.slice(0, visibleCount).map(({ item, rank }) => (
+                <tr
+                  className="source-release"
+                  key={item.id}
+                  aria-label={item.release.title}
+                >
+                  <td className="release-title-cell">
+                    <button
+                      className="release-title-button"
+                      onClick={() => setDetailId(item.id)}
+                    >
+                      {item.release.title}
+                    </button>
+                    <small>
+                      {sourceName(item.release)} · #{rank + 1}
+                      {!item.current_connection
+                        ? " · Expired"
+                        : item.assessment.blocked.length
+                          ? " · Blocked"
+                          : ""}
+                    </small>
+                  </td>
+                  <td>{item.release.authors?.join(", ") || "—"}</td>
+                  <td>{item.release.narrators?.join(", ") || "—"}</td>
+                  <td className="release-numeric">
+                    {item.release.size_bytes == null
+                      ? "Unknown"
+                      : transferSize(item.release.size_bytes)}
+                  </td>
+                  <td>
+                    <span className="release-format">
+                      {item.release.formats?.join(", ").toUpperCase() ||
+                        "Unknown"}
+                    </span>
+                    <small>
+                      {item.release.medium === "audio"
+                        ? "Audiobook"
+                        : item.release.medium === "ebook"
+                          ? "Ebook"
+                          : "Unknown medium"}
+                    </small>
+                  </td>
+                  <td className="release-numeric release-seeds">
+                    {item.release.seeders?.toLocaleString() ?? "Unknown"}
+                  </td>
+                  <td>
+                    <ReleaseTags release={item.release} />
+                    {item.release.source === "mam" &&
+                      !item.release.freeleech &&
+                      !item.release.vip && <span className="muted">—</span>}
+                  </td>
+                  <td>
+                    <div className="source-row-actions">
+                      <button
+                        className="release-info-button"
+                        aria-label={`Details for ${item.release.title}`}
+                        title="Release details"
+                        onClick={() => setDetailId(item.id)}
+                      >
+                        <Info size={18} />
+                      </button>
+                      {canAcquire && (
+                        <SourceReleaseDownload
+                          searchId={data.id}
+                          resultId={item.id}
+                          title={item.release.title}
+                          disabled={
+                            inspecting ||
+                            data.status !== "completed" ||
+                            data.stale_identity ||
+                            !item.current_connection ||
+                            item.assessment.blocked.length > 0 ||
+                            Date.parse(item.expires_at) <= Date.now()
+                          }
+                        />
+                      )}
+                    </div>
+                  </td>
+                </tr>
               ))}
-            </ul>
-          </details>
-          <details>
-            <summary>Original release details</summary>
-            <p className="source-description">
-              {item.release.description || "No description supplied"}
-            </p>
-            <p>Raw title: {item.release.raw_title}</p>
-            {item.release.source === "mam" && (
-              <>
-                <p>
-                  MAM completed downloads:{" "}
-                  {item.release.snatches != null && item.release.snatches >= 0
-                    ? item.release.snatches.toLocaleString()
-                    : "Unknown"}
-                  . This is a MAM-only popularity measure.
-                </p>
-                <p>
-                  Series:{" "}
-                  {(item.release.series || [])
-                    .map((s) => `${s.name} ${s.position || ""}`)
-                    .join(", ") || "Unknown"}
-                </p>
-                <p>
-                  Tags:{" "}
-                  {(item.release.tags || []).join(", ") || "None supplied"}
-                </p>
-                <p className="source-description">{item.release.media_info}</p>
-              </>
-            )}
-          </details>
-          {canAcquire && (
-            <button
-              disabled={
-                inspecting ||
-                data.stale_identity ||
-                !item.current_connection ||
-                item.assessment.blocked.length > 0
-              }
-              onClick={() => onInspect(item.id)}
-            >
-              Inspect this release
-            </button>
-          )}
-        </article>
-      ))}
-      {filtered.length > 50 && (
-        <nav className="button-row" aria-label="Ranked release pages">
-          <button
-            disabled={page === 0 || inspecting}
-            onClick={() => {
-              setPageIndex(page - 1);
-              resultsHeading.current?.focus();
-              resultsHeading.current?.scrollIntoView({ block: "start" });
-            }}
-          >
-            Previous releases
-          </button>
-          <button
-            disabled={offset + 50 >= filtered.length || inspecting}
-            onClick={() => {
-              setPageIndex(page + 1);
-              resultsHeading.current?.focus();
-              resultsHeading.current?.scrollIntoView({ block: "start" });
-            }}
-          >
-            Next releases
-          </button>
-        </nav>
+            </tbody>
+          </table>
+        </div>
       )}
+      {detailItem && (
+        <SourceReleaseDetails
+          item={detailItem}
+          rank={detailIndex}
+          searchId={data.id}
+          close={() => setDetailId(null)}
+          canAcquire={canAcquire}
+          onInspect={() => onInspect(detailItem.id)}
+          disabled={
+            inspecting ||
+            data.stale_identity ||
+            !detailItem.current_connection ||
+            detailItem.assessment.blocked.length > 0
+          }
+        />
+      )}
+      <InfiniteScroll
+        query={{
+          hasNextPage: visibleCount < filtered.length,
+          isFetching: inspecting,
+          isFetchNextPageError: false,
+          fetchNextPage: async () => setPageIndex((n) => n + 1),
+        }}
+      />
     </>
   );
 }

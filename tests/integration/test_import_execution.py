@@ -372,3 +372,30 @@ async def test_restored_plan_cannot_publish_under_a_fresh_command(
     assert not list(ready_route["target"].rglob("*.epub"))
     async with database() as db:
         assert await db.scalar(select(func.count()).select_from(ImportRun)) == int(prior_start)
+
+
+async def test_persisted_library_mount_publishes_without_destination_environment(
+    client, admin, database, ready_route, monkeypatch
+):
+    from app.db.models import ImportStorageSettings
+
+    async with database() as db, db.begin():
+        db.add(
+            ImportStorageSettings(
+                id=1,
+                destinations={"ebooks": str(ready_route["target"])},
+                staging_root=str(ready_route["stage"]),
+            )
+        )
+    monkeypatch.setattr(get_settings(), "import_destinations", {})
+    monkeypatch.setattr(get_settings(), "import_staging_root", None)
+    original = ready_route["source"] / "pack/book.epub"
+    before = original.read_bytes()
+    response = await start(client, ready_route)
+    assert response.status_code == 202, response.text
+    await get_queue().run_worker_async(wait=False, concurrency=1)
+    run = (await client.get(f"/api/organization/imports/{response.json()['id']}")).json()
+    assert run["entries"][0]["state"] == "confirmed", run
+    published = next(ready_route["target"].rglob("*.epub"))
+    assert published.stat().st_ino == original.stat().st_ino
+    assert original.read_bytes() == before

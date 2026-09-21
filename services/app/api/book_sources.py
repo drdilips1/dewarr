@@ -4,7 +4,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Header, HTTPException
 from pydantic import BaseModel, Field
-from sqlalchemy import select, text
+from sqlalchemy import select
 
 from app.adapters.contracts import AdapterError
 from app.adapters.source_releases import SourceRelease
@@ -12,12 +12,12 @@ from app.adapters.source_releases import release_value as parse_release
 from app.api.audiobookbay import resolve as resolve_abb
 from app.api.dependencies import CurrentUser, Database, Member
 from app.api.metadata import adapter_http_error
+from app.api.operations import OperationView
 from app.api.prowlarr import resolve as resolve_prowlarr
 from app.api.source_artifacts import SourceArtifactView, artifact_view
 from app.db.models import AcquisitionIntent, Operation, SourceConnection, SourceResult
 from app.domain import series_preparation
-from app.domain.book_sources import SearchInput, accessible_work, checked, refresh_status, start
-from app.domain.operations import transaction_lock
+from app.domain.book_sources import SearchInput, accessible_work, checked, refresh_search, start
 from app.domain.release_profiles import (
     ProfileSnapshot,
     ReleaseAssessment,
@@ -105,29 +105,9 @@ class BookSearchView(BaseModel):
 
 
 async def view(db, user, operation_id):
-    await transaction_lock(db, f"source-search:{operation_id}")
-    operation, changed = await checked(db, operation_id, user.id)
-    await series_preparation.repair(db, operation)
+    operation, changed = await refresh_search(db, operation_id, user.id)
     payload = deepcopy(operation.payload)
     preparation = payload.get("catalog_preparation")
-    # Queue truth repairs exhausted workers; do not infer failure from slow polling.
-    for source, worker in payload["workers"].items():
-        status = await db.scalar(
-            text("SELECT status::text FROM book_queue.procrastinate_jobs WHERE id=:id"),
-            {"id": worker["job_id"]},
-        )
-        if status in {"failed", "aborted", "succeeded"} or status is None:
-            for key, unit in payload["sources"].items():
-                if (key == source or key.startswith(source + ":")) and unit["state"] not in {
-                    "completed",
-                    "failed",
-                }:
-                    unit.update(
-                        state="failed",
-                        message="Search worker stopped. Start a new search to retry.",
-                    )
-                    worker.pop("token", None)
-    refresh_status(operation, payload)
     profile = ProfileSnapshot.model_validate(payload["profile"])
     preferences = profile.preferences
     request_id = payload.get("command", {}).get("request_id")
@@ -285,3 +265,25 @@ async def inspect(search_id: UUID, result_id: UUID, user: Member, db: Database):
     except AdapterError as error:
         raise adapter_http_error(error) from error
     return await artifact_view(db, identifier, owner_id)
+
+
+@router.post(
+    "/source-searches/{search_id}/results/{result_id}/download",
+    response_model=OperationView,
+    status_code=202,
+)
+async def download_release(
+    search_id: UUID,
+    result_id: UUID,
+    user: Member,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=160),
+):
+    from app.domain.quick_add import selected_release
+
+    operation = await selected_release(db, user, search_id, result_id, idempotency_key)
+    await db.flush()
+    await db.refresh(operation)
+    response = OperationView.model_validate(operation)
+    await db.commit()
+    return response

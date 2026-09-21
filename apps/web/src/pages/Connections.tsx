@@ -1,4 +1,15 @@
-import { useState } from "react";
+import Destinations from "./Destinations";
+import SettingHelp from "../components/SettingHelp";
+import {
+  CheckCircle2,
+  XCircle,
+  LoaderCircle,
+  Pencil,
+  RefreshCw,
+  PlugZap,
+  Plus,
+} from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
@@ -6,9 +17,14 @@ import type { components } from "../api/schema";
 import { Empty, Loading, Notice } from "../components";
 
 type Connection = components["schemas"]["ConnectionView"];
-type Library = components["schemas"]["LibraryView"];
 
-export default function Connections() {
+export default function Connections({
+  embedded = false,
+  connectionOnly = false,
+}: {
+  embedded?: boolean;
+  connectionOnly?: boolean;
+}) {
   const cache = useQueryClient();
   const [editing, setEditing] = useState<Connection | "new" | null>(null);
   const [message, setMessage] = useState("");
@@ -57,22 +73,30 @@ export default function Connections() {
   return (
     <>
       <div className="page-heading">
-        <div>
-          <p className="eyebrow">CONNECTED LIBRARIES</p>
-          <h1>Connections</h1>
-          <p className="muted">
-            Keep your catalog in sync with Audiobookshelf.
-          </p>
-          <Link to="/downloaders">Downloaders</Link>
-        </div>
-        <button className="primary" onClick={() => setEditing("new")}>
-          Connect Audiobookshelf
+        {!embedded && (
+          <div>
+            <p className="eyebrow">CONNECTED LIBRARIES</p>
+            <h1>Connections</h1>
+            <p className="muted">
+              Keep your catalog in sync with Audiobookshelf.
+            </p>
+            <Link to="/settings#downloaders">Downloaders</Link>
+          </div>
+        )}
+        <button
+          className={
+            connections.data?.length ? "settings-add-connection" : "primary"
+          }
+          onClick={() => setEditing("new")}
+        >
+          <Plus size={16} />{" "}
+          {connections.data?.length ? "Add server" : "Connect Audiobookshelf"}
         </button>
       </div>
       <Notice error={connections.error || libraries.error || command.error} />
       {message && (
         <p className="notice" role="status">
-          {message} <Link to="/activity">View activity</Link>
+          {message} <Link to="/settings#logs">View logs</Link>
         </p>
       )}
       {editing && (
@@ -85,7 +109,7 @@ export default function Connections() {
       {connections.isPending ? (
         <Loading />
       ) : connections.data?.length ? (
-        <div className="connection-grid">
+        <div className="connection-grid library-connections">
           {connections.data.map((connection) => (
             <article className="panel" key={connection.id}>
               <div className="section-heading">
@@ -96,60 +120,81 @@ export default function Connections() {
                     : "Disabled"}
                 </span>
               </div>
+              {connection.library_count != null && (
+                <p className="connection-result success">
+                  <CheckCircle2 size={16} />
+                  {connection.library_count} libraries · {connection.book_count}{" "}
+                  books and audiobooks
+                </p>
+              )}
               <p className="muted break-text">{connection.base_url}</p>
-              <p>
-                {connection.version
-                  ? `Audiobookshelf ${connection.version}`
-                  : "Version not checked"}
-              </p>
-              <p className="muted">
+              <p className="muted connection-detail">
+                {connection.version ? `v${connection.version} · ` : ""}
                 {connection.last_success_at
-                  ? `Last inventory: ${new Date(connection.last_success_at).toLocaleString()}`
-                  : "No completed inventory sync yet"}
+                  ? `Synced ${new Date(connection.last_success_at).toLocaleString()}`
+                  : "Not synced yet"}
               </p>
               {connection.last_error && (
                 <p className="notice error">{connection.last_error}</p>
               )}
               <div className="button-row">
-                <button onClick={() => setEditing(connection)}>
-                  Edit connection
+                <button
+                  className="settings-icon-button"
+                  aria-label="Edit connection"
+                  title="Edit connection"
+                  onClick={() => setEditing(connection)}
+                >
+                  <Pencil size={16} />
                 </button>
                 <button
+                  aria-label="Test connection"
+                  title="Test connection"
                   disabled={!connection.enabled || command.isPending}
                   onClick={() => command.mutate({ connection, action: "test" })}
                 >
-                  Test connection
+                  <PlugZap size={16} /> Test
                 </button>
                 <button
+                  aria-label="Sync library"
+                  title="Sync library"
                   disabled={!connection.enabled || command.isPending}
                   onClick={() => command.mutate({ connection, action: "sync" })}
                 >
-                  Sync library
+                  <RefreshCw size={16} /> Sync
                 </button>
               </div>
             </article>
           ))}
         </div>
+      ) : embedded ? (
+        <p className="muted">No libraries connected.</p>
       ) : (
         <Empty title="Bring your library into view">
           Connect Audiobookshelf to see which books and recordings you already
           have.
         </Empty>
       )}
-      {!!libraries.data?.length && (
-        <section className="library-access">
-          <h2>Library access</h2>
-          <p className="muted">
-            Administrators can browse all connected libraries. Grant other
-            readers access below.
-          </p>
-          {libraries.data.map((library) => (
-            <LibraryAccess
-              key={library.id + library.granted_user_ids.join(",")}
-              library={library}
-            />
-          ))}
-        </section>
+      {!connectionOnly && (
+        <>
+          <section
+            className="settings-block library-destinations"
+            aria-label="Library folders"
+          >
+            <div className="setting-subheading">
+              <h3>Library folders</h3>
+              <SettingHelp label="library folders">
+                Completed downloads are organized into these destinations.
+                Hardlinks preserve the original names and files for seeding.
+                Downloads and library folders must share a filesystem and
+                compatible worker mounts.
+              </SettingHelp>
+              <Link className="settings-inline-link" to="/settings#naming">
+                File naming →
+              </Link>
+            </div>
+            <Destinations embedded />
+          </section>
+        </>
       )}
     </>
   );
@@ -163,6 +208,53 @@ function ConnectionForm({
   close: () => void;
 }) {
   const cache = useQueryClient();
+  const formRef = useRef<HTMLFormElement>(null);
+  const [revision, setRevision] = useState(0);
+  const [checking, setChecking] = useState(false);
+  const [check, setCheck] = useState<
+    components["schemas"]["ConnectionCheck"] | null
+  >(null);
+  const [checkError, setCheckError] = useState("");
+  function bodyFrom(form: HTMLFormElement) {
+    const fields = new FormData(form);
+    return {
+      kind: "audiobookshelf" as const,
+      name: String(fields.get("name")),
+      base_url: String(fields.get("base_url")),
+      public_url: String(fields.get("public_url")) || null,
+      token: String(fields.get("token")) || null,
+      enabled: fields.get("enabled") === "on",
+    };
+  }
+  useEffect(() => {
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      const form = formRef.current;
+      if (!form?.checkValidity()) return;
+      setChecking(true);
+      try {
+        const value = result(
+          await api.POST("/api/integrations/check", {
+            body: bodyFrom(form),
+            params: { query: { integration_id: connection?.id } },
+            signal: controller.signal,
+          }),
+        );
+        if (!controller.signal.aborted) setCheck(value);
+      } catch (error) {
+        if (!controller.signal.aborted)
+          setCheckError(
+            error instanceof Error ? error.message : "Connection failed",
+          );
+      } finally {
+        if (!controller.signal.aborted) setChecking(false);
+      }
+    }, 700);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [revision, connection?.id]);
   const save = useMutation({
     mutationFn: async (form: HTMLFormElement) => {
       const fields = new FormData(form);
@@ -191,10 +283,17 @@ function ConnectionForm({
   });
   return (
     <form
+      ref={formRef}
       className="panel editor"
+      onChange={() => {
+        setCheck(null);
+        setCheckError("");
+        setChecking(false);
+        setRevision((value) => value + 1);
+      }}
       onSubmit={(event) => {
         event.preventDefault();
-        save.mutate(event.currentTarget);
+        if (check) save.mutate(event.currentTarget);
       }}
     >
       <h2>
@@ -211,21 +310,30 @@ function ConnectionForm({
         />
       </label>
       <label>
-        Server URL
+        <span className="setting-subheading">
+          Server URL{" "}
+          <SettingHelp label="Server URL">
+            Address reachable from this app’s server.
+          </SettingHelp>
+        </span>
         <input
           name="base_url"
+          aria-label="Server URL"
           type="url"
           defaultValue={connection?.base_url}
           placeholder="http://audiobookshelf:80"
           required
           maxLength={2000}
         />
-        <small>
-          Address reachable from this app's server, including any URL prefix.
-        </small>
       </label>
       <label>
-        Browser URL (optional)
+        <span className="setting-subheading">
+          Browser URL (optional){" "}
+          <SettingHelp label="Browser URL">
+            Address for Open in Audiobookshelf links. Defaults to the server
+            URL.
+          </SettingHelp>
+        </span>
         <input
           name="public_url"
           type="url"
@@ -233,9 +341,6 @@ function ConnectionForm({
           placeholder="https://books.example.com"
           maxLength={2000}
         />
-        <small>
-          Used for Open in Audiobookshelf links. Defaults to the server URL.
-        </small>
       </label>
       <label>
         API token
@@ -246,9 +351,7 @@ function ConnectionForm({
           required={!connection}
           maxLength={8192}
           placeholder={
-            connection
-              ? "Leave blank to keep the saved token"
-              : "Paste your Audiobookshelf token"
+            connection ? "••••••••" : "Paste your Audiobookshelf token"
           }
         />
       </label>
@@ -260,84 +363,42 @@ function ConnectionForm({
         />
         Enable connection
       </label>
-      {connection && (
-        <p className="muted">
-          After changing settings, sync again to verify library access.
-        </p>
-      )}
+      <div
+        role="status"
+        aria-live="polite"
+        className={`connection-result ${check ? "success" : checkError ? "failure" : ""}`}
+      >
+        {checking ? (
+          <>
+            <LoaderCircle size={16} />
+            Checking connection…
+          </>
+        ) : check ? (
+          <>
+            <CheckCircle2 size={16} />
+            Connected · {check.library_count} libraries · {check.book_count}{" "}
+            books and audiobooks
+          </>
+        ) : checkError ? (
+          <>
+            <XCircle size={16} />
+            {checkError}
+          </>
+        ) : (
+          "Enter your server and token to check the connection."
+        )}
+      </div>
       <div className="button-row">
-        <button className="primary" disabled={save.isPending}>
-          Save connection
+        <button
+          className="primary"
+          disabled={save.isPending || checking || !check}
+        >
+          {save.isPending ? "Saving…" : "Save connection"}
         </button>
         <button type="button" onClick={close}>
           Cancel
         </button>
       </div>
-    </form>
-  );
-}
-
-function LibraryAccess({ library }: { library: Library }) {
-  const cache = useQueryClient();
-  const [selected, setSelected] = useState(library.granted_user_ids);
-  const [saved, setSaved] = useState(false);
-  const accounts = useQuery({
-    queryKey: ["accounts"],
-    queryFn: async () => result(await api.GET("/api/auth/users")),
-  });
-  const save = useMutation({
-    mutationFn: async () =>
-      result(
-        await api.PUT("/api/library/libraries/{library_id}/grants", {
-          params: { path: { library_id: library.id } },
-          body: { user_ids: selected },
-        }),
-      ),
-    onSuccess: async () => {
-      setSaved(true);
-      await cache.invalidateQueries();
-    },
-  });
-  return (
-    <form
-      className="panel editor"
-      onSubmit={(event) => {
-        event.preventDefault();
-        save.mutate();
-      }}
-    >
-      <h3>{library.name}</h3>
-      <p className="muted">
-        {library.accessible ? "Connected" : "Access needs a fresh sync"}
-      </p>
-      <Notice error={accounts.error || save.error} />
-      {accounts.data
-        ?.filter((account) => account.role !== "admin")
-        .map((account) => (
-          <label className="check-label" key={account.id}>
-            <input
-              type="checkbox"
-              checked={selected.includes(account.id)}
-              onChange={(event) => {
-                setSaved(false);
-                setSelected(
-                  event.target.checked
-                    ? [...selected, account.id]
-                    : selected.filter((id) => id !== account.id),
-                );
-              }}
-            />
-            {account.display_name}
-          </label>
-        ))}
-      {accounts.data?.some((account) => account.role !== "admin") ? (
-        <button disabled={save.isPending}>Save access</button>
-      ) : (
-        <p>
-          <Link to="/accounts">Add a reader account</Link> to grant access.
-        </p>
-      )}
-      {saved && <p role="status">Library access saved.</p>}
     </form>
   );
 }

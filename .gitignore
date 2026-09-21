@@ -16,3 +16,7 @@ playwright-report/
 .DS_Store
 *.tsbuildinfo
 *.egg-info/
+
+# Local deployments and backups
+data/
+backups/

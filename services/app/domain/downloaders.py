@@ -64,6 +64,11 @@ def bind_mappings(mappings: list[DownloadMapping], save_path: str) -> list[dict]
 
 def mappings_current(row):
     mappings = row.config.get("mappings", [])
+    if row.config.get("client_managed") and not any(
+        relative_to(row.config.get("save_path", ""), mapping["download_root"]) is not None
+        for mapping in mappings
+    ):
+        return False
     return bool(mappings) and all(
         str(get_settings().import_sources.get(mapping["source_key"])) == mapping["source_path"]
         for mapping in mappings
@@ -120,17 +125,21 @@ async def test_connection(user_id, connection_id):
                 retry_after=math.ceil((row.next_sync_at - now).total_seconds()),
             )
         generation, endpoint = row.credential_generation, row.base_url
+        client_managed, category = row.config.get("client_managed", False), row.config["category"]
         credentials = decrypt_secrets(row.encrypted_secrets)
         row.lease_token, row.lease_until = token, now + timedelta(seconds=TEST_LEASE_SECONDS)
         row.next_sync_at = now + timedelta(seconds=TEST_INTERVAL)
     failure = None
     capabilities = None
+    observed_path = None
     try:
         async with (
             asyncio.timeout(TEST_TIMEOUT),
             QbitClient(endpoint, credentials["username"], credentials["password"]) as client,
         ):
             capabilities = await client.capabilities()
+            if client_managed:
+                observed_path = await client.download_location(category)
     except AdapterError as error:
         failure = error
     except TimeoutError:
@@ -150,6 +159,25 @@ async def test_connection(user_id, connection_id):
             row.capabilities = capabilities.model_dump(mode="json") if capabilities else {}
             if not failure:
                 row.last_success_at = datetime.now(UTC)
+                if observed_path is not None:
+                    # Existing mount bindings remain import evidence, never torrent overrides.
+                    mappings = row.config.get("mappings", [])
+                    if not mappings:
+                        candidates = [
+                            (key, str(root))
+                            for key, root in get_settings().import_sources.items()
+                            if relative_to(observed_path, str(root)) is not None
+                        ]
+                        if candidates:
+                            key, root = max(candidates, key=lambda item: len(item[1]))
+                            mappings = [
+                                {
+                                    "download_root": root,
+                                    "source_key": key,
+                                    "source_path": root,
+                                }
+                            ]
+                    row.config = {**row.config, "save_path": observed_path, "mappings": mappings}
         if failure:
             row.next_sync_at = datetime.now(UTC) + timedelta(
                 seconds=max(60, failure.retry_after or 0)

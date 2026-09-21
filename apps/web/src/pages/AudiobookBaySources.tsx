@@ -1,3 +1,4 @@
+import SettingHelp from "../components/SettingHelp";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
@@ -20,12 +21,7 @@ export default function AudiobookBaySources({
   const [submitted, setSubmitted] = useState<Search | null>(null);
   const cache = useQueryClient();
   const navigate = useNavigate();
-  const connection = useQuery({
-    queryKey: ["abb-connection"],
-    enabled: admin,
-    queryFn: async () =>
-      result(await api.GET("/api/sources/audiobookbay/connection")),
-  });
+
   const search = useMutation({
     mutationFn: async (body: Search) =>
       result(await api.POST("/api/sources/audiobookbay/search", { body })),
@@ -76,18 +72,9 @@ export default function AudiobookBaySources({
         </div>
       </header>
       {admin && (
-        <details>
-          <summary>
-            AudiobookBay connection · {connection.data?.status || "loading"}
-          </summary>
-          <Notice error={connection.error} />
-          {connection.data && (
-            <ConnectionForm
-              key={connection.data.generation}
-              value={connection.data}
-            />
-          )}
-        </details>
+        <Link className="back-link" to="/settings#sources">
+          Source settings →
+        </Link>
       )}
       <form
         className="panel editor"
@@ -240,7 +227,7 @@ export default function AudiobookBaySources({
   );
 }
 
-function ConnectionForm({ value }: { value: Connection }) {
+export function AudiobookBayConnectionForm({ value }: { value: Connection }) {
   const cache = useQueryClient();
   const [url, setUrl] = useState(value.base_url);
   const [proxy, setProxy] = useState(value.proxy_url || "");
@@ -304,7 +291,16 @@ function ConnectionForm({ value }: { value: Connection }) {
         />
       </label>
       <div>
-        <label htmlFor="abb-metadata-downloader">Metadata downloader</label>
+        <label htmlFor="abb-metadata-downloader">
+          <span className="setting-subheading">
+            Metadata downloader
+            <SettingHelp label="connection options">
+              Torrent inspection requires qBittorrent with metadata APIs (5.2+).
+              Automatic requests use their selected downloader.{" "}
+              <Link to="/settings#downloaders">Manage downloaders</Link>
+            </SettingHelp>
+          </span>
+        </label>
         <select
           id="abb-metadata-downloader"
           value={downloader}
@@ -320,15 +316,20 @@ function ConnectionForm({ value }: { value: Connection }) {
             ))}
         </select>
       </div>
-      <p className="muted">
-        Torrent inspection requires qBittorrent with metadata APIs (5.2+).
-        Automatic requests use their selected downloader.{" "}
-        <Link to="/downloaders">Manage downloaders</Link>
-      </p>
+
       <details>
         <summary>Proxy routing</summary>
         <label>
-          HTTP proxy URL (optional)
+          <span className="setting-subheading">
+            HTTP proxy URL (optional)
+            <SettingHelp label="connection options">
+              {value.has_proxy_credentials
+                ? "Credentials saved; blank fields preserve them on the same proxy."
+                : "No proxy credentials saved."}{" "}
+              When configured, all site requests use this proxy. qBittorrent's
+              network route is configured separately.
+            </SettingHelp>
+          </span>
           <input
             type="url"
             value={proxy}
@@ -350,18 +351,19 @@ function ConnectionForm({ value }: { value: Connection }) {
           <input
             type="password"
             autoComplete="new-password"
+            placeholder={
+              value.has_proxy_credentials &&
+              !clear &&
+              proxy === (value.proxy_url || "")
+                ? "••••••••"
+                : undefined
+            }
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             maxLength={1000}
           />
         </label>
-        <p className="muted">
-          {value.has_proxy_credentials
-            ? "Credentials saved; blank fields preserve them on the same proxy."
-            : "No proxy credentials saved."}{" "}
-          When configured, all site requests use this proxy. qBittorrent's
-          network route is configured separately.
-        </p>
+
         <label className="check-label">
           <input
             type="checkbox"
@@ -390,7 +392,7 @@ function ConnectionForm({ value }: { value: Connection }) {
           disabled={save.isPending || test.isPending || !value.enabled}
           onClick={() => test.mutate()}
         >
-          Test saved connection
+          Test connection
         </button>
       </div>
       {test.isSuccess && (

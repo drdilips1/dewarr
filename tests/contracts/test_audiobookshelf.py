@@ -124,15 +124,18 @@ class ABSFixture:
 
 
 async def connect(client):
-    response = await client.post(
-        "/api/integrations",
-        json={
-            "name": "Home ABS",
-            "base_url": "http://abs.test/abs",
-            "public_url": "https://books.test/abs",
-            "token": "private-abs-token",
-        },
-    )
+    from unittest.mock import patch
+
+    with patch("app.api.integrations.Audiobookshelf", ABSFixture({}).client):
+        response = await client.post(
+            "/api/integrations",
+            json={
+                "name": "Home ABS",
+                "base_url": "http://abs.test/abs",
+                "public_url": "https://books.test/abs",
+                "token": "private-abs-token",
+            },
+        )
     assert response.status_code == 201, response.text
     assert "private-abs-token" not in response.text
     return response.json()["id"]
@@ -600,3 +603,35 @@ async def test_due_inventory_scheduler_preserves_single_active_job(client, admin
             == 1
         )
         assert (await db.get(Integration, UUID(connection))).next_sync_at > datetime.now(UTC)
+
+
+async def test_connection_preflight_counts_and_rejects_bad_credentials(client, admin, monkeypatch):
+    fixture = ABSFixture({"one": book("one"), "two": book("two")})
+    monkeypatch.setattr("app.api.integrations.Audiobookshelf", fixture.client)
+    body = {
+        "name": "Checked library",
+        "base_url": "http://abs.test/abs",
+        "token": "private-abs-token",
+    }
+    checked = await client.post("/api/integrations/check", json=body)
+    assert checked.status_code == 200
+    assert checked.json()["library_count"] == 1
+    assert checked.json()["book_count"] == 2
+    assert (await client.get("/api/integrations")).json() == []
+    saved = await client.post("/api/integrations", json=body)
+    assert saved.status_code == 201
+    assert saved.json()["status"] == "connected"
+    assert saved.json()["book_count"] == 2
+
+    async def fail(request):
+        return httpx.Response(401)
+
+    monkeypatch.setattr(
+        "app.api.integrations.Audiobookshelf",
+        lambda endpoint, token: Audiobookshelf(
+            endpoint, token, transport=httpx.MockTransport(fail)
+        ),
+    )
+    assert (await client.post("/api/integrations/check", json=body)).status_code == 422
+    assert (await client.post("/api/integrations", json=body)).status_code == 422
+    assert len((await client.get("/api/integrations")).json()) == 1

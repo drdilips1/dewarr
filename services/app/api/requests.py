@@ -26,6 +26,7 @@ from app.domain.acquisition import (
     submit,
     validate_request,
 )
+from app.domain.display_requests import ExistingCopyHint, existing_copy_hints
 from app.domain.list_series import SeriesPlanView
 from app.domain.release_profiles import ProfileSnapshot
 from app.domain.request_preferences import PreferenceChoice, resolve
@@ -73,6 +74,7 @@ class RequestView(BaseModel):
 
 
 class PreviewView(BaseModel):
+    existing_copies: list[ExistingCopyHint] = Field(default_factory=list)
     specification: RequestSpec
     targets: list[TargetView]
     download_available: bool = False
@@ -214,6 +216,52 @@ async def view(db, user, intent):
     )
 
 
+class QuickAddInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    work_id: UUID
+    specification: RequestOptions = Field(default_factory=RequestOptions)
+
+
+@router.post("/quick-add", response_model=OperationView, status_code=202)
+async def quick_add(
+    body: QuickAddInput,
+    user: Member,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=160),
+):
+    from app.domain.quick_add import begin
+
+    operation = await begin(db, user, body.work_id, body.specification, idempotency_key)
+    await db.flush()
+    await db.refresh(operation)
+    response = OperationView.model_validate(operation)
+    await db.commit()
+    return response
+
+
+@router.get("/quick-add/latest/{work_id}", response_model=OperationView | None)
+async def latest_quick_add(work_id: UUID, user: Member, db: Database):
+    from app.domain.quick_add import KIND, repair
+
+    operation = await db.scalar(
+        select(Operation)
+        .where(
+            Operation.owner_id == user.id,
+            Operation.kind == KIND,
+            Operation.payload["command"]["work_id"].astext == str(work_id),
+        )
+        .order_by(Operation.created_at.desc())
+        .limit(1)
+        .with_for_update()
+    )
+    if operation:
+        await repair(db, operation)
+        await db.commit()
+        await db.refresh(operation)
+        return OperationView.model_validate(operation)
+    return None
+
+
 @router.post("/preview", response_model=PreviewView)
 async def preview(body: RequestInput, user: CurrentUser, db: Database):
     specification, profile = await resolve(
@@ -226,6 +274,7 @@ async def preview(body: RequestInput, user: CurrentUser, db: Database):
 
         expansion = await plan(db, user, (await canonical_work(db, body.work_id)).id)
     return PreviewView(
+        existing_copies=await existing_copy_hints(db, user, body.work_id, specification),
         specification=specification,
         release_policy=profile,
         series_scope=expansion,

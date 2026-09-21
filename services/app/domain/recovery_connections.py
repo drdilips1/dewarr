@@ -41,7 +41,7 @@ class ConnectionChoice(BaseModel):
     username: SecretStr | None = Field(default=None, min_length=1, max_length=300)
     password: SecretStr | None = Field(default=None, min_length=1, max_length=1000)
     save_path: str | None = Field(default=None, max_length=2000)
-    category: str | None = Field(default=None, pattern=r"^[A-Za-z0-9_-]{1,100}$")
+    category: str | None = Field(default=None, pattern=r"^[A-Za-z0-9_-]{0,100}$")
     mappings: list[downloaders.DownloadMapping] | None = Field(
         default=None, min_length=1, max_length=20
     )

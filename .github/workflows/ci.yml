@@ -92,4 +92,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: docker build --tag book-search:ci .
+      - run: docker build --tag dewarr:ci .

@@ -1,3 +1,4 @@
+import SettingHelp from "../components/SettingHelp";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, result } from "../api/client";
 import { Notice } from "../components";
@@ -47,18 +48,20 @@ export default function AutomaticImportPolicy({
       }),
   });
   return (
-    <section aria-label="Automatic import policy" className="library-access">
-      <h3>Automatic import</h3>
-      <p>
-        Import newly completed downloads when one catalog version matches the
-        embedded identity and the files pass completeness checks. Uncertain
-        books stay for review. Existing completed downloads are not included.
-      </p>
-      <p className="muted">
-        Currently supports EPUB and identified M4B/MP3 recordings. Other
-        collection titles, unsupported formats, incomplete track sets and
-        ambiguous versions need file review.
-      </p>
+    <section
+      aria-label="Automatic import policy"
+      className="automatic-import-setting"
+    >
+      <div className="setting-subheading">
+        <h3>Import on completion</h3>
+        <SettingHelp label="automatic import">
+          Applies to new downloads after enabling. EPUB and identified M4B/MP3
+          recordings import when identity and completeness checks pass.
+          Ambiguous books, unsupported formats and incomplete tracks stay for
+          review. Disabling holds unpublished automatic work and preserves
+          published files.
+        </SettingHelp>
+      </div>
       <Notice error={query.error || save.error} />
       {query.data && (
         <>
@@ -86,13 +89,6 @@ export default function AutomaticImportPolicy({
           {!query.data.can_enable && (
             <p className="muted">
               Save and verify this destination with a conventional layout first.
-            </p>
-          )}
-          {query.data.enabled && (
-            <p className="muted">
-              Disabling holds automatic work that has not published. Published
-              files are preserved. Already started imports remain available for
-              explicit file review and recovery.
             </p>
           )}
         </>

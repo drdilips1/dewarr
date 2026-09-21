@@ -1,22 +1,36 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
+import { BookOpen, Headphones, Folder, FileText } from "lucide-react";
+import Sortable from "../components/Sortable";
+import { Link } from "react-router-dom";
+import {
+  useLibraryFolderSettings,
+  selectLibraryDestination,
+} from "./libraryFolderSettings";
+import SettingHelp from "../components/SettingHelp";
+import {
+  folderTemplate,
+  templateSegments,
+  toggleSegment,
+  readChoices,
+  simpleChoices,
+  seriesChoices,
+  namingExamples,
+  type Medium,
+  type NamingChoices,
+} from "./namingBuilder";
 
 type Profile = components["schemas"]["NamingProfile"];
 type Settings = components["schemas"]["SettingsView"];
-type Template =
-  "audio_folder" | "ebook_folder" | "audio_filename" | "ebook_filename";
-const fields: [Template, string][] = [
-  ["audio_folder", "Audiobook folder"],
-  ["audio_filename", "Audiobook filename"],
-  ["ebook_folder", "Ebook folder"],
-  ["ebook_filename", "Ebook filename"],
-];
-
-export default function Organization() {
+export default function Organization({
+  embedded = false,
+}: {
+  embedded?: boolean;
+}) {
+  const [medium, setMedium] = useState<Medium>("ebook");
   const query = useQuery({
     queryKey: ["organization"],
     refetchOnWindowFocus: false,
@@ -32,6 +46,9 @@ export default function Organization() {
   if (!query.data) return <Notice error={query.error} />;
   return (
     <Editor
+      embedded={embedded}
+      medium={medium}
+      setMedium={setMedium}
       key={query.data.settings.revision}
       settings={query.data.settings}
       defaults={query.data.defaults}
@@ -40,29 +57,34 @@ export default function Organization() {
 }
 
 function Editor({
+  embedded,
   settings,
   defaults,
+  medium,
+  setMedium,
 }: {
+  embedded: boolean;
   settings: Settings;
   defaults: Profile;
+  medium: Medium;
+  setMedium: (medium: Medium) => void;
 }) {
   const cache = useQueryClient();
+  const folders = useLibraryFolderSettings();
   const [draft, setDraft] = useState(settings.profile);
   const [previewProfile, setPreviewProfile] = useState(draft);
-  const [field, setField] = useState<Template>("audio_folder");
-  const [token, setToken] = useState("title");
-  const inputs = useRef<Partial<Record<Template, HTMLInputElement | null>>>({});
   useEffect(() => {
-    const timer = window.setTimeout(() => setPreviewProfile(draft), 350);
+    const timer = window.setTimeout(() => setPreviewProfile(draft), 250);
     return () => window.clearTimeout(timer);
   }, [draft]);
   const preview = useQuery({
-    queryKey: ["organization-preview", previewProfile],
+    queryKey: ["organization-preview", "builder", previewProfile],
     retry: false,
+    placeholderData: (previous) => previous,
     queryFn: async () =>
       result(
         await api.POST("/api/organization/preview", {
-          body: { profile: previewProfile },
+          body: { profile: previewProfile, groups: namingExamples },
         }),
       ),
   });
@@ -76,219 +98,357 @@ function Editor({
     onSuccess: (settings) =>
       cache.setQueryData(["organization"], { settings, defaults }),
   });
+  const folder = `${medium}_folder` as const;
+  const filename = `${medium}_filename` as const;
+  const choices = readChoices(draft[folder], medium);
   const changed = JSON.stringify(draft) !== JSON.stringify(settings.profile);
-  const currentPreview =
-    JSON.stringify(previewProfile) === JSON.stringify(draft);
-  function insertToken() {
-    const input = inputs.current[field];
-    const value = draft[field] || "";
-    const start = input?.selectionStart ?? value.length;
-    const end = input?.selectionEnd ?? value.length;
-    const text = `{${token}}`;
-    setDraft({
-      ...draft,
-      [field]: value.slice(0, start) + text + value.slice(end),
-    });
-    requestAnimationFrame(() => {
-      input?.focus();
-      input?.setSelectionRange(start + text.length, start + text.length);
-    });
-  }
+  const current =
+    JSON.stringify(previewProfile) === JSON.stringify(draft) &&
+    !preview.isFetching;
+  const example = preview.data?.items.find((item) => item.medium === medium);
+  const path = example?.files?.[0]?.destination;
+  const destination = selectLibraryDestination(
+    folders.data?.destinations || [],
+    folders.data?.defaults.effective?.[`${medium}_destination_id`],
+    medium,
+  );
+  // The planner returns an illustrative media root; substitute only that root.
+  const relativePath = path?.split("/").slice(1).join("/");
+  const fullPath = relativePath
+    ? `${destination?.backend_path?.replace(/\/$/, "") || (medium === "audio" ? "audiobooks" : "ebooks")}/${relativePath}`
+    : undefined;
+  const options: [keyof NamingChoices, string][] = [
+    ["author", "Author"],
+    ["series", "Series"],
+    ["sequence", "Sequence"],
+    ["year", medium === "audio" ? "Recording year" : "Edition year"],
+    ["version", medium === "audio" ? "Narrator" : "Edition"],
+    ["language", "Language"],
+    ["publisher", "Publisher"],
+  ];
+  const presets = [
+    ["By author", simpleChoices],
+    ["By series", seriesChoices],
+  ] as const;
   return (
-    <>
-      <div className="page-heading">
-        <div>
-          <p className="eyebrow">Library setup</p>
-          <h1>File organization</h1>
-          <p className="muted">
-            Choose how future books and recordings will be named. Existing files
-            stay in place.
-          </p>
-        </div>
+    <section className="naming-builder" aria-label="Organization settings">
+      {!embedded && <h1>File naming</h1>}
+      <div className="segmented-control" role="group" aria-label="Book format">
+        <button
+          type="button"
+          aria-pressed={medium === "ebook"}
+          onClick={() => setMedium("ebook")}
+        >
+          <BookOpen size={16} />
+          Ebook
+        </button>
+        <button
+          type="button"
+          aria-pressed={medium === "audio"}
+          onClick={() => setMedium("audio")}
+        >
+          <Headphones size={16} />
+          Audiobook
+        </button>
       </div>
-      <p className="notice">
-        Naming previews and completed-file inspection are available. Library
-        destination checks and per-book importing are available for verified
-        destinations.
-      </p>
-      <p>
-        <Link to="/organization/inspections">Inspect completed downloads</Link>
-      </p>
-      <p>
-        <Link to="/organization/destinations">
-          Configure library destinations
-        </Link>
-      </p>
-      <section className="panel editor" aria-label="Organization settings">
-        <h2>Folder layout</h2>
-        <label>
-          Layout preset
-          <select
-            value={draft.layout}
-            disabled={save.isPending}
-            onChange={(event) =>
-              setDraft({
-                ...draft,
-                layout: event.target.value as Profile["layout"],
-              })
-            }
-          >
-            <option value="conventional">
-              Author / series / book and version
-            </option>
-            <option value="nested">
-              Author / series / book / version — preview only
-            </option>
-          </select>
-        </label>
-        <label className="check-label">
-          <input
-            type="checkbox"
-            checked={draft.rename_files}
-            disabled={save.isPending}
-            onChange={(event) =>
-              setDraft({ ...draft, rename_files: event.target.checked })
-            }
-          />
-          Rename imported files
-        </label>
-        <p className="muted">
-          Each recording or edition has its own item folder. Ebook and audiobook
-          paths use separate illustrative roots below.
-        </p>
-        <details>
-          <summary>Customize naming</summary>
-          <p className="muted">
-            Insert metadata tokens into the folder or filename. Optional
-            segments such as <code>[ - {"{edition_year}"}]</code> disappear when
-            metadata is missing. Actual file extensions are added automatically.
-          </p>
-          {fields.map(([key, label]) => (
-            <label key={key}>
-              {label}
-              <input
-                ref={(element) => {
-                  inputs.current[key] = element;
-                }}
-                value={draft[key]}
-                maxLength={600}
+      <div className="naming-workspace">
+        <div className="naming-options">
+          <fieldset>
+            <legend>Layout preset</legend>
+            <div className="preset-options">
+              <button
+                type="button"
                 disabled={save.isPending}
-                onFocus={() => setField(key)}
+                aria-pressed={
+                  draft.layout === defaults.layout &&
+                  draft[folder] === defaults[folder]
+                }
+                onClick={() =>
+                  setDraft({
+                    ...draft,
+                    layout: defaults.layout,
+                    [folder]: defaults[folder],
+                  })
+                }
+              >
+                Recommended
+              </button>
+              {presets.map(([name, preset]) => (
+                <button
+                  key={name}
+                  type="button"
+                  aria-pressed={
+                    draft.layout === "conventional" &&
+                    draft[folder] === folderTemplate(medium, preset)
+                  }
+                  disabled={save.isPending}
+                  onClick={() =>
+                    setDraft({
+                      ...draft,
+                      layout: "conventional",
+                      [folder]: folderTemplate(medium, preset),
+                    })
+                  }
+                >
+                  {name}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+          {choices && draft.layout === "conventional" ? (
+            <fieldset>
+              <legend>Include in path</legend>
+              <div className="metadata-toggles">
+                <label className="check-label">
+                  <input type="checkbox" checked disabled />
+                  Title
+                </label>
+                {options.map(([key, label]) => (
+                  <label className="check-label" key={key}>
+                    <input
+                      type="checkbox"
+                      checked={choices[key]}
+                      disabled={save.isPending}
+                      onChange={() =>
+                        setDraft({
+                          ...draft,
+                          [folder]: toggleSegment(draft[folder], medium, key),
+                        })
+                      }
+                    />
+                    {label}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          ) : (
+            <p className="notice">
+              Custom layout active. Choose a preset to use the path builder.
+            </p>
+          )}
+          <div className="naming-file-controls">
+            <label className="check-label">
+              <input
+                type="checkbox"
+                checked={draft.rename_files}
+                disabled={save.isPending}
                 onChange={(event) =>
-                  setDraft({ ...draft, [key]: event.target.value })
+                  setDraft({ ...draft, rename_files: event.target.checked })
                 }
               />
+              Rename imported files
+              <SettingHelp label="renaming files">
+                Applies to both ebooks and audiobooks. Original torrent files
+                keep their names for seeding; only library filenames change.
+              </SettingHelp>
             </label>
-          ))}
-          <div className="inline-form">
-            <label>
-              Insert into
-              <select
-                value={field}
-                onChange={(event) => setField(event.target.value as Template)}
-              >
-                {fields.map(([key, label]) => (
-                  <option key={key} value={key}>
-                    {label}
+            {draft.rename_files && (
+              <label className="naming-filename-style">
+                Filename style
+                <select
+                  value={
+                    [
+                      "{title}",
+                      "[{sequence} - ]{title}",
+                      ...(medium === "audio"
+                        ? ["[{disc}-][{track} - ]{title}"]
+                        : []),
+                      "{author} - {title}",
+                    ].includes(draft[filename])
+                      ? draft[filename]
+                      : "custom"
+                  }
+                  disabled={save.isPending}
+                  onChange={(event) => {
+                    if (event.target.value !== "custom")
+                      setDraft({ ...draft, [filename]: event.target.value });
+                  }}
+                >
+                  <option value="{title}">Book title</option>
+                  <option value="[{sequence} - ]{title}">
+                    Sequence · Book title
                   </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Metadata token
-              <select
-                value={token}
-                onChange={(event) => setToken(event.target.value)}
-              >
-                {Object.entries(settings.tokens).map(([key, description]) => (
-                  <option key={key} value={key}>
-                    {key} — {description}
+                  {medium === "audio" && (
+                    <option value="[{disc}-][{track} - ]{title}">
+                      Disc · Track · Book title
+                    </option>
+                  )}
+                  <option value="{author} - {title}">
+                    Author · Book title
                   </option>
-                ))}
-              </select>
-            </label>
-            <button
-              type="button"
-              disabled={save.isPending}
-              onClick={insertToken}
-            >
-              Insert token
-            </button>
+                  <option value="custom" disabled>
+                    Custom template
+                  </option>
+                </select>
+              </label>
+            )}
           </div>
-        </details>
-        <Notice error={save.error || preview.error} />
+          <div className="naming-path-editor">
+            <div className="naming-lane-heading">
+              <h3>Folder order</h3>
+              <span>Drag to reorder</span>
+            </div>
+            {folders.error && (
+              <p className="muted">
+                Library folder unavailable. The preview uses an example root.
+              </p>
+            )}
+            <TokenLane
+              template={draft[folder]}
+              label="Folder token order"
+              disabled={save.isPending || draft.layout !== "conventional"}
+              onChange={(value) => setDraft({ ...draft, [folder]: value })}
+            />
+          </div>
+          <div
+            className="folder-preview"
+            aria-label="Folder preview"
+            aria-busy={!current}
+          >
+            <div className="folder-preview-heading">
+              <span className="setting-subheading">
+                LIVE PREVIEW{" "}
+                <SettingHelp label="naming preview">
+                  Illustrative metadata and folders. Actual paths use the
+                  selected library folder and the book’s available metadata.
+                  Extensions are added automatically.
+                </SettingHelp>
+              </span>
+              <span>{medium === "audio" ? "Audiobook" : "Ebook"}</span>
+            </div>
+            {fullPath && (
+              <div
+                className="naming-full-path"
+                tabIndex={0}
+                aria-label="Example destination path"
+              >
+                <code>{fullPath}</code>
+              </div>
+            )}
+            {!path && (
+              <p>
+                {preview.isFetching
+                  ? "Building preview…"
+                  : example?.reason || "Preview unavailable"}
+              </p>
+            )}
+            {!current && path && (
+              <span className="preview-updating">Updating…</span>
+            )}
+            {example?.warnings?.map((warning) => (
+              <p className="notice" key={warning}>
+                {warning}
+              </p>
+            ))}
+          </div>
+          {path && (
+            <section className="naming-tree-section" aria-label="Folder tree">
+              <h3>Folder tree</h3>
+              <ol className="folder-tree">
+                <li>
+                  <Folder size={14} />
+                  <code>
+                    {destination?.backend_path ||
+                      (medium === "audio" ? "audiobooks" : "ebooks")}
+                  </code>
+                  <Link to="/settings#libraries">Change folder</Link>
+                </li>
+                {relativePath?.split("/").map((part, index, parts) => (
+                  <li
+                    key={index}
+                    style={{ paddingInlineStart: `${(index + 1) * 12}px` }}
+                  >
+                    {index === parts.length - 1 ? (
+                      <FileText size={14} />
+                    ) : (
+                      <Folder size={14} />
+                    )}
+                    <span>{part}</span>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
+        </div>
+      </div>
+      <Notice error={save.error || preview.error} />
+      <div className="settings-form-footer">
         <div className="button-row">
           <button
             type="button"
-            onClick={() => setDraft(defaults)}
-            disabled={save.isPending}
-          >
-            Reset naming defaults
-          </button>
-          <button
-            type="button"
             className="primary"
-            onClick={() => save.mutate()}
             disabled={
               !changed ||
               save.isPending ||
-              !currentPreview ||
-              preview.isFetching ||
-              !!preview.error
+              !current ||
+              !!preview.error ||
+              !preview.data?.items.length ||
+              preview.data.items.some((item) => item.state !== "ready")
             }
+            onClick={() => save.mutate()}
           >
             {save.isPending ? "Saving…" : "Save naming settings"}
           </button>
+          <button
+            type="button"
+            disabled={save.isPending}
+            onClick={() => setDraft(defaults)}
+          >
+            Reset naming defaults
+          </button>
         </div>
-        {!changed && (
-          <p className="success" role="status">
-            Naming settings are saved.
-          </p>
-        )}
-      </section>
-      <section className="library-access" aria-label="Naming examples">
-        <h2>Preview with example books</h2>
-        <p className="muted">
-          Synthetic examples include a series download, two narrators, a
-          multi-track audiobook and missing metadata. These are not books in
-          your library.
-        </p>
-        {preview.isFetching && <p className="muted">Updating the preview…</p>}
-        {preview.data && (
-          <>
-            <p role="status">
-              {preview.data.expected_items} planned item folders ·{" "}
-              {preview.data.held_items} need attention
-            </p>
-            {preview.data.items.map((item) => (
-              <article className="panel editor" key={item.group_id}>
-                <h3>
-                  {item.title} ·{" "}
-                  {item.medium === "audio" ? "Audiobook" : "Ebook"}
-                </h3>
-                {item.reason && <p className="notice">{item.reason}</p>}
-                {!!item.missing_metadata?.length && (
-                  <p className="muted">
-                    Missing metadata: {item.missing_metadata?.join(", ")}.
-                    Optional segments are omitted.
-                  </p>
-                )}
-                {(item.warnings ?? []).map((warning) => (
-                  <p className="notice" key={warning}>
-                    {warning}
-                  </p>
-                ))}
-                {(item.files ?? []).map((file) => (
-                  <div className="import-path" key={file.source}>
-                    <span className="muted">Download: {file.source}</span>
-                    <strong>Library: {file.destination}</strong>
-                  </div>
-                ))}
-              </article>
-            ))}
-          </>
-        )}
-      </section>
-    </>
+        <span className="save-state" role="status">
+          {changed ? "Unsaved changes" : "Saved"}
+        </span>
+      </div>
+    </section>
+  );
+}
+
+const tokenLabels: Record<string, string> = {
+  author: "Author",
+  title: "Title",
+  series: "Series",
+  sequence: "Sequence",
+  recording_year: "Recording year",
+  edition_year: "Edition year",
+  narrator: "Narrator",
+  edition: "Edition",
+  language: "Language",
+  publisher: "Publisher",
+  disc: "Disc",
+  track: "Track",
+};
+function TokenLane({
+  template,
+  label,
+  disabled,
+  onChange,
+}: {
+  template: string;
+  label: string;
+  disabled: boolean;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div className="naming-token-lane">
+      <Sortable
+        horizontal
+        label={label}
+        disabled={disabled}
+        values={templateSegments(template)}
+        onChange={(segments) => onChange(segments.join(""))}
+        render={(segment) => {
+          const token = segment.match(/\{([^}]+)\}/)?.[1] || "";
+          return (
+            <span className="naming-token-label">
+              {tokenLabels[token] ||
+                token.replaceAll("_", " ") ||
+                "Custom text"}
+            </span>
+          );
+        }}
+      />
+    </div>
   );
 }

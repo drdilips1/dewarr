@@ -90,6 +90,13 @@ async def test_followed_lists_group_aliases_preview_order_and_count_scoped_holdi
         "audio": True,
         "stale": True,
         "in_collection": True,
+        "ebook_versions": 1,
+        "audio_versions": 1,
+        "primary_audio_narrators": [],
+        "primary_audio_version_id": None,
+        "primary_ebook_version_id": None,
+        "ebook_stale": True,
+        "audio_stale": False,
     }
     assert card["books"][2]["availability"]["in_collection"]
     assert datetime.fromisoformat(card["last_success_at"]) == NOW

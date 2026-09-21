@@ -1,11 +1,10 @@
 """Create installation secrets without printing or replacing them."""
 
 import argparse
+import base64
 import os
 import secrets
 from pathlib import Path
-
-from cryptography.fernet import Fernet
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--mode", choices=["native", "compose"], default="compose")
@@ -28,7 +27,7 @@ def create_secret(name, value):
     return value
 
 
-create_secret("app_key", Fernet.generate_key().decode())
+create_secret("app_key", base64.urlsafe_b64encode(secrets.token_bytes(32)).decode())
 create_secret("bootstrap_token", secrets.token_urlsafe(40))
 password = create_secret("postgres_password", secrets.token_urlsafe(32))
 prefix = "/run/secrets/" if args.mode == "compose" else str(secret_dir) + "/"

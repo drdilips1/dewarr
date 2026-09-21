@@ -1,3 +1,6 @@
+import type { ReactNode } from "react";
+import { X } from "lucide-react";
+import Sortable from "../components/Sortable";
 export default function PreferenceOrder({
   label,
   values,
@@ -5,73 +8,56 @@ export default function PreferenceOrder({
   valid = () => true,
   names = {},
   onRemove,
+  help,
 }: {
   label: string;
+  help?: ReactNode;
   values: string[];
   onChange: (values: string[]) => void;
   valid?: (values: string[]) => boolean;
   names?: Record<string, string>;
   onRemove?: (value: string) => void;
 }) {
-  const moved = (index: number, step: number) => {
-    const next = [...values];
-    [next[index], next[index + step]] = [next[index + step], next[index]];
-    return next;
-  };
+  const display = (value: string) =>
+    names[value] ||
+    {
+      format: "Format",
+      source: "Source",
+      seeders: "Seeders",
+      popularity: "Popularity",
+      narrator: "Narrator",
+    }[value] ||
+    value.toUpperCase();
   return (
     <fieldset>
-      <legend>{label}</legend>
-      <ol className="preference-order">
-        {values.map((value, index) => (
-          <li key={value}>
-            <span>{names[value] || value}</span>
-            <div>
-              {onRemove && (
-                <button
-                  type="button"
-                  aria-label={`Remove ${names[value] || value} from ${label}`}
-                  disabled={values.length <= 1}
-                  onClick={() => onRemove(value)}
-                >
-                  Remove
-                </button>
-              )}
+      <legend>
+        <span className="setting-subheading">
+          {label}
+          {help}
+        </span>
+      </legend>
+      <Sortable
+        label={label}
+        values={values}
+        onChange={onChange}
+        valid={valid}
+        render={(value) => (
+          <>
+            <span>{display(value)}</span>
+            {onRemove && (
               <button
                 type="button"
-                aria-label={`Move ${names[value] || value} up in ${label}`}
-                disabled={index === 0 || !valid(moved(index, -1))}
-                onClick={() => {
-                  const next = [...values];
-                  [next[index - 1], next[index]] = [
-                    next[index],
-                    next[index - 1],
-                  ];
-                  onChange(next);
-                }}
+                className="sort-remove"
+                aria-label={`Remove ${names[value] || value} from ${label}`}
+                disabled={values.length <= 1}
+                onClick={() => onRemove(value)}
               >
-                ↑
+                <X size={14} />
               </button>
-              <button
-                type="button"
-                aria-label={`Move ${names[value] || value} down in ${label}`}
-                disabled={
-                  index === values.length - 1 || !valid(moved(index, 1))
-                }
-                onClick={() => {
-                  const next = [...values];
-                  [next[index + 1], next[index]] = [
-                    next[index],
-                    next[index + 1],
-                  ];
-                  onChange(next);
-                }}
-              >
-                ↓
-              </button>
-            </div>
-          </li>
-        ))}
-      </ol>
+            )}
+          </>
+        )}
+      />
     </fieldset>
   );
 }

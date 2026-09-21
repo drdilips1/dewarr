@@ -1,3 +1,4 @@
+import SettingHelp from "../components/SettingHelp";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
@@ -24,13 +25,8 @@ export default function Sources({
   const [narrator, setNarrator] = useState(false);
   const [submitted, setSubmitted] = useState<Query | null>(null);
   const [detail, setDetail] = useState<Release | null>(null);
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const cache = useQueryClient();
-  const connection = useQuery({
-    queryKey: ["mam-connection"],
-    enabled: admin,
-    queryFn: async () => result(await api.GET("/api/sources/mam/connection")),
-  });
+
   const search = useMutation({
     mutationFn: async (query: Query) =>
       result(await api.POST("/api/sources/mam/search", { body: query })),
@@ -70,26 +66,10 @@ export default function Sources({
           </p>
         </div>
       </header>
-      <p className="notice">
-        Source browsing is available. Download dispatch will be enabled when the
-        downloader and import workflow are ready.
-      </p>
       {admin && (
-        <details
-          open={settingsOpen}
-          onToggle={(event) => setSettingsOpen(event.currentTarget.open)}
-        >
-          <summary>
-            MAM connection · {connection.data?.status || "loading"}
-          </summary>
-          <Notice error={connection.error} />
-          {connection.data && (
-            <ConnectionForm
-              key={connection.data.generation}
-              value={connection.data}
-            />
-          )}
-        </details>
+        <Link className="back-link" to="/settings#sources">
+          Source settings →
+        </Link>
       )}
       <form
         className="panel editor"
@@ -383,7 +363,7 @@ function TorrentInspection({ sourceId }: { sourceId: string }) {
   );
 }
 
-function ConnectionForm({ value }: { value: Connection }) {
+export function MamConnectionForm({ value }: { value: Connection }) {
   const cache = useQueryClient();
   const [base, setBase] = useState(value.base_url);
   const [proxy, setProxy] = useState(value.proxy_url || "");
@@ -394,22 +374,28 @@ function ConnectionForm({ value }: { value: Connection }) {
   const [enabled, setEnabled] = useState(
     value.configured ? value.enabled : true,
   );
+  const dirty =
+    base !== value.base_url ||
+    proxy !== (value.proxy_url || "") ||
+    Boolean(cookie || username || password || clearAuth) ||
+    enabled !== value.enabled;
+  const persist = async () =>
+    result(
+      await api.PUT("/api/sources/mam/connection", {
+        body: {
+          base_url: base,
+          proxy_url: proxy || null,
+          mam_id: cookie || null,
+          proxy_username: username || null,
+          proxy_password: password || null,
+          clear_proxy_credentials: clearAuth,
+          enabled,
+          expected_generation: value.generation,
+        },
+      }),
+    );
   const save = useMutation({
-    mutationFn: async () =>
-      result(
-        await api.PUT("/api/sources/mam/connection", {
-          body: {
-            base_url: base,
-            proxy_url: proxy || null,
-            mam_id: cookie || null,
-            proxy_username: username || null,
-            proxy_password: password || null,
-            clear_proxy_credentials: clearAuth,
-            enabled,
-            expected_generation: value.generation,
-          },
-        }),
-      ),
+    mutationFn: persist,
     onSuccess: (connection) => {
       setCookie("");
       setUsername("");
@@ -417,13 +403,31 @@ function ConnectionForm({ value }: { value: Connection }) {
       cache.setQueryData(["mam-connection"], connection);
     },
   });
-  const test = useMutation({
-    mutationFn: async () =>
-      result(await api.POST("/api/sources/mam/connection/test")),
-    onSuccess: (connection) =>
-      cache.setQueryData(["mam-connection"], connection),
-    onSettled: () => cache.invalidateQueries({ queryKey: ["mam-connection"] }),
+  const network = useQuery<components["schemas"]["MAMNetworkView"] | null>({
+    queryKey: ["mam-network", value.generation],
+    queryFn: async () => null,
+    enabled: false,
   });
+  const test = useMutation({
+    mutationFn: async () => {
+      if (dirty) await persist();
+      return result(await api.POST("/api/sources/mam/network/test"));
+    },
+    onMutate: () => cache.setQueryData(["mam-network", value.generation], null),
+    onSuccess: (diagnostics) => {
+      cache.setQueryData(
+        ["mam-network", diagnostics.connection.generation],
+        diagnostics,
+      );
+      cache.setQueryData(["mam-connection"], diagnostics.connection);
+      setCookie("");
+      setUsername("");
+      setPassword("");
+      setClearAuth(false);
+    },
+    onError: () => cache.invalidateQueries({ queryKey: ["mam-connection"] }),
+  });
+  const health = !dirty && enabled ? network.data : null;
   return (
     <form
       className="panel editor"
@@ -450,64 +454,147 @@ function ConnectionForm({ value }: { value: Connection }) {
           value={cookie}
           onChange={(event) => setCookie(event.target.value)}
           autoComplete="new-password"
-          placeholder={
-            value.has_session
-              ? "Saved; leave blank to keep"
-              : "Session cookie value"
-          }
+          placeholder={value.has_session ? "••••••••" : "Session cookie value"}
           maxLength={8192}
         />
       </label>
-      <label>
-        Gluetun HTTP proxy URL
-        <input
-          type="url"
-          value={proxy}
-          onChange={(event) => setProxy(event.target.value)}
-          placeholder="http://gluetun:8888"
-          maxLength={2000}
-        />
-      </label>
-      <p className="muted">
-        {proxy
-          ? "Proxy required: a failed proxy will never fall back to a direct request."
-          : "MAM requests use a direct connection."}{" "}
-        This setting routes source HTTP requests; torrent traffic is configured
-        separately.
-      </p>
-      <details>
-        <summary>
-          Proxy authentication
-          {value.has_proxy_credentials ? " · credentials saved" : ""}
-        </summary>
+      <details open={Boolean(value.proxy_url) || value.status === "route"}>
+        <summary>Proxy options</summary>{" "}
         <label>
-          Proxy username
+          <span className="setting-subheading">
+            HTTP proxy URL
+            <SettingHelp label="connection options">
+              {proxy
+                ? "Proxy required: a failed proxy will never fall back to a direct request."
+                : "MAM requests use a direct connection."}{" "}
+              This setting routes source HTTP requests; torrent traffic is
+              configured separately.
+            </SettingHelp>
+          </span>
           <input
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-            autoComplete="off"
-            maxLength={300}
+            type="url"
+            value={proxy}
+            onChange={(event) => setProxy(event.target.value)}
+            placeholder="http://gluetun:8888"
+            maxLength={2000}
           />
         </label>
-        <label>
-          Proxy password
-          <input
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            autoComplete="new-password"
-            maxLength={1000}
-          />
-        </label>
-        <label className="check-label">
-          <input
-            type="checkbox"
-            checked={clearAuth}
-            onChange={(event) => setClearAuth(event.target.checked)}
-          />
-          Clear saved proxy credentials
-        </label>
+        <p className="muted">
+          Supports HTTP and HTTPS proxies. Enter authentication in the separate
+          username and password fields below.
+        </p>
+        <div className="settings-fields">
+          <label>
+            Proxy username
+            <input
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+              autoComplete="off"
+              maxLength={300}
+            />
+          </label>
+          <label>
+            Proxy password
+            <input
+              type="password"
+              placeholder={
+                value.has_proxy_credentials &&
+                !clearAuth &&
+                proxy === (value.proxy_url || "")
+                  ? "••••••••"
+                  : undefined
+              }
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              autoComplete="new-password"
+              maxLength={1000}
+            />
+          </label>
+          <label className="check-label">
+            <input
+              type="checkbox"
+              checked={clearAuth}
+              onChange={(event) => setClearAuth(event.target.checked)}
+            />
+            Clear saved proxy credentials
+          </label>
+        </div>
       </details>
+      <section
+        className="mam-network"
+        data-health={health?.status || "unknown"}
+        aria-label="MAM network status"
+        aria-live="polite"
+      >
+        <div className="mam-network-heading">
+          <div className="mam-network-title">
+            <h3>Network checks</h3>
+            <SettingHelp label="network checks">
+              Tests the MAM cookie and checks public IPs through the proxy and
+              direct server connection. IP checks never send your MAM cookie.
+              MAM requests never fall back to direct when a proxy is configured.
+            </SettingHelp>
+          </div>
+          <span className="mam-network-badge">
+            {test.isPending
+              ? "Testing…"
+              : health
+                ? health.status
+                : "Not tested"}
+          </span>
+        </div>
+        {health?.status !== "healthy" && (
+          <p className="mam-network-description">
+            {health?.message || "Test connection to refresh these checks."}
+          </p>
+        )}
+        <dl>
+          <div>
+            <dt>Current route</dt>
+            <dd>
+              {!enabled ? "Disabled" : proxy ? "Proxy (required)" : "Direct"}
+              {dirty ? " · unsaved" : ""}
+            </dd>
+          </div>
+          <div>
+            <dt>MAM cookie</dt>
+            <dd>{health?.cookie_status || "Unverified"}</dd>
+          </div>
+          <div>
+            <dt>Proxy health</dt>
+            <dd>
+              {health?.proxy_status ||
+                (proxy ? "Not tested" : "Not configured")}
+            </dd>
+          </div>
+          <div className="mam-network-address">
+            <dt>Proxy IP</dt>
+            <dd>
+              {health?.proxy?.ip ||
+                health?.proxy?.error ||
+                (proxy ? "Not tested" : "Not configured")}
+            </dd>
+          </div>
+          <div className="mam-network-address">
+            <dt>Direct server IP</dt>
+            <dd>{health?.direct.ip || health?.direct.error || "Not tested"}</dd>
+          </div>
+        </dl>
+        {health && (
+          <p className="mam-network-checked">
+            Last checked{" "}
+            <time dateTime={health.checked_at}>
+              {new Date(health.checked_at).toLocaleString()}
+            </time>
+          </p>
+        )}
+        {health?.proxy?.ip && health.proxy.ip === health.direct.ip && (
+          <p className="notice">
+            The proxy and direct server report the same public IP. Check the
+            proxy's VPN routing if you expect different addresses.
+          </p>
+        )}
+      </section>
       <label className="check-label">
         <input
           type="checkbox"
@@ -517,23 +604,31 @@ function ConnectionForm({ value }: { value: Connection }) {
         Enable MAM
       </label>
       <Notice error={save.error || test.error} />
-      {value.last_error && <p className="notice">{value.last_error}</p>}
+      {value.last_error && !test.error && !save.error && (
+        <p className="notice">{value.last_error}</p>
+      )}
       <p role="status">Connection: {value.status}</p>
       <div className="actions">
         <button className="primary" disabled={save.isPending || test.isPending}>
-          Save MAM connection
+          Save connection
         </button>
         <button
           type="button"
           disabled={
-            !value.configured ||
-            !value.enabled ||
+            (!value.has_session && !cookie) ||
+            !enabled ||
             save.isPending ||
             test.isPending
           }
-          onClick={() => test.mutate()}
+          onClick={(event) => {
+            if (event.currentTarget.form?.reportValidity()) test.mutate();
+          }}
         >
-          Test saved connection
+          {test.isPending
+            ? "Testing…"
+            : dirty
+              ? "Save & test connection"
+              : "Test connection"}
         </button>
       </div>
     </form>

@@ -285,3 +285,69 @@ async def test_cancelled_http_request_leaves_fenced_session_for_recovery(
         assert row.lease_token and row.lease_until > datetime.now(UTC)
     assert (await search(client)).status_code == 429
     assert len(source_http["calls"]) == 1
+
+
+async def test_network_diagnostics_cookie_rotation_routes_and_failures(
+    client, admin, database, source_http, monkeypatch
+):
+    from app.api import sources
+    from app.domain.mam_diagnostics import EgressResult
+
+    probes = []
+
+    async def probe(proxy=None, username=None, password=None):
+        probes.append((proxy, username, password))
+        return EgressResult(ip="203.0.113.1" if proxy else "198.51.100.2")
+
+    monkeypatch.setattr(sources, "probe_egress", probe)
+    await configure(
+        client, proxy_url="http://proxy:8888", proxy_username="private", proxy_password="secret"
+    )
+    # MockTransport cannot override httpx's explicit proxy mount. Keep the real
+    # session flow while the existing source fixture supplies MAM responses.
+    original = source_network.MAMClient
+    monkeypatch.setattr(
+        source_network, "MAMClient", lambda *a, **kw: original(*a, **{**kw, "proxy_url": None})
+    )
+    result = await client.post("/api/sources/mam/network/test")
+    assert result.status_code == 200, result.text
+    data = result.json()
+    assert data["status"] == "healthy" and data["cookie_status"] == "authenticated"
+    assert data["proxy"]["ip"] == "203.0.113.1"
+    assert data["direct"]["ip"] == "198.51.100.2"
+    assert ("http://proxy:8888", "private", "secret") in probes
+    assert "secret" not in result.text and "private" not in result.text
+    source_http.update(status=401)
+    failed = (await client.post("/api/sources/mam/network/test")).json()
+    assert failed["status"] == "unhealthy" and failed["cookie_status"] == "rejected"
+    assert failed["proxy_status"] == "healthy"
+    assert failed["connection"]["status"] == "authentication"
+
+
+async def test_network_diagnostics_disabled_and_member_access(client, admin, database):
+    await configure(client, enabled=False)
+    assert (await client.post("/api/sources/mam/network/test")).status_code == 409
+    async with database() as db, db.begin():
+        (await db.get(User, UUID(admin["id"]))).role = "member"
+    assert (await client.post("/api/sources/mam/network/test")).status_code == 403
+
+
+async def test_network_ip_lookup_failure_does_not_reject_authenticated_cookie(
+    client, admin, database, source_http, monkeypatch
+):
+    from app.api import sources
+    from app.domain.mam_diagnostics import EgressResult
+
+    async def unavailable(*args):
+        return EgressResult(error="IP lookup unavailable")
+
+    monkeypatch.setattr(sources, "probe_egress", unavailable)
+    await configure(client)
+    response = await client.post("/api/sources/mam/network/test")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "degraded"
+    assert data["cookie_status"] == "authenticated"
+    assert data["proxy"] is None and data["proxy_status"] == "not-configured"
+    assert data["direct"]["ip"] is None
+    assert data["connection"]["status"] == "connected"

@@ -228,7 +228,7 @@ async def test_upgrade_seals_existing_paused_restore_and_blocks_loss_of_boundary
     async with database() as db:
         assert (
             await db.scalar(text("SELECT version_num FROM alembic_version"))
-            == "0044_recovery_approvals"
+            == "0046_goodreads_accounts"
         )
 
 

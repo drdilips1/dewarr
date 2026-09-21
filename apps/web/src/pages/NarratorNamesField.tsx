@@ -1,3 +1,4 @@
+import Sortable from "../components/Sortable";
 import { useState } from "react";
 
 export default function NarratorNamesField({
@@ -14,7 +15,7 @@ export default function NarratorNamesField({
   const [name, setName] = useState("");
   const add = () => {
     const value = name.normalize("NFKC").trim().replace(/\s+/g, " ");
-    if (!value || values.length >= 32) return;
+    if (!value || values.includes(value) || values.length >= 32) return;
     onChange([...values, value]);
     setName("");
   };
@@ -26,56 +27,24 @@ export default function NarratorNamesField({
           ? "Earlier names are preferred. Other narrators remain eligible."
           : "Every listed narrator is required for audio requests. Leave empty to accept any narrator."}
       </p>
-      <ul className="preference-order">
-        {values.map((value, index) => (
-          <li key={`${index}:${value}`}>
+      <Sortable
+        label={label}
+        values={values}
+        onChange={onChange}
+        render={(value) => (
+          <>
             <span>{value}</span>
-            <div>
-              {ordered && (
-                <>
-                  <button
-                    type="button"
-                    disabled={index === 0}
-                    aria-label={`Move ${value} up in ${label}`}
-                    onClick={() => {
-                      const next = [...values];
-                      [next[index - 1], next[index]] = [
-                        next[index],
-                        next[index - 1],
-                      ];
-                      onChange(next);
-                    }}
-                  >
-                    ↑
-                  </button>
-                  <button
-                    type="button"
-                    disabled={index === values.length - 1}
-                    aria-label={`Move ${value} down in ${label}`}
-                    onClick={() => {
-                      const next = [...values];
-                      [next[index + 1], next[index]] = [
-                        next[index],
-                        next[index + 1],
-                      ];
-                      onChange(next);
-                    }}
-                  >
-                    ↓
-                  </button>
-                </>
-              )}
-              <button
-                type="button"
-                aria-label={`Remove ${value} from ${label}`}
-                onClick={() => onChange(values.filter((_, i) => i !== index))}
-              >
-                Remove
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+            <button
+              type="button"
+              className="sort-remove"
+              aria-label={`Remove ${value} from ${label}`}
+              onClick={() => onChange(values.filter((item) => item !== value))}
+            >
+              Remove
+            </button>
+          </>
+        )}
+      />
       <label>
         {label} name
         <input

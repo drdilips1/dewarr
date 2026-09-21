@@ -1,3 +1,5 @@
+import { usePagedQuery } from "../hooks/usePagedQuery";
+import InfiniteScroll from "../components/InfiniteScroll";
 import { EffectivePreferences } from "./PreferenceFields";
 import { lazy, Suspense, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -13,8 +15,6 @@ const ManualPack = lazy(() => import("./ManualPack"));
 export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
   const [params] = useSearchParams();
   const cache = useQueryClient();
-  const [offset, setOffset] = useState(0);
-  const [historyOffset, setHistoryOffset] = useState(0);
   const [choice, setChoice] = useState(
     params.get("request")
       ? `${params.get("request")}:${params.get("slot") || artifact.release.medium}`
@@ -35,14 +35,20 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
     queryFn: async () =>
       result(await api.GET("/api/acquisition/selections/options")),
   });
-  const requests = useQuery({
-    queryKey: ["requests", "selection", offset],
-    queryFn: async () =>
+  const requests = usePagedQuery({
+    queryKey: ["requests", "selection"],
+    queryFn: async (offset, signal) =>
       result(
         await api.GET("/api/requests", {
+          signal,
           params: { query: { offset, limit: 20 } },
         }),
       ),
+    initial: 0,
+    next: (last, pages) => {
+      const count = pages.reduce((n, p) => n + p.items.length, 0);
+      return last.items.length && count < last.total ? count : undefined;
+    },
   });
   const linkedRequest = useQuery({
     queryKey: ["requests", "selection-linked", params.get("request")],
@@ -61,11 +67,12 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
   const selectedProfile = profiles.data?.find(
     (p) => (p.id || "") === (params.get("profile") || ""),
   );
-  const history = useQuery({
-    queryKey: ["release-selections", artifact.id, historyOffset],
-    queryFn: async () =>
+  const history = usePagedQuery({
+    queryKey: ["release-selections", artifact.id],
+    queryFn: async (historyOffset, signal) =>
       result(
         await api.GET("/api/acquisition/selections", {
+          signal,
           params: {
             query: {
               artifact_id: artifact.id,
@@ -75,6 +82,11 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
           },
         }),
       ),
+    initial: 0,
+    next: (last, pages) => {
+      const count = pages.reduce((n, p) => n + p.items.length, 0);
+      return last.items.length && count < last.total ? count : undefined;
+    },
   });
   const choices = Array.from(
     new Map(
@@ -234,11 +246,13 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
         />
       )}
       <p>
-        Download profile:{" "}
+        Download preferences:{" "}
         {!useSearchContext
           ? "Selected request’s saved preferences"
           : selectedProfile?.name ||
-            (params.get("profile") ? "Saved profile unavailable" : "Balanced")}
+            (params.get("profile")
+              ? "Saved preferences unavailable"
+              : "Balanced")}
       </p>
       <p className="muted">
         Choose the book this release contains and its library destination. The
@@ -280,23 +294,10 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
           ))}
         </select>
       </label>
-      {(offset > 0 || (requests.data?.total || 0) > 20) && (
-        <div className="button-row">
-          {offset > 0 && (
-            <button onClick={() => setOffset((value) => value - 20)}>
-              Previous wanted books
-            </button>
-          )}
-          {requests.data && offset + 20 < requests.data.total && (
-            <button onClick={() => setOffset((value) => value + 20)}>
-              More wanted books
-            </button>
-          )}
-        </div>
-      )}
+      <InfiniteScroll query={requests} />
       {!choices.length && !requests.isPending && (
         <p className="muted">
-          No matching wanted requests on this page.{" "}
+          No matching wanted requests.{" "}
           <Link to="/">Open a book and save the media you want first.</Link>
         </p>
       )}
@@ -496,7 +497,7 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
                 </button>
               )}
               {["committed", "fulfilled"].includes(item.state) && (
-                <Link to="/activity">View download</Link>
+                <Link to="/requests#downloads">View download</Link>
               )}
               {item.state === "prepared" && (
                 <button
@@ -513,18 +514,7 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
               )}
             </article>
           ))}
-          <div className="button-row">
-            {historyOffset > 0 && (
-              <button onClick={() => setHistoryOffset((value) => value - 10)}>
-                Previous selections
-              </button>
-            )}
-            {historyOffset + 10 < history.data.total && (
-              <button onClick={() => setHistoryOffset((value) => value + 10)}>
-                More selections
-              </button>
-            )}
-          </div>
+          <InfiniteScroll query={history} />
         </>
       )}
     </section>

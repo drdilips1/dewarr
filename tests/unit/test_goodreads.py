@@ -162,3 +162,11 @@ def test_shelf_budget_wait_does_not_exhaust_failure_retries():
     after = datetime.now(UTC) + timedelta(seconds=5)
     assert before <= decision.retry_at <= after
     assert strategy.get_retry_decision(exception=RuntimeError("unexpected"), job=job) is None
+
+
+def test_feed_retains_only_supported_goodreads_artwork():
+    feed = FEED.replace(
+        b"http://127.0.0.1/private", b"https://i.gr-assets.com/books/123._SY75_.jpg"
+    )
+    assert parse_feed(feed)[0]["cover_url"] == "https://i.gr-assets.com/books/123._SY600_.jpg"
+    assert "cover_url" not in parse_feed(FEED)[0]

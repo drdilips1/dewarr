@@ -1,6 +1,10 @@
+import { usePagedQuery } from "../hooks/usePagedQuery";
+import InfiniteScroll from "../components/InfiniteScroll";
+import BookLink from "../components/BookLink";
+import BookCover from "../components/BookCover";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { BookOpen, Check, Search } from "lucide-react";
+import { Check, Search } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
@@ -15,26 +19,35 @@ export default function ProviderSearch({
   canEdit,
   matchWorkId,
   onMatched,
+  initialQuery = "",
 }: {
+  initialQuery?: string;
   canEdit: boolean;
   matchWorkId?: string;
   onMatched?: () => void;
 }) {
-  const [params, setParams] = useSearchParams();
+  const [routeParams, setRouteParams] = useSearchParams();
+  const [matchParams, setMatchParams] = useState(
+    () => new URLSearchParams({ q: initialQuery, provider: "hardcover" }),
+  );
+  const params = matchWorkId ? matchParams : routeParams;
+  const setParams = (values: Record<string, string>) => {
+    if (matchWorkId) setMatchParams(new URLSearchParams(values));
+    else setRouteParams(values);
+  };
   const q = params.get("q") || "";
   const selectedProvider = params.get("provider");
   const provider =
     selectedProvider === "hardcover" || selectedProvider === "openlibrary"
       ? selectedProvider
       : "automatic";
-  const page = Math.max(1, Math.min(100, Number(params.get("page")) || 1));
   const [input, setInput] = useState(q);
   const [selected, setSelected] = useState<Book | null>(null);
   const selectedButton = useRef<HTMLButtonElement | null>(null);
   useEffect(() => {
     setInput(q);
     setSelected(null);
-  }, [q, provider, page]);
+  }, [q, provider]);
   const local = useQuery({
     queryKey: ["works", "global-search", q],
     queryFn: async () =>
@@ -45,24 +58,34 @@ export default function ProviderSearch({
       ),
     enabled: !matchWorkId && Boolean(q.trim()),
   });
-  const query = useQuery({
-    queryKey: ["provider-search", q, provider, page],
-    queryFn: async () =>
+  const query = usePagedQuery({
+    queryKey: ["provider-search", q, provider],
+    queryFn: async (page, signal) =>
       result(
         await api.GET("/api/metadata/search", {
           params: { query: { q, provider, page } },
+          signal,
         }),
       ),
+    next: (last, pages) =>
+      last.has_more && pages.length < 100 ? pages.length + 1 : undefined,
     enabled: Boolean(q.trim()),
     retry: false,
   });
+  const knownWorks = Object.assign(
+    {},
+    ...(query.loadedPages || []).map((p) => p.known_works || {}),
+  );
   const localIds = new Set(
     ((!matchWorkId && local.data?.items) || []).map((work) => work.id),
   );
   const providerItems =
     query.data?.items.filter((book) => {
-      const known = query.data?.known_works?.[book.external_id];
-      return matchWorkId || !known || !localIds.has(known.id);
+      const known = knownWorks[book.external_id];
+      if (matchWorkId || !known) return true;
+      if (localIds.has(known.id)) return false;
+      localIds.add(known.id);
+      return true;
     }) || [];
   return (
     <>
@@ -76,7 +99,7 @@ export default function ProviderSearch({
               library status stays visible as you browse.
             </p>
           </div>
-          <Link to="/metadata">Metadata settings</Link>
+          <Link to="/settings#catalog">Metadata settings</Link>
         </div>
       )}
       {matchWorkId && <h3>Find the correct catalog record</h3>}
@@ -164,26 +187,23 @@ export default function ProviderSearch({
         <>
           <div className="section-heading">
             <h2>{providerName(query.data.provider)} results</h2>
-            <span className="muted">Page {page}</span>
+            <span className="muted">{providerItems.length} books loaded</span>
           </div>
           {providerItems.length ? (
             <div className="provider-results">
               {providerItems.map((book) => {
-                const known = query.data.known_works?.[book.external_id];
+                const known = knownWorks[book.external_id];
                 const content = (
                   <>
-                    {book.cover_url ? (
-                      <img
-                        src={book.cover_url}
-                        alt=""
-                        loading="lazy"
-                        referrerPolicy="no-referrer"
+                    <div className="provider-cover">
+                      <BookCover
+                        title={book.title}
+                        cover={book.cover_url}
+                        work={known}
+                        providerBook={book}
+                        actions={!matchWorkId}
                       />
-                    ) : (
-                      <div className="mini-cover">
-                        <BookOpen size={24} />
-                      </div>
-                    )}
+                    </div>
                     <span>
                       <strong>{book.title}</strong>
                       <small>
@@ -198,14 +218,20 @@ export default function ProviderSearch({
                     </span>
                   </>
                 );
-                return known && !matchWorkId ? (
-                  <Link
+                return !matchWorkId ? (
+                  <BookLink
+                    aria-label={`View ${book.title}`}
                     className="provider-result"
                     key={`${book.provider}:${book.external_id}`}
-                    to={`/books/${known.id}`}
+                    to={
+                      known
+                        ? `/books/${known.id}`
+                        : `/discover/books/${book.provider}/${encodeURIComponent(book.external_id)}`
+                    }
+                    state={{ search: `/search?${params.toString()}` }}
                   >
                     {content}
-                  </Link>
+                  </BookLink>
                 ) : (
                   <button
                     className="provider-result"
@@ -234,28 +260,7 @@ export default function ProviderSearch({
               catalog.
             </Empty>
           )}
-          <div className="pagination">
-            {page > 1 && (
-              <button
-                onClick={() => {
-                  setSelected(null);
-                  setParams({ q, provider, page: String(page - 1) });
-                }}
-              >
-                Previous results
-              </button>
-            )}
-            {query.data.has_more && page < 100 && (
-              <button
-                onClick={() => {
-                  setSelected(null);
-                  setParams({ q, provider, page: String(page + 1) });
-                }}
-              >
-                Next results
-              </button>
-            )}
-          </div>
+          <InfiniteScroll query={query} />
         </>
       )}
       {selected && (
@@ -395,7 +400,9 @@ export function Preview({
             .
           </p>
           <p className="muted">
-            Adding a catalog title does not download it or mark it as owned.
+            {matchWorkId
+              ? "Use this book for its description, authors and reviews. Your library copies stay in place."
+              : "Adding a catalog title does not download it or mark it as owned."}
           </p>
           {preview.data?.work && !matchWorkId ? (
             <>
@@ -414,7 +421,7 @@ export function Preview({
               {save.isPending
                 ? "Saving…"
                 : matchWorkId
-                  ? "Confirm catalog match"
+                  ? "Use this book"
                   : "Add to catalog"}
             </button>
           )}

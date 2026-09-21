@@ -1,8 +1,7 @@
-name: book-search
+name: dewarr
 
 x-application: &application
-  build: .
-  image: book-search:local
+  image: ${DEWARR_IMAGE:-ghcr.io/logabell/dewarr:latest}
   env_file: .env
   user: "${BOOK_UID:-1000}:${BOOK_GID:-1000}"
   secrets:
@@ -44,7 +43,7 @@ services:
   api:
     <<: *application
     ports:
-      - "127.0.0.1:8000:8000"
+      - "${DEWARR_BIND:-127.0.0.1}:${DEWARR_PORT:-8000}:8000"
     depends_on:
       migrate:
         condition: service_completed_successfully

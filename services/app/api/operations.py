@@ -55,6 +55,7 @@ LIST_CONTEXTS = {
     "discovery.follow-list": ("result", "list_id"),
 }
 WORK_CONTEXTS = {
+    "acquisition.quick-add": ("command", "work_id"),
     "metadata.enrich": ("work_id",),
     "sources.search": ("command", "work_id"),
 }

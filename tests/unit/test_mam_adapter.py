@@ -245,3 +245,66 @@ async def test_unrelated_cookie_domain_cannot_replace_the_mam_session():
     async with MAMClient("https://mam.test", "fixture", transport=transport) as client:
         await client.search(MAMSearch(q="Harbor"))
         assert client.rotated_cookie is None
+
+
+async def test_refused_proxy_reports_actionable_error_without_exposing_credentials():
+    # Reserve a local port, then close it so the real HTTP transport is refused.
+    server = await asyncio.start_server(lambda r, w: w.close(), "127.0.0.1", 0)
+    port = server.sockets[0].getsockname()[1]
+    server.close()
+    await server.wait_closed()
+    async with MAMClient(
+        "https://mam.test",
+        "private-session",
+        proxy_url=f"http://127.0.0.1:{port}",
+        proxy_username="private-user",
+        proxy_password="private-password",
+    ) as client:
+        with pytest.raises(AdapterError, match="proxy refused the connection") as error:
+            await client.test()
+    assert error.value.kind == FailureKind.ROUTE
+    assert "No direct fallback" in str(error.value)
+    assert "private-" not in str(error.value)
+
+
+async def test_https_proxy_tunnel_rejection_has_safe_actionable_error():
+    async def proxy(reader, writer):
+        await reader.readuntil(b"\r\n\r\n")
+        writer.write(
+            b"HTTP/1.1 407 private-proxy-error\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
+        )
+        await writer.drain()
+        writer.close()
+        await writer.wait_closed()
+
+    async with await asyncio.start_server(proxy, "127.0.0.1", 0) as server:
+        port = server.sockets[0].getsockname()[1]
+        async with MAMClient(
+            "https://mam.test", "private-session", proxy_url=f"http://127.0.0.1:{port}"
+        ) as client:
+            with pytest.raises(AdapterError, match="proxy rejected the HTTPS tunnel") as error:
+                await client.test()
+    assert error.value.kind == FailureKind.ROUTE
+    assert "private-" not in str(error.value)
+
+
+@pytest.mark.parametrize(
+    "value,expected",
+    [
+        (1, True),
+        (0, False),
+        ("1", True),
+        ("0", False),
+        (True, True),
+        (False, False),
+        (None, None),
+        ("unknown", None),
+        (2, None),
+    ],
+)
+def test_mam_badges_accept_explicit_boolean_and_numeric_flags(value, expected):
+    page = parse_page(
+        search_response(data=[release_row(free=value, vip=value)]), MAMSearch(q="Harbor")
+    )
+    assert page.items[0].freeleech is expected
+    assert page.items[0].vip is expected

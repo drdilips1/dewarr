@@ -453,7 +453,11 @@ async def synchronize(operation_id: UUID, *, client_factory=Audiobookshelf):
                 .values(accessible=False)
             )
             integration.status, integration.last_error = "connected", None
-            integration.capabilities = capabilities.model_dump(mode="json")
+            integration.capabilities = {
+                **capabilities.model_dump(mode="json"),
+                "library_count": len(libraries),
+                "book_count": len(locations),
+            }
             integration.last_success_at = datetime.now(UTC)
             integration.next_sync_at = datetime.now(UTC) + timedelta(minutes=30)
             integration.lease_token, integration.lease_until = None, None

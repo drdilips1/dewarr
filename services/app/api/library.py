@@ -6,7 +6,9 @@ from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 from sqlalchemy import Text, cast, delete, func, or_, select
 
+from app.api.catalog import WorkPage, work_view
 from app.api.dependencies import Admin, CurrentUser, Database
+from app.api.library_groups import router as groups_router
 from app.db.models import (
     AssetContains,
     AuditEvent,
@@ -16,13 +18,18 @@ from app.db.models import (
     LibraryGrant,
     ProviderObject,
     User,
+    Version,
     Work,
 )
+from app.domain.availability import availability_for
+from app.domain.catalog_display import display_family, display_map
+from app.domain.catalog_titles import title_narrators
 from app.domain.corrections import asset_state, correct_asset, revision
 from app.domain.visibility import visible_library, visible_work
-from app.domain.work_graph import canonical_map, family_ids
+from app.domain.work_graph import canonical_map
 
 router = APIRouter(prefix="/library", tags=["library"])
+router.include_router(groups_router)
 
 
 class LibraryView(BaseModel):
@@ -36,6 +43,12 @@ class LibraryView(BaseModel):
 
 class GrantInput(BaseModel):
     user_ids: list[UUID] = Field(max_length=1000)
+
+
+class AssetFileView(BaseModel):
+    path: str
+    format: str
+    size: int | None = None
 
 
 class AssetView(BaseModel):
@@ -54,6 +67,7 @@ class AssetView(BaseModel):
     formats: list[str]
     last_seen_at: datetime | None
     open_url: str
+    files: list[AssetFileView] = Field(default_factory=list)
     match_revision: str | None = None
     collection: bool = False
     collection_work_id: UUID | None = None
@@ -148,28 +162,7 @@ async def replace_grants(library_id: UUID, body: GrantInput, admin: Admin, db: D
     await db.commit()
 
 
-@router.get("/assets", response_model=AssetPage)
-async def assets(
-    user: CurrentUser,
-    db: Database,
-    work_id: UUID | None = None,
-    library_id: UUID | None = None,
-    needs_review: bool = False,
-    q: str = Query(default="", max_length=300),
-    medium: Literal["any", "ebook", "audio"] = "any",
-    state: Literal[
-        "any",
-        "present",
-        "stale",
-        "missing-suspected",
-        "missing-confirmed",
-        "scope-unavailable",
-        "moved",
-    ] = "any",
-    sort: Literal["title", "recent"] = "title",
-    offset: int = Query(default=0, ge=0),
-    limit: int = Query(default=40, ge=1, le=100),
-):
+def asset_conditions(user, work_id, library_id, needs_review, q, medium, state):
     conditions = [
         visible_library(user),
         Integration.enabled.is_(True),
@@ -178,7 +171,9 @@ async def assets(
     if work_id:
         conditions.append(
             LibraryAsset.id.in_(
-                select(AssetContains.asset_id).where(AssetContains.work_id.in_(family_ids(work_id)))
+                select(AssetContains.asset_id).where(
+                    AssetContains.work_id.in_(display_family(user, work_id))
+                )
             )
         )
     if library_id:
@@ -212,6 +207,86 @@ async def assets(
                 LibraryAsset.id.in_(catalog_matches),
             )
         )
+    return conditions
+
+
+@router.get("/books", response_model=WorkPage)
+async def library_books(
+    user: CurrentUser,
+    db: Database,
+    library_id: UUID | None = None,
+    q: str = Query(default="", max_length=300),
+    medium: Literal["any", "ebook", "audio"] = "any",
+    state: Literal[
+        "any",
+        "present",
+        "stale",
+        "missing-suspected",
+        "missing-confirmed",
+        "scope-unavailable",
+        "moved",
+    ] = "any",
+    sort: Literal["title", "recent"] = "title",
+    offset: int = Query(default=0, ge=0),
+    limit: int = Query(default=40, ge=1, le=100),
+):
+    mapping = display_map(user)
+    matching = (
+        select(mapping.c.work_id, func.max(LibraryAsset.created_at).label("observed_at"))
+        .select_from(LibraryAsset)
+        .join(Library, LibraryAsset.library_id == Library.id)
+        .join(Integration, Library.integration_id == Integration.id)
+        .join(AssetContains, AssetContains.asset_id == LibraryAsset.id)
+        .join(mapping, mapping.c.origin_id == AssetContains.work_id)
+        .where(*asset_conditions(user, None, library_id, False, q, medium, state))
+        .group_by(mapping.c.work_id)
+        .subquery()
+    )
+    query = select(Work).join(matching, matching.c.work_id == Work.id)
+    total = await db.scalar(select(func.count()).select_from(matching))
+    rows = list(
+        await db.scalars(
+            query.order_by(
+                *([matching.c.observed_at.desc()] if sort == "recent" else []),
+                Work.title,
+                Work.id,
+            )
+            .offset(offset)
+            .limit(limit)
+        )
+    )
+    availability = await availability_for(db, user, [work.id for work in rows])
+    return WorkPage(
+        items=[work_view(work, availability[work.id]) for work in rows],
+        total=total or 0,
+        offset=offset,
+        limit=limit,
+    )
+
+
+@router.get("/assets", response_model=AssetPage)
+async def assets(
+    user: CurrentUser,
+    db: Database,
+    work_id: UUID | None = None,
+    library_id: UUID | None = None,
+    needs_review: bool = False,
+    q: str = Query(default="", max_length=300),
+    medium: Literal["any", "ebook", "audio"] = "any",
+    state: Literal[
+        "any",
+        "present",
+        "stale",
+        "missing-suspected",
+        "missing-confirmed",
+        "scope-unavailable",
+        "moved",
+    ] = "any",
+    sort: Literal["title", "recent"] = "title",
+    offset: int = Query(default=0, ge=0),
+    limit: int = Query(default=40, ge=1, le=100),
+):
+    conditions = asset_conditions(user, work_id, library_id, needs_review, q, medium, state)
     query = (
         select(LibraryAsset, Library, Integration)
         .join(Library, LibraryAsset.library_id == Library.id)
@@ -268,6 +343,15 @@ async def assets(
         by_work = contents.setdefault(row.asset_id, {})
         root = roots[row.work_id]
         by_work[root] = by_work.get(root, False) or row.verified
+    version_narrators = dict(
+        (
+            await db.execute(
+                select(Version.id, Version.narrators).where(
+                    Version.id.in_([row[0].version_id for row in rows if row[0].version_id])
+                )
+            )
+        ).all()
+    )
     views = []
     for asset, library, connection in rows:
         link = by_key.get((f"abs:{connection.id}", f"item:{asset.medium}", asset.external_id))
@@ -309,11 +393,24 @@ async def assets(
                 if asset.containment
                 else [],
                 version_id=asset.version_id,
-                narrators=asset.metadata_snapshot.get("narrators", [])
+                narrators=(
+                    asset.metadata_snapshot.get("narrators")
+                    or version_narrators.get(asset.version_id)
+                    or title_narrators(asset.title)
+                )
                 if asset.medium == "audio"
                 else [],
                 formats=sorted({file.get("format", "unknown") for file in asset.files}),
                 last_seen_at=asset.last_seen_at,
+                files=[
+                    AssetFileView(
+                        path=file["path"],
+                        format=file.get("format", "unknown"),
+                        size=file.get("size"),
+                    )
+                    for file in asset.files
+                    if isinstance(file.get("path"), str)
+                ],
                 open_url=(connection.config.get("public_url") or connection.base_url)
                 + "/item/"
                 + asset.external_id,

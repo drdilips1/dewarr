@@ -46,6 +46,7 @@ class UserView(BaseModel):
     display_name: str
     role: str
     can_automate: bool
+    onboarding_status: str = "pending"
 
 
 class AuthView(BaseModel):
@@ -65,6 +66,7 @@ def user_view(user: User) -> UserView:
         display_name=user.display_name,
         role=user.role,
         can_automate=user.can_automate,
+        onboarding_status=(user.onboarding or {}).get("status", "pending"),
     )
 
 

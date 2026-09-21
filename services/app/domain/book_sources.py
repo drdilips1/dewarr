@@ -6,7 +6,7 @@ from uuid import UUID, uuid4
 
 from fastapi import HTTPException
 from pydantic import BaseModel, Field
-from sqlalchemy import delete, select
+from sqlalchemy import delete, select, text
 
 from app.adapters.audiobookbay import ABBSearch
 from app.adapters.contracts import AdapterError, FailureKind
@@ -612,3 +612,29 @@ async def run(identifier, source):
         await fail_worker(identifier, source, token, str(error))
     except HTTPException as error:
         await fail_worker(identifier, source, token, str(error.detail))
+
+
+async def refresh_search(db, operation_id, user_id):
+    await transaction_lock(db, f"source-search:{operation_id}")
+    operation, changed = await checked(db, operation_id, user_id)
+    await series_preparation.repair(db, operation)
+    payload = deepcopy(operation.payload)
+    # Queue truth repairs exhausted workers; do not infer failure from slow polling.
+    for source, worker in payload["workers"].items():
+        status = await db.scalar(
+            text("SELECT status::text FROM book_queue.procrastinate_jobs WHERE id=:id"),
+            {"id": worker["job_id"]},
+        )
+        if status in {"failed", "aborted", "succeeded"} or status is None:
+            for key, unit in payload["sources"].items():
+                if (key == source or key.startswith(source + ":")) and unit["state"] not in {
+                    "completed",
+                    "failed",
+                }:
+                    unit.update(
+                        state="failed",
+                        message="Search worker stopped. Start a new search to retry.",
+                    )
+                    worker.pop("token", None)
+    refresh_status(operation, payload)
+    return operation, changed

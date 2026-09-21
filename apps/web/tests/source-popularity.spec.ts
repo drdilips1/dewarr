@@ -29,7 +29,7 @@ test("source popularity persists as an ordered preference without rewriting save
   );
   await page.goto(`/books/${work.id}?tab=sources`);
   const sources = page.getByRole("region", { name: "Book download sources" });
-  const mam = sources.getByRole("article", {
+  const mam = sources.getByRole("row", {
     name: "Harbor & Roads — Complete Stories",
     exact: true,
   });
@@ -63,47 +63,27 @@ test("source popularity persists as an ordered preference without rewriting save
   await sources
     .getByRole("combobox", { name: "Download profile", exact: true })
     .selectOption("");
-  await sources
-    .getByText("Customize download preferences", { exact: true })
-    .click();
+  await sources.getByText("Download profile settings", { exact: true }).click();
+  await sources.getByText("Edit profile", { exact: true }).click();
   await sources
     .getByLabel("Profile name", { exact: true })
     .fill("Popularity within each source");
-  await sources.getByText("Source popularity", { exact: true }).click();
   await sources
-    .getByRole("button", {
-      name: "Use source popularity in ranking",
-      exact: true,
-    })
-    .click();
+    .getByRole("checkbox", { name: "Prefer popular releases", exact: true })
+    .check();
   const order = sources.getByRole("group", {
     name: "Ranking priorities",
     exact: true,
   });
-  await expect(
-    order.getByRole("button", {
-      name: "Move popularity up in Ranking priorities",
-      exact: true,
-    }),
-  ).toBeDisabled();
-  await expect(
-    order.getByRole("button", {
-      name: "Move source down in Ranking priorities",
-      exact: true,
-    }),
-  ).toBeDisabled();
-  await order
-    .getByRole("button", {
-      name: "Move popularity down in Ranking priorities",
-      exact: true,
-    })
-    .click();
-  await order
-    .getByRole("button", {
-      name: "Move popularity up in Ranking priorities",
-      exact: true,
-    })
-    .click();
+  const priority = order.getByRole("button", {
+    name: "Reorder popularity in Ranking priorities",
+    exact: true,
+  });
+  await priority.focus();
+  await page.keyboard.press("ArrowUp");
+  await expect(order.locator("li").nth(1)).toContainText("Source");
+  await page.keyboard.press("ArrowDown");
+  await page.keyboard.press("ArrowUp");
   const savedResponse = page.waitForResponse(
     (response) =>
       response.url().endsWith("/api/acquisition/profiles") &&
@@ -125,26 +105,23 @@ test("source popularity persists as an ordered preference without rewriting save
     "seeders",
   ]);
   await refresh();
-  await mam.getByText("Why this ranking?", { exact: true }).click();
-  await expect(mam).toContainText(
+  await mam.getByRole("button", { name: /^Details for/ }).click();
+  const details = page.getByRole("dialog", { name: "Release details" });
+  await details.getByText("Why this ranking?", { exact: true }).click();
+  await expect(details).toContainText(
     "MAM reports 321 completed downloads; compared only within MAM",
   );
-  await mam.getByText("Original release details", { exact: true }).click();
-  await expect(mam).toContainText("MAM completed downloads: 321");
-  await mam.screenshot({
+  await expect(details.locator(".release-facts")).toContainText("321");
+  await details.screenshot({
     path: testInfo.outputPath("popularity-evidence.png"),
   });
   await page.reload();
   await expect(
     sources.getByRole("combobox", { name: "Download profile", exact: true }),
   ).toHaveValue(profile.id);
-  await sources
-    .getByText("Customize download preferences", { exact: true })
-    .click();
-  await sources.getByText("Source popularity", { exact: true }).click();
-  const popularity = sources.locator("details").filter({
-    has: page.locator("summary", { hasText: /^Source popularity$/ }),
-  });
+  await sources.getByText("Download profile settings", { exact: true }).click();
+  await sources.getByText("Edit profile", { exact: true }).click();
+  const popularity = sources.locator(".setting-inline-option");
   // Use the innermost details (the outer customization details also contains it).
   await popularity.last().screenshot({
     path: testInfo.outputPath("popularity-settings-desktop.png"),
@@ -159,8 +136,8 @@ test("source popularity persists as an ordered preference without rewriting save
     ),
   ).toBe(true);
   await sources
-    .getByRole("button", { name: "Stop ranking by popularity", exact: true })
-    .click();
+    .getByRole("checkbox", { name: "Prefer popular releases", exact: true })
+    .uncheck();
   const changedResponse = page.waitForResponse(
     (response) =>
       response.url().endsWith(`/api/acquisition/profiles/${profile.id}`) &&

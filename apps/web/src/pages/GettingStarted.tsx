@@ -1,258 +1,274 @@
-import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
-import { api, result } from "../api/client";
+import SettingHelp from "../components/SettingHelp";
+import { lazy, Suspense, useEffect, useRef } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { BookOpen, Check, ArrowRight } from "lucide-react";
+import { api, result, type Auth } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
+import { settingsSections } from "./SettingsSections";
 
-type Service = components["schemas"]["SetupService"];
-
-function ServiceEvidence({ value }: { value: Service }) {
-  return (
-    <>
-      <strong>{value.name}</strong>{" "}
-      <span className="status">
-        {value.enabled ? value.status.replaceAll("-", " ") : "Disabled"}
-      </span>
-      <p className="muted">
-        {value.last_success_at
-          ? `Last recorded success: ${new Date(value.last_success_at).toLocaleString()}`
-          : "No successful operation timestamp recorded."}
-      </p>
-    </>
-  );
-}
-
-export default function GettingStarted() {
-  const query = useQuery({
-    queryKey: ["setup-readiness"],
-    queryFn: async () => result(await api.GET("/api/setup/readiness")),
-    refetchInterval: 30000,
+const Libraries = lazy(() => import("./Connections"));
+const Destinations = lazy(() => import("./Destinations"));
+const ReadingAccounts = lazy(() => import("./ReadingAccounts"));
+type Progress = components["schemas"]["OnboardingProgress"];
+export default function GettingStarted({ role }: { role: string }) {
+  const admin = role === "admin";
+  const cache = useQueryClient();
+  const navigate = useNavigate();
+  const heading = useRef<HTMLHeadingElement>(null);
+  const progress = useQuery({
+    queryKey: ["onboarding"],
+    queryFn: async () => result(await api.GET("/api/setup/onboarding")),
   });
-  const data = query.data;
+  const readiness = useQuery({
+    queryKey: ["setup-readiness"],
+    enabled: admin,
+    queryFn: async () => result(await api.GET("/api/setup/readiness")),
+    refetchInterval: 15000,
+  });
+  // Preserve saved step numbers independently of the settings tab layout.
+  const all = settingsSections(role).map((section) =>
+    admin && section.id === "libraries"
+      ? { ...section, content: <Libraries embedded connectionOnly /> }
+      : section,
+  );
+  if (admin)
+    all.push({
+      id: "storage",
+      title: "Library folders",
+      content: <Destinations embedded />,
+    });
+  const ids = admin
+    ? [
+        "catalog",
+        "libraries",
+        "sources",
+        "downloaders",
+        "storage",
+        "reading",
+        "finish",
+      ]
+    : role === "viewer"
+      ? ["catalog", "finish"]
+      : ["catalog", "preferences", "reading", "finish"];
+  const descriptions: Record<string, string> = {
+    catalog:
+      "Connect Hardcover for discovery, or use Open Library without an account.",
+    reading:
+      "Connect Goodreads or Hardcover once, then choose the lists you want to keep up with.",
+    libraries: "Connect Audiobookshelf to see the books you already own.",
+    sources: "Choose where to find ebook and audiobook releases.",
+    downloaders: "Connect qBittorrent using its Web UI address.",
+    storage: "Choose where imported books will be saved.",
+    preferences: "Choose the formats and sources you prefer.",
+    finish:
+      "Your saved settings are ready. You can change them anytime in Settings.",
+  };
+  const current = Math.min(
+    ["completed", "skipped"].includes(progress.data?.status || "")
+      ? 0
+      : progress.data?.step || 0,
+    ids.length - 1,
+  );
+  const id = ids[current];
+  const section = all.find((section) => section.id === id);
+  const update = useMutation({
+    mutationFn: async (next: Progress) =>
+      result(await api.PUT("/api/setup/onboarding", { body: next })),
+    onSuccess: (next) => {
+      cache.setQueryData(["onboarding"], next);
+      cache.setQueryData<Auth>(["session"], (old) =>
+        old
+          ? {
+              ...old,
+              user: {
+                ...old.user,
+                onboarding_status: next.status || "pending",
+              },
+            }
+          : old,
+      );
+      cache.invalidateQueries({ queryKey: ["setup-readiness"] });
+      if (next.status !== "pending") navigate("/discover", { replace: true });
+    },
+  });
+  function move(step: number, skip = false) {
+    update.mutate({
+      status: "pending",
+      step,
+      skipped: skip
+        ? [...new Set([...(progress.data?.skipped || []), current])]
+        : progress.data?.skipped || [],
+    });
+  }
+  function leave(status: "completed" | "deferred" | "skipped") {
+    update.mutate({
+      status,
+      step: current,
+      skipped: progress.data?.skipped || [],
+    });
+  }
+  useEffect(() => {
+    heading.current?.focus({ preventScroll: true });
+    window.scrollTo(0, 0);
+  }, [current, progress.isSuccess]);
+  if (progress.isPending) return <Loading />;
   return (
-    <>
-      <header className="page-heading">
-        <div>
-          <p className="eyebrow">MAKE YOURSELF AT HOME</p>
-          <h1>Getting started</h1>
-          <p className="muted">
-            Bring your library into view, then set up downloads when you are
-            ready.
-          </p>
-        </div>
-        <button onClick={() => query.refetch()} disabled={query.isFetching}>
-          {query.isFetching ? "Refreshing…" : "Refresh setup status"}
+    <div className="onboarding-page">
+      <header className="onboarding-header">
+        <span className="brand">
+          <BookOpen size={28} /> Dewarr
+        </span>
+        <button disabled={update.isPending} onClick={() => leave("deferred")}>
+          Finish later
         </button>
       </header>
-      <Notice error={query.error} />
-      {query.isPending ? <Loading /> : null}
-      {query.isError ? (
-        <p>Setup status is unavailable. Refresh to check it again.</p>
-      ) : data ? (
-        <>
-          <p className="muted">
-            Saved status as of {new Date(data.observed_at).toLocaleString()}.
-            This page does not test services or start downloads. Connection
-            results describe previous operations; they do not guarantee current
-            access.
-          </p>
-          <h2>Start browsing</h2>
-          <div className="connection-grid setup-grid">
-            <section className="panel" aria-label="Library setup">
-              <p className="eyebrow">1 · YOUR EXISTING BOOKS</p>
-              <h3>Connect Audiobookshelf</h3>
-              <p>
-                Test the connection, then sync its libraries to recognize the
-                ebooks and recordings you already own.
-              </p>
-              {!data.libraries.length ? (
-                <p className="notice">No library connection saved.</p>
-              ) : (
-                data.libraries.map((item) => (
-                  <div className="setup-evidence" key={item.id}>
-                    <ServiceEvidence value={item} />
-                    <p>
-                      {item.inventoried_libraries} of {item.libraries}{" "}
-                      discovered libraries have an accessible, completed
-                      inventory.
-                    </p>
-                    {!item.enabled ||
-                    item.status !== "connected" ||
-                    !item.libraries ||
-                    item.inventoried_libraries < item.libraries ? (
-                      <p>
-                        Review the connection and sync before relying on
-                        ownership.
-                      </p>
-                    ) : null}
-                  </div>
-                ))
-              )}
-              <Link to="/connections">Set up library connection →</Link>
-            </section>
-            <section className="panel" aria-label="Catalog setup">
-              <p className="eyebrow">2 · FIND YOUR NEXT READ</p>
-              <h3>Choose your catalog</h3>
-              <p>
-                Open Library search needs no account. Connect your personal
-                Hardcover account for its catalog, discovery, and supported
-                lists.
-              </p>
-              {data.catalog ? (
-                <ServiceEvidence value={data.catalog} />
-              ) : (
-                <p className="notice">
-                  Hardcover is optional and not connected.
-                </p>
-              )}
-              <div className="button-row">
-                <Link to="/search">Find a book →</Link>
-                <Link to="/metadata">Set up Hardcover →</Link>
-              </div>
-            </section>
-          </div>
-          <p>
-            You can browse and curate lists before configuring downloads. After
-            syncing, check a known ebook and audiobook in{" "}
-            <Link to="/library">your library</Link>.
-          </p>
-          <h2>Prepare downloads</h2>
-          <p className="notice">
-            {data.download_dispatch_enabled
-              ? "Download dispatch is enabled in this installation. Each request still needs eligible sources, a working downloader, and a valid import route."
-              : "Download dispatch is disabled in this installation. Browsing and setup are available; new transfers cannot start."}
-          </p>
-          <div className="connection-grid setup-grid">
-            <section className="panel" aria-label="Source setup">
-              <p className="eyebrow">3 · AVAILABLE RELEASES</p>
-              <h3>Connect download sources</h3>
-              <p>
-                Start with MAM and the proxy route you use. Add other sources
-                whenever you want broader coverage.
-              </p>
-              {!data.sources.length ? (
-                <p>No sources saved.</p>
-              ) : (
-                data.sources.map((item) => (
-                  <div className="setup-evidence" key={item.key}>
-                    <ServiceEvidence value={item} />
-                    <p>
-                      {item.uses_proxy
-                        ? "Configured to use a proxy."
-                        : "Configured for a direct connection."}
-                    </p>
-                  </div>
-                ))
-              )}
-              <div className="button-row">
-                <Link to="/sources">Set up MAM →</Link>
-                <Link to="/sources/audiobookbay">Set up AudiobookBay →</Link>
-                <Link to="/sources/prowlarr">Set up Prowlarr →</Link>
-              </div>
-            </section>
-            <section className="panel" aria-label="Downloader setup">
-              <p className="eyebrow">4 · DOWNLOAD LOCATION</p>
-              <h3>Connect qBittorrent</h3>
-              <p>
-                Test access and map qBittorrent folders to the download folders
-                visible to this app's worker.
-              </p>
-              {!data.downloaders.length ? (
-                <p>No downloader saved.</p>
-              ) : (
-                data.downloaders.map((item) => (
-                  <div className="setup-evidence" key={item.id}>
-                    <ServiceEvidence value={item} />
-                    <p>
-                      {item.mappings_current
-                        ? "Saved path mappings match the configured download roots. Filesystem access still needs a real-file check."
-                        : "Path mappings need review before downloading."}
-                    </p>
-                  </div>
-                ))
-              )}
-              {!data.download_roots ? (
-                <p className="notice">No worker download roots configured.</p>
-              ) : null}
-              <Link to="/downloaders">Set up downloader and paths →</Link>
-            </section>
-            <section className="panel" aria-label="Destination setup">
-              <p className="eyebrow">5 · ORGANIZED LIBRARY</p>
-              <h3>Choose library destinations</h3>
-              <p>
-                Choose ebook and audio destinations as needed. Preview naming
-                and test the hardlink or copy route from your downloader's save
-                folder.
-              </p>
-              {!data.destinations.length ? (
-                <p>No destinations saved.</p>
-              ) : (
-                data.destinations.map((item) => (
-                  <div className="setup-evidence" key={item.name}>
-                    <strong>
-                      {item.name} ·{" "}
-                      {item.medium === "audio" ? "Audiobook" : "Ebook"}
-                    </strong>
-                    <p>
-                      {!item.enabled
-                        ? "Disabled"
-                        : !item.configured
-                          ? "Deployment roots need configuration."
-                          : item.publication_available
-                            ? "A matching route probe is recorded. Import rechecks the selected files and destination."
-                            : "A current real-file route check is needed."}
-                    </p>
-                  </div>
-                ))
-              )}
-              {!data.destination_roots || !data.staging_configured ? (
-                <p className="notice">
-                  Library roots and a private staging folder must be configured
-                  on the worker.
-                </p>
-              ) : null}
-              <div className="button-row">
-                <Link to="/organization">Review naming →</Link>
-                <Link to="/organization/destinations">
-                  Set up destinations →
-                </Link>
-              </div>
-            </section>
-          </div>
-          <section
-            className="panel setup-next"
-            aria-label="First download and automation"
-          >
-            <h2>Try one book, then automate a small list</h2>
-            <p>
-              Review your format and source preferences. Acquire one book into a
-              test library, confirm its files appear correctly in
-              Audiobookshelf, and check that the app shows ownership. Repeat the
-              request to check for duplicates before enabling a list's automatic
-              mode.
+      <div className="onboarding-intro">
+        <h1>Let’s set up your library</h1>
+        <p>Every step is optional.</p>
+      </div>
+      <Notice error={progress.error || update.error} />
+      {progress.error ? (
+        <button onClick={() => progress.refetch()}>Retry setup</button>
+      ) : (
+        <div className="onboarding-layout">
+          <nav aria-label="Setup steps" className="onboarding-steps">
+            {ids.map((key, index) => (
+              <button
+                key={key}
+                disabled={update.isPending}
+                aria-current={index === current ? "step" : undefined}
+                onClick={() => move(index)}
+              >
+                <span className="onboarding-step-number">
+                  {index < current &&
+                  !progress.data?.skipped?.includes(index) ? (
+                    <Check size={16} />
+                  ) : (
+                    index + 1
+                  )}
+                </span>
+                <span>
+                  {all.find((section) => section.id === key)?.title ||
+                    "Ready to go"}
+                  {progress.data?.skipped?.includes(index) && (
+                    <small>Skipped</small>
+                  )}
+                </span>
+              </button>
+            ))}
+          </nav>
+          <div className="onboarding-card">
+            <p className="eyebrow">
+              STEP {current + 1} OF {ids.length}
             </p>
-            {!data.download_dispatch_enabled ? (
-              <details>
-                <summary>How to enable download dispatch</summary>
-                <p>
-                  After reviewing the setup above, the operator can set{" "}
-                  <code>BOOK_DOWNLOAD_DISPATCH_ENABLED=true</code> for both the
-                  API and worker and restart them. This page cannot change that
-                  deployment setting. Use a small test list before authorizing a
-                  historical backlog.
-                </p>
-              </details>
-            ) : null}
-            <div className="button-row">
-              <Link to="/download-preferences">
-                Review download preferences →
-              </Link>
-              <Link to="/lists">Curate a reading list →</Link>
-              <Link to="/activity">Follow progress →</Link>
+            <h2 ref={heading} tabIndex={-1}>
+              {section?.title || "Ready to go"}
+            </h2>
+            <div className="onboarding-context">
+              <SettingHelp label="this setup step">
+                {descriptions[id]}
+              </SettingHelp>
             </div>
-          </section>
-        </>
-      ) : null}
-    </>
+            {id === "finish" ? (
+              <div className="onboarding-finish">
+                <Check size={36} />
+                <h3>You’re ready to explore</h3>
+                {admin && (
+                  <>
+                    <Notice error={readiness.error} />
+                    {readiness.data && (
+                      <ul>
+                        <li>
+                          {readiness.data.catalog?.enabled
+                            ? "Hardcover configured"
+                            : "Open Library available"}
+                        </li>
+                        <li>
+                          {readiness.data.libraries.length} library connections
+                        </li>
+                        <li>
+                          {
+                            readiness.data.sources.filter(
+                              (source) => source.enabled,
+                            ).length
+                          }{" "}
+                          enabled download sources
+                        </li>
+                        <li>
+                          {readiness.data.downloaders.length} download clients
+                        </li>
+                      </ul>
+                    )}
+                    {readiness.data &&
+                      !readiness.data.download_dispatch_enabled && (
+                        <p className="notice">
+                          Downloads are disabled on this server. Browsing and
+                          lists are ready.
+                        </p>
+                      )}
+                  </>
+                )}
+                <p>Skipped a step? Open Settings whenever you’re ready.</p>
+              </div>
+            ) : (
+              <div className="settings-section-body">
+                <Suspense fallback={<Loading />}>
+                  {id === "reading" ? (
+                    <ReadingAccounts onConfigureHardcover={() => move(0)} />
+                  ) : (
+                    section?.content
+                  )}
+                </Suspense>
+              </div>
+            )}
+            {id !== "finish" && (
+              <p className="onboarding-save-note">
+                Save your changes above before moving to the next step.
+              </p>
+            )}
+            <footer className="onboarding-actions">
+              <button
+                disabled={current === 0 || update.isPending}
+                onClick={() => move(current - 1)}
+              >
+                Back
+              </button>
+              <div>
+                {id !== "finish" && (
+                  <button
+                    disabled={update.isPending}
+                    onClick={() => move(current + 1, true)}
+                  >
+                    Skip this step
+                  </button>
+                )}
+                <button
+                  className="primary"
+                  disabled={update.isPending}
+                  onClick={() =>
+                    id === "finish" ? leave("completed") : move(current + 1)
+                  }
+                >
+                  {update.isPending
+                    ? "Saving…"
+                    : id === "finish"
+                      ? "Start browsing"
+                      : "Next step"}
+                  <ArrowRight size={16} />
+                </button>
+              </div>
+            </footer>
+          </div>
+        </div>
+      )}
+      <footer className="onboarding-skip">
+        <button disabled={update.isPending} onClick={() => leave("skipped")}>
+          Skip setup
+        </button>
+        <span>You can return from Settings.</span>
+      </footer>
+    </div>
   );
 }

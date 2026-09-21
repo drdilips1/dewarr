@@ -418,3 +418,58 @@ async def test_budget_wait_persists_truthful_status_and_old_operation_eventually
     row = (await client.get(f"/api/lists/{shelf}/subscription")).json()
     assert row["state"] == "failed" and "expired" in row["message"]
     assert row["baseline_at"] is None
+
+
+async def test_newly_synced_books_lead_discovery_without_changing_curated_order(
+    client, database, shelf, feeds
+):
+    feeds.items = [
+        {**feeds.items[0], "external_id": str(100 + i), "title": f"Original {i}"} for i in range(20)
+    ]
+    await sync(client, database, shelf, "initial-discovery-sync")
+    original = (await client.get(f"/api/lists/{shelf}")).json()
+    additions = [
+        {**feeds.items[0], "external_id": "200", "title": "Newest book"},
+        {**feeds.items[0], "external_id": "201", "title": "Another new book"},
+    ]
+    feeds.items = additions + feeds.items
+    await sync(client, database, shelf, "updated-discovery-sync")
+    response = await client.get(f"/api/lists/{shelf}", params={"sort": "newest", "limit": 16})
+    assert response.status_code == 200, response.text
+    page = response.json()
+    assert page["count"] == 22
+    assert [w["title"] for w in page["items"][:2]] == ["Newest book", "Another new book"]
+    default = (await client.get(f"/api/lists/{shelf}")).json()
+    assert default["items"][:20] == original["items"]
+    following = (
+        await client.get(f"/api/lists/{shelf}", params={"sort": "newest", "offset": 16})
+    ).json()
+    assert len({w["id"] for w in page["items"] + following["items"]}) == 22
+    await sync(client, database, shelf, "repeated-discovery-sync")
+    repeated = (
+        await client.get(f"/api/lists/{shelf}", params={"sort": "newest", "limit": 16})
+    ).json()
+    assert repeated["items"] == page["items"]
+
+
+async def test_sync_backfills_and_preserves_goodreads_cover(client, database, shelf, feeds):
+    await sync(client, database, shelf, "cover-before")
+    assert (await client.get(f"/api/lists/{shelf}")).json()["items"][0]["cover_url"] is None
+    # Simulate a subscription last fetched before covers were retained.
+    from app.security import encrypt_secrets
+
+    async with database() as db, db.begin():
+        row = await db.scalar(
+            select(ListSubscription).where(ListSubscription.list_id == UUID(shelf))
+        )
+        config = decrypt_secrets(row.encrypted_config)
+        config.pop("cover_metadata_version")
+        row.encrypted_config = encrypt_secrets(config)
+    url = "https://i.gr-assets.com/books/123.jpg"
+    feeds.items = [{**feeds.items[0], "cover_url": url}]
+    await sync(client, database, shelf, "cover-added")
+    assert feeds.calls[-1] == {"etag": None, "modified": None}
+    assert (await client.get(f"/api/lists/{shelf}")).json()["items"][0]["cover_url"] == url
+    feeds.items = [{k: v for k, v in feeds.items[0].items() if k != "cover_url"}]
+    await sync(client, database, shelf, "cover-omitted")
+    assert (await client.get(f"/api/lists/{shelf}")).json()["items"][0]["cover_url"] == url

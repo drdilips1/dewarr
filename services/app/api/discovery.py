@@ -14,14 +14,16 @@ from app.api.dependencies import CurrentUser, Database
 from app.api.metadata import accessible_work, current_actor, provider_call
 from app.db.models import CatalogAccount, LibraryAsset, Work, WorkMetadataSource
 from app.domain.availability import availability_for, availability_rows
-from app.domain.catalog_bindings import visible_provider_works
+from app.domain.catalog_bindings import displayed_provider_works
+from app.domain.catalog_display import display_ids, display_map
 from app.domain.visibility import visible_origin_work, visible_work
-from app.domain.work_graph import canonical_map, family_ids
+from app.domain.work_graph import family_ids
 
 router = APIRouter(prefix="/discovery", tags=["discovery"])
 
 
 class DiscoveryTitle(BaseModel):
+    rating: float | None = Field(default=None, ge=0, le=5, allow_inf_nan=False)
     provider: Literal["hardcover", "local"]
     external_id: str | None = None
     title: str
@@ -58,10 +60,8 @@ class LibraryDiscoveryShelf(DiscoveryShelf):
 
 
 async def project(db, user, books, reason):
-    """Only accepted, visible provider IDs may assert a local catalog/library match."""
-    works = await visible_provider_works(
-        db, user, [("hardcover", book.external_id) for book in books]
-    )
+    """Project visible ownership from accepted links or unique exact book matches."""
+    works = await displayed_provider_works(db, user, "hardcover", books)
     availability = await availability_for(db, user, list({work.id for work in works.values()}))
     result = []
     seen = set()
@@ -104,7 +104,7 @@ async def local(user: CurrentUser, db: Database):
     rows = list(
         await db.scalars(
             select(Work)
-            .where(Work.redirect_to.is_(None), visible_work(user))
+            .where(Work.id.in_(display_ids(user)), visible_work(user))
             .order_by(Work.created_at.desc(), Work.id)
             .limit(20)
         )
@@ -124,7 +124,7 @@ async def library(
     page: int = Query(default=1, ge=1, le=100),
     limit: int = Query(default=12, ge=1, le=24),
 ):
-    mapping = canonical_map()
+    mapping = display_map(user)
     holdings = availability_rows(user, mapping)
     if medium != "any":
         holdings = holdings.where(LibraryAsset.medium == medium)
@@ -139,7 +139,7 @@ async def library(
         await db.execute(
             select(Work, recent.c.observed_at)
             .join(recent, recent.c.work_id == Work.id)
-            .where(Work.redirect_to.is_(None), visible_work(user))
+            .where(Work.id.in_(display_ids(user)), visible_work(user))
             .order_by(recent.c.observed_at.desc(), Work.title, Work.id)
             .offset((page - 1) * limit)
             .limit(limit + 1)
@@ -247,7 +247,7 @@ async def related(work_id: UUID, user: CurrentUser, db: Database):
         await db.scalars(
             select(Work)
             .where(
-                Work.redirect_to.is_(None),
+                Work.id.in_(display_ids(user)),
                 Work.id != work_id,
                 visible_work(user),
                 or_(*(Work.authors.contains([author]) for author in authors[:10]))

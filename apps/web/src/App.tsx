@@ -1,16 +1,17 @@
+import { ApplicationRelease } from "./components/ApplicationRelease";
+import { useRefreshGoodreads } from "./hooks/useRefreshGoodreads";
 import { lazy, Suspense, useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  Activity,
+  Download,
   BookOpen,
   Compass,
-  Library,
-  List,
+  ListPlus,
+  RefreshCw,
   LogOut,
   Search,
   Settings,
-  Users,
 } from "lucide-react";
 import {
   Navigate,
@@ -24,28 +25,21 @@ import { api, ApiError, result, setCsrf } from "./api/client";
 import type { Auth } from "./api/client";
 import { Loading, Notice } from "./components";
 
-const Catalog = lazy(() => import("./pages/Catalog"));
+const AddDiscoveryList = lazy(() => import("./pages/AddDiscoveryList"));
+const SettingsPage = lazy(() => import("./pages/Settings"));
 const GettingStarted = lazy(() => import("./pages/GettingStarted"));
+const DiscoverBook = lazy(() => import("./pages/DiscoverBook"));
 const Discover = lazy(() => import("./pages/Discover"));
 const CommunityLists = lazy(() => import("./pages/CommunityLists"));
 const BookDetail = lazy(() => import("./pages/BookDetail"));
+const AuthorDetail = lazy(() => import("./pages/AuthorDetail"));
 const Series = lazy(() => import("./pages/Series"));
 const Lists = lazy(() => import("./pages/Lists"));
-const ActivityPage = lazy(() => import("./pages/Activity"));
-const Connections = lazy(() => import("./pages/Connections"));
-const DownloadPreferences = lazy(() => import("./pages/DownloadPreferences"));
-const Downloaders = lazy(() => import("./pages/Downloaders"));
-const AudiobookBaySources = lazy(() => import("./pages/AudiobookBaySources"));
-const ProwlarrSources = lazy(() => import("./pages/ProwlarrSources"));
-const Sources = lazy(() => import("./pages/Sources"));
+const RequestsPage = lazy(() => import("./pages/Requests"));
 const SourceArtifact = lazy(() => import("./pages/SourceArtifact"));
 const MyLibrary = lazy(() => import("./pages/MyLibrary"));
-const Accounts = lazy(() => import("./pages/Accounts"));
 const ProviderSearch = lazy(() => import("./pages/ProviderSearch"));
-const Organization = lazy(() => import("./pages/Organization"));
 const ImportReview = lazy(() => import("./pages/ImportReview"));
-const Destinations = lazy(() => import("./pages/Destinations"));
-const MetadataSettings = lazy(() => import("./pages/MetadataSettings"));
 const Recovery = lazy(() => import("./pages/Recovery"));
 
 export default function App() {
@@ -134,8 +128,8 @@ function SignIn({ onSuccess }: { onSuccess: (auth: Auth) => void }) {
     <main className="auth-page">
       <div className="auth-intro">
         <div className="brand">
-          <BookOpen size={30} />
-          <span>Book Search</span>
+          <img src="/assets/dewarr.png" width="32" height="32" alt="" />
+          <span>Dewarr</span>
         </div>
         <h1>
           Your next chapter
@@ -244,6 +238,8 @@ function Shell({ auth }: { auth: Auth }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [search, setSearch] = useState("");
+  const [addingList, setAddingList] = useState(false);
+  const goodreadsRefresh = useRefreshGoodreads();
   useEffect(() => {
     if (location.pathname === "/search")
       setSearch(new URLSearchParams(location.search).get("q") || "");
@@ -260,6 +256,19 @@ function Shell({ auth }: { auth: Auth }) {
     event.preventDefault();
     navigate("/search?q=" + encodeURIComponent(search.trim()));
   }
+  if (
+    auth.user.onboarding_status === "pending" &&
+    location.pathname !== "/onboarding"
+  )
+    return <Navigate to="/onboarding" replace />;
+  if (location.pathname === "/onboarding")
+    return (
+      <main className="onboarding-shell">
+        <Suspense fallback={<Loading />}>
+          <GettingStarted role={auth.user.role} />
+        </Suspense>
+      </main>
+    );
   return (
     <div className="app-shell">
       <a className="skip-link" href="#main">
@@ -267,8 +276,8 @@ function Shell({ auth }: { auth: Auth }) {
       </a>
       <aside className="sidebar">
         <NavLink to="/" className="brand">
-          <BookOpen size={27} />
-          <span>Book Search</span>
+          <img src="/assets/dewarr.png" width="32" height="32" alt="" />
+          <span>Dewarr</span>
         </NavLink>
         <button
           className="icon-button mobile-signout"
@@ -280,62 +289,22 @@ function Shell({ auth }: { auth: Auth }) {
         </button>
         <p className="nav-caption">YOUR COLLECTION</p>
         <nav aria-label="Main navigation">
-          {auth.user.role === "admin" ? (
-            <NavLink to="/getting-started">
-              <Settings size={19} />
-              Getting started
-            </NavLink>
-          ) : null}
           <NavLink to="/discover">
             <Compass size={19} />
             Discover
           </NavLink>
-          <NavLink to="/" end>
-            <Library size={19} />
-            Catalog
-          </NavLink>
-          <NavLink to="/library">
+          <NavLink to="/library" end>
             <BookOpen size={19} />
             My Library
           </NavLink>
-          <NavLink to="/search">
-            <Search size={19} />
-            Search books
+          <NavLink to="/requests">
+            <Download size={19} />
+            Requests
           </NavLink>
-          <NavLink to="/sources">
-            <Search size={19} />
-            Sources
-          </NavLink>
-          <NavLink to="/metadata">
+          <NavLink to="/settings">
             <Settings size={19} />
-            Metadata
+            Settings
           </NavLink>
-          {auth.user.role === "admin" && (
-            <NavLink to="/connections">
-              <Settings size={19} />
-              Connections
-            </NavLink>
-          )}
-          {auth.user.role === "admin" && (
-            <NavLink to="/organization">
-              <Settings size={19} />
-              Organization
-            </NavLink>
-          )}
-          <NavLink to="/lists">
-            <List size={19} />
-            Lists
-          </NavLink>
-          <NavLink to="/activity">
-            <Activity size={19} />
-            Activity
-          </NavLink>
-          {auth.user.role === "admin" ? (
-            <NavLink to="/accounts">
-              <Users size={19} />
-              Accounts
-            </NavLink>
-          ) : null}
         </nav>
         <div className="sidebar-bottom">
           <div className="avatar">
@@ -354,10 +323,11 @@ function Shell({ auth }: { auth: Auth }) {
             <LogOut size={18} />
           </button>
         </div>
+        <ApplicationRelease />
       </aside>
       <div className="workspace">
         <header className="topbar">
-          <form className="search" onSubmit={searchSubmit}>
+          <form className="search" role="search" onSubmit={searchSubmit}>
             <Search size={18} aria-hidden="true" />
             <input
               aria-label="Search books or authors"
@@ -368,25 +338,78 @@ function Shell({ auth }: { auth: Auth }) {
             />
             <button type="submit">Search</button>
           </form>
-          <span className="quiet-label">Your reading, organized.</span>
+          {auth.user.role !== "viewer" && (
+            <div className="topbar-actions">
+              <button
+                className="topbar-action"
+                onClick={() => setAddingList(true)}
+              >
+                <ListPlus size={18} aria-hidden="true" />
+                Add list
+              </button>
+              <button
+                className="topbar-action"
+                aria-label="Refresh Goodreads lists"
+                title="Refresh all enabled Goodreads lists"
+                disabled={goodreadsRefresh.busy}
+                onClick={goodreadsRefresh.refresh}
+              >
+                <RefreshCw
+                  size={18}
+                  aria-hidden="true"
+                  className={
+                    goodreadsRefresh.busy ? "list-refresh-spinning" : undefined
+                  }
+                />
+                <span className="goodreads-refresh-label">
+                  {goodreadsRefresh.busy
+                    ? "Refreshing…"
+                    : "Refresh Goodreads lists"}
+                </span>
+              </button>
+            </div>
+          )}
         </header>
+        {addingList && (
+          <Suspense fallback={<Loading />}>
+            <AddDiscoveryList close={() => setAddingList(false)} />
+          </Suspense>
+        )}
         <main id="main" className="main-content">
           <Notice error={logout.error} />
+          <Notice error={goodreadsRefresh.error} />
+          {(goodreadsRefresh.busy || goodreadsRefresh.message) && (
+            <p role="status">
+              {goodreadsRefresh.busy
+                ? "Refreshing Goodreads lists…"
+                : goodreadsRefresh.message}
+            </p>
+          )}
           <Suspense fallback={<Loading />}>
             <Routes>
               <Route
                 path="/getting-started"
-                element={
-                  auth.user.role === "admin" ? (
-                    <GettingStarted />
-                  ) : (
-                    <Navigate to="/" replace />
-                  )
-                }
+                element={<SettingsRedirect to="/onboarding" />}
+              />
+              <Route
+                path="/settings"
+                element={<SettingsPage role={auth.user.role} />}
+              />
+              <Route
+                path="/authors/hardcover/:externalId"
+                element={<AuthorDetail />}
               />
               <Route
                 path="/discover"
                 element={<Discover canEdit={auth.user.role !== "viewer"} />}
+              />
+              <Route
+                path="/discover/collections/:collectionId"
+                element={<Discover canEdit={auth.user.role !== "viewer"} />}
+              />
+              <Route
+                path="/discover/books/:provider/:externalId"
+                element={<DiscoverBook canEdit={auth.user.role !== "viewer"} />}
               />
               <Route
                 path="/discover/lists"
@@ -402,23 +425,9 @@ function Shell({ auth }: { auth: Auth }) {
               />
               <Route
                 path="/download-preferences"
-                element={
-                  auth.user.role !== "viewer" ? (
-                    <DownloadPreferences admin={auth.user.role === "admin"} />
-                  ) : (
-                    <Navigate to="/" replace />
-                  )
-                }
+                element={<SettingsRedirect to="/settings#preferences" />}
               />
-              <Route
-                path="/"
-                element={
-                  <Catalog
-                    canEdit={auth.user.role !== "viewer"}
-                    admin={auth.user.role === "admin"}
-                  />
-                }
-              />
+              <Route path="/" element={<SettingsRedirect to="/library" />} />
               <Route
                 path="/books/:id"
                 element={
@@ -440,36 +449,19 @@ function Shell({ auth }: { auth: Auth }) {
               />
               <Route
                 path="/metadata"
-                element={
-                  <MetadataSettings admin={auth.user.role === "admin"} />
-                }
+                element={<SettingsRedirect to="/settings#catalog" />}
               />
               <Route
                 path="/sources"
-                element={
-                  <Sources
-                    admin={auth.user.role === "admin"}
-                    canAcquire={auth.user.role !== "viewer"}
-                  />
-                }
+                element={<SettingsRedirect to="/search" />}
               />
               <Route
                 path="/sources/audiobookbay"
-                element={
-                  <AudiobookBaySources
-                    admin={auth.user.role === "admin"}
-                    canAcquire={auth.user.role !== "viewer"}
-                  />
-                }
+                element={<SettingsRedirect to="/search" />}
               />
               <Route
                 path="/sources/prowlarr"
-                element={
-                  <ProwlarrSources
-                    admin={auth.user.role === "admin"}
-                    canAcquire={auth.user.role !== "viewer"}
-                  />
-                }
+                element={<SettingsRedirect to="/search" />}
               />
               <Route
                 path="/sources/artifacts/:id"
@@ -483,23 +475,11 @@ function Shell({ auth }: { auth: Auth }) {
               />
               <Route
                 path="/downloaders"
-                element={
-                  auth.user.role === "admin" ? (
-                    <Downloaders />
-                  ) : (
-                    <Navigate to="/" replace />
-                  )
-                }
+                element={<SettingsRedirect to="/settings#downloaders" />}
               />
               <Route
                 path="/organization/destinations"
-                element={
-                  auth.user.role === "admin" ? (
-                    <Destinations />
-                  ) : (
-                    <Navigate to="/" replace />
-                  )
-                }
+                element={<SettingsRedirect to="/settings#libraries" />}
               />
               <Route
                 path="/organization/inspections"
@@ -513,13 +493,7 @@ function Shell({ auth }: { auth: Auth }) {
               />
               <Route
                 path="/organization"
-                element={
-                  auth.user.role === "admin" ? (
-                    <Organization />
-                  ) : (
-                    <Navigate to="/" replace />
-                  )
-                }
+                element={<SettingsRedirect to="/settings#naming" />}
               />
               <Route
                 path="/lists"
@@ -530,37 +504,35 @@ function Shell({ auth }: { auth: Auth }) {
                 element={<Lists canEdit={auth.user.role !== "viewer"} />}
               />
               <Route
-                path="/activity"
+                path="/requests"
                 element={
-                  <ActivityPage
+                  <RequestsPage
                     admin={auth.user.role === "admin"}
                     canRequest={auth.user.role !== "viewer"}
                   />
                 }
               />
+              <Route path="/activity" element={<LegacyActivityRedirect />} />
               <Route
                 path="/accounts"
-                element={
-                  auth.user.role === "admin" ? (
-                    <Accounts />
-                  ) : (
-                    <Navigate to="/" replace />
-                  )
-                }
+                element={<SettingsRedirect to="/settings#accounts" />}
               />
               <Route
                 path="/library"
-                element={<MyLibrary admin={auth.user.role === "admin"} />}
+                element={
+                  <MyLibrary
+                    admin={auth.user.role === "admin"}
+                    canEdit={auth.user.role !== "viewer"}
+                  />
+                }
+              />
+              <Route
+                path="/review"
+                element={<Navigate to="/library" replace />}
               />
               <Route
                 path="/connections"
-                element={
-                  auth.user.role === "admin" ? (
-                    <Connections />
-                  ) : (
-                    <Navigate to="/" replace />
-                  )
-                }
+                element={<SettingsRedirect to="/settings#libraries" />}
               />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
@@ -568,5 +540,29 @@ function Shell({ auth }: { auth: Auth }) {
         </main>
       </div>
     </div>
+  );
+}
+
+function SettingsRedirect({ to }: { to: string }) {
+  const location = useLocation();
+  const [path, hash] = to.split("#");
+  return (
+    <Navigate
+      to={`${path}${location.search}${hash ? `#${hash}` : ""}`}
+      replace
+    />
+  );
+}
+
+function LegacyActivityRedirect() {
+  const location = useLocation();
+  return (
+    <SettingsRedirect
+      to={
+        location.hash === "#downloads"
+          ? "/requests#downloads"
+          : "/settings#logs"
+      }
+    />
   );
 }

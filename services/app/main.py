@@ -12,6 +12,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from app.api import (
     acquisition_preferences,
     acquisition_selections,
+    application_release,
     audiobookbay,
     auth,
     automatic_imports,
@@ -19,9 +20,11 @@ from app.api import (
     book_sources,
     capacity,
     catalog,
+    catalog_grouping,
     community_lists,
     destinations,
     discovery,
+    discovery_collections,
     download_attempts,
     download_reviews,
     downloaders,
@@ -32,6 +35,7 @@ from app.api import (
     inspection_matches,
     integrations,
     library,
+    library_folders,
     list_comparisons,
     list_csv,
     list_discovery,
@@ -45,6 +49,7 @@ from app.api import (
     operations,
     organization,
     prowlarr,
+    reading_accounts,
     recovery,
     release_profiles,
     requests,
@@ -81,7 +86,8 @@ async def lifespan(app: FastAPI):
 
 
 def create_app() -> FastAPI:
-    app = FastAPI(title="Book Search", version="0.1.0", lifespan=lifespan)
+    app = FastAPI(title="Dewarr", version="0.1.0", lifespan=lifespan)
+    app.include_router(application_release.router, prefix="/api")
 
     @app.exception_handler(RequestValidationError)
     async def invalid_request(request: Request, exception: RequestValidationError):
@@ -104,7 +110,7 @@ def create_app() -> FastAPI:
             "frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
         )
         if request.url.path.startswith("/api"):
-            response.headers["Cache-Control"] = "no-store"
+            response.headers.setdefault("Cache-Control", "no-store")
         return response
 
     @app.get("/api/health/live", tags=["health"])
@@ -134,7 +140,9 @@ def create_app() -> FastAPI:
     app.include_router(recovery.router, prefix="/api")
     app.include_router(operations.router, prefix="/api")
     app.include_router(catalog.router, prefix="/api")
+    app.include_router(catalog_grouping.router, prefix="/api")
     app.include_router(discovery.router, prefix="/api")
+    app.include_router(discovery_collections.router, prefix="/api")
     app.include_router(series_discovery.router, prefix="/api")
     app.include_router(community_lists.router, prefix="/api")
     app.include_router(series.router, prefix="/api")
@@ -146,6 +154,7 @@ def create_app() -> FastAPI:
     app.include_router(list_comparisons.router, prefix="/api")
     app.include_router(list_csv.router, prefix="/api")
     app.include_router(list_discovery.router, prefix="/api")
+    app.include_router(reading_accounts.router, prefix="/api")
     app.include_router(list_requests.router, prefix="/api")
     app.include_router(list_policies.router, prefix="/api")
     app.include_router(integrations.router, prefix="/api")
@@ -161,6 +170,7 @@ def create_app() -> FastAPI:
     app.include_router(inspection_matches.router, prefix="/api")
     app.include_router(import_runs.router, prefix="/api")
     app.include_router(destinations.router, prefix="/api")
+    app.include_router(library_folders.router, prefix="/api")
     app.include_router(automatic_imports.router, prefix="/api")
     app.include_router(automatic_selection.router, prefix="/api")
     app.include_router(capacity.router, prefix="/api")

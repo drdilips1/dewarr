@@ -87,7 +87,7 @@ test("release view sorting and filters compare every loaded result without chang
   const comparison = sources.getByRole("region", {
     name: "Compare loaded releases",
   });
-  const cards = sources.locator("article.source-release");
+  const cards = sources.locator("tr.source-release");
   await expect(
     sources.getByText("55 distinct releases · showing 1–50"),
   ).toBeVisible({ timeout: 30_000 });
@@ -105,13 +105,13 @@ test("release view sorting and filters compare every loaded result without chang
   await expect(cards.first()).toHaveAttribute("aria-label", "Release 00");
   await comparison.getByLabel("Sort this view").selectOption("seeds");
   await expect(cards.first()).toHaveAttribute("aria-label", "Release 54");
-  await expect(cards.first()).toContainText("Profile rank 55");
+  await expect(cards.first()).toContainText("#55");
   await sources
     .getByRole("button", { name: "Next releases", exact: true })
     .click();
   await expect(cards).toHaveCount(5);
-  await expect(cards.nth(3)).toContainText("0 seeders");
-  await expect(cards.last()).toContainText("Unknown seeds");
+  await expect(cards.nth(3).locator(".release-seeds")).toHaveText("0");
+  await expect(cards.last().locator(".release-seeds")).toHaveText("Unknown");
   await comparison
     .getByLabel("Filter title, author or narrator")
     .fill("Final Narrator");
@@ -138,7 +138,6 @@ test("release view sorting and filters compare every loaded result without chang
     .getByRole("button", { name: "Next releases", exact: true })
     .click();
   await expect(cards.last()).toHaveAttribute("aria-label", "Release 00");
-  await comparison.getByText("Filter loaded releases", { exact: true }).click();
   await comparison.getByLabel("Result source").selectOption("prowlarr:10");
   await expect(cards).toHaveCount(1);
   await expect(cards.first()).toHaveAttribute("aria-label", "Release 03");
@@ -147,7 +146,7 @@ test("release view sorting and filters compare every loaded result without chang
   await expect(cards).toHaveCount(1);
   await expect(cards.first()).toHaveAttribute("aria-label", "Release 02");
   await comparison.getByLabel("Reported format").selectOption("unknown");
-  await expect(cards.first()).toContainText("Unknown format");
+  await expect(cards.first()).toContainText("Unknown");
   await comparison.getByLabel("Reported format").selectOption("");
   await comparison.getByLabel("Hide blocked or expired results").check();
   await expect(
@@ -156,16 +155,17 @@ test("release view sorting and filters compare every loaded result without chang
   await comparison.getByLabel("Hide blocked or expired results").uncheck();
   await comparison.getByLabel("Sort this view").selectOption("title");
   await expect(cards.first()).toHaveAttribute("aria-label", "Release 00");
-  await expect(
-    sources
-      .getByRole("article", { name: "Release 15", exact: true })
-      .getByRole("button", { name: "Inspect this release" }),
-  ).toBeDisabled();
-  await expect(
-    sources
-      .getByRole("article", { name: "Release 16", exact: true })
-      .getByRole("button", { name: "Inspect this release" }),
-  ).toBeDisabled();
+  for (const title of ["Release 15", "Release 16"]) {
+    await sources
+      .getByRole("button", { name: `Details for ${title}`, exact: true })
+      .click();
+    await expect(
+      page
+        .getByRole("dialog")
+        .getByRole("button", { name: "Inspect this release" }),
+    ).toBeDisabled();
+    await page.keyboard.press("Escape");
+  }
   await comparison.screenshot({
     path: testInfo.outputPath("release-comparison-desktop.png"),
   });
@@ -192,8 +192,14 @@ test("release view sorting and filters compare every loaded result without chang
   await expect(
     sources.getByText(/The catalog identity or series evidence changed/),
   ).toBeVisible();
+  await cards
+    .first()
+    .getByRole("button", { name: /^Details for/ })
+    .click();
   await expect(
-    cards.first().getByRole("button", { name: "Inspect this release" }),
+    page
+      .getByRole("dialog")
+      .getByRole("button", { name: "Inspect this release" }),
   ).toBeDisabled();
   expect(writes).toEqual([]);
   expect(errors).toEqual([]);

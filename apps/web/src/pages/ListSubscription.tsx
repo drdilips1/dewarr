@@ -1,3 +1,5 @@
+import { usePagedQuery } from "../hooks/usePagedQuery";
+import InfiniteScroll from "../components/InfiniteScroll";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -7,7 +9,6 @@ import { Notice } from "../components";
 import ListWriteback from "./ListWriteback";
 
 type Subscription = components["schemas"]["SubscriptionView"];
-type Observation = components["schemas"]["ObservationView"];
 
 export default function ListSubscription({
   listId,
@@ -17,8 +18,6 @@ export default function ListSubscription({
   onMembershipChange?: () => void;
 }) {
   const cache = useQueryClient();
-  const [expanded, setExpanded] = useState(false);
-  const [offset, setOffset] = useState(0);
   const [choice, setChoice] = useState<"goodreads" | "hardcover">("goodreads");
   const key = useRef(crypto.randomUUID());
   const path = { list_id: listId };
@@ -34,16 +33,6 @@ export default function ListSubscription({
       query.state.data && ["queued", "running"].includes(query.state.data.state)
         ? 1500
         : 30_000,
-  });
-  const observations = useQuery({
-    queryKey: ["list-observations", listId, offset],
-    queryFn: async () =>
-      result(
-        await api.GET("/api/lists/{list_id}/subscription/observations", {
-          params: { path, query: { offset, limit: 20 } },
-        }),
-      ),
-    enabled: expanded && !!subscription.data,
   });
   const lastSuccess = subscription.data?.last_success_at;
   useEffect(() => {
@@ -109,7 +98,6 @@ export default function ListSubscription({
         }),
       ),
     onSuccess: () => {
-      setExpanded(false);
       refresh();
     },
   });
@@ -127,9 +115,7 @@ export default function ListSubscription({
           : "Goodreads shelf subscription"
       }
     >
-      <h2>
-        {hardcover ? "Follow a Hardcover list" : "Follow a Goodreads shelf"}
-      </h2>
+      <h2>{data ? "List updates" : "Connect a reading list"}</h2>
       <p>
         {hardcover
           ? "Follow your own or an accessible community list. Verified removals affect source-only entries; books you added locally stay here."
@@ -181,42 +167,9 @@ export default function ListSubscription({
         />
       )}
       {data && (
-        <details onToggle={(event) => setExpanded(event.currentTarget.open)}>
-          <summary>Observed entries and exclusions</summary>
-          <Notice error={observations.error} />
-          {expanded &&
-            observations.data?.items.map((entry) => (
-              <ObservedEntry
-                key={entry.id}
-                entry={entry}
-                listId={listId}
-                onChanged={refresh}
-              />
-            ))}
-          <div className="button-row">
-            <button
-              disabled={offset === 0}
-              onClick={() => setOffset(Math.max(0, offset - 20))}
-            >
-              Previous observations
-            </button>
-            <button
-              disabled={
-                !observations.data || offset + 20 >= observations.data.total
-              }
-              onClick={() => setOffset(offset + 20)}
-            >
-              Next observations
-            </button>
-          </div>
-          <p>
-            Stop following keeps current books as local entries and removes this
-            subscription's observation and exclusion history.
-          </p>
-          <button disabled={detach.isPending} onClick={() => detach.mutate()}>
-            Stop following and keep books
-          </button>
-        </details>
+        <button disabled={detach.isPending} onClick={() => detach.mutate()}>
+          Stop following and keep books
+        </button>
       )}
       {hardcover && data && (
         <ListWriteback
@@ -279,7 +232,7 @@ function SubscriptionSettings({
               required={!data}
               placeholder={
                 data
-                  ? "Saved securely; leave blank to keep"
+                  ? "••••••••"
                   : "https://www.goodreads.com/review/list_rss/…"
               }
               maxLength={2000}
@@ -317,132 +270,30 @@ function SubscriptionSettings({
   );
 }
 
-function ObservedEntry({
-  entry,
-  listId,
-  onChanged,
-}: {
-  entry: Observation;
-  listId: string;
-  onChanged: () => void;
-}) {
-  const [matching, setMatching] = useState(false);
-  const match = useMutation({
-    mutationFn: async (q: string) =>
-      result(
-        await api.GET("/api/catalog/works", {
-          params: { query: { q, limit: 20 } },
-        }),
-      ),
-  });
-  const update = useMutation({
-    mutationFn: async (body: { excluded?: boolean; work_id?: string }) =>
-      result(
-        await api.PATCH(
-          "/api/lists/{list_id}/subscription/observations/{observation_id}",
-          {
-            params: { path: { list_id: listId, observation_id: entry.id } },
-            body,
-          },
-        ),
-      ),
-    onSuccess: () => {
-      setMatching(false);
-      onChanged();
-    },
-  });
-  return (
-    <article
-      className="panel editor"
-      aria-label={`Shelf entry: ${entry.title}`}
-    >
-      <h3>{entry.title}</h3>
-      <p>{entry.authors.join(", ") || "Author not supplied"}</p>
-      {entry.work_id ? (
-        <Link to={`/books/${entry.work_id}`}>
-          Catalog book: {entry.catalog_title}
-        </Link>
-      ) : (
-        <p>The linked catalog book is no longer accessible.</p>
-      )}
-      {!entry.present && (
-        <p className="muted">
-          No longer present in the verified source list. Any separately added
-          local entry is preserved.
-        </p>
-      )}
-      {entry.identity_changed && (
-        <p className="notice">
-          The source identity changed. Review the linked catalog book; its
-          metadata was preserved.
-        </p>
-      )}
-      <Notice error={match.error || update.error} />
-      <div className="button-row">
-        <button
-          disabled={update.isPending || !entry.present}
-          onClick={() => update.mutate({ excluded: !entry.excluded })}
-        >
-          {entry.excluded ? "Restore to this list" : "Exclude from this shelf"}
-        </button>
-        <button onClick={() => setMatching(!matching)}>
-          Match a catalog book
-        </button>
-      </div>
-      {matching && (
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            match.mutate(String(new FormData(event.currentTarget).get("q")));
-          }}
-        >
-          <label>
-            Find the matching catalog book
-            <input
-              name="q"
-              defaultValue={entry.title}
-              required
-              maxLength={300}
-            />
-          </label>
-          <button disabled={match.isPending}>Find catalog matches</button>
-          {match.data?.items.map((work) => (
-            <button
-              type="button"
-              key={work.id}
-              disabled={update.isPending}
-              onClick={() => update.mutate({ work_id: work.id })}
-            >
-              Use {work.title} · {work.authors.join(", ")}
-            </button>
-          ))}
-        </form>
-      )}
-    </article>
-  );
-}
-
 function HardcoverChoice({ data }: { data: Subscription | null | undefined }) {
   const [mode, setMode] = useState<"owned" | "followed" | "public">("owned");
-  const [cursor, setCursor] = useState(0);
   const [selected, setSelected] = useState(
     String(data?.hardcover_list_id || ""),
   );
-  const options = useQuery({
-    queryKey: ["hardcover-lists", mode, cursor],
+  const options = usePagedQuery({
+    queryKey: ["hardcover-lists", mode],
     enabled: !data,
-    queryFn: async () =>
+    queryFn: async (cursor, signal) =>
       result(
         await api.GET("/api/metadata/hardcover-lists", {
           params: { query: { mode, cursor } },
+          signal,
         }),
       ),
+    initial: 0,
+    next: (last) => last.next_cursor ?? undefined,
   });
   return (
     <>
       <p className="muted">
-        Uses your account in <Link to="/metadata">Metadata settings</Link>. Your
-        token needs access to lists and book metadata.
+        Uses your account in{" "}
+        <Link to="/settings#catalog">Metadata settings</Link>. Your token needs
+        access to lists and book metadata.
       </p>
       {!data ? (
         <>
@@ -453,7 +304,6 @@ function HardcoverChoice({ data }: { data: Subscription | null | undefined }) {
               value={mode}
               onChange={(e) => {
                 setMode(e.target.value as typeof mode);
-                setCursor(0);
               }}
             >
               <option value="owned">My lists</option>
@@ -488,22 +338,7 @@ function HardcoverChoice({ data }: { data: Subscription | null | undefined }) {
               ))}
             </select>
           </label>
-          <div className="button-row">
-            <button
-              type="button"
-              disabled={!cursor || options.isFetching}
-              onClick={() => setCursor(0)}
-            >
-              First list page
-            </button>
-            <button
-              type="button"
-              disabled={!options.data?.next_cursor || options.isFetching}
-              onClick={() => setCursor(options.data!.next_cursor!)}
-            >
-              More Hardcover lists
-            </button>
-          </div>
+          <InfiniteScroll query={options} />
         </>
       ) : null}
       <label>

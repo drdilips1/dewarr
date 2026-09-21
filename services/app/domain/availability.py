@@ -1,11 +1,20 @@
 from uuid import UUID
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.models import AssetContains, Integration, Library, LibraryAsset, LibraryGrant, User
-from app.domain.work_graph import canonical_map
+from app.db.models import (
+    AssetContains,
+    Integration,
+    Library,
+    LibraryAsset,
+    LibraryGrant,
+    User,
+    Version,
+)
+from app.domain.catalog_display import display_map
+from app.domain.primary_editions import asset_narrators, edition_order, primary_choices
 
 
 class Availability(BaseModel):
@@ -14,6 +23,13 @@ class Availability(BaseModel):
     audio: bool = False
     stale: bool = False
     in_collection: bool = False
+    ebook_versions: int = 0
+    audio_versions: int = 0
+    ebook_stale: bool = False
+    audio_stale: bool = False
+    primary_ebook_version_id: UUID | None = None
+    primary_audio_version_id: UUID | None = None
+    primary_audio_narrators: list[str] = Field(default_factory=list)
 
 
 async def availability_for(
@@ -24,20 +40,59 @@ async def availability_for(
     result = {work_id: Availability() for work_id in work_ids}
     if not work_ids:
         return result
-    mapping = canonical_map()
+    mapping = display_map(user)
     roots = dict((await db.execute(select(mapping).where(mapping.c.origin_id.in_(work_ids)))).all())
     by_root = {}
     for origin, root in roots.items():
         by_root.setdefault(root, []).append(origin)
-    query = availability_rows(user, mapping).where(mapping.c.work_id.in_(by_root))
-    for work_id, medium, state, containment in (await db.execute(query)).all():
+    query = (
+        availability_rows(user, mapping)
+        .with_only_columns(mapping.c.work_id, LibraryAsset, Version.narrators)
+        .outerjoin(Version, Version.id == LibraryAsset.version_id)
+        .where(mapping.c.work_id.in_(by_root))
+        .order_by(LibraryAsset.created_at, LibraryAsset.id)
+    )
+    choices = await primary_choices(db, user, mapping, list(by_root))
+    copies = {root: {"ebook": [], "audio": []} for root in by_root}
+    versions = {root: {"ebook": {}, "audio": {}} for root in by_root}
+    for work_id, asset, version_narrators in (await db.execute(query)).all():
+        narrators = asset_narrators(asset, version_narrators)
+        if asset.medium in versions[work_id]:
+            copies[work_id][asset.medium].append((asset, narrators))
+            key = asset.version_id or asset.id
+            prior = versions[work_id][asset.medium].get(key)
+            if prior is None or (not prior and narrators):
+                versions[work_id][asset.medium][key] = narrators
         for origin in by_root[work_id]:
             availability = result[origin]
             availability.owned = True
-            availability.ebook |= medium == "ebook"
-            availability.audio |= medium == "audio"
-            availability.stale |= state == "stale"
-            availability.in_collection |= containment is not None
+            availability.ebook |= asset.medium == "ebook"
+            availability.audio |= asset.medium == "audio"
+            availability.stale |= asset.state == "stale"
+            availability.in_collection |= asset.containment is not None
+    for root, formats in versions.items():
+        primary = {}
+        for medium, rows in copies[root].items():
+            rows.sort(
+                key=lambda row: edition_order(row[0], choices.get(root, {}).get(medium), row[1])
+            )
+            primary[medium] = rows[0] if rows else None
+        for origin in by_root[root]:
+            result[origin].ebook_versions = len(formats["ebook"])
+            result[origin].audio_versions = len(formats["audio"])
+            for medium in ("ebook", "audio"):
+                rows = copies[root][medium]
+                setattr(
+                    result[origin],
+                    medium + "_stale",
+                    bool(rows) and all(a.state == "stale" for a, _ in rows),
+                )
+                setattr(
+                    result[origin],
+                    "primary_" + medium + "_version_id",
+                    primary[medium][0].version_id if primary[medium] else None,
+                )
+            result[origin].primary_audio_narrators = primary["audio"][1] if primary["audio"] else []
     return result
 
 

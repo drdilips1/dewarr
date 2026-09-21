@@ -16,6 +16,7 @@ class DestinationView(StrictModel):
     library_id: UUID
     medium: str
     backend_path: str
+    local_path: str | None = None
     mode: str
     enabled: bool
     revision: str
@@ -50,6 +51,7 @@ async def view(db, row):
         library_id=row.library_id,
         medium=row.medium,
         backend_path=row.backend_path,
+        local_path=configuration["root_path"],
         mode=row.mode,
         enabled=row.enabled,
         revision=revision,

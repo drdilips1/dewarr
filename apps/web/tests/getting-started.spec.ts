@@ -2,9 +2,10 @@ import { expect, test } from "@playwright/test";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
-test("getting started distinguishes disabled dispatch and unavailable status", async ({
+test("onboarding defers, resumes and completes once; settings show one focused section", async ({
   page,
 }, testInfo) => {
+  test.setTimeout(120_000);
   execFileSync("uv", ["run", "python", "scripts/e2e_auth_budget.py"], {
     cwd: fileURLToPath(new URL("../../../", import.meta.url)),
     stdio: "pipe",
@@ -12,78 +13,228 @@ test("getting started distinguishes disabled dispatch and unavailable status", a
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
+  await expect(page.getByLabel("Username", { exact: true })).toBeVisible();
+  const bootstrap = await page.getByLabel("Your name").isVisible();
+  await page.getByLabel("Username", { exact: true }).fill("reader");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("browser test password");
+  if (bootstrap) {
+    await page.getByLabel("Your name").fill("Test Reader");
+    await page.getByLabel("Setup token").fill("browser-test-bootstrap-token");
+    await page.getByRole("button", { name: "Create administrator" }).click();
+  } else {
+    await page.getByRole("button", { name: "Sign in", exact: true }).click();
+    await expect(
+      page.getByRole("navigation", { name: "Main navigation" }),
+    ).toBeVisible();
+    const auth = await (await page.request.get("/api/auth/me")).json();
+    await page.request.put("/api/setup/onboarding", {
+      headers: {
+        Origin: "http://127.0.0.1:8001",
+        "X-CSRF-Token": auth.csrf_token,
+      },
+      data: { status: "pending", step: 0, skipped: [] },
+    });
+    await page.reload();
+  }
+  await expect(page).toHaveURL(/\/onboarding$/);
+  await expect(
+    page.getByRole("heading", { name: "Let’s set up your library" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("navigation", { name: "Main navigation" }),
+  ).toHaveCount(0);
+  await page
+    .getByRole("button", { name: "Skip this step", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Libraries", exact: true }),
+  ).toBeVisible();
+  await page.screenshot({
+    path: testInfo.outputPath("onboarding-desktop.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.screenshot({
+    path: testInfo.outputPath("onboarding-mobile.png"),
+    fullPage: true,
+  });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.getByRole("button", { name: "Finish later", exact: true }).click();
+  await expect(page).toHaveURL(/\/discover$/);
+  await page.reload();
+  await expect(
+    page.getByRole("heading", { name: "Discover", exact: true }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.getByRole("link", { name: "Settings", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Open onboarding setup wizard" })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Libraries", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Skip setup", exact: true }).click();
+  await page.getByRole("link", { name: "Settings", exact: true }).click();
+  const navigation = page.getByRole("navigation", { name: "Main navigation" });
+  for (const label of [
+    "Metadata",
+    "Connections",
+    "Organization",
+    "Accounts",
+    "Getting started",
+  ])
+    await expect(
+      navigation.getByRole("link", { name: label, exact: true }),
+    ).toHaveCount(0);
+  await page.goto("/settings#catalog");
+  const catalog = page.getByRole("region", {
+    name: "Catalog & metadata",
+    exact: true,
+  });
+  await catalog
+    .getByLabel("Hardcover API token")
+    .fill("browser-hardcover-token");
+  await catalog
+    .getByRole("button", { name: "Save connection", exact: true })
+    .click();
+  await expect(
+    catalog.getByText("Your catalog connection was saved."),
+  ).toBeVisible();
+  await catalog
+    .getByRole("button", { name: "Test connection", exact: true })
+    .click();
+  await expect(
+    catalog.getByText("Hardcover catalog access verified."),
+  ).toBeVisible();
+  await catalog.getByLabel("Primary language").selectOption("fr");
+  await catalog.getByRole("button", { name: "Save metadata defaults" }).click();
+  await expect(catalog.getByText("Metadata defaults saved.")).toBeVisible();
+  await page.goto("/settings#sources");
+  const mam = page.getByRole("form", { name: "MAM connection settings" });
+  if (!(await mam.isVisible()))
+    await page
+      .getByRole("region", { name: "MAM settings", exact: true })
+      .locator("summary")
+      .first()
+      .click();
+  if (!(await mam.isVisible()))
+    await page
+      .getByRole("region", { name: "MAM settings", exact: true })
+      .locator("summary")
+      .first()
+      .click();
+  await mam
+    .getByLabel("MAM URL", { exact: true })
+    .fill("http://127.0.0.1:13379/mam");
+  const mamSession = await (
+    await page.request.get("http://127.0.0.1:13379/fixture/mam-session")
+  ).json();
+  await mam.getByLabel(/^(mam_id|mam_id)$/).fill(mamSession.cookie);
+  await mam
+    .getByRole("button", { name: "Save connection", exact: true })
+    .click();
+  await expect(mam.getByLabel(/^(mam_id|mam_id)$/)).toHaveValue("");
+  await mam
+    .getByRole("button", { name: "Test connection", exact: true })
+    .click();
+  await expect(mam).toContainText("Connection: connected");
+  await page.goto("/settings#naming");
+  await expect(page).toHaveURL(/\/settings#naming$/);
+  await expect(
+    page
+      .getByRole("navigation", { name: "Settings sections" })
+      .getByRole("link", { name: "File naming", exact: true }),
+  ).toHaveAttribute("aria-current", "page");
+  await expect(catalog).toHaveCount(0);
+  await page.goto("/metadata");
+  await expect(page).toHaveURL(/\/settings#catalog$/);
+  await expect(catalog.getByLabel("Primary language")).toHaveValue("fr");
+  await page.screenshot({ path: testInfo.outputPath("settings-desktop.png") });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.screenshot({ path: testInfo.outputPath("settings-mobile.png") });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.goto("/settings#display");
+  await page
+    .getByRole("button", { name: "Open onboarding setup wizard" })
+    .click();
+  await page
+    .getByRole("navigation", { name: "Setup steps" })
+    .getByRole("button", { name: /Ready to go/ })
+    .click();
+  await page
+    .getByRole("button", { name: "Start browsing", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/discover$/);
+  expect(
+    (await (await page.request.get("/api/setup/onboarding")).json()).status,
+  ).toBe("completed");
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+  await expect(page.getByLabel("Username", { exact: true })).toBeVisible();
   await page.getByLabel("Username", { exact: true }).fill("reader");
   await page
     .getByLabel("Password", { exact: true })
     .fill("browser test password");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: "Your catalog" }),
+    page.getByRole("navigation", { name: "Main navigation" }),
   ).toBeVisible();
-  // The disposable server enables dispatch for acquisition tests. Exercise the
-  // disabled presentation without mutating the server's deployment settings.
-  await page.route("**/api/setup/readiness", async (route) => {
-    const response = await route.fetch();
-    expect(response.status()).toBe(200);
-    await route.fulfill({
-      response,
-      json: { ...(await response.json()), download_dispatch_enabled: false },
-    });
+  await expect(page).not.toHaveURL(/\/onboarding$/);
+  const auth = await (await page.request.get("/api/auth/me")).json();
+  const created = await page.request.post("/api/auth/users", {
+    headers: {
+      Origin: "http://127.0.0.1:8001",
+      "X-CSRF-Token": auth.csrf_token,
+    },
+    data: {
+      username: "settings-viewer",
+      display_name: "Settings viewer",
+      password: "viewer test password",
+      role: "viewer",
+    },
   });
-  const writes: string[] = [];
-  page.on("request", (request) => {
-    if (request.url().includes("/api/") && request.method() !== "GET")
-      writes.push(request.url());
-  });
+  expect(created.ok()).toBe(true);
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+  await page.getByLabel("Username", { exact: true }).fill("settings-viewer");
   await page
-    .getByRole("link", { name: "Getting started", exact: true })
+    .getByLabel("Password", { exact: true })
+    .fill("viewer test password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(page).toHaveURL(/\/onboarding$/);
+  await expect(
+    page.getByRole("navigation", { name: "Setup steps" }).getByRole("button"),
+  ).toHaveCount(2);
+  await page.getByRole("button", { name: "Skip setup", exact: true }).click();
+  await page.getByRole("link", { name: "Settings", exact: true }).click();
+  await expect(page.locator(".settings-section")).toHaveCount(1);
+  await expect(
+    page.getByRole("region", { name: "Display", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Catalog & metadata", exact: true }),
+  ).toHaveCount(0);
+  await page
+    .getByRole("navigation", { name: "Settings categories" })
+    .getByRole("link", { name: "Metadata", exact: true })
     .click();
   await expect(
-    page.getByText(/Download dispatch is disabled in this installation/),
+    page.getByRole("region", { name: "Catalog & metadata", exact: true }),
   ).toBeVisible();
-  await page
-    .getByText("How to enable download dispatch", { exact: true })
-    .click();
   await expect(
-    page.getByText("BOOK_DOWNLOAD_DISPATCH_ENABLED=true", { exact: true }),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Refresh setup status" }).click();
+    page.getByRole("button", { name: "Users & access" }),
+  ).toHaveCount(0);
   await expect(
-    page.getByRole("button", { name: "Refresh setup status" }),
-  ).toBeEnabled();
-  await page.screenshot({
-    path: testInfo.outputPath("getting-started-connected.png"),
-    fullPage: true,
-  });
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.screenshot({
-    path: testInfo.outputPath("getting-started-mobile.png"),
-    fullPage: true,
-  });
-  expect(
-    await page.evaluate(
-      () => document.documentElement.scrollWidth <= window.innerWidth,
-    ),
-  ).toBe(true);
-  expect(writes).toEqual([]);
-  await page.unroute("**/api/setup/readiness");
-  await page.route("**/api/setup/readiness", (route) =>
-    route.fulfill({
-      status: 503,
-      contentType: "application/json",
-      body: JSON.stringify({ detail: "Synthetic setup outage" }),
-    }),
-  );
-  await page.getByRole("button", { name: "Refresh setup status" }).click();
-  await expect(
-    page.getByText("Setup status is unavailable. Refresh to check it again."),
-  ).toBeVisible();
-  await expect(page.getByLabel("Library setup")).toHaveCount(0);
-  await page.unroute("**/api/setup/readiness");
-  await page.getByRole("button", { name: "Refresh setup status" }).click();
-  await expect(page.getByLabel("Library setup")).toBeVisible();
-  await expect(
-    page.getByText(/Download dispatch is enabled in this installation/),
-  ).toBeVisible();
+    page.getByRole("button", { name: "Connect Audiobookshelf" }),
+  ).toHaveCount(0);
   expect(errors).toEqual([]);
 });

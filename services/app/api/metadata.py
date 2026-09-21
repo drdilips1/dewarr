@@ -10,6 +10,8 @@ from sqlalchemy import case, exists, func, or_, select
 from app.adapters.catalog_providers import Hardcover, OpenLibrary
 from app.adapters.catalog_types import BookData, Provider, SearchPage, SeriesData
 from app.adapters.contracts import AdapterError, FailureKind
+from app.adapters.hardcover_authors import AuthorPage
+from app.adapters.hardcover_details import ReaderDetails
 from app.adapters.hardcover_lists import ChoicePage
 from app.api.catalog import WorkInput, WorkView, work_view
 from app.api.dependencies import Admin, CurrentUser, Database, Member
@@ -17,10 +19,13 @@ from app.api.operations import OperationView
 from app.db.models import (
     AssetContains,
     AuditEvent,
+    BookList,
     CatalogAccount,
     Integration,
     Library,
     LibraryAsset,
+    ListObservation,
+    ListSubscription,
     MetadataSettings,
     Operation,
     ProviderObject,
@@ -30,7 +35,8 @@ from app.db.models import (
     WorkMetadataSource,
 )
 from app.domain.availability import availability_for
-from app.domain.catalog_bindings import visible_provider_works
+from app.domain.catalog_bindings import displayed_provider_works, visible_provider_works
+from app.domain.catalog_display import display_family
 from app.domain.catalog_enrichment import TERMINAL, effective_status, proposal, schedule_enrichment
 from app.domain.catalog_metadata import (
     FIELDS,
@@ -42,9 +48,13 @@ from app.domain.catalog_metadata import (
 )
 from app.domain.catalog_network import CatalogGateway
 from app.domain.corrections import revision, source_state
+from app.domain.hardcover_matching import MatchEvidence
+from app.domain.hardcover_matching import lookup as lookup_hardcover
 from app.domain.operations import transaction_lock
+from app.domain.release_profiles import normalized
 from app.domain.visibility import visible_library, visible_origin_work, visible_work
 from app.domain.work_graph import canonical_work, family_ids
+from app.importing.match_evidence import catalog_identifiers
 from app.security import decrypt_secrets, encrypt_secrets
 
 router = APIRouter(prefix="/metadata", tags=["metadata"])
@@ -207,8 +217,12 @@ class MetadataSearchPage(SearchPage):
     known_works: dict[str, WorkView] = Field(default_factory=dict)
 
 
-async def known_works(db, user, provider, external_ids):
-    matched = await visible_provider_works(db, user, [(provider, value) for value in external_ids])
+async def known_works(db, user, provider, external_ids, books=None):
+    matched = (
+        await displayed_provider_works(db, user, provider, books)
+        if books is not None
+        else await visible_provider_works(db, user, [(provider, value) for value in external_ids])
+    )
     availability = await availability_for(db, user, list({work.id for work in matched.values()}))
     return {
         external_id: work_view(work, availability[work.id])
@@ -228,21 +242,22 @@ async def search(
         raise HTTPException(422, "Enter a title, author or identifier")
     user_id = user.id
     selected = provider
+    settings = await preferences(db)
+    language = settings.language if settings.filter_language else None
     if provider == "automatic":
-        settings = await preferences(db)
         account = await db.get(CatalogAccount, user_id)
         selected = settings.primary if account and account.enabled else "openlibrary"
     warning = None
     try:
         result, stale, warning = await provider_call(
-            db, user_id, selected, "search", q.strip(), page
+            db, user_id, selected, "search", q.strip(), page, language
         )
     except AdapterError as error:
         if provider != "automatic" or selected != "hardcover":
             raise adapter_http_error(error) from error
         try:
             result, stale, _ = await provider_call(
-                db, user_id, "openlibrary", "search", q.strip(), page
+                db, user_id, "openlibrary", "search", q.strip(), page, language
             )
             warning = "Hardcover is unavailable; showing Open Library results. " + str(error)
         except AdapterError as fallback_error:
@@ -253,7 +268,7 @@ async def search(
         stale=stale,
         warning=warning,
         known_works=await known_works(
-            db, user, result.provider, [book.external_id for book in result.items]
+            db, user, result.provider, [book.external_id for book in result.items], result.items
         ),
     )
 
@@ -271,9 +286,49 @@ async def preview(provider: Provider, external_id: str, user: CurrentUser, db: D
     try:
         book, stale, warning = await provider_call(db, user_id, provider, "fetch", external_id)
         user = await current_actor(db, user_id)
-        matched = await known_works(db, user, book.provider, [book.external_id])
+        matched = await known_works(db, user, book.provider, [book.external_id], [book])
         return BookPreview(
             book=book, stale=stale, warning=warning, work=matched.get(book.external_id)
+        )
+    except AdapterError as error:
+        raise adapter_http_error(error) from error
+
+
+@router.get("/books/hardcover/{external_id}/reader-details", response_model=ReaderDetails)
+async def reader_details(external_id: str, user: CurrentUser, db: Database):
+    try:
+        details, stale, warning = await provider_call(
+            db, user.id, "hardcover", "reader_details", external_id
+        )
+        return details.model_copy(update={"stale": stale, "warning": warning})
+    except AdapterError as error:
+        raise adapter_http_error(error) from error
+
+
+class AuthorPreview(AuthorPage):
+    known_works: dict[str, WorkView] = Field(default_factory=dict)
+
+
+@router.get("/authors/hardcover/{external_id}", response_model=AuthorPreview)
+async def author_details(
+    external_id: str,
+    user: CurrentUser,
+    db: Database,
+    page: int = Query(default=1, ge=1, le=100),
+):
+    user_id = user.id
+    try:
+        details, stale, warning = await provider_call(
+            db, user_id, "hardcover", "author_details", external_id, page
+        )
+        user = await current_actor(db, user_id)
+        return AuthorPreview(
+            **details.model_dump(exclude={"stale", "warning"}),
+            stale=stale,
+            warning=warning,
+            known_works=await known_works(
+                db, user, "hardcover", [book.external_id for book in details.books], details.books
+            ),
         )
     except AdapterError as error:
         raise adapter_http_error(error) from error
@@ -309,8 +364,171 @@ async def accessible_work(db, user, work_id, *, lock=False):
     return work
 
 
+class ReaderMatch(BaseModel):
+    candidates: list[BookData] = Field(default_factory=list)
+    book: BookData | None = None
+    status: Literal["matched", "unmatched", "disabled"] = "unmatched"
+    basis: str | None = None
+    reason: str | None = None
+
+
+async def reader_lookup_identity(db, user, work_id):
+    work = await accessible_work(db, user, work_id)
+    settings = await preferences(db)
+    # An explicit rejection is durable, including rejected sources in merged works.
+    rejected = await db.scalar(
+        select(WorkMetadataSource.id).where(
+            WorkMetadataSource.work_id.in_(family_ids(work.id)),
+            WorkMetadataSource.provider == "hardcover",
+            WorkMetadataSource.accepted.is_(False),
+        )
+    )
+    if (
+        not settings.automatic_enrichment
+        or work.metadata_fields.get("identity_rejected")
+        or rejected
+    ):
+        return None
+    snapshots = list(
+        await db.scalars(
+            select(LibraryAsset.metadata_snapshot)
+            .join(AssetContains, AssetContains.asset_id == LibraryAsset.id)
+            .join(Library, Library.id == LibraryAsset.library_id)
+            .join(Integration, Integration.id == Library.integration_id)
+            .where(
+                AssetContains.work_id.in_(family_ids(work.id)),
+                AssetContains.verified.is_(True),
+                LibraryAsset.full_content.is_(True),
+                LibraryAsset.state.in_(["present", "stale"]),
+                Library.accessible.is_(True),
+                Integration.enabled.is_(True),
+                visible_library(user),
+            )
+        )
+    )
+    # RSS imports keep ISBNs in the observation, not in a library edition.
+    # Existing shelves must provide the same evidence as newly followed ones.
+    observations = await db.scalars(
+        select(ListObservation.snapshot)
+        .join(ListSubscription, ListSubscription.id == ListObservation.subscription_id)
+        .join(BookList, BookList.id == ListSubscription.list_id)
+        .where(
+            BookList.owner_id == user.id,
+            ListSubscription.provider == "goodreads",
+            ListObservation.work_id.in_(family_ids(work.id)),
+            ListObservation.present.is_(True),
+            ListObservation.excluded.is_(False),
+        )
+    )
+    for snapshot in observations:
+        if (
+            not snapshot.get("identity_changed")
+            and normalized(snapshot.get("title", "")) == normalized(work.title)
+            and {normalized(a) for a in snapshot.get("authors", [])}
+            == {normalized(a) for a in work.authors}
+        ):
+            snapshots.append(
+                {
+                    "identifiers": {
+                        key: snapshot[key] for key in ("isbn", "isbn13") if snapshot.get(key)
+                    }
+                }
+            )
+    identifiers = sorted(
+        set().union(*(catalog_identifiers(row.get("identifiers") or {}) for row in snapshots))
+    )
+    evidence = MatchEvidence(
+        title=work.title, authors=work.authors, language=work.language, identifiers=identifiers
+    )
+    return (work.id, evidence.model_dump_json())
+
+
+@router.get("/works/{work_id}/reader-match", response_model=ReaderMatch)
+async def reader_match(work_id: UUID, user: CurrentUser, db: Database):
+    """Read-only reader metadata for inventory books without a provider binding.
+
+    Never creates catalog identities or claims edition ownership from a search result.
+    Provider calls use the same account-scoped cache and fences as Discover.
+    """
+    user_id = user.id
+    identity = await reader_lookup_identity(db, user, work_id)
+    if not identity:
+        return ReaderMatch(status="disabled")
+    canonical_id, raw = identity
+    evidence = MatchEvidence.model_validate_json(raw)
+    try:
+
+        async def call(operation, *args):
+            return await provider_call(db, user_id, "hardcover", operation, *args)
+
+        match = await lookup_hardcover(evidence, call)
+        user = await current_actor(db, user_id)
+        if await reader_lookup_identity(db, user, canonical_id) != identity:
+            return ReaderMatch(reason="Library evidence changed during lookup. Retry the match.")
+        return ReaderMatch(**match.model_dump())
+    except AdapterError as error:
+        raise adapter_http_error(error) from error
+
+
+@router.post("/works/{work_id}/match-hardcover", response_model=ReaderMatch)
+async def save_hardcover_match(work_id: UUID, user: Admin, db: Database):
+    """Persist only a freshly verified match, with an evidence fence and audit trail."""
+    user_id = user.id
+    before = await reader_lookup_identity(db, user, work_id)
+    if not before:
+        return ReaderMatch(
+            status="disabled",
+            reason="Automatic matching is disabled or a previous match was rejected.",
+        )
+    existing = await db.scalar(
+        select(WorkMetadataSource.id).where(
+            WorkMetadataSource.work_id.in_(family_ids(work_id)),
+            WorkMetadataSource.provider == "hardcover",
+            WorkMetadataSource.accepted.is_(True),
+        )
+    )
+    if existing:
+        return ReaderMatch(
+            status="disabled", reason="This book already has a saved Hardcover match."
+        )
+    match = await reader_match(work_id, user, db)
+    if not match.book:
+        return match
+    user = await current_actor(db, user_id, admin=True)
+    work = await accessible_work(db, user, work_id, lock=True)
+    if await reader_lookup_identity(db, user, work_id) != before:
+        raise HTTPException(409, "Library evidence changed. Retry the match.")
+    existing = await db.scalar(
+        select(WorkMetadataSource.id).where(
+            WorkMetadataSource.work_id.in_(family_ids(work.id)),
+            WorkMetadataSource.provider == "hardcover",
+        )
+    )
+    if existing:
+        raise HTTPException(
+            409, "The saved match changed during lookup. Review it before continuing."
+        )
+    await attach_source(db, work, match.book, verified_match=True)
+    db.add(
+        AuditEvent(
+            actor_id=user_id,
+            action="metadata.source.auto-matched",
+            entity_id=work.id,
+            detail={
+                "provider": "hardcover",
+                "external_id": match.book.external_id,
+                "basis": match.basis,
+                "evidence": MatchEvidence.model_validate_json(before[1]).model_dump(mode="json"),
+            },
+        )
+    )
+    await db.commit()
+    return match
+
+
 class SourceView(BaseModel):
     id: UUID
+    work_id: UUID | None = None
     revision: str | None = None
     provider: Provider
     external_id: str
@@ -319,10 +537,13 @@ class SourceView(BaseModel):
     cover_url: str | None
     editions_more: bool
     series: list[SeriesData]
+    book: BookData | None = None
 
 
 class VersionView(BaseModel):
     id: UUID
+    work_id: UUID | None = None
+    abridged: bool | None = None
     medium: str
     title: str | None
     language: str | None
@@ -352,16 +573,18 @@ async def work_metadata(
     db: Database,
     offset: int = Query(default=0, ge=0),
     limit: int = Query(default=40, ge=1, le=100),
+    scope: Literal["identity", "display"] = "identity",
 ):
     work = await accessible_work(db, user, work_id)
     work_id = work.id
+    members = display_family(user, work_id) if scope == "display" else family_ids(work_id)
     sources = (
         await db.scalars(
             select(WorkMetadataSource)
             .join(Work, WorkMetadataSource.work_id == Work.id)
             .where(
                 visible_origin_work(user),
-                WorkMetadataSource.work_id.in_(family_ids(work_id)),
+                WorkMetadataSource.work_id.in_(members),
                 WorkMetadataSource.accepted.is_(True),
             )
             .order_by(WorkMetadataSource.provider, WorkMetadataSource.external_id)
@@ -373,7 +596,10 @@ async def work_metadata(
         source_views.append(
             SourceView(
                 id=source.id,
-                revision=revision(source_state(work, source)) if user.role == "admin" else None,
+                work_id=source.work_id,
+                revision=revision(source_state(work, source))
+                if user.role == "admin" and scope == "identity"
+                else None,
                 provider=book.provider,
                 external_id=book.external_id,
                 title=book.title,
@@ -381,6 +607,7 @@ async def work_metadata(
                 cover_url=book.cover_url,
                 editions_more=book.editions_more,
                 series=book.series,
+                book=book,
             )
         )
         covers.extend([book.cover_url, *(edition.cover_url for edition in book.editions)])
@@ -391,7 +618,7 @@ async def work_metadata(
         .join(Work, Work.id == WorkMetadataSource.work_id)
         .where(
             visible_origin_work(user),
-            ProviderObject.work_id.in_(family_ids(work_id)),
+            ProviderObject.work_id.in_(members),
             ProviderObject.version_id == Version.id,
             ProviderObject.kind == "edition",
             WorkMetadataSource.accepted.is_(True),
@@ -405,7 +632,7 @@ async def work_metadata(
         .join(AssetContains)
         .where(
             LibraryAsset.version_id == Version.id,
-            AssetContains.work_id.in_(family_ids(work_id)),
+            AssetContains.work_id.in_(members),
             Library.accessible.is_(True),
             Integration.enabled.is_(True),
             visible_library(user),
@@ -418,7 +645,7 @@ async def work_metadata(
             LibraryAsset.state.in_(["present", "stale"]),
         )
     )
-    conditions = [Version.work_id.in_(family_ids(work_id))]
+    conditions = [Version.work_id.in_(members)]
     conditions.append(or_(catalog_version, exists(accessible_asset)))
     needs_review = exists(
         select(ProviderObject.id).where(
@@ -471,6 +698,8 @@ async def work_metadata(
         versions=[
             VersionView(
                 id=version.id,
+                work_id=version.work_id,
+                abridged=version.abridged,
                 medium=version.medium,
                 title=version.title,
                 language=version.language,
