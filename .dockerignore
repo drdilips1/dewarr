@@ -11,3 +11,6 @@
 test-results
 **/test-results
 **/playwright-report
+
+data
+backups

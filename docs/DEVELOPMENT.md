@@ -75,20 +75,9 @@ The browser journey covers bootstrap, catalog/list/library/metadata/request work
 
 Torrent inspection uses the pinned libtorrent 2.1.1 Python wheel in an offline child process. Native parser tests cover v1/v2/hybrid layouts and cancellation on the local macOS runtime. Linux/Compose certification remains pending; retain the explicit libtorrent/Boost/OpenSSL notices when packaging. See [Source artifacts](SOURCE-ARTIFACTS.md) for limits and the dispatch boundary.
 
-## Container deployment scaffold
+## Container deployment
 
-On a fresh installation with Docker/Compose:
-
-```sh
-uv run python scripts/init_env.py --mode compose
-docker compose up --build -d
-```
-
-The initializer sets UID/GID to the invoking user so mounted secret files remain readable by the application account. The image itself defaults to UID/GID 1000. Do not generate native `.env` then assume its localhost database URL works inside Compose; create the appropriate configuration for the deployment environment deliberately.
-
-Compose runs PostgreSQL, a one-shot migration process, API and worker. The API is bound to loopback by default. Configure the reverse proxy and exact `BOOK_PUBLIC_URL` for remote access; enable `BOOK_COOKIE_SECURE=true` under HTTPS. Forwarded headers are not trusted by default. No Docker socket or media directory is mounted into the API. Optional read-only inspection mounts and BOOK_IMPORT_SOURCES are documented in [Organization planning](ORGANIZATION-PLANNING.md); publication needs destination/staging write access and source mounts that permit the selected hardlink operation. Verify the actual route before importing.
-
-Base image digests are pinned and were resolved from the Docker Hub registry. Local container build/run has not been verified because Docker is unavailable on this host. CI includes an image-build job; an unexecuted workflow is not passing evidence.
+See the [Docker guide](DOCKER.md) for installation, shared folders, Audiobookshelf, reverse proxies, and upgrades. Linux amd64 source builds, migrations, API readiness, and background-worker execution were verified for the Dewarr release. External service credentials and production acquisition remain installation-specific.
 
 ## State and recovery boundaries
 
