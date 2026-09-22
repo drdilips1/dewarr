@@ -19,8 +19,13 @@ import {
   simpleChoices,
   seriesChoices,
   namingExamples,
+  seriesIndexFilename,
+  seriesIndexFolder,
+  parseSegment,
+  withJoin,
   type Medium,
   type NamingChoices,
+  type TokenJoin,
 } from "./namingBuilder";
 
 type Profile = components["schemas"]["NamingProfile"];
@@ -193,6 +198,26 @@ function Editor({
                   {name}
                 </button>
               ))}
+              <button
+                type="button"
+                aria-pressed={
+                  draft.layout === "conventional" &&
+                  draft[folder] === seriesIndexFolder &&
+                  draft[filename] === seriesIndexFilename
+                }
+                disabled={save.isPending}
+                title="Author/Series/Sequence Title, with file Sequence - Series - Title (Year)"
+                onClick={() =>
+                  setDraft({
+                    ...draft,
+                    layout: "conventional",
+                    [folder]: seriesIndexFolder,
+                    [filename]: seriesIndexFilename,
+                  })
+                }
+              >
+                Sequence title
+              </button>
             </div>
           </fieldset>
           {choices && draft.layout === "conventional" ? (
@@ -240,6 +265,8 @@ function Editor({
               <SettingHelp label="renaming files">
                 Applies to both ebooks and audiobooks. Original torrent files
                 keep their names for seeding; only library filenames change.
+                Multi-file audiobooks need disc and track in the filename so
+                playback order is preserved.
               </SettingHelp>
             </label>
             {draft.rename_files && (
@@ -254,6 +281,7 @@ function Editor({
                         ? ["[{disc}-][{track} - ]{title}"]
                         : []),
                       "{author} - {title}",
+                      seriesIndexFilename,
                     ].includes(draft[filename])
                       ? draft[filename]
                       : "custom"
@@ -276,6 +304,9 @@ function Editor({
                   <option value="{author} - {title}">
                     Author · Book title
                   </option>
+                  <option value={seriesIndexFilename}>
+                    Sequence · Series · Title (Year)
+                  </option>
                   <option value="custom" disabled>
                     Custom template
                   </option>
@@ -283,6 +314,21 @@ function Editor({
               </label>
             )}
           </div>
+          {draft.rename_files && (
+            <div className="naming-path-editor">
+              <div className="naming-lane-heading">
+                <h3>Filename order</h3>
+                <span>Drag to reorder</span>
+              </div>
+              <TokenLane
+                template={draft[filename]}
+                label="Filename token order"
+                allowFolder={false}
+                disabled={save.isPending}
+                onChange={(value) => setDraft({ ...draft, [filename]: value })}
+              />
+            </div>
+          )}
           <div className="naming-path-editor">
             <div className="naming-lane-heading">
               <h3>Folder order</h3>
@@ -296,6 +342,7 @@ function Editor({
             <TokenLane
               template={draft[folder]}
               label="Folder token order"
+              allowFolder
               disabled={save.isPending || draft.layout !== "conventional"}
               onChange={(value) => setDraft({ ...draft, [folder]: value })}
             />
@@ -418,16 +465,25 @@ const tokenLabels: Record<string, string> = {
   publisher: "Publisher",
   disc: "Disc",
   track: "Track",
+  year: "Year",
 };
+const joinLabels: [TokenJoin, string][] = [
+  ["folder", "Folder"],
+  ["dash", "Dash"],
+  ["space", "Space"],
+  ["parentheses", "Parentheses"],
+];
 function TokenLane({
   template,
   label,
   disabled,
+  allowFolder,
   onChange,
 }: {
   template: string;
   label: string;
   disabled: boolean;
+  allowFolder: boolean;
   onChange: (value: string) => void;
 }) {
   return (
@@ -439,13 +495,42 @@ function TokenLane({
         values={templateSegments(template)}
         onChange={(segments) => onChange(segments.join(""))}
         render={(segment) => {
-          const token = segment.match(/\{([^}]+)\}/)?.[1] || "";
+          const parsed = parseSegment(segment);
+          const token =
+            parsed?.token || segment.match(/\{([^}]+)\}/)?.[1] || "";
+          const name =
+            tokenLabels[token] || token.replaceAll("_", " ") || "Custom text";
+          const join = parsed?.join ? (
+            <select
+              className="naming-token-join"
+              aria-label={`Join ${name} in ${label}`}
+              value={parsed.join}
+              disabled={disabled}
+              onPointerDown={(event) => event.stopPropagation()}
+              onChange={(event) => {
+                const next = withJoin(segment, event.target.value as TokenJoin);
+                onChange(
+                  templateSegments(template)
+                    .map((item) => (item === segment ? next : item))
+                    .join(""),
+                );
+              }}
+            >
+              {joinLabels
+                .filter(([value]) => allowFolder || value !== "folder")
+                .map(([value, joinName]) => (
+                  <option key={value} value={value}>
+                    {joinName}
+                  </option>
+                ))}
+            </select>
+          ) : null;
           return (
-            <span className="naming-token-label">
-              {tokenLabels[token] ||
-                token.replaceAll("_", " ") ||
-                "Custom text"}
-            </span>
+            <>
+              {parsed?.leading && join}
+              <span className="naming-token-label">{name}</span>
+              {parsed && !parsed.leading && join}
+            </>
           );
         }}
       />

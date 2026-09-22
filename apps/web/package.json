@@ -9,6 +9,7 @@
     "typecheck": "tsc -b",
     "generate:api": "openapi-typescript ../../docs/openapi.json -o src/api/schema.d.ts && prettier --write src/api/schema.d.ts",
     "format:check": "prettier --check src vite.config.ts playwright.config.ts tests",
+    "test:unit": "node --test src/pages/namingBuilder.test.ts",
     "pretest:e2e": "npm run build",
     "test:e2e": "playwright test"
   },

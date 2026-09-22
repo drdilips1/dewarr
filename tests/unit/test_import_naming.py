@@ -179,6 +179,60 @@ def test_item_ancestor_collision_holds_both_before_scanner_can_merge_them():
     assert all(not item.files and "contain another book" in item.reason for item in plan.items)
 
 
+def test_author_series_sequence_title_names_keep_medium_year_optional():
+    audio = group(
+        medium="audio",
+        sequence="1",
+        series="Harry Potter",
+        recording_year=1999,
+        original_year=1997,
+        source_posted_year=2024,
+    )
+    audio.metadata.authors = ["J. K. Rowling"]
+    audio.metadata.title = "Harry Potter and the Philosopher's Stone"
+    planned = plan_import(
+        [audio],
+        NamingProfile(
+            audio_folder="{author}/[{series}/][{sequence} ]{title}",
+            audio_filename="[{sequence} - ][{series} - ]{title}[ ({year})]",
+        ),
+    ).items[0]
+    assert planned.state == "ready"
+    assert planned.files[0].destination == (
+        "audiobooks/J. K. Rowling/Harry Potter/"
+        "01 Harry Potter and the Philosopher's Stone/"
+        "01 - Harry Potter - Harry Potter and the Philosopher's Stone (1999).m4b"
+    )
+    ebook = plan_import(
+        [
+            group(
+                sequence="2",
+                series="Harbor Trilogy",
+                edition_year=2017,
+                recording_year=2020,
+            )
+        ],
+        NamingProfile(
+            ebook_folder="{author}/[{series}/][{sequence} ]{title}",
+            ebook_filename="[{sequence} - ][{series} - ]{title}[ ({year})]",
+        ),
+    ).items[0]
+    assert ebook.files[0].destination == (
+        "ebooks/Writer/Harbor Trilogy/02 Harbor/02 - Harbor Trilogy - Harbor (2017).epub"
+    )
+    standalone = plan_import(
+        [group(original_year=1990, source_posted_year=2025)],
+        NamingProfile(ebook_filename="[{sequence} - ][{series} - ]{title}[ ({year})]"),
+    ).items[0]
+    assert standalone.state == "ready"
+    assert standalone.files[0].destination.endswith("/Harbor.epub")
+    required = plan_import(
+        [group(sequence="1", series="Harbor Trilogy")],
+        NamingProfile(ebook_filename="{sequence} - {series} - {title} ({year})"),
+    ).items[0]
+    assert required.state == "held" and required.reason == "Required metadata is missing: year"
+
+
 def test_keep_original_names_and_format_tokens_do_not_convert_media():
     item = group(medium="audio")
     item.files = [PlannedSourceFile(path="Download/Actual.MP3")]
