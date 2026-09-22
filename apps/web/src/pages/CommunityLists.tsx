@@ -9,6 +9,7 @@ import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
 import DiscoveryShelf from "../components/DiscoveryShelf";
+import { randomUUID } from "../randomUUID";
 
 type Card = components["schemas"]["CommunityListCard"];
 
@@ -57,7 +58,7 @@ function ListPreview({
   externalId: string;
   canEdit: boolean;
 }) {
-  const [key] = useState(() => crypto.randomUUID());
+  const [key] = useState(() => randomUUID());
   const client = useQueryClient();
   const query = usePagedQuery({
     queryKey: ["community-lists", externalId],

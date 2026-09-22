@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { api, result } from "../api/client";
 import { Loading, Notice } from "../components";
 import type { components } from "../api/schema";
+import { randomUUID } from "../randomUUID";
 
 export type ConnectionReview =
   components["schemas"]["ConnectionReconciliationView"];
@@ -105,10 +106,10 @@ function ConnectionEditor({
   const [choice, setChoice] = useState<Choice>(() =>
     initialChoice(evidence, findingId),
   );
-  const [key, setKey] = useState(() => crypto.randomUUID());
+  const [key, setKey] = useState(() => randomUUID());
   function edit(patch: Partial<Choice>) {
     setChoice((previous) => ({ ...previous, ...patch }));
-    setKey(crypto.randomUUID());
+    setKey(randomUUID());
   }
   function mapping(
     index: number,
@@ -375,7 +376,7 @@ export function ConnectionRecoveryReview({
   otherBusy: boolean;
 }) {
   const client = useQueryClient();
-  const [key] = useState(() => crypto.randomUUID());
+  const [key] = useState(() => randomUUID());
   const heading = useRef<HTMLHeadingElement>(null);
   const prepared = review.status === "prepared";
   useEffect(() => {

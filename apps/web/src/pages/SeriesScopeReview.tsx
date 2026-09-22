@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
+import { randomUUID } from "../randomUUID";
 
 export type MainBookReview = components["schemas"]["ScopeReviewView"];
 
@@ -23,7 +24,7 @@ export default function SeriesScopeReview({
   const [confirmedDraft, setConfirmedDraft] = useState<string | null>(null);
   const draft = JSON.stringify([generation, review.id, [...selected].sort()]);
   const confirmed = confirmedDraft === draft;
-  const command = useRef({ draft: "", key: crypto.randomUUID() });
+  const command = useRef({ draft: "", key: randomUUID() });
   const path = { external_id: externalId };
   const changed = async () => {
     setConfirmedDraft(null);
@@ -34,7 +35,7 @@ export default function SeriesScopeReview({
   const save = useMutation({
     mutationFn: async () => {
       if (command.current.draft !== draft)
-        command.current = { draft, key: crypto.randomUUID() };
+        command.current = { draft, key: randomUUID() };
       return result(
         await api.POST(
           "/api/catalog/series/hardcover/{external_id}/main-books",

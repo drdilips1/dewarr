@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import { Notice } from "../components";
 import type { components } from "../api/schema";
+import { randomUUID } from "../randomUUID";
 
 type Difference = components["schemas"]["ListDifferenceView"];
 type Filter =
@@ -79,8 +80,7 @@ export default function ListDifferences({
         action,
         generation,
       ]);
-      if (!keys.current.has(command))
-        keys.current.set(command, crypto.randomUUID());
+      if (!keys.current.has(command)) keys.current.set(command, randomUUID());
       return result(
         await api.POST(
           "/api/lists/{list_id}/writeback/differences/{comparison_id}/resolve",

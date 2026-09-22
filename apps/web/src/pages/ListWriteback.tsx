@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import { Notice } from "../components";
 import ListDifferences from "./ListDifferences";
+import { randomUUID } from "../randomUUID";
 
 export default function ListWriteback({
   listId,
@@ -21,7 +22,7 @@ export default function ListWriteback({
   const path = { list_id: listId };
   const keys = useRef(new Map<string, string>());
   const key = (name: string) => {
-    if (!keys.current.has(name)) keys.current.set(name, crypto.randomUUID());
+    if (!keys.current.has(name)) keys.current.set(name, randomUUID());
     return keys.current.get(name)!;
   };
   const policy = useQuery({
@@ -116,7 +117,7 @@ export default function ListWriteback({
     mutationFn: async (workId: string) =>
       result(
         await api.POST("/api/lists/{list_id}/writeback/changes/preview", {
-          params: { path, header: { "idempotency-key": crypto.randomUUID() } },
+          params: { path, header: { "idempotency-key": randomUUID() } },
           body: { work_id: workId },
         }),
       ),

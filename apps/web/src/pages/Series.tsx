@@ -12,6 +12,7 @@ import BookCover from "../components/BookCover";
 import DetailTabs from "../components/DetailTabs";
 import SeriesRequests from "./SeriesRequests";
 import SeriesScopeReview from "./SeriesScopeReview";
+import { randomUUID } from "../randomUUID";
 
 export default function Series({ canEdit }: { canEdit: boolean }) {
   const { externalId = "" } = useParams();
@@ -99,7 +100,7 @@ function SeriesContent({
         await api.POST("/api/catalog/series/hardcover/{external_id}/refresh", {
           params: {
             path: { external_id: externalId },
-            header: { "idempotency-key": crypto.randomUUID() },
+            header: { "idempotency-key": randomUUID() },
           },
         }),
       ),

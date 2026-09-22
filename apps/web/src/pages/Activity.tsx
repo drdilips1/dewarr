@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, result } from "../api/client";
 import { Notice } from "../components";
 import OperationHistory from "./OperationHistory";
+import { randomUUID } from "../randomUUID";
 
 export default function Activity({ admin }: { admin: boolean }) {
   const client = useQueryClient();
@@ -9,7 +10,7 @@ export default function Activity({ admin }: { admin: boolean }) {
     mutationFn: async () =>
       result(
         await api.POST("/api/system/probe", {
-          params: { header: { "idempotency-key": crypto.randomUUID() } },
+          params: { header: { "idempotency-key": randomUUID() } },
         }),
       ),
     onSuccess: () => client.invalidateQueries({ queryKey: ["activity"] }),

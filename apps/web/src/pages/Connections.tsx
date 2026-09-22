@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Empty, Loading, Notice } from "../components";
+import { randomUUID } from "../randomUUID";
 
 type Connection = components["schemas"]["ConnectionView"];
 
@@ -61,7 +62,7 @@ export default function Connections({
           await api.POST("/api/integrations/{integration_id}/sync", {
             params: {
               path: { integration_id: connection.id },
-              header: { "idempotency-key": crypto.randomUUID() },
+              header: { "idempotency-key": randomUUID() },
             },
           }),
         );

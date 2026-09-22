@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
+import { randomUUID } from "../randomUUID";
 
 type Review = components["schemas"]["ReviewView"];
 
@@ -31,8 +32,7 @@ export default function DownloadReviews() {
   const claim = useMutation({
     mutationFn: async (row: Review) => {
       const revision = `${row.attempt_id}:${row.revision}`;
-      if (!keys.current.has(revision))
-        keys.current.set(revision, crypto.randomUUID());
+      if (!keys.current.has(revision)) keys.current.set(revision, randomUUID());
       return result(
         await api.POST("/api/acquisition/reviews/{attempt_id}/claim", {
           params: {

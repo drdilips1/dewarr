@@ -22,6 +22,7 @@ import {
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
+import { randomUUID } from "../randomUUID";
 
 const ReadingListDetails = lazy(() => import("./ReadingListDetails"));
 
@@ -559,7 +560,7 @@ function TrackedList({
         await api.POST("/api/lists/{list_id}/subscription/sync", {
           params: {
             path: { list_id: entry.list_id },
-            header: { "idempotency-key": crypto.randomUUID() },
+            header: { "idempotency-key": randomUUID() },
           },
         }),
       ),

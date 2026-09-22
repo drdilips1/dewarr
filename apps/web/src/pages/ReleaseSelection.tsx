@@ -8,6 +8,7 @@ import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
 import { chooseRoute, destinationPreference } from "./RouteFields";
+import { randomUUID } from "../randomUUID";
 
 type Artifact = components["schemas"]["SourceArtifactView"];
 const ManualPack = lazy(() => import("./ManualPack"));
@@ -28,7 +29,7 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
   const [packReceipt, setPackReceipt] = useState<
     components["schemas"]["ManualPackPrepared"] | null
   >(null);
-  const key = useRef(crypto.randomUUID());
+  const key = useRef(randomUUID());
   const downloadKeys = useRef(new Map<string, string>());
   const options = useQuery({
     queryKey: ["selection-options"],
@@ -189,7 +190,7 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
         }),
       ),
     onSuccess: async () => {
-      key.current = crypto.randomUUID();
+      key.current = randomUUID();
       setConfirmed(false);
       await refresh();
     },
@@ -208,7 +209,7 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
       const sorted = [...ids].sort();
       const command = sorted.join(":");
       if (!downloadKeys.current.has(command))
-        downloadKeys.current.set(command, crypto.randomUUID());
+        downloadKeys.current.set(command, randomUUID());
       return result(
         await api.POST("/api/acquisition/downloads", {
           params: {
@@ -230,7 +231,7 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
   });
   const changed = () => {
     setConfirmed(false);
-    key.current = crypto.randomUUID();
+    key.current = randomUUID();
     save.reset();
   };
   return (

@@ -12,6 +12,7 @@ import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
 import DownloadConstraints from "./DownloadConstraints";
 import { chooseRoute, destinationPreference } from "./RouteFields";
+import { randomUUID } from "../randomUUID";
 
 type Policy = components["schemas"]["ListPolicyView"];
 type Input = components["schemas"]["ListPolicyInput"];
@@ -210,7 +211,7 @@ function PolicyEditor({
   const [contentRevision, setContentRevision] = useState<string>();
   const [previewId, setPreviewId] = useState<string | null>(null);
   const [offset, setOffset] = useState(0);
-  const key = useRef(crypto.randomUUID());
+  const key = useRef(randomUUID());
   const path = { list_id: listId };
   const options = useQuery({
     queryKey: ["selection-options"],
@@ -339,7 +340,7 @@ function PolicyEditor({
     onSuccess: saved,
   });
   const changed = () => {
-    key.current = crypto.randomUUID();
+    key.current = randomUUID();
     preview.reset();
   };
   return (
