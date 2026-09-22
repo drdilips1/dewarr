@@ -6184,6 +6184,13 @@ export interface components {
        */
       mode: "hardlink" | "copy";
       /**
+       * Seeding Rename
+       * @default false
+       */
+      seeding_rename: boolean;
+      /** Client Path */
+      client_path?: string | null;
+      /**
        * Enabled
        * @default true
        */
@@ -6213,6 +6220,13 @@ export interface components {
       local_path?: string | null;
       /** Mode */
       mode: string;
+      /**
+       * Seeding Rename
+       * @default false
+       */
+      seeding_rename: boolean;
+      /** Client Path */
+      client_path?: string | null;
       /** Enabled */
       enabled: boolean;
       /** Revision */
@@ -6344,7 +6358,9 @@ export interface components {
       /** Download Root */
       download_root: string;
       /** Source Key */
-      source_key: string;
+      source_key?: string | null;
+      /** Worker Path */
+      worker_path?: string | null;
     };
     /** DownloadMemberView */
     DownloadMemberView: {
@@ -6439,7 +6455,7 @@ export interface components {
       /** Download Root */
       download_root: string;
       /** Source Key */
-      source_key: string;
+      source_key?: string | null;
       /** Worker Path */
       worker_path: string;
     };
@@ -6683,6 +6699,13 @@ export interface components {
       destination_id?: string | null;
       /** Expected Revision */
       expected_revision?: string | null;
+      /**
+       * Seeding Rename
+       * @default false
+       */
+      seeding_rename: boolean;
+      /** Client Path */
+      client_path?: string | null;
     };
     /** FolderOption */
     FolderOption: {

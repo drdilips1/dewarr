@@ -24,7 +24,7 @@ from app.config import Settings, get_settings
 from app.db.models import Base
 from app.recovery import MAINTENANCE_LOCK
 
-SCHEMA = "0048_import_storage"
+SCHEMA = "0055_seeding_rename"
 CONFIG_FIELDS = {
     "public_url",
     "cookie_secure",
@@ -224,10 +224,10 @@ def backup(settings: Settings, root: Path) -> Manifest:
         from app.importing.storage import apply_storage
 
         mounted = connection.execute(
-            "SELECT destinations, staging_root FROM import_storage_settings WHERE id = 1"
+            "SELECT destinations, staging_root, sources FROM import_storage_settings WHERE id = 1"
         ).fetchone()
         if mounted:
-            settings = apply_storage(settings, *mounted)
+            settings = apply_storage(settings, mounted[0], mounted[1], mounted[2])
         if (
             settings.import_staging_root is None
             and connection.execute("SELECT EXISTS(SELECT 1 FROM import_entries)").fetchone()[0]

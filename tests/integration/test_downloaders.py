@@ -8,7 +8,7 @@ from sqlalchemy import select
 
 from app.adapters.qbittorrent import QbitClient
 from app.config import get_settings
-from app.db.models import AuditEvent, Integration, User
+from app.db.models import AuditEvent, ImportStorageSettings, Integration, User
 from app.domain import downloaders
 from app.security import decrypt_secrets
 
@@ -424,3 +424,97 @@ async def test_simple_connection_test_reads_folder_without_requiring_mounts(
     assert tested.json()["save_path"] == "/remote/books"
     assert not tested.json()["mappings_current"]
     assert all(request.method == "GET" for request in calls)
+
+
+async def test_remote_path_map_translates_client_paths_to_a_worker_folder(
+    client, admin, database, monkeypatch, tmp_path
+):
+    monkeypatch.setattr(get_settings(), "import_sources", {})
+    library, stage, worker = (tmp_path / name for name in ("library", "stage", "downloads"))
+    monkeypatch.setattr(get_settings(), "import_destinations", {"ebooks": library})
+    monkeypatch.setattr(get_settings(), "import_staging_root", stage)
+    created = await client.post(
+        "/api/downloaders",
+        json={"base_url": "http://qbit.test", "username": "kept-user", "password": "kept-secret"},
+    )
+    assert created.status_code == 201, created.text
+    record = created.json()
+    early = await client.put(
+        f"/api/downloaders/{record['id']}",
+        json={
+            "base_url": record["base_url"],
+            "expected_generation": record["generation"],
+            "mappings": [{"download_root": "/remote/downloads", "worker_path": str(worker)}],
+        },
+    )
+    assert early.status_code == 422
+    async with database() as db, db.begin():
+        row = await db.get(Integration, UUID(record["id"]))
+        row.config = {**row.config, "save_path": "/remote/downloads/books"}
+        generation = row.credential_generation
+    overlap = await client.put(
+        f"/api/downloaders/{record['id']}",
+        json={
+            "base_url": record["base_url"],
+            "expected_generation": generation,
+            "mappings": [{"download_root": "/remote/downloads", "worker_path": str(library)}],
+        },
+    )
+    assert overlap.status_code == 422
+    escaped = await client.put(
+        f"/api/downloaders/{record['id']}",
+        json={
+            "base_url": record["base_url"],
+            "expected_generation": generation,
+            "mappings": [{"download_root": "/remote/downloads", "worker_path": "/data/../secret"}],
+        },
+    )
+    assert escaped.status_code == 422
+    mapped = await client.put(
+        f"/api/downloaders/{record['id']}",
+        json={
+            "base_url": record["base_url"],
+            "expected_generation": generation,
+            "mappings": [{"download_root": "/remote/downloads", "worker_path": str(worker)}],
+        },
+    )
+    assert mapped.status_code == 200, mapped.text
+    body = mapped.json()
+    assert body["mappings_current"] and body["status"] == "untested"
+    assert body["mappings"] == [
+        {
+            "download_root": "/remote/downloads",
+            "source_key": "downloads",
+            "worker_path": str(worker),
+        }
+    ]
+    preview = await client.post(
+        f"/api/downloaders/{record['id']}/preview-path",
+        json={
+            "path": "/remote/downloads/books/Title/book.m4b",
+            "expected_generation": body["generation"],
+        },
+    )
+    assert preview.status_code == 200, preview.text
+    assert preview.json()["relative_path"] == "books/Title/book.m4b"
+    assert preview.json()["worker_path"] == str(worker / "books/Title/book.m4b")
+    assert not preview.json()["filesystem_verified"]
+    async with database() as db:
+        stored = await db.get(ImportStorageSettings, 1)
+        row = await db.get(Integration, UUID(record["id"]))
+        assert stored.sources == {"downloads": str(worker)}
+        assert row.config["client_managed"]
+        assert decrypt_secrets(row.encrypted_secrets)["password"] == "kept-secret"
+    moved = tmp_path / "elsewhere"
+    replaced = await client.put(
+        f"/api/downloaders/{record['id']}",
+        json={
+            "base_url": record["base_url"],
+            "expected_generation": body["generation"],
+            "mappings": [{"download_root": "/remote/downloads", "worker_path": str(moved)}],
+        },
+    )
+    assert replaced.status_code == 200, replaced.text
+    assert replaced.json()["mappings"][0]["worker_path"] == str(moved)
+    async with database() as db:
+        assert (await db.get(ImportStorageSettings, 1)).sources == {"elsewhere": str(moved)}

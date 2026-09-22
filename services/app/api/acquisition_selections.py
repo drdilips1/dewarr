@@ -18,6 +18,7 @@ from app.domain.downloaders import USENET_KINDS, mapped_path, mappings_current
 from app.domain.visibility import visible_library
 from app.importing.destinations import destination_configuration
 from app.importing.naming import fingerprint
+from app.importing.storage import import_sources
 
 router = APIRouter(prefix="/acquisition/selections", tags=["acquisition-selections"])
 
@@ -174,8 +175,9 @@ async def options(user: Member, db: Database):
         )
         .order_by(Integration.name, Integration.id)
     ):
-        current = mappings_current(row)
-        mapping = mapped_path(row, row.config["save_path"]) if current else None
+        sources = await import_sources(db)
+        current = mappings_current(row, sources)
+        mapping = mapped_path(row, row.config["save_path"], sources) if current else None
         downloaders.append(
             DownloaderChoice(
                 id=row.id,

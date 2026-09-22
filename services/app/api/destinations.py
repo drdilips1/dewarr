@@ -8,7 +8,6 @@ from sqlalchemy import select
 from app.api.dependencies import Admin, Database
 from app.api.imports import assert_admin
 from app.api.operations import OperationView
-from app.config import get_settings
 from app.db.models import (
     AuditEvent,
     FrozenImportPlan,
@@ -23,7 +22,8 @@ from app.importing.destination_view import DestinationView, view
 from app.importing.destinations import destination_configuration, permitted
 from app.importing.filesystem import relative_parts
 from app.importing.naming import StrictModel
-from app.importing.storage import storage_settings
+from app.importing.seeding_rename import normalize_seeding_target
+from app.importing.storage import import_sources, storage_settings
 from app.jobs.queue import enqueue
 
 router = APIRouter(prefix="/organization", tags=["organization"])
@@ -34,6 +34,8 @@ class DestinationInput(StrictModel):
     medium: Literal["ebook", "audio"]
     backend_path: str = Field(min_length=2, max_length=1024)
     mode: Literal["hardlink", "copy"] = "hardlink"
+    seeding_rename: bool = False
+    client_path: str | None = Field(default=None, max_length=1024)
     enabled: bool = True
     expected_revision: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
 
@@ -42,6 +44,9 @@ class DestinationInput(StrictModel):
         if not self.backend_path.startswith("/"):
             raise ValueError("Enter the absolute library root as Audiobookshelf sees it")
         relative_parts(self.backend_path[1:])
+        self.seeding_rename, self.client_path = normalize_seeding_target(
+            self.seeding_rename, self.client_path
+        )
         return self
 
 
@@ -137,7 +142,8 @@ async def setup_probe(
         raise HTTPException(409, "Enable and test the downloader before checking its save folder")
     if downloader.credential_generation != body.downloader_generation:
         raise HTTPException(409, "Downloader settings changed; reload before probing")
-    mapping = mapped_path(downloader, downloader.config["save_path"])
+    sources = await import_sources(db)
+    mapping = mapped_path(downloader, downloader.config["save_path"], sources)
     operation = Operation(
         owner_id=admin.id,
         kind="organization.probe",
@@ -153,7 +159,7 @@ async def setup_probe(
                 "mapping": mapping,
             },
             "source_key": mapping["source_key"],
-            "source_path": str(get_settings().import_sources[mapping["source_key"]]),
+            "source_path": str(sources[mapping["source_key"]]),
         },
     )
     if not await permitted(db, operation, row):
@@ -193,7 +199,7 @@ async def probe_destination(
     document = frozen.document
     configuration = await destination_configuration(db, row)
     source = document["source"]
-    if str(get_settings().import_sources.get(source["key"])) != source["path"]:
+    if str((await import_sources(db)).get(source["key"])) != source["path"]:
         raise HTTPException(409, "Download root changed; inspect the files again")
     selected = next(
         (

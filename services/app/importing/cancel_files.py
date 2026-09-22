@@ -60,6 +60,36 @@ def remove_stage(staging, receipt, spec, checkpoint):
         checkpoint("cancel-stage-removed")
 
 
+def cancel_renamed(root, staging, name, receipt, spec):
+    """Never delete a seeding file that qBittorrent already moved into the library."""
+    try:
+        with beneath(root, spec.folder, folder=True) as item:
+            names = set(os.listdir(item))
+            media = {file.name for file in spec.files}
+            allowed = media | set(generated_files(spec)) | {".torrent"}
+            # An empty folder, or only the parked torrent directory, is not the book.
+            incomplete = bool(names - {".torrent"}) and not media <= names
+            if names - allowed or incomplete:
+                raise PublicationError(
+                    "The library folder does not match this seeding rename; "
+                    "review it before cancelling"
+                )
+            if not media <= names:
+                receipt["state"] = "cancelled"
+                write_receipt(staging, name, receipt)
+                return receipt
+            if receipt.get("stage_identity") and not same_object(item, receipt["stage_identity"]):
+                raise PublicationError("Destination exists and belongs to another item")
+            receipt["state"] = "published"
+            receipt["stage_identity"] = receipt.get("stage_identity") or object_id(item)
+            write_receipt(staging, name, receipt)
+            return receipt
+    except FileNotFoundError:
+        receipt["state"] = "cancelled"
+        write_receipt(staging, name, receipt)
+        return receipt
+
+
 def cancel_files(spec, *, guard=nullcontext, checkpoint=lambda _: None):
     name = str(spec.entry_id) + ".json"
     with private_staging(spec.staging_root) as staging, directory(spec.destination_root) as root:
@@ -71,11 +101,14 @@ def cancel_files(spec, *, guard=nullcontext, checkpoint=lambda _: None):
             receipt = read_receipt(staging, name)
             if receipt is None:
                 try:
-                    with beneath(root, spec.folder, folder=True):
-                        raise PublicationError(
-                            "Destination exists without a publication journal; "
-                            "review before cancelling"
-                        )
+                    with beneath(root, spec.folder, folder=True) as item:
+                        names = set(os.listdir(item))
+                        # A leftover empty book folder is not a published copy.
+                        if spec.mode != "rename" or names - {".torrent"}:
+                            raise PublicationError(
+                                "Destination exists without a publication journal; "
+                                "review before cancelling"
+                            )
                 except FileNotFoundError:
                     pass
                 receipt = {
@@ -97,6 +130,8 @@ def cancel_files(spec, *, guard=nullcontext, checkpoint=lambda _: None):
                 raise PublicationError("Cancellation journal or destination identity changed")
             if receipt["state"] == "cancelled":
                 return receipt
+            if spec.mode == "rename":
+                return cancel_renamed(root, staging, name, receipt, spec)
             try:
                 with beneath(root, spec.folder, folder=True) as item:
                     if receipt.get("stage_identity") and same_object(

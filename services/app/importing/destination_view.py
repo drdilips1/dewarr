@@ -3,11 +3,11 @@ from uuid import UUID
 
 from sqlalchemy import select
 
-from app.config import get_settings
 from app.db.models import RestoreCheckpoint
 from app.domain.recovery_approvals import denial
 from app.importing.destinations import destination_configuration, setup_route_current
 from app.importing.naming import StrictModel, fingerprint
+from app.importing.storage import import_sources
 
 
 class DestinationView(StrictModel):
@@ -18,6 +18,8 @@ class DestinationView(StrictModel):
     backend_path: str
     local_path: str | None = None
     mode: str
+    seeding_rename: bool = False
+    client_path: str | None = None
     enabled: bool
     revision: str
     configured: bool
@@ -30,7 +32,7 @@ async def view(db, row):
     configuration = await destination_configuration(db, row)
     revision = fingerprint(configuration)
     probe = row.probe if row.probe and row.probe.get("configuration_revision") == revision else None
-    if probe and str(get_settings().import_sources.get(probe.get("source_key"))) != probe.get(
+    if probe and str((await import_sources(db)).get(probe.get("source_key"))) != probe.get(
         "source_path"
     ):
         probe = None
@@ -54,6 +56,8 @@ async def view(db, row):
         backend_path=row.backend_path,
         local_path=configuration["root_path"],
         mode=row.mode,
+        seeding_rename=bool(row.seeding_rename),
+        client_path=row.client_path,
         enabled=row.enabled,
         revision=revision,
         configured=bool(configuration["root_path"] and configuration["staging_path"]),

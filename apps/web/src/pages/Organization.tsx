@@ -263,10 +263,11 @@ function Editor({
               />
               Rename imported files
               <SettingHelp label="renaming files">
-                Applies to both ebooks and audiobooks. Original torrent files
-                keep their names for seeding; only library filenames change.
-                Multi-file audiobooks need disc and track in the filename so
-                playback order is preserved.
+                Applies to both ebooks and audiobooks. Hardlinks and copies
+                leave the torrent filenames in place for seeding and use this
+                pattern for the library file. Renaming the seeding copy uses
+                this pattern for that same file. Multi-file audiobooks need disc
+                and track in the filename so playback order is preserved.
               </SettingHelp>
             </label>
             {medium === "audio" && (
@@ -284,10 +285,10 @@ function Editor({
                 />
                 Merge MP3 chapters into one M4B
                 <SettingHelp label="chapter merging">
-                  When this is on, a finished multi-file MP3 download becomes one
-                  M4B before it enters the library. Quick add does this on its
-                  own. Each file becomes a chapter. The download stays unchanged
-                  for seeding. Leave this off to import the MP3s.
+                  When this is on, a finished multi-file MP3 download becomes
+                  one M4B before it enters the library. Quick add does this on
+                  its own. Each file becomes a chapter. The download stays
+                  unchanged for seeding. Leave this off to import the MP3s.
                 </SettingHelp>
               </label>
             )}

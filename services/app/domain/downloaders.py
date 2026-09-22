@@ -2,18 +2,18 @@
 
 import asyncio
 import math
+import re
 from datetime import UTC, datetime, timedelta
-from pathlib import PurePosixPath
+from pathlib import Path, PurePosixPath
 from uuid import uuid4
 
 from fastapi import HTTPException
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from app.adapters.contracts import AdapterError, FailureKind
 from app.adapters.nzbget import NzbClient
 from app.adapters.qbittorrent import QbitClient, absolute_path
 from app.adapters.sabnzbd import SabClient
-from app.config import get_settings
 from app.db.models import Integration
 from app.db.session import session_factory
 from app.domain.operations import transaction_lock
@@ -43,12 +43,19 @@ TEST_LEASE_SECONDS = 90
 class DownloadMapping(BaseModel):
     model_config = ConfigDict(extra="forbid")
     download_root: str = Field(max_length=2000)
-    source_key: str = Field(pattern=r"^[a-z0-9_-]{1,60}$")
+    source_key: str | None = Field(default=None, pattern=r"^[a-z0-9_-]{1,60}$")
+    worker_path: str | None = Field(default=None, max_length=2000)
 
-    @field_validator("download_root")
+    @field_validator("download_root", "worker_path")
     @classmethod
     def root(cls, value):
-        return absolute_path(value)
+        return absolute_path(value) if value is not None else None
+
+    @model_validator(mode="after")
+    def target(self):
+        if self.source_key is None and self.worker_path is None:
+            raise ValueError("Choose the folder Dewarr can read")
+        return self
 
 
 def relative_to(path, root):
@@ -59,26 +66,79 @@ def relative_to(path, root):
         return None
 
 
-def bind_mappings(mappings: list[DownloadMapping], save_path: str) -> list[dict]:
-    bound = []
-    sources = get_settings().import_sources
+def overlaps(path: Path, other: Path) -> bool:
+    return path == other or path.is_relative_to(other) or other.is_relative_to(path)
+
+
+def library_conflict(path: Path, settings) -> bool:
+    others = list(settings.import_destinations.values())
+    if settings.import_staging_root:
+        others.append(settings.import_staging_root)
+    return any(overlaps(path, other) for other in others)
+
+
+def allocate_key(path: Path, sources) -> str:
+    for key, root in sources.items():
+        if Path(root) == path:
+            return key
+    stem = re.sub(r"[^a-z0-9_-]+", "", path.name.lower()).strip("-_") or "downloads"
+    if not re.fullmatch(r"[a-z0-9_-]{1,60}", stem):
+        stem = "downloads"
+    stem = stem[:60]
+    candidate, number = stem, 2
+    while candidate in sources:
+        suffix = f"-{number}"
+        candidate = stem[: 60 - len(suffix)] + suffix
+        number += 1
+        if number > 100:
+            raise HTTPException(422, "Too many download folders use that name")
+    return candidate
+
+
+def bind_mappings(
+    mappings: list[DownloadMapping], save_path: str, sources
+) -> tuple[list[dict], dict]:
+    """Return saved mappings and any new worker folders that must be remembered."""
+    sources, declared, bound = dict(sources), {}, []
     for mapping in mappings:
-        root = sources.get(mapping.source_key)
-        if not root:
-            raise HTTPException(422, "Select a download root configured on the worker")
+        if mapping.worker_path and (
+            not mapping.source_key or str(sources.get(mapping.source_key)) != mapping.worker_path
+        ):
+            root = Path(mapping.worker_path)
+            for existing in sources.values():
+                existing = Path(existing)
+                if existing != root and overlaps(root, existing):
+                    raise HTTPException(422, "Download folders must not overlap")
+            key = mapping.source_key or allocate_key(root, sources)
+            if key in sources and Path(sources[key]) != root:
+                raise HTTPException(422, "That download folder name is already used")
+            if key not in sources:
+                sources[key] = root
+                declared[key] = str(root)
+        else:
+            root = sources.get(mapping.source_key)
+            if not root:
+                raise HTTPException(422, "Select a download root configured on the worker")
+            key = mapping.source_key
         if any(
             relative_to(mapping.download_root, previous["download_root"]) is not None
             or relative_to(previous["download_root"], mapping.download_root) is not None
             for previous in bound
         ):
             raise HTTPException(422, "Download path mappings must not overlap")
-        bound.append({**mapping.model_dump(), "source_path": str(root)})
+        bound.append(
+            {
+                "download_root": mapping.download_root,
+                "source_key": key,
+                "source_path": str(sources[key]),
+            }
+        )
     if not any(relative_to(save_path, mapping["download_root"]) is not None for mapping in bound):
         raise HTTPException(422, "The save path must be inside a mapped download root")
-    return bound
+    return bound, declared
 
 
-def mappings_current(row):
+def mappings_current(row, sources):
     mappings = row.config.get("mappings", [])
     if row.config.get("client_managed") and not any(
         relative_to(row.config.get("save_path", ""), mapping["download_root"]) is not None
@@ -86,17 +146,16 @@ def mappings_current(row):
     ):
         return False
     return bool(mappings) and all(
-        str(get_settings().import_sources.get(mapping["source_key"])) == mapping["source_path"]
-        for mapping in mappings
+        str(sources.get(mapping["source_key"])) == mapping["source_path"] for mapping in mappings
     )
 
 
-def mapped_path(row, path):
+def mapped_path(row, path, sources):
     try:
         path = absolute_path(path)
     except ValueError as error:
         raise HTTPException(422, "The download path does not match one configured root") from error
-    if not mappings_current(row):
+    if not mappings_current(row, sources):
         raise HTTPException(
             409, "Worker download roots changed. Review and save the path mappings."
         )
@@ -197,9 +256,11 @@ async def test_connection(user_id, connection_id):
                     # Existing mount bindings remain import evidence, never torrent overrides.
                     mappings = row.config.get("mappings", [])
                     if not mappings:
+                        from app.importing.storage import import_sources
+
                         candidates = [
                             (key, str(root))
-                            for key, root in get_settings().import_sources.items()
+                            for key, root in (await import_sources(db)).items()
                             if relative_to(observed_path, str(root)) is not None
                         ]
                         if candidates:

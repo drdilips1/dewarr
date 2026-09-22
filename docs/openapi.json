@@ -19121,6 +19121,23 @@
             "title": "Mode",
             "default": "hardlink"
           },
+          "seeding_rename": {
+            "type": "boolean",
+            "title": "Seeding Rename",
+            "default": false
+          },
+          "client_path": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1024
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Path"
+          },
           "enabled": {
             "type": "boolean",
             "title": "Enabled",
@@ -19186,6 +19203,22 @@
           "mode": {
             "type": "string",
             "title": "Mode"
+          },
+          "seeding_rename": {
+            "type": "boolean",
+            "title": "Seeding Rename",
+            "default": false
+          },
+          "client_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Path"
           },
           "enabled": {
             "type": "boolean",
@@ -19568,16 +19601,34 @@
             "title": "Download Root"
           },
           "source_key": {
-            "type": "string",
-            "pattern": "^[a-z0-9_-]{1,60}$",
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9_-]{1,60}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Source Key"
+          },
+          "worker_path": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Worker Path"
           }
         },
         "additionalProperties": false,
         "type": "object",
         "required": [
-          "download_root",
-          "source_key"
+          "download_root"
         ],
         "title": "DownloadMapping"
       },
@@ -19829,8 +19880,15 @@
             "title": "Download Root"
           },
           "source_key": {
-            "type": "string",
-            "pattern": "^[a-z0-9_-]{1,60}$",
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9_-]{1,60}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Source Key"
           },
           "worker_path": {
@@ -19842,7 +19900,6 @@
         "type": "object",
         "required": [
           "download_root",
-          "source_key",
           "worker_path"
         ],
         "title": "DownloaderMappingView"
@@ -20585,6 +20642,23 @@
               }
             ],
             "title": "Expected Revision"
+          },
+          "seeding_rename": {
+            "type": "boolean",
+            "title": "Seeding Rename",
+            "default": false
+          },
+          "client_path": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1024
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Path"
           }
         },
         "additionalProperties": false,

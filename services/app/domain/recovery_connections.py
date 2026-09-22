@@ -23,6 +23,7 @@ from app.domain import downloaders
 from app.domain import recovery_reconciliation as reviews
 from app.domain.operations import transaction_lock
 from app.domain.recovery_scans import MAX_RECORDS, ScanHeld, digest
+from app.importing.storage import import_sources
 from app.security import decrypt_secrets, encrypt_secrets
 
 KIND = "recovery.connections"
@@ -182,16 +183,16 @@ async def observe(inputs, writer):
                 .limit(MAX_RECORDS + 1)
             )
         )
+        roots = [
+            {"key": key, "path": str(path)}
+            for key, path in sorted((await import_sources(db)).items())
+        ]
     if len(history) > MAX_RECORDS:
         raise ScanHeld("Too much connection-review history; operator review is required")
     confirmations = {}
     for operation in history:
         for result in operation.payload.get("results", []):
             confirmations.setdefault(result["integration_id"], result["connection_digest"])
-    roots = [
-        {"key": key, "path": str(path)}
-        for key, path in sorted(get_settings().import_sources.items())
-    ]
     for row in inputs["integrations"]:
         if row["kind"] not in SUPPORTED or row["owner_id"] is not None:
             continue
@@ -223,7 +224,7 @@ async def unique_endpoint(db, identifier, kind, endpoint):
         raise HTTPException(409, "This downloader endpoint already has a connection")
 
 
-def draft_settings(row, choice):
+def draft_settings(row, choice, sources):
     replacement = choice.replacement()
     if row.base_url != choice.base_url and replacement is None:
         raise HTTPException(422, "Enter fresh credentials before changing a connection endpoint")
@@ -235,7 +236,10 @@ def draft_settings(row, choice):
         if public_url != (config.get("public_url") or row.base_url):
             config["public_url"] = public_url
     else:
-        proposed = [mapping.model_dump() for mapping in choice.mappings]
+        proposed = [
+            {"download_root": mapping.download_root, "source_key": mapping.source_key}
+            for mapping in choice.mappings
+        ]
         previous = [
             {key: m[key] for key in ("download_root", "source_key")}
             for m in config.get("mappings", [])
@@ -246,7 +250,7 @@ def draft_settings(row, choice):
             if not choice.enabled
             and proposed == previous
             and choice.save_path == config.get("save_path")
-            else downloaders.bind_mappings(choice.mappings, choice.save_path)
+            else downloaders.bind_mappings(choice.mappings, choice.save_path, sources)[0]
         )
         config = {
             **config,
@@ -303,7 +307,7 @@ async def prepare(db, checkpoint, owner_id, scan_id, choices, key):
             raise HTTPException(409, "Choose a distinct endpoint for each downloader")
         if row.kind == "qbittorrent":
             endpoints.add(choice.base_url)
-        draft = draft_settings(row, choice)
+        draft = draft_settings(row, choice, await import_sources(db))
         seen.add(row.id)
         items.append(
             {

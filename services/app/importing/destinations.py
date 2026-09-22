@@ -19,8 +19,14 @@ from app.importing.backend import verify_backend
 from app.importing.filesystem import InspectionError, directory
 from app.importing.naming import fingerprint
 from app.importing.publication import PublishFile, probe_destination, probe_download_folder
-from app.importing.storage import storage_settings
+from app.importing.storage import import_sources, storage_settings
 from app.security import decrypt_secrets
+
+
+async def confirm_library_mapping(downloader_id, client_path, worker_root, *, client_factory=None):
+    from app.importing.seeding_rename import confirm_library_mapping as confirm
+
+    await confirm(downloader_id, client_path, worker_root, client_factory=client_factory)
 
 
 async def destination_configuration(db, destination):
@@ -51,6 +57,8 @@ async def destination_configuration(db, destination):
         "medium": destination.medium,
         "backend_path": destination.backend_path,
         "mode": destination.mode,
+        "seeding_rename": bool(destination.seeding_rename),
+        "client_path": destination.client_path,
         "enabled": destination.enabled,
         # Independent valid library choices must not invalidate another medium's route.
         # Include any unsafe root so later mount changes still invalidate verification.
@@ -96,7 +104,7 @@ async def permitted(db, operation, destination):
 async def route_unchanged(db, destination, payload):
     return (
         await destination_configuration(db, destination) == payload["configuration"]
-        and str(get_settings().import_sources.get(payload["source_key"])) == payload["source_path"]
+        and str((await import_sources(db)).get(payload["source_key"])) == payload["source_path"]
         and await setup_route_current(db, payload)
     )
 
@@ -116,7 +124,7 @@ async def setup_route_current(db, evidence):
     if row.credential_generation != binding["generation"] or row.status != "connected":
         return False
     try:
-        mapping = mapped_path(row, row.config["save_path"])
+        mapping = mapped_path(row, row.config["save_path"], await import_sources(db))
     except (HTTPException, KeyError, ValueError):
         return False
     return mapping == binding["mapping"]
@@ -177,8 +185,11 @@ async def probe_route(operation_id: UUID, *, client_factory=None):
             )
             destination.probe_token, destination.probe = None, None
             return
+    copy_fallback = False
+    seeding_rename = False
     try:
         configuration = payload["configuration"]
+        seeding_rename = bool(configuration.get("seeding_rename"))
         for watched in configuration["watched_paths"]:
             watched = Path(watched)
             for external in (Path(payload["source_path"]), Path(configuration["staging_path"])):
@@ -205,7 +216,33 @@ async def probe_route(operation_id: UUID, *, client_factory=None):
                 Path(configuration["staging_path"]),
                 **({"source_kind": "file"} if payload.get("source_kind") == "file" else {}),
             )
-        ok = report["no_replace"] and report[configuration["mode"]]
+        copy_fallback = bool(
+            not seeding_rename
+            and configuration["mode"] == "hardlink"
+            and report.get("no_replace")
+            and report.get("copy")
+            and not report.get("hardlink")
+        )
+        if seeding_rename:
+            report["seeding_rename"] = True
+            ok = bool(report.get("no_replace") and configuration.get("client_path"))
+            if ok:
+                binding = payload.get("setup_downloader")
+                if not binding:
+                    raise InspectionError(
+                        "Check this folder from the library picker so Dewarr can "
+                        "confirm qBittorrent sees it."
+                    )
+                await confirm_library_mapping(
+                    binding["id"],
+                    configuration["client_path"],
+                    Path(configuration["root_path"]),
+                )
+        else:
+            ok = (
+                bool(report.get("no_replace") and report.get(configuration["mode"]))
+                or copy_fallback
+            )
         if ok:
             backend = configuration["backend"]
             async with factory(backend["base_url"], secret) as adapter:
@@ -217,13 +254,28 @@ async def probe_route(operation_id: UUID, *, client_factory=None):
                     configuration["medium"],
                 )
 
+        uses_copy = (
+            ok
+            and not seeding_rename
+            and not report.get("hardlink")
+            and (copy_fallback or configuration["mode"] == "copy")
+        )
         message = (
-            "Filesystem and library folder mapping verified; ready for a reviewed import plan"
+            "qBittorrent will rename completed downloads into this folder. "
+            "The seeding file and the library file are the same copy."
+            if ok and seeding_rename
+            else "Hardlinks are unavailable across these mounts. "
+            "Downloads will be copied into the library."
+            if uses_copy
+            else "Filesystem and library folder mapping verified; ready for a reviewed import plan"
             if ok
-            else ("Hardlink route unavailable; correct the mounts or explicitly choose copy mode")
+            else "Could not prepare this folder for a seeding rename. "
+            "Check the library path and try again."
+            if seeding_rename
+            else "Hardlink route unavailable; correct the mounts or explicitly choose copy mode"
         )
     except (OSError, ValueError, AdapterError) as error:
-        report, ok = {}, False
+        report, ok, copy_fallback = {}, False, False
         message = (
             str(error)[:300]
             if isinstance(error, (InspectionError, AdapterError))
@@ -250,6 +302,9 @@ async def probe_route(operation_id: UUID, *, client_factory=None):
             )
             destination.probe_token, destination.probe = None, None
             return
+        if ok and copy_fallback:
+            destination.mode = "copy"
+            configuration = await destination_configuration(db, destination)
         destination.probe = {
             "status": "verified" if ok else "failed",
             "message": message,

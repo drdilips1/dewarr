@@ -384,6 +384,7 @@ async def test_persisted_library_mount_publishes_without_destination_environment
             ImportStorageSettings(
                 id=1,
                 destinations={"ebooks": str(ready_route["target"])},
+                sources={},
                 staging_root=str(ready_route["stage"]),
             )
         )

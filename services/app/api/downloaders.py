@@ -1,4 +1,5 @@
 from datetime import datetime
+from pathlib import Path
 from typing import Literal
 from uuid import UUID
 
@@ -11,11 +12,13 @@ from app.adapters.http import configured_url
 from app.adapters.qbittorrent import absolute_path
 from app.api.dependencies import Admin, Database
 from app.api.metadata import adapter_http_error
-from app.db.models import AuditEvent, Integration
+from app.config import get_settings
+from app.db.models import AuditEvent, ImportStorageSettings, Integration
 from app.domain import downloaders
 from app.domain.downloaders import DownloadMapping
 from app.domain.operations import transaction_lock
 from app.domain.source_network import check_actor
+from app.importing.storage import import_sources, storage_settings
 from app.security import decrypt_secrets, encrypt_secrets
 
 router = APIRouter(prefix="/downloaders", tags=["downloaders"])
@@ -63,7 +66,7 @@ class DownloaderInput(BaseModel):
 
     @model_validator(mode="after")
     def legacy_storage(self):
-        if (self.save_path is None) != (self.mappings is None):
+        if self.save_path is not None and self.mappings is None:
             raise ValueError("Legacy storage settings must be supplied together")
         return self
 
@@ -109,7 +112,7 @@ class PathPreviewView(BaseModel):
     filesystem_verified: bool = False
 
 
-def view(row):
+def view(row, sources):
     return DownloaderView(
         id=row.id,
         kind=row.kind,
@@ -132,7 +135,7 @@ def view(row):
             )
             for mapping in row.config["mappings"]
         ],
-        mappings_current=downloaders.mappings_current(row),
+        mappings_current=downloaders.mappings_current(row, sources),
     )
 
 
@@ -143,7 +146,38 @@ async def connections(admin: Admin, db: Database):
         .where(Integration.kind.in_(downloaders.DOWNLOAD_KINDS), Integration.owner_id.is_(None))
         .order_by(Integration.name, Integration.id)
     )
-    return [view(row) for row in rows]
+    sources = await import_sources(db)
+    return [view(row, sources) for row in rows]
+
+
+async def remember_sources(db, declared, retired):
+    if not declared and not retired:
+        return
+    storage = await db.get(ImportStorageSettings, 1, with_for_update=True)
+    if not storage:
+        storage = ImportStorageSettings(id=1, destinations={}, sources={})
+        db.add(storage)
+        await db.flush()
+    sources = {**storage.sources, **declared}
+    for key in retired:
+        sources.pop(key, None)
+    storage.sources = sources
+
+
+def retired_keys(previous, bound, env_sources, others):
+    kept = {item["source_key"] for item in bound}
+    used_elsewhere = {
+        mapping["source_key"]
+        for row in others
+        for mapping in (row.config or {}).get("mappings", [])
+    }
+    return [
+        mapping["source_key"]
+        for mapping in previous
+        if mapping["source_key"] not in kept
+        and mapping["source_key"] not in used_elsewhere
+        and mapping["source_key"] not in env_sources
+    ]
 
 
 async def save(body, admin, db, connection_id=None):
@@ -161,11 +195,31 @@ async def save(body, admin, db, connection_id=None):
     )
     if duplicate and (not row or duplicate.id != row.id):
         raise HTTPException(409, "This downloader endpoint already has a connection")
-    mappings = (
-        downloaders.bind_mappings(body.mappings, body.save_path)
-        if body.mappings is not None
-        else (row.config.get("mappings", []) if row and row.base_url == body.base_url else [])
-    )
+    mounted = await import_sources(db)
+    if body.mappings is not None:
+        save_path = body.save_path or ((row.config or {}).get("save_path") if row else "")
+        if not save_path:
+            raise HTTPException(422, "Test the downloader before mapping its folder")
+        mappings, declared = downloaders.bind_mappings(body.mappings, save_path, mounted)
+        settings = await storage_settings(db)
+        for path in declared.values():
+            if downloaders.library_conflict(Path(path), settings):
+                raise HTTPException(
+                    422,
+                    "Download folders must be separate from library and staging folders",
+                )
+        previous = (row.config or {}).get("mappings", []) if row else []
+        others_query = select(Integration).where(
+            Integration.kind == "qbittorrent", Integration.owner_id.is_(None)
+        )
+        if row:
+            others_query = others_query.where(Integration.id != row.id)
+        others = list(await db.scalars(others_query))
+        await remember_sources(
+            db, declared, retired_keys(previous, mappings, get_settings().import_sources, others)
+        )
+    else:
+        mappings = row.config.get("mappings", []) if row and row.base_url == body.base_url else []
     same_endpoint = bool(row and row.base_url == body.base_url)
     if body.kind == "sabnzbd":
         secrets = decrypt_secrets(row.encrypted_secrets) if same_endpoint else {"api_key": ""}
@@ -202,7 +256,7 @@ async def save(body, admin, db, connection_id=None):
     await db.flush()
     db.add(AuditEvent(actor_id=admin.id, action="downloader.saved", entity_id=row.id))
     await db.commit()
-    return view(row)
+    return view(row, await import_sources(db))
 
 
 @router.post("", response_model=DownloaderView, status_code=201)
@@ -223,7 +277,8 @@ async def test_connection(connection_id: UUID, admin: Admin, db: Database):
         await downloaders.test_connection(user_id, connection_id)
     except AdapterError as error:
         raise adapter_http_error(error) from error
-    return view(await downloaders.connection_or_404(db, connection_id))
+    row = await downloaders.connection_or_404(db, connection_id)
+    return view(row, await import_sources(db))
 
 
 @router.post("/{connection_id}/preview-path", response_model=PathPreviewView)
@@ -231,4 +286,4 @@ async def preview_path(connection_id: UUID, body: PathPreviewInput, admin: Admin
     row = await downloaders.connection_or_404(db, connection_id)
     if row.credential_generation != body.expected_generation:
         raise HTTPException(409, "Downloader settings changed. Reload before previewing.")
-    return PathPreviewView(**downloaders.mapped_path(row, body.path))
+    return PathPreviewView(**downloaders.mapped_path(row, body.path, await import_sources(db)))

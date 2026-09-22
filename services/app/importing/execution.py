@@ -53,6 +53,7 @@ from app.importing.publication import (
     PublicationSpec,
     publish_item,
 )
+from app.importing.storage import import_sources
 from app.importing.versioning import version_revision
 from app.security import decrypt_secrets
 
@@ -99,7 +100,7 @@ async def context(db, entry, token, *, lock=False):
     if await destination_configuration(db, destination) != entry.configuration["destination"]:
         raise PublicationError("Destination or connection changed; review it before retrying")
     if (
-        str(get_settings().import_sources.get(entry.configuration["source_key"]))
+        str((await import_sources(db)).get(entry.configuration["source_key"]))
         != entry.configuration["source_path"]
     ):
         raise PublicationError("Source mapping changed; do not publish this frozen plan")
@@ -789,6 +790,10 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                     current = await db.get(ImportEntry, entry_id)
                     await context(db, current, token, lock=True)
                     await capacity.reserve_import(db, current, spec, observation)
+                if spec.mode == "rename":
+                    from app.importing.seeding_rename import place_seeding_copy
+
+                    await place_seeding_copy(entry_id, spec, token)
                 loop = asyncio.get_running_loop()
                 required = observation["required_bytes"]
                 guard = RenameGuard(loop, entry_id, token, spec)

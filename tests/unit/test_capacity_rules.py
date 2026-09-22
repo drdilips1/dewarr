@@ -48,6 +48,17 @@ def test_unsupported_mount_boundaries_cannot_gain_a_reservation(observation):
         download_cost(frozen(), observation)
 
 
+def test_seeding_rename_reserves_a_copy_only_across_filesystems():
+    same = frozen()
+    same["destination"]["seeding_rename"] = True
+    download, future = download_cost(same, snapshot())
+    assert future == {"a": 8 * 1024**2}
+    moved = frozen()
+    moved["destination"]["seeding_rename"] = True
+    _, future = download_cost(moved, snapshot(library="b", staging="b"))
+    assert future == {"b": GIB + 8 * 1024**2}
+
+
 def test_space_budget_counts_other_reservations_and_free_space_floor():
     limits = Limits(minimum_free_bytes=5 * GIB, minimum_free_percent=5)
     # 5% of 200 GiB is 10 GiB; 20 free less 6 reserved less 4 new is exactly enough.

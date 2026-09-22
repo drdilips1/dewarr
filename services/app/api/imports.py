@@ -21,6 +21,7 @@ from app.importing.naming import (
 )
 from app.importing.planning import FreezeInput, FrozenPlanView, assert_admin, owned_inspection
 from app.importing.planning import freeze_plan as plan_import_command
+from app.importing.storage import import_sources
 from app.jobs.queue import enqueue
 
 router = APIRouter(prefix="/organization", tags=["organization"])
@@ -50,8 +51,8 @@ class InspectionView(BaseModel):
 
 
 @router.get("/download-roots", response_model=list[str])
-async def download_roots(admin: Admin):
-    return sorted(get_settings().import_sources)
+async def download_roots(admin: Admin, db: Database):
+    return sorted(await import_sources(db))
 
 
 @router.post("/inspections", status_code=202, response_model=InspectionView)
@@ -63,7 +64,7 @@ async def create_inspection(
 ):
     if get_settings().recovery_mode:
         raise HTTPException(409, "Inspection is paused for recovery")
-    root = get_settings().import_sources.get(body.source_key)
+    root = (await import_sources(db)).get(body.source_key)
     if not root:
         raise HTTPException(422, "Select a download root configured on the worker")
     await transaction_lock(db, f"operation:{admin.id}:{idempotency_key}")

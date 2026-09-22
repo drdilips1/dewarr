@@ -24,6 +24,7 @@ from app.domain.operations import transaction_lock
 from app.domain.source_artifacts import member
 from app.importing.destinations import destination_configuration
 from app.importing.naming import fingerprint
+from app.importing.storage import import_sources
 from app.jobs.queue import enqueue
 
 
@@ -105,7 +106,8 @@ async def proposal(db, user, attempt, selection):
     if (
         downloader.config.get("save_path") != frozen["downloader"]["save_path"]
         or downloader.config.get("category") != frozen["downloader"]["category"]
-        or mapped_path(downloader, downloader.config["save_path"]) != frozen["mapping"]
+        or mapped_path(downloader, downloader.config["save_path"], await import_sources(db))
+        != frozen["mapping"]
     ):
         raise HTTPException(
             409,

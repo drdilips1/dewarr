@@ -12,10 +12,11 @@ from app.domain.download_reviews import validate_inspection
 from app.domain.operations import transaction_lock
 from app.importing.filesystem import InspectionError
 from app.importing.inspection import inspect_download
+from app.importing.storage import import_sources
 
 
-def source_matches(row):
-    return get_settings().import_sources.get(row.source_key) == Path(row.source_path)
+def source_matches(row, sources):
+    return sources.get(row.source_key) == Path(row.source_path)
 
 
 async def run_inspection(operation_id: UUID):
@@ -46,7 +47,7 @@ async def run_inspection(operation_id: UUID):
             get_settings().recovery_mode
             or not actor.active
             or actor.role != "admin"
-            or not source_matches(row)
+            or not source_matches(row, await import_sources(db))
         ):
             row.state, operation.status = "failed", "failed"
             row.message = operation.message = (
@@ -84,7 +85,7 @@ async def run_inspection(operation_id: UUID):
             get_settings().recovery_mode
             or not actor.active
             or actor.role != "admin"
-            or not source_matches(row)
+            or not source_matches(row, await import_sources(db))
         ):
             snapshot, message = None, "Inspection access changed; no results were published"
         row.snapshot, row.message = snapshot, message

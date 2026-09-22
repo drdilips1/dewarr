@@ -1,6 +1,7 @@
 import errno
 import json
 import os
+import shutil
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from uuid import uuid4
@@ -8,6 +9,7 @@ from uuid import uuid4
 import pytest
 
 from app.importing import publication
+from app.importing.cancel_files import cancel_files
 from app.importing.inspection import inspect_download
 from app.importing.naming import fingerprint
 from app.importing.publication import (
@@ -17,6 +19,7 @@ from app.importing.publication import (
     PublishFile,
     probe_destination,
     publish_item,
+    remember_rename_plan,
 )
 from tests.media_fixtures import epub
 
@@ -67,6 +70,89 @@ def test_publication_preserves_original_and_keeps_receipts_outside_library(speci
     assert publish_item(spec) == receipt
 
 
+def test_rename_publication_keeps_the_seeding_inode_and_adds_sidecars(specification):
+    spec = specification.model_copy(update={"mode": "rename"})
+    original = spec.source_root / "pack/book.epub"
+    leaf = spec.destination_root / spec.folder
+    leaf.mkdir(parents=True)
+    published = leaf / "First Harbor.epub"
+    os.rename(original, published)
+    (leaf / ".torrent").mkdir()
+    (leaf / ".torrent" / "cover.jpg").write_bytes(b"cover")
+    inode = published.stat().st_ino
+    receipt = publish_item(spec)
+    assert published.stat().st_ino == inode
+    assert (leaf / "metadata.opf").read_text() == "<package/>"
+    assert receipt["state"] == "published"
+    assert not original.exists()
+    assert publish_item(spec)["state"] == "published"
+
+
+def test_rename_publication_refuses_a_different_file_on_the_same_device(specification):
+    spec = specification.model_copy(update={"mode": "rename"})
+    original = spec.source_root / "pack/book.epub"
+    leaf = spec.destination_root / spec.folder
+    leaf.mkdir(parents=True)
+    published = leaf / "First Harbor.epub"
+    shutil.copy2(original, published)
+    with pytest.raises(PublicationError, match="seeding copy"):
+        publish_item(spec)
+    assert original.exists() and published.exists()
+
+
+def test_cancelling_a_seeding_rename_keeps_files_already_in_the_library(specification):
+    spec = specification.model_copy(update={"mode": "rename"})
+    original = spec.source_root / "pack/book.epub"
+    leaf = spec.destination_root / spec.folder
+    leaf.mkdir(parents=True)
+    published = leaf / "First Harbor.epub"
+    os.rename(original, published)
+    (leaf / ".torrent").mkdir()
+    remember_rename_plan(spec, {"location": "/library", "renames": [], "targets": []})
+    receipt = cancel_files(spec)
+    assert receipt["state"] == "published"
+    assert published.read_bytes()
+    assert (leaf / ".torrent").is_dir()
+
+
+def test_cancelling_an_empty_library_folder_does_not_keep_a_missing_book(specification):
+    spec = specification.model_copy(update={"mode": "rename"})
+    leaf = spec.destination_root / spec.folder
+    leaf.mkdir(parents=True)
+    (leaf / ".torrent").mkdir()
+    remember_rename_plan(spec, {"location": "/library", "renames": [], "targets": []})
+    receipt = cancel_files(spec)
+    assert receipt["state"] == "cancelled"
+    assert leaf.is_dir()
+
+
+def test_cancelling_a_partial_library_folder_stays_held(specification):
+    extra = specification.files[0].model_copy(
+        update={"name": "Second.epub", "source": "second.epub"}
+    )
+    spec = specification.model_copy(
+        update={"files": [*specification.files, extra], "mode": "rename"}
+    )
+    leaf = spec.destination_root / spec.folder
+    leaf.mkdir(parents=True)
+    published = leaf / "First Harbor.epub"
+    os.rename(spec.source_root / "pack/book.epub", published)
+    remember_rename_plan(spec, {"location": "/library", "renames": [], "targets": []})
+    with pytest.raises(PublicationError, match="does not match"):
+        cancel_files(spec)
+    assert published.is_file()
+
+
+def test_cancelling_before_a_seeding_rename_leaves_the_download(specification):
+    spec = specification.model_copy(update={"mode": "rename"})
+    original = spec.source_root / "pack/book.epub"
+    before = original.read_bytes()
+    remember_rename_plan(spec, {"location": "/library", "renames": [], "targets": []})
+    receipt = cancel_files(spec)
+    assert receipt["state"] == "cancelled"
+    assert original.read_bytes() == before
+
+
 @pytest.mark.parametrize(
     "mode,point",
     [
@@ -104,6 +190,25 @@ def test_retry_recognizes_published_item_even_if_download_was_later_removed(spec
     publish_item(spec)
     (spec.source_root / "pack/book.epub").unlink()
     assert publish_item(spec)["state"] == "published"
+
+
+def test_same_filesystem_rename_reserves_sidecar_bytes_only(specification):
+    spec = specification.model_copy(update={"mode": "rename"})
+    assert publication.remaining_import_bytes(spec) == len(b"<package/>")
+
+
+def test_cross_filesystem_rename_reserves_the_download_folder(specification):
+    spec = specification.model_copy(update={"mode": "rename"})
+    identity = {**spec.files[0].identity, "device": spec.files[0].identity["device"] + 1}
+    spec = spec.model_copy(
+        update={"files": [spec.files[0].model_copy(update={"identity": identity})]}
+    )
+    booklet = spec.source_root / "pack" / "booklet.pdf"
+    booklet.write_bytes(b"%PDF")
+    payload = sum(
+        path.stat().st_size for path in (spec.source_root / "pack").iterdir() if path.is_file()
+    )
+    assert publication.remaining_import_bytes(spec) == payload + len(b"<package/>")
 
 
 @pytest.mark.parametrize("point", ["prepared", "published-before-receipt"])

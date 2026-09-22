@@ -225,7 +225,7 @@ async def test_failed_setup_does_not_touch_downloaded_files(
 
 
 @pytest.mark.parametrize("mode", ["hardlink", "copy"])
-async def test_cross_filesystem_route_requires_explicit_copy_policy(
+async def test_cross_filesystem_route_copies_when_hardlink_is_impossible(
     client, admin, empty_route, monkeypatch, mode
 ):
     def cross_device(*args, **kwargs):
@@ -248,6 +248,66 @@ async def test_cross_filesystem_route_requires_explicit_copy_policy(
     assert (await start(client, empty_route)).status_code == 202
     await get_queue().run_worker_async(wait=False, concurrency=1)
     checked = await current(client)
-    assert checked["publication_available"] == (mode == "copy")
-    assert checked["mode"] == mode
+    assert checked["publication_available"]
+    assert checked["mode"] == "copy"
     assert not checked["probe"]["hardlink"] and checked["probe"]["copy"]
+    assert "copied into the library" in checked["probe"]["message"]
+    activated = await client.post(
+        f"/api/organization/library-folders/{checked['id']}/activate",
+        json={"expected_revision": checked["revision"]},
+    )
+    assert activated.status_code == 200, activated.text
+    assert activated.json()["mode"] == "copy" and activated.json()["publication_available"]
+
+
+async def test_seeding_rename_is_optional_and_does_not_require_a_hardlink(
+    client, admin, empty_route, monkeypatch
+):
+    def cross_device(*args, **kwargs):
+        raise OSError(errno.EXDEV, "different filesystem")
+
+    seen = {}
+
+    async def confirm(downloader_id, client_path, worker_root, *, client_factory=None):
+        seen["downloader_id"] = str(downloader_id)
+        seen["client_path"] = client_path
+        seen["worker_root"] = worker_root
+
+    monkeypatch.setattr(publication.os, "link", cross_device)
+    monkeypatch.setattr(destinations, "confirm_library_mapping", confirm)
+    saved = empty_route["destination"]
+    assert saved["seeding_rename"] is False
+    response = await client.put(
+        "/api/organization/destinations/ebooks",
+        json={
+            "library_id": saved["library_id"],
+            "medium": "ebook",
+            "backend_path": "/books",
+            "seeding_rename": True,
+            "client_path": "/library/books",
+            "expected_revision": saved["revision"],
+        },
+    )
+    assert response.status_code == 200, response.text
+    empty_route["destination"] = response.json()
+    assert empty_route["destination"]["seeding_rename"] is True
+    assert empty_route["destination"]["client_path"] == "/library/books"
+    assert empty_route["destination"]["mode"] == "hardlink"
+    assert (await start(client, empty_route, key="seeding-rename-probe")).status_code == 202
+    await get_queue().run_worker_async(wait=False, concurrency=1)
+    checked = await current(client)
+    assert checked["publication_available"], checked
+    assert checked["mode"] == "hardlink" and checked["seeding_rename"] is True
+    assert checked["probe"]["seeding_rename"] and not checked["probe"]["hardlink"]
+    assert "same copy" in checked["probe"]["message"]
+    assert seen == {
+        "downloader_id": str(empty_route["downloader"]),
+        "client_path": "/library/books",
+        "worker_root": empty_route["target"],
+    }
+    activated = await client.post(
+        f"/api/organization/library-folders/{checked['id']}/activate",
+        json={"expected_revision": checked["revision"]},
+    )
+    assert activated.status_code == 200, activated.text
+    assert activated.json()["seeding_rename"] is True and activated.json()["publication_available"]

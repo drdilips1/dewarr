@@ -264,7 +264,7 @@ function ConnectionEditor({
                   <label>
                     Worker download root
                     <select
-                      value={value.source_key}
+                      value={value.source_key ?? ""}
                       onChange={(e) =>
                         mapping(index, { source_key: e.target.value })
                       }
@@ -272,7 +272,7 @@ function ConnectionEditor({
                       {!evidence.source_roots.some(
                         (root) => root.key === value.source_key,
                       ) && (
-                        <option value={value.source_key}>
+                        <option value={value.source_key ?? ""}>
                           Unavailable ·{" "}
                           {value.source_key || "Choose a configured root"}
                         </option>

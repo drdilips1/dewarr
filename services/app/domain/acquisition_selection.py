@@ -42,6 +42,7 @@ from app.domain.source_artifacts import artifact_bytes, member
 from app.domain.work_graph import acquisition_lock, canonical_work
 from app.importing.destinations import destination_configuration, setup_route_current
 from app.importing.naming import fingerprint
+from app.importing.storage import import_sources
 from app.importing.versioning import version_revision
 
 
@@ -84,10 +85,13 @@ async def verified_probe(db, destination, configuration, mapping):
         and probe.get("status") == "verified"
         and probe.get("configuration_revision") == fingerprint(configuration)
         and probe.get("source_key") == mapping["source_key"]
-        and probe.get("source_path")
-        == str(get_settings().import_sources.get(mapping["source_key"]))
+        and probe.get("source_path") == str((await import_sources(db)).get(mapping["source_key"]))
         and probe.get("no_replace")
-        and probe.get(destination.mode)
+        and (
+            probe.get("seeding_rename")
+            if configuration.get("seeding_rename")
+            else probe.get(destination.mode)
+        )
         and probe.get("backend", {}).get("root_mapping")
     )
 
@@ -241,7 +245,7 @@ async def prepare(db, user, body, key, *, automatic_evidence=None):
             raise HTTPException(409, "Connect and test Soulseek before downloading this folder")
     else:
         downloader = route
-    mapping = mapped_path(downloader, downloader.config["save_path"])
+    mapping = mapped_path(downloader, downloader.config["save_path"], await import_sources(db))
     destination = await db.scalar(
         select(ImportDestination)
         .where(
@@ -425,7 +429,8 @@ async def configuration_current(
             and (await canonical_work(db, UUID(frozen["origin_work_id"]))).id
             == UUID(frozen["work_id"])
             and await destination_configuration(db, destination) == frozen["destination"]
-            and mapped_path(downloader, downloader.config["save_path"]) == frozen["mapping"]
+            and mapped_path(downloader, downloader.config["save_path"], await import_sources(db))
+            == frozen["mapping"]
             and await verified_probe(db, destination, frozen["destination"], frozen["mapping"])
         )
     except HTTPException:

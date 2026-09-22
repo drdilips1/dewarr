@@ -40,7 +40,7 @@ Use the same paths in Dewarr, qBittorrent, and your library server (Audiobookshe
 /data/staging
 ```
 
-Choose those folders in Settings and verify your library routes. If Audiobookshelf sees `/audiobooks` while Dewarr sees `/data/audiobooks`, set that mapping in Dewarr. A shared parent mount allows hardlinks when the filesystem supports them.
+Choose those folders in Settings and verify your library routes. If Audiobookshelf sees `/audiobooks` while Dewarr sees `/data/audiobooks`, set that mapping in Dewarr. If qBittorrent sees a different path for the download folder, map that path in **Settings → Download clients**. A shared parent mount allows hardlinks when the filesystem supports them. When the download and library folders are on different filesystems, Dewarr copies the files into the library instead. A library folder can instead ask qBittorrent to rename the seeding files into that folder, so the seeding file and the library file are the same copy. That option stays off unless you turn it on.
 
 ## Existing PostgreSQL
 

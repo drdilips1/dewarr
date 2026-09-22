@@ -19,6 +19,7 @@ from app.domain.downloaders import (
 from app.domain.visibility import visible_library
 from app.importing.destinations import destination_configuration
 from app.importing.naming import fingerprint
+from app.importing.storage import import_sources
 
 
 class PolicyRoute(BaseModel):
@@ -169,7 +170,7 @@ async def other_client(db, preferences, primary):
     if not other.enabled or other.status != "connected" or client_protocol(other.kind) != wanted:
         return None
     try:
-        mapped_path(other, other.config["save_path"])
+        mapped_path(other, other.config["save_path"], await import_sources(db))
     except HTTPException:
         return None
     return other
@@ -208,8 +209,9 @@ async def fallback_routes(db, user, spec, profile, primary, routes):
     other = await other_client(db, profile.preferences, primary)
     if not other or not routes:
         return None, None, {}
-    other_mapping = mapped_path(other, other.config["save_path"])
-    primary_mapping = mapped_path(primary, primary.config["save_path"])
+    sources = await import_sources(db)
+    other_mapping = mapped_path(other, other.config["save_path"], sources)
+    primary_mapping = mapped_path(primary, primary.config["save_path"], sources)
     same_folder = (
         other_mapping["source_key"] == primary_mapping["source_key"]
         and other_mapping["relative_path"] == primary_mapping["relative_path"]
@@ -285,7 +287,7 @@ async def resolve(db, user, spec, downloader_id, generation, routes):
         or downloader.credential_generation != generation
     ):
         raise HTTPException(409, "Downloader settings changed; test and preview again")
-    mapping = mapped_path(downloader, downloader.config["save_path"])
+    mapping = mapped_path(downloader, downloader.config["save_path"], await import_sources(db))
     media = {spec.mode} if spec.mode in {"ebook", "audio"} else {"ebook", "audio"}
     if set(routes) != media:
         raise HTTPException(422, "Choose an import destination for each requested medium")
