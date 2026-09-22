@@ -40,14 +40,21 @@ class Settings(BaseSettings):
         for key, path in sources.items():
             if not re.fullmatch(r"[a-z0-9_-]{1,60}", key):
                 raise ValueError("Download root keys use lowercase letters, numbers, - and _")
-            if not path.is_absolute() or str(path) == "/" or ".." in path.parts:
+            if (
+                not path.is_absolute()
+                or path.anchor != "/"
+                or str(path) == "/"
+                or ".." in path.parts
+            ):
                 raise ValueError("Download roots must be absolute directories below /")
         return sources
 
     @field_validator("import_staging_root")
     @classmethod
     def validate_staging_root(cls, path):
-        if path is not None and (not path.is_absolute() or str(path) == "/" or ".." in path.parts):
+        if path is not None and (
+            not path.is_absolute() or path.anchor != "/" or str(path) == "/" or ".." in path.parts
+        ):
             raise ValueError("Use an absolute staging directory below /")
         return path
 

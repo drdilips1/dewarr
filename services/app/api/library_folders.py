@@ -10,7 +10,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import Field, field_validator, model_validator
 from sqlalchemy import select
 
-from app.adapters.audiobookshelf import Audiobookshelf
+from app.adapters.audiobookshelf import Audiobookshelf, backend_path
 from app.adapters.contracts import AdapterError
 from app.adapters.grimmory import Grimmory
 from app.api.automatic_imports import view as policy_view
@@ -123,11 +123,27 @@ class FolderInput(StrictModel):
         )
         return self
 
-    @field_validator("backend_path", "local_path")
+    @field_validator("backend_path")
     @classmethod
-    def absolute_folder(cls, value):
+    def library_root(cls, value):
+        return backend_path(value)
+
+    @field_validator("local_path")
+    @classmethod
+    def worker_folder(cls, value):
+        value = value.strip()
         path = Path(value)
-        if not value.startswith("/") or str(path) == "/" or ".." in path.parts or "\x00" in value:
+        # A leading "//" is a UNC prefix. pathlib keeps it, then the directory
+        # walk drops that prefix and opens a different local folder.
+        if (
+            not value.startswith("/")
+            or value.startswith("//")
+            or "\\" in value
+            or path.anchor != "/"
+            or str(path) == "/"
+            or ".." in path.parts
+            or "\x00" in value
+        ):
             raise ValueError("Choose an absolute folder path below /")
         return str(path)
 
@@ -177,7 +193,8 @@ async def choose(medium: Literal["ebook", "audio"], body: FolderInput, admin: Ad
         raise HTTPException(
             422,
             "Use a library folder inside a shared media mount, such as /data/ebooks. "
-            "Choose Other path to enter the folder path used by Dewarr.",
+            "Dewarr keeps its staging directory beside that folder, so the folder "
+            "cannot sit directly under /.",
         )
     stage = settings.import_staging_root or local.parent / ".book-search-staging"
     # All media and publication journals remain outside watched roots.

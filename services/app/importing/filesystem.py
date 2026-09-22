@@ -21,7 +21,8 @@ def relative_parts(value: str) -> list[str]:
 
 @contextmanager
 def directory(path: Path):
-    if not path.is_absolute() or str(path) == "/" or ".." in path.parts:
+    # A leading "//" is a UNC prefix. Walking parts[1:] would open /host/share.
+    if not path.is_absolute() or path.anchor != "/" or str(path) == "/" or ".." in path.parts:
         raise InspectionError("Configure an absolute download root, not the filesystem root")
     fd = os.open("/", os.O_RDONLY | os.O_DIRECTORY)
     try:

@@ -228,6 +228,266 @@ test("two media rows choose ABS folders and verify before activation", async ({
   expect(errors).toEqual([]);
 });
 
+test("a Windows Audiobookshelf path asks for the Dewarr mount", async ({
+  page,
+}) => {
+  const writes: { path: string; body: any }[] = [];
+  let destination: any = null;
+  await page.route("**/api/**", (route) => {
+    const path = new URL(route.request().url()).pathname;
+    const method = route.request().method();
+    if (["PUT", "POST"].includes(method))
+      writes.push({ path, body: route.request().postDataJSON() });
+    let data: unknown = [];
+    if (path === "/api/auth/me")
+      data = {
+        user: {
+          id: "user",
+          role: "admin",
+          display_name: "Reader",
+          onboarding_status: "complete",
+        },
+        csrf_token: "test",
+      };
+    else if (path === "/api/setup/onboarding") data = { status: "completed" };
+    else if (path === "/api/integrations")
+      data = [
+        {
+          id: "abs",
+          name: "Audiobookshelf",
+          enabled: true,
+          status: "connected",
+          library_count: 1,
+          book_count: 1,
+          base_url: "http://library:13378",
+          version: "2.36.1",
+        },
+      ];
+    else if (path === "/api/library/libraries")
+      data = [
+        { id: "lib", name: "Books", accessible: true, granted_user_ids: [] },
+      ];
+    else if (path === "/api/organization/library-folders")
+      data = [
+        {
+          library_id: "lib",
+          library_name: "Books",
+          server_name: "Audiobookshelf",
+          ebooks_allowed: true,
+          folders: ["D:/Books/Audiobooks"],
+        },
+      ];
+    else if (path === "/api/organization/destinations")
+      data = destination ? [destination] : [];
+    else if (path === "/api/downloaders")
+      data = [
+        {
+          id: "qbit",
+          name: "qBittorrent",
+          enabled: true,
+          status: "connected",
+          mappings_current: true,
+          generation: 1,
+        },
+      ];
+    else if (path.endsWith("/automatic-import"))
+      data = {
+        enabled: true,
+        ready: false,
+        can_enable: false,
+        generation: 1,
+        message: "Completed downloads import automatically",
+      };
+    else if (path.startsWith("/api/acquisition/preferences/"))
+      data = {
+        effective: {},
+        inherited: {},
+        overrides: {},
+        inherited_origins: {},
+        revision: "one",
+      };
+    else if (path === "/api/organization/library-folders/ebook") {
+      const body = route.request().postDataJSON();
+      destination = {
+        id: "dest",
+        root_key: "library-ebook",
+        medium: "ebook",
+        enabled: true,
+        mode: "hardlink",
+        revision: "revision",
+        publication_available: false,
+        ...body,
+      };
+      data = destination;
+    } else if (path.endsWith("/setup-probe"))
+      data = { id: "probe", status: "queued" };
+    else if (path === "/api/activity")
+      data = [{ id: "probe", status: "completed", message: "Verified" }];
+    else if (path.endsWith("/activate"))
+      data = { ...destination, publication_available: true };
+    return route.fulfill({ json: data });
+  });
+  await page.goto("/settings#storage");
+  await page.getByRole("button", { name: "Choose ebooks folder" }).click();
+  const dialog = page.getByRole("dialog", { name: "Choose ebooks folder" });
+  await expect(
+    dialog.getByText("D:/Books/Audiobooks", { exact: true }),
+  ).toBeVisible();
+  await expect(dialog.getByText("No compatible folders found")).toHaveCount(0);
+  await expect(
+    dialog.getByRole("radio", { name: "Books: D:/Books/Audiobooks" }),
+  ).toBeChecked();
+  await expect(
+    dialog.getByRole("radio", { name: "Other path", exact: true }),
+  ).toHaveCount(0);
+  const mount = dialog.getByLabel("Dewarr folder path");
+  await expect(mount).toBeVisible();
+  await expect(mount).toHaveValue("");
+  await expect(
+    dialog.getByRole("button", { name: "Use this folder" }),
+  ).toBeDisabled();
+  await mount.fill("D:/Books/Audiobooks");
+  await dialog.getByRole("button", { name: "Use this folder" }).click();
+  await expect(
+    dialog.getByText(
+      "Enter the absolute folder Dewarr has mounted, such as /data/audiobooks.",
+    ),
+  ).toBeVisible();
+  await mount.fill("/data/audiobooks");
+  await dialog.getByRole("button", { name: "Use this folder" }).click();
+  await expect(dialog).toHaveCount(0);
+  expect(writes.find((w) => w.path.endsWith("/ebook"))?.body).toMatchObject({
+    backend_path: "D:/Books/Audiobooks",
+    local_path: "/data/audiobooks",
+  });
+});
+
+test("a UNC Audiobookshelf path is not used as the Dewarr mount", async ({
+  page,
+}) => {
+  const writes: { path: string; body: any }[] = [];
+  let destination: any = null;
+  await page.route("**/api/**", (route) => {
+    const path = new URL(route.request().url()).pathname;
+    const method = route.request().method();
+    if (["PUT", "POST"].includes(method))
+      writes.push({ path, body: route.request().postDataJSON() });
+    let data: unknown = [];
+    if (path === "/api/auth/me")
+      data = {
+        user: {
+          id: "user",
+          role: "admin",
+          display_name: "Reader",
+          onboarding_status: "complete",
+        },
+        csrf_token: "test",
+      };
+    else if (path === "/api/setup/onboarding") data = { status: "completed" };
+    else if (path === "/api/integrations")
+      data = [
+        {
+          id: "abs",
+          name: "Audiobookshelf",
+          enabled: true,
+          status: "connected",
+          library_count: 1,
+          book_count: 1,
+          base_url: "http://library:13378",
+          version: "2.36.1",
+        },
+      ];
+    else if (path === "/api/library/libraries")
+      data = [
+        { id: "lib", name: "Books", accessible: true, granted_user_ids: [] },
+      ];
+    else if (path === "/api/organization/library-folders")
+      data = [
+        {
+          library_id: "lib",
+          library_name: "Books",
+          server_name: "Audiobookshelf",
+          ebooks_allowed: true,
+          folders: ["//media/share/Books"],
+        },
+      ];
+    else if (path === "/api/organization/destinations")
+      data = destination ? [destination] : [];
+    else if (path === "/api/downloaders")
+      data = [
+        {
+          id: "qbit",
+          name: "qBittorrent",
+          enabled: true,
+          status: "connected",
+          mappings_current: true,
+          generation: 1,
+        },
+      ];
+    else if (path.endsWith("/automatic-import"))
+      data = {
+        enabled: true,
+        ready: false,
+        can_enable: false,
+        generation: 1,
+        message: "Completed downloads import automatically",
+      };
+    else if (path.startsWith("/api/acquisition/preferences/"))
+      data = {
+        effective: {},
+        inherited: {},
+        overrides: {},
+        inherited_origins: {},
+        revision: "one",
+      };
+    else if (path === "/api/organization/library-folders/ebook") {
+      const body = route.request().postDataJSON();
+      destination = {
+        id: "dest",
+        root_key: "library-ebook",
+        medium: "ebook",
+        enabled: true,
+        mode: "hardlink",
+        revision: "revision",
+        publication_available: false,
+        ...body,
+      };
+      data = destination;
+    } else if (path.endsWith("/setup-probe"))
+      data = { id: "probe", status: "queued" };
+    else if (path === "/api/activity")
+      data = [{ id: "probe", status: "completed", message: "Verified" }];
+    else if (path.endsWith("/activate"))
+      data = { ...destination, publication_available: true };
+    return route.fulfill({ json: data });
+  });
+  await page.goto("/settings#storage");
+  await page.getByRole("button", { name: "Choose ebooks folder" }).click();
+  const dialog = page.getByRole("dialog", { name: "Choose ebooks folder" });
+  await expect(
+    dialog.getByRole("radio", { name: "Books: //media/share/Books" }),
+  ).toBeChecked();
+  const mount = dialog.getByLabel("Dewarr folder path");
+  await expect(mount).toHaveValue("");
+  await expect(
+    dialog.getByRole("button", { name: "Use this folder" }),
+  ).toBeDisabled();
+  await mount.fill("//media/share/Books");
+  await dialog.getByRole("button", { name: "Use this folder" }).click();
+  await expect(
+    dialog.getByText(
+      "Enter the absolute folder Dewarr has mounted, such as /data/audiobooks.",
+    ),
+  ).toBeVisible();
+  await mount.fill("/data/audiobooks");
+  await dialog.getByRole("button", { name: "Use this folder" }).click();
+  await expect(dialog).toHaveCount(0);
+  expect(writes.find((w) => w.path.endsWith("/ebook"))?.body).toMatchObject({
+    backend_path: "//media/share/Books",
+    local_path: "/data/audiobooks",
+  });
+});
+
 test("resuming folder setup shows both media choices", async ({ page }) => {
   await page.route("**/api/**", (route) => {
     const path = new URL(route.request().url()).pathname;
