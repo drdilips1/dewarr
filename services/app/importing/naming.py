@@ -23,6 +23,7 @@ TOKENS = {
     "original_year": "Original work publication year",
     "edition_year": "Ebook edition year",
     "recording_year": "Audiobook recording release year",
+    "year": "Ebook edition year or audiobook recording year",
     "edition": "Edition label",
     "publisher": "Edition publisher",
     "narrator": "Narrators of this recording",
@@ -216,8 +217,12 @@ def component(value, limit=180):
     return value
 
 
-def values_for(metadata, file=None):
+def values_for(metadata, file=None, *, medium=None):
     values = metadata.model_dump()
+    if medium == "audio":
+        values["year"] = metadata.recording_year
+    elif medium == "ebook":
+        values["year"] = metadata.edition_year
     values["author"] = next(
         (author for author in metadata.authors if author.strip()), "Unknown author"
     )
@@ -340,7 +345,7 @@ def plan_import(groups: list[ImportGroup], profile: NamingProfile):
                             "Include track and, for multiple discs, disc tokens "
                             "to preserve playback order"
                         )
-            values = values_for(group.metadata)
+            values = values_for(group.metadata, medium=group.medium)
             values["formats"] = " + ".join(
                 sorted({PurePosixPath(file.path).suffix[1:].upper() for file in media})
             )
@@ -379,7 +384,7 @@ def plan_import(groups: list[ImportGroup], profile: NamingProfile):
                 name = (
                     render(
                         getattr(profile, group.medium + "_filename"),
-                        {**values, **values_for(group.metadata, file)},
+                        {**values, **values_for(group.metadata, file, medium=group.medium)},
                     )
                     if profile.rename_files
                     else component(PurePosixPath(file.path).stem)

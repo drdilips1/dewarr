@@ -40,9 +40,11 @@ export function readChoices(
     author: template.includes("{author}"),
     series: template.includes("{series}"),
     sequence: template.includes("{sequence}"),
-    year: template.includes(
-      medium === "audio" ? "{recording_year}" : "{edition_year}",
-    ),
+    year:
+      template.includes("{year}") ||
+      template.includes(
+        medium === "audio" ? "{recording_year}" : "{edition_year}",
+      ),
     version: template.includes(medium === "audio" ? "{narrator}" : "{edition}"),
     language: template.includes("{language}"),
     publisher: template.includes("{publisher}"),
@@ -56,6 +58,7 @@ export function readChoices(
     "{sequence}",
     "{edition_year}",
     "{recording_year}",
+    "{year}",
     "{edition}",
     "{narrator}",
     "{language}",
@@ -111,6 +114,76 @@ export function templateSegments(template: string): string[] {
     ? parts
     : [template];
 }
+const YEAR_TOKENS = ["year", "recording_year", "edition_year"];
+export const seriesIndexFolder = "{author}/[{series}/][{sequence} ]{title}";
+export const seriesIndexFilename =
+  "[{sequence} - ][{series} - ]{title}[ ({year})]";
+export type TokenJoin = "folder" | "dash" | "space" | "parentheses";
+export type ParsedSegment = {
+  optional: boolean;
+  token: string;
+  join: TokenJoin | null;
+  leading: boolean;
+};
+const JOINS: [string, string, TokenJoin, boolean][] = [
+  ["", "/", "folder", false],
+  ["", " - ", "dash", false],
+  ["", " ", "space", false],
+  [" - ", "", "dash", true],
+  [" ", "", "space", true],
+  [" (", ")", "parentheses", true],
+];
+export function parseSegment(segment: string): ParsedSegment | null {
+  const optional = segment.startsWith("[") && segment.endsWith("]");
+  const body = optional ? segment.slice(1, -1) : segment;
+  const match = body.match(/^([^{]*)\{([a-z_]+)\}([^}]*)$/);
+  if (!match) return null;
+  const [, prefix, token, suffix] = match;
+  const found = JOINS.find(
+    ([knownPrefix, knownSuffix]) =>
+      prefix === knownPrefix && suffix === knownSuffix,
+  );
+  if (!found && (prefix !== "" || suffix !== "")) return null;
+  return {
+    optional,
+    token,
+    join: found ? found[2] : null,
+    leading: found ? found[3] : false,
+  };
+}
+export function formatSegment({
+  optional,
+  token,
+  join,
+  leading,
+}: ParsedSegment): string {
+  let prefix = "";
+  let suffix = "";
+  if (join === "folder") suffix = "/";
+  else if (join === "parentheses") {
+    prefix = " (";
+    suffix = ")";
+  } else if (join === "dash") {
+    if (leading) prefix = " - ";
+    else suffix = " - ";
+  } else if (join === "space") {
+    if (leading) prefix = " ";
+    else suffix = " ";
+  }
+  const body = `${prefix}{${token}}${suffix}`;
+  return optional ? `[${body}]` : body;
+}
+export function withJoin(segment: string, join: TokenJoin): string {
+  const parsed = parseSegment(segment);
+  if (!parsed) return segment;
+  const leading =
+    join === "folder"
+      ? false
+      : join === "parentheses" || parsed.join === "parentheses"
+        ? true
+        : parsed.leading;
+  return formatSegment({ ...parsed, join, leading });
+}
 export function toggleSegment(
   template: string,
   medium: Medium,
@@ -126,10 +199,17 @@ export function toggleSegment(
           ? "narrator"
           : "edition"
         : key;
+  const tokens = key === "year" ? YEAR_TOKENS : [token];
   const segments = templateSegments(template);
-  if (segments.some((segment) => segment.includes(`{${token}}`)))
+  if (
+    segments.some((segment) =>
+      tokens.some((item) => segment.includes(`{${item}}`)),
+    )
+  )
     return segments
-      .filter((segment) => !segment.includes(`{${token}}`))
+      .filter(
+        (segment) => !tokens.some((item) => segment.includes(`{${item}}`)),
+      )
       .join("");
   const enabled = folderTemplate(medium, {
     ...simpleChoices,

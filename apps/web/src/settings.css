@@ -2138,6 +2138,18 @@ button.help-button:hover {
   font-size: 12px;
   font-weight: 500;
 }
+.settings-section-body .naming-token-lane select.naming-token-join {
+  width: auto;
+  max-width: 8.5rem;
+  height: 22px;
+  min-height: 22px;
+  flex: 0 0 auto;
+  margin-inline: 6px;
+  padding: 0 16px 0 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  line-height: 20px;
+}
 .naming-builder .metadata-toggles {
   gap: 8px 16px;
 }

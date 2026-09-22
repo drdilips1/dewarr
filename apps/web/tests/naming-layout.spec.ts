@@ -157,6 +157,30 @@ test("naming lanes stay on one line and preserve independent format settings", a
   await expect(
     page.getByRole("checkbox", { name: "Language", exact: true }),
   ).toBeChecked();
+  await page
+    .getByRole("button", { name: "Sequence title", exact: true })
+    .click();
+  await expect
+    .poll(() => previews.at(-1)?.audio_folder)
+    .toBe("{author}/[{series}/][{sequence} ]{title}");
+  await expect
+    .poll(() => previews.at(-1)?.audio_filename)
+    .toBe("[{sequence} - ][{series} - ]{title}[ ({year})]");
+  await page
+    .getByRole("combobox", { name: "Join Sequence in Folder token order" })
+    .selectOption("dash");
+  await expect
+    .poll(() => previews.at(-1)?.audio_folder)
+    .toBe("{author}/[{series}/][{sequence} - ]{title}");
+  await page
+    .getByRole("combobox", { name: "Join Sequence in Folder token order" })
+    .selectOption("space");
+  await page
+    .getByRole("combobox", { name: "Join Year in Filename token order" })
+    .selectOption("dash");
+  await expect
+    .poll(() => previews.at(-1)?.audio_filename)
+    .toBe("[{sequence} - ][{series} - ]{title}[ - {year}]");
   await page.setViewportSize({ width: 390, height: 844 });
   await assertOneLine();
   expect(
