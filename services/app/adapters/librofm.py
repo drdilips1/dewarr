@@ -30,9 +30,7 @@ _PUBLICATION = re.compile(
 )
 _SERIES = re.compile(r'class="audiobook-title__series"[^>]*>\s*(?:<a[^>]*>)?\s*([^<]+)')
 _TAGS = re.compile(r"<[^>]+>")
-_LD = re.compile(
-    r'<script[^>]*type="application/ld\+json"[^>]*>(.*?)</script>', re.I | re.S
-)
+_LD = re.compile(r'<script[^>]*type="application/ld\+json"[^>]*>(.*?)</script>', re.I | re.S)
 
 
 class LibroHit(BaseModel):

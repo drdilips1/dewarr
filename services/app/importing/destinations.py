@@ -114,12 +114,7 @@ async def setup_route_current(db, evidence):
     if not binding:
         return True
     row = await db.get(Integration, UUID(binding["id"]), populate_existing=True)
-    if (
-        not row
-        or row.kind not in DOWNLOAD_KINDS
-        or row.owner_id is not None
-        or not row.enabled
-    ):
+    if not row or row.kind not in DOWNLOAD_KINDS or row.owner_id is not None or not row.enabled:
         return False
     if row.credential_generation != binding["generation"] or row.status != "connected":
         return False

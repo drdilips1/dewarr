@@ -206,6 +206,7 @@ function PathMap({ connection }: { connection: Connection }) {
         await api.PUT("/api/downloaders/{connection_id}", {
           params: { path: { connection_id: connection.id } },
           body: {
+            kind: connection.kind,
             name: connection.name,
             base_url: connection.base_url,
             category: connection.category,

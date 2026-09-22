@@ -212,9 +212,7 @@ async def _edition_page(query, statement, start, end, offset, limit):
 async def upcoming(query, start, end, page):
     """One page of audiobook edition dates. Work dates are resolved per book, not here."""
     try:
-        books, has_more = await _edition_page(
-            query, HC_UPCOMING, start, end, (page - 1) * 20, 20
-        )
+        books, has_more = await _edition_page(query, HC_UPCOMING, start, end, (page - 1) * 20, 20)
         return DiscoveryBatch(items=books, has_more=has_more)
     except (TypeError, ValueError, KeyError, AttributeError, ValidationError) as error:
         raise parse_failure() from error
@@ -227,9 +225,7 @@ async def upcoming_month(query, start, end):
     offset = 0
     try:
         for _ in range(20):
-            books, has_more = await _edition_page(
-                query, _month_query(101), start, end, offset, 100
-            )
+            books, has_more = await _edition_page(query, _month_query(101), start, end, offset, 100)
             for value in books:
                 if value.external_id in seen:
                     continue

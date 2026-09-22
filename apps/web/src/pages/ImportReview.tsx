@@ -457,8 +457,8 @@ function Review({ inspection }: { inspection: Inspection }) {
             (selection) => !selection.full_content,
           ) && (
             <p className="muted">
-              Confirm that each selected group contains the complete book
-              before saving.
+              Confirm that each selected group contains the complete book before
+              saving.
             </p>
           )}
           <button

@@ -101,9 +101,7 @@ test("activity requests preserve independent reasons and route missing media to 
   await expect(card).toContainText("Effective request scope");
   await card.getByText("Details", { exact: true }).click();
   expect(writes).toEqual([]);
-  await card
-    .getByRole("link", { name: "Choose release", exact: true })
-    .click();
+  await card.getByRole("link", { name: "Choose release", exact: true }).click();
   await expect(page).toHaveURL(
     new RegExp(`request=${saved.request.id}&slot=audio`),
   );

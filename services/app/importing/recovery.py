@@ -97,9 +97,7 @@ def read_publication(entry, roots):
                 verify_item(folder, spec, deadline, receipt.get("derived"))
                 if files != publication_identities(folder, spec):
                     raise ScanHeld("Published media or metadata changed during observation")
-                evidence["media_identities"] = {
-                    name: files[name] for name in published_names(spec)
-                }
+                evidence["media_identities"] = {name: files[name] for name in published_names(spec)}
                 if before != identity(os.fstat(folder)):
                     raise ScanHeld("Published directory changed during observation")
                 evidence["destination_identity"] = object_id(folder)

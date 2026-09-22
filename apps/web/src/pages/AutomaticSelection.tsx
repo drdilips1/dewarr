@@ -444,7 +444,9 @@ export default function AutomaticSelection({
               </Link>
             )}
             {receipt.data.download_id && (
-              <Link to="/requests?status=downloading">View automatic download</Link>
+              <Link to="/requests?status=downloading">
+                View automatic download
+              </Link>
             )}
           </div>
           {!!receipt.data.decisions.length && (

@@ -194,7 +194,9 @@ function genreSections(entries: Entry[], selected: string[]) {
     if (match) buckets.get(match)?.push(entry);
     else other.push(entry);
   }
-  const sections = [...buckets.entries()]
+  const sections: { genre: string | null; entries: Entry[] }[] = [
+    ...buckets.entries(),
+  ]
     .filter(([, items]) => items.length > 0)
     .map(([genre, items]) => ({ genre, entries: items }));
   if (other.length) sections.push({ genre: null, entries: other });

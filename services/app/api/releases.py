@@ -429,9 +429,7 @@ async def follow_status(work_id: UUID, user: CurrentUser, db: Database):
         raise HTTPException(404, "You are not following this book")
     operation = await db.get(Operation, row.operation_id) if row.operation_id else None
     message = (
-        operation.message
-        if operation and operation.message
-        else "Waiting for the release day"
+        operation.message if operation and operation.message else "Waiting for the release day"
     )
     return _follow_view(row, message)
 

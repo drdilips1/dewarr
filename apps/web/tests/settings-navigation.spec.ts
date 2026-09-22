@@ -110,7 +110,9 @@ for (const role of ["admin", "member", "viewer"]) {
     await page
       .getByRole("button", { name: "Downloading", exact: true })
       .click();
-    await expect(page.getByText("No downloads yet.", { exact: true })).toBeVisible();
+    await expect(
+      page.getByText("No downloads yet.", { exact: true }),
+    ).toBeVisible();
     await expect(
       page.getByRole("button", { name: "Review", exact: true }),
     ).toHaveCount(role === "admin" ? 1 : 0);
@@ -130,7 +132,9 @@ for (const role of ["admin", "member", "viewer"]) {
       ),
     ).toBe(true);
     await page.goto("/requests#downloads");
-    await expect(page.getByText("No downloads yet.", { exact: true })).toBeVisible();
+    await expect(
+      page.getByText("No downloads yet.", { exact: true }),
+    ).toBeVisible();
     await page.screenshot({ path: testInfo.outputPath("requests-mobile.png") });
     expect(
       await page.evaluate(

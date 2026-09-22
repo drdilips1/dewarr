@@ -232,8 +232,6 @@ test("onboarding defers, resumes and completes once; settings show one focused s
   await expect(
     page.getByRole("button", { name: "Users & access" }),
   ).toHaveCount(0);
-  await expect(
-    page.getByRole("button", { name: "Add server" }),
-  ).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Add server" })).toHaveCount(0);
   expect(errors).toEqual([]);
 });

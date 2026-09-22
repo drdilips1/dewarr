@@ -345,12 +345,10 @@ async def test_duplicate_can_merge_into_a_book_with_an_outstanding_download(
         await db.commit()
     async with database() as db:
         assert (await db.get(Work, duplicate_id)).redirect_to == holder
-        assert (
-            await db.scalar(
-                select(AcquisitionReservation).where(
-                    AcquisitionReservation.work_id == holder,
-                    AcquisitionReservation.state == "committed",
-                )
+        assert await db.scalar(
+            select(AcquisitionReservation).where(
+                AcquisitionReservation.work_id == holder,
+                AcquisitionReservation.state == "committed",
             )
         )
         assert (await db.get(AcquisitionSelection, UUID(selected["id"]))).state == "committed"
