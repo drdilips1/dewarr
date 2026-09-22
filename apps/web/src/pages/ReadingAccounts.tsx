@@ -28,7 +28,7 @@ const ReadingListDetails = lazy(() => import("./ReadingListDetails"));
 
 type Subscription = components["schemas"]["ReadingSubscription"];
 type Choice = { external_id: string; name: string; count: number | null };
-type Provider = "goodreads" | "hardcover";
+type Provider = "goodreads" | "hardcover" | "storygraph";
 
 export default function ReadingAccounts({
   onConfigureHardcover,
@@ -58,6 +58,10 @@ export default function ReadingAccounts({
       <Notice error={subscriptions.error} />
       {subscriptions.isPending && <Loading />}
       <GoodreadsConnection
+        subscriptions={subscriptions.data || []}
+        ready={subscriptions.isSuccess}
+      />
+      <StoryGraphConnection
         subscriptions={subscriptions.data || []}
         ready={subscriptions.isSuccess}
       />
@@ -224,6 +228,184 @@ function GoodreadsConnection({
               : data
                 ? "Update Goodreads connection"
                 : "Find my Goodreads shelves"}
+          </button>
+        </form>
+      </details>
+    </section>
+  );
+}
+
+function StoryGraphConnection({
+  subscriptions,
+  ready,
+}: {
+  subscriptions: Subscription[];
+  ready: boolean;
+}) {
+  const cache = useQueryClient();
+  const [sessionCookie, setSessionCookie] = useState("");
+  const [rememberToken, setRememberToken] = useState("");
+  const account = useQuery({
+    queryKey: ["storygraph-account"],
+    queryFn: async () =>
+      result(await api.GET("/api/reading-accounts/storygraph")),
+  });
+  const connect = useMutation({
+    mutationFn: async () =>
+      result(
+        await api.PUT("/api/reading-accounts/storygraph", {
+          body: {
+            session_cookie: sessionCookie,
+            remember_token: rememberToken,
+          },
+        }),
+      ),
+    onSuccess: (value) => {
+      cache.setQueryData(["storygraph-account"], value);
+      setSessionCookie("");
+      setRememberToken("");
+    },
+  });
+  const discover = useMutation({
+    mutationFn: async () =>
+      result(await api.POST("/api/reading-accounts/storygraph/discover")),
+    onSuccess: (value) => cache.setQueryData(["storygraph-account"], value),
+  });
+  const disconnect = useMutation({
+    mutationFn: async () => {
+      result(await api.DELETE("/api/reading-accounts/storygraph"));
+    },
+    onSuccess: () => cache.setQueryData(["storygraph-account"], null),
+  });
+  const data = account.data;
+  return (
+    <section
+      className="panel editor reading-account"
+      aria-label="StoryGraph connection"
+    >
+      <div className="setting-subheading">
+        <span className="reading-provider-mark" aria-hidden="true">
+          s
+        </span>
+        <div className="reading-account-title">
+          <h2>StoryGraph</h2>
+          {data && (
+            <a
+              href={data.profile_url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {data.username} ↗
+            </a>
+          )}
+        </div>
+        {data && (
+          <span className="reading-status">
+            <CircleCheck size={14} aria-hidden="true" /> Connected
+          </span>
+        )}
+        <SettingHelp label="StoryGraph">
+          Paste the _storygraph_session and remember_user_token cookies from
+          app.thestorygraph.com. They are a full StoryGraph login. Dewarr stores
+          them encrypted and does not show them again. Shelves, tags, and lists
+          you paste stay in sync with that session.
+        </SettingHelp>
+      </div>
+      <Notice
+        error={
+          account.error || connect.error || discover.error || disconnect.error
+        }
+      />
+      {account.isPending && <Loading />}
+      {data && (
+        <>
+          <ShelfChoices
+            key={data.username + data.discovered_at}
+            provider="storygraph"
+            choices={data.shelves}
+            subscriptions={subscriptions.filter(
+              (s) => s.subscription.provider === "storygraph",
+            )}
+            ready={ready}
+            accountId={data.username}
+            initial="to-read"
+            actions={
+              <>
+                <button
+                  disabled={discover.isPending || connect.isPending}
+                  onClick={() => discover.mutate()}
+                >
+                  {discover.isPending ? (
+                    "Looking for lists…"
+                  ) : (
+                    <>
+                      <RefreshCw size={14} aria-hidden="true" /> Refresh lists
+                    </>
+                  )}
+                </button>
+                <button
+                  disabled={disconnect.isPending}
+                  onClick={() => disconnect.mutate()}
+                >
+                  Disconnect
+                </button>
+              </>
+            }
+          />
+          <p className="muted">
+            Disconnecting removes the saved login. Lists you already follow stay
+            here, and their checks wait until you connect again.
+          </p>
+        </>
+      )}
+      {!data &&
+        subscriptions
+          .filter((entry) => entry.subscription.provider === "storygraph")
+          .map((entry) => <TrackedList key={entry.list_id} entry={entry} />)}
+      <details open={!data}>
+        <summary>
+          {data
+            ? "Change StoryGraph connection"
+            : "Connect your StoryGraph account"}
+        </summary>
+        <form
+          className="editor reading-connect-form"
+          onSubmit={(event) => {
+            event.preventDefault();
+            connect.mutate();
+          }}
+        >
+          <label>
+            _storygraph_session
+            <input
+              value={sessionCookie}
+              onChange={(event) => setSessionCookie(event.target.value)}
+              autoComplete="off"
+              required
+              maxLength={4096}
+              type="password"
+            />
+          </label>
+          <label>
+            remember_user_token
+            <input
+              value={rememberToken}
+              onChange={(event) => setRememberToken(event.target.value)}
+              autoComplete="off"
+              required
+              maxLength={4096}
+              type="password"
+            />
+          </label>
+          <button
+            className="primary"
+            disabled={connect.isPending || discover.isPending}
+          >
+            {connect.isPending
+              ? "Finding your lists…"
+              : data
+                ? "Update StoryGraph connection"
+                : "Find my StoryGraph lists"}
           </button>
         </form>
       </details>

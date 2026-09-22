@@ -14,6 +14,14 @@ import type { components } from "../api/schema";
 type Preview =
   | { type: "collection"; data: components["schemas"]["CollectionDetail"] }
   | { type: "personal"; data: components["schemas"]["PersonalListPreview"] };
+
+function storygraphHost(hostname: string) {
+  return (
+    hostname === "app.thestorygraph.com" ||
+    hostname === "www.thestorygraph.com" ||
+    hostname === "thestorygraph.com"
+  );
+}
 export default function AddDiscoveryList({ close }: { close: () => void }) {
   const [creating, setCreating] = useState(false);
   const [name, setName] = useState("");
@@ -23,12 +31,27 @@ export default function AddDiscoveryList({ close }: { close: () => void }) {
   const [preview, setPreview] = useState<Preview | null>(null);
   const navigate = useNavigate();
   const cache = useQueryClient();
+  let storygraphPaste = false;
+  try {
+    storygraphPaste = storygraphHost(new URL(url).hostname);
+  } catch {
+    storygraphPaste = false;
+  }
   const load = useMutation({
     mutationFn: async (): Promise<Preview> => {
       const parsed = new URL(url);
+      if (storygraphHost(parsed.hostname))
+        return {
+          type: "personal",
+          data: result(
+            await api.POST("/api/discovery/personal-list/preview", {
+              body: { url, tracking: true },
+            }),
+          ),
+        };
       if (!["goodreads.com", "www.goodreads.com"].includes(parsed.hostname))
         throw new Error(
-          "Use a Goodreads list or shelf URL. Hardcover lists are available below.",
+          "Use a Goodreads list or shelf URL, or a StoryGraph shelf or tag link. Hardcover lists are available below.",
         );
       if (/\/choiceawards\/best-books-\d{4}\/?$/.test(parsed.pathname)) {
         navigate(
@@ -161,7 +184,8 @@ export default function AddDiscoveryList({ close }: { close: () => void }) {
         </button>
       </form>
       <p className="explore-footnote">
-        Listopia, Choice Awards, or a personal Goodreads shelf.
+        Listopia, Choice Awards, a personal Goodreads shelf, or a StoryGraph
+        shelf or tag.
       </p>
       <Notice error={load.error || add.error} />
       {preview && (
@@ -202,8 +226,9 @@ export default function AddDiscoveryList({ close }: { close: () => void }) {
           ) : (
             <>
               <p className="muted">
-                {preview.data.count} books in the feed. Older books may need a
-                CSV import.
+                {storygraphPaste
+                  ? `${preview.data.count} ${preview.data.count === 1 ? "book" : "books"} ${preview.data.partial ? "from the pages read so far" : "on this list"}. Later checks add books and leave removed ones here.`
+                  : `${preview.data.count} books in the feed. Older books may need a CSV import.`}
               </p>
               <ul>
                 {preview.data.titles.map((t) => (

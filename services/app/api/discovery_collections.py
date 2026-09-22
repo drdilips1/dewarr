@@ -11,7 +11,7 @@ from app.adapters.contracts import AdapterError
 from app.adapters.goodreads_discovery import CollectionBook, fetch_collection, image_url, source
 from app.api.catalog import WorkView, work_view
 from app.api.dependencies import CurrentUser, Database, Member
-from app.api.metadata import current_actor
+from app.api.metadata import adapter_http_error, current_actor
 from app.db.models import DiscoveryFollow, DiscoveryLayout
 from app.domain.availability import availability_for
 from app.domain.catalog_bindings import displayed_provider_works
@@ -410,12 +410,80 @@ class PersonalListPreview(BaseModel):
     count: int
     titles: list[str]
     list_id: str | None = None
+    partial: bool = False
+
+
+async def storygraph_personal(body, user, db):
+    from app.adapters import storygraph
+    from app.db.models import StorygraphAccount
+    from app.db.session import session_factory
+    from app.domain.storygraph_subscriptions import (
+        BUSY,
+        LIMITED,
+        fetch_lock,
+        save_rotation,
+        storygraph_budget,
+    )
+    from app.security import decrypt_secrets
+
+    try:
+        target = storygraph.list_url(body.url)
+    except ValueError as error:
+        raise HTTPException(422, str(error)) from error
+    account = await db.get(StorygraphAccount, user.id)
+    if not account:
+        raise HTTPException(
+            409, "Connect StoryGraph in Reading accounts before following this list"
+        )
+    uid = user.id
+    await db.rollback()
+    async with fetch_lock(uid, wait=False) as acquired:
+        if not acquired:
+            raise HTTPException(429, BUSY)
+        async with session_factory()() as gate, gate.begin():
+            wait = await storygraph_budget(gate, uid)
+        if wait:
+            raise HTTPException(429, LIMITED)
+        account = await db.get(StorygraphAccount, uid)
+        if not account:
+            raise HTTPException(
+                409, "Connect StoryGraph in Reading accounts before following this list"
+            )
+        saved = decrypt_secrets(account.encrypted_config)
+        sent_cookie = saved.get("session_cookie") if isinstance(saved, dict) else None
+        await db.rollback()
+        live = {}
+        try:
+            page = await storygraph.read_list(
+                storygraph.open_session(saved), target, session_out=live
+            )
+        except AdapterError as error:
+            await save_rotation(db, uid, sent_cookie, live.get("session_cookie"))
+            await db.commit()
+            raise adapter_http_error(error) from error
+        user = await current_actor(db, uid, edit=True)
+        account = await db.get(StorygraphAccount, user.id, populate_existing=True)
+        if not account:
+            raise HTTPException(
+                409, "Connect StoryGraph in Reading accounts before following this list"
+            )
+        await save_rotation(db, uid, saved["session_cookie"], page.session_cookie)
+        current = decrypt_secrets(account.encrypted_config)
+        username = target.username or current["username"]
+        config = {"kind": target.kind, "id": target.id, "name": page.name, "username": username}
+        await db.commit()
+    return user, config, page, current["username"]
 
 
 async def personal_preview(body, user, db):
+    from urllib.parse import urlsplit
+
+    from app.adapters import storygraph
     from app.adapters.goodreads import fetch_feed
     from app.adapters.goodreads_profile import profile_input, shelf_url
 
+    if storygraph.is_storygraph_host(urlsplit(body.url.strip()).hostname):
+        return await storygraph_personal(body, user, db)
     try:
         config = profile_input(body.url)
         url = shelf_url(config, config["selected"] or "to-read")
@@ -435,8 +503,20 @@ async def personal_preview(body, user, db):
 
 @router.post("/personal-list/preview", response_model=PersonalListPreview)
 async def preview_personal(body: PersonalListURL, user: Member, db: Database):
+    from urllib.parse import urlsplit
+
+    from app.adapters import storygraph
     from app.adapters.goodreads_profile import shelf_name
 
+    if storygraph.is_storygraph_host(urlsplit(body.url.strip()).hostname):
+        _, config, page, _seen = await personal_preview(body, user, db)
+        await db.commit()
+        return PersonalListPreview(
+            name=config["name"],
+            count=len(page.items),
+            titles=[book["title"] for book in page.items[:4]],
+            partial=page.partial,
+        )
     _, config, _, value = await personal_preview(body, user, db)
     return PersonalListPreview(
         name=shelf_name(config["selected"] or "to-read"),
@@ -447,14 +527,56 @@ async def preview_personal(body: PersonalListURL, user: Member, db: Database):
 
 @router.post("/personal-list", response_model=PersonalListPreview)
 async def add_personal(body: PersonalListURL, user: Member, db: Database):
+    from urllib.parse import urlsplit
     from uuid import uuid4
 
+    from app.adapters import storygraph
     from app.adapters.goodreads import feed_identity
     from app.adapters.goodreads_profile import shelf_name
-    from app.db.models import BookList, ListSubscription
+    from app.db.models import BookList, ListSubscription, StorygraphAccount
     from app.domain.list_subscriptions import begin
     from app.security import decrypt_secrets, encrypt_secrets
 
+    if storygraph.is_storygraph_host(urlsplit(body.url.strip()).hostname):
+        user, config, page, seen_username = await personal_preview(body, user, db)
+        await transaction_lock(db, f"storygraph-account:{user.id}")
+        account = await db.get(StorygraphAccount, user.id)
+        latest = decrypt_secrets(account.encrypted_config).get("username") if account else None
+        config = storygraph.retarget_config(config, seen_username, latest)
+        ident = storygraph.identity(config)
+        await transaction_lock(db, f"storygraph-follow:{user.id}:{ident}")
+        rows = (
+            await db.execute(
+                select(BookList, ListSubscription)
+                .join(ListSubscription)
+                .where(BookList.owner_id == user.id, ListSubscription.provider == "storygraph")
+            )
+        ).all()
+        for item, sub in rows:
+            if storygraph.identity(decrypt_secrets(sub.encrypted_config)) == ident:
+                await db.commit()
+                return PersonalListPreview(
+                    name=item.name, count=len(page.items), titles=[], list_id=str(item.id)
+                )
+        item = BookList(owner_id=user.id, name=config["name"][:200], shared=False)
+        db.add(item)
+        await db.flush()
+        sub = ListSubscription(
+            list_id=item.id,
+            provider="storygraph",
+            encrypted_config=encrypt_secrets(config),
+            interval_minutes=60,
+            enabled=body.tracking,
+            next_sync_at=datetime.now(UTC),
+        )
+        db.add(sub)
+        await db.flush()
+        if body.tracking:
+            await begin(db, user, item.id, f"discovery-follow:{uuid4()}")
+        await db.commit()
+        return PersonalListPreview(
+            name=config["name"], count=len(page.items), titles=[], list_id=str(item.id)
+        )
     user, config, url, value = await personal_preview(body, user, db)
     name = shelf_name(config["selected"] or "to-read")
     identity = feed_identity(url)

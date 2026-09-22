@@ -39,7 +39,7 @@ async def current_subscription(db, identifier):
     if (
         not subscription
         or not subscription.enabled
-        or subscription.provider not in {"hardcover", "goodreads"}
+        or subscription.provider not in {"hardcover", "goodreads", "storygraph"}
         or not owner
         or not owner.active
         or owner.role == "viewer"

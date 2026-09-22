@@ -167,8 +167,14 @@ async def test_discovery_requires_member_and_csrf(client, admin, discovery):
         },
     )
     client.headers["X-CSRF-Token"] = signed_in.json()["csrf_token"]
-    for path in ["goodreads", "subscriptions"]:
+    for path in ["goodreads", "storygraph", "subscriptions"]:
         assert (await client.get(f"/api/reading-accounts/{path}")).status_code == 403
     assert (
         await client.put("/api/reading-accounts/goodreads", json={"profile": "123"})
+    ).status_code == 403
+    assert (
+        await client.put(
+            "/api/reading-accounts/storygraph",
+            json={"session_cookie": "session-token", "remember_token": "remember-token"},
+        )
     ).status_code == 403

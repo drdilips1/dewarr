@@ -19,7 +19,9 @@ export default function ListSubscription({
   onMembershipChange?: () => void;
 }) {
   const cache = useQueryClient();
-  const [choice, setChoice] = useState<"goodreads" | "hardcover">("goodreads");
+  const [choice, setChoice] = useState<
+    "goodreads" | "hardcover" | "storygraph"
+  >("goodreads");
   const key = useRef(randomUUID());
   const path = { list_id: listId };
   const subscription = useQuery({
@@ -72,7 +74,7 @@ export default function ListSubscription({
           params: { path },
           body: {
             provider: String(fields.get("provider")) as
-              "goodreads" | "hardcover",
+              "goodreads" | "hardcover" | "storygraph",
             hardcover_list_id: fields.get("hardcover_id")
               ? Number(fields.get("hardcover_id"))
               : null,
@@ -105,6 +107,7 @@ export default function ListSubscription({
   const data = subscription.data;
   const provider = data?.provider || choice;
   const hardcover = provider === "hardcover";
+  const storygraph = provider === "storygraph";
   const busy =
     sync.isPending || data?.state === "queued" || data?.state === "running";
   return (
@@ -113,14 +116,18 @@ export default function ListSubscription({
       aria-label={
         hardcover
           ? "Hardcover list subscription"
-          : "Goodreads shelf subscription"
+          : storygraph
+            ? "StoryGraph list subscription"
+            : "Goodreads shelf subscription"
       }
     >
       <h2>{data ? "List updates" : "Connect a reading list"}</h2>
       <p>
         {hardcover
           ? "Follow your own or an accessible community list. Verified removals affect source-only entries; books you added locally stay here."
-          : "Bring shelf additions into this list. Books missing from a later feed stay here."}{" "}
+          : storygraph
+            ? "Bring list additions into this list. Books missing from a later check stay here."
+            : "Bring shelf additions into this list. Books missing from a later feed stay here."}{" "}
         Removing an imported book excludes it from future refreshes.
       </p>
       <p className="muted">
@@ -147,13 +154,19 @@ export default function ListSubscription({
             .{" "}
             {hardcover
               ? "Only a fully verified observation updates membership."
-              : "RSS is a partial view of a shelf."}
+              : storygraph
+                ? "A StoryGraph check adds books and leaves omitted ones here."
+                : "RSS is a partial view of a shelf."}
           </p>
           <button
             disabled={!!busy || !data.enabled}
             onClick={() => sync.mutate()}
           >
-            {hardcover ? "Refresh Hardcover list" : "Refresh Goodreads shelf"}
+            {hardcover
+              ? "Refresh Hardcover list"
+              : storygraph
+                ? "Reread StoryGraph list"
+                : "Refresh Goodreads shelf"}
           </button>
         </>
       )}
@@ -192,8 +205,8 @@ function SubscriptionSettings({
 }: {
   data: Subscription | null | undefined;
   pending: boolean;
-  provider: "goodreads" | "hardcover";
-  onProvider: (provider: "goodreads" | "hardcover") => void;
+  provider: "goodreads" | "hardcover" | "storygraph";
+  onProvider: (provider: "goodreads" | "hardcover" | "storygraph") => void;
   onSave: (form: HTMLFormElement) => void;
 }) {
   return (
@@ -206,22 +219,31 @@ function SubscriptionSettings({
           onSave(event.currentTarget);
         }}
       >
-        <label>
-          List provider
-          <select
-            aria-label="List provider"
-            value={provider}
-            disabled={!!data}
-            onChange={(e) =>
-              onProvider(e.target.value as "goodreads" | "hardcover")
-            }
-          >
-            <option value="goodreads">Goodreads RSS</option>
-            <option value="hardcover">Hardcover</option>
-          </select>
-          <input type="hidden" name="provider" value={provider} />
-        </label>
-        {provider === "hardcover" ? (
+        {provider === "storygraph" ? (
+          <input type="hidden" name="provider" value="storygraph" />
+        ) : (
+          <label>
+            List provider
+            <select
+              aria-label="List provider"
+              value={provider}
+              disabled={!!data}
+              onChange={(e) =>
+                onProvider(e.target.value as "goodreads" | "hardcover")
+              }
+            >
+              <option value="goodreads">Goodreads RSS</option>
+              <option value="hardcover">Hardcover</option>
+            </select>
+            <input type="hidden" name="provider" value={provider} />
+          </label>
+        )}
+        {provider === "storygraph" ? (
+          <p className="muted">
+            This list stays linked to the StoryGraph shelf or tag you followed.
+            Reconnect StoryGraph in Reading accounts if checks stop.
+          </p>
+        ) : provider === "hardcover" ? (
           <HardcoverChoice data={data} />
         ) : (
           <label>

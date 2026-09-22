@@ -187,12 +187,36 @@ async def budget(db, *, block=0):
     return 0
 
 
-async def catalog_match(db, owner, record, *, previous=True, create=True):
+async def storygraph_budget(db, user_id, *, block=0, replace=False):
+    key = f"storygraph:{user_id}"
+    await transaction_lock(db, f"{key}-budget")
+    now = datetime.now(UTC)
+    row = await db.get(RateLimit, key)
+    if block:
+        until = now + timedelta(seconds=block)
+        if not row:
+            db.add(RateLimit(key=key, count=1, resets_at=until))
+        elif replace:
+            row.resets_at = until
+        else:
+            row.resets_at = max(row.resets_at, until)
+        return 0
+    if row and row.resets_at > now:
+        return max(1, int((row.resets_at - now).total_seconds()) + 1)
+    until = now + timedelta(milliseconds=1500)
+    if row:
+        row.resets_at = until
+    else:
+        db.add(RateLimit(key=key, count=1, resets_at=until))
+    return 0
+
+
+async def catalog_match(db, owner, record, *, previous=True, create=True, provider="goodreads"):
     binding = (
         await db.scalar(
             select(ListCatalogBinding).where(
                 ListCatalogBinding.owner_id == owner.id,
-                ListCatalogBinding.identity_key == f"goodreads:{record.get('external_id')}",
+                ListCatalogBinding.identity_key == f"{provider}:{record.get('external_id')}",
             )
         )
         if previous and record.get("external_id")
@@ -213,7 +237,7 @@ async def catalog_match(db, owner, record, *, previous=True, create=True):
             .join(BookList)
             .where(
                 BookList.owner_id == owner.id,
-                ListSubscription.provider == "goodreads",
+                ListSubscription.provider == provider,
                 ListObservation.external_id == record["external_id"],
             )
             .order_by(ListObservation.created_at)
@@ -345,7 +369,7 @@ async def apply_records(db, row, owner, items):
 
                 work = await hardcover_match(db, owner, record)
             else:
-                work = await catalog_match(db, owner, record)
+                work = await catalog_match(db, owner, record, provider=row.provider)
             observation = ListObservation(
                 subscription_id=row.id,
                 external_id=record["external_id"],
@@ -395,6 +419,10 @@ async def run(operation_id):
         from app.domain.hardcover_subscriptions import run as run_hardcover
 
         return await run_hardcover(operation_id)
+    if provider == "storygraph":
+        from app.domain.storygraph_subscriptions import run as run_storygraph
+
+        return await run_storygraph(operation_id)
     if get_settings().recovery_mode:
         raise ShelfRetry(60)
     token = uuid4()

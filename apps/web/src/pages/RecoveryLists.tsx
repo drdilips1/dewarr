@@ -98,16 +98,23 @@ export function ListBaselineRecoveryReview({
         {review.items.map((item) => (
           <li key={item.subscription_id}>
             <strong>{item.title}</strong> (
-            {item.provider === "hardcover" ? "Hardcover" : "Goodreads"})
+            {item.provider === "hardcover"
+              ? "Hardcover"
+              : item.provider === "storygraph"
+                ? "StoryGraph"
+                : "Goodreads"}
+            )
             <p>
               {item.summary.visible} visible books; {item.summary.new} newly
               observed; {item.summary.returned} returned;{" "}
               {item.summary.excluded} saved exclusions.
             </p>
             <p>
-              {item.complete
-                ? `${item.summary.missing} previously observed books are no longer in the complete list. Remove only their external membership; preserve manual additions and other request reasons.`
-                : "RSS is a partial view. Books omitted from this feed keep their saved membership."}
+              {item.provider === "storygraph"
+                ? "This StoryGraph check is a partial view. Books omitted from it keep their saved membership."
+                : item.complete
+                  ? `${item.summary.missing} previously observed books are no longer in the complete list. Remove only their external membership; preserve manual additions and other request reasons.`
+                  : "RSS is a partial view. Books omitted from this feed keep their saved membership."}
             </p>
             {item.pause_acquisition && (
               <p>
