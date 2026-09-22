@@ -22,6 +22,7 @@ from app.db.models import (
 from app.domain.download_reviews import validate_inspection
 from app.domain.operations import transaction_lock
 from app.importing.collection_contents import verify as verify_contents
+from app.importing.converters import audio_conversion
 from app.importing.destination_view import view as destination_view
 from app.importing.destinations import destination_configuration
 from app.importing.grouping import current_grouping
@@ -170,6 +171,12 @@ async def start_import(db, admin, plan_id: UUID, body: ImportInput, idempotency_
             )
             continue
         configuration = await destination_configuration(db, destination)
+        try:
+            conversion = audio_conversion(item, files, group["metadata"])
+        except ValueError as error:
+            entry.message = str(error)[:500]
+            continue
+        converted = {chapter.source for chapter in conversion.chapters} if conversion else set()
         specification = PublicationSpec(
             entry_id=entry.id,
             plan_revision=plan.revision,
@@ -189,7 +196,9 @@ async def start_import(db, admin, plan_id: UUID, body: ImportInput, idempotency_
                     identity=files[mapping["source"]]["identity"],
                 )
                 for mapping in item["files"]
+                if mapping["source"] not in converted
             ],
+            conversion=conversion,
             sidecars=document["initial_sidecars"][item["group_id"]],
         )
         entry.specification = specification.model_dump(mode="json")
@@ -214,6 +223,7 @@ async def start_import(db, admin, plan_id: UUID, body: ImportInput, idempotency_
             ]
         if (
             item["medium"] == "audio"
+            and not specification.conversion
             and sum(file.get("role", "media") == "media" for file in group["files"]) > 1
         ):
             names = {file.source: file.name for file in specification.files}
@@ -229,7 +239,13 @@ async def start_import(db, admin, plan_id: UUID, body: ImportInput, idempotency_
                 )
                 if file.get("role", "media") == "media"
             ]
-        entry.state, entry.message, entry.reserved = "queued", "Waiting to publish this book", True
+        entry.state, entry.message, entry.reserved = (
+            "queued",
+            "Waiting to merge MP3 chapters into one M4B"
+            if specification.conversion
+            else "Waiting to publish this book",
+            True,
+        )
         operation = Operation(
             owner_id=admin.id,
             kind="organization.publish",

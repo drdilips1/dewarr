@@ -14,6 +14,7 @@ test("naming lanes stay on one line and preserve independent format settings", a
       "{author}/[{series}/][{sequence} - ][{edition_year} - ]{title}[ - {edition}]",
     audio_filename: "[{disc}-][{track} - ]{title}",
     ebook_filename: "{title}",
+    merge_mp3_chapters: false,
   };
   let profile = { ...defaults };
   let revision = 1;
@@ -121,6 +122,12 @@ test("naming lanes stay on one line and preserve independent format settings", a
     page.getByText("Customize filename template", { exact: true }),
   ).toHaveCount(0);
   await page.getByRole("button", { name: "Audiobook", exact: true }).click();
+  const merge = page.getByRole("checkbox", {
+    name: /Merge MP3 chapters into one M4B/,
+  });
+  await expect(merge).not.toBeChecked();
+  await merge.click();
+  await expect(merge).toBeChecked();
   const sequence = lane.getByRole("button", {
     name: "Reorder [{sequence} - ] in Folder token order",
     exact: true,
@@ -152,8 +159,12 @@ test("naming lanes stay on one line and preserve independent format settings", a
   await page.getByRole("button", { name: "Save naming settings" }).click();
   expect(profile.ebook_folder).toBe("{author}/{title}");
   expect(profile.audio_folder).toBe(`${defaults.audio_folder}[ - {language}]`);
+  expect(profile.merge_mp3_chapters).toBe(true);
   await page.reload();
   await page.getByRole("button", { name: "Audiobook", exact: true }).click();
+  await expect(
+    page.getByRole("checkbox", { name: /Merge MP3 chapters into one M4B/ }),
+  ).toBeChecked();
   await expect(
     page.getByRole("checkbox", { name: "Language", exact: true }),
   ).toBeChecked();

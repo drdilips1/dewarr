@@ -48,3 +48,18 @@ def test_partial_labels_and_noncertified_ebook_containers_need_review(extension,
         {name: {"path": name, "extension": extension, "state": "inspected"}},
         {"title": title},
     )
+
+
+def test_automatic_import_holds_a_lossy_chapter_merge_for_review():
+    from app.importing.automatic import conversion_review_reason
+    from app.importing.naming import NamingProfile
+
+    group = SimpleNamespace(
+        files=[
+            SimpleNamespace(path="01.mp3", role="media"),
+            SimpleNamespace(path="02.mp3", role="media"),
+        ]
+    )
+    assert conversion_review_reason(NamingProfile(), group) is None
+    reason = conversion_review_reason(NamingProfile(merge_mp3_chapters=True), group)
+    assert reason and "M4B" in reason

@@ -11,8 +11,10 @@ from app.importing.filesystem import beneath, directory, identity, source_scope
 from app.importing.publication import (
     PublicationSpec,
     checked_source,
+    conversion_inputs,
     object_id,
     private_staging,
+    published_names,
     read_receipt,
     same_object,
     specification_fingerprint,
@@ -77,10 +79,12 @@ def read_publication(entry, roots):
                         receipt,
                     )
                 files = publication_identities(folder, spec)
-                verify_item(folder, spec, deadline)
+                verify_item(folder, spec, deadline, receipt.get("derived"))
                 if files != publication_identities(folder, spec):
                     raise ScanHeld("Published media or metadata changed during observation")
-                evidence["media_identities"] = {file.name: files[file.name] for file in spec.files}
+                evidence["media_identities"] = {
+                    name: files[name] for name in published_names(spec)
+                }
                 if before != identity(os.fstat(folder)):
                     raise ScanHeld("Published directory changed during observation")
                 evidence["destination_identity"] = object_id(folder)
@@ -113,7 +117,7 @@ def read_publication(entry, roots):
                 directory(spec.source_root) as source_root,
                 source_scope(source_root, spec.source_relative, spec.source_kind) as source,
             ):
-                for file in spec.files:
+                for file in (*spec.files, *conversion_inputs(spec)):
                     checked_source(source, file, deadline)
             evidence["source"] = "matches-frozen-files"
         except (OSError, ValueError):
@@ -147,7 +151,7 @@ def read_publication(entry, roots):
 
 def publication_identities(folder, spec):
     result = {}
-    for name in {file.name for file in spec.files} | set(spec.sidecars) | set(spec.binary_sidecars):
+    for name in published_names(spec) | set(spec.sidecars) | set(spec.binary_sidecars):
         with beneath(folder, name) as media:
             result[name] = identity(os.fstat(media))
     return result

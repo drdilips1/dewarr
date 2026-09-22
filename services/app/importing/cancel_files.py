@@ -8,10 +8,12 @@ from uuid import uuid4
 from app.importing.filesystem import beneath, directory
 from app.importing.publication import (
     PublicationError,
+    entry_lock,
     generated_files,
     object_id,
     private_staging,
     publication_lock,
+    published_names,
     read_receipt,
     same_object,
     specification_fingerprint,
@@ -29,7 +31,7 @@ def remove_stage(staging, receipt, spec, checkpoint):
         if not same_object(folder, receipt["stage_identity"]):
             raise PublicationError("Cancellation staging identity changed")
         media = {file.name: file for file in spec.files}
-        known = set(media) | set(generated_files(spec))
+        known = published_names(spec) | set(generated_files(spec))
         names = os.listdir(folder)
         if set(names) - known:
             raise PublicationError("Unrecognized staged files need review before cancellation")
@@ -61,7 +63,11 @@ def remove_stage(staging, receipt, spec, checkpoint):
 def cancel_files(spec, *, guard=nullcontext, checkpoint=lambda _: None):
     name = str(spec.entry_id) + ".json"
     with private_staging(spec.staging_root) as staging, directory(spec.destination_root) as root:
-        with publication_lock(staging, json.dumps(object_id(root), sort_keys=True)), guard():
+        with (
+            entry_lock(staging, spec.entry_id),
+            publication_lock(staging, json.dumps(object_id(root), sort_keys=True)),
+            guard(),
+        ):
             receipt = read_receipt(staging, name)
             if receipt is None:
                 try:

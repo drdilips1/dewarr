@@ -42,8 +42,20 @@ def test_examples_produce_separate_items_for_media_recordings_and_series_childre
         "audiobooks/Alex Morgan/Harbor Trilogy/01 - 2024 - The First Harbor - Casey Reed/"
         "The First Harbor.m4b" in paths
     )
-    assert paths[-3].endswith("/001 - Beyond the Harbor.mp3")
-    assert paths[-2].endswith("/002 - Beyond the Harbor.mp3")
+    harbor = next(item for item in plan.items if item.title == "Beyond the Harbor")
+    assert harbor.conversion is None
+    assert [path.split("/")[-1] for path in paths if path.endswith("Beyond the Harbor.mp3")] == [
+        "001 - Beyond the Harbor.mp3",
+        "002 - Beyond the Harbor.mp3",
+    ]
+    merged_plan = plan_import(naming_examples(), NamingProfile(merge_mp3_chapters=True))
+    merged = next(item for item in merged_plan.items if item.title == "Beyond the Harbor")
+    assert merged.conversion is not None
+    assert merged.conversion.sources == [
+        "Harbor.Complete/Book_02/track01.mp3",
+        "Harbor.Complete/Book_02/track02.mp3",
+    ]
+    assert any("chapterized M4B" in warning for warning in merged.warnings)
     assert paths[-1] == "ebooks/Alex Morgan/A Standalone Story/A Standalone Story.epub"
     assert "edition_year" in plan.items[-1].missing_metadata
 
@@ -123,13 +135,34 @@ def test_multiple_discs_keep_order_and_custom_names_cannot_discard_track_order()
         PlannedSourceFile(path="CD2/track.mp3", disc=2, track=1),
         PlannedSourceFile(path="CD1/track.mp3", disc=1, track=1),
     ]
-    plan = plan_import([item], NamingProfile())
+    separate = NamingProfile(merge_mp3_chapters=False)
+    plan = plan_import([item], separate)
     assert [file.destination.split("/")[-1] for file in plan.items[0].files] == [
         "01-001 - Harbor.mp3",
         "02-001 - Harbor.mp3",
     ]
-    held = plan_import([item], NamingProfile(audio_filename="{title}")).items[0]
+    assert plan.items[0].conversion is None
+    held = plan_import(
+        [item], NamingProfile(audio_filename="{title}", merge_mp3_chapters=False)
+    ).items[0]
     assert held.state == "held" and "playback order" in held.reason
+    merged = plan_import(
+        [item], NamingProfile(audio_filename="{title}", merge_mp3_chapters=True)
+    ).items[0]
+    assert merged.state == "ready"
+    assert merged.conversion.output_name == "Harbor.m4b"
+    assert merged.conversion.sources == ["CD1/track.mp3", "CD2/track.mp3"]
+
+
+def test_multi_file_m4b_stays_separate_when_chapter_merge_is_mp3_only():
+    item = group(medium="audio")
+    item.files = [
+        PlannedSourceFile(path="disc1.m4b", disc=1, track=1),
+        PlannedSourceFile(path="disc2.m4b", disc=2, track=1),
+    ]
+    planned = plan_import([item], NamingProfile()).items[0]
+    assert planned.conversion is None
+    assert [file.destination.split(".")[-1] for file in planned.files] == ["m4b", "m4b"]
 
 
 def test_duplicate_representations_and_shared_source_files_are_held():

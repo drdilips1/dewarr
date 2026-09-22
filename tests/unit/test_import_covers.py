@@ -356,8 +356,9 @@ def test_legacy_publication_fingerprints_remain_stable(specification, with_cover
             }
         )
     old = specification.model_dump(mode="json")
-    # Both legacy eras predate source_kind; only the oldest predates binary artwork.
+    # Legacy eras predate source_kind and chapter merging; only the oldest predates artwork.
     old.pop("source_kind")
+    old.pop("conversion")
     if not with_cover:
         old.pop("binary_sidecars")
     assert specification_fingerprint(specification) == fingerprint(old)

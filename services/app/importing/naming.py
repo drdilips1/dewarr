@@ -86,6 +86,12 @@ def validate_template(template, *, folder):
 class NamingProfile(StrictModel):
     layout: Literal["conventional", "nested"] = "conventional"
     rename_files: bool = True
+    merge_mp3_chapters: bool = Field(
+        default=False,
+        description=(
+            "Merge a multi-file MP3 audiobook into one chapterized M4B before library import"
+        ),
+    )
     audio_folder: str = (
         "{author}/[{series}/][{sequence} - ][{recording_year} - ]{title}[ - {narrator}]"
     )
@@ -166,6 +172,12 @@ class FileMapping(StrictModel):
     role: str
 
 
+class PlannedConversion(StrictModel):
+    converter: Literal["ffmpeg-chapterized-m4b"]
+    output_name: str
+    sources: list[str] = Field(min_length=2, max_length=2000)
+
+
 class PlannedItem(StrictModel):
     group_id: UUID
     work_id: UUID
@@ -178,6 +190,7 @@ class PlannedItem(StrictModel):
     files: list[FileMapping] = Field(default_factory=list)
     missing_metadata: list[str] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)
+    conversion: PlannedConversion | None = None
 
 
 class ImportPlan(StrictModel):
@@ -328,6 +341,7 @@ def plan_import(groups: list[ImportGroup], profile: NamingProfile):
                 if file.role == "supplement"
             ):
                 raise ValueError("Only identified supplementary ebooks may join this item")
+            merging = False
             if group.medium == "audio" and len(media) > 1:
                 order = [(file.disc or 1, file.track) for file in media]
                 if any(file.track is None for file in media) or len(set(order)) != len(order):
@@ -336,7 +350,14 @@ def plan_import(groups: list[ImportGroup], profile: NamingProfile):
                     raise ValueError(
                         "Choose one audio representation; do not combine alternate encodings"
                     )
-                if profile.rename_files:
+                from app.importing.converters import MAX_CHAPTERS, mp3_chapter_merge
+
+                merging = mp3_chapter_merge(profile, media)
+                if merging and len(media) > MAX_CHAPTERS:
+                    raise ValueError(
+                        "This recording has more MP3 files than chapter merging supports"
+                    )
+                if profile.rename_files and not merging:
                     tokens = template_tokens(profile.audio_filename)
                     if "track" not in tokens or (
                         len({file.disc or 1 for file in media}) > 1 and "disc" not in tokens
@@ -346,8 +367,12 @@ def plan_import(groups: list[ImportGroup], profile: NamingProfile):
                             "to preserve playback order"
                         )
             values = values_for(group.metadata, medium=group.medium)
-            values["formats"] = " + ".join(
-                sorted({PurePosixPath(file.path).suffix[1:].upper() for file in media})
+            values["formats"] = (
+                "M4B"
+                if merging
+                else " + ".join(
+                    sorted({PurePosixPath(file.path).suffix[1:].upper() for file in media})
+                )
             )
             template = getattr(profile, group.medium + "_folder")
             item.missing_metadata = sorted(
@@ -377,9 +402,12 @@ def plan_import(groups: list[ImportGroup], profile: NamingProfile):
                 raise ValueError("Destination folder collides or exceeds the relative path limit")
             files = []
             names = set()
-            for file in sorted(
+            ordered = sorted(
                 group.files, key=lambda file: (file.disc or 1, file.track or 0, file.path)
-            ):
+            )
+            for file in ordered:
+                if merging and file.role == "media":
+                    continue
                 extension = PurePosixPath(file.path).suffix.lower()
                 name = (
                     render(
@@ -406,6 +434,33 @@ def plan_import(groups: list[ImportGroup], profile: NamingProfile):
                         role=file.role,
                     )
                 )
+            if merging:
+                output = component(values["title"]) + ".m4b"
+                if collision_key(output) in names:
+                    output = (
+                        component(values["title"], 140)
+                        + " ["
+                        + hashlib.sha256(b"m4b").hexdigest()[:8]
+                        + "].m4b"
+                    )
+                if collision_key(output) in names:
+                    raise ValueError("Selected files produce the same destination")
+                sources = [file.path for file in ordered if file.role == "media"]
+                files.append(
+                    FileMapping(
+                        source=sources[0],
+                        destination=f"{root}/{folder}/{output}",
+                        role="media",
+                    )
+                )
+                item.conversion = PlannedConversion(
+                    converter="ffmpeg-chapterized-m4b",
+                    output_name=output,
+                    sources=sources,
+                )
+                item.warnings.append(
+                    "These MP3 files will be merged into one chapterized M4B before import"
+                )
             used_folders.add(key)
             item.folder, item.files = f"{root}/{folder}", files
             if group.medium == "ebook" and len(media) > 1:
@@ -414,7 +469,7 @@ def plan_import(groups: list[ImportGroup], profile: NamingProfile):
                 )
         except ValueError as error:
             item.state, item.reason = "held", str(error)
-            item.folder, item.files = None, []
+            item.folder, item.files, item.conversion = None, [], None
     ready = [item for item in items if item.state == "ready"]
     for item in ready:
         own = collision_key(item.folder)
@@ -432,7 +487,7 @@ def plan_import(groups: list[ImportGroup], profile: NamingProfile):
             )
     for item in items:
         if item.state == "held":
-            item.folder, item.files = None, []
+            item.folder, item.files, item.conversion = None, [], None
     return ImportPlan(
         items=items,
         expected_items=sum(item.state == "ready" for item in items),

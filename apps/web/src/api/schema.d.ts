@@ -8024,6 +8024,12 @@ export interface components {
        */
       rename_files: boolean;
       /**
+       * Merge Mp3 Chapters
+       * @description Merge a multi-file MP3 audiobook into one chapterized M4B before library import
+       * @default false
+       */
+      merge_mp3_chapters: boolean;
+      /**
        * Audio Folder
        * @default {author}/[{series}/][{sequence} - ][{recording_year} - ]{title}[ - {narrator}]
        */
@@ -8417,6 +8423,17 @@ export interface components {
       missing_metadata?: string[];
       /** Warnings */
       warnings?: string[];
+      /** Conversion */
+      conversion?: components["schemas"]["PlannedConversion"] | null;
+    };
+    /** PlannedConversion */
+    PlannedConversion: {
+      /** Converter */
+      converter: "ffmpeg-chapterized-m4b";
+      /** Output Name */
+      output_name: string;
+      /** Sources */
+      sources: string[];
     };
     /** PlannedSourceFile */
     PlannedSourceFile: {
