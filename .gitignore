@@ -29,6 +29,8 @@ backups/
 /docs/*.md
 !/docs/DOCKER.md
 !/docs/DEVELOPMENT.md
+!/docs/OIDC.md
+!/docs/PLEX.md
 !/docs/READING-ACCOUNTS.md
 !/docs/RECOVERY.md
 

@@ -46,8 +46,10 @@ from app.api import (
     list_writeback_review,
     lists,
     metadata,
+    oidc,
     operations,
     organization,
+    plex,
     prowlarr,
     reading_accounts,
     recovery,
@@ -136,6 +138,8 @@ def create_app() -> FastAPI:
         )
 
     app.include_router(auth.router, prefix="/api")
+    app.include_router(oidc.router, prefix="/api")
+    app.include_router(plex.router, prefix="/api")
     app.include_router(setup.router, prefix="/api")
     app.include_router(recovery.router, prefix="/api")
     app.include_router(operations.router, prefix="/api")

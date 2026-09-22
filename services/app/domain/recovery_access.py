@@ -14,7 +14,9 @@ from app.db.models import (
     Library,
     LibraryGrant,
     LoginSession,
+    OidcIdentity,
     Operation,
+    PlexIdentity,
     RecoveryFinding,
     User,
 )
@@ -59,14 +61,18 @@ def access_state(user, grants):
 
 def signature(user, grants):
     # The hash binds credential identity without exposing passwords in findings or receipts.
-    return digest(
-        {
-            "id": user["id"],
-            "username": user["username"],
-            "password_hash": user["password_hash"],
-            **access_state(user, grants),
-        }
-    )
+    # Provider subjects are included only after a link, so password-only reviews stay valid.
+    payload = {
+        "id": user["id"],
+        "username": user["username"],
+        "password_hash": user["password_hash"],
+        **access_state(user, grants),
+    }
+    if user.get("oidc_subject"):
+        payload["oidc_subject"] = user["oidc_subject"]
+    if user.get("plex_user_id"):
+        payload["plex_user_id"] = user["plex_user_id"]
+    return digest(payload)
 
 
 async def observe(inputs, writer):
@@ -288,13 +294,18 @@ async def apply(db, review, item, unused):
         await db.execute(delete(LoginSession).where(LoginSession.user_id == user_id))
     await db.flush()
     grants = [{"user_id": user_id, "library_id": UUID(i)} for i in after["library_ids"]]
+    current = {c.name: getattr(user, c.name) for c in User.__table__.columns}
+    identity = await db.scalar(select(OidcIdentity).where(OidcIdentity.user_id == user_id))
+    if identity:
+        current["oidc_subject"] = identity.subject
+    plex_identity = await db.scalar(select(PlexIdentity).where(PlexIdentity.user_id == user_id))
+    if plex_identity:
+        current["plex_user_id"] = plex_identity.plex_user_id
     result = {
         "user_id": str(user_id),
         "state": "reviewed",
         "changed": changed,
-        "access_digest": signature(
-            {c.name: getattr(user, c.name) for c in User.__table__.columns}, grants
-        ),
+        "access_digest": signature(current, grants),
     }
     db.add(
         AuditEvent(

@@ -191,6 +191,25 @@
         }
       }
     },
+    "/api/auth/finish": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Finish",
+        "operationId": "finish_api_auth_finish_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/auth/logout": {
       "post": {
         "tags": [
@@ -518,6 +537,325 @@
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/oidc": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Oidc Status",
+        "operationId": "oidc_status_api_auth_oidc_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OidcPublicView"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/oidc/settings": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Oidc Settings",
+        "operationId": "oidc_settings_api_auth_oidc_settings_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OidcSettingsView"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Save Oidc Settings",
+        "operationId": "save_oidc_settings_api_auth_oidc_settings_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OidcSettingsInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OidcSettingsView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/oidc/discover": {
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Discover Provider",
+        "operationId": "discover_provider_api_auth_oidc_discover_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiscoverInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscoveryView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/oidc/start": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Start",
+        "operationId": "start_api_auth_oidc_start_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/oidc/callback": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Callback",
+        "operationId": "callback_api_auth_oidc_callback_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/plex": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Plex Status",
+        "operationId": "plex_status_api_auth_plex_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlexPublicView"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/plex/settings": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Plex Settings",
+        "operationId": "plex_settings_api_auth_plex_settings_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlexSettingsView"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Save Plex Settings",
+        "operationId": "save_plex_settings_api_auth_plex_settings_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlexSettingsInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlexSettingsView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/plex/pending": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Plex Pending",
+        "operationId": "plex_pending_api_auth_plex_pending_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlexPendingView"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/plex/link": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Link",
+        "operationId": "link_api_auth_plex_link_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/plex/start": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Start",
+        "operationId": "start_api_auth_plex_start_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/plex/callback": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Callback",
+        "operationId": "callback_api_auth_plex_callback_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
               }
             }
           }
@@ -18819,6 +19157,22 @@
         ],
         "title": "DestinationView"
       },
+      "DiscoverInput": {
+        "properties": {
+          "issuer": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Issuer"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "issuer"
+        ],
+        "title": "DiscoverInput"
+      },
       "DiscoveryBookPage": {
         "properties": {
           "items": {
@@ -19058,6 +19412,44 @@
           "authors"
         ],
         "title": "DiscoveryTitle"
+      },
+      "DiscoveryView": {
+        "properties": {
+          "issuer": {
+            "type": "string",
+            "title": "Issuer"
+          },
+          "authorization_endpoint": {
+            "type": "string",
+            "title": "Authorization Endpoint"
+          },
+          "token_endpoint": {
+            "type": "string",
+            "title": "Token Endpoint"
+          },
+          "userinfo_endpoint": {
+            "type": "string",
+            "title": "Userinfo Endpoint"
+          },
+          "jwks_uri": {
+            "type": "string",
+            "title": "Jwks Uri"
+          },
+          "signing_algorithm": {
+            "type": "string",
+            "title": "Signing Algorithm"
+          }
+        },
+        "type": "object",
+        "required": [
+          "issuer",
+          "authorization_endpoint",
+          "token_endpoint",
+          "userinfo_endpoint",
+          "jwks_uri",
+          "signing_algorithm"
+        ],
+        "title": "DiscoveryView"
       },
       "DownloadConstraints": {
         "properties": {
@@ -24766,6 +25158,251 @@
         ],
         "title": "ObservationView"
       },
+      "OidcPublicView": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "enabled"
+        ],
+        "title": "OidcPublicView"
+      },
+      "OidcSettingsInput": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": false
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Label",
+            "default": "your identity provider"
+          },
+          "issuer": {
+            "type": "string",
+            "maxLength": 300,
+            "title": "Issuer",
+            "default": ""
+          },
+          "authorization_endpoint": {
+            "type": "string",
+            "maxLength": 500,
+            "title": "Authorization Endpoint",
+            "default": ""
+          },
+          "token_endpoint": {
+            "type": "string",
+            "maxLength": 500,
+            "title": "Token Endpoint",
+            "default": ""
+          },
+          "userinfo_endpoint": {
+            "type": "string",
+            "maxLength": 500,
+            "title": "Userinfo Endpoint",
+            "default": ""
+          },
+          "jwks_uri": {
+            "type": "string",
+            "maxLength": 500,
+            "title": "Jwks Uri",
+            "default": ""
+          },
+          "client_id": {
+            "type": "string",
+            "maxLength": 200,
+            "title": "Client Id",
+            "default": ""
+          },
+          "client_secret": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Secret"
+          },
+          "signing_algorithm": {
+            "type": "string",
+            "title": "Signing Algorithm",
+            "default": "RS256"
+          },
+          "match_existing": {
+            "type": "string",
+            "title": "Match Existing",
+            "default": "off"
+          },
+          "auto_register": {
+            "type": "boolean",
+            "title": "Auto Register",
+            "default": false
+          },
+          "default_role": {
+            "type": "string",
+            "title": "Default Role",
+            "default": "member"
+          },
+          "group_claim": {
+            "type": "string",
+            "maxLength": 80,
+            "title": "Group Claim",
+            "default": ""
+          },
+          "group_scope": {
+            "type": "string",
+            "maxLength": 80,
+            "title": "Group Scope",
+            "default": ""
+          },
+          "admin_group": {
+            "type": "string",
+            "maxLength": 120,
+            "title": "Admin Group",
+            "default": ""
+          },
+          "member_group": {
+            "type": "string",
+            "maxLength": 120,
+            "title": "Member Group",
+            "default": ""
+          },
+          "viewer_group": {
+            "type": "string",
+            "maxLength": 120,
+            "title": "Viewer Group",
+            "default": ""
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "OidcSettingsInput"
+      },
+      "OidcSettingsView": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "issuer": {
+            "type": "string",
+            "title": "Issuer"
+          },
+          "authorization_endpoint": {
+            "type": "string",
+            "title": "Authorization Endpoint"
+          },
+          "token_endpoint": {
+            "type": "string",
+            "title": "Token Endpoint"
+          },
+          "userinfo_endpoint": {
+            "type": "string",
+            "title": "Userinfo Endpoint"
+          },
+          "jwks_uri": {
+            "type": "string",
+            "title": "Jwks Uri"
+          },
+          "client_id": {
+            "type": "string",
+            "title": "Client Id"
+          },
+          "signing_algorithm": {
+            "type": "string",
+            "title": "Signing Algorithm"
+          },
+          "match_existing": {
+            "type": "string",
+            "title": "Match Existing"
+          },
+          "auto_register": {
+            "type": "boolean",
+            "title": "Auto Register"
+          },
+          "default_role": {
+            "type": "string",
+            "title": "Default Role"
+          },
+          "group_claim": {
+            "type": "string",
+            "title": "Group Claim"
+          },
+          "group_scope": {
+            "type": "string",
+            "title": "Group Scope"
+          },
+          "admin_group": {
+            "type": "string",
+            "title": "Admin Group"
+          },
+          "member_group": {
+            "type": "string",
+            "title": "Member Group"
+          },
+          "viewer_group": {
+            "type": "string",
+            "title": "Viewer Group"
+          },
+          "secret_set": {
+            "type": "boolean",
+            "title": "Secret Set"
+          },
+          "redirect_uri": {
+            "type": "string",
+            "title": "Redirect Uri"
+          }
+        },
+        "type": "object",
+        "required": [
+          "enabled",
+          "label",
+          "issuer",
+          "authorization_endpoint",
+          "token_endpoint",
+          "userinfo_endpoint",
+          "jwks_uri",
+          "client_id",
+          "signing_algorithm",
+          "match_existing",
+          "auto_register",
+          "default_role",
+          "group_claim",
+          "group_scope",
+          "admin_group",
+          "member_group",
+          "viewer_group",
+          "secret_set",
+          "redirect_uri"
+        ],
+        "title": "OidcSettingsView"
+      },
       "OmittedSeriesBook": {
         "properties": {
           "work_id": {
@@ -25376,9 +26013,7 @@
         "properties": {
           "converter": {
             "type": "string",
-            "enum": [
-              "ffmpeg-chapterized-m4b"
-            ],
+            "const": "ffmpeg-chapterized-m4b",
             "title": "Converter"
           },
           "output_name": {
@@ -25390,8 +26025,8 @@
               "type": "string"
             },
             "type": "array",
-            "minItems": 2,
             "maxItems": 2000,
+            "minItems": 2,
             "title": "Sources"
           }
         },
@@ -25559,6 +26194,114 @@
           "path"
         ],
         "title": "PlannedSourceFile"
+      },
+      "PlexPendingView": {
+        "properties": {
+          "servers": {
+            "items": {
+              "$ref": "#/components/schemas/PlexServerView"
+            },
+            "type": "array",
+            "title": "Servers"
+          }
+        },
+        "type": "object",
+        "required": [
+          "servers"
+        ],
+        "title": "PlexPendingView"
+      },
+      "PlexPublicView": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          }
+        },
+        "type": "object",
+        "required": [
+          "enabled"
+        ],
+        "title": "PlexPublicView"
+      },
+      "PlexServerView": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "machine_id": {
+            "type": "string",
+            "title": "Machine Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "machine_id"
+        ],
+        "title": "PlexServerView"
+      },
+      "PlexSettingsInput": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": false
+          },
+          "machine_id": {
+            "type": "string",
+            "maxLength": 80,
+            "title": "Machine Id",
+            "default": ""
+          },
+          "auto_register": {
+            "type": "boolean",
+            "title": "Auto Register",
+            "default": false
+          },
+          "default_role": {
+            "type": "string",
+            "title": "Default Role",
+            "default": "member"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "PlexSettingsInput"
+      },
+      "PlexSettingsView": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "machine_id": {
+            "type": "string",
+            "title": "Machine Id"
+          },
+          "server_name": {
+            "type": "string",
+            "title": "Server Name"
+          },
+          "auto_register": {
+            "type": "boolean",
+            "title": "Auto Register"
+          },
+          "default_role": {
+            "type": "string",
+            "title": "Default Role"
+          }
+        },
+        "type": "object",
+        "required": [
+          "enabled",
+          "machine_id",
+          "server_name",
+          "auto_register",
+          "default_role"
+        ],
+        "title": "PlexSettingsView"
       },
       "PolicyConfiguration": {
         "properties": {
