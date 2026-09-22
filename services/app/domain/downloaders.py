@@ -10,13 +10,27 @@ from fastapi import HTTPException
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.adapters.contracts import AdapterError, FailureKind
+from app.adapters.nzbget import NzbClient
 from app.adapters.qbittorrent import QbitClient, absolute_path
+from app.adapters.sabnzbd import SabClient
 from app.config import get_settings
 from app.db.models import Integration
 from app.db.session import session_factory
 from app.domain.operations import transaction_lock
 from app.domain.source_network import check_actor
 from app.security import decrypt_secrets
+
+DOWNLOAD_KINDS = {"qbittorrent", "sabnzbd", "nzbget"}
+USENET_KINDS = {"sabnzbd", "nzbget"}
+
+
+def client_protocol(kind):
+    if kind in USENET_KINDS:
+        return "nzb"
+    if kind == "qbittorrent":
+        return "torrent"
+    return None
+
 
 SETTINGS_LOCK = "downloaders:settings"
 TEST_INTERVAL = 2
@@ -100,7 +114,7 @@ def mapped_path(row, path):
 
 async def connection_or_404(db, connection_id):
     row = await db.get(Integration, connection_id, populate_existing=True)
-    if not row or row.kind != "qbittorrent" or row.owner_id is not None:
+    if not row or row.kind not in DOWNLOAD_KINDS or row.owner_id is not None:
         raise HTTPException(404, "Downloader connection not found")
     return row
 
@@ -124,7 +138,7 @@ async def test_connection(user_id, connection_id):
                 "Wait before testing this downloader again.",
                 retry_after=math.ceil((row.next_sync_at - now).total_seconds()),
             )
-        generation, endpoint = row.credential_generation, row.base_url
+        generation, endpoint, kind = row.credential_generation, row.base_url, row.kind
         client_managed, category = row.config.get("client_managed", False), row.config["category"]
         credentials = decrypt_secrets(row.encrypted_secrets)
         row.lease_token, row.lease_until = token, now + timedelta(seconds=TEST_LEASE_SECONDS)
@@ -133,10 +147,17 @@ async def test_connection(user_id, connection_id):
     capabilities = None
     observed_path = None
     try:
-        async with (
-            asyncio.timeout(TEST_TIMEOUT),
-            QbitClient(endpoint, credentials["username"], credentials["password"]) as client,
-        ):
+        if kind == "sabnzbd":
+            client = SabClient(endpoint, credentials.get("api_key", ""))
+        elif kind == "nzbget":
+            client = NzbClient(
+                endpoint,
+                credentials.get("username", ""),
+                credentials.get("password", ""),
+            )
+        else:
+            client = QbitClient(endpoint, credentials["username"], credentials["password"])
+        async with asyncio.timeout(TEST_TIMEOUT), client:
             capabilities = await client.capabilities()
             if client_managed:
                 observed_path = await client.download_location(category)
@@ -216,6 +237,8 @@ async def resolve_metadata(user_id, connection_id, magnet, *, expected_generatio
                 "Downloader inspection is cooling down.",
                 retry_after=math.ceil((row.next_sync_at - now).total_seconds()),
             )
+        if row.kind != "qbittorrent":
+            raise HTTPException(422, "Magnet inspection requires qBittorrent")
         generation, endpoint = row.credential_generation, row.base_url
         credentials = decrypt_secrets(row.encrypted_secrets)
         row.lease_token, row.lease_until = token, now + timedelta(seconds=90)

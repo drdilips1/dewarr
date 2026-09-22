@@ -23,6 +23,19 @@ test("download defaults inherit per field and persist after reload", async ({
     name: "Download defaults",
     exact: true,
   });
+  await panel
+    .getByText("Downloader and destination defaults", { exact: true })
+    .click();
+  const torrentDefault = panel.getByLabel("Default torrent downloader", {
+    exact: true,
+  });
+  const usenetDefault = panel.getByLabel("Default Usenet downloader", {
+    exact: true,
+  });
+  await expect(torrentDefault).toBeVisible();
+  await expect(usenetDefault).toBeVisible();
+  await expect(torrentDefault).toHaveValue("");
+  await expect(usenetDefault).toHaveValue("");
   await panel.getByLabel("Apply to").selectOption("installation");
   await panel.getByText("Formats and transfer limits", { exact: true }).click();
   await panel

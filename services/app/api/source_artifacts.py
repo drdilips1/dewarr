@@ -6,6 +6,7 @@ from fastapi.responses import Response
 from pydantic import BaseModel
 
 from app.adapters.contracts import AdapterError
+from app.adapters.nzb_descriptor import NzbDescriptor
 from app.adapters.source_releases import SourceRelease
 from app.adapters.torrent_descriptor import TorrentDescriptor
 from app.api.dependencies import Database, Member
@@ -23,7 +24,7 @@ class SourceArtifactView(BaseModel):
     source_id: str
     source_generation: int
     current_connection: bool
-    descriptor: TorrentDescriptor
+    descriptor: TorrentDescriptor | NzbDescriptor
     release: SourceRelease
     dispatch_available: bool = False
 

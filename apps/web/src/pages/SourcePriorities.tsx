@@ -21,7 +21,8 @@ function unavailable(indexer: Indexer) {
       : "Excluded in source settings";
   if (!indexer.enabled) return "Disabled in Prowlarr";
   if (!indexer.supports_search) return "Search unavailable";
-  if (indexer.protocol !== "torrent") return "Download protocol unsupported";
+  if (indexer.protocol !== "torrent" && indexer.protocol !== "nzb")
+    return "Download protocol unsupported";
   if (
     indexer.categories.length &&
     !indexer.categories.some((value) =>

@@ -52,8 +52,37 @@ def test_series_scope_inheritance_and_legacy_boolean_compatibility():
 
 
 def test_route_layers_preserve_explicit_clearing_and_legacy_unset_snapshots():
-    fields = {"downloader_id", "ebook_destination_id", "audio_destination_id"}
+    fields = {
+        "downloader_id",
+        "torrent_downloader_id",
+        "usenet_downloader_id",
+        "ebook_destination_id",
+        "audio_destination_id",
+    }
     assert not fields & ReleasePreferences().model_dump(mode="json").keys()
+    torrent, usenet = str(uuid4()), str(uuid4())
+    chosen, _origins = resolve_preferences(
+        [
+            (
+                "Installation default",
+                {"downloader_id": torrent, "usenet_downloader_id": usenet},
+            )
+        ]
+    )
+    assert str(chosen.downloader_id) == torrent
+    assert chosen.torrent_downloader_id is None
+    assert str(chosen.usenet_downloader_id) == usenet
+    cleared_client, _origins = resolve_preferences(
+        [
+            (
+                "Installation default",
+                {"downloader_id": torrent, "usenet_downloader_id": usenet},
+            ),
+            ("Personal default", {"usenet_downloader_id": None}),
+        ]
+    )
+    assert cleared_client.usenet_downloader_id is None
+    assert str(cleared_client.downloader_id) == torrent
     installation, personal, saved, listed, requested = [str(uuid4()) for _ in range(5)]
     preferences, origins = resolve_preferences(
         [

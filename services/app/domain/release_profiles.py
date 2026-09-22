@@ -38,6 +38,8 @@ class ReleasePreferences(ScopePreferences):
     # Omit unset routes from full snapshots so legacy effective revisions stay
     # valid. Sparse overrides still retain explicit nulls to clear inheritance.
     downloader_id: UUID | None = Field(default=None, exclude_if=lambda value: value is None)
+    torrent_downloader_id: UUID | None = Field(default=None, exclude_if=lambda value: value is None)
+    usenet_downloader_id: UUID | None = Field(default=None, exclude_if=lambda value: value is None)
     ebook_destination_id: UUID | None = Field(default=None, exclude_if=lambda value: value is None)
     audio_destination_id: UUID | None = Field(default=None, exclude_if=lambda value: value is None)
     allow_unknown_seeders: bool = Field(default=False, exclude_if=lambda value: not value)
@@ -124,6 +126,8 @@ class PreferenceOverrides(ReleasePreferences):
         values = handler(self)
         for field in {
             "downloader_id",
+            "torrent_downloader_id",
+            "usenet_downloader_id",
             "ebook_destination_id",
             "audio_destination_id",
             "series_scope",
@@ -344,8 +348,11 @@ def assess_release(release, work, preferences, medium="all"):
         explanation.append(
             "Source title and author agree with the catalog; file identity still needs inspection"
         )
-    if release.protocol != "torrent" or getattr(release, "acquisition_supported", True) is False:
-        blocked.append("No supported torrent-file acquisition is available")
+    if (
+        release.protocol not in {"torrent", "nzb"}
+        or getattr(release, "acquisition_supported", True) is False
+    ):
+        blocked.append("No supported torrent or NZB file is available")
     if medium != "all" and release.medium is not None and medium != release.medium:
         blocked.append("The release is for a different medium")
     if release.medium is None:
@@ -459,15 +466,14 @@ def enforce_profile(release, descriptor, snapshot):
         p.path.rsplit(".", 1)[-1].lower() for p in descriptor.files if "." in p.path
     } & FORMATS
     forbidden = (set(release.formats) | actual_formats) & set(preferences.blocked_formats)
+    label = "torrent" if hasattr(descriptor, "torrent_bytes") else "NZB"
     if forbidden:
         raise HTTPException(
-            422, "The selected torrent contains a blocked format: " + ", ".join(sorted(forbidden))
+            422, f"The selected {label} contains a blocked format: " + ", ".join(sorted(forbidden))
         )
-    if (
-        preferences.maximum_bytes is not None
-        and descriptor.torrent_bytes > preferences.maximum_bytes
-    ):
-        raise HTTPException(422, "The inspected torrent exceeds the profile size limit")
+    size = getattr(descriptor, "torrent_bytes", descriptor.content_bytes)
+    if preferences.maximum_bytes is not None and size > preferences.maximum_bytes:
+        raise HTTPException(422, f"The inspected {label} exceeds the profile size limit")
 
 
 def enforce_inspected_profile(files, snapshot):

@@ -100,6 +100,8 @@ async def preview(db, user, selection_id):
         return result
     artifact = await db.get(SourceArtifact, selection.artifact_id)
     release = parse_release(artifact.source_key, artifact.release_snapshot)
+    if artifact.descriptor.get("protocol") == "nzb":
+        raise HTTPException(422, "Usenet releases are imported after the download finishes")
     descriptor = TorrentDescriptor.model_validate(artifact.descriptor)
     artifact_bytes(artifact)
     if (

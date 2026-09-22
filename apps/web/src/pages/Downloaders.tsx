@@ -7,6 +7,52 @@ import type { components } from "../api/schema";
 import { Empty, Loading, Notice } from "../components";
 
 type Connection = components["schemas"]["DownloaderView"];
+type DownloaderKind = Connection["kind"];
+
+const CLIENTS: Record<
+  DownloaderKind,
+  {
+    name: string;
+    placeholder: string;
+    url: string;
+    category: string;
+    saved: string;
+  }
+> = {
+  qbittorrent: {
+    name: "qBittorrent",
+    placeholder: "http://qbittorrent:8080",
+    url: "Use the Web UI address accessible to this app. This connection does not change qBittorrent’s VPN or torrent routing.",
+    category: "Set download folders and torrent preferences in qBittorrent.",
+    saved:
+      "Credentials are stored privately. Leave both fields blank to keep them. Changing the server address clears saved credentials.",
+  },
+  sabnzbd: {
+    name: "SABnzbd",
+    placeholder: "http://sabnzbd:8080",
+    url: "Use the SABnzbd address accessible to this app. NZBs from Prowlarr are sent there. This connection does not change SABnzbd’s folders or post-processing.",
+    category:
+      "Set the category folder in SABnzbd. Testing this connection reads that folder.",
+    saved:
+      "The API key is stored privately. Leave it blank to keep the saved key. Changing the server address requires the key again.",
+  },
+  nzbget: {
+    name: "NZBGet",
+    placeholder: "http://nzbget:6789",
+    url: "Use the NZBGet address accessible to this app. NZBs from Prowlarr are sent there. This connection does not change NZBGet’s folders or post-processing.",
+    category:
+      "Set the category folder in NZBGet. Testing this connection reads that folder.",
+    saved:
+      "Username and password are stored privately. Leave both blank when control authentication is off, or to keep saved credentials. Changing the server address clears them.",
+  },
+};
+
+function draftKind(editing: string, selected?: Connection): DownloaderKind {
+  if (selected?.kind) return selected.kind;
+  if (editing === "sab") return "sabnzbd";
+  if (editing === "nzb") return "nzbget";
+  return "qbittorrent";
+}
 
 export default function Downloaders({
   embedded = false,
@@ -38,22 +84,33 @@ export default function Downloaders({
           <div>
             <p className="eyebrow">DOWNLOAD CONNECTIONS</p>
             <h1>Downloaders</h1>
-            <p>Connect qBittorrent using its Web UI address.</p>
+            <p>
+              Connect qBittorrent for torrents, or SABnzbd or NZBGet for Usenet.
+            </p>
             <Link to="/settings#libraries">Library connections</Link>
           </div>
         )}
-        <button className="primary" onClick={() => setEditing("new")}>
-          Connect qBittorrent
-        </button>
+        <div className="button-row">
+          <button className="primary" onClick={() => setEditing("qbit")}>
+            Connect qBittorrent
+          </button>
+          <button onClick={() => setEditing("sab")}>Connect SABnzbd</button>
+          <button onClick={() => setEditing("nzb")}>Connect NZBGet</button>
+        </div>
       </header>
       <Notice error={connections.error || test.error} />
-      {editing && (editing === "new" || selected) && (
-        <ConnectionForm
-          key={`${editing}:${selected?.generation || 0}`}
-          connection={selected}
-          close={() => setEditing(null)}
-        />
-      )}
+      {editing &&
+        (editing === "qbit" ||
+          editing === "sab" ||
+          editing === "nzb" ||
+          selected) && (
+          <ConnectionForm
+            key={`${editing}:${selected?.generation || 0}`}
+            kind={draftKind(editing, selected)}
+            connection={selected}
+            close={() => setEditing(null)}
+          />
+        )}
       {connections.isPending ? (
         <Loading />
       ) : connections.data?.length ? (
@@ -73,7 +130,7 @@ export default function Downloaders({
               <p className="break-text">{connection.base_url}</p>
               <p>
                 {connection.version
-                  ? `qBittorrent ${connection.version}`
+                  ? `${CLIENTS[connection.kind].name} ${connection.version}`
                   : "Version not checked"}
               </p>
               <p className="muted">
@@ -108,8 +165,9 @@ export default function Downloaders({
         <p className="muted">No download clients connected.</p>
       ) : (
         <Empty title="No downloaders connected">
-          Add your qBittorrent Web UI address to get started. Credentials are
-          optional.
+          Add qBittorrent for torrents, or SABnzbd or NZBGet for Usenet.
+          qBittorrent and NZBGet credentials are optional. SABnzbd needs an API
+          key.
         </Empty>
       )}
     </>
@@ -118,24 +176,31 @@ export default function Downloaders({
 
 function ConnectionForm({
   connection,
+  kind,
   close,
 }: {
   connection?: Connection;
+  kind: DownloaderKind;
   close: () => void;
 }) {
   const urlId = useId();
   const cache = useQueryClient();
+  const client = CLIENTS[kind];
+  const token = kind === "sabnzbd";
   const [url, setUrl] = useState(connection?.base_url || "");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [apiKey, setApiKey] = useState("");
   const [category, setCategory] = useState(connection?.category ?? "");
   const save = useMutation({
     mutationFn: async () => {
       const body = {
-        name: connection?.name || "qBittorrent",
+        kind,
+        name: connection?.name || client.name,
         base_url: url,
-        username: username || null,
-        password: password || null,
+        username: token ? null : username || null,
+        password: token ? null : password || null,
+        api_key: token ? apiKey || null : null,
         category,
         enabled: connection?.enabled ?? true,
         expected_generation: connection?.generation || 0,
@@ -152,6 +217,7 @@ function ConnectionForm({
     onSuccess: () => {
       setUsername("");
       setPassword("");
+      setApiKey("");
       cache.invalidateQueries({ queryKey: ["downloaders"] });
       close();
     },
@@ -159,7 +225,7 @@ function ConnectionForm({
   return (
     <form
       className="panel editor"
-      aria-label="qBittorrent connection settings"
+      aria-label={`${client.name} connection settings`}
       onSubmit={(event) => {
         event.preventDefault();
         save.mutate();
@@ -169,49 +235,62 @@ function ConnectionForm({
       <div style={{ display: "grid", gap: 6, maxWidth: "32rem" }}>
         <div className="setting-label">
           <label htmlFor={urlId} style={{ width: "auto" }}>
-            qBittorrent URL or IP address
+            {`${client.name} URL or IP address`}
           </label>
-          <SettingHelp label="qBittorrent URL or IP address">
-            Use the Web UI address accessible to this app. This connection does
-            not change qBittorrent’s VPN or torrent routing.
+          <SettingHelp label={`${client.name} URL or IP address`}>
+            {client.url}
           </SettingHelp>
         </div>
         <input
           id={urlId}
           type="text"
-          placeholder="http://qbittorrent:8080"
+          placeholder={client.placeholder}
           value={url}
           onChange={(event) => setUrl(event.target.value)}
           required
           maxLength={2000}
         />
       </div>
-      <label>
-        qBittorrent username (optional)
-        <input
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
-          autoComplete="off"
-          maxLength={300}
-        />
-      </label>
-      <label>
-        qBittorrent password (optional)
-        <input
-          type="password"
-          placeholder={connection?.has_credentials ? "••••••••" : undefined}
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          autoComplete="new-password"
-          maxLength={1000}
-        />
-      </label>
+      {token ? (
+        <label>
+          SABnzbd API key
+          <input
+            type="password"
+            value={apiKey}
+            onChange={(event) => setApiKey(event.target.value)}
+            placeholder={connection?.has_credentials ? "••••••••" : undefined}
+            autoComplete="new-password"
+            required={!connection?.has_credentials}
+            maxLength={1000}
+          />
+        </label>
+      ) : (
+        <>
+          <label>
+            {`${client.name} username (optional)`}
+            <input
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+              autoComplete="off"
+              maxLength={300}
+            />
+          </label>
+          <label>
+            {`${client.name} password (optional)`}
+            <input
+              type="password"
+              placeholder={connection?.has_credentials ? "••••••••" : undefined}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              autoComplete="new-password"
+              maxLength={1000}
+            />
+          </label>
+        </>
+      )}
       {connection && (
         <div className="setting-help-row">
-          <SettingHelp label="connection setup">
-            Credentials are stored privately. Leave both fields blank to keep
-            them. Changing the server address clears saved credentials.
-          </SettingHelp>
+          <SettingHelp label="connection setup">{client.saved}</SettingHelp>
         </div>
       )}
       <label>
@@ -223,9 +302,7 @@ function ConnectionForm({
           maxLength={100}
         />
       </label>
-      <p className="muted">
-        Set download folders and torrent preferences in qBittorrent.
-      </p>
+      <p className="muted">{client.category}</p>
       <div className="button-row">
         <button className="primary" disabled={save.isPending}>
           {save.isPending ? "Saving…" : "Save downloader"}

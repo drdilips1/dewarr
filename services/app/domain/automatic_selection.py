@@ -8,12 +8,12 @@ from pathlib import PurePosixPath
 from uuid import UUID, uuid4
 
 from fastapi import HTTPException
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 from sqlalchemy import select, text
 
 from app.adapters.contracts import AdapterError, FailureKind
+from app.adapters.nzb_descriptor import load_descriptor
 from app.adapters.source_releases import release_value as parse_release
-from app.adapters.torrent_descriptor import TorrentDescriptor
 from app.config import get_settings
 from app.db.models import (
     AcquisitionIntent,
@@ -42,6 +42,7 @@ from app.domain.automatic_eligibility import (
     limit_bytes,
 )
 from app.domain.book_sources import checked
+from app.domain.downloaders import client_protocol, connection_or_404
 from app.domain.operations import transaction_lock
 from app.domain.prowlarr_network import prowlarr_call
 from app.domain.release_profiles import (
@@ -86,11 +87,105 @@ class AutomaticSelectionInput(BaseModel):
     downloader_generation: int = Field(ge=1)
     destination_id: UUID
     destination_revision: str = Field(pattern=r"^[a-f0-9]{64}$")
+    alternate_downloader_id: UUID | None = None
+    alternate_downloader_generation: int | None = Field(default=None, ge=1)
+    alternate_destination_id: UUID | None = None
+    alternate_destination_revision: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
     download_when_ready: bool = False
+
+    @model_validator(mode="after")
+    def fallback_route(self):
+        parts = (
+            self.alternate_downloader_id,
+            self.alternate_downloader_generation,
+            self.alternate_destination_id,
+            self.alternate_destination_revision,
+        )
+        if any(part is not None for part in parts) and not all(part is not None for part in parts):
+            raise ValueError("A fallback downloader needs its revision and import route")
+        if self.alternate_downloader_id and self.alternate_downloader_id == self.downloader_id:
+            raise ValueError("Choose a different client for the other download protocol")
+        return self
 
 
 def release_value(row):
     return parse_release(row.source_key, row.release_snapshot)
+
+
+def protocol_rejection(protocol):
+    if protocol == "nzb":
+        return "This release needs a SABnzbd or NZBGet connection"
+    return "This release needs a qBittorrent connection"
+
+
+async def accept_route(db, operation, result_id, route, protocol):
+    if route is None:
+        await reject_candidate(db, operation, result_id, [protocol_rejection(protocol)])
+        return False
+    if route_ready(route):
+        return True
+    if route["approval_key"] == "dispatch_approval":
+        finish(operation, "held", "The download client for this release is not ready")
+        return False
+    await reject_candidate(
+        db, operation, result_id, ["The download client for this release is not ready"]
+    )
+    return False
+
+
+def route_ready(route):
+    downloader = route["downloader"]
+    if downloader is None:
+        return False
+    return bool(
+        downloader.enabled
+        and downloader.status == "connected"
+        and downloader.credential_generation == route["generation"]
+    )
+
+
+def wanted_protocol(protocol):
+    return "nzb" if protocol == "nzb" else "torrent"
+
+
+async def matching_route(db, body, protocol):
+    """Return the saved client whose protocol matches this release."""
+    wanted = wanted_protocol(protocol)
+    try:
+        primary = await connection_or_404(db, body.downloader_id)
+    except HTTPException:
+        primary = None
+    if primary and client_protocol(primary.kind) == wanted:
+        return {
+            "downloader": primary,
+            "generation": body.downloader_generation,
+            "destination_id": body.destination_id,
+            "destination_revision": body.destination_revision,
+            "approval_key": "dispatch_approval",
+        }
+    alternate = None
+    if body.alternate_downloader_id:
+        try:
+            alternate = await connection_or_404(db, body.alternate_downloader_id)
+        except HTTPException:
+            alternate = None
+    if alternate and client_protocol(alternate.kind) == wanted:
+        return {
+            "downloader": alternate,
+            "generation": body.alternate_downloader_generation,
+            "destination_id": body.alternate_destination_id,
+            "destination_revision": body.alternate_destination_revision,
+            "approval_key": "alternate_dispatch_approval",
+        }
+    if primary is None and alternate is None:
+        return {
+            "downloader": None,
+            "generation": body.downloader_generation,
+            "destination_id": body.destination_id,
+            "destination_revision": body.destination_revision,
+            "approval_key": "dispatch_approval",
+        }
+    return None
 
 
 def verify_version_snapshot(payload, version):
@@ -216,9 +311,9 @@ async def begin(db, user, body, key, *, list_authority=None, series_authority=No
 
     await require_series(db, user.id, series_authority, intent_id=body.intent_id)
     await transaction_lock(db, f"operation:{user.id}:{key}")
-    command = body.model_dump(mode="json")
+    command = body.model_dump(mode="json", exclude_none=True)
     if body.result_id is None:
-        command.pop("result_id")
+        command.pop("result_id", None)
     if not body.download_when_ready:
         command.pop("download_when_ready")  # Preserve earlier preparation-only command receipts.
     previous = await db.scalar(
@@ -239,6 +334,13 @@ async def begin(db, user, body, key, *, list_authority=None, series_authority=No
             db, user.id, body.destination_id, body.destination_revision
         )
         if body.download_when_ready
+        else None
+    )
+    alternate_approval = (
+        await automatic_dispatch.approve_route(
+            db, user.id, body.alternate_destination_id, body.alternate_destination_revision
+        )
+        if body.download_when_ready and body.alternate_destination_id
         else None
     )
     active = await db.scalar(
@@ -298,6 +400,11 @@ async def begin(db, user, body, key, *, list_authority=None, series_authority=No
             "selection_id": None,
             "token": None,
             "dispatch_approval": approval,
+            **(
+                {"alternate_dispatch_approval": alternate_approval}
+                if alternate_approval is not None
+                else {}
+            ),
             "download_id": None,
             "list_authority": list_authority,
             "series_authority": series_authority,
@@ -431,7 +538,8 @@ async def resolve_candidate(owner_id, row, *, downloader_id=None, downloader_gen
         release = release_value(row)
         reference = decrypt_secrets(row.encrypted_reference).get("link")
         if not reference:
-            raise HTTPException(422, "This result has no supported torrent file")
+            label = "NZB" if getattr(release, "protocol", None) == "nzb" else "torrent"
+            raise HTTPException(422, f"This result has no supported {label} file")
         artifact, generation = await prowlarr_call(
             owner_id, "resolve", (release, reference), expected_generation=row.source_generation
         )
@@ -531,6 +639,14 @@ async def run(identifier):
                     body.destination_revision,
                     expected=operation.payload["dispatch_approval"],
                 )
+                if body.alternate_destination_id:
+                    await automatic_dispatch.approve_route(
+                        db,
+                        user.id,
+                        body.alternate_destination_id,
+                        body.alternate_destination_revision,
+                        expected=operation.payload.get("alternate_dispatch_approval"),
+                    )
             frozen_catalog = operation.payload.get("pack_catalog")
             if frozen_catalog is not None and frozen_catalog != await pack_coverage.catalog(
                 db, user, work
@@ -579,11 +695,16 @@ async def run(identifier):
                 "review candidate reasons or refresh results",
             )
             return
-        row = possible[0][1]
+        row, preview = possible[0][1], possible[0][2]
+        route = await matching_route(db, body, preview.protocol)
+        if not await accept_route(db, operation, row.id, route, preview.protocol):
+            return
         cached = payload.get("verified", {}).get(str(row.id))
-        payload.update(
-            token=token, lease_until=(datetime.now(UTC) + timedelta(minutes=4)).isoformat()
-        )
+        payload = {
+            **payload,
+            "token": token,
+            "lease_until": (datetime.now(UTC) + timedelta(minutes=4)).isoformat(),
+        }
         operation.payload = payload
         operation.status, operation.message = (
             "running",
@@ -606,8 +727,8 @@ async def run(identifier):
                     artifact_id, fresh = await resolve_candidate(
                         owner_id,
                         row,
-                        downloader_id=body.downloader_id,
-                        downloader_generation=body.downloader_generation,
+                        downloader_id=route["downloader"].id,
+                        downloader_generation=route["generation"],
                     )
                 else:
                     artifact_id, fresh = await resolve_candidate(owner_id, row)
@@ -639,7 +760,7 @@ async def run(identifier):
                     db,
                     operation,
                     row.id,
-                    ["Torrent could not be inspected or is unsupported; review this source result"],
+                    ["Release could not be inspected or is unsupported; review this source result"],
                 )
                 return
             finish(
@@ -647,7 +768,7 @@ async def run(identifier):
                 "queued" if retry else "held",
                 "Source access is temporarily unavailable"
                 if retry
-                else "Torrent inspection needs review; inspect the source result manually",
+                else "Release inspection needs review; inspect the source result manually",
             )
         if retry:
             raise SourceSearchRetry(getattr(error, "retry_after", None) or 60) from None
@@ -733,7 +854,10 @@ async def run(identifier):
                     ],
                 )
                 return
-            descriptor = TorrentDescriptor.model_validate(artifact.descriptor)
+            descriptor = load_descriptor(artifact.descriptor)
+            route = await matching_route(db, body, fresh.protocol)
+            if not await accept_route(db, operation, row.id, route, fresh.protocol):
+                return
             reasons = eligibility(
                 fresh,
                 operation.payload["work"],
@@ -823,10 +947,10 @@ async def run(identifier):
                         search_id=body.search_id,
                         slot=body.slot,
                         artifact_id=artifact_id,
-                        downloader_id=body.downloader_id,
-                        downloader_generation=body.downloader_generation,
-                        destination_id=body.destination_id,
-                        destination_revision=body.destination_revision,
+                        downloader_id=route["downloader"].id,
+                        downloader_generation=route["generation"],
+                        destination_id=route["destination_id"],
+                        destination_revision=route["destination_revision"],
                         confirmed_work_id=work.id,
                         profile_id=profile.id,
                         profile_generation=profile.generation,
@@ -868,7 +992,7 @@ async def run(identifier):
                             "Fetched source page; single-book manifest; "
                             "actual file identity checked after downloading"
                         ),
-                        "dispatch_approval": operation.payload.get("dispatch_approval"),
+                        "dispatch_approval": operation.payload.get(route["approval_key"]),
                         "list_authority": operation.payload.get("list_authority"),
                         "series_authority": operation.payload.get("series_authority"),
                     },

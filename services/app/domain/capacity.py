@@ -134,7 +134,12 @@ def download_cost(frozen, observation):
         raise CapacityWait("Staging and library must be on the same filesystem")
     if frozen["destination"]["mode"] == "hardlink" and roots["download"] != roots["library"]:
         raise CapacityWait("Hardlinks require download and library storage on the same filesystem")
-    total = frozen["descriptor"]["torrent_bytes"]
+    descriptor = frozen["descriptor"]
+    total = descriptor.get("torrent_bytes")
+    if total is None:
+        total = descriptor.get("content_bytes") or frozen.get("release", {}).get("size_bytes") or 0
+    if not total:
+        raise CapacityWait("Usenet release size is unknown; review it before downloading")
     # Future sidecar/cover allowance is conservative until actual import plans exist.
     overhead = min(len(frozen["descriptor"]["files"]), 100) * 8 * MIB
     future = overhead + (total if frozen["destination"]["mode"] == "copy" else 0)

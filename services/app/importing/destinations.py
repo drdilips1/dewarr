@@ -13,7 +13,7 @@ from app.adapters.contracts import AdapterError
 from app.config import get_settings
 from app.db.models import AuditEvent, ImportDestination, Integration, Library, Operation, User
 from app.db.session import session_factory
-from app.domain.downloaders import mapped_path
+from app.domain.downloaders import DOWNLOAD_KINDS, mapped_path
 from app.importing.backend import verify_backend
 from app.importing.filesystem import InspectionError, directory
 from app.importing.naming import fingerprint
@@ -104,7 +104,12 @@ async def setup_route_current(db, evidence):
     if not binding:
         return True
     row = await db.get(Integration, UUID(binding["id"]), populate_existing=True)
-    if not row or row.kind != "qbittorrent" or row.owner_id is not None or not row.enabled:
+    if (
+        not row
+        or row.kind not in DOWNLOAD_KINDS
+        or row.owner_id is not None
+        or not row.enabled
+    ):
         return False
     if row.credential_generation != binding["generation"] or row.status != "connected":
         return False

@@ -5,7 +5,12 @@ import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
-import { chooseRoute, destinationPreference } from "./RouteFields";
+import {
+  chooseRoute,
+  destinationPreference,
+  downloaderLabel,
+  protocolPreference,
+} from "./RouteFields";
 import { effectiveSeriesScope } from "./PreferenceFields";
 
 type Search = components["schemas"]["BookSearchView"];
@@ -21,8 +26,10 @@ export default function AutomaticSelection({
   slot: string;
 }) {
   const cache = useQueryClient();
-  const [downloaderId, setDownloaderId] = useState("");
+  const [torrentId, setTorrentId] = useState("");
+  const [usenetId, setUsenetId] = useState("");
   const [destinationId, setDestinationId] = useState("");
+  const [alternateDestinationId, setAlternateDestinationId] = useState("");
   const command = useRef({ body: "", key: crypto.randomUUID() });
   const queryKey = ["automatic-selection", requestId, slot];
   const request = useQuery({
@@ -81,24 +88,53 @@ export default function AutomaticSelection({
   const downloaders = options.data?.downloaders.filter((d) => d.ready) || [];
   const preferences =
     request.data?.release_policy?.preferences || search.profile.preferences;
-  const downloader = chooseRoute(
-    downloaders,
-    downloaderId,
-    preferences.downloader_id,
+  const torrent = chooseRoute(
+    downloaders.filter((d) => d.protocol === "torrent"),
+    torrentId,
+    protocolPreference(preferences, "torrent", downloaders),
   );
-  const destinations =
+  const usenet = chooseRoute(
+    downloaders.filter((d) => d.protocol === "nzb"),
+    usenetId,
+    protocolPreference(preferences, "nzb", downloaders),
+  );
+  const primary =
+    [torrent, usenet].find((item) => item?.id === preferences.downloader_id) ||
+    torrent ||
+    usenet;
+  const alternate =
+    torrent && usenet && primary
+      ? primary.id === torrent.id
+        ? usenet
+        : torrent
+      : undefined;
+  const matchingDestinations = (client?: { source_key?: string | null }) =>
     options.data?.destinations.filter(
       (d) =>
         d.ready &&
         d.medium === medium &&
-        d.source_key === downloader?.source_key &&
+        d.source_key === client?.source_key &&
         (!library || d.library_id === library),
     ) || [];
+  const sameFolder =
+    !!torrent && !!usenet && torrent.source_key === usenet.source_key;
+  const destinations = matchingDestinations(primary);
   const destination = chooseRoute(
     destinations,
     destinationId,
     destinationPreference(preferences, medium || "audio"),
   );
+  const alternateDestinations =
+    alternate && !sameFolder ? matchingDestinations(alternate) : destinations;
+  const alternateDestination = alternate
+    ? sameFolder
+      ? destination
+      : chooseRoute(
+          alternateDestinations,
+          alternateDestinationId,
+          destinationPreference(preferences, medium || "audio"),
+        )
+    : undefined;
   const saveReceipt = (value: Receipt) => {
     cache.setQueryData(queryKey, value);
     for (const name of ["activity", "requests", "release-selections"])
@@ -110,10 +146,20 @@ export default function AutomaticSelection({
         intent_id: requestId,
         slot,
         search_id: search.id,
-        downloader_id: downloader!.id,
-        downloader_generation: downloader!.generation,
+        downloader_id: primary!.id,
+        downloader_generation: primary!.generation,
         destination_id: destination!.id,
         destination_revision: destination!.revision,
+        ...(alternate &&
+        alternateDestination &&
+        (!downloadWhenReady || alternateDestination.automatic_import_ready)
+          ? {
+              alternate_downloader_id: alternate.id,
+              alternate_downloader_generation: alternate.generation,
+              alternate_destination_id: alternateDestination.id,
+              alternate_destination_revision: alternateDestination.revision,
+            }
+          : {}),
         download_when_ready: downloadWhenReady,
       };
       const serialized = JSON.stringify(body);
@@ -169,7 +215,7 @@ export default function AutomaticSelection({
     receipt.isPending ||
     !!receipt.error ||
     !fresh ||
-    !downloader ||
+    !primary ||
     !destination ||
     !!target?.source_artifact_id ||
     target?.state !== "wanted" ||
@@ -195,7 +241,8 @@ export default function AutomaticSelection({
           " Automatic acquisition also imports additional qualifying books from your saved main-book review, using that same pack and medium. Preparation alone covers this requested book."}
         Exact editions require a matching catalog ISBN; recordings also require
         matching narrator credits. Uncertain versions and collection coverage
-        need review.
+        need review. A torrent release uses the torrent client. When the first
+        source has no eligible file, a later NZB uses the Usenet client.
       </p>
       <p className="muted">
         Single-book transfer limit: {transferSize(limit)}.
@@ -217,26 +264,59 @@ export default function AutomaticSelection({
         }
       />
       <label>
-        Preparation downloader
+        Torrent downloader
         <select
-          value={downloader?.id || ""}
+          aria-label="Torrent downloader"
+          value={torrent?.id || ""}
           disabled={active || prepare.isPending}
           onChange={(e) => {
-            setDownloaderId(e.target.value);
+            setTorrentId(e.target.value);
             setDestinationId("");
+            setAlternateDestinationId("");
           }}
         >
-          <option value="">Choose a verified downloader</option>
-          {downloaders.map((d) => (
-            <option key={d.id} value={d.id}>
-              {d.name}
-            </option>
-          ))}
+          <option value="">Choose a verified torrent downloader</option>
+          {downloaders
+            .filter((d) => d.protocol === "torrent")
+            .map((d) => (
+              <option key={d.id} value={d.id}>
+                {downloaderLabel(d)}
+              </option>
+            ))}
         </select>
       </label>
       <label>
-        Preparation library destination
+        Usenet downloader
         <select
+          aria-label="Usenet downloader"
+          value={usenet?.id || ""}
+          disabled={active || prepare.isPending}
+          onChange={(e) => {
+            setUsenetId(e.target.value);
+            setDestinationId("");
+            setAlternateDestinationId("");
+          }}
+        >
+          <option value="">Choose a verified Usenet downloader</option>
+          {downloaders
+            .filter((d) => d.protocol === "nzb")
+            .map((d) => (
+              <option key={d.id} value={d.id}>
+                {downloaderLabel(d)}
+              </option>
+            ))}
+        </select>
+      </label>
+      <label>
+        {alternate && !sameFolder
+          ? "Primary library destination"
+          : "Library destination"}
+        <select
+          aria-label={
+            alternate && !sameFolder
+              ? "Primary library destination"
+              : "Library destination"
+          }
           value={destination?.id || ""}
           disabled={active || prepare.isPending}
           onChange={(e) => setDestinationId(e.target.value)}
@@ -249,12 +329,47 @@ export default function AutomaticSelection({
           ))}
         </select>
       </label>
-      {!options.isPending && (!downloaders.length || !destinations.length) && (
+      {alternate && !sameFolder && (
+        <label>
+          Fallback library destination
+          <select
+            aria-label="Fallback library destination"
+            value={alternateDestination?.id || ""}
+            disabled={active || prepare.isPending}
+            onChange={(e) => setAlternateDestinationId(e.target.value)}
+          >
+            <option value="">Choose a verified destination</option>
+            {alternateDestinations.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.name}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
+      {!options.isPending && (!primary || !destination) && (
         <p>
-          Verify a matching downloader and library destination in Settings and
-          Organization first.
+          Verify a torrent or Usenet downloader and a library destination in
+          Settings and Organization first.
         </p>
       )}
+      {!options.isPending &&
+        !!primary &&
+        !!destination &&
+        !!alternate &&
+        !alternateDestination && (
+          <p>
+            The other download client has no verified destination for this
+            library, so this preparation uses only the primary client.
+          </p>
+        )}
+      {!!alternateDestination &&
+        !alternateDestination.automatic_import_ready && (
+          <p>
+            Automatic download uses only the primary client until the other
+            destination is approved for automatic import.
+          </p>
+        )}
       {!fresh && <p>Refresh source results before preparing a release.</p>}
       <button
         className="primary"

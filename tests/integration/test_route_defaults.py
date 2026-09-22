@@ -1,6 +1,7 @@
 # ruff: noqa: F401, F811
 """Default routes choose destinations without granting or silently renewing authority."""
 
+from copy import deepcopy
 from uuid import UUID, uuid4
 
 import pytest
@@ -9,6 +10,7 @@ from sqlalchemy import select
 from app.db.models import (
     AutomaticImportPolicy,
     DownloadAttempt,
+    Integration,
     ListAcquisitionBook,
     ListAcquisitionPolicy,
     Operation,
@@ -151,3 +153,39 @@ async def test_clearing_a_default_is_persistent_and_does_not_reenable_inheritanc
     assert response.status_code == 422, response.text
     restored = await save(client, {})
     assert restored["effective"]["audio_destination_id"] == route["destination_id"]
+
+
+async def test_saved_usenet_client_backs_up_a_torrent_default(client, database, policy_fixture):
+    route = policy_fixture["source"]["body"]
+    async with database() as db, db.begin():
+        primary = await db.get(Integration, UUID(route["downloader_id"]))
+        usenet = Integration(
+            kind="sabnzbd",
+            name="Fixture Usenet",
+            base_url="http://sab.test",
+            encrypted_secrets=primary.encrypted_secrets,
+            credential_generation=primary.credential_generation,
+            status="connected",
+            config=deepcopy(primary.config),
+        )
+        db.add(usenet)
+        await db.flush()
+        usenet_id = str(usenet.id)
+    await save(
+        client,
+        {"downloader_id": route["downloader_id"], "usenet_downloader_id": usenet_id},
+        "installation",
+    )
+    await save(client, {"audio_destination_id": route["destination_id"]})
+    plan = await preview(
+        client, policy_fixture, downloader_id=None, downloader_generation=None, routes={}
+    )
+    config = plan["configuration"]
+    assert config["route_options"] == {
+        "downloader_id": None,
+        "downloader_generation": None,
+        "routes": {},
+    }
+    assert config["downloader_id"] == route["downloader_id"]
+    assert config["alternate_downloader_id"] == usenet_id
+    assert config["alternate_routes"]["audio"] == config["routes"]["audio"]

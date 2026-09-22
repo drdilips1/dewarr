@@ -182,14 +182,12 @@ export default function PreferenceFields({
           {origin("source_order")}
         </section>
       </div>
-      {!defaults && (
-        <RouteFields
-          overrides={overrides}
-          inherited={inherited}
-          origins={origins}
-          onChange={onChange}
-        />
-      )}
+      <RouteFields
+        overrides={overrides}
+        inherited={inherited}
+        origins={origins}
+        onChange={onChange}
+      />
       <details>
         <summary>
           <span className="setting-subheading">

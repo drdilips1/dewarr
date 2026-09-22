@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Header, HTTPException, Query
@@ -13,7 +14,7 @@ from app.db.models import AcquisitionSelection, ImportDestination, Integration, 
 from app.domain import acquisition_selection as selections
 from app.domain import automatic_dispatch, manual_pack
 from app.domain.acquisition_selection import SelectionInput
-from app.domain.downloaders import mapped_path, mappings_current
+from app.domain.downloaders import USENET_KINDS, mapped_path, mappings_current
 from app.domain.visibility import visible_library
 from app.importing.destinations import destination_configuration
 from app.importing.naming import fingerprint
@@ -86,6 +87,7 @@ class DownloaderChoice(BaseModel):
     id: UUID
     name: str
     generation: int
+    protocol: Literal["torrent", "nzb"]
     source_key: str | None
     ready: bool
 
@@ -128,6 +130,7 @@ async def view(db, row):
             row.state == "prepared"
             and not hold
             and not row.frozen.get("automatic_selection")
+            and row.frozen["descriptor"].get("protocol") != "nzb"
             and len(row.frozen["descriptor"]["files"]) > 1
         ),
     )
@@ -165,7 +168,7 @@ async def options(user: Member, db: Database):
     for row in await db.scalars(
         select(Integration)
         .where(
-            Integration.kind == "qbittorrent",
+            Integration.kind.in_(["qbittorrent", *USENET_KINDS]),
             Integration.owner_id.is_(None),
             Integration.enabled.is_(True),
         )
@@ -178,6 +181,7 @@ async def options(user: Member, db: Database):
                 id=row.id,
                 name=row.name,
                 generation=row.credential_generation,
+                protocol="nzb" if row.kind in USENET_KINDS else "torrent",
                 source_key=mapping["source_key"] if mapping else None,
                 ready=current and row.status == "connected",
             )

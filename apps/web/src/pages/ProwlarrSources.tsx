@@ -209,8 +209,9 @@ export default function ProwlarrSources({
       </form>
       <p className="muted">
         Catalog identity, narrator, language and file format stay unknown when
-        an indexer does not supply them. Torrent files can enter the acquisition
-        workflow; NZB and magnet-only acquisition are not supported yet.
+        an indexer does not supply them. Torrent files go to qBittorrent and NZB
+        files go to SABnzbd or NZBGet. Magnet-only and direct links are not
+        supported.
       </p>
       <div aria-live="polite">
         {batches.map((batch) => (
@@ -252,7 +253,9 @@ export default function ProwlarrSources({
                     disabled={busy || !item.release.acquisition_supported}
                     onClick={() => inspect.mutate(item.id)}
                   >
-                    Inspect torrent
+                    {item.release.protocol === "nzb"
+                      ? "Inspect NZB"
+                      : "Inspect torrent"}
                   </button>
                 )}
               </article>

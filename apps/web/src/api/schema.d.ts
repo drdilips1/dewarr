@@ -4628,6 +4628,14 @@ export interface components {
       routes?: {
         [key: string]: components["schemas"]["PolicyRoute"];
       };
+      /** Alternate Downloader Id */
+      alternate_downloader_id?: string | null;
+      /** Alternate Downloader Generation */
+      alternate_downloader_generation?: number | null;
+      /** Alternate Routes */
+      alternate_routes?: {
+        [key: string]: components["schemas"]["PolicyRoute"];
+      };
     };
     /** AutomaticSelectionInput */
     AutomaticSelectionInput: {
@@ -4659,6 +4667,14 @@ export interface components {
       destination_id: string;
       /** Destination Revision */
       destination_revision: string;
+      /** Alternate Downloader Id */
+      alternate_downloader_id?: string | null;
+      /** Alternate Downloader Generation */
+      alternate_downloader_generation?: number | null;
+      /** Alternate Destination Id */
+      alternate_destination_id?: string | null;
+      /** Alternate Destination Revision */
+      alternate_destination_revision?: string | null;
       /**
        * Download When Ready
        * @default false
@@ -5912,6 +5928,11 @@ export interface components {
       name: string;
       /** Generation */
       generation: number;
+      /**
+       * Protocol
+       * @enum {string}
+       */
+      protocol: "torrent" | "nzb";
       /** Source Key */
       source_key: string | null;
       /** Ready */
@@ -5919,6 +5940,12 @@ export interface components {
     };
     /** DownloaderInput */
     DownloaderInput: {
+      /**
+       * Kind
+       * @default qbittorrent
+       * @enum {string}
+       */
+      kind: "qbittorrent" | "sabnzbd" | "nzbget";
       /**
        * Name
        * @default qBittorrent
@@ -5930,6 +5957,8 @@ export interface components {
       username?: string | null;
       /** Password */
       password?: string | null;
+      /** Api Key */
+      api_key?: string | null;
       /** Save Path */
       save_path?: string | null;
       /**
@@ -5966,6 +5995,11 @@ export interface components {
        * Format: uuid
        */
       id: string;
+      /**
+       * Kind
+       * @enum {string}
+       */
+      kind: "qbittorrent" | "sabnzbd" | "nzbget";
       /** Name */
       name: string;
       /** Base Url */
@@ -7880,6 +7914,36 @@ export interface components {
        */
       ebook_filename: string;
     };
+    /** NzbDescriptor */
+    NzbDescriptor: {
+      /**
+       * Protocol
+       * @default nzb
+       * @constant
+       */
+      protocol: "nzb";
+      /** Name */
+      name: string;
+      /** Artifact Sha256 */
+      artifact_sha256: string;
+      /** Content Bytes */
+      content_bytes: number;
+      /** Nzb Bytes */
+      nzb_bytes: number;
+      /** Files */
+      files: components["schemas"]["NzbFile"][];
+      /** Parser */
+      parser: string;
+    };
+    /** NzbFile */
+    NzbFile: {
+      /** Index */
+      index: number;
+      /** Path */
+      path: string;
+      /** Size Bytes */
+      size_bytes: number;
+    };
     /** ObservationInput */
     ObservationInput: {
       /** Excluded */
@@ -8241,6 +8305,14 @@ export interface components {
       routes: {
         [key: string]: components["schemas"]["PolicyRoute"];
       };
+      /** Alternate Downloader Id */
+      alternate_downloader_id?: string | null;
+      /** Alternate Downloader Generation */
+      alternate_downloader_generation?: number | null;
+      /** Alternate Routes */
+      alternate_routes?: {
+        [key: string]: components["schemas"]["PolicyRoute"];
+      };
       route_options?: components["schemas"]["AutomaticRoutes"] | null;
       request_constraints?: components["schemas"]["DownloadConstraints"] | null;
     };
@@ -8312,6 +8384,10 @@ export interface components {
       audio_library_id?: string | null;
       /** Downloader Id */
       downloader_id?: string | null;
+      /** Torrent Downloader Id */
+      torrent_downloader_id?: string | null;
+      /** Usenet Downloader Id */
+      usenet_downloader_id?: string | null;
       /** Ebook Destination Id */
       ebook_destination_id?: string | null;
       /** Audio Destination Id */
@@ -9049,6 +9125,10 @@ export interface components {
       audio_library_id?: string | null;
       /** Downloader Id */
       downloader_id?: string | null;
+      /** Torrent Downloader Id */
+      torrent_downloader_id?: string | null;
+      /** Usenet Downloader Id */
+      usenet_downloader_id?: string | null;
       /** Ebook Destination Id */
       ebook_destination_id?: string | null;
       /** Audio Destination Id */
@@ -10122,7 +10202,10 @@ export interface components {
       source_generation: number;
       /** Current Connection */
       current_connection: boolean;
-      descriptor: components["schemas"]["TorrentDescriptor"];
+      /** Descriptor */
+      descriptor:
+        | components["schemas"]["TorrentDescriptor"]
+        | components["schemas"]["NzbDescriptor"];
       /** Release */
       release:
         | components["schemas"]["MAMRelease"]

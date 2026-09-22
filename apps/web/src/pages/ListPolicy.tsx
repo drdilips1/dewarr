@@ -11,7 +11,12 @@ import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
 import DownloadConstraints from "./DownloadConstraints";
-import { chooseRoute, destinationPreference } from "./RouteFields";
+import {
+  chooseRoute,
+  primaryDownloaderPreference,
+  destinationPreference,
+  downloaderLabel,
+} from "./RouteFields";
 
 type Policy = components["schemas"]["ListPolicyView"];
 type Input = components["schemas"]["ListPolicyInput"];
@@ -228,7 +233,7 @@ function PolicyEditor({
   const downloader = chooseRoute(
     downloaders,
     downloaderId,
-    preferences.downloader_id,
+    primaryDownloaderPreference(preferences, downloaders),
   );
   const effectiveMedium =
     medium || overrides.desired_media || profile?.preferences.desired_media;
@@ -270,11 +275,13 @@ function PolicyEditor({
     expected_content_revision:
       mode === "automatic" && selected.length ? contentRevision : undefined,
     downloader_id:
-      mode === "automatic" && (downloaderId || !preferences.downloader_id)
+      mode === "automatic" &&
+      (downloaderId || !primaryDownloaderPreference(preferences, downloaders))
         ? downloader?.id
         : null,
     downloader_generation:
-      mode === "automatic" && (downloaderId || !preferences.downloader_id)
+      mode === "automatic" &&
+      (downloaderId || !primaryDownloaderPreference(preferences, downloaders))
         ? downloader?.generation
         : null,
     routes:
@@ -436,7 +443,7 @@ function PolicyEditor({
                     <option value="">Choose a tested downloader</option>
                     {downloaders.map((d) => (
                       <option key={d.id} value={d.id}>
-                        {d.name}
+                        {downloaderLabel(d)}
                       </option>
                     ))}
                   </select>

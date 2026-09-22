@@ -1,6 +1,7 @@
 """Durable, one-submission download attempts. Redelivery observes, never re-adds."""
 
 import asyncio
+import re
 from datetime import UTC, datetime, timedelta
 from uuid import UUID, uuid4
 
@@ -8,7 +9,11 @@ from fastapi import HTTPException
 from sqlalchemy import select, update
 
 from app.adapters.contracts import AdapterError, FailureKind
-from app.adapters.qbittorrent import QbitClient, verify_association
+from app.adapters.nzbget import NzbClient
+from app.adapters.nzbget import verify_association as verify_nzb
+from app.adapters.qbittorrent import QbitClient, absolute_path, verify_association
+from app.adapters.sabnzbd import SabClient
+from app.adapters.sabnzbd import verify_association as verify_sab
 from app.adapters.torrent_descriptor import TorrentDescriptor
 from app.config import get_settings
 from app.db.models import (
@@ -33,7 +38,7 @@ from app.db.session import session_factory
 from app.domain import automatic_dispatch, capacity, download_memberships
 from app.domain.acquisition import RequestSpec, evaluate, validate_request
 from app.domain.acquisition_selection import configuration_current, owned_selection
-from app.domain.downloaders import SETTINGS_LOCK
+from app.domain.downloaders import SETTINGS_LOCK, relative_to
 from app.domain.operations import transaction_lock
 from app.domain.release_profiles import DEFAULTS_LOCK
 from app.domain.source_artifacts import artifact_bytes, member
@@ -49,6 +54,20 @@ TERMINAL = {"complete", "cancelled"}
 def hashes(selection):
     descriptor = TorrentDescriptor.model_validate(selection.frozen["descriptor"])
     return {value for value in (descriptor.infohash_v1, descriptor.infohash_v2) if value}
+
+
+def identities(selection):
+    descriptor = selection.frozen["descriptor"]
+    if descriptor.get("protocol") == "nzb":
+        digest = descriptor.get("artifact_sha256")
+        if isinstance(digest, str) and re.fullmatch(r"[0-9a-f]{64}", digest):
+            return {digest}
+        return set()
+    return hashes(selection)
+
+
+def nzb_release(selection):
+    return selection.frozen["descriptor"].get("protocol") == "nzb"
 
 
 def attempt_tag(attempt):
@@ -143,10 +162,10 @@ async def selection_authority(db, selection, *, wanted, configuration=None, disp
         or artifact.descriptor != selection.frozen["descriptor"]
     ):
         raise HTTPException(409, "Saved torrent identity changed; inspect the release again")
-    if wanted:
+    if wanted and not nzb_release(selection):
         inspection_path(selection)
-        if dispatch_consent:
-            await automatic_dispatch.require_selection(db, selection)
+    if wanted and dispatch_consent:
+        await automatic_dispatch.require_selection(db, selection)
     return await db.get(Integration, selection.downloader_id), content
 
 
@@ -252,17 +271,17 @@ async def start(db, user, selection_id, key, *, automatic=False, additional_sele
         await selection_authority(db, item, wanted=True)
     downloader = await db.get(Integration, selection.downloader_id)
     endpoint_key = fingerprint({"url": downloader.base_url.rstrip("/")})
-    identities = hashes(selection)
-    if not identities:
-        raise HTTPException(409, "Torrent identity is required before dispatch")
+    claimed = identities(selection)
+    if not claimed:
+        raise HTTPException(409, "Download identity is required before dispatch")
     # Endpoint-scoped claims also catch two saved connections to the same URL.
-    for digest in sorted(identities):
+    for digest in sorted(claimed):
         await transaction_lock(db, f"download-identity:{endpoint_key}:{digest}")
     if await db.scalar(
         select(DownloadIdentityClaim.id)
         .where(
             DownloadIdentityClaim.endpoint_key == endpoint_key,
-            DownloadIdentityClaim.torrent_hash.in_(identities),
+            DownloadIdentityClaim.torrent_hash.in_(claimed),
             DownloadIdentityClaim.active.is_(True),
         )
         .limit(1)
@@ -305,7 +324,7 @@ async def start(db, user, selection_id, key, *, automatic=False, additional_sele
             DownloadIdentityClaim(
                 attempt_id=attempt.id, endpoint_key=endpoint_key, torrent_hash=digest
             )
-            for digest in sorted(identities)
+            for digest in sorted(claimed)
         ]
     )
     for item in members:
@@ -407,6 +426,8 @@ async def recheck(db, user, identifier):
 
 
 async def find(client, selection, tag):
+    if nzb_release(selection):
+        return await client.find(attempt_tag=tag, torrent_hash=None)
     found = {}
     for digest in sorted(hashes(selection)):
         for state in await client.find(attempt_tag=tag, torrent_hash=digest):
@@ -416,6 +437,15 @@ async def find(client, selection, tag):
 
 def transfer_stage(selection, state):
     """Classify verified transfer evidence without scheduling import or changing state."""
+    if nzb_release(selection):
+        if getattr(state, "failed", False):
+            return "held", "The Usenet client reported a failed download"
+        if not state.completed:
+            return "downloading", "Transfer associated; waiting for the Usenet client to finish"
+        return (
+            "complete",
+            "Download complete; file inspection and library confirmation are still required",
+        )
     if not state.completed and not state.reported_complete:
         return "downloading", "Transfer associated; waiting for complete files"
     expected = {
@@ -484,9 +514,30 @@ async def finish_observation(db, attempt, selection, state):
     return True
 
 
+def completed_nzb_path(selection, storage):
+    root = absolute_path(selection.frozen["downloader"]["save_path"])
+    extra = relative_to(absolute_path(storage), root)
+    if not extra:
+        raise HTTPException(
+            409, "The Usenet client did not report a folder inside the download path"
+        )
+    relative = "/".join(
+        part
+        for part in (selection.frozen["mapping"]["relative_path"], extra)
+        if part not in {"", "."}
+    )
+    if not relative or len(relative) > 1024:
+        raise HTTPException(409, "Completed download path exceeds the inspection limit")
+    return relative
+
+
 async def create_inspection(db, attempt, selection, user, *, key=None):
     mapping = selection.frozen["mapping"]
-    relative = inspection_path(selection)
+    relative = (
+        completed_nzb_path(selection, (attempt.observation or {})["save_path"])
+        if nzb_release(selection)
+        else inspection_path(selection)
+    )
     operation = Operation(
         owner_id=user.id,
         kind="organization.inspect",
@@ -549,7 +600,11 @@ async def run(identifier):
             if repair:
                 await finish_repair(db, repair, "held", attempt.message)
             return
-        credentials, endpoint = decrypt_secrets(downloader.encrypted_secrets), downloader.base_url
+        credentials, endpoint, kind = (
+            decrypt_secrets(downloader.encrypted_secrets),
+            downloader.base_url,
+            downloader.kind,
+        )
         already_submitted = attempt.external_may_exist
         attempt.run_token, attempt.lease_until = token, now + timedelta(seconds=LEASE_SECONDS)
         attempt.state = "uncertain" if already_submitted else "preflight"
@@ -569,10 +624,17 @@ async def run(identifier):
             if not already_submitted:
                 raise
             # Existing external work must remain observable even during a mount outage.
-        async with (
-            asyncio.timeout(NETWORK_SECONDS),
-            QbitClient(endpoint, credentials["username"], credentials["password"]) as client,
-        ):
+        if kind == "sabnzbd":
+            client = SabClient(endpoint, credentials.get("api_key", ""))
+        elif kind == "nzbget":
+            client = NzbClient(
+                endpoint,
+                credentials.get("username", ""),
+                credentials.get("password", ""),
+            )
+        else:
+            client = QbitClient(endpoint, credentials["username"], credentials["password"])
+        async with asyncio.timeout(NETWORK_SECONDS), client:
             await client.capabilities()
             states = await find(client, selection, tag)
             if not already_submitted:
@@ -617,13 +679,28 @@ async def run(identifier):
                         return
                     attempt.receipt = receipt.model_dump(mode="json")
                 states = await find(client, selection, tag)
-            observed = verify_association(
-                states,
-                tag=tag,
-                hashes=hashes(selection),
-                save_path=frozen["downloader"]["save_path"],
-                category=frozen["downloader"]["category"],
-            )
+            if kind == "sabnzbd":
+                observed = verify_sab(
+                    states,
+                    tag=tag,
+                    save_path=frozen["downloader"]["save_path"],
+                    category=frozen["downloader"]["category"],
+                )
+            elif kind == "nzbget":
+                observed = verify_nzb(
+                    states,
+                    tag=tag,
+                    save_path=frozen["downloader"]["save_path"],
+                    category=frozen["downloader"]["category"],
+                )
+            else:
+                observed = verify_association(
+                    states,
+                    tag=tag,
+                    hashes=hashes(selection),
+                    save_path=frozen["downloader"]["save_path"],
+                    category=frozen["downloader"]["category"],
+                )
             async with session_factory()() as db, db.begin():
                 attempt, current = await locked(db, identifier)
                 if attempt.run_token != token:

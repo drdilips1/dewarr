@@ -108,7 +108,11 @@ test("individual indexer priorities load explicitly and retain saved choices thr
   });
   await expect(picker).toBeEnabled();
   expect(calls).toBe(1);
-  for (const id of [9, 31, 32, 33, 34])
+  await expect(picker.locator('option[value="prowlarr:9"]')).toHaveJSProperty(
+    "disabled",
+    false,
+  );
+  for (const id of [31, 32, 33, 34])
     await expect(
       picker.locator(`option[value="prowlarr:${id}"]`),
     ).toHaveJSProperty("disabled", true);

@@ -223,8 +223,8 @@ async def compatible_reservation(db, candidate, rule):
             compatible["required_narrators"], version["narrators"]
         ):
             return None
+    from app.adapters.nzb_descriptor import load_descriptor
     from app.adapters.source_releases import release_value
-    from app.adapters.torrent_descriptor import TorrentDescriptor
     from app.domain.release_profiles import ProfileSnapshot, ReleasePreferences, enforce_profile
     from app.domain.request_constraints import constrained_preferences
 
@@ -232,7 +232,7 @@ async def compatible_reservation(db, candidate, rule):
     try:
         enforce_profile(
             release_value(release["source"], release),
-            TorrentDescriptor.model_validate(selection.frozen["descriptor"]),
+            load_descriptor(selection.frozen["descriptor"]),
             ProfileSnapshot(preferences=constrained_preferences(ReleasePreferences(), compatible)),
         )
     except HTTPException:

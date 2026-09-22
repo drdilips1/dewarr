@@ -90,5 +90,101 @@ test("qBittorrent setup only needs an address and category", async ({
     path: testInfo.outputPath("simple-qbittorrent-mobile.png"),
     fullPage: true,
   });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.getByRole("button", { name: "Cancel", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Connect SABnzbd", exact: true })
+    .click();
+  const sab = page.getByRole("form", { name: "SABnzbd connection settings" });
+  await expect(sab.locator("input")).toHaveCount(3);
+  await expect(
+    sab.getByLabel("SABnzbd API key", { exact: true }),
+  ).toHaveAttribute("required", "");
+  await sab
+    .getByLabel("SABnzbd URL or IP address", { exact: true })
+    .fill("10.0.0.3:8080");
+  await sab
+    .getByLabel("SABnzbd API key", { exact: true })
+    .fill("browser-sab-key");
+  await sab
+    .getByLabel("Download category", { exact: true })
+    .fill("usenet-books");
+  const sabSaved = page.waitForResponse(
+    (response) =>
+      response.url().endsWith("/api/downloaders") &&
+      response.request().method() === "POST",
+  );
+  await sab
+    .getByRole("button", { name: "Save downloader", exact: true })
+    .click();
+  const sabResponse = await sabSaved;
+  expect(sabResponse.status()).toBe(201);
+  expect(sabResponse.request().postDataJSON()).toMatchObject({
+    kind: "sabnzbd",
+    api_key: "browser-sab-key",
+    category: "usenet-books",
+  });
+  const sabBody = await sabResponse.json();
+  expect(sabBody.kind).toBe("sabnzbd");
+  expect(JSON.stringify(sabBody)).not.toContain("browser-sab-key");
+  await expect(sab).toHaveCount(0);
+  const sabCard = page
+    .getByRole("article")
+    .filter({ hasText: "http://10.0.0.3:8080" });
+  await expect(sabCard).toContainText("usenet-books");
+  await page
+    .getByRole("button", { name: "Connect NZBGet", exact: true })
+    .click();
+  const nzb = page.getByRole("form", { name: "NZBGet connection settings" });
+  await expect(nzb.locator("input")).toHaveCount(4);
+  await expect(
+    nzb.getByLabel("NZBGet username (optional)", { exact: true }),
+  ).not.toHaveAttribute("required");
+  await expect(
+    nzb.getByLabel("NZBGet password (optional)", { exact: true }),
+  ).not.toHaveAttribute("required");
+  await nzb
+    .getByLabel("NZBGet URL or IP address", { exact: true })
+    .fill("10.0.0.4:6789");
+  await nzb
+    .getByLabel("NZBGet username (optional)", { exact: true })
+    .fill("nzb-user");
+  await nzb
+    .getByLabel("NZBGet password (optional)", { exact: true })
+    .fill("browser-nzb-password");
+  await nzb.getByLabel("Download category", { exact: true }).fill("nzb-books");
+  const nzbSaved = page.waitForResponse(
+    (response) =>
+      response.url().endsWith("/api/downloaders") &&
+      response.request().method() === "POST",
+  );
+  await nzb
+    .getByRole("button", { name: "Save downloader", exact: true })
+    .click();
+  const nzbResponse = await nzbSaved;
+  expect(nzbResponse.status()).toBe(201);
+  expect(nzbResponse.request().postDataJSON()).toMatchObject({
+    kind: "nzbget",
+    username: "nzb-user",
+    password: "browser-nzb-password",
+    category: "nzb-books",
+  });
+  const nzbBody = await nzbResponse.json();
+  expect(nzbBody.kind).toBe("nzbget");
+  expect(JSON.stringify(nzbBody)).not.toContain("browser-nzb-password");
+  expect(JSON.stringify(nzbBody)).not.toContain("nzb-user");
+  await expect(nzb).toHaveCount(0);
+  const nzbCard = page
+    .getByRole("article")
+    .filter({ hasText: "http://10.0.0.4:6789" });
+  await expect(nzbCard).toContainText("nzb-books");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
+    )
+    .toBe(true);
   expect(rootsRequested).toBe(false);
 });

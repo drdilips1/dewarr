@@ -4,7 +4,12 @@ import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
 import type { Choice } from "./RequestPreferences";
-import { chooseRoute, destinationPreference } from "./RouteFields";
+import {
+  chooseRoute,
+  primaryDownloaderPreference,
+  destinationPreference,
+  downloaderLabel,
+} from "./RouteFields";
 
 export function useSeriesRoutes(
   enabled: boolean,
@@ -42,7 +47,7 @@ export function useSeriesRoutes(
   const downloader = chooseRoute(
     downloaders,
     downloaderId,
-    preferences.downloader_id,
+    primaryDownloaderPreference(preferences, downloaders),
   );
   const available = (medium: string) =>
     options.data?.destinations.filter(
@@ -77,11 +82,13 @@ export function useSeriesRoutes(
     downloader && media.length && media.every((m) => destination(m))
       ? {
           downloader_id:
-            downloaderId || !preferences.downloader_id
+            downloaderId ||
+            !primaryDownloaderPreference(preferences, downloaders)
               ? downloader.id
               : undefined,
           downloader_generation:
-            downloaderId || !preferences.downloader_id
+            downloaderId ||
+            !primaryDownloaderPreference(preferences, downloaders)
               ? downloader.generation
               : undefined,
           routes,
@@ -138,7 +145,7 @@ export default function SeriesAutomaticRoutes({
           <option value="">Choose a tested downloader</option>
           {downloaders.map((item) => (
             <option key={item.id} value={item.id}>
-              {item.name}
+              {downloaderLabel(item)}
             </option>
           ))}
         </select>

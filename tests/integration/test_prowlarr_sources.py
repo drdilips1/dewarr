@@ -225,7 +225,7 @@ async def test_unsupported_and_invalid_torrents_never_become_artifacts(
     await configure(client)
     prowlarr_http["releases"] = [release(protocol="usenet")]
     result_id = (await search(client)).json()["items"][0]["id"]
-    assert (await resolve(client, result_id)).status_code == 422
+    assert (await resolve(client, result_id)).status_code == 502
     prowlarr_http["releases"] = [release()]
     prowlarr_http["bytes"] = b"<html>login secret</html>"
     result_id = (await search(client)).json()["items"][0]["id"]

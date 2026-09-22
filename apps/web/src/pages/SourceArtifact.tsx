@@ -3,8 +3,17 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
+import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
 import ReleaseSelection from "./ReleaseSelection";
+
+type Descriptor = components["schemas"]["SourceArtifactView"]["descriptor"];
+
+function isNzb(
+  descriptor: Descriptor,
+): descriptor is components["schemas"]["NzbDescriptor"] {
+  return "protocol" in descriptor;
+}
 
 export default function SourceArtifact() {
   const { id = "" } = useParams();
@@ -25,6 +34,7 @@ export default function SourceArtifact() {
   if (artifact.isPending) return <Loading />;
   if (!artifact.data) return <Notice error={artifact.error} />;
   const { descriptor, release, current_connection, created_at } = artifact.data;
+  const usenet = isNzb(descriptor);
   const files = descriptor.files.slice(0, (page + 1) * 50);
   return (
     <>
@@ -38,7 +48,7 @@ export default function SourceArtifact() {
                 : "PROWLARR"}{" "}
             RELEASE
           </p>
-          <h1>Torrent manifest</h1>
+          <h1>{usenet ? "NZB manifest" : "Torrent manifest"}</h1>
           <p>{release.title}</p>
           <Link
             to={
@@ -58,21 +68,34 @@ export default function SourceArtifact() {
           it for a download.
         </p>
       )}
-      <section className="panel" aria-label="Inspected torrent">
+      <section
+        className="panel"
+        aria-label={usenet ? "Inspected NZB" : "Inspected torrent"}
+      >
         <h2>{descriptor.name}</h2>
         <p>
           {descriptor.files.length} files ·{" "}
-          {descriptor.content_bytes.toLocaleString()} bytes of content ·{" "}
-          {descriptor.private ? "Private tracker" : "Public torrent"}
+          {descriptor.content_bytes.toLocaleString()} bytes of content
+          {isNzb(descriptor)
+            ? ` · ${descriptor.nzb_bytes.toLocaleString()} byte NZB`
+            : descriptor.private
+              ? " · Private tracker"
+              : " · Public torrent"}
         </p>
         <p className="muted">
-          Inspected {new Date(created_at).toLocaleString()}. These are torrent
-          file entries; book and edition matches are reviewed after download.
+          Inspected {new Date(created_at).toLocaleString()}.{" "}
+          {usenet
+            ? "These are the file names from the NZB. The Usenet client unpacks the download, and book matches are reviewed after it finishes."
+            : "These are torrent file entries; book and edition matches are reviewed after download."}
         </p>
         <p className="notice">
-          Torrent metadata is saved privately. No download has been started.
+          {usenet ? "NZB" : "Torrent"} metadata is saved privately. No download
+          has been started.
         </p>
-        <ul className="artifact-files" aria-label="Torrent files">
+        <ul
+          className="artifact-files"
+          aria-label={usenet ? "NZB files" : "Torrent files"}
+        >
           {files.map((file) => (
             <li key={file.index}>
               <span className="break-text">{file.path}</span>
@@ -91,23 +114,32 @@ export default function SourceArtifact() {
           }}
         />
         <details>
-          <summary>Torrent identity</summary>
+          <summary>{usenet ? "NZB identity" : "Torrent identity"}</summary>
           <dl className="source-facts">
-            <dt>v1 info hash</dt>
-            <dd className="break-text">
-              {descriptor.infohash_v1 || "Not present"}
-            </dd>
-            <dt>v2 info hash</dt>
-            <dd className="break-text">
-              {descriptor.infohash_v2 || "Not present"}
-            </dd>
-            <dt>Metadata checksum</dt>
-            <dd className="break-text">{descriptor.artifact_sha256}</dd>
-            <dt>Padding</dt>
-            <dd>
-              {descriptor.padding_bytes.toLocaleString()} B (not library
-              content)
-            </dd>
+            {isNzb(descriptor) ? (
+              <>
+                <dt>NZB checksum</dt>
+                <dd className="break-text">{descriptor.artifact_sha256}</dd>
+              </>
+            ) : (
+              <>
+                <dt>v1 info hash</dt>
+                <dd className="break-text">
+                  {descriptor.infohash_v1 || "Not present"}
+                </dd>
+                <dt>v2 info hash</dt>
+                <dd className="break-text">
+                  {descriptor.infohash_v2 || "Not present"}
+                </dd>
+                <dt>Metadata checksum</dt>
+                <dd className="break-text">{descriptor.artifact_sha256}</dd>
+                <dt>Padding</dt>
+                <dd>
+                  {descriptor.padding_bytes.toLocaleString()} B (not library
+                  content)
+                </dd>
+              </>
+            )}
           </dl>
         </details>
       </section>

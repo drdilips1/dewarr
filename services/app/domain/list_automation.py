@@ -230,7 +230,6 @@ async def advance_target(db, user, policy, book, target, progress, now, *, serie
             )
         if search.status != "completed":
             return "searching", search.message, next_tick(now)
-        route = config["routes"][medium]
         existing = await db.scalar(
             select(Operation)
             .where(
@@ -251,15 +250,28 @@ async def advance_target(db, user, policy, book, target, progress, now, *, serie
                     "A compatible selection is already running",
                     next_tick(now),
                 )
+        from app.domain.automatic_routes import AutomaticRoutes, selection_clients
+
+        routes = AutomaticRoutes.model_validate(
+            {
+                key: config[key]
+                for key in (
+                    "downloader_id",
+                    "downloader_generation",
+                    "routes",
+                    "alternate_downloader_id",
+                    "alternate_downloader_generation",
+                    "alternate_routes",
+                )
+                if key in config
+            }
+        )
         command = automatic_selection.AutomaticSelectionInput(
             intent_id=book.intent_id,
             slot=target.slot,
             search_id=search.id,
-            downloader_id=config["downloader_id"],
-            downloader_generation=config["downloader_generation"],
-            destination_id=route["destination_id"],
-            destination_revision=route["destination_revision"],
             download_when_ready=True,
+            **selection_clients(routes, medium),
         )
         try:
             operation = await automatic_selection.begin(

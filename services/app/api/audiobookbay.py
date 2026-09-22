@@ -101,8 +101,8 @@ async def save_connection(body: ABBConnectionInput, admin: Admin, db: Database):
     if body.metadata_downloader_id:
         await transaction_lock(db, SETTINGS_LOCK)
         downloader = await connection_or_404(db, body.metadata_downloader_id)
-        if not downloader.enabled:
-            raise HTTPException(422, "Choose an enabled metadata downloader")
+        if downloader.kind != "qbittorrent" or not downloader.enabled:
+            raise HTTPException(422, "Choose an enabled qBittorrent metadata downloader")
     secrets = decrypt_secrets(row.encrypted_secrets) if row else {}
     if not row:
         row = SourceConnection(key="audiobookbay", generation=0)

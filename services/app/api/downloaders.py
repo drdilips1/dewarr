@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException
@@ -22,10 +23,12 @@ router = APIRouter(prefix="/downloaders", tags=["downloaders"])
 
 class DownloaderInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
+    kind: Literal["qbittorrent", "sabnzbd", "nzbget"] = "qbittorrent"
     name: str = Field(default="qBittorrent", min_length=1, max_length=120)
     base_url: str = Field(max_length=2000)
     username: SecretStr | None = Field(default=None, min_length=1, max_length=300)
     password: SecretStr | None = Field(default=None, min_length=1, max_length=1000)
+    api_key: SecretStr | None = Field(default=None, min_length=1, max_length=1000)
     save_path: str | None = Field(default=None, max_length=2000)
     category: str = Field(default="", pattern=r"^[A-Za-z0-9_-]{0,100}$")
     mappings: list[DownloadMapping] | None = Field(default=None, min_length=1, max_length=20)
@@ -45,6 +48,14 @@ class DownloaderInput(BaseModel):
         value = value.strip()
         return configured_url(value if "://" in value else "http://" + value)
 
+    @field_validator("api_key")
+    @classmethod
+    def token(cls, value):
+        secret = value.get_secret_value() if value else ""
+        if secret and any(ord(character) < 33 or ord(character) > 126 for character in secret):
+            raise ValueError("Enter a valid API key without whitespace")
+        return value
+
     @field_validator("save_path")
     @classmethod
     def path(cls, value):
@@ -63,6 +74,7 @@ class DownloaderMappingView(DownloadMapping):
 
 class DownloaderView(BaseModel):
     id: UUID
+    kind: Literal["qbittorrent", "sabnzbd", "nzbget"]
     name: str
     base_url: str
     enabled: bool
@@ -100,6 +112,7 @@ class PathPreviewView(BaseModel):
 def view(row):
     return DownloaderView(
         id=row.id,
+        kind=row.kind,
         name=row.name,
         base_url=row.base_url,
         enabled=row.enabled,
@@ -127,7 +140,7 @@ def view(row):
 async def connections(admin: Admin, db: Database):
     rows = await db.scalars(
         select(Integration)
-        .where(Integration.kind == "qbittorrent", Integration.owner_id.is_(None))
+        .where(Integration.kind.in_(downloaders.DOWNLOAD_KINDS), Integration.owner_id.is_(None))
         .order_by(Integration.name, Integration.id)
     )
     return [view(row) for row in rows]
@@ -139,9 +152,11 @@ async def save(body, admin, db, connection_id=None):
     row = await downloaders.connection_or_404(db, connection_id) if connection_id else None
     if (row.credential_generation if row else 0) != body.expected_generation:
         raise HTTPException(409, "Downloader settings changed. Reload before saving.")
+    if row and row.kind != body.kind:
+        raise HTTPException(409, "Downloader type cannot be changed")
     duplicate = await db.scalar(
         select(Integration).where(
-            Integration.kind == "qbittorrent", Integration.base_url == body.base_url
+            Integration.kind == body.kind, Integration.base_url == body.base_url
         )
     )
     if duplicate and (not row or duplicate.id != row.id):
@@ -151,18 +166,26 @@ async def save(body, admin, db, connection_id=None):
         if body.mappings is not None
         else (row.config.get("mappings", []) if row and row.base_url == body.base_url else [])
     )
-    secrets = (
-        decrypt_secrets(row.encrypted_secrets)
-        if row and row.base_url == body.base_url
-        else {"username": "", "password": ""}
-    )
-    if body.username is not None or body.password is not None:
-        secrets = {
-            "username": body.username.get_secret_value() if body.username else "",
-            "password": body.password.get_secret_value() if body.password else "",
-        }
+    same_endpoint = bool(row and row.base_url == body.base_url)
+    if body.kind == "sabnzbd":
+        secrets = decrypt_secrets(row.encrypted_secrets) if same_endpoint else {"api_key": ""}
+        if body.api_key:
+            secrets = {"api_key": body.api_key.get_secret_value()}
+        if not secrets.get("api_key"):
+            raise HTTPException(422, "Enter an API key when connecting SABnzbd")
+    else:
+        secrets = (
+            decrypt_secrets(row.encrypted_secrets)
+            if same_endpoint
+            else {"username": "", "password": ""}
+        )
+        if body.username is not None or body.password is not None:
+            secrets = {
+                "username": body.username.get_secret_value() if body.username else "",
+                "password": body.password.get_secret_value() if body.password else "",
+            }
     if not row:
-        row = Integration(kind="qbittorrent", credential_generation=0)
+        row = Integration(kind=body.kind, credential_generation=0)
         db.add(row)
     row.name, row.base_url, row.enabled = body.name, body.base_url, body.enabled
     row.encrypted_secrets = encrypt_secrets(secrets)

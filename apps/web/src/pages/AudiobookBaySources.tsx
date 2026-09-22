@@ -308,7 +308,9 @@ export function AudiobookBayConnectionForm({ value }: { value: Connection }) {
         >
           <option value="">Browsing only — no default resolver</option>
           {clients.data
-            ?.filter((client) => client.enabled)
+            ?.filter(
+              (client) => client.enabled && client.kind === "qbittorrent",
+            )
             .map((client) => (
               <option key={client.id} value={client.id}>
                 {client.name}

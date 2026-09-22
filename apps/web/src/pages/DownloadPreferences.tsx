@@ -172,6 +172,8 @@ function Editor({
               "audio_library_id",
               "ebook_library_id",
               "downloader_id",
+              "torrent_downloader_id",
+              "usenet_downloader_id",
               "ebook_destination_id",
               "audio_destination_id",
             ]);

@@ -202,7 +202,8 @@ async def resolve(result_id: UUID, user: Member, db: Database):
     release = ProwlarrRelease.model_validate(row.release_snapshot)
     reference = decrypt_secrets(row.encrypted_reference).get("link")
     if not reference or not release.acquisition_supported:
-        raise HTTPException(422, "This result has no supported torrent file")
+        label = "NZB" if release.protocol == "nzb" else "torrent"
+        raise HTTPException(422, f"This result has no supported {label} file")
     user_id, generation = user.id, row.source_generation
     await db.rollback()
     artifact, _ = await call(

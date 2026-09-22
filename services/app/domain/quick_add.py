@@ -166,7 +166,6 @@ async def run(identifier):
                             else:
                                 # Either requests use the preferred medium first, as configured.
                                 medium = spec.preferred_medium if slot == "either" else slot
-                                route = routes.routes[medium]
                                 child = await automatic_selection.begin(
                                     db,
                                     user,
@@ -174,10 +173,7 @@ async def run(identifier):
                                         intent_id=intent.id,
                                         slot=slot,
                                         search_id=search.id,
-                                        downloader_id=routes.downloader_id,
-                                        downloader_generation=routes.downloader_generation,
-                                        destination_id=route.destination_id,
-                                        destination_revision=route.destination_revision,
+                                        **automatic_routes.selection_clients(routes, medium),
                                         download_when_ready=True,
                                     ),
                                     f"quick-select:{operation.id}:{slot}",
@@ -283,7 +279,6 @@ async def selected_release(db, user, search_id, result_id, key):
     await automatic_routes.resolve(
         db, user, route_spec, routes.downloader_id, routes.downloader_generation, routes.routes
     )
-    route = routes.routes[release.medium]
     return await automatic_selection.begin(
         db,
         user,
@@ -292,11 +287,8 @@ async def selected_release(db, user, search_id, result_id, key):
             slot=slot,
             search_id=search_id,
             result_id=result_id,
-            downloader_id=routes.downloader_id,
-            downloader_generation=routes.downloader_generation,
-            destination_id=route.destination_id,
-            destination_revision=route.destination_revision,
             download_when_ready=True,
+            **automatic_routes.selection_clients(routes, release.medium),
         ),
         key,
     )

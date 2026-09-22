@@ -7,7 +7,12 @@ import { Link, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
-import { chooseRoute, destinationPreference } from "./RouteFields";
+import {
+  chooseRoute,
+  destinationPreference,
+  downloaderLabel,
+  protocolPreference,
+} from "./RouteFields";
 
 type Artifact = components["schemas"]["SourceArtifactView"];
 const ManualPack = lazy(() => import("./ManualPack"));
@@ -117,14 +122,23 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
     ? params.get("request") === selected?.intent.id
     : !params.get("work") || params.get("work") === selected?.intent.work_id;
   const downloaders =
-    options.data?.downloaders.filter((item) => item.ready) || [];
+    options.data?.downloaders.filter(
+      (item) =>
+        item.ready &&
+        item.protocol ===
+          (artifact.release.protocol === "nzb" ? "nzb" : "torrent"),
+    ) || [];
   const preferences =
     selected?.intent.release_policy?.preferences ||
     selectedProfile?.preferences;
   const downloader = chooseRoute(
     downloaders,
     downloaderId,
-    preferences?.downloader_id,
+    protocolPreference(
+      preferences,
+      artifact.release.protocol === "nzb" ? "nzb" : "torrent",
+      downloaders,
+    ),
   );
   const requiredLibrary =
     selected?.intent.specification[
@@ -313,7 +327,7 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
           <option value="">Choose a tested downloader</option>
           {downloaders.map((item) => (
             <option key={item.id} value={item.id}>
-              {item.name}
+              {downloaderLabel(item)}
             </option>
           ))}
         </select>

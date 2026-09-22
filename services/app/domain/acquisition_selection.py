@@ -7,8 +7,8 @@ from fastapi import HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import select
 
+from app.adapters.nzb_descriptor import load_descriptor
 from app.adapters.source_releases import release_value as parse_release
-from app.adapters.torrent_descriptor import TorrentDescriptor
 from app.config import get_settings
 from app.db.models import (
     AcquisitionIntent,
@@ -33,7 +33,7 @@ from app.domain.acquisition import (
     reserve,
     validate_request,
 )
-from app.domain.downloaders import SETTINGS_LOCK, connection_or_404, mapped_path
+from app.domain.downloaders import SETTINGS_LOCK, USENET_KINDS, connection_or_404, mapped_path
 from app.domain.operations import transaction_lock
 from app.domain.release_profiles import enforce_profile
 from app.domain.request_constraints import constrained_preferences
@@ -181,10 +181,10 @@ async def prepare(db, user, body, key, *, automatic_evidence=None):
     source = await db.get(SourceConnection, artifact.source_key, populate_existing=True)
     if not source or not source.enabled or source.generation != artifact.source_generation:
         raise HTTPException(409, "The source connection changed; inspect the release again")
-    descriptor = TorrentDescriptor.model_validate(artifact.descriptor)
+    descriptor = load_descriptor(artifact.descriptor)
     artifact_bytes(artifact)
     if descriptor.artifact_sha256 != artifact.sha256:
-        raise HTTPException(409, "The saved torrent descriptor needs inspection again")
+        raise HTTPException(409, "The saved release descriptor needs inspection again")
     release = parse_release(artifact.source_key, artifact.release_snapshot)
     profile = await for_selection(db, user, intent, body)
     if automatic_evidence:
@@ -221,6 +221,13 @@ async def prepare(db, user, body, key, *, automatic_evidence=None):
     downloader = await connection_or_404(db, body.downloader_id)
     if not downloader.enabled or downloader.credential_generation != body.downloader_generation:
         raise HTTPException(409, "Downloader settings changed; refresh before selecting")
+    usenet = artifact.descriptor.get("protocol") == "nzb"
+    if usenet != (release.protocol == "nzb"):
+        raise HTTPException(409, "Saved release type does not match its inspected file")
+    if usenet and downloader.kind not in USENET_KINDS:
+        raise HTTPException(422, "Choose a SABnzbd or NZBGet connection for Usenet releases")
+    if not usenet and downloader.kind != "qbittorrent":
+        raise HTTPException(422, "Choose a qBittorrent connection for torrent releases")
     if downloader.status != "connected":
         raise HTTPException(409, "An administrator must test the saved downloader first")
     mapping = mapped_path(downloader, downloader.config["save_path"])

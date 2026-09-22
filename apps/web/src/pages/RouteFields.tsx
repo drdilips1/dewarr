@@ -8,11 +8,50 @@ import { Notice } from "../components";
 type Preferences = components["schemas"]["ReleasePreferences"];
 type Overrides = components["schemas"]["PreferenceOverrides"];
 export const routeLabels = {
-  downloader_id: "Default downloader",
+  torrent_downloader_id: "Default torrent downloader",
+  usenet_downloader_id: "Default Usenet downloader",
   ebook_destination_id: "Default ebook destination",
   audio_destination_id: "Default audiobook destination",
 } as const;
 type Field = keyof typeof routeLabels;
+type DownloaderChoice = { id: string; name: string; protocol?: string };
+
+function protocolFor(field: Field) {
+  if (field === "torrent_downloader_id") return "torrent";
+  if (field === "usenet_downloader_id") return "nzb";
+  return null;
+}
+
+export function protocolPreference(
+  preferences: Partial<Preferences> | undefined,
+  protocol: "torrent" | "nzb",
+  downloaders: DownloaderChoice[] = [],
+) {
+  const specific =
+    protocol === "torrent"
+      ? preferences?.torrent_downloader_id
+      : preferences?.usenet_downloader_id;
+  if (specific) return specific;
+  const legacy = preferences?.downloader_id;
+  const client = downloaders.find((item) => item.id === legacy);
+  return client?.protocol === protocol ? legacy : undefined;
+}
+
+export function primaryDownloaderPreference(
+  preferences: Partial<Preferences> | undefined,
+  downloaders: DownloaderChoice[] = [],
+) {
+  return (
+    protocolPreference(preferences, "torrent", downloaders) ||
+    protocolPreference(preferences, "nzb", downloaders)
+  );
+}
+
+export function downloaderLabel(item: { name: string; protocol?: string }) {
+  if (item.protocol === "nzb") return `${item.name} · Usenet`;
+  if (item.protocol === "torrent") return `${item.name} · Torrents`;
+  return item.name;
+}
 
 export function chooseRoute<T extends { id: string }>(
   items: T[],
@@ -74,38 +113,48 @@ export default function RouteFields({
 
       <Notice error={options.error} />
       {(Object.keys(routeLabels) as Field[]).map((field) => {
-        const choices =
-          field === "downloader_id"
-            ? options.data?.downloaders || []
-            : options.data?.destinations.filter(
-                (d) =>
-                  d.medium ===
-                  (field === "audio_destination_id" ? "audio" : "ebook"),
-              ) || [];
+        const protocol = protocolFor(field);
+        const downloaders = options.data?.downloaders || [];
+        const choices = protocol
+          ? downloaders.filter((item) => item.protocol === protocol)
+          : options.data?.destinations.filter(
+              (d) =>
+                d.medium ===
+                (field === "audio_destination_id" ? "audio" : "ebook"),
+            ) || [];
+        const selected = protocol
+          ? protocolPreference(values, protocol, downloaders) || ""
+          : values[field] || "";
         return (
           <div key={field}>
             <label>
               {routeLabels[field]}
               <select
                 aria-label={routeLabels[field]}
-                value={values[field] || ""}
-                onChange={(event) =>
-                  onChange({
+                value={selected}
+                onChange={(event) => {
+                  const raw = event.target.value;
+                  const next = {
                     ...overrides,
-                    [field]: event.target.value || null,
-                  })
-                }
+                    [field]: raw || null,
+                  };
+                  if (
+                    !raw &&
+                    protocol &&
+                    downloaders.find((item) => item.id === values.downloader_id)
+                      ?.protocol === protocol
+                  )
+                    next.downloader_id = null;
+                  onChange(next);
+                }}
               >
                 <option value="">No saved default</option>
-                {values[field] &&
-                  !choices.some((item) => item.id === values[field]) && (
-                    <option value={values[field]!}>
-                      Unavailable saved choice
-                    </option>
-                  )}
+                {selected && !choices.some((item) => item.id === selected) && (
+                  <option value={selected}>Unavailable saved choice</option>
+                )}
                 {choices.map((item) => (
                   <option key={item.id} value={item.id}>
-                    {item.name}
+                    {protocol ? downloaderLabel(item) : item.name}
                     {item.ready ? "" : " · needs verification"}
                   </option>
                 ))}
@@ -147,27 +196,50 @@ export function EffectiveRoutes({
   preferences: Preferences;
   origins: Record<string, string>;
 }) {
-  const fields = (Object.keys(routeLabels) as Field[]).filter(
-    (field) => preferences[field] || origins[field],
+  const options = useOptions(
+    (Object.keys(routeLabels) as Field[]).some(
+      (field) => preferences[field] || origins[field],
+    ) || Boolean(preferences.downloader_id),
   );
-  const options = useOptions(fields.length > 0);
+  const downloaders = options.data?.downloaders || [];
+  const fields = (Object.keys(routeLabels) as Field[]).filter((field) => {
+    const protocol = protocolFor(field);
+    return (
+      preferences[field] ||
+      origins[field] ||
+      (protocol
+        ? protocolPreference(preferences, protocol, downloaders)
+        : undefined)
+    );
+  });
   if (!fields.length) return null;
   return (
     <dl>
       {fields.map((field) => {
-        const choices =
-          field === "downloader_id"
-            ? options.data?.downloaders
-            : options.data?.destinations;
+        const protocol = protocolFor(field);
+        const selected = protocol
+          ? protocolPreference(preferences, protocol, downloaders)
+          : preferences[field];
+        const choices = protocol ? downloaders : options.data?.destinations;
+        const name = selected
+          ? protocol
+            ? downloaderLabel(
+                choices?.find((item) => item.id === selected) || {
+                  name: "Unavailable saved choice",
+                },
+              )
+            : choices?.find((item) => item.id === selected)?.name ||
+              "Unavailable saved choice"
+          : "No saved default";
         return (
           <div key={field}>
             <dt>{routeLabels[field]}</dt>
             <dd>
-              {preferences[field]
-                ? choices?.find((item) => item.id === preferences[field])
-                    ?.name || "Unavailable saved choice"
-                : "No saved default"}
-              <small> · {origins[field] || "Saved profile"}</small>
+              {name}
+              <small>
+                {" "}
+                · {origins[field] || origins.downloader_id || "Saved profile"}
+              </small>
             </dd>
           </div>
         );

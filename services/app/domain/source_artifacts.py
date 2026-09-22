@@ -5,6 +5,7 @@ from fastapi import HTTPException
 from sqlalchemy import select
 
 from app.adapters.contracts import AdapterError, FailureKind
+from app.adapters.nzb_descriptor import inspect_nzb
 from app.adapters.torrent_descriptor import inspect_torrent
 from app.db.models import AuditEvent, SourceArtifact, SourceConnection, User
 from app.db.session import session_factory
@@ -33,17 +34,22 @@ async def resolve_mam(user_id, source_id, *, expected_generation=None):
 async def persist_artifact(
     user_id, source_id, artifact, generation, source_key, *, expected_downloader=None
 ):
-    descriptor = await inspect_torrent(artifact.content)
+    if getattr(artifact.release, "protocol", None) == "nzb":
+        descriptor = inspect_nzb(artifact.content)
+        secret_key = "nzb"
+    else:
+        descriptor = await inspect_torrent(artifact.content)
+        secret_key = "torrent"
     digest = hashlib.sha256(artifact.content).hexdigest()
     if digest != descriptor.artifact_sha256:
-        raise AdapterError(FailureKind.PARSER, "Torrent identity changed during inspection.")
+        raise AdapterError(FailureKind.PARSER, "Download identity changed during inspection.")
     async with session_factory()() as db, db.begin():
         await transaction_lock(db, f"source:{source_key}")
         await member(db, user_id)
         source = await db.get(SourceConnection, source_key)
         if not source or not source.enabled or source.generation != generation:
             raise HTTPException(
-                409, "Source settings changed while inspecting the torrent. Resolve it again."
+                409, "Source settings changed while inspecting the release. Resolve it again."
             )
         if expected_downloader:
             from app.domain.downloaders import SETTINGS_LOCK, connection_or_404
@@ -71,7 +77,7 @@ async def persist_artifact(
             sha256=digest,
             descriptor=descriptor.model_dump(mode="json"),
             encrypted_content=encrypt_secrets(
-                {"torrent": base64.b64encode(artifact.content).decode()}
+                {secret_key: base64.b64encode(artifact.content).decode()}
             ),
             release_snapshot=artifact.release.model_dump(mode="json"),
         )
@@ -84,7 +90,9 @@ async def persist_artifact(
 def artifact_bytes(row):
     """Verified bytes for internal dispatch or explicit owner-authorized torrent export."""
     try:
-        content = base64.b64decode(decrypt_secrets(row.encrypted_content)["torrent"], validate=True)
+        secrets = decrypt_secrets(row.encrypted_content)
+        encoded = secrets.get("torrent") or secrets.get("nzb")
+        content = base64.b64decode(encoded, validate=True)
         if hashlib.sha256(content).hexdigest() != row.sha256:
             raise ValueError("Digest mismatch")
         return content

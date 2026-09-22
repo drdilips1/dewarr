@@ -9,6 +9,7 @@ import {
   LoaderCircle,
 } from "lucide-react";
 import { api, result } from "../api/client";
+import { downloaderLabel } from "./RouteFields";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
 import SettingHelp from "../components/SettingHelp";
@@ -425,7 +426,7 @@ function FolderPicker({
                   <option value="">Choose a client</option>
                   {options.data.downloaders.map((d) => (
                     <option value={d.id} key={d.id}>
-                      {d.name}
+                      {downloaderLabel(d)}
                     </option>
                   ))}
                 </select>

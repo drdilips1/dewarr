@@ -17,7 +17,7 @@ from app.db.models import (
     SourceConnection,
     User,
 )
-from app.domain.downloaders import mappings_current
+from app.domain.downloaders import DOWNLOAD_KINDS, mappings_current
 from app.importing.destination_view import view as destination_view
 from app.importing.storage import storage_settings
 
@@ -140,7 +140,7 @@ async def readiness(admin: Admin, db: Database):
                 id=row.id, **service(row, row.name), mappings_current=mappings_current(row)
             )
             for row in integrations
-            if row.kind == "qbittorrent"
+            if row.kind in DOWNLOAD_KINDS
         ],
         destinations=destinations,
         download_roots=len(settings.import_sources),

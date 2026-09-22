@@ -287,7 +287,7 @@ class ProwlarrClient:
             transport = protocol(row.get("protocol"))
             reference = (
                 self.reference(row.get("downloadUrl"), body.indexer_id)
-                if transport == "torrent"
+                if transport in {"torrent", "nzb"}
                 else None
             )
             result.append(
@@ -308,7 +308,7 @@ class ProwlarrClient:
                         limitation=None
                         if reference
                         else (
-                            "A proxied torrent file is required; NZB, direct links "
+                            "A proxied torrent or NZB file is required; direct links "
                             "and magnet-only results cannot be acquired yet."
                         ),
                     ),
@@ -320,12 +320,16 @@ class ProwlarrClient:
     async def resolve(self, argument):
         release, link = argument
         if not release.acquisition_supported or not re.fullmatch(r"[A-Za-z0-9_-]{1,12000}", link):
+            kind = "NZB" if release.protocol == "nzb" else "torrent"
             raise AdapterError(
-                FailureKind.UNSUPPORTED, "This result has no supported torrent file."
+                FailureKind.UNSUPPORTED, f"This result has no supported {kind} file."
             )
         content = await self.request(
             f"{int(release.indexer_id)}/download",
-            params={"link": link, "file": "book.torrent"},
+            params={
+                "link": link,
+                "file": "book.nzb" if release.protocol == "nzb" else "book.torrent",
+            },
             binary=True,
         )
         return ProwlarrArtifact(release, content)

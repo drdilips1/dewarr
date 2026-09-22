@@ -28,6 +28,15 @@ class PolicyConfiguration(BaseModel):
     downloader_id: UUID | None
     downloader_generation: int | None
     routes: dict[str, policies.PolicyRoute]
+    alternate_downloader_id: UUID | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
+    alternate_downloader_generation: int | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
+    alternate_routes: dict[str, policies.PolicyRoute] = Field(
+        default_factory=dict, exclude_if=lambda value: not value
+    )
     route_options: AutomaticRoutes | None = Field(
         default=None, exclude_if=lambda value: value is None
     )

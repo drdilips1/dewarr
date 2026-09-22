@@ -75,7 +75,9 @@ def eligibility(
         and preferences.allow_unknown_seeders
         and release.source == "audiobookbay"
     )
-    if release.seeders == 0 or (release.seeders is None and not unknown_allowed):
+    if release.protocol != "nzb" and (
+        release.seeders == 0 or (release.seeders is None and not unknown_allowed)
+    ):
         reasons.append("At least one reported seeder is required for automatic selection")
     if unknown_allowed and descriptor and not getattr(release, "metadata_resolved", False):
         reasons.append("Unknown seed counts require resolved torrent metadata before selection")
@@ -108,7 +110,8 @@ def eligibility(
     if release.size_bytes is not None and release.size_bytes > ceiling:
         reasons.append("Reported transfer size exceeds the automatic selection limit")
     if descriptor:
-        if descriptor.torrent_bytes > ceiling:
+        inspected_bytes = getattr(descriptor, "torrent_bytes", descriptor.content_bytes)
+        if inspected_bytes > ceiling:
             reasons.append("Inspected transfer size exceeds the automatic selection limit")
         formats = {PurePosixPath(f.path).suffix.lower().lstrip(".") for f in descriptor.files}
         if formats & set(preferences.blocked_formats):

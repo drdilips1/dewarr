@@ -59,7 +59,8 @@ export default function GettingStarted({ role }: { role: string }) {
       "Connect Goodreads or Hardcover once, then choose the lists you want to keep up with.",
     libraries: "Connect Audiobookshelf to see the books you already own.",
     sources: "Choose where to find ebook and audiobook releases.",
-    downloaders: "Connect qBittorrent using its Web UI address.",
+    downloaders:
+      "Connect qBittorrent for torrents, or SABnzbd or NZBGet for Usenet.",
     storage: "Choose where imported books will be saved.",
     preferences: "Choose the formats and sources you prefer.",
     finish:

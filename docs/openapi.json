@@ -15069,6 +15069,43 @@
             },
             "type": "object",
             "title": "Routes"
+          },
+          "alternate_downloader_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alternate Downloader Id"
+          },
+          "alternate_downloader_generation": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alternate Downloader Generation"
+          },
+          "alternate_routes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PolicyRoute"
+            },
+            "propertyNames": {
+              "enum": [
+                "ebook",
+                "audio"
+              ]
+            },
+            "type": "object",
+            "title": "Alternate Routes"
           }
         },
         "additionalProperties": false,
@@ -15123,6 +15160,54 @@
             "type": "string",
             "pattern": "^[a-f0-9]{64}$",
             "title": "Destination Revision"
+          },
+          "alternate_downloader_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alternate Downloader Id"
+          },
+          "alternate_downloader_generation": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alternate Downloader Generation"
+          },
+          "alternate_destination_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alternate Destination Id"
+          },
+          "alternate_destination_revision": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alternate Destination Revision"
           },
           "download_when_ready": {
             "type": "boolean",
@@ -18530,6 +18615,14 @@
             "type": "integer",
             "title": "Generation"
           },
+          "protocol": {
+            "type": "string",
+            "enum": [
+              "torrent",
+              "nzb"
+            ],
+            "title": "Protocol"
+          },
           "source_key": {
             "anyOf": [
               {
@@ -18551,6 +18644,7 @@
           "id",
           "name",
           "generation",
+          "protocol",
           "source_key",
           "ready"
         ],
@@ -18558,6 +18652,16 @@
       },
       "DownloaderInput": {
         "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "qbittorrent",
+              "sabnzbd",
+              "nzbget"
+            ],
+            "title": "Kind",
+            "default": "qbittorrent"
+          },
           "name": {
             "type": "string",
             "maxLength": 120,
@@ -18599,6 +18703,21 @@
               }
             ],
             "title": "Password"
+          },
+          "api_key": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 1,
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Api Key"
           },
           "save_path": {
             "anyOf": [
@@ -18686,6 +18805,15 @@
             "format": "uuid",
             "title": "Id"
           },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "qbittorrent",
+              "sabnzbd",
+              "nzbget"
+            ],
+            "title": "Kind"
+          },
           "name": {
             "type": "string",
             "title": "Name"
@@ -18772,6 +18900,7 @@
         "type": "object",
         "required": [
           "id",
+          "kind",
           "name",
           "base_url",
           "enabled",
@@ -23818,6 +23947,89 @@
         "type": "object",
         "title": "NamingProfile"
       },
+      "NzbDescriptor": {
+        "properties": {
+          "protocol": {
+            "type": "string",
+            "const": "nzb",
+            "title": "Protocol",
+            "default": "nzb"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "artifact_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Artifact Sha256"
+          },
+          "content_bytes": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Content Bytes"
+          },
+          "nzb_bytes": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Nzb Bytes"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/NzbFile"
+            },
+            "type": "array",
+            "maxItems": 10000,
+            "minItems": 1,
+            "title": "Files"
+          },
+          "parser": {
+            "type": "string",
+            "title": "Parser"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "artifact_sha256",
+          "content_bytes",
+          "nzb_bytes",
+          "files",
+          "parser"
+        ],
+        "title": "NzbDescriptor"
+      },
+      "NzbFile": {
+        "properties": {
+          "index": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Index"
+          },
+          "path": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 1,
+            "title": "Path"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Size Bytes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "index",
+          "path",
+          "size_bytes"
+        ],
+        "title": "NzbFile"
+      },
       "ObservationInput": {
         "properties": {
           "excluded": {
@@ -24711,6 +24923,36 @@
             "type": "object",
             "title": "Routes"
           },
+          "alternate_downloader_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alternate Downloader Id"
+          },
+          "alternate_downloader_generation": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alternate Downloader Generation"
+          },
+          "alternate_routes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PolicyRoute"
+            },
+            "type": "object",
+            "title": "Alternate Routes"
+          },
           "route_options": {
             "anyOf": [
               {
@@ -24970,6 +25212,30 @@
               }
             ],
             "title": "Downloader Id"
+          },
+          "torrent_downloader_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Torrent Downloader Id"
+          },
+          "usenet_downloader_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usenet Downloader Id"
           },
           "ebook_destination_id": {
             "anyOf": [
@@ -27076,6 +27342,30 @@
               }
             ],
             "title": "Downloader Id"
+          },
+          "torrent_downloader_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Torrent Downloader Id"
+          },
+          "usenet_downloader_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usenet Downloader Id"
           },
           "ebook_destination_id": {
             "anyOf": [
@@ -29962,7 +30252,15 @@
             "title": "Current Connection"
           },
           "descriptor": {
-            "$ref": "#/components/schemas/TorrentDescriptor"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TorrentDescriptor"
+              },
+              {
+                "$ref": "#/components/schemas/NzbDescriptor"
+              }
+            ],
+            "title": "Descriptor"
           },
           "release": {
             "oneOf": [

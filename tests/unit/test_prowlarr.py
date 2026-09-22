@@ -133,7 +133,7 @@ async def test_unknowns_and_unsupported_protocols():
         hit = (await client.search(ProwlarrSearch(q="Book", indexer_id=7))).hits[0]
         assert hit.release.protocol == "nzb" and hit.release.medium == "ebook"
         assert hit.release.seeders is None and hit.release.size_bytes is None
-        assert not hit.release.acquisition_supported
+        assert hit.release.acquisition_supported and hit.reference == "secret_proxy_link"
 
 
 async def test_proxy_redirect_does_not_follow_or_log_private_reference(caplog):
