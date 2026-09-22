@@ -76,7 +76,10 @@ def mappings_current(row):
 
 
 def mapped_path(row, path):
-    path = absolute_path(path)
+    try:
+        path = absolute_path(path)
+    except ValueError as error:
+        raise HTTPException(422, "The download path does not match one configured root") from error
     if not mappings_current(row):
         raise HTTPException(
             409, "Worker download roots changed. Review and save the path mappings."
@@ -101,6 +104,14 @@ def mapped_path(row, path):
 async def connection_or_404(db, connection_id):
     row = await db.get(Integration, connection_id, populate_existing=True)
     if not row or row.kind != "qbittorrent" or row.owner_id is not None:
+        raise HTTPException(404, "Downloader connection not found")
+    return row
+
+
+async def transfer_connection(db, connection_id):
+    """qBittorrent or slskd. The qBittorrent test endpoint stays on connection_or_404."""
+    row = await db.get(Integration, connection_id, populate_existing=True)
+    if not row or row.kind not in {"qbittorrent", "slskd"} or row.owner_id is not None:
         raise HTTPException(404, "Downloader connection not found")
     return row
 

@@ -5,6 +5,7 @@ import { Loading, Notice } from "../components";
 import { MamConnectionForm } from "./Sources";
 import { AudiobookBayConnectionForm } from "./AudiobookBaySources";
 import { ProwlarrConnectionForm } from "./ProwlarrSources";
+import { SlskdConnectionForm } from "./SlskdSettings";
 
 export default function SourceSettings() {
   const cache = useQueryClient();
@@ -16,6 +17,10 @@ export default function SourceSettings() {
     queryKey: ["abb-connection"],
     queryFn: async () =>
       result(await api.GET("/api/sources/audiobookbay/connection")),
+  });
+  const slskd = useQuery({
+    queryKey: ["slskd-connection"],
+    queryFn: async () => result(await api.GET("/api/sources/slskd/connection")),
   });
   const prowlarr = useQuery({
     queryKey: ["prowlarr-connection"],
@@ -63,6 +68,27 @@ export default function SourceSettings() {
                 cache.invalidateQueries({ queryKey: ["prowlarr-connection"] });
                 cache.invalidateQueries({ queryKey: ["prowlarr-indexers"] });
               }}
+            />
+          )}
+        </details>
+      </section>
+      <section aria-label="Soulseek settings">
+        <details
+          className="source-connection"
+          open={slskd.data?.configured || undefined}
+        >
+          <summary>
+            <span>Soulseek</span>
+            <span className="connection-state">
+              {connectionLabel(slskd.data?.status)}
+            </span>
+          </summary>
+          <Notice error={slskd.error} />
+          {slskd.isPending && <Loading />}
+          {slskd.data && (
+            <SlskdConnectionForm
+              key={slskd.data.generation}
+              value={slskd.data}
             />
           )}
         </details>

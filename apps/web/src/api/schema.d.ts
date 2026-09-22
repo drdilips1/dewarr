@@ -3767,6 +3767,41 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/sources/slskd/connection": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Connection */
+    get: operations["connection_api_sources_slskd_connection_get"];
+    /** Save Connection */
+    put: operations["save_connection_api_sources_slskd_connection_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/sources/slskd/connection/test": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Test Connection */
+    post: operations["test_connection_api_sources_slskd_connection_test_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/downloaders": {
     parameters: {
       query?: never;
@@ -7368,7 +7403,7 @@ export interface components {
        * @default unknown
        * @enum {string}
        */
-      protocol: "torrent" | "nzb" | "direct" | "unknown";
+      protocol: "torrent" | "nzb" | "direct" | "soulseek" | "unknown";
       /** Details */
       details?: {
         [key: string]: unknown;
@@ -8328,6 +8363,13 @@ export interface components {
       ebook_formats?: string[];
       /** Audio Formats */
       audio_formats?: string[];
+      /**
+       * Source Strategy
+       * @enum {string}
+       */
+      source_strategy?: "priority" | "rank_all";
+      /** Source Fallback */
+      source_fallback?: boolean;
       /** Source Order */
       source_order?: string[];
       /** Criteria */
@@ -8541,7 +8583,7 @@ export interface components {
        * @default unknown
        * @enum {string}
        */
-      protocol: "torrent" | "nzb" | "direct" | "unknown";
+      protocol: "torrent" | "nzb" | "direct" | "soulseek" | "unknown";
       /** Details */
       details?: {
         [key: string]: unknown;
@@ -8692,7 +8734,8 @@ export interface components {
       release:
         | components["schemas"]["MAMRelease"]
         | components["schemas"]["ProwlarrRelease"]
-        | components["schemas"]["ABBRelease"];
+        | components["schemas"]["ABBRelease"]
+        | components["schemas"]["SlskdRelease"];
       assessment: components["schemas"]["ReleaseAssessment"];
       /**
        * Expires At
@@ -9095,6 +9138,17 @@ export interface components {
        *     ]
        */
       audio_formats: string[];
+      /**
+       * Source Strategy
+       * @default priority
+       * @enum {string}
+       */
+      source_strategy: "priority" | "rank_all";
+      /**
+       * Source Fallback
+       * @default true
+       */
+      source_fallback: boolean;
       /**
        * Source Order
        * @default [
@@ -10102,6 +10156,133 @@ export interface components {
       /** Needs Setup */
       needs_setup: boolean;
     };
+    /** SlskdConnectionInput */
+    SlskdConnectionInput: {
+      /**
+       * Base Url
+       * @default http://127.0.0.1:5030
+       */
+      base_url: string;
+      /** Api Key */
+      api_key?: string | null;
+      /**
+       * Enabled
+       * @default true
+       */
+      enabled: boolean;
+      /**
+       * Expected Generation
+       * @default 0
+       */
+      expected_generation: number;
+    };
+    /** SlskdConnectionView */
+    SlskdConnectionView: {
+      /** Configured */
+      configured: boolean;
+      /** Enabled */
+      enabled: boolean;
+      /** Base Url */
+      base_url: string;
+      /** Has Api Key */
+      has_api_key: boolean;
+      /** Generation */
+      generation: number;
+      /** Status */
+      status: string;
+      /** Last Error */
+      last_error: string | null;
+      /** Last Success At */
+      last_success_at: string | null;
+      /** Download Root */
+      download_root: string | null;
+      /** Mapped */
+      mapped: boolean;
+      /** Downloader Id */
+      downloader_id: string | null;
+      /** Downloader Generation */
+      downloader_generation: number;
+    };
+    /** SlskdFile */
+    SlskdFile: {
+      /** Filename */
+      filename: string;
+      /** Size */
+      size: number;
+    };
+    /** SlskdRelease */
+    SlskdRelease: {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      source: "slskd";
+      /** Source Id */
+      source_id: string;
+      /** Indexer Id */
+      indexer_id?: string | null;
+      /** Raw Title */
+      raw_title: string;
+      /** Medium */
+      medium?: ("ebook" | "audio") | null;
+      /** Authors */
+      authors?: string[];
+      /** Narrators */
+      narrators?: string[];
+      /** Language */
+      language?: string | null;
+      /** Formats */
+      formats?: string[];
+      /** Size Bytes */
+      size_bytes?: number | null;
+      /** Seeders */
+      seeders?: number | null;
+      /** Description */
+      description?: string | null;
+      /** Coverage */
+      coverage?: components["schemas"]["CoverageClaim"][];
+      /**
+       * Protocol
+       * @default soulseek
+       * @constant
+       */
+      protocol: "soulseek";
+      /** Details */
+      details?: {
+        [key: string]: unknown;
+      };
+      /** Title */
+      title: string;
+      /**
+       * Observed At
+       * Format: date-time
+       */
+      observed_at: string;
+      /** Username */
+      username: string;
+      /** Directory */
+      directory: string;
+      /** Files */
+      files: components["schemas"]["SlskdFile"][];
+      /**
+       * Peer Online
+       * @default true
+       */
+      peer_online: boolean;
+      /** Queue Length */
+      queue_length?: number | null;
+      /** Upload Speed */
+      upload_speed?: number | null;
+      /** Free Upload Slot */
+      free_upload_slot?: boolean | null;
+      /** Search Id */
+      search_id: string;
+      /**
+       * Locked Files
+       * @default 0
+       */
+      locked_files: number;
+    };
     /** SourceArtifactView */
     SourceArtifactView: {
       /**
@@ -10127,7 +10308,8 @@ export interface components {
       release:
         | components["schemas"]["MAMRelease"]
         | components["schemas"]["ProwlarrRelease"]
-        | components["schemas"]["ABBRelease"];
+        | components["schemas"]["ABBRelease"]
+        | components["schemas"]["SlskdRelease"];
       /**
        * Dispatch Available
        * @default false
@@ -18686,6 +18868,79 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  connection_api_sources_slskd_connection_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SlskdConnectionView"];
+        };
+      };
+    };
+  };
+  save_connection_api_sources_slskd_connection_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SlskdConnectionInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SlskdConnectionView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  test_connection_api_sources_slskd_connection_test_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SlskdConnectionView"];
         };
       };
     };

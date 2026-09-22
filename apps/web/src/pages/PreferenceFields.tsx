@@ -11,6 +11,8 @@ export const preferenceLabels: Partial<Record<keyof Preferences, string>> = {
   allow_unknown_seeders: "Allow unknown seed counts",
   criteria: "Ranking priorities",
   source_order: "Source preference",
+  source_strategy: "Quick add source strategy",
+  source_fallback: "Fall back to the next source",
   ebook_formats: "Ebook format preference",
   audio_formats: "Audiobook format preference",
   blocked_formats: "Blocked formats",
@@ -172,7 +174,39 @@ export default function PreferenceFields({
           </div>
         </section>
         <section className="priority-block">
-          {" "}
+          <label>
+            Quick add
+            <select
+              aria-label="Quick add source strategy"
+              value={effective.source_strategy ?? "priority"}
+              onChange={(event) =>
+                onChange({
+                  ...overrides,
+                  source_strategy: event.target.value as
+                    "priority" | "rank_all",
+                })
+              }
+            >
+              <option value="priority">Prefer the first source</option>
+              <option value="rank_all">Rank every connected source</option>
+            </select>
+          </label>
+          <label className="check-label">
+            <input
+              type="checkbox"
+              checked={effective.source_fallback ?? true}
+              disabled={
+                (effective.source_strategy ?? "priority") !== "priority"
+              }
+              onChange={(event) =>
+                onChange({
+                  ...overrides,
+                  source_fallback: event.target.checked,
+                })
+              }
+            />
+            If that source has no automatic match, try the next source
+          </label>
           <SourcePriorities
             values={effective.source_order || []}
             onChange={(source_order) =>

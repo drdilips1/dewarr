@@ -538,7 +538,9 @@ function Results({
                     </small>
                   </td>
                   <td className="release-numeric release-seeds">
-                    {item.release.seeders?.toLocaleString() ?? "Unknown"}
+                    {item.release.protocol === "soulseek"
+                      ? "Peer online"
+                      : (item.release.seeders?.toLocaleString() ?? "Unknown")}
                   </td>
                   <td>
                     <ReleaseTags release={item.release} />
@@ -618,7 +620,9 @@ function sourceName(release: Search["items"][number]["release"]) {
     ? "MAM"
     : release.source === "audiobookbay"
       ? "AudiobookBay"
-      : `${release.indexer_name || "Prowlarr"} (indexer ${release.indexer_id})`;
+      : release.source === "slskd"
+        ? "Soulseek"
+        : `${release.indexer_name || "Prowlarr"} (indexer ${release.indexer_id})`;
 }
 
 function compareKnown(

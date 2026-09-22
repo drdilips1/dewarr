@@ -33,7 +33,7 @@ from app.domain.acquisition import (
     reserve,
     validate_request,
 )
-from app.domain.downloaders import SETTINGS_LOCK, connection_or_404, mapped_path
+from app.domain.downloaders import SETTINGS_LOCK, mapped_path, transfer_connection
 from app.domain.operations import transaction_lock
 from app.domain.release_profiles import enforce_profile
 from app.domain.request_constraints import constrained_preferences
@@ -218,11 +218,30 @@ async def prepare(db, user, body, key, *, automatic_evidence=None):
     version = await db.get(Version, UUID(rule["version_id"])) if rule["version_id"] else None
     release_compatible(release, rule, version)
     await transaction_lock(db, SETTINGS_LOCK)
-    downloader = await connection_or_404(db, body.downloader_id)
-    if not downloader.enabled or downloader.credential_generation != body.downloader_generation:
+    route = await transfer_connection(db, body.downloader_id)
+    if not route.enabled or route.credential_generation != body.downloader_generation:
         raise HTTPException(409, "Downloader settings changed; refresh before selecting")
-    if downloader.status != "connected":
+    if route.status != "connected":
         raise HTTPException(409, "An administrator must test the saved downloader first")
+    if artifact.source_key == "slskd":
+        from app.domain.slskd_connection import integration as soulseek_integration
+
+        downloader = await soulseek_integration(db)
+        if not downloader or not downloader.enabled or downloader.status != "connected":
+            raise HTTPException(409, "Connect and test Soulseek before downloading this folder")
+    elif route.kind == "qbittorrent":
+        downloader = route
+    else:
+        downloader = await db.scalar(
+            select(Integration).where(
+                Integration.kind == "qbittorrent",
+                Integration.owner_id.is_(None),
+                Integration.enabled.is_(True),
+                Integration.status == "connected",
+            )
+        )
+        if not downloader:
+            raise HTTPException(409, "Connect qBittorrent to download this torrent")
     mapping = mapped_path(downloader, downloader.config["save_path"])
     destination = await db.scalar(
         select(ImportDestination)

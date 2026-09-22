@@ -87,7 +87,7 @@ class Release(BaseModel):
     seeders: int | None = Field(default=None, ge=0)
     description: str | None = None
     coverage: list[CoverageClaim] = Field(default_factory=list)
-    protocol: Literal["torrent", "nzb", "direct", "unknown"] = "unknown"
+    protocol: Literal["torrent", "nzb", "direct", "soulseek", "unknown"] = "unknown"
     details: dict[str, Any] = Field(default_factory=dict)
 
 

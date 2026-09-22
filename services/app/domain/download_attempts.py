@@ -51,6 +51,13 @@ def hashes(selection):
     return {value for value in (descriptor.infohash_v1, descriptor.infohash_v2) if value}
 
 
+def identities(selection):
+    descriptor = TorrentDescriptor.model_validate(selection.frozen["descriptor"])
+    if descriptor.parser == "slskd-file-list":
+        return {descriptor.artifact_sha256}
+    return hashes(selection)
+
+
 def attempt_tag(attempt):
     return "book-search:" + str(attempt.id)
 
@@ -188,7 +195,17 @@ async def wanted_members(db, members):
     return active
 
 
-async def start(db, user, selection_id, key, *, automatic=False, additional_selection_ids=()):
+async def start(
+    db,
+    user,
+    selection_id,
+    key,
+    *,
+    automatic=False,
+    additional_selection_ids=(),
+    attempt_id=None,
+    already_queued=False,
+):
     additional = sorted(set(additional_selection_ids))
     if len(additional) > 99 or selection_id in additional:
         raise HTTPException(422, "Choose up to 100 distinct selections for one transfer")
@@ -252,17 +269,17 @@ async def start(db, user, selection_id, key, *, automatic=False, additional_sele
         await selection_authority(db, item, wanted=True)
     downloader = await db.get(Integration, selection.downloader_id)
     endpoint_key = fingerprint({"url": downloader.base_url.rstrip("/")})
-    identities = hashes(selection)
-    if not identities:
+    claimed = identities(selection)
+    if not claimed:
         raise HTTPException(409, "Torrent identity is required before dispatch")
     # Endpoint-scoped claims also catch two saved connections to the same URL.
-    for digest in sorted(identities):
+    for digest in sorted(claimed):
         await transaction_lock(db, f"download-identity:{endpoint_key}:{digest}")
     if await db.scalar(
         select(DownloadIdentityClaim.id)
         .where(
             DownloadIdentityClaim.endpoint_key == endpoint_key,
-            DownloadIdentityClaim.torrent_hash.in_(identities),
+            DownloadIdentityClaim.torrent_hash.in_(claimed),
             DownloadIdentityClaim.active.is_(True),
         )
         .limit(1)
@@ -270,7 +287,9 @@ async def start(db, user, selection_id, key, *, automatic=False, additional_sele
         raise HTTPException(
             409, "This transfer is already recorded; its existing files need reconciliation"
         )
-    attempt_id, operation_id = uuid4(), uuid4()
+    if already_queued and attempt_id is None:
+        raise HTTPException(409, "A queued Soulseek batch needs its attempt id")
+    attempt_id, operation_id = attempt_id or uuid4(), uuid4()
     operation = Operation(
         id=operation_id,
         owner_id=user.id,
@@ -293,6 +312,13 @@ async def start(db, user, selection_id, key, *, automatic=False, additional_sele
         operation_id=operation.id,
         endpoint_key=endpoint_key,
         next_check_at=datetime.now(UTC),
+        state="submitting" if already_queued else "queued",
+        external_may_exist=already_queued,
+        message=(
+            "Soulseek batch queued; waiting for the transfer"
+            if already_queued
+            else "Waiting to check the downloader"
+        ),
     )
     db.add(attempt)
     await db.flush()
@@ -305,7 +331,7 @@ async def start(db, user, selection_id, key, *, automatic=False, additional_sele
             DownloadIdentityClaim(
                 attempt_id=attempt.id, endpoint_key=endpoint_key, torrent_hash=digest
             )
-            for digest in sorted(identities)
+            for digest in sorted(claimed)
         ]
     )
     for item in members:
@@ -416,6 +442,8 @@ async def find(client, selection, tag):
 
 def transfer_stage(selection, state):
     """Classify verified transfer evidence without scheduling import or changing state."""
+    if state.state == "failed":
+        return "held", "Soulseek stopped this folder before every file finished"
     if not state.completed and not state.reported_complete:
         return "downloading", "Transfer associated; waiting for complete files"
     expected = {
@@ -423,7 +451,12 @@ def transfer_stage(selection, state):
     }
     actual = {item.relative_path: item.size_bytes for item in state.files}
     if expected != actual or state.total_bytes != selection.frozen["descriptor"]["torrent_bytes"]:
-        return "held", "Completed files differ from the inspected torrent; review the downloader"
+        inspected = (
+            "Soulseek file list"
+            if selection.frozen["descriptor"].get("parser") == "slskd-file-list"
+            else "inspected torrent"
+        )
+        return "held", f"Completed files differ from the {inspected}; review the downloader"
     return (
         "complete",
         "Download complete; file inspection and library confirmation are still required",
@@ -443,6 +476,8 @@ async def finish_observation(db, attempt, selection, state):
     attempt.observation = state.model_dump(mode="json")
     next_state, message = transfer_stage(selection, state)
     await record(db, attempt, next_state, message, poll=next_state == "downloading")
+    if state.state == "failed":
+        await capacity.release_slot(db, attempt)
     if next_state != "complete":
         return
     members = await download_memberships.for_attempt(db, attempt.id)
@@ -508,6 +543,84 @@ async def create_inspection(db, attempt, selection, user, *, key=None):
     return inspection
 
 
+async def observe_soulseek(
+    identifier, token, *, endpoint, api_key, frozen, already_submitted, repair_id
+):
+    """Queue or watch one slskd batch. The attempt id is the batch id and external id."""
+    from app.adapters.slskd import SlskdClient, SlskdRelease
+    from app.domain.download_repairs import finish as finish_repair
+    from app.domain.download_repairs import require_repair_actor
+
+    release = SlskdRelease.model_validate(frozen["release"])
+    async with asyncio.timeout(NETWORK_SECONDS), SlskdClient(endpoint, api_key) as client:
+        if not already_submitted:
+            storage = await capacity.observe_download(frozen)
+            async with session_factory()() as db, db.begin():
+                attempt, current = await locked(db, identifier)
+                if (
+                    attempt.run_token != token
+                    or attempt.state != "preflight"
+                    or attempt.lease_until <= datetime.now(UTC)
+                ):
+                    return
+                if automatic_dispatch.consent(current):
+                    await transaction_lock(db, DEFAULTS_LOCK)
+                await authority(db, current, wanted=True)
+                await capacity.admit(db, attempt, current, storage)
+                await capacity.submitted(db, attempt)
+                attempt.external_may_exist, attempt.state = True, "submitting"
+                attempt.message = "Submission recorded; uncertain outcomes will only be reconciled"
+                (await db.get(Operation, attempt.operation_id)).message = attempt.message
+            await client.enqueue(release, attempt_id=str(identifier))
+        try:
+            state = await client.batch(str(identifier), release)
+        except AdapterError as error:
+            if error.kind != FailureKind.NOT_FOUND:
+                raise
+            raise AdapterError(
+                FailureKind.UNCERTAIN,
+                "Soulseek batch is not visible yet; still checking",
+            ) from error
+        if state.state == "failed":
+            try:
+                await client.cancel(release.username, str(identifier))
+            except AdapterError:
+                # The attempt is still recorded as held, so a missed cancel is visible.
+                pass
+    state.save_path = frozen["downloader"]["save_path"]
+    async with session_factory()() as db, db.begin():
+        attempt, current = await locked(db, identifier)
+        if attempt.run_token != token:
+            return
+        repair = await db.get(DownloadRepair, repair_id) if repair_id else None
+        if repair:
+            await require_repair_actor(db, repair)
+        await authority(
+            db,
+            current,
+            wanted=False,
+            configuration=repair.configuration if repair else None,
+        )
+        if repair and state.completed:
+            await finish_repair(
+                db,
+                repair,
+                "applied",
+                "Updated connections verified against the existing transfer; no download was added",
+            )
+        needs_import = await finish_observation(db, attempt, current, state)
+        if attempt.state == "complete":
+            await capacity.downloaded(db, attempt, needs_import=bool(needs_import))
+        db.add(
+            AuditEvent(
+                actor_id=attempt.owner_id,
+                action="acquisition.download.observed",
+                entity_id=attempt.id,
+                detail={"state": attempt.state},
+            )
+        )
+
+
 async def run(identifier):
     """Persist the irreversible boundary before add; all subsequent runs only find."""
     token = uuid4()
@@ -549,7 +662,11 @@ async def run(identifier):
             if repair:
                 await finish_repair(db, repair, "held", attempt.message)
             return
-        credentials, endpoint = decrypt_secrets(downloader.encrypted_secrets), downloader.base_url
+        credentials, endpoint, kind = (
+            decrypt_secrets(downloader.encrypted_secrets),
+            downloader.base_url,
+            downloader.kind,
+        )
         already_submitted = attempt.external_may_exist
         attempt.run_token, attempt.lease_until = token, now + timedelta(seconds=LEASE_SECONDS)
         attempt.state = "uncertain" if already_submitted else "preflight"
@@ -569,6 +686,17 @@ async def run(identifier):
             if not already_submitted:
                 raise
             # Existing external work must remain observable even during a mount outage.
+        if kind == "slskd":
+            await observe_soulseek(
+                identifier,
+                token,
+                endpoint=endpoint,
+                api_key=credentials["api_key"],
+                frozen=frozen,
+                already_submitted=already_submitted,
+                repair_id=repair_id,
+            )
+            return
         async with (
             asyncio.timeout(NETWORK_SECONDS),
             QbitClient(endpoint, credentials["username"], credentials["password"]) as client,
@@ -672,6 +800,14 @@ async def run(identifier):
                     FailureKind.RATE_LIMIT,
                 }
             )
+            # A refused Soulseek enqueue did not keep a batch, so the slot can be freed.
+            if (
+                kind == "slskd"
+                and isinstance(error, AdapterError)
+                and error.kind in {FailureKind.NOT_FOUND, FailureKind.UNSUPPORTED}
+            ):
+                attempt.external_may_exist = False
+                transient = False
             unknown = attempt.external_may_exist and (
                 transient or isinstance(error, AdapterError) and error.kind == FailureKind.UNCERTAIN
             )

@@ -12609,6 +12609,87 @@
         }
       }
     },
+    "/api/sources/slskd/connection": {
+      "get": {
+        "tags": [
+          "sources"
+        ],
+        "summary": "Connection",
+        "operationId": "connection_api_sources_slskd_connection_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SlskdConnectionView"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "sources"
+        ],
+        "summary": "Save Connection",
+        "operationId": "save_connection_api_sources_slskd_connection_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SlskdConnectionInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SlskdConnectionView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sources/slskd/connection/test": {
+      "post": {
+        "tags": [
+          "sources"
+        ],
+        "summary": "Test Connection",
+        "operationId": "test_connection_api_sources_slskd_connection_test_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SlskdConnectionView"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/downloaders": {
       "get": {
         "tags": [
@@ -22424,6 +22505,7 @@
               "torrent",
               "nzb",
               "direct",
+              "soulseek",
               "unknown"
             ],
             "title": "Protocol",
@@ -25041,6 +25123,18 @@
             "minItems": 1,
             "title": "Audio Formats"
           },
+          "source_strategy": {
+            "type": "string",
+            "enum": [
+              "priority",
+              "rank_all"
+            ],
+            "title": "Source Strategy"
+          },
+          "source_fallback": {
+            "type": "boolean",
+            "title": "Source Fallback"
+          },
           "source_order": {
             "items": {
               "type": "string"
@@ -25704,6 +25798,7 @@
               "torrent",
               "nzb",
               "direct",
+              "soulseek",
               "unknown"
             ],
             "title": "Protocol",
@@ -26019,6 +26114,9 @@
               },
               {
                 "$ref": "#/components/schemas/ABBRelease"
+              },
+              {
+                "$ref": "#/components/schemas/SlskdRelease"
               }
             ],
             "title": "Release",
@@ -26027,7 +26125,8 @@
               "mapping": {
                 "audiobookbay": "#/components/schemas/ABBRelease",
                 "mam": "#/components/schemas/MAMRelease",
-                "prowlarr": "#/components/schemas/ProwlarrRelease"
+                "prowlarr": "#/components/schemas/ProwlarrRelease",
+                "slskd": "#/components/schemas/SlskdRelease"
               }
             }
           },
@@ -27166,6 +27265,20 @@
               "ogg",
               "opus"
             ]
+          },
+          "source_strategy": {
+            "type": "string",
+            "enum": [
+              "priority",
+              "rank_all"
+            ],
+            "title": "Source Strategy",
+            "default": "priority"
+          },
+          "source_fallback": {
+            "type": "boolean",
+            "title": "Source Fallback",
+            "default": true
           },
           "source_order": {
             "items": {
@@ -29933,6 +30046,376 @@
         ],
         "title": "SetupView"
       },
+      "SlskdConnectionInput": {
+        "properties": {
+          "base_url": {
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Base Url",
+            "default": "http://127.0.0.1:5030"
+          },
+          "api_key": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255,
+                "minLength": 16,
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Api Key"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": true
+          },
+          "expected_generation": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Expected Generation",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "title": "SlskdConnectionInput"
+      },
+      "SlskdConnectionView": {
+        "properties": {
+          "configured": {
+            "type": "boolean",
+            "title": "Configured"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "base_url": {
+            "type": "string",
+            "title": "Base Url"
+          },
+          "has_api_key": {
+            "type": "boolean",
+            "title": "Has Api Key"
+          },
+          "generation": {
+            "type": "integer",
+            "title": "Generation"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "last_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Error"
+          },
+          "last_success_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Success At"
+          },
+          "download_root": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Download Root"
+          },
+          "mapped": {
+            "type": "boolean",
+            "title": "Mapped"
+          },
+          "downloader_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Downloader Id"
+          },
+          "downloader_generation": {
+            "type": "integer",
+            "title": "Downloader Generation"
+          }
+        },
+        "type": "object",
+        "required": [
+          "configured",
+          "enabled",
+          "base_url",
+          "has_api_key",
+          "generation",
+          "status",
+          "last_error",
+          "last_success_at",
+          "download_root",
+          "mapped",
+          "downloader_id",
+          "downloader_generation"
+        ],
+        "title": "SlskdConnectionView"
+      },
+      "SlskdFile": {
+        "properties": {
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Size"
+          }
+        },
+        "type": "object",
+        "required": [
+          "filename",
+          "size"
+        ],
+        "title": "SlskdFile"
+      },
+      "SlskdRelease": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "const": "slskd",
+            "title": "Source",
+            "default": "slskd"
+          },
+          "source_id": {
+            "type": "string",
+            "title": "Source Id"
+          },
+          "indexer_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Indexer Id"
+          },
+          "raw_title": {
+            "type": "string",
+            "title": "Raw Title"
+          },
+          "medium": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "ebook",
+                  "audio"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Medium"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Authors"
+          },
+          "narrators": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Narrators"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "formats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Formats"
+          },
+          "size_bytes": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size Bytes"
+          },
+          "seeders": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seeders"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "coverage": {
+            "items": {
+              "$ref": "#/components/schemas/CoverageClaim"
+            },
+            "type": "array",
+            "title": "Coverage"
+          },
+          "protocol": {
+            "type": "string",
+            "const": "soulseek",
+            "title": "Protocol",
+            "default": "soulseek"
+          },
+          "details": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Details"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "observed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Observed At"
+          },
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "directory": {
+            "type": "string",
+            "title": "Directory"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/SlskdFile"
+            },
+            "type": "array",
+            "title": "Files"
+          },
+          "peer_online": {
+            "type": "boolean",
+            "title": "Peer Online",
+            "default": true
+          },
+          "queue_length": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Queue Length"
+          },
+          "upload_speed": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Upload Speed"
+          },
+          "free_upload_slot": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Free Upload Slot"
+          },
+          "search_id": {
+            "type": "string",
+            "title": "Search Id"
+          },
+          "locked_files": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Locked Files",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "source_id",
+          "raw_title",
+          "title",
+          "observed_at",
+          "username",
+          "directory",
+          "files",
+          "search_id"
+        ],
+        "title": "SlskdRelease"
+      },
       "SourceArtifactView": {
         "properties": {
           "id": {
@@ -29974,6 +30457,9 @@
               },
               {
                 "$ref": "#/components/schemas/ABBRelease"
+              },
+              {
+                "$ref": "#/components/schemas/SlskdRelease"
               }
             ],
             "title": "Release",
@@ -29982,7 +30468,8 @@
               "mapping": {
                 "audiobookbay": "#/components/schemas/ABBRelease",
                 "mam": "#/components/schemas/MAMRelease",
-                "prowlarr": "#/components/schemas/ProwlarrRelease"
+                "prowlarr": "#/components/schemas/ProwlarrRelease",
+                "slskd": "#/components/schemas/SlskdRelease"
               }
             }
           },
