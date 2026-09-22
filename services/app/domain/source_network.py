@@ -8,7 +8,7 @@ from uuid import uuid4
 from fastapi import HTTPException
 
 from app.adapters.contracts import AdapterError, FailureKind
-from app.adapters.mam import MAMClient
+from app.adapters.mam import MAMClient, stored_automation
 from app.db.models import SourceConnection, User
 from app.db.session import session_factory
 from app.domain.operations import transaction_lock
@@ -37,7 +37,7 @@ async def source_call(
 ):
     token = uuid4()
     async with session_factory()() as db, db.begin():
-        await check_actor(db, user_id, admin=operation == "test")
+        await check_actor(db, user_id, admin=operation in {"test", "maintain"})
         await transaction_lock(db, "source:mam")
         if recovery_guard is not None:
             await recovery_guard(db)
@@ -67,15 +67,15 @@ async def source_call(
                 "MAM is cooling down. Wait before retrying.",
                 retry_after=math.ceil(wait),
             )
-        row.lease_token, row.lease_until = (
-            token,
-            now + timedelta(seconds=120 if operation == "resolve" else LEASE_SECONDS),
-        )
+        lease_for = {"resolve": 120, "maintain": 180}.get(operation, LEASE_SECONDS)
+        row.lease_token, row.lease_until = token, now + timedelta(seconds=lease_for)
         row.next_request_at = due + timedelta(seconds=REQUEST_INTERVAL)
         generation, endpoint, proxy = row.generation, row.base_url, row.proxy_url
+        automation = stored_automation(row.automation)
         secrets = decrypt_secrets(row.encrypted_secrets)
     client = None
     failure = None
+    value = None
     try:
         if wait:
             await asyncio.sleep(wait)
@@ -87,6 +87,7 @@ async def source_call(
             proxy_password=secrets.get("proxy_password"),
             request_interval=REQUEST_INTERVAL,
         )
+        client.automation = automation
         async with client:
             value = (
                 await getattr(client, operation)(argument)
@@ -121,18 +122,24 @@ async def source_call(
         if client and client.cooldown:
             deadline = datetime.now(UTC) + timedelta(seconds=client.cooldown)
             row.blocked_until = max(row.blocked_until or deadline, deadline)
-        if not changed:
+        if operation != "maintain" and not changed:
             row.status = failure.kind.value if failure else "connected"
             row.last_error = str(failure) if failure else None
             if not failure:
                 row.last_success_at = datetime.now(UTC)
+        if operation == "maintain" and argument is not None and same_session and not changed:
+            from app.domain.account_automation import next_automation_state
+
+            row.automation_state = next_automation_state(
+                row.automation_state, argument, None if failure else value, datetime.now(UTC)
+            )
         # Persist session rotation even if this request's reader lost access.
     if changed:
         raise HTTPException(
             409, "MAM connection changed during this request; retry with the current settings"
         )
     async with session_factory()() as db:
-        await check_actor(db, user_id, admin=operation == "test")
+        await check_actor(db, user_id, admin=operation in {"test", "maintain"})
     if failure:
         raise failure
     return (value, generation) if with_generation else value

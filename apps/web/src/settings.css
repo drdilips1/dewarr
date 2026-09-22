@@ -2390,6 +2390,53 @@ button.help-button:hover {
 .mam-network-checked time {
   margin-left: 4px;
 }
+.account-automation {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin: 0;
+  padding: 12px 14px 14px;
+  min-width: 0;
+  max-width: 100%;
+  display: grid;
+  gap: 10px;
+}
+.account-automation legend {
+  padding: 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.account-automation .muted,
+.account-automation .setting-subheading {
+  margin: 0;
+}
+.automation-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  min-width: 0;
+}
+@media (max-width: 600px) {
+  .automation-fields {
+    grid-template-columns: 1fr;
+  }
+}
+.helper-option {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.helper-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.helper-toggle .check-label {
+  width: auto;
+}
+.account-automation input[type="number"] {
+  max-width: 160px;
+}
 
 /* Compact log ledger; expand a row for its full context. */
 .logs-heading {

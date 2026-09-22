@@ -4681,6 +4681,97 @@ export interface components {
       /** Library Ids */
       library_ids: string[];
     };
+    /**
+     * AccountAutomation
+     * @description Account actions an administrator can turn on. All of them default off.
+     */
+    AccountAutomation: {
+      /**
+       * Seedbox Ip
+       * @default false
+       */
+      seedbox_ip: boolean;
+      /**
+       * Seedbox Interval Seconds
+       * @default 300
+       */
+      seedbox_interval_seconds: number;
+      /**
+       * Auto Vip
+       * @default false
+       */
+      auto_vip: boolean;
+      /**
+       * Vip Interval Hours
+       * @default 24
+       */
+      vip_interval_hours: number;
+      /**
+       * Use Wedge
+       * @default false
+       */
+      use_wedge: boolean;
+      /**
+       * Wedge Min Size
+       * @default false
+       */
+      wedge_min_size: boolean;
+      /**
+       * Wedge Min Size Mb
+       * @default 0
+       */
+      wedge_min_size_mb: number;
+      /**
+       * Protect Ratio
+       * @default false
+       */
+      protect_ratio: boolean;
+      /**
+       * Ratio Below
+       * @default 1.5
+       */
+      ratio_below: number;
+      /**
+       * Ratio Buy Gb
+       * @default 50
+       */
+      ratio_buy_gb: number;
+      /**
+       * Maintain Buffer
+       * @default false
+       */
+      maintain_buffer: boolean;
+      /**
+       * Buffer Below Gb
+       * @default 10
+       */
+      buffer_below_gb: number;
+      /**
+       * Buffer Buy Gb
+       * @default 50
+       */
+      buffer_buy_gb: number;
+      /**
+       * Spend Bonus
+       * @default false
+       */
+      spend_bonus: boolean;
+      /**
+       * Bonus Above
+       * @default 5000
+       */
+      bonus_above: number;
+      /**
+       * Bonus Buy Gb
+       * @default 50
+       */
+      bonus_buy_gb: number;
+      /**
+       * Upload Interval Hours
+       * @default 6
+       */
+      upload_interval_hours: number;
+    };
     /** AccountInput */
     AccountInput: {
       /** Token */
@@ -5085,6 +5176,11 @@ export interface components {
        * @default false
        */
       download_when_ready: boolean;
+      /**
+       * Use Wedge
+       * @default false
+       */
+      use_wedge: boolean;
     };
     /** AutomaticSelectionView */
     AutomaticSelectionView: {
@@ -7801,6 +7897,7 @@ export interface components {
        * @default true
        */
       enabled: boolean;
+      automation?: components["schemas"]["AccountAutomation"];
       /**
        * Expected Generation
        * @default 0
@@ -7831,6 +7928,7 @@ export interface components {
       last_success_at: string | null;
       /** Route */
       route: string;
+      automation?: components["schemas"]["AccountAutomation"];
     };
     /** MAMNetworkView */
     MAMNetworkView: {
@@ -7912,6 +8010,10 @@ export interface components {
       uploaded_at?: string | null;
       /** Freeleech */
       freeleech?: boolean | null;
+      /** Personal Freeleech */
+      personal_freeleech?: boolean | null;
+      /** Vip Freeleech */
+      vip_freeleech?: boolean | null;
       /** Vip */
       vip?: boolean | null;
       /** Tags */
@@ -19903,7 +20005,9 @@ export interface operations {
   };
   download_release_api_source_searches__search_id__results__result_id__download_post: {
     parameters: {
-      query?: never;
+      query?: {
+        use_wedge?: boolean;
+      };
       header: {
         "idempotency-key": string;
       };

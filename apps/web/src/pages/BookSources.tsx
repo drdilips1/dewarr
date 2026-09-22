@@ -583,6 +583,11 @@ function Results({
                           searchId={data.id}
                           resultId={item.id}
                           title={item.release.title}
+                          offerWedge={
+                            item.release.source === "mam" &&
+                            !item.release.freeleech &&
+                            !item.release.personal_freeleech
+                          }
                           disabled={
                             inspecting ||
                             data.status !== "completed" ||

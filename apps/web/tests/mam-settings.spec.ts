@@ -88,6 +88,11 @@ test("MAM masks saved secrets and saves edited proxy before testing", async ({
   ).toHaveAttribute("placeholder", "••••••••");
   const proxy = form.locator('input[type="url"]').nth(1);
   await expect(proxy).toBeVisible();
+  await expect(
+    form.getByRole("checkbox", {
+      name: "Use a Freeleech wedge on download",
+    }),
+  ).not.toBeChecked();
   await form
     .getByRole("button", { name: "Test connection", exact: true })
     .click();
@@ -129,6 +134,9 @@ test("MAM masks saved secrets and saves edited proxy before testing", async ({
   await form.screenshot({
     path: testInfo.outputPath("mam-masked-settings.png"),
   });
+  await form
+    .getByRole("checkbox", { name: "Use a Freeleech wedge on download" })
+    .check();
   rejectSave = true;
   await proxy.fill("http://another-proxy:8888");
   await form
@@ -136,5 +144,15 @@ test("MAM masks saved secrets and saves edited proxy before testing", async ({
     .click();
   await expect(form).toContainText("Settings changed; reload before saving.");
   expect(actions).toEqual(["test", "save", "test", "save"]);
+  expect(writes.at(-1)).toMatchObject({
+    automation: {
+      seedbox_ip: false,
+      auto_vip: false,
+      use_wedge: true,
+      protect_ratio: false,
+      maintain_buffer: false,
+      spend_bonus: false,
+    },
+  });
   expect(errors).toEqual([]);
 });

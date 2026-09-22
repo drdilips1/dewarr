@@ -7,17 +7,19 @@ and docs/notices; exact upstream revisions are in docs/REUSE-LEDGER.md.
 
 import asyncio
 import errno
+import ipaddress
 import json
 import logging
+import math
 import re
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from html.parser import HTMLParser
 from typing import Literal
 from urllib.parse import parse_qsl, unquote, urlencode, urlsplit
 
 import httpx
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, ValidationError, field_validator
 
 from app.adapters.contracts import AdapterError, FailureKind, Release
 from app.adapters.http import configured_url
@@ -25,6 +27,17 @@ from app.domain.catalog_network import retry_delay
 
 MAX_RESPONSE_BYTES = 8 * 1024 * 1024
 SEARCH_PATH = "tor/js/loadSearchJSONbasic.php"
+VIP_POINTS_PER_WEEK = 1250
+VIP_MAX_WEEKS = 12.85
+UPLOAD_CREDIT_GB = 50
+RATIO_FLOOR = 1.5
+BUFFER_FLOOR_GB = 10
+BONUS_CEILING = 5000
+UPLOAD_CHECK_HOURS = 6
+UPLOAD_PURCHASE_CAP = 12
+VIP_DOWNLOAD_BLOCKED = "This torrent requires active MyAnonamouse VIP."
+SEEDBOX_REFRESH = timedelta(hours=24)
+logger = logging.getLogger(__name__)
 
 
 class PrivateDownloadLogFilter(logging.Filter):
@@ -39,7 +52,84 @@ class PrivateDownloadLogFilter(logging.Filter):
 logging.getLogger("httpx").addFilter(PrivateDownloadLogFilter())
 
 
-def download_path(value, source_id):
+class AccountAutomation(BaseModel):
+    """Account actions an administrator can turn on. All of them default off."""
+
+    seedbox_ip: bool = False
+    seedbox_interval_seconds: int = Field(default=300, ge=60, le=86400)
+    auto_vip: bool = False
+    vip_interval_hours: int = Field(default=24, ge=1, le=168)
+    use_wedge: bool = False
+    wedge_min_size: bool = False
+    wedge_min_size_mb: float = Field(default=0, ge=0, le=10_000_000)
+    protect_ratio: bool = False
+    ratio_below: float = Field(default=RATIO_FLOOR, gt=0, le=1000)
+    ratio_buy_gb: int = Field(default=UPLOAD_CREDIT_GB, ge=50, le=100_000)
+    maintain_buffer: bool = False
+    buffer_below_gb: float = Field(default=BUFFER_FLOOR_GB, ge=0, le=10_000_000)
+    buffer_buy_gb: int = Field(default=UPLOAD_CREDIT_GB, ge=50, le=100_000)
+    spend_bonus: bool = False
+    bonus_above: int = Field(default=BONUS_CEILING, ge=0, le=100_000_000)
+    bonus_buy_gb: int = Field(default=UPLOAD_CREDIT_GB, ge=50, le=100_000)
+    upload_interval_hours: int = Field(default=UPLOAD_CHECK_HOURS, ge=1, le=168)
+
+    @field_validator(
+        "seedbox_ip",
+        "auto_vip",
+        "use_wedge",
+        "wedge_min_size",
+        "protect_ratio",
+        "maintain_buffer",
+        "spend_bonus",
+        mode="before",
+    )
+    @classmethod
+    def strict_switch(cls, value):
+        # Reject "yes" and 1. A loose coercion must not turn an action on.
+        if not isinstance(value, bool):
+            raise ValueError("Use true or false")
+        return value
+
+
+class HelperCommand(BaseModel):
+    seedbox: bool = False
+    known_ip: str | None = None
+    known_asn: str | None = None
+    seedbox_stale: bool = False
+    vip: bool = False
+    upload_ratio: bool = False
+    upload_buffer: bool = False
+    upload_bonus: bool = False
+    ratio_below: float = RATIO_FLOOR
+    ratio_buy_gb: int = UPLOAD_CREDIT_GB
+    buffer_below_gb: float = BUFFER_FLOOR_GB
+    buffer_buy_gb: int = UPLOAD_CREDIT_GB
+    bonus_above: int = BONUS_CEILING
+    bonus_buy_gb: int = UPLOAD_CREDIT_GB
+
+    @property
+    def uploads(self):
+        return self.upload_ratio or self.upload_buffer or self.upload_bonus
+
+
+class HelperResult(BaseModel):
+    checked: list[str] = Field(default_factory=list)
+    seedbox_ip: str | None = None
+    seedbox_asn: str | None = None
+    seedbox_authorized: bool = False
+    seedbox_unchanged: bool = False
+    vip_purchased: bool = False
+    upload_purchased: bool = False
+
+
+def stored_automation(value):
+    try:
+        return AccountAutomation.model_validate(value or {})
+    except ValidationError:
+        return AccountAutomation()
+
+
+def download_path(value, source_id, *, personal_freeleech=False):
     if not isinstance(value, str) or not 0 < len(value) <= 4096:
         raise AdapterError(FailureKind.PARSER, "MAM did not provide a usable download reference.")
     try:
@@ -72,7 +162,11 @@ def download_path(value, source_id):
         raise AdapterError(
             FailureKind.UNSUPPORTED, "MAM download reference has unsupported options."
         )
-    return "tor/download.php/" + parts.path + "?" + urlencode({"tid": source_id})
+    path = "tor/download.php/" + parts.path + "?" + urlencode({"tid": source_id})
+    # `fl` spends one wedge the account already owns. Only an enabled setting adds it.
+    if personal_freeleech:
+        path += "&fl"
+    return path
 
 
 class MAMSearch(BaseModel):
@@ -139,6 +233,8 @@ class MAMRelease(Release):
     snatches: int | None = None
     uploaded_at: str | None = None
     freeleech: bool | None = None
+    personal_freeleech: bool | None = None
+    vip_freeleech: bool | None = None
     vip: bool | None = None
     tags: list[str] = Field(default_factory=list)
     isbn: str | None = None
@@ -308,6 +404,8 @@ def release(row, observed_at):
         snatches=integer(row.get("times_completed")),
         uploaded_at=plain(row.get("added"), 100),
         freeleech=flag(row.get("free")),
+        personal_freeleech=flag(row.get("personal_freeleech")),
+        vip_freeleech=flag(row.get("fl_vip")),
         vip=flag(row.get("vip")),
         tags=[text for tag in tags[:100] if (text := plain(tag))],
         isbn=str(row["isbn"])[:200] if isinstance(row.get("isbn"), (str, int)) else None,
@@ -378,6 +476,171 @@ def parse_page(value, query):
     )
 
 
+_BYTE_UNITS = {
+    "B": 1,
+    "KB": 10**3,
+    "MB": 10**6,
+    "GB": 10**9,
+    "TB": 10**12,
+    "KIB": 1024,
+    "MIB": 1024**2,
+    "GIB": 1024**3,
+    "TIB": 1024**4,
+}
+
+
+def number(value):
+    if isinstance(value, bool) or value is None:
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    if not isinstance(value, str):
+        return None
+    text = value.strip().replace(",", "")
+    if not text or "---" in text:
+        return None
+    lowered = text.lower()
+    if "∞" in text or "inf" in lowered:
+        return math.inf
+    if "nan" in lowered:
+        return None
+    try:
+        return float(text)
+    except ValueError:
+        return None
+
+
+def gigabytes(value):
+    if isinstance(value, str):
+        match = re.fullmatch(r"([0-9]+(?:\.[0-9]+)?)\s*([KMGT]?I?B)", value.strip().upper())
+        if match:
+            return float(match[1]) * _BYTE_UNITS[match[2]] / (1024**3)
+        value = number(value)
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    if not math.isfinite(value) or value < 0:
+        return None
+    if isinstance(value, int) and value >= 1024**2:
+        return value / (1024**3)
+    return float(value)
+
+
+def vip_until_from(payload):
+    raw = payload.get("vip_until") if isinstance(payload, dict) else None
+    if not isinstance(raw, str) or not raw.strip():
+        return None
+    try:
+        parsed = datetime.fromisoformat(raw.strip().replace(" ", "T"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=UTC)
+    return parsed.astimezone(UTC)
+
+
+def vip_weeks_available(payload, now=None):
+    """Weeks of VIP this account can buy without passing the store cap. Zero means skip."""
+    now = now or datetime.now(UTC)
+    points = number(payload.get("seedbonus") if isinstance(payload, dict) else None)
+    if points is None or not math.isfinite(points) or points < VIP_POINTS_PER_WEEK:
+        return 0
+    expiry = vip_until_from(payload)
+    current = (expiry - now).total_seconds() / (7 * 24 * 3600) if expiry and expiry > now else 0
+    room = VIP_MAX_WEEKS - current
+    if room < 1:
+        return 0
+    return min(points / VIP_POINTS_PER_WEEK, room)
+
+
+def _with_bonus(payload, bought):
+    points = number(bought.get("seedbonus")) if isinstance(bought, dict) else None
+    if points is None or not isinstance(payload, dict):
+        return payload
+    return {**payload, "seedbonus": points}
+
+
+def credit_amount(payload, command):
+    """GB of upload credit for ratio or buffer. Ratio wins, and bonus is a separate purchase."""
+    if not isinstance(payload, dict):
+        return None
+    if command.upload_ratio:
+        ratio = number(payload.get("ratio"))
+        if ratio is not None and math.isfinite(ratio) and ratio < command.ratio_below:
+            return command.ratio_buy_gb
+    if command.upload_buffer:
+        uploaded = gigabytes(payload.get("uploaded"))
+        downloaded = gigabytes(payload.get("downloaded"))
+        if (
+            uploaded is not None
+            and downloaded is not None
+            and uploaded - downloaded < command.buffer_below_gb
+        ):
+            return command.buffer_buy_gb
+    return None
+
+
+def accepted(payload):
+    if not isinstance(payload, dict):
+        return False
+    return flag(payload.get("success")) is True or flag(payload.get("Success")) is True
+
+
+def route_identity(payload):
+    if not isinstance(payload, dict):
+        raise AdapterError(FailureKind.PARSER, "MAM did not report a usable route address.")
+    ip = payload.get("ip")
+    asn = payload.get("ASN")
+    try:
+        ip = str(ipaddress.ip_address(ip))
+    except (TypeError, ValueError) as error:
+        raise AdapterError(
+            FailureKind.PARSER, "MAM did not report a usable route address."
+        ) from error
+    if isinstance(asn, bool) or not isinstance(asn, (int, str)):
+        raise AdapterError(FailureKind.PARSER, "MAM did not report a usable network.")
+    asn_text = str(asn).strip()
+    if not re.fullmatch(r"[0-9]{1,12}", asn_text):
+        raise AdapterError(FailureKind.PARSER, "MAM did not report a usable network.")
+    return ip, asn_text
+
+
+def seedbox_update_target(base_url):
+    host = (urlsplit(str(base_url)).hostname or "").lower().rstrip(".")
+    if host == "myanonamouse.net" or host.endswith(".myanonamouse.net"):
+        return "https://t.myanonamouse.net/json/dynamicSeedbox.php"
+    return "json/dynamicSeedbox.php"
+
+
+def spend_wedge(item, vip_until, enabled, now=None, *, min_bytes=None):
+    """Apply an owned wedge only when the torrent is not already free for this account."""
+    if not enabled or item.freeleech is True or item.personal_freeleech is True:
+        return False
+    now = now or datetime.now(UTC)
+    if item.vip_freeleech is True and vip_until is not None and vip_until > now:
+        return False
+    if min_bytes is not None and (item.size_bytes is None or item.size_bytes <= min_bytes):
+        return False
+    return True
+
+
+def resolve_target(argument):
+    requested = False
+    source_id = argument
+    if isinstance(argument, dict):
+        source_id = argument.get("source_id")
+        requested = argument.get("use_wedge") is True
+    if not isinstance(source_id, str) or not re.fullmatch(r"[1-9][0-9]{0,17}", source_id):
+        raise ValueError("Invalid MAM release identifier")
+    return source_id, requested
+
+
+def wedge_limit(settings, explicit):
+    """Minimum size applies to automatic wedges. A choice for one torrent ignores it."""
+    if explicit or not settings.use_wedge or not settings.wedge_min_size:
+        return None
+    return int(settings.wedge_min_size_mb * 1024 * 1024)
+
+
 class MAMClient:
     def __init__(
         self,
@@ -409,9 +672,18 @@ class MAMClient:
             transport=transport,
         )
         self.rotated_cookie = None
+        self.automation = AccountAutomation()
         self.uses_proxy = bool(proxy_url)
         self.request_interval = request_interval
         self.cooldown = 0
+
+    @property
+    def use_wedge(self):
+        return self.automation.use_wedge
+
+    @use_wedge.setter
+    def use_wedge(self, value):
+        self.automation = self.automation.model_copy(update={"use_wedge": value is True})
 
     async def __aenter__(self):
         return self
@@ -419,7 +691,13 @@ class MAMClient:
     async def __aexit__(self, *args):
         await self.client.aclose()
 
-    async def request(self, path, payload=None, *, binary=False):
+    async def request(self, path, payload=None, *, binary=False, params=None, authenticated=True):
+        headers = {}
+        if binary:
+            headers["Accept"] = "application/x-bittorrent"
+        if not authenticated:
+            # Route checks identify the network. They must not send the session cookie.
+            headers["Cookie"] = ""
         try:
             async with (
                 asyncio.timeout(40),
@@ -427,7 +705,8 @@ class MAMClient:
                     "POST" if payload else "GET",
                     path,
                     json=payload,
-                    headers={"Accept": "application/x-bittorrent"} if binary else None,
+                    params=params,
+                    headers=headers or None,
                 ) as response,
             ):
                 self.cooldown = retry_delay(dict(response.headers), datetime.now(UTC))
@@ -555,9 +834,8 @@ class MAMClient:
             )
         return None
 
-    async def resolve(self, source_id):
-        if not re.fullmatch(r"[1-9][0-9]{0,17}", source_id):
-            raise ValueError("Invalid MAM release identifier")
+    async def resolve(self, argument):
+        source_id, requested = resolve_target(argument)
         query = MAMSearch(q="detail", limit=1)
         payload = query.payload()
         payload["dlLink"] = "true"
@@ -579,7 +857,30 @@ class MAMClient:
             raise AdapterError(
                 FailureKind.PARSER, "MAM returned a different release than requested."
             )
-        path = download_path(value["data"][0].get("dl"), source_id)
+        item = page.items[0]
+        enabled = requested or self.automation.use_wedge
+        vip_until = None
+        if item.vip is True or (enabled and item.vip_freeleech is True):
+            if self.cooldown:
+                raise AdapterError(
+                    FailureKind.RATE_LIMIT,
+                    "MAM requested a cooldown before fetching torrent metadata. Retry later.",
+                    retry_after=int(self.cooldown),
+                )
+            await asyncio.sleep(self.request_interval)
+            vip_until = vip_until_from(await self.request("jsonLoad.php"))
+            if item.vip is True and not (vip_until and vip_until > datetime.now(UTC)):
+                raise AdapterError(FailureKind.UNSUPPORTED, VIP_DOWNLOAD_BLOCKED)
+        path = download_path(
+            value["data"][0].get("dl"),
+            source_id,
+            personal_freeleech=spend_wedge(
+                item,
+                vip_until,
+                enabled,
+                min_bytes=wedge_limit(self.automation, requested),
+            ),
+        )
         if self.cooldown:
             raise AdapterError(
                 FailureKind.RATE_LIMIT,
@@ -588,4 +889,87 @@ class MAMClient:
             )
         await asyncio.sleep(self.request_interval)
         content = await self.request(path, binary=True)
-        return MAMArtifact(release=page.items[0], content=content)
+        return MAMArtifact(release=item, content=content)
+
+    async def _pause(self):
+        if self.cooldown:
+            raise AdapterError(
+                FailureKind.RATE_LIMIT,
+                "MAM requested a cooldown. Account automation will retry later.",
+                retry_after=int(self.cooldown) or 60,
+            )
+        await asyncio.sleep(self.request_interval)
+
+    async def _buy(self, spendtype, extra):
+        params = {
+            "spendtype": spendtype,
+            "_": int(datetime.now(UTC).timestamp() * 1000),
+            **extra,
+        }
+        return await self.request("json/bonusBuy.php", params=params)
+
+    async def maintain(self, command):
+        if not isinstance(command, HelperCommand):
+            command = HelperCommand.model_validate(command)
+        result = HelperResult()
+        if not (command.seedbox or command.vip or command.uploads):
+            return result
+        if command.seedbox:
+            seen = await self.request("json/jsonIp.php", authenticated=False)
+            ip, asn = route_identity(seen)
+            result.seedbox_ip = ip
+            result.seedbox_asn = asn
+            result.checked.append("seedbox")
+            if ip != command.known_ip or asn != command.known_asn or command.seedbox_stale:
+                await self._pause()
+                update = await self.request(seedbox_update_target(str(self.client.base_url)))
+                result.seedbox_authorized = accepted(update)
+                if result.seedbox_authorized:
+                    logger.info("Account automation updated the dynamic seedbox")
+            else:
+                result.seedbox_unchanged = True
+        if command.vip or command.uploads:
+            if result.checked:
+                await self._pause()
+            payload = await self.request("jsonLoad.php")
+            if command.vip:
+                result.checked.append("vip")
+                if vip_weeks_available(payload) >= 1:
+                    await self._pause()
+                    result.vip_purchased = accepted(await self._buy("VIP", {"duration": "max"}))
+                    if result.vip_purchased:
+                        logger.info("Account automation purchased VIP")
+                        await self._pause()
+                        payload = await self.request("jsonLoad.php")
+            if command.uploads:
+                result.checked.append("upload")
+                result.upload_purchased = await self._buy_upload(payload, command)
+        return result
+
+    async def _buy_upload(self, payload, command):
+        purchased = False
+        amount = credit_amount(payload, command)
+        if amount:
+            await self._pause()
+            bought = await self._buy("upload", {"amount": amount})
+            purchased = accepted(bought)
+            if purchased:
+                logger.info("Account automation purchased upload credit")
+                payload = _with_bonus(payload, bought)
+        if not command.upload_bonus:
+            return purchased
+        for _ in range(UPLOAD_PURCHASE_CAP):
+            points = number(payload.get("seedbonus")) if isinstance(payload, dict) else None
+            if points is None or not math.isfinite(points) or points <= command.bonus_above:
+                break
+            await self._pause()
+            bought = await self._buy("upload", {"amount": command.bonus_buy_gb})
+            if not accepted(bought):
+                break
+            purchased = True
+            logger.info("Account automation purchased upload credit")
+            nxt = number(bought.get("seedbonus")) if isinstance(bought, dict) else None
+            if nxt is None or nxt >= points:
+                break
+            payload = {**payload, "seedbonus": nxt}
+        return purchased

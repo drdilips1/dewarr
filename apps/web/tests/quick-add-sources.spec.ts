@@ -89,7 +89,7 @@ test("Quick add follows defaults and format overrides; sources provide compact r
     items: [
       {
         id: "result-1",
-        release,
+        release: { ...release, freeleech: false, personal_freeleech: false },
         current_connection: true,
         assessment: {
           blocked: [],
@@ -121,6 +121,7 @@ test("Quick add follows defaults and format overrides; sources provide compact r
   const posted: Record<string, unknown>[] = [];
   let receipt: unknown = null;
   const releaseDownloads: string[] = [];
+  const wedgeChoices: Array<string | null> = [];
   await page.route("**/api/**", async (route) => {
     const path = new URL(route.request().url()).pathname;
     let data: unknown = {};
@@ -169,7 +170,9 @@ test("Quick add follows defaults and format overrides; sources provide compact r
     else if (path === "/api/sources/mam/releases/720130")
       data = search.items[1].release;
     else if (path.endsWith("/download") && path.includes("/results/")) {
-      releaseDownloads.push(path);
+      const url = new URL(route.request().url());
+      releaseDownloads.push(url.pathname);
+      wedgeChoices.push(url.searchParams.get("use_wedge"));
       data = {
         id: "selected-1",
         status: "queued",
@@ -262,6 +265,10 @@ test("Quick add follows defaults and format overrides; sources provide compact r
     name: "Download Project Hail Mary",
     exact: true,
   });
+  const wedge = table.getByRole("checkbox", { name: "Use a Freeleech wedge" });
+  await expect(wedge).toHaveCount(1);
+  await expect(wedge).toBeEnabled();
+  await wedge.check();
   await expect(sourceDownload.nth(1)).toBeDisabled();
   await sourceDownload.first().click();
   await expect(table).toContainText("Selected release download started");
@@ -269,6 +276,7 @@ test("Quick add follows defaults and format overrides; sources provide compact r
   expect(releaseDownloads).toEqual([
     "/api/source-searches/search-1/results/result-1/download",
   ]);
+  expect(wedgeChoices).toEqual(["true"]);
   await page.getByLabel("Sort this view").selectOption("smallest");
   await expect(table.locator("tbody tr").first()).toContainText("EPUB");
   await page.getByLabel("Sort this view").selectOption("profile");

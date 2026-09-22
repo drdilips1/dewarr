@@ -77,6 +77,7 @@ async def test_connection_search_detail_rotation_and_redaction(
     configured = await configure(client)
     assert configured.status_code == 200, configured.text
     assert configured.json()["route"] == "direct"
+    assert configured.json()["automation"]["use_wedge"] is False
     tested = await client.post("/api/sources/mam/connection/test")
     assert tested.status_code == 200 and tested.json()["status"] == "connected"
     found = await search(client)

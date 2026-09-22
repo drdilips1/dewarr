@@ -92,6 +92,7 @@ class AutomaticSelectionInput(BaseModel):
     alternate_destination_id: UUID | None = None
     alternate_destination_revision: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
     download_when_ready: bool = False
+    use_wedge: bool = False
 
     @model_validator(mode="after")
     def fallback_route(self):
@@ -335,6 +336,8 @@ async def begin(db, user, body, key, *, list_authority=None, series_authority=No
         command.pop("result_id", None)
     if not body.download_when_ready:
         command.pop("download_when_ready")  # Preserve earlier preparation-only command receipts.
+    if not body.use_wedge:
+        command.pop("use_wedge")
     previous = await db.scalar(
         select(Operation).where(Operation.owner_id == user.id, Operation.idempotency_key == key)
     )
@@ -534,7 +537,9 @@ async def candidates(db, operation, work, profile, rule, version):
     return ranked
 
 
-async def resolve_candidate(owner_id, row, *, downloader_id=None, downloader_generation=None):
+async def resolve_candidate(
+    owner_id, row, *, downloader_id=None, downloader_generation=None, use_wedge=False
+):
     if row.source_key == "audiobookbay":
         from app.domain.audiobookbay_network import resolve_abb
 
@@ -546,10 +551,11 @@ async def resolve_candidate(owner_id, row, *, downloader_id=None, downloader_gen
             downloader_generation=downloader_generation,
         )
     if row.source_key == "mam":
+        source_id = row.release_snapshot["source_id"]
         artifact, generation = await source_call(
             owner_id,
             "resolve",
-            row.release_snapshot["source_id"],
+            {"source_id": source_id, "use_wedge": True} if use_wedge else source_id,
             with_generation=True,
             expected_generation=row.source_generation,
         )
@@ -752,7 +758,16 @@ async def run(identifier):
                         downloader_generation=route["generation"],
                     )
                 else:
-                    artifact_id, fresh = await resolve_candidate(owner_id, row)
+                    artifact_id, fresh = await resolve_candidate(
+                        owner_id,
+                        row,
+                        use_wedge=bool(
+                            body.use_wedge
+                            and body.result_id is not None
+                            and row.id == body.result_id
+                            and row.source_key == "mam"
+                        ),
+                    )
     except (AdapterError, HTTPException, TimeoutError) as error:
         async with session_factory()() as db, db.begin():
             await transaction_lock(db, f"auto-select:{identifier}")
