@@ -146,6 +146,9 @@ async def prepare(db, user, body, key, *, automatic_evidence=None):
     intent = await db.get(AcquisitionIntent, body.intent_id)
     if not intent or intent.owner_id != user.id:
         raise HTTPException(404, "Request not found")
+    from app.domain.permissions import require_download_allowed
+
+    await require_download_allowed(db, user, intent)
     work = await acquisition_lock(db, intent.work_id)
     await member(db, user.id)
     if body.confirmed_work_id != work.id:

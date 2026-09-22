@@ -464,6 +464,22 @@ nav a.active {
   background: #292d52;
   color: #c7d2fe;
 }
+.nav-count {
+  margin-left: auto;
+  min-width: 1.15rem;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #292d52;
+  color: #c7d2fe;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+}
+nav a.active .nav-count {
+  background: #1e1b4b;
+  color: #e0e7ff;
+}
 .sidebar-bottom {
   margin-top: auto;
   display: flex;
@@ -1017,9 +1033,49 @@ nav a.active {
 .account-list > div {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   padding: 15px 0;
   gap: 15px;
   align-items: center;
+}
+.account-editor,
+.permission-grid,
+.role-list {
+  flex-basis: 100%;
+}
+.permission-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+.permission-grid label {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-top: 8px;
+}
+.permission-grid small,
+.role-list .muted {
+  display: block;
+  color: var(--muted);
+}
+.role-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+}
+.role-list li {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 0;
+}
+.request-decision {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
 }
 .account-list > div + div {
   border-top: 1px solid var(--line);
@@ -1182,6 +1238,9 @@ nav a.active {
     font-size: 12px;
     gap: 6px;
     white-space: nowrap;
+  }
+  .nav-count {
+    margin-left: 2px;
   }
   nav svg {
     width: 15px;

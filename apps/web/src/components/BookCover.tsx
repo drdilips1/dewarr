@@ -5,6 +5,7 @@ import QuickAdd from "./QuickAdd";
 import { api, result, type Auth } from "../api/client";
 import type { Work } from "../api/client";
 import { useDisplayPreferences } from "../displayPreferences";
+import { canStartDownload } from "../permissions";
 
 type Props = {
   providerBook?: { provider: string; external_id: string };
@@ -29,9 +30,14 @@ export default function BookCover({
     queryKey: ["session"],
     enabled: false,
   });
+  const canDownload = canStartDownload(
+    session?.user.permissions,
+    session?.user.role,
+    medium === "ebook" || medium === "audio" ? medium : undefined,
+  );
   const canAdd =
     actions &&
-    session?.user.role !== "viewer" &&
+    canDownload &&
     !!session &&
     !!(work || providerBook) &&
     !(work?.availability.ebook && work?.availability.audio);

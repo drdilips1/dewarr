@@ -41,11 +41,23 @@ class User(Identity, Base):
     role: Mapped[str] = mapped_column(String(20), default="member")
     active: Mapped[bool] = mapped_column(Boolean, default=True)
     can_automate: Mapped[bool] = mapped_column(Boolean, default=False)
+    # Null keeps the legacy role preset. Explicit bits are the Seerr-style grant set.
+    permissions: Mapped[int | None] = mapped_column(BigInteger)
+    permission_role_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("permission_roles.id", ondelete="SET NULL")
+    )
     onboarding: Mapped[dict[str, Any]] = mapped_column(
         JSONB,
         default=lambda: {"status": "pending", "step": 0, "skipped": []},
         server_default='{"status":"pending","step":0,"skipped":[]}',
     )
+
+
+class PermissionRole(Identity, Base):
+    __tablename__ = "permission_roles"
+    name: Mapped[str] = mapped_column(String(80), unique=True)
+    description: Mapped[str] = mapped_column(String(300), default="")
+    permissions: Mapped[int] = mapped_column(BigInteger)
 
 
 class LoginSession(Base):
@@ -644,6 +656,10 @@ class AcquisitionReason(Identity, Base):
     __table_args__ = (
         UniqueConstraint("intent_id", "kind", "reference"),
         CheckConstraint("kind IN ('manual', 'list', 'series')", name="acquisition_reason_kind"),
+        CheckConstraint(
+            "approval_status IN ('pending', 'approved', 'declined')",
+            name="ck_acquisition_reason_approval",
+        ),
     )
     intent_id: Mapped[UUID] = mapped_column(ForeignKey("acquisition_intents.id"), index=True)
     kind: Mapped[str] = mapped_column(String(20))
@@ -653,6 +669,12 @@ class AcquisitionReason(Identity, Base):
     list_id: Mapped[UUID | None] = mapped_column(
         ForeignKey("book_lists.id", ondelete="SET NULL"), index=True
     )
+    approval_status: Mapped[str] = mapped_column(
+        String(20), default="approved", server_default="approved"
+    )
+    decided_by: Mapped[UUID | None] = mapped_column(ForeignKey("users.id"))
+    decided_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    decision_note: Mapped[str | None] = mapped_column(String(300))
 
 
 class AcquisitionReservation(Identity, Base):

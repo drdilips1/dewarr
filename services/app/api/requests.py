@@ -3,7 +3,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Header, HTTPException, Query
 from pydantic import BaseModel, ConfigDict, Field
-from sqlalchemy import exists, func, select
+from sqlalchemy import String, and_, cast, exists, func, or_, select
 
 from app.api.dependencies import CurrentUser, Database, Member
 from app.api.operations import OperationView
@@ -15,6 +15,7 @@ from app.db.models import (
     AuditEvent,
     BookList,
     Operation,
+    User,
     Version,
 )
 from app.domain.acquisition import (
@@ -28,7 +29,17 @@ from app.domain.acquisition import (
 )
 from app.domain.display_requests import ExistingCopyHint, existing_copy_hints
 from app.domain.list_series import SeriesPlanView
+from app.domain.permissions import (
+    AUTO_APPROVE,
+    AUTO_APPROVE_AUDIO,
+    AUTO_APPROVE_EBOOK,
+    MANAGE_REQUESTS,
+    auto_approves,
+    effective_permissions,
+    has,
+)
 from app.domain.release_profiles import ProfileSnapshot
+from app.domain.request_approvals import approval_download_started
 from app.domain.request_preferences import PreferenceChoice, resolve
 from app.domain.work_graph import acquisition_lock, canonical_work, family_ids
 
@@ -58,6 +69,8 @@ class ReasonView(BaseModel):
     kind: str
     active: bool
     list_id: UUID | None
+    approval_status: str = "approved"
+    decision_note: str | None = None
     release_policy: ProfileSnapshot | None = None
 
 
@@ -65,7 +78,11 @@ class RequestView(BaseModel):
     id: UUID
     work_id: UUID
     work_title: str
+    owner_name: str = ""
     can_open_book: bool = False
+    can_decide: bool = False
+    can_start_download: bool = False
+    approval_status: str = "approved"
     specification: RequestSpec
     targets: list[TargetView]
     reasons: list[ReasonView]
@@ -106,6 +123,89 @@ async def owned_intent(db, user, intent_id):
     return intent
 
 
+async def readable_intent(db, user, intent_id):
+    intent = await db.get(AcquisitionIntent, intent_id)
+    if intent and (intent.owner_id == user.id or has(user, MANAGE_REQUESTS)):
+        return intent
+    raise HTTPException(404, "Request not found")
+
+
+def _download_modes(user) -> list[str] | None:
+    """None covers every medium. An empty list cannot start an approval download."""
+    if not has(user, MANAGE_REQUESTS):
+        return []
+    perms = effective_permissions(user)
+    if user.role == "admin" or perms & AUTO_APPROVE:
+        return None
+    ebook = bool(perms & AUTO_APPROVE_EBOOK)
+    audio = bool(perms & AUTO_APPROVE_AUDIO)
+    if ebook and audio:
+        return None
+    if ebook:
+        return ["ebook"]
+    if audio:
+        return ["audio"]
+    return []
+
+
+def _ready_for_download():
+    mode = func.coalesce(AcquisitionIntent.specification["mode"].astext, "")
+    perms = User.permissions
+    umbrella = perms.bitwise_and(AUTO_APPROVE) != 0
+    ebook = perms.bitwise_and(AUTO_APPROVE_EBOOK) != 0
+    audio = perms.bitwise_and(AUTO_APPROVE_AUDIO) != 0
+    specific = or_(
+        and_(mode == "ebook", ebook),
+        and_(mode == "audio", audio),
+        and_(mode.not_in(["ebook", "audio"]), ebook, audio),
+    )
+    owner_can = and_(
+        User.active.is_(True),
+        or_(
+            User.role == "admin",
+            and_(User.role != "viewer", User.permissions.is_(None)),
+            and_(User.role != "viewer", or_(umbrella, specific)),
+        ),
+    )
+    return [
+        exists(
+            select(AcquisitionReason.id).where(
+                AcquisitionReason.intent_id == AcquisitionIntent.id,
+                AcquisitionReason.active.is_(True),
+                AcquisitionReason.approval_status == "approved",
+            )
+        ),
+        ~exists(
+            select(AcquisitionReason.id).where(
+                AcquisitionReason.intent_id == AcquisitionIntent.id,
+                AcquisitionReason.active.is_(True),
+                AcquisitionReason.approval_status == "pending",
+            )
+        ),
+        ~exists(select(User.id).where(User.id == AcquisitionIntent.owner_id, owner_can)),
+        ~exists(
+            select(Operation.id).where(
+                Operation.kind == "acquisition.quick-add",
+                Operation.status.in_(["queued", "running", "completed"]),
+                Operation.payload["approval_dispatch"].astext == "true",
+                Operation.payload["command"]["work_id"].astext
+                == cast(AcquisitionIntent.work_id, String),
+            )
+        ),
+    ]
+
+
+def approval_of(reasons) -> str:
+    active = [reason for reason in reasons if reason.active]
+    if any(reason.approval_status == "pending" for reason in active):
+        return "pending"
+    if any(reason.approval_status == "approved" for reason in active):
+        return "approved"
+    if any(reason.approval_status == "declined" for reason in active):
+        return "declined"
+    return "approved"
+
+
 async def view(db, user, intent):
     # Refresh only the display projection here; dispatch must evaluate under the work lock.
     spec = RequestSpec.model_validate(intent.specification)
@@ -118,7 +218,19 @@ async def view(db, user, intent):
             .order_by(AcquisitionReason.created_at, AcquisitionReason.id)
         )
     ).all()
-    active = any(reason.active for reason in reasons)
+    active = any(reason.active and reason.approval_status == "approved" for reason in reasons)
+    pending = any(reason.active and reason.approval_status == "pending" for reason in reasons)
+    declined = any(reason.active and reason.approval_status == "declined" for reason in reasons)
+    approval = approval_of(reasons)
+    owner = await db.get(User, intent.owner_id)
+    can_dispatch = has(user, MANAGE_REQUESTS) and auto_approves(user, spec)
+    download_followup = (
+        can_dispatch
+        and approval == "approved"
+        and not (owner and auto_approves(owner, spec))
+        and not await approval_download_started(db, intent.work_id)
+    )
+    can_start_download = (can_dispatch and approval == "pending") or download_followup
     descriptions = []
     work_title = "Unavailable book"
     can_open_book = False
@@ -144,7 +256,21 @@ async def view(db, user, intent):
         targets = [TargetView(**item) for item in await assess(db, user, intent.work_id, spec)]
         for target in targets:
             if not active:
-                target.state, target.message = "cancelled", "No active request reasons"
+                if pending:
+                    target.state, target.message = "paused", "Waiting for approval"
+                elif declined:
+                    target.state, target.message = "cancelled", "Request declined"
+                else:
+                    target.state, target.message = "cancelled", "No active request reasons"
+            elif target.state == "wanted" and not (
+                intent.owner_id == user.id and auto_approves(user, spec)
+            ):
+                target.next_action = "none"
+                target.message = (
+                    "Approved. Start the download from this review."
+                    if download_followup
+                    else "Approved. An account that can download will add it to the library."
+                )
             elif target.state == "wanted":
                 target.next_action = "search"
                 target.message = "Saved to wanted; choose a source release to continue"
@@ -184,7 +310,11 @@ async def view(db, user, intent):
         id=intent.id,
         work_id=(await canonical_work(db, intent.work_id)).id,
         work_title=work_title,
+        owner_name=owner.display_name if owner else "",
         can_open_book=can_open_book,
+        can_decide=has(user, MANAGE_REQUESTS) and approval == "pending",
+        can_start_download=can_start_download,
+        approval_status=approval,
         specification=spec,
         release_policy=intent.release_policy,
         description="; ".join(
@@ -200,11 +330,15 @@ async def view(db, user, intent):
                 kind=reason.kind,
                 active=reason.active,
                 list_id=reason.list_id,
+                approval_status=reason.approval_status,
+                decision_note=reason.decision_note,
                 release_policy=reason.release_policy,
                 label="Series: "
                 + ((await db.get(Operation, UUID(reason.reference))).payload["series"]["name"])
                 if reason.kind == "series"
                 else "Your request"
+                if reason.kind == "manual" and intent.owner_id == user.id
+                else (owner.display_name if owner else "Someone") + " requested this"
                 if reason.kind == "manual"
                 else (
                     await db.scalar(select(BookList.name).where(BookList.id == reason.list_id))
@@ -320,10 +454,36 @@ async def all_requests(
     db: Database,
     work_id: UUID | None = None,
     active_only: bool = False,
+    pending_only: bool = False,
+    download_ready: bool = False,
     offset: int = Query(default=0, ge=0),
     limit: int = Query(default=20, ge=1, le=100),
 ):
-    where = [AcquisitionIntent.owner_id == user.id]
+    if pending_only and download_ready:
+        raise HTTPException(422, "Choose either waiting requests or downloads")
+    if (pending_only or download_ready) and not has(user, MANAGE_REQUESTS):
+        raise HTTPException(403, "You cannot review requests")
+    if download_ready:
+        modes = _download_modes(user)
+        if modes == []:
+            return RequestPage(items=[], total=0, offset=offset, limit=limit)
+        where = _ready_for_download()
+        if modes is not None:
+            where.append(
+                func.coalesce(AcquisitionIntent.specification["mode"].astext, "").in_(modes)
+            )
+    elif pending_only:
+        where = [
+            exists(
+                select(AcquisitionReason.id).where(
+                    AcquisitionReason.intent_id == AcquisitionIntent.id,
+                    AcquisitionReason.active.is_(True),
+                    AcquisitionReason.approval_status == "pending",
+                )
+            )
+        ]
+    else:
+        where = [AcquisitionIntent.owner_id == user.id]
     if active_only:
         where.append(
             exists(
@@ -355,7 +515,50 @@ async def all_requests(
 
 @router.get("/{intent_id}", response_model=RequestView)
 async def request_detail(intent_id: UUID, user: CurrentUser, db: Database):
-    return await view(db, user, await owned_intent(db, user, intent_id))
+    return await view(db, user, await readable_intent(db, user, intent_id))
+
+
+class DecisionInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    status: Literal["approved", "declined"]
+    note: str | None = Field(default=None, max_length=300)
+    download: bool = False
+    expected_status: Literal["pending", "approved", "declined"]
+
+
+class DecisionView(BaseModel):
+    request: RequestView
+    download_started: bool
+    download_message: str | None = None
+
+
+@router.post("/{intent_id}/decision", response_model=DecisionView)
+async def decision(
+    intent_id: UUID,
+    body: DecisionInput,
+    user: CurrentUser,
+    db: Database,
+    idempotency_key: str = Header(min_length=8, max_length=200),
+):
+    from app.domain.request_approvals import decide
+
+    intent, started, message = await decide(
+        db,
+        user,
+        intent_id,
+        body.status,
+        body.note,
+        body.download,
+        body.expected_status,
+        idempotency_key,
+    )
+    response = DecisionView(
+        request=await view(db, user, intent),
+        download_started=started,
+        download_message=message,
+    )
+    await db.commit()
+    return response
 
 
 @router.delete("/{intent_id}/reasons/{reason_id}", response_model=RequestView)

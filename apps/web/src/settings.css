@@ -665,30 +665,276 @@ button.help-button:hover {
   left: 0;
   right: 0;
 }
-.settings-section-body .account-list {
-  margin-top: 16px;
+.access-toolbar {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 14px;
 }
-.settings-section-body .account-list > div {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  gap: 10px;
-  align-items: center;
+.access-switch {
+  display: flex;
+  gap: 20px;
+  min-width: 0;
 }
-.settings-section-body .account-list strong,
-.settings-section-body .account-list p {
+.settings-section-body .access-switch button,
+.access-page .access-switch button {
+  min-height: 36px;
+  margin: 0 0 -1px;
+  padding: 8px 0 10px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 650;
+  box-shadow: none;
+}
+.settings-section-body .access-switch button:hover,
+.access-page .access-switch button:hover {
+  background: transparent;
+  color: #fff;
+}
+.settings-section-body .access-switch button[aria-selected="true"],
+.access-page .access-switch button[aria-selected="true"] {
+  background: transparent;
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.access-toolbar > button {
+  align-self: center;
+  margin-bottom: 8px;
+}
+.settings-section-body .access-lead {
+  margin: 0 0 14px;
+  color: var(--muted);
+  max-width: 42rem;
+}
+.access-table-scroll + .access-lead {
+  margin-top: 12px;
+}
+.access-table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.access-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+}
+.access-table th {
+  padding: 10px 14px;
+  background: #1b2536;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.access-table td {
+  padding: 12px 14px;
+  border-top: 1px solid var(--line);
+  vertical-align: middle;
   overflow-wrap: anywhere;
 }
-.settings-section-body .account-list button {
-  max-width: 100%;
-  white-space: normal;
+.access-table tbody tr:hover {
+  background: #1c293d;
+}
+.access-table-users th:nth-child(1) {
+  width: 34%;
+}
+.access-table-users th:nth-child(2) {
+  width: 24%;
+}
+.access-table-users th:last-child,
+.access-table-roles th:last-child {
+  width: 108px;
+  text-align: right;
+}
+.access-table td:last-child {
+  text-align: right;
+  white-space: nowrap;
+}
+.access-table-roles th:nth-child(2) {
+  width: 120px;
+}
+.access-name {
+  font-weight: 650;
+}
+.access-username,
+.access-meta {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.access-username-inline {
+  display: none;
+}
+.access-meta {
+  margin-top: 2px;
+}
+.access-you {
+  margin-left: 8px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #263249;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 650;
+  vertical-align: 1px;
+}
+.settings-section-body .access-table button {
+  min-height: 30px;
+  padding: 4px 10px;
+}
+.book-dialog.access-dialog {
+  container-type: inline-size;
+}
+.book-dialog.access-dialog-wide {
+  width: min(960px, calc(100vw - 32px));
+}
+.access-dialog .book-dialog-heading {
+  font-size: 15px;
+}
+.settings-section-body .access-dialog .book-dialog-heading button {
+  min-height: 0;
+  padding: 5px;
+  border: 0;
+  background: transparent;
+}
+.settings-section-body .access-dialog label,
+.settings-section-body
+  .access-dialog
+  input:not([type="checkbox"]):not([type="radio"]),
+.settings-section-body .access-dialog select {
+  max-width: none;
+}
+.settings-section-body .access-dialog form > label {
+  max-width: 24rem;
+}
+.access-dialog .access-hint {
+  margin: 0;
+  color: var(--muted);
+}
+.access-dialog .permission-grid {
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin: 4px 0 0;
+}
+.access-dialog .permission-grid fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.access-dialog .permission-grid legend {
+  display: block;
+  width: 100%;
+  margin: 0 0 4px;
+  padding: 0;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.access-dialog .permission-grid label {
+  align-items: flex-start;
+  margin-top: 8px;
+  font-weight: 600;
+}
+.access-dialog .permission-grid label span {
+  min-width: 0;
+}
+.access-dialog .permission-grid small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.access-dialog .permission-grid label:has(input:disabled) {
+  opacity: 0.72;
+}
+.settings-section-body .access-dialog .access-form-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.settings-section-body .access-dialog .access-form-actions button {
+  width: auto;
+}
+.settings-section-body .access-dialog .access-delete {
+  margin-right: auto;
+  background: transparent;
+  border-color: transparent;
+  color: #ffc1c6;
+}
+.settings-section-body .access-dialog .access-delete:hover {
+  background: #3a2430;
+}
+.access-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.settings-section-body .access-confirm p {
+  margin: 0;
+  color: var(--muted);
+}
+@container (min-width: 640px) {
+  .access-dialog .permission-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@container (min-width: 860px) {
+  .access-dialog .permission-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+@container (max-width: 640px) {
+  .access-table {
+    min-width: 0;
+  }
+  .access-table-users th:nth-child(2),
+  .access-table-users td:nth-child(2) {
+    display: none;
+  }
+  .access-username-inline {
+    display: block;
+    margin-top: 2px;
+  }
+  .access-table-users th:nth-child(1),
+  .access-table-users th:nth-child(3) {
+    width: auto;
+  }
+  .access-table-users th:last-child,
+  .access-table-roles th:last-child {
+    width: 76px;
+  }
+  .access-table th,
+  .access-table td {
+    padding: 10px;
+  }
 }
 @container (max-width: 520px) {
-  .settings-section-body .account-list > div {
-    grid-template-columns: minmax(0, 1fr) auto;
+  .access-toolbar {
+    flex-wrap: wrap;
   }
-  .settings-section-body .account-list button {
-    grid-column: 1 / -1;
-    justify-self: start;
+  .access-toolbar > button {
+    margin-bottom: 10px;
   }
 }
 

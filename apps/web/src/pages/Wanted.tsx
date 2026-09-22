@@ -5,7 +5,12 @@ import RequestPreferences, { type Choice } from "./RequestPreferences";
 import { EffectivePreferences } from "./PreferenceFields";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api, result } from "../api/client";
+import { api, result, type Auth } from "../api/client";
+import {
+  canAutoDownload,
+  canRequestAdvanced,
+  canRequestMedium,
+} from "../permissions";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
 import { Link } from "react-router-dom";
@@ -38,12 +43,30 @@ export default function Wanted({
   clearVersion: () => void;
 }) {
   const cache = useQueryClient();
+  const auth = cache.getQueryData<Auth>(["session"]);
+  const advanced = canRequestAdvanced(auth?.user.permissions, auth?.user.role);
   const heading = useRef<HTMLHeadingElement>(null);
   const [mode, setMode] = useState<Spec["mode"] | "">(
     version?.medium === "audio" || version?.medium === "ebook"
       ? version.medium
       : "",
   );
+  const autoDownload = canAutoDownload(
+    auth?.user.permissions,
+    auth?.user.role,
+    mode === "ebook" || mode === "audio" ? mode : undefined,
+  );
+  const requestEbook = canRequestMedium(
+    auth?.user.permissions,
+    auth?.user.role,
+    "ebook",
+  );
+  const requestAudio = canRequestMedium(
+    auth?.user.permissions,
+    auth?.user.role,
+    "audio",
+  );
+  const requestBoth = canRequestMedium(auth?.user.permissions, auth?.user.role);
   const [preferred, setPreferred] = useState<"ebook" | "audio">("ebook");
   const [preferences, setPreferences] = useState<Choice>({});
   const key = useRef(randomUUID());
@@ -53,8 +76,12 @@ export default function Wanted({
   const specification: Spec = {
     ...(mode ? { mode } : {}),
     ...(mode === "either" ? { preferred_medium: preferred } : {}),
-    ...(version?.medium === "audio" ? { audio_version_id: version.id } : {}),
-    ...(version?.medium === "ebook" ? { ebook_version_id: version.id } : {}),
+    ...(advanced && version?.medium === "audio"
+      ? { audio_version_id: version.id }
+      : {}),
+    ...(advanced && version?.medium === "ebook"
+      ? { ebook_version_id: version.id }
+      : {}),
   };
   const profiles = useQuery({
     queryKey: ["release-profiles"],
@@ -111,9 +138,13 @@ export default function Wanted({
           body: {
             work_id: workId,
             specification,
-            release_preferences: preferences,
-            expected_preference_revision:
-              preview.data?.release_policy?.effective_revision,
+            ...(advanced
+              ? {
+                  release_preferences: preferences,
+                  expected_preference_revision:
+                    preview.data?.release_policy?.effective_revision,
+                }
+              : {}),
           },
           params: { header: { "idempotency-key": key.current } },
         }),
@@ -148,8 +179,9 @@ export default function Wanted({
         Wanted media
       </h2>
       <p className="muted">
-        Track the media you want and skip copies already in your library. Save a
-        request, then choose a source to acquire missing media.
+        {autoDownload
+          ? "Track the media you want and skip copies already in your library. Save a request, then choose a source to acquire missing media."
+          : "Ask for a book without starting the download. Someone with approval access can accept it into the library, or decline it."}
       </p>
       {version ? (
         <div className="source-attribution">
@@ -176,10 +208,10 @@ export default function Wanted({
             }}
           >
             <option value="">Use my download settings</option>
-            <option value="ebook">Ebook</option>
-            <option value="audio">Audiobook</option>
-            <option value="both">Both</option>
-            <option value="either">Either</option>
+            {requestEbook && <option value="ebook">Ebook</option>}
+            {requestAudio && <option value="audio">Audiobook</option>}
+            {requestBoth && <option value="both">Both</option>}
+            {requestBoth && <option value="either">Either</option>}
           </select>
         </label>
       )}
@@ -202,13 +234,22 @@ export default function Wanted({
           </small>
         </label>
       )}
-      <RequestPreferences
-        value={preferences}
-        onChange={(value) => {
-          changed();
-          setPreferences(value);
-        }}
-      />
+      {advanced ? (
+        <RequestPreferences
+          value={preferences}
+          onChange={(value) => {
+            changed();
+            setPreferences(value);
+          }}
+        />
+      ) : (
+        version && (
+          <p className="muted">
+            This account requests any acceptable version. An approver can choose
+            a specific edition later.
+          </p>
+        )
+      )}
       <Notice
         error={preview.error || save.error || requests.error || cancel.error}
       />
@@ -299,11 +340,13 @@ export default function Wanted({
           )
         }
       >
-        Save to wanted
+        {autoDownload ? "Save to wanted" : "Request book"}
       </button>
       {save.isSuccess && (
         <p className="success" role="status">
-          Your media request was saved.
+          {save.data.request.approval_status === "pending"
+            ? "Request sent. It will download after approval."
+            : "Your media request was saved."}
         </p>
       )}
       {!!requests.data?.items.length && (

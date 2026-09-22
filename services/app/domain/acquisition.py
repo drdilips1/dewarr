@@ -4,6 +4,7 @@ This module performs no downloader mutations. Source selection and dispatch cons
 these persisted requirements after their integration/import gates are implemented.
 """
 
+from datetime import UTC, datetime
 from typing import Literal
 from uuid import UUID
 
@@ -615,7 +616,14 @@ async def evaluate(db, user, intent):
             )
         ):
             reason.active = False
-    active = any(reason.active for reason in reasons)
+
+    def open_reason(reason, status):
+        return reason.active and reason.approval_status == status
+
+    approved = [reason for reason in reasons if open_reason(reason, "approved")]
+    pending = [reason for reason in reasons if open_reason(reason, "pending")]
+    declined = [reason for reason in reasons if open_reason(reason, "declined")]
+    active = bool(approved)
     allowed = bool(user and user.active and user.role != "viewer")
     if allowed:
         try:
@@ -641,10 +649,14 @@ async def evaluate(db, user, intent):
         previous_reservation_id = target.reservation_id
         target.reservation_id, target.satisfied_asset_id = None, None
         if not active or not allowed:
-            target.state = "cancelled" if not active else "paused"
-            target.message = (
-                "No active request reasons" if not active else "Request access needs attention"
-            )
+            if not allowed:
+                target.state, target.message = "paused", "Request access needs attention"
+            elif pending:
+                target.state, target.message = "paused", "Waiting for approval"
+            elif declined:
+                target.state, target.message = "cancelled", "Request declined"
+            else:
+                target.state, target.message = "cancelled", "No active request reasons"
             continue
         outcome = next(item for item in outcomes if item["slot"] == slot)
         target.state, target.message = outcome["state"], outcome["message"]
@@ -678,9 +690,12 @@ async def submit(
     frozen_preferences=None,
     expected_preference_revision=None,
     series_reference=None,
+    hold_for_approval=True,
 ):
     if get_settings().recovery_mode:
         raise HTTPException(409, "Request evaluation is paused for recovery")
+    explicit_fields = set(spec.model_fields_set)
+    original = spec
     payload = {
         "work_id": str(work_id),
         "specification": spec.model_dump(mode="json"),
@@ -812,6 +827,15 @@ async def submit(
         db.add(record)
     record.active = True
     record.release_policy = profile.model_dump(mode="json")
+    if hold_for_approval:
+        from app.domain.permissions import prepare_manual_approval
+
+        prepare_manual_approval(user, spec, record, explicit_fields, original, preference_choice)
+    elif record.approval_status != "approved":
+        record.approval_status = "approved"
+        record.decided_by = user.id
+        record.decided_at = datetime.now(UTC)
+        record.decision_note = None
     await db.flush()
     await evaluate(db, user, intent)
     operation = Operation(

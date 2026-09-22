@@ -111,6 +111,9 @@ async def owned_request(db, user, request_id, work_id):
         raise HTTPException(404, "Request not found")
     if (await canonical_work(db, intent.work_id)).id != (await canonical_work(db, work_id)).id:
         raise HTTPException(409, "Request does not match this book")
+    from app.domain.permissions import require_download_allowed
+
+    await require_download_allowed(db, user, intent)
     return intent
 
 

@@ -24,6 +24,8 @@ import {
 import { api, ApiError, result, setCsrf } from "./api/client";
 import type { Auth } from "./api/client";
 import { Loading, Notice } from "./components";
+import { usePendingApprovals } from "./hooks/usePendingApprovals";
+import { canManageOwnRequests } from "./permissions";
 
 const AddDiscoveryList = lazy(() => import("./pages/AddDiscoveryList"));
 const SettingsPage = lazy(() => import("./pages/Settings"));
@@ -227,6 +229,11 @@ function Shell({ auth }: { auth: Auth }) {
     if (location.pathname === "/search")
       setSearch(new URLSearchParams(location.search).get("q") || "");
   }, [location.pathname, location.search]);
+  const canApprove =
+    auth.user.role === "admin" ||
+    auth.user.permissions.includes("manage_requests");
+  const pendingApprovals = usePendingApprovals(canApprove);
+  const waiting = pendingApprovals.data?.total ?? 0;
   const logout = useMutation({
     mutationFn: async () => result(await api.POST("/api/auth/logout")),
     onSuccess: () => {
@@ -280,9 +287,15 @@ function Shell({ auth }: { auth: Auth }) {
             <BookOpen size={19} />
             My Library
           </NavLink>
-          <NavLink to="/requests">
+          <NavLink to={waiting > 0 ? "/requests#approvals" : "/requests"}>
             <Download size={19} />
             Requests
+            {waiting > 0 && (
+              <span className="nav-count">
+                {waiting > 99 ? "99+" : waiting}
+                <span className="sr-only"> waiting for approval</span>
+              </span>
+            )}
           </NavLink>
           <NavLink to="/settings">
             <Settings size={19} />
@@ -295,7 +308,7 @@ function Shell({ auth }: { auth: Auth }) {
           </div>
           <div>
             <strong>{auth.user.display_name}</strong>
-            <small>{auth.user.role}</small>
+            <small>{auth.user.access_label}</small>
           </div>
           <button
             className="icon-button"
@@ -376,7 +389,12 @@ function Shell({ auth }: { auth: Auth }) {
               />
               <Route
                 path="/settings"
-                element={<SettingsPage role={auth.user.role} />}
+                element={
+                  <SettingsPage
+                    role={auth.user.role}
+                    permissions={auth.user.permissions}
+                  />
+                }
               />
               <Route
                 path="/authors/hardcover/:externalId"
@@ -491,7 +509,14 @@ function Shell({ auth }: { auth: Auth }) {
                 element={
                   <RequestsPage
                     admin={auth.user.role === "admin"}
-                    canRequest={auth.user.role !== "viewer"}
+                    canRequest={canManageOwnRequests(
+                      auth.user.permissions,
+                      auth.user.role,
+                    )}
+                    canApprove={
+                      auth.user.role === "admin" ||
+                      auth.user.permissions.includes("manage_requests")
+                    }
                   />
                 }
               />

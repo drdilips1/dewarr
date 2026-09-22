@@ -42,6 +42,20 @@
   color: #f3f4f6;
   box-shadow: inset 0 0 0 1px #4a5b7a;
 }
+.requests-tab-count {
+  margin-left: 8px;
+  min-width: 1.15rem;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #292d52;
+  color: #c7d2fe;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.requests-page .requests-panel + .requests-panel {
+  margin-top: 16px;
+}
 .requests-page .requests-panel {
   margin-top: 0;
   padding: 20px;

@@ -90,6 +90,7 @@ function AccessEditor({
     role: evidence.before.role as Choice["role"],
     can_automate:
       evidence.before.role === "viewer" ? false : evidence.before.can_automate,
+    permissions: evidence.before.permissions,
     library_ids: evidence.before.library_ids,
   });
   const [key, setKey] = useState(() => randomUUID());
@@ -220,6 +221,7 @@ function PermissionSummary({
       <p>
         {value.active ? "Enabled" : "Disabled"} · {value.role} · Member
         automation {value.can_automate ? "allowed" : "not allowed"}
+        {value.permissions ? ` · permission set ${value.permissions}` : ""}
       </p>
       <p>
         Saved grants:{" "}

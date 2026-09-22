@@ -24,9 +24,32 @@ from app.jobs.queue import enqueue
 KIND = "acquisition.quick-add"
 
 
-async def begin(db, user, work_id, options, key):
+async def begin(db, user, work_id, options, key, *, dispatch=False):
     if get_settings().recovery_mode:
         raise HTTPException(409, "Quick add is paused for recovery")
+    from app.domain.permissions import (
+        MANAGE_REQUESTS,
+        approval_dispatch,
+        auto_approves,
+        download_authorization,
+        has,
+    )
+
+    if dispatch:
+        if not (has(user, MANAGE_REQUESTS) and auto_approves(user, options)):
+            raise HTTPException(403, "You cannot download this request")
+    elif not auto_approves(user, options):
+        raise HTTPException(403, "This account can request books, but a download needs approval")
+    token = approval_dispatch.set(dispatch)
+    grant = download_authorization.set(options)
+    try:
+        return await _begin(db, user, work_id, options, key, dispatch=dispatch)
+    finally:
+        download_authorization.reset(grant)
+        approval_dispatch.reset(token)
+
+
+async def _begin(db, user, work_id, options, key, *, dispatch):
     automatic_routes.permitted(user)
     command = {"work_id": str(work_id), "specification": options.model_dump(mode="json")}
     await transaction_lock(db, f"operation:{user.id}:{key}")
@@ -77,6 +100,7 @@ async def begin(db, user, work_id, options, key):
         "intent_id": str(intent.id),
         "slots": {},
         "expires_at": (datetime.now(UTC) + timedelta(minutes=20)).isoformat(),
+        **({"approval_dispatch": True} if dispatch else {}),
     }
     operation = Operation(
         owner_id=user.id,
@@ -141,6 +165,11 @@ async def run(identifier):
         ):
             return
         payload = deepcopy(operation.payload)
+        from app.domain.permissions import approval_dispatch, download_authorization
+
+        grant_spec = acquisition.RequestOptions.model_validate(payload["command"]["specification"])
+        token = approval_dispatch.set(bool(payload.get("approval_dispatch")))
+        grant = download_authorization.set(grant_spec)
         try:
             user = await db.get(User, operation.owner_id)
             automatic_routes.permitted(user)
@@ -206,6 +235,9 @@ async def run(identifier):
                 operation.status, operation.message = "running", search.message
         except HTTPException as error:
             operation.status, operation.message = "held", str(error.detail)
+        finally:
+            download_authorization.reset(grant)
+            approval_dispatch.reset(token)
         operation.payload = payload
         if operation.status in {"queued", "running"}:
             operation.job_id = await enqueue(
@@ -229,8 +261,8 @@ async def selected_release(db, user, search_id, result_id, key):
     """Download only the clicked result using the reader's configured route."""
     from app.adapters.source_releases import release_value
     from app.db.models import SourceResult
+    from app.domain.permissions import auto_approves, download_authorization
 
-    automatic_routes.permitted(user)
     await transaction_lock(db, f"selected-release:{user.id}:{key}")
     previous = await db.scalar(
         select(Operation).where(Operation.owner_id == user.id, Operation.idempotency_key == key)
@@ -253,6 +285,18 @@ async def selected_release(db, user, search_id, result_id, key):
     release = release_value(row.source_key, row.release_snapshot)
     if release.medium not in {"ebook", "audio"}:
         raise HTTPException(409, "The release medium is unknown; inspect this release first")
+    granted = acquisition.RequestOptions(mode=release.medium)
+    if not auto_approves(user, granted):
+        raise HTTPException(403, "This account can request books, but a download needs approval")
+    grant = download_authorization.set(granted)
+    try:
+        return await _selected_release(db, user, search, search_id, result_id, key, release)
+    finally:
+        download_authorization.reset(grant)
+
+
+async def _selected_release(db, user, search, search_id, result_id, key, release):
+    automatic_routes.permitted(user)
     bound = search.payload.get("command", {}).get("request_id")
     if bound:
         intent = await db.get(AcquisitionIntent, UUID(bound))

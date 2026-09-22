@@ -3,7 +3,8 @@ import InfiniteScroll from "../components/InfiniteScroll";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
-import { api, result } from "../api/client";
+import { api, result, type Auth } from "../api/client";
+import { canRequestMedium, canStartDownload } from "../permissions";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
 import RequestPreferences, { type Choice } from "./RequestPreferences";
@@ -22,7 +23,7 @@ const states: Record<string, string> = {
   wanted: "Missing",
   pending: "Already requested",
   "awaiting-inventory": "Check inventory",
-  paused: "Needs attention",
+  paused: "Waiting for approval",
   cancelled: "Cancelled",
 };
 
@@ -57,6 +58,35 @@ export default function SeriesRequests({
   const [preferences, setPreferences] = useState<Choice>({});
   const [automatic, setAutomatic] = useState(false);
   const routes = useSeriesRoutes(automatic, spec.mode, preferences);
+  const session = useQuery<Auth | null>({
+    queryKey: ["session"],
+    enabled: false,
+  });
+  const requestEbook = canRequestMedium(
+    session.data?.user.permissions,
+    session.data?.user.role,
+    "ebook",
+  );
+  const requestAudio = canRequestMedium(
+    session.data?.user.permissions,
+    session.data?.user.role,
+    "audio",
+  );
+  const requestBoth = canRequestMedium(
+    session.data?.user.permissions,
+    session.data?.user.role,
+  );
+  const canDownloadSeries =
+    canStartDownload(
+      session.data?.user.permissions,
+      session.data?.user.role,
+      "ebook",
+    ) ||
+    canStartDownload(
+      session.data?.user.permissions,
+      session.data?.user.role,
+      "audio",
+    );
 
   const key = useRef(randomUUID());
   const panel = useRef<HTMLElement>(null);
@@ -208,9 +238,10 @@ export default function SeriesRequests({
       <h2>Request books from this series</h2>
       <p>
         Choose books above, review what is missing, then save your requests.
-        Future additions to the series are not included. You can choose releases
-        yourself or automatically acquire the missing media in this reviewed
-        set.
+        Future additions to the series are not included.{" "}
+        {canDownloadSeries
+          ? "You can choose releases yourself or automatically acquire the missing media in this reviewed set."
+          : "Requests wait for approval before a download can start."}
       </p>
       <Notice
         error={
@@ -291,10 +322,10 @@ export default function SeriesRequests({
                 }
               >
                 <option value="inherit">Use my defaults</option>
-                <option value="ebook">Ebook</option>
-                <option value="audio">Audiobook</option>
-                <option value="both">Both</option>
-                <option value="either">Either medium</option>
+                {requestEbook && <option value="ebook">Ebook</option>}
+                {requestAudio && <option value="audio">Audiobook</option>}
+                {requestBoth && <option value="both">Both</option>}
+                {requestBoth && <option value="either">Either medium</option>}
               </select>
             </label>
             {spec.mode === "either" && (
@@ -448,7 +479,9 @@ export default function SeriesRequests({
                   ? "Retry saved series request"
                   : value.automatic
                     ? "Start automatic series acquisition"
-                    : "Save series requests"}
+                    : canDownloadSeries
+                      ? "Save series requests"
+                      : "Send series for approval"}
               </button>
             )}
             {value.can_retry_acquisition && (
