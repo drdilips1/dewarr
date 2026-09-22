@@ -91,6 +91,11 @@ class Hardcover:
 
         return await browse(self.query, shelf, page, today)
 
+    async def upcoming(self, start, end, page):
+        from app.adapters.hardcover_discovery import upcoming
+
+        return await upcoming(self.query, start, end, page)
+
     async def related(self, external_id):
         from app.adapters.hardcover_discovery import related
 

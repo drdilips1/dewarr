@@ -5,6 +5,7 @@ from urllib.parse import urlsplit
 from pydantic import BaseModel, Field, field_validator
 
 Provider = Literal["hardcover", "openlibrary"]
+CATALOG_PROVIDERS = ("hardcover", "openlibrary")
 
 
 def year(value) -> int | None:
@@ -27,6 +28,7 @@ def cover_url(value) -> str | None:
             in {
                 "covers.openlibrary.org",
                 "assets.hardcover.app",
+                "covers.libro.fm",
                 "i.gr-assets.com",
                 "images.gr-assets.com",
             }
@@ -79,6 +81,17 @@ class BookData(BaseModel):
     @classmethod
     def names(cls, value):
         return list(dict.fromkeys(" ".join(name.split()) for name in value if name.strip()))
+
+
+def catalog_snapshot(provider, external_id, title, authors, cover=None):
+    """A source row the book page can read. Unknown cover hosts are dropped."""
+    return BookData(
+        provider=provider,
+        external_id=external_id,
+        title=title,
+        authors=authors,
+        cover_url=cover_url(cover),
+    ).model_dump(mode="json")
 
 
 class SearchPage(BaseModel):

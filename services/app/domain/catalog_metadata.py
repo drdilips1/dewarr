@@ -2,10 +2,10 @@ from datetime import UTC, datetime
 from typing import Literal
 
 from fastapi import HTTPException
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, ValidationError, field_validator
 from sqlalchemy import select
 
-from app.adapters.catalog_types import BookData, Provider
+from app.adapters.catalog_types import CATALOG_PROVIDERS, BookData, Provider
 from app.db.models import (
     ListCatalogBinding,
     MetadataSettings,
@@ -57,6 +57,7 @@ async def resolve_fields(db, work, settings):
             .join(Work, Work.id == WorkMetadataSource.work_id)
             .where(
                 WorkMetadataSource.work_id.in_(family_ids(work.id)),
+                WorkMetadataSource.provider.in_(CATALOG_PROVIDERS),
                 WorkMetadataSource.accepted.is_(True),
                 Work.catalog_public.is_(True) if work.catalog_public else True,
             )
@@ -117,9 +118,13 @@ async def attach_source(db, work, book, *, explicit=False, verified_match=False)
             "This catalog source was explicitly unmatched. Confirm a new match to use it again.",
         )
     if link and not explicit:
-        old = BookData.model_validate(link.snapshot)
-        if work_key(old.title, old.authors) != work_key(book.title, book.authors) or (
-            book.canonical_id and book.canonical_id != book.external_id
+        try:
+            old = BookData.model_validate(link.snapshot)
+        except ValidationError:
+            old = None
+        if old is not None and (
+            work_key(old.title, old.authors) != work_key(book.title, book.authors)
+            or (book.canonical_id and book.canonical_id != book.external_id)
         ):
             raise HTTPException(
                 409,
@@ -140,7 +145,10 @@ async def attach_source(db, work, book, *, explicit=False, verified_match=False)
     if book.editions_offset:
         if not link.snapshot or link.snapshot.get("next_edition_offset") != book.editions_offset:
             raise HTTPException(409, "Edition pagination changed. Refresh this book and retry.")
-        previous = BookData.model_validate(link.snapshot)
+        try:
+            previous = BookData.model_validate(link.snapshot)
+        except ValidationError as error:
+            raise HTTPException(409, "Refresh this book before loading more editions.") from error
         if work_key(previous.title, previous.authors) != work_key(book.title, book.authors):
             raise HTTPException(
                 409, "The provider changed this book. Refresh before loading more editions."

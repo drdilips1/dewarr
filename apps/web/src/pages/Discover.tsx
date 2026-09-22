@@ -33,10 +33,12 @@ import {
   genreLabel,
   useCollections,
 } from "../components/DiscoveryCollections";
+import ReleaseCalendar, { UpcomingShelf } from "./ReleaseCalendar";
 
 const views = [
   ["home", "For you"],
   ["browse", "Browse"],
+  ["calendar", "Calendar"],
   ["collections", "Collections"],
   ["awards", "Awards"],
   ["yours", "Your lists"],
@@ -67,6 +69,8 @@ export default function Discover({ canEdit = true }: { canEdit?: boolean }) {
         <Home canEdit={canEdit} />
       ) : view === "browse" ? (
         <Browse />
+      ) : view === "calendar" ? (
+        <ReleaseCalendar canEdit={canEdit} />
       ) : view === "yours" ? (
         <YourLists canEdit={canEdit} />
       ) : (
@@ -227,6 +231,12 @@ function Home({ canEdit }: { canEdit: boolean }) {
       id: "new-releases",
       title: "New releases",
       content: <ProviderShelf canEdit={canEdit} shelf="new-releases" />,
+    });
+  if (account.data?.enabled)
+    rows.push({
+      id: "upcoming",
+      title: "Upcoming releases",
+      content: <UpcomingShelf canEdit={canEdit} />,
     });
   if (!account.data?.suggest_series_gaps) rows.push(seriesRow);
   for (const c of sources.collections.data || []) {

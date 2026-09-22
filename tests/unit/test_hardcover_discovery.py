@@ -9,6 +9,7 @@ from app.adapters.hardcover_discovery import (
     HC_RECENT,
     HC_RELATED,
     HC_TRENDING,
+    HC_UPCOMING,
 )
 
 
@@ -95,6 +96,87 @@ async def test_invalid_release_date_or_redirect_does_not_claim_new_publication(e
     source, _ = adapter({HC_RECENT: {"books": [row(1, **extra)]}})
     with pytest.raises(AdapterError):
         await source.discovery("new-releases", 1, date(2026, 9, 18))
+
+
+def edition(key, edition_day, *, work_day=None, tags=None):
+    return {
+        "id": key + 100,
+        "release_date": edition_day,
+        "book": row(
+            key,
+            release_date=work_day,
+            cached_tags=tags,
+            cached_contributors=[{"contribution": "Author", "author": {"name": "Ruby Dixon"}}],
+        ),
+    }
+
+
+async def test_upcoming_accepts_a_future_audiobook_date_and_prefers_it_over_the_work_date():
+    source, calls = adapter(
+        {
+            HC_UPCOMING: {
+                "editions": [
+                    edition(
+                        7,
+                        "2026-10-27",
+                        work_day="2026-09-01",
+                        tags=[
+                            "Romance",
+                            {"tag": "Science Fiction"},
+                            {"name": "Not a tracked shelf"},
+                        ],
+                    )
+                ]
+            }
+        }
+    )
+    result = await source.upcoming(date(2026, 10, 1), date(2026, 10, 31), 1)
+    book = result.items[0]
+    assert book.release_date == date(2026, 10, 27)
+    assert book.date_basis == "audiobook"
+    assert book.genres == ["romance", "science-fiction"]
+    assert book.title == "Book 7"
+    assert calls[0]["variables"] == {"from": "2026-10-01", "to": "2026-10-31", "offset": 0}
+    assert "reading_format_id: {_eq: 2}" in calls[0]["query"]
+    rejected, _ = adapter({HC_RECENT: {"books": [row(1, release_date="2026-10-27")]}})
+    with pytest.raises(AdapterError):
+        await rejected.discovery("new-releases", 1, date(2026, 9, 22))
+
+
+async def test_upcoming_skips_a_redirect_and_a_second_edition_without_failing_the_month():
+    source, calls = adapter(
+        {
+            HC_UPCOMING: {
+                "editions": [
+                    edition(7, "2026-10-02"),
+                    {
+                        "id": 200,
+                        "release_date": "2026-10-03",
+                        "book": row(9, canonical_id=22, release_date="2026-10-03"),
+                    },
+                    edition(7, "2026-10-20"),
+                    edition(8, "2026-10-04"),
+                ]
+            }
+        }
+    )
+    result = await source.upcoming(date(2026, 10, 1), date(2026, 10, 31), 1)
+    assert [(item.external_id, item.release_date) for item in result.items] == [
+        ("7", date(2026, 10, 2)),
+        ("8", date(2026, 10, 4)),
+    ]
+    assert "book: {canonical_id: {_is_null: true}}" in calls[0]["query"]
+
+
+async def test_upcoming_rejects_a_date_outside_the_month_and_an_unknown_tag_shape():
+    outside, _ = adapter({HC_UPCOMING: {"editions": [edition(1, "2026-11-01")]}})
+    with pytest.raises(AdapterError):
+        await outside.upcoming(date(2026, 10, 1), date(2026, 10, 31), 1)
+    unknown, _ = adapter(
+        {HC_UPCOMING: {"editions": [edition(1, "2026-10-02", tags=[{"slug": "romance"}])]}}
+    )
+    with pytest.raises(AdapterError):
+        await unknown.upcoming(date(2026, 10, 1), date(2026, 10, 31), 1)
 
 
 async def test_related_suggestions_preserve_provider_order_and_exclude_the_seed():

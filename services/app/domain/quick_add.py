@@ -13,6 +13,7 @@ from app.db.models import (
     AcquisitionIntent,
     AcquisitionReservation,
     AcquisitionTarget,
+    MonitoredRelease,
     Operation,
     SourceConnection,
     User,
@@ -26,10 +27,37 @@ from app.domain import (
     source_strategy,
 )
 from app.domain.operations import transaction_lock
+from app.domain.release_dates import release_facts, search_allowed
+from app.domain.release_monitor import sync_monitor
 from app.domain.release_profiles import ProfileSnapshot
+from app.domain.work_graph import canonical_work
 from app.jobs.queue import enqueue
 
 KIND = "acquisition.quick-add"
+
+
+def _idle_outcome(targets, pending, held):
+    """A wanted request is not already available. Only a satisfied request is."""
+    if pending:
+        return "queued", "Searching for your preferred releases"
+    if held or any(target.state == "wanted" for target in targets):
+        message = "; ".join(target.message for target in held if target.message)
+        return "held", message or "This request is still open, so no download was started"
+    return "completed", "Already available; no duplicate download started"
+
+
+async def _search_targets(db, targets):
+    pending = []
+    held = [target for target in targets if target.state not in {"wanted", "satisfied"}]
+    for target in targets:
+        reservation = (
+            await db.get(AcquisitionReservation, target.reservation_id)
+            if target.reservation_id
+            else None
+        )
+        if target.state == "wanted" and reservation and reservation.state == "planned":
+            pending.append(target)
+    return pending, held
 
 
 async def begin(db, user, work_id, options, key, *, dispatch=False):
@@ -93,16 +121,7 @@ async def _begin(db, user, work_id, options, key, *, dispatch):
             .order_by(AcquisitionTarget.slot)
         )
     )
-    pending = []
-    held = [target for target in targets if target.state not in {"wanted", "satisfied"}]
-    for target in targets:
-        reservation = (
-            await db.get(AcquisitionReservation, target.reservation_id)
-            if target.reservation_id
-            else None
-        )
-        if target.state == "wanted" and reservation and reservation.state == "planned":
-            pending.append(target)
+    pending, held = await _search_targets(db, targets)
     payload = {
         "command": command,
         "intent_id": str(intent.id),
@@ -110,74 +129,141 @@ async def _begin(db, user, work_id, options, key, *, dispatch):
         "expires_at": (datetime.now(UTC) + timedelta(minutes=20)).isoformat(),
         **({"approval_dispatch": True} if dispatch else {}),
     }
+    status, message = _idle_outcome(targets, pending, held)
     operation = Operation(
         owner_id=user.id,
         kind=KIND,
         idempotency_key=key,
-        status="queued" if pending else "held" if held else "completed",
+        status=status,
         payload=deepcopy(payload),
-        message="Searching for your preferred releases"
-        if pending
-        else "; ".join(target.message for target in held)
-        if held
-        else "Already available or requested; no duplicate download started",
+        message=message,
     )
     db.add(operation)
     await db.flush()
     if pending:
-        spec = acquisition.RequestSpec.model_validate(intent.specification)
-        profile = ProfileSnapshot.model_validate(intent.release_policy)
-        # A copy already in the library needs no download route.
-        route_spec = spec
-        if spec.mode == "both" and len(pending) == 1:
-            route_spec = spec.model_copy(update={"mode": pending[0].slot})
-        routes, _ = await automatic_routes.inherit(
-            db, user, route_spec, profile, automatic_routes.AutomaticRoutes()
-        )
-        await automatic_routes.resolve(
-            db, user, route_spec, routes.downloader_id, routes.downloader_generation, routes.routes
-        )
-        connected = {
-            row.key
-            for row in await db.scalars(
-                select(SourceConnection).where(SourceConnection.enabled.is_(True))
+        work = await canonical_work(db, intent.work_id)
+        day, _, coming = release_facts(work.metadata_fields)
+        if not search_allowed(day, datetime.now(UTC).date(), coming_soon=coming):
+            operation.status = "held"
+            operation.message = (
+                f"Waiting until {day.isoformat()}; source search starts on release day"
+                if day
+                else "Waiting for a release date; source search starts once the day is known"
             )
-            if row.key in SOURCE_NAMES
-        }
-        order = source_strategy.search_order(profile.preferences.source_order, connected)
-        plan = {
-            "strategy": profile.preferences.source_strategy,
-            "fallback": profile.preferences.source_fallback,
-            "order": order,
-            "index": 0,
-            "tried": [],
-        }
-        only = [order[0]] if plan["strategy"] == "priority" and order else None
-        payload["routes"] = routes.model_dump(mode="json")
-        payload["source_plan"] = plan
-        operation.message = (
-            f"Searching {SOURCE_NAMES[order[0]]}" if only else "Searching connected sources"
+            payload["waiting_for_release"] = day.isoformat() if day else None
+            operation.payload = deepcopy(payload)
+            await sync_monitor(db, user, work, operation, command["specification"])
+            return operation
+        await start_search(db, user, operation, intent, pending, held, payload)
+        await sync_monitor(db, user, work, operation, command["specification"])
+        return operation
+    work = await canonical_work(db, intent.work_id)
+    if await db.scalar(
+        select(MonitoredRelease).where(
+            MonitoredRelease.owner_id == user.id, MonitoredRelease.work_id == work.id
         )
-        search = await book_sources.start(
-            db,
-            user,
-            intent.work_id,
-            book_sources.SearchInput(
-                request_id=intent.id, medium=spec.mode if spec.mode in {"audio", "ebook"} else "all"
-            ),
-            f"quick-search:{operation.id}:{order[0] if only else 'all'}",
-            only_sources=only,
+    ):
+        await sync_monitor(db, user, work, operation, command["specification"])
+    return operation
+
+
+async def start_search(db, user, operation, intent, pending, held, payload):
+    spec = acquisition.RequestSpec.model_validate(intent.specification)
+    profile = ProfileSnapshot.model_validate(intent.release_policy)
+    # A copy already in the library needs no download route.
+    route_spec = spec
+    if spec.mode == "both" and len(pending) == 1:
+        route_spec = spec.model_copy(update={"mode": pending[0].slot})
+    routes, _ = await automatic_routes.inherit(
+        db, user, route_spec, profile, automatic_routes.AutomaticRoutes()
+    )
+    await automatic_routes.resolve(
+        db, user, route_spec, routes.downloader_id, routes.downloader_generation, routes.routes
+    )
+    connected = {
+        row.key
+        for row in await db.scalars(
+            select(SourceConnection).where(SourceConnection.enabled.is_(True))
         )
-        payload["search_id"] = str(search.id)
-        payload["slots"] = {
-            **{target.slot: {} for target in pending},
-            **{
-                target.slot: {"done": True, "failed": True, "message": target.message}
-                for target in held
-            },
-        }
-        operation.payload = deepcopy(payload)
-        operation.job_id = await enqueue(db, KIND, operation_id=str(operation.id))
+        if row.key in SOURCE_NAMES
+    }
+    order = source_strategy.search_order(profile.preferences.source_order, connected)
+    plan = {
+        "strategy": profile.preferences.source_strategy,
+        "fallback": profile.preferences.source_fallback,
+        "order": order,
+        "index": 0,
+        "tried": [],
+    }
+    only = [order[0]] if plan["strategy"] == "priority" and order else None
+    payload["routes"] = routes.model_dump(mode="json")
+    payload["source_plan"] = plan
+    operation.message = (
+        f"Searching {SOURCE_NAMES[order[0]]}" if only else "Searching connected sources"
+    )
+    search = await book_sources.start(
+        db,
+        user,
+        intent.work_id,
+        book_sources.SearchInput(
+            request_id=intent.id, medium=spec.mode if spec.mode in {"audio", "ebook"} else "all"
+        ),
+        f"quick-search:{operation.id}:{order[0] if only else 'all'}",
+        only_sources=only,
+    )
+    payload["search_id"] = str(search.id)
+    payload["slots"] = {
+        **{target.slot: {} for target in pending},
+        **{
+            target.slot: {"done": True, "failed": True, "message": target.message}
+            for target in held
+        },
+    }
+    operation.payload = deepcopy(payload)
+    operation.job_id = await enqueue(db, KIND, operation_id=str(operation.id))
+    return operation
+
+
+async def resume_search(db, user, operation):
+    """Start the search that was parked until the release day, on the same request."""
+    from app.domain.permissions import approval_dispatch, download_authorization
+
+    payload = deepcopy(operation.payload)
+    if "waiting_for_release" not in payload or operation.status not in {"held", "queued"}:
+        return operation
+    try:
+        intent_id = UUID(payload["intent_id"])
+    except (KeyError, TypeError, ValueError) as error:
+        raise HTTPException(409, "The parked request is no longer available") from error
+    intent = await db.get(AcquisitionIntent, intent_id)
+    if intent is None:
+        raise HTTPException(409, "The parked request is no longer available")
+    targets = list(
+        await db.scalars(
+            select(AcquisitionTarget)
+            .where(AcquisitionTarget.intent_id == intent.id)
+            .order_by(AcquisitionTarget.slot)
+        )
+    )
+    pending, held = await _search_targets(db, targets)
+    payload.pop("waiting_for_release", None)
+    # The parked request was created before release day. The quick-add window starts now.
+    payload["expires_at"] = (datetime.now(UTC) + timedelta(minutes=20)).isoformat()
+    grant_spec = acquisition.RequestOptions.model_validate(payload["command"]["specification"])
+    token = approval_dispatch.set(bool(payload.get("approval_dispatch")))
+    grant = download_authorization.set(grant_spec)
+    try:
+        if pending:
+            await start_search(db, user, operation, intent, pending, held, payload)
+            operation.status = "queued"
+        else:
+            operation.status, operation.message = _idle_outcome(targets, pending, held)
+            operation.payload = payload
+        work = await canonical_work(db, intent.work_id)
+        await sync_monitor(db, user, work, operation, payload["command"]["specification"])
+    finally:
+        download_authorization.reset(grant)
+        approval_dispatch.reset(token)
     return operation
 
 

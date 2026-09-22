@@ -11,7 +11,7 @@ from app.api.catalog import WorkView, work_view
 from app.api.dependencies import CurrentUser, Database, Member
 from app.api.metadata import adapter_http_error
 from app.api.operations import OperationView
-from app.db.models import CatalogSeries, Operation, SeriesMembership, Work
+from app.db.models import CatalogSeries, MonitoredRelease, Operation, SeriesMembership, Work
 from app.domain import catalog_series, series_requests, series_scopes
 from app.domain.availability import availability_for
 from app.domain.series_scopes import ScopeReviewInput, ScopeReviewView
@@ -60,6 +60,7 @@ class SeriesEntryView(BaseModel):
     ambiguous_position: bool
     release_date: str | None
     publication: str
+    followed: bool = False
     work: WorkView
 
 
@@ -164,6 +165,20 @@ async def detail(
         ):
             by_position.setdefault(entry.snapshot["position"], set()).add(work.id)
     available = await availability_for(db, user, list({work.id for _, work in entries}))
+    page = entries[offset : offset + limit]
+    followed_ids = (
+        set(
+            await db.scalars(
+                select(MonitoredRelease.work_id).where(
+                    MonitoredRelease.owner_id == user.id,
+                    MonitoredRelease.work_id.in_([work.id for _, work in page]),
+                    MonitoredRelease.state != "stopped",
+                )
+            )
+        )
+        if page
+        else set()
+    )
     counted = {
         work.id
         for entry, work in entries
@@ -172,7 +187,7 @@ async def detail(
         and not entry.snapshot["canonical_id"]
     }
     items = []
-    for entry, work in entries[offset : offset + limit]:
+    for entry, work in page:
         data = entry.snapshot
         released = date.fromisoformat(data["release_date"]) if data["release_date"] else None
         items.append(
@@ -186,6 +201,7 @@ async def detail(
                 merged_record=bool(data["canonical_id"]),
                 ambiguous_position=len(by_position.get(data["position"], set())) > 1,
                 release_date=data["release_date"],
+                followed=work.id in followed_ids,
                 publication="unreleased"
                 if released and released > datetime.now(UTC).date()
                 else "published"

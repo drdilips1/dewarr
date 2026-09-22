@@ -49,6 +49,7 @@ async def recover_stalled_jobs() -> None:
                 "acquisition.pack-dispatch",
                 "lists.sync",
                 "discovery.schedule",
+                "releases.schedule",
                 "discovery.refresh",
                 "lists.writeback",
                 "lists.writeback.compare",

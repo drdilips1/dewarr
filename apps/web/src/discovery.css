@@ -1083,3 +1083,120 @@
   border: 0;
   border-radius: inherit;
 }
+.release-calendar {
+  display: grid;
+  gap: 20px;
+}
+.release-genres {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.release-genres div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+.release-genres label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.release-weekdays,
+.release-month {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+.release-weekdays span {
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+}
+.release-day,
+.release-pad {
+  min-height: 88px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px;
+  background: var(--surface);
+}
+.release-pad {
+  border-color: transparent;
+  background: transparent;
+}
+.release-day h2 {
+  margin: 0 0 8px;
+  font-size: 13px;
+}
+.release-day {
+  min-width: 0;
+  overflow: hidden;
+}
+.release-marks,
+.release-undated,
+.release-agenda {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.release-marks {
+  gap: 2px;
+}
+.release-marks a {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+}
+.release-day:has(.release-marks li) {
+  border-color: var(--accent);
+}
+.release-book {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+.release-book .book-cover {
+  width: 72px;
+}
+.release-book h3 {
+  margin: 0;
+  font-size: 13px;
+}
+.release-book p {
+  margin: 2px 0 0;
+  font-size: 12px;
+}
+.release-follow {
+  display: grid;
+  gap: 4px;
+  margin-top: 6px;
+}
+.release-follow button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+}
+.discovery-shelf .release-follow {
+  margin: 8px 0 0;
+}
+@media (max-width: 720px) {
+  .release-weekdays,
+  .release-month {
+    gap: 4px;
+  }
+  .release-day,
+  .release-pad {
+    min-height: 44px;
+    padding: 4px;
+  }
+  .release-book {
+    grid-template-columns: 1fr;
+  }
+}

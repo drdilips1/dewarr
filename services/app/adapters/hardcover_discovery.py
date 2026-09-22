@@ -1,11 +1,13 @@
 """Bounded discovery queries against Hardcover's published GraphQL schema."""
 
 from datetime import date, timedelta
+from typing import Literal
 
 from pydantic import BaseModel, ValidationError
 
 from app.adapters.catalog_providers import contributors, identifier, parse_failure
 from app.adapters.catalog_types import BookData, cover_url, year
+from app.domain.release_dates import genre_slug
 
 FIELDS = "id canonical_id rating title release_year release_date cached_image cached_contributors"
 HC_TRENDING = """query DiscoveryTrending($offset: Int!) {
@@ -21,10 +23,25 @@ HC_RECENT = """query DiscoveryRecent($from: date!, $to: date!, $offset: Int!) {
 HC_RELATED = """query DiscoveryRelated($id: Int!) {
  books(where: {id: {_eq: $id}}, limit: 1) { id cached_similar_book_ids }
 }"""
+# Audio editions only. reading_format_id 2 is Hardcover's audiobook format.
+# The edition release_date is the day on the calendar; the parent work date is not.
+HC_UPCOMING = """query UpcomingAudio($from: date!, $to: date!, $offset: Int!) {
+ editions(where: {reading_format_id: {_eq: 2}, release_date: {_gte: $from, _lte: $to},
+ book: {canonical_id: {_is_null: true}}},
+ order_by: [{release_date: asc}, {id: asc}], limit: 21, offset: $offset) {
+  id release_date
+  book {
+   id canonical_id rating title release_year release_date
+   cached_image cached_contributors cached_tags
+  }
+ }
+}"""
 
 
 class DiscoveryBook(BookData):
     release_date: date | None = None
+    genres: list[str] = []
+    date_basis: Literal["audiobook", "work", "unknown"] = "unknown"
 
 
 class DiscoveryBatch(BaseModel):
@@ -41,7 +58,28 @@ def ids(values, maximum):
     return [int(identifier("hardcover", str(value))) for value in values]
 
 
-def book(row):
+def genres_from_tags(raw):
+    if raw is None:
+        return []
+    if not isinstance(raw, list):
+        raise parse_failure()
+    found = []
+    for item in raw:
+        if isinstance(item, str):
+            name = item
+        elif isinstance(item, dict) and ("tag" in item or "name" in item):
+            name = item.get("tag") if isinstance(item.get("tag"), str) else item.get("name")
+            if not isinstance(name, str):
+                raise parse_failure()
+        else:
+            raise parse_failure()
+        slug = genre_slug(name)
+        if slug and slug not in found:
+            found.append(slug)
+    return found
+
+
+def book(row, *, release_date=None, genres=None, date_basis="unknown"):
     return DiscoveryBook(
         provider="hardcover",
         external_id=identifier("hardcover", str(row["id"])),
@@ -52,7 +90,9 @@ def book(row):
         rating=row.get("rating"),
         authors=contributors(row.get("cached_contributors"), "Author"),
         publication_year=year(row.get("release_year")),
-        release_date=row.get("release_date"),
+        release_date=row.get("release_date") if release_date is None else release_date,
+        genres=genres or [],
+        date_basis=date_basis,
         cover_url=cover_url((row.get("cached_image") or {}).get("url")),
     )
 
@@ -99,6 +139,54 @@ async def browse(query, shelf, page, today):
         ):
             raise parse_failure()
         return DiscoveryBatch(items=books[:20], has_more=len(books) > 20)
+    except (TypeError, ValueError, KeyError, AttributeError, ValidationError) as error:
+        raise parse_failure() from error
+
+
+async def upcoming(query, start, end, page):
+    """One month of audiobook edition dates. Work dates are resolved per book, not here."""
+    try:
+        rows = (
+            await query(
+                HC_UPCOMING,
+                {"from": start.isoformat(), "to": end.isoformat(), "offset": (page - 1) * 20},
+            )
+        )["editions"]
+        if not isinstance(rows, list) or len(rows) > 21:
+            raise parse_failure()
+        books = []
+        seen = set()
+        for row in rows:
+            if not isinstance(row, dict):
+                raise parse_failure()
+            parent = row.get("book")
+            if not isinstance(parent, dict):
+                raise parse_failure()
+            edition_day = row.get("release_date")
+            if not isinstance(edition_day, str) or not (
+                start.isoformat() <= edition_day <= end.isoformat()
+            ):
+                raise parse_failure()
+            parsed = date.fromisoformat(edition_day)
+            if not start <= parsed <= end:
+                raise parse_failure()
+            # A redirect, or a second audio edition of a book already kept, is ordinary.
+            # The first edition wins because the query is ordered by release day.
+            if parent.get("canonical_id"):
+                continue
+            external = identifier("hardcover", str(parent.get("id")))
+            if external in seen:
+                continue
+            seen.add(external)
+            books.append(
+                book(
+                    parent,
+                    release_date=edition_day,
+                    genres=genres_from_tags(parent.get("cached_tags")),
+                    date_basis="audiobook",
+                )
+            )
+        return DiscoveryBatch(items=books[:20], has_more=len(rows) > 20)
     except (TypeError, ValueError, KeyError, AttributeError, ValidationError) as error:
         raise parse_failure() from error
 

@@ -4,11 +4,17 @@ from typing import Any, Literal
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, Query
-from pydantic import BaseModel, Field, SecretStr, model_validator
+from pydantic import BaseModel, Field, SecretStr, ValidationError, model_validator
 from sqlalchemy import case, exists, func, or_, select
 
 from app.adapters.catalog_providers import Hardcover, OpenLibrary
-from app.adapters.catalog_types import BookData, Provider, SearchPage, SeriesData
+from app.adapters.catalog_types import (
+    CATALOG_PROVIDERS,
+    BookData,
+    Provider,
+    SearchPage,
+    SeriesData,
+)
 from app.adapters.contracts import AdapterError, FailureKind
 from app.adapters.hardcover_authors import AuthorPage
 from app.adapters.hardcover_details import ReaderDetails
@@ -615,6 +621,7 @@ async def work_metadata(
             .where(
                 visible_origin_work(user),
                 WorkMetadataSource.work_id.in_(members),
+                WorkMetadataSource.provider.in_(CATALOG_PROVIDERS),
                 WorkMetadataSource.accepted.is_(True),
             )
             .order_by(WorkMetadataSource.provider, WorkMetadataSource.external_id)
@@ -622,7 +629,10 @@ async def work_metadata(
     ).all()
     source_views, covers = [], []
     for source in sources:
-        book = BookData.model_validate(source.snapshot)
+        try:
+            book = BookData.model_validate(source.snapshot)
+        except ValidationError:
+            continue
         source_views.append(
             SourceView(
                 id=source.id,
