@@ -5,6 +5,7 @@ from fastapi import APIRouter, Header, HTTPException
 from pydantic import Field, model_validator
 from sqlalchemy import select
 
+from app.adapters.audiobookshelf import backend_path
 from app.api.dependencies import Admin, Database
 from app.api.imports import assert_admin
 from app.api.operations import OperationView
@@ -20,7 +21,6 @@ from app.domain.downloaders import connection_or_404, mapped_path
 from app.domain.operations import transaction_lock
 from app.importing.destination_view import DestinationView, view
 from app.importing.destinations import destination_configuration, permitted
-from app.importing.filesystem import relative_parts
 from app.importing.naming import StrictModel
 from app.importing.seeding_rename import normalize_seeding_target
 from app.importing.storage import import_sources, storage_settings
@@ -41,9 +41,7 @@ class DestinationInput(StrictModel):
 
     @model_validator(mode="after")
     def backend_root(self):
-        if not self.backend_path.startswith("/"):
-            raise ValueError("Enter the absolute library root as Audiobookshelf sees it")
-        relative_parts(self.backend_path[1:])
+        self.backend_path = backend_path(self.backend_path)
         self.seeding_rename, self.client_path = normalize_seeding_target(
             self.seeding_rename, self.client_path
         )

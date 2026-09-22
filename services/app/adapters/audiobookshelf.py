@@ -64,16 +64,41 @@ class ABSImportConfiguration(BaseModel):
     metadata_precedence: list[str]
 
 
+_UNCONFINED = "Backend library path must be a confined absolute path"
+
+
+def _confined(parts: list[str], *, minimum: int) -> None:
+    if len(parts) < minimum or any(part in {".", "..", ""} for part in parts):
+        raise ValueError(_UNCONFINED)
+
+
 def backend_path(value):
+    """Library root as Audiobookshelf stores it.
+
+    Drive roots use forward slashes, including a drive itself (``D:/``). UNC roots
+    keep the leading backslashes Audiobookshelf saved after ``Path.resolve``
+    (``\\\\host/share/Books``). A leading ``//`` is the same root; collapsing it
+    to one slash, or sending it back as ``//``, misses the stored folder.
+    """
+    if not isinstance(value, str) or any(ord(character) < 32 for character in value):
+        raise ValueError(_UNCONFINED)
+    if value.startswith("\\\\") or value.startswith("//"):
+        parts = value[2:].replace("\\", "/").split("/")
+        _confined(parts, minimum=2)
+        return "\\\\" + "/".join(parts)
+    windows = value.replace("\\", "/")
+    if re.fullmatch(r"[A-Za-z]:/", windows):
+        return windows
+    if re.fullmatch(r"[A-Za-z]:(?:/.*)?", windows):
+        _confined(windows.split("/")[1:], minimum=1)
+        return windows
     if (
-        not isinstance(value, str)
-        or not value.startswith("/")
+        not value.startswith("/")
         or value == "/"
         or "\\" in value
         or any(part in {".", "..", ""} for part in value[1:].split("/"))
-        or any(ord(character) < 32 for character in value)
     ):
-        raise ValueError("Backend library path must be a confined absolute POSIX path")
+        raise ValueError(_UNCONFINED)
     return str(PurePosixPath(value))
 
 
@@ -208,7 +233,8 @@ class Audiobookshelf(JsonEndpoint):
 
     async def path_exists(self, root: str, name: str) -> bool:
         # This read-only upstream POST also requires ABS upload permission.
-        backend_path(root)
+        # The lookup is an exact match on the stored folder path.
+        root = backend_path(root)
         if not re.fullmatch(r"book-search-check-[a-f0-9]{32}", name):
             raise ValueError("Only generated mapping challenge names are permitted")
         try:

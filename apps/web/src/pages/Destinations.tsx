@@ -26,6 +26,10 @@ type Destination = components["schemas"]["DestinationView"];
 function libraryApp(kind?: string) {
   return kind === "grimmory" ? "Grimmory" : "Audiobookshelf";
 }
+
+function posixPath(path: string) {
+  return path.startsWith("/") && !path.startsWith("//");
+}
 type Medium = "ebook" | "audio";
 const names = { ebook: "Ebooks", audio: "Audiobooks" };
 
@@ -181,7 +185,11 @@ function FolderPicker({
     saved ? `${saved.library_id}|${saved.backend_path}` : "",
   );
   const [localPath, setLocalPath] = useState(
-    saved?.local_path || saved?.backend_path || "",
+    saved?.local_path && posixPath(saved.local_path)
+      ? saved.local_path
+      : saved?.backend_path && posixPath(saved.backend_path)
+        ? saved.backend_path
+        : "",
   );
   const [otherPath, setOtherPath] = useState(
     !!saved?.local_path && saved.local_path !== saved.backend_path,
@@ -250,12 +258,18 @@ function FolderPicker({
   );
   const library = selectedFolder;
   const backendPath = selectedFolder?.path || "";
+  const remotePath = !!backendPath && !posixPath(backendPath);
+  const mapping = otherPath || remotePath;
   const eligible = !!selectedFolder;
-  const workerPath = otherPath ? localPath : backendPath;
+  const workerPath = mapping ? localPath.trim() : backendPath;
   const save = useMutation({
     mutationFn: async () => {
       if (!library || !downloader || !eligible)
         throw new Error("Choose a folder and connect a download client first.");
+      if (mapping && !posixPath(workerPath))
+        throw new Error(
+          "Enter the absolute folder Dewarr has mounted, such as /data/audiobooks.",
+        );
       setProgress("Saving folder…");
       const destination = result(
         await api.PUT("/api/organization/library-folders/{medium}", {
@@ -353,8 +367,9 @@ function FolderPicker({
     >
       <div className="settings-section-body folder-picker-body">
         <p className="muted">
-          Start with your library folder. If Dewarr uses a different mount path,
-          choose Other path to map the same folder.
+          {remotePath
+            ? "This library folder uses a Windows path. Enter the mounted folder Dewarr can read."
+            : "Start with your library folder. If Dewarr uses a different mount path, choose Other path to map the same folder."}
         </p>
         <Notice error={options.error} />
         {options.isPending && <Loading />}
@@ -373,10 +388,17 @@ function FolderPicker({
                     type="radio"
                     name="folder"
                     aria-label={`${folder.library_name}: ${folder.path}`}
-                    checked={!otherPath && selectedChoice === folder.key}
+                    checked={
+                      selectedChoice === folder.key &&
+                      (!otherPath || remotePath)
+                    }
                     onChange={() => {
                       setChoice(folder.key);
                       setOtherPath(false);
+                      if (!posixPath(folder.path))
+                        setLocalPath((current) =>
+                          current === backendPath ? "" : current,
+                        );
                     }}
                   />
                   <span className="folder-option-copy">
@@ -390,7 +412,7 @@ function FolderPicker({
                   </span>
                 </label>
               ))}
-              {!!folders.length && (
+              {!!folders.length && !remotePath && (
                 <label className="abs-folder-option folder-other-option">
                   <input
                     type="radio"
@@ -400,7 +422,8 @@ function FolderPicker({
                     onChange={() => {
                       setChoice(selectedChoice);
                       setOtherPath(true);
-                      if (!localPath) setLocalPath(backendPath);
+                      if (!localPath && posixPath(backendPath))
+                        setLocalPath(backendPath);
                     }}
                   />
                   <span className="folder-option-copy">
@@ -408,7 +431,7 @@ function FolderPicker({
                   </span>
                 </label>
               )}
-              {otherPath && !!folders.length && (
+              {mapping && !!folders.length && (
                 <div className="folder-other-field">
                   <label>
                     <span className="sr-only">Dewarr folder path</span>
@@ -420,7 +443,9 @@ function FolderPicker({
                     />
                   </label>
                   <p className="muted">
-                    Same library folder, using its path in Dewarr.
+                    {remotePath
+                      ? `${libraryApp(selectedFolder?.server_kind)} reports ${backendPath}. Enter the path Dewarr uses for that same folder.`
+                      : "Same library folder, using its path in Dewarr."}
                   </p>
                   {folders.length > 1 && (
                     <p className="muted">
