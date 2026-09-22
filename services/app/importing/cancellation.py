@@ -60,6 +60,10 @@ async def execute(operation_id: UUID, *, checkpoint=lambda _: None):
         spec = PublicationSpec.model_validate(entry.specification)
         operation.status, operation.message = "running", "Checking publication before cancellation"
     try:
+        if spec.mode == "rename":
+            from app.importing.seeding_rename import undo_unplaced_rename
+
+            await undo_unplaced_rename(entry_id, spec)
         guard = CancellationGuard(asyncio.get_running_loop(), entry_id, token)
         task = asyncio.create_task(
             asyncio.to_thread(cancel_files, spec, guard=guard.hold, checkpoint=checkpoint)

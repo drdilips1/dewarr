@@ -18,6 +18,7 @@ from app.importing.grouping import (
     regroup,
 )
 from app.importing.naming import StrictModel, fingerprint
+from app.importing.storage import import_sources
 from app.importing.workflow import source_matches
 
 router = APIRouter(prefix="/organization/inspections", tags=["organization"])
@@ -58,7 +59,11 @@ async def save_grouping(inspection_id: UUID, body: GroupingInput, admin: Admin, 
     await transaction_lock(db, f"inspection-plan:{inspection_id}")
     await assert_admin(db, admin.id)
     inspection = await owned_inspection(db, admin.id, inspection_id)
-    if inspection.state != "ready" or not inspection.snapshot or not source_matches(inspection):
+    if (
+        inspection.state != "ready"
+        or not inspection.snapshot
+        or not source_matches(inspection, await import_sources(db))
+    ):
         raise HTTPException(409, "Inspect the current configured source before changing groups")
     if body.inspection_revision != inspection.snapshot["revision"]:
         raise HTTPException(409, "Inspection changed; review the current files")

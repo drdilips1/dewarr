@@ -9,7 +9,6 @@ from pathlib import Path
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import func, or_, select
 
-from app.config import get_settings
 from app.db.models import (
     AutomaticImport,
     CapacitySettings,
@@ -24,6 +23,7 @@ from app.db.models import (
 from app.db.session import session_factory
 from app.domain.operations import transaction_lock
 from app.importing.filesystem import InspectionError, directory, relative_parts
+from app.importing.storage import import_sources
 
 LOCK = "acquisition:capacity"
 MIB = 1024**2
@@ -116,7 +116,8 @@ async def observe(paths):
 
 async def observe_download(frozen):
     mapping, destination = frozen["mapping"], frozen["destination"]
-    configured = get_settings().import_sources.get(mapping["source_key"])
+    async with session_factory()() as db:
+        configured = (await import_sources(db)).get(mapping["source_key"])
     if not configured or str(Path(configured) / mapping["relative_path"]) != mapping["worker_path"]:
         raise CapacityWait("Download storage mapping changed; review the saved route")
     return await observe(
@@ -132,12 +133,15 @@ def download_cost(frozen, observation):
     roots = observation["roots"]
     if roots["staging"] != roots["library"]:
         raise CapacityWait("Staging and library must be on the same filesystem")
-    if frozen["destination"]["mode"] == "hardlink" and roots["download"] != roots["library"]:
+    rename = bool(frozen["destination"].get("seeding_rename"))
+    same_library = roots["download"] == roots["library"]
+    if not rename and frozen["destination"]["mode"] == "hardlink" and not same_library:
         raise CapacityWait("Hardlinks require download and library storage on the same filesystem")
     total = frozen["descriptor"]["torrent_bytes"]
     # Future sidecar/cover allowance is conservative until actual import plans exist.
     overhead = min(len(frozen["descriptor"]["files"]), 100) * 8 * MIB
-    future = overhead + (total if frozen["destination"]["mode"] == "copy" else 0)
+    copies = frozen["destination"]["mode"] == "copy" or (rename and not same_library)
+    future = overhead + (total if copies else 0)
     return {roots["download"]: total}, {roots["library"]: future}
 
 

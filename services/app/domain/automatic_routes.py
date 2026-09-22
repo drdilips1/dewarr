@@ -14,6 +14,7 @@ from app.domain.downloaders import connection_or_404, mapped_path
 from app.domain.visibility import visible_library
 from app.importing.destinations import destination_configuration
 from app.importing.naming import fingerprint
+from app.importing.storage import import_sources
 
 
 class PolicyRoute(BaseModel):
@@ -107,7 +108,7 @@ async def resolve(db, user, spec, downloader_id, generation, routes):
         or downloader.credential_generation != generation
     ):
         raise HTTPException(409, "Downloader settings changed; test and preview again")
-    mapping = mapped_path(downloader, downloader.config["save_path"])
+    mapping = mapped_path(downloader, downloader.config["save_path"], await import_sources(db))
     media = {spec.mode} if spec.mode in {"ebook", "audio"} else {"ebook", "audio"}
     if set(routes) != media:
         raise HTTPException(422, "Choose an import destination for each requested medium")

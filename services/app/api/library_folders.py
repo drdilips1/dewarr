@@ -7,7 +7,7 @@ from uuid import UUID
 
 from cryptography.fernet import InvalidToken
 from fastapi import APIRouter, HTTPException
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, model_validator
 from sqlalchemy import select
 
 from app.adapters.audiobookshelf import Audiobookshelf
@@ -28,6 +28,7 @@ from app.domain.release_profiles import DEFAULTS_LOCK
 from app.importing.destination_view import DestinationView, view
 from app.importing.naming import StrictModel
 from app.importing.planning import assert_admin
+from app.importing.seeding_rename import normalize_seeding_target
 from app.importing.storage import storage_settings
 from app.security import decrypt_secrets
 
@@ -95,6 +96,15 @@ class FolderInput(StrictModel):
     local_path: str = Field(max_length=1024)
     destination_id: UUID | None = None
     expected_revision: str | None = None
+    seeding_rename: bool = False
+    client_path: str | None = Field(default=None, max_length=1024)
+
+    @model_validator(mode="after")
+    def seeding_target(self):
+        self.seeding_rename, self.client_path = normalize_seeding_target(
+            self.seeding_rename, self.client_path
+        )
+        return self
 
     @field_validator("backend_path", "local_path")
     @classmethod
@@ -164,7 +174,7 @@ async def choose(medium: Literal["ebook", "audio"], body: FolderInput, admin: Ad
                 )
     storage = await db.get(ImportStorageSettings, 1)
     if not storage:
-        storage = ImportStorageSettings(id=1, destinations={})
+        storage = ImportStorageSettings(id=1, destinations={}, sources={})
         db.add(storage)
     storage.destinations = {**storage.destinations, root_key: str(local)}
     storage.staging_root = str(stage)
@@ -177,6 +187,7 @@ async def choose(medium: Literal["ebook", "audio"], body: FolderInput, admin: Ad
         "hardlink",
         True,
     )
+    destination.seeding_rename, destination.client_path = body.seeding_rename, body.client_path
     destination.probe = destination.probe_token = destination.probe_operation_id = None
     await db.flush()
     db.add(
@@ -205,12 +216,8 @@ async def activate(destination_id: UUID, body: ActivateInput, admin: Admin, db: 
     if not destination:
         raise HTTPException(404, "Destination not found")
     current = await view(db, destination)
-    if (
-        current.revision != body.expected_revision
-        or not current.publication_available
-        or destination.mode != "hardlink"
-    ):
-        raise HTTPException(409, "The current folder must pass its hardlink test before use")
+    if current.revision != body.expected_revision or not current.publication_available:
+        raise HTTPException(409, "The current folder must pass its route test before use")
     if body.automatic and not (await policy_view(db, destination)).can_enable:
         raise HTTPException(
             409, "Automatic import requires a verified folder and supported naming layout"

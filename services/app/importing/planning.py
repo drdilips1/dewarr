@@ -37,6 +37,7 @@ from app.importing.naming import (
     plan_import,
 )
 from app.importing.settings import current_profile
+from app.importing.storage import import_sources
 from app.importing.versioning import version_revision
 from app.importing.workflow import source_matches
 
@@ -119,7 +120,8 @@ async def freeze_plan(db, admin, inspection_id: UUID, body: FreezeInput):
     from app.domain.recovery_approvals import require_current
 
     await require_current(db, "operation", row.operation_id)
-    if row.state != "ready" or not row.snapshot or not source_matches(row):
+    sources_match = source_matches(row, await import_sources(db))
+    if row.state != "ready" or not row.snapshot or not sources_match:
         raise HTTPException(
             409, "A completed inspection of the configured download root is required"
         )

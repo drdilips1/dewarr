@@ -7,6 +7,7 @@ from app.api.imports import owned_inspection
 from app.domain.work_graph import graph_lock
 from app.importing.grouping import current_grouping
 from app.importing.matching import MatchPage, match_group
+from app.importing.storage import import_sources
 from app.importing.workflow import source_matches
 
 router = APIRouter(prefix="/organization/inspections", tags=["organization"])
@@ -22,7 +23,11 @@ async def matches(
     limit: int = Query(default=10, ge=1, le=25),
 ):
     inspection = await owned_inspection(db, admin.id, inspection_id)
-    if inspection.state != "ready" or not inspection.snapshot or not source_matches(inspection):
+    if (
+        inspection.state != "ready"
+        or not inspection.snapshot
+        or not source_matches(inspection, await import_sources(db))
+    ):
         raise HTTPException(409, "Inspect the current configured files before matching")
     revision, grouping = await current_grouping(db, inspection)
     if revision != grouping_revision:

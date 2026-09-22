@@ -34,6 +34,7 @@ from app.domain.operations import transaction_lock
 from app.domain.release_profiles import ProfileSnapshot, enforce_inspected_profile
 from app.domain.work_graph import canonical_work, family_ids
 from app.importing.naming import fingerprint
+from app.importing.storage import import_sources
 from app.importing.versioning import version_revision
 
 
@@ -387,7 +388,9 @@ async def claim(db, admin, identifier, revision, key):
         raise HTTPException(409, "This request is no longer missing the selected media")
     downloader = await db.get(Integration, selection.downloader_id)
     if (
-        mapped_path(downloader, selection.frozen["downloader"]["save_path"])
+        mapped_path(
+            downloader, selection.frozen["downloader"]["save_path"], await import_sources(db)
+        )
         != selection.frozen["mapping"]
     ):
         raise HTTPException(

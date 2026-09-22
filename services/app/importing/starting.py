@@ -29,6 +29,7 @@ from app.importing.naming import StrictModel
 from app.importing.ownership import already_owned
 from app.importing.planning import assert_admin
 from app.importing.publication import PublicationSpec, PublishFile
+from app.importing.storage import import_sources
 from app.importing.versioning import version_revision
 from app.jobs.queue import enqueue
 
@@ -82,7 +83,7 @@ async def start_import(db, admin, plan_id: UUID, body: ImportInput, idempotency_
     if not document.get("initial_sidecars") or not document.get("version_revisions"):
         raise HTTPException(409, "Create a fresh plan with frozen metadata and version evidence")
     source = document["source"]
-    if str(get_settings().import_sources.get(source["key"])) != source["path"]:
+    if str((await import_sources(db)).get(source["key"])) != source["path"]:
         raise HTTPException(409, "Download mapping changed; inspect and plan again")
     destinations = {}
     for medium, choice in body.destinations.items():
@@ -170,6 +171,11 @@ async def start_import(db, admin, plan_id: UUID, body: ImportInput, idempotency_
             )
             continue
         configuration = await destination_configuration(db, destination)
+        if configuration.get("seeding_rename") and not configuration.get("client_path"):
+            entry.message = (
+                "Enter the library folder qBittorrent uses before renaming the seeding copy"
+            )
+            continue
         specification = PublicationSpec(
             entry_id=entry.id,
             plan_revision=plan.revision,
@@ -180,7 +186,7 @@ async def start_import(db, admin, plan_id: UUID, body: ImportInput, idempotency_
             destination_root=Path(configuration["root_path"]),
             staging_root=Path(configuration["staging_path"]),
             folder=item["folder"].split("/", 1)[1],
-            mode=destination.mode,
+            mode="rename" if destination.seeding_rename else destination.mode,
             files=[
                 PublishFile(
                     source=mapping["source"],

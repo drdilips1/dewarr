@@ -238,8 +238,10 @@ function Editor({
               />
               Rename imported files
               <SettingHelp label="renaming files">
-                Applies to both ebooks and audiobooks. Original torrent files
-                keep their names for seeding; only library filenames change.
+                Applies to both ebooks and audiobooks. Hardlinks and copies
+                leave the torrent filenames in place for seeding and use this
+                pattern for the library file. Renaming the seeding copy uses
+                this pattern for that same file.
               </SettingHelp>
             </label>
             {draft.rename_files && (

@@ -137,7 +137,9 @@ async def readiness(admin: Admin, db: Database):
         ],
         downloaders=[
             SetupDownloader(
-                id=row.id, **service(row, row.name), mappings_current=mappings_current(row)
+                id=row.id,
+                **service(row, row.name),
+                mappings_current=mappings_current(row, settings.import_sources),
             )
             for row in integrations
             if row.kind == "qbittorrent"

@@ -184,9 +184,10 @@ export default function Connections({
               <h3>Library folders</h3>
               <SettingHelp label="library folders">
                 Completed downloads are organized into these destinations.
-                Hardlinks preserve the original names and files for seeding.
-                Downloads and library folders must share a filesystem and
-                compatible worker mounts.
+                Hardlinks keep the original download available for seeding. A
+                folder can rename the seeding copy in qBittorrent when you want
+                the library file and the seeding file to be the same copy.
+                Downloads and library folders need compatible worker mounts.
               </SettingHelp>
               <Link className="settings-inline-link" to="/settings#naming">
                 File naming →

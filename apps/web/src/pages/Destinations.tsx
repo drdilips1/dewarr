@@ -41,7 +41,8 @@ export default function Destinations({
       {!embedded && <h1>Library folders</h1>}
       <p className="muted">
         Choose an Audiobookshelf folder for each format. Your naming rules build
-        the folders inside it; original downloads stay available for seeding.
+        the folders inside it. Hardlinks leave the original download available
+        for seeding.
       </p>
       <Notice error={query.error} />
       {query.isPending ? (
@@ -93,12 +94,19 @@ export default function Destinations({
                           }
                         >
                           {destination.publication_available &&
-                          destination.mode === "hardlink" ? (
+                          destination.seeding_rename ? (
+                            <>
+                              <CheckCircle2 size={12} /> Renames the seeding
+                              copy
+                            </>
+                          ) : destination.publication_available &&
+                            destination.mode === "hardlink" ? (
                             <>
                               <CheckCircle2 size={12} /> Hardlinks verified
                             </>
-                          ) : destination.mode === "copy" ? (
-                            "Copy mode · choose a folder to use hardlinks"
+                          ) : destination.publication_available &&
+                            destination.mode === "copy" ? (
+                            "Copy mode · files are copied into this folder"
                           ) : (
                             "Needs verification"
                           )}
@@ -131,9 +139,10 @@ export default function Destinations({
       )}
       <div className="library-folder-guide">
         <p>
-          <strong>Hardlinks save space.</strong> Downloads and library folders
-          must share a filesystem. Changes to file contents affect both
-          locations.
+          <strong>Hardlinks save space</strong> when the download and library
+          share a filesystem. You can copy into the library, or rename the
+          seeding copy in qBittorrent so the library file and the seeding file
+          are the same copy.
         </p>
         <div className="button-row">
           <Link to="/settings#naming">Edit file naming →</Link>
@@ -172,6 +181,8 @@ function FolderPicker({
     !!saved?.local_path && saved.local_path !== saved.backend_path,
   );
   const [downloaderId, setDownloaderId] = useState("");
+  const [seedingRename, setSeedingRename] = useState(!!saved?.seeding_rename);
+  const [clientPath, setClientPath] = useState(saved?.client_path || "");
   const [automaticChoice, setAutomatic] = useState<boolean | null>(null);
   const policy = useQuery({
     queryKey: [
@@ -247,11 +258,17 @@ function FolderPicker({
             local_path: workerPath,
             destination_id: current.current?.id,
             expected_revision: current.current?.revision,
+            seeding_rename: seedingRename,
+            client_path: seedingRename ? clientPath.trim() : null,
           },
         }),
       );
       current.current = destination;
-      setProgress("Checking hardlinks and Audiobookshelf access…");
+      setProgress(
+        seedingRename
+          ? "Checking the qBittorrent library path and Audiobookshelf access…"
+          : "Checking hardlinks and Audiobookshelf access…",
+      );
       const operation = result(
         await api.POST(
           "/api/organization/destinations/{destination_id}/setup-probe",
@@ -280,12 +297,23 @@ function FolderPicker({
           throw new Error(status.message || "Folder verification failed.");
         if (status?.status === "completed") {
           setProgress("Setting your library destination…");
+          const verified = result(
+            await api.GET("/api/organization/destinations"),
+          ).find((item) => item.id === destination.id);
+          if (!verified?.publication_available) {
+            const message = verified?.probe?.message;
+            throw new Error(
+              typeof message === "string"
+                ? message
+                : "Folder verification failed.",
+            );
+          }
           return result(
             await api.POST(
               "/api/organization/library-folders/{destination_id}/activate",
               {
                 params: { path: { destination_id: destination.id } },
-                body: { expected_revision: destination.revision, automatic },
+                body: { expected_revision: verified.revision, automatic },
               },
             ),
           );
@@ -437,8 +465,44 @@ function FolderPicker({
                 <Link to="/settings#downloaders" onClick={close}>
                   download client
                 </Link>{" "}
-                to verify hardlinks.
+                to verify this folder.
               </p>
+            )}
+            <label className="check-label">
+              <input
+                type="checkbox"
+                checked={seedingRename}
+                onChange={(event) => {
+                  const enabled = event.target.checked;
+                  setSeedingRename(enabled);
+                  if (enabled && !clientPath.trim()) setClientPath(workerPath);
+                }}
+                disabled={save.isPending}
+              />
+              Rename the seeding copy in qBittorrent
+              <SettingHelp label="seeding rename">
+                qBittorrent renames the downloaded files into this folder. The
+                seeding file and the library file are the same copy, and the
+                torrent stays valid.
+              </SettingHelp>
+            </label>
+            {seedingRename && (
+              <div className="folder-path-mapping">
+                <label>
+                  Library folder in qBittorrent
+                  <input
+                    value={clientPath}
+                    onChange={(event) => setClientPath(event.target.value)}
+                    placeholder={workerPath || "/audiobooks"}
+                    required
+                    disabled={save.isPending}
+                  />
+                </label>
+                <p className="muted">
+                  The folder qBittorrent uses for this library. Leave the Dewarr
+                  path when both containers see the same folder.
+                </p>
+              </div>
             )}
             <label className="check-label">
               <input
@@ -449,9 +513,9 @@ function FolderPicker({
               />
               Auto-organize downloads
               <SettingHelp label="automatic organization">
-                Hardlink completed downloads into this folder using your file
-                naming settings. Originals stay available for seeding. Uncertain
-                matches stay in review.
+                {seedingRename
+                  ? "Place completed downloads in this folder using your file naming settings. qBittorrent renames the seeding files into this folder. Uncertain matches stay in review."
+                  : "Place completed downloads in this folder using your file naming settings. Hardlinks are used when the download and library share a filesystem. Otherwise the files are copied. Originals stay available for seeding. Uncertain matches stay in review."}
               </SettingHelp>
             </label>
             <Notice error={save.error || policy.error} />
@@ -472,7 +536,8 @@ function FolderPicker({
                   (!!saved && !policy.data) ||
                   !eligible ||
                   !downloader ||
-                  !workerPath.trim()
+                  !workerPath.trim() ||
+                  (seedingRename && !clientPath.trim())
                 }
               >
                 {save.isPending ? "Checking…" : "Use this folder"}

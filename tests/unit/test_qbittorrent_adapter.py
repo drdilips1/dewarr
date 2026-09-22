@@ -11,6 +11,7 @@ from app.adapters.qbittorrent import (
     absolute_path,
     magnet_hashes,
     parse_state,
+    relative_torrent_path,
     verify_association,
 )
 
@@ -57,6 +58,9 @@ class Server:
         self.adds = 0
         self.lost_response = False
         self.version = "v5.2.3"
+        self.files = files()
+        self.save_path = "/downloads/books"
+        self.refuse_rename = False
 
     async def __call__(self, request):
         self.requests.append(request)
@@ -99,9 +103,30 @@ class Server:
                 ],
             )
         if path == "torrents/properties":
-            return httpx.Response(200, json=properties())
+            return httpx.Response(200, json=properties(save_path=self.save_path))
         if path == "torrents/files":
-            return httpx.Response(200, json=files())
+            return httpx.Response(200, json=self.files)
+        if path == "torrents/renameFile":
+            if self.refuse_rename:
+                return httpx.Response(409, text="fails")
+            body = parse_qs(request.content.decode())
+            old, new = body["oldPath"][0], body["newPath"][0]
+            renamed = False
+            for item in self.files:
+                if item["name"] == old:
+                    item["name"] = new
+                    renamed = True
+            return httpx.Response(200 if renamed else 409, text="Ok." if renamed else "fails")
+        if path == "torrents/setLocation":
+            body = parse_qs(request.content.decode())
+            self.save_path = body["location"][0]
+            for torrent in self.torrents:
+                torrent["save_path"] = self.save_path
+            return httpx.Response(200, text="Ok.")
+        if path == "app/getDirectoryContent":
+            body = parse_qs(request.content.decode())
+            self.listed = body["dirPath"][0]
+            return httpx.Response(200, json=[".dewarr-route-test"])
         raise AssertionError(path)
 
     def client(self):
@@ -230,12 +255,21 @@ def test_completion_requires_whole_pack_file_evidence(torrent, contents):
 
 
 @pytest.mark.parametrize(
-    "path", ["../book", "/book", "a/../../book", "a\\book", "C:/book", "a//b", "a\x00b"]
+    "path",
+    ["../book", "/book", "a/../../book", "a\\book", "C:/book", "C:book.m4b", "a//b", "a\x00b"],
 )
 def test_file_evidence_rejects_unsafe_paths(path):
     with pytest.raises(AdapterError) as error:
         parse_state(row(), properties(), files(name=path))
     assert error.value.kind == FailureKind.PARSER
+
+
+def test_a_colon_in_a_title_is_a_torrent_file_name():
+    name = "Book/Title: Subtitle.m4b"
+    state = parse_state(row(), properties(), files(name=name))
+    assert state.files[0].relative_path == name
+    assert relative_torrent_path(name) == name
+    assert relative_torrent_path("A: Novel.m4b") == "A: Novel.m4b"
 
 
 @pytest.mark.parametrize("value", [True, -1, float("nan"), float("inf"), "1", 1.1])
@@ -581,3 +615,39 @@ def test_auto_managed_torrents_can_be_verified_without_changing_server_preferenc
     assert verify_association(
         [state], tag=TAG, hashes={HASH}, save_path="/downloads/books", category="book-search"
     ).association_verified
+
+
+async def test_rename_and_move_are_explicit_and_a_refusal_is_definite():
+    server = Server()
+    server.torrents.append(row())
+    async with server.client() as client:
+        moved = await client.set_location(HASH, "/library")
+        assert moved
+        state = await client.status(HASH)
+        assert state.save_path == "/library"
+        renamed = await client.rename_file(HASH, "Book/book.m4b", "Author/Title.m4b")
+        assert renamed
+        assert (await client.status(HASH)).files[0].relative_path == "Author/Title.m4b"
+        server.refuse_rename = True
+        assert not await client.rename_file(HASH, "Author/Title.m4b", "Other.m4b")
+    bodies = [
+        parse_qs(request.content.decode())
+        for request in server.requests
+        if request.url.path.endswith(("torrents/setLocation", "torrents/renameFile"))
+    ]
+    assert bodies[0] == {"hashes": [HASH], "location": ["/library"]}
+    assert bodies[1]["oldPath"] == ["Book/book.m4b"]
+    assert bodies[1]["newPath"] == ["Author/Title.m4b"]
+
+
+async def test_directory_listing_reads_the_path_qbittorrent_sees():
+    server = Server()
+    async with server.client() as client:
+        assert await client.directory_entries("/library/books") == [".dewarr-route-test"]
+    assert server.listed == "/library/books"
+    listed = [
+        request
+        for request in server.requests
+        if request.url.path.endswith("app/getDirectoryContent")
+    ]
+    assert len(listed) == 1 and listed[0].method == "POST"

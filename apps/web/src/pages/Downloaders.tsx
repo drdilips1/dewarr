@@ -87,7 +87,23 @@ export default function Downloaders({
               <dl className="source-facts">
                 <dt>Category</dt>
                 <dd>{connection.category}</dd>
+                {connection.save_path && (
+                  <>
+                    <dt>qBittorrent folder</dt>
+                    <dd className="break-text">{connection.save_path}</dd>
+                  </>
+                )}
               </dl>
+              {connection.mappings_current &&
+                connection.mappings.map((mapping) => (
+                  <p className="muted break-text" key={mapping.download_root}>
+                    {mapping.download_root} → {mapping.worker_path}
+                  </p>
+                ))}
+              <PathMap
+                key={`${connection.id}:${connection.generation}`}
+                connection={connection}
+              />
               <div className="button-row">
                 <button onClick={() => setEditing(connection.id)}>
                   Edit downloader
@@ -113,6 +129,133 @@ export default function Downloaders({
         </Empty>
       )}
     </>
+  );
+}
+
+function PathMap({ connection }: { connection: Connection }) {
+  const cache = useQueryClient();
+  const [rows, setRows] = useState(
+    connection.mappings.length
+      ? connection.mappings.map((item) => ({
+          download_root: item.download_root,
+          worker_path: item.worker_path,
+        }))
+      : [{ download_root: connection.save_path, worker_path: "" }],
+  );
+  const save = useMutation({
+    mutationFn: async () => {
+      const saved = result(
+        await api.PUT("/api/downloaders/{connection_id}", {
+          params: { path: { connection_id: connection.id } },
+          body: {
+            name: connection.name,
+            base_url: connection.base_url,
+            category: connection.category,
+            enabled: connection.enabled,
+            expected_generation: connection.generation,
+            mappings: rows,
+          },
+        }),
+      );
+      return result(
+        await api.POST("/api/downloaders/{connection_id}/test", {
+          params: { path: { connection_id: saved.id } },
+        }),
+      );
+    },
+    onSettled: () => cache.invalidateQueries({ queryKey: ["downloaders"] }),
+  });
+  if (!connection.save_path) return null;
+  return (
+    <form
+      className="path-map"
+      aria-label="Download path mapping"
+      onSubmit={(event) => {
+        event.preventDefault();
+        save.mutate();
+      }}
+    >
+      <fieldset>
+        <legend>Download path mapping</legend>
+        <p className="muted">
+          Map the folder qBittorrent reports to the folder Dewarr can read. Use
+          this when the download client and Dewarr see the same files at
+          different paths.
+        </p>
+        {rows.map((row, index) => (
+          <div className="path-map-row" key={index}>
+            <label>
+              Path in qBittorrent
+              <input
+                value={row.download_root}
+                onChange={(event) =>
+                  setRows((current) =>
+                    current.map((item, itemIndex) =>
+                      itemIndex === index
+                        ? { ...item, download_root: event.target.value }
+                        : item,
+                    ),
+                  )
+                }
+                required
+                maxLength={2000}
+              />
+            </label>
+            <label>
+              Path on Dewarr
+              <input
+                value={row.worker_path}
+                placeholder="/data/downloads"
+                onChange={(event) =>
+                  setRows((current) =>
+                    current.map((item, itemIndex) =>
+                      itemIndex === index
+                        ? { ...item, worker_path: event.target.value }
+                        : item,
+                    ),
+                  )
+                }
+                required
+                maxLength={2000}
+              />
+            </label>
+            {rows.length > 1 && (
+              <button
+                type="button"
+                onClick={() =>
+                  setRows((current) =>
+                    current.filter((_, itemIndex) => itemIndex !== index),
+                  )
+                }
+              >
+                Remove mapping {index + 1}
+              </button>
+            )}
+          </div>
+        ))}
+        <button
+          type="button"
+          disabled={rows.length >= 20}
+          onClick={() =>
+            setRows((current) => [
+              ...current,
+              { download_root: "", worker_path: "" },
+            ])
+          }
+        >
+          Add path mapping
+        </button>
+      </fieldset>
+      {!connection.mappings_current && (
+        <p className="notice">
+          Dewarr cannot read the download folder until this map is saved.
+        </p>
+      )}
+      <Notice error={save.error} />
+      <button className="primary" disabled={save.isPending}>
+        {save.isPending ? "Saving path map…" : "Save path map"}
+      </button>
+    </form>
   );
 }
 

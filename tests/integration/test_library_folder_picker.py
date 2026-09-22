@@ -39,6 +39,7 @@ async def test_picker_persists_mounts_verifies_and_sets_both_defaults(
     assert response.status_code == 200, response.text
     chosen = response.json()
     assert chosen["configured"] and chosen["mode"] == "hardlink"
+    assert chosen["seeding_rename"] is False
     assert chosen["local_path"] == str(route["target"])
     assert not chosen["publication_available"]
     denied = await client.post(

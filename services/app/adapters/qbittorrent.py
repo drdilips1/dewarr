@@ -2,7 +2,8 @@
 
 Submission is not association or completion. Callers must journal dispatch before
 calling submit, then reconcile identity, tag and destination before importing.
-No implicit retries, existing-torrent mutations or source-file operations live here.
+Observation does not change a torrent. rename_file and set_location are the
+explicit ways to move or rename a seeding copy.
 """
 
 import asyncio
@@ -55,6 +56,36 @@ def absolute_path(value: str) -> str:
     ):
         raise ValueError("Expected an absolute POSIX download path")
     return value.rstrip("/")
+
+
+def _windows_drive_prefix(part: str) -> bool:
+    """A colon inside a title is a normal POSIX name. C: and C:foo are not."""
+    return (
+        len(part) >= 2
+        and part[0].isalpha()
+        and part[1] == ":"
+        and (len(part) == 2 or part[2] != " ")
+    )
+
+
+def unsafe_relative_path(value: str) -> bool:
+    if (
+        not isinstance(value, str)
+        or not value
+        or value.startswith("/")
+        or "\\" in value
+        or any(ord(c) < 32 or ord(c) == 127 for c in value)
+        or any(part in {".", "..", ""} for part in value.split("/"))
+        or any(_windows_drive_prefix(part) for part in value.split("/"))
+    ):
+        return True
+    return False
+
+
+def relative_torrent_path(value: str) -> str:
+    if unsafe_relative_path(value):
+        raise ValueError("Unsafe torrent path")
+    return value
 
 
 def magnet_hashes(value: str) -> set[str]:
@@ -181,14 +212,7 @@ def parse_state(row: dict, properties: dict, files: list) -> QbitState:
         all_selected = bool(files)
         for file in files:
             name = file["name"]
-            if (
-                not isinstance(name, str)
-                or name.startswith("/")
-                or "\\" in name
-                or ":" in name
-                or any(ord(c) < 32 or ord(c) == 127 for c in name)
-                or any(part in {".", "..", ""} for part in name.split("/"))
-            ):
+            if unsafe_relative_path(name):
                 raise ValueError("Unsafe file path")
             index = integer(file["index"])
             if name in names or index in indexes:
@@ -276,9 +300,12 @@ class QbitClient:
                         "qBittorrent rejected authentication or access. Check the connection.",
                     )
                 if mutating and status in {400, 415}:
-                    raise AdapterError(
-                        FailureKind.PARSER, "qBittorrent rejected the torrent input."
+                    rejected = (
+                        "qBittorrent rejected the rename."
+                        if path.startswith("torrents/rename") or path == "torrents/setLocation"
+                        else "qBittorrent rejected the torrent input."
                     )
+                    raise AdapterError(FailureKind.PARSER, rejected)
                 if 300 <= status < 400:
                     raise AdapterError(
                         FailureKind.UNCERTAIN if mutating else FailureKind.ROUTE,
@@ -516,6 +543,59 @@ class QbitClient:
         if state.external_id != key:
             raise AdapterError(FailureKind.PARSER, "qBittorrent returned a different transfer.")
         return state
+
+    async def _mutate(self, path, data):
+        await self.capabilities()
+        await self._login()
+        status, result = await self._request(
+            "POST", path, data=data, mutating=True, accepted_statuses=(409,)
+        )
+        if status == 409:
+            return False
+        if result.strip() not in {b"", b"Ok."}:
+            raise AdapterError(
+                FailureKind.PARSER, "qBittorrent returned an unexpected rename result."
+            )
+        return True
+
+    async def rename_file(self, torrent_hash: str, old_path: str, new_path: str) -> bool:
+        """Rename one torrent file. False means qBittorrent refused the change."""
+        return await self._mutate(
+            "torrents/renameFile",
+            {
+                "hash": hash_value(torrent_hash),
+                "oldPath": relative_torrent_path(old_path),
+                "newPath": relative_torrent_path(new_path),
+            },
+        )
+
+    async def set_location(self, torrent_hash: str, location: str) -> bool:
+        """Move torrent content to an absolute directory. False means it was refused."""
+        return await self._mutate(
+            "torrents/setLocation",
+            {"hashes": hash_value(torrent_hash), "location": absolute_path(location)},
+        )
+
+    async def directory_entries(self, path: str) -> list[str]:
+        """List subdirectory names qBittorrent sees at an absolute path."""
+        await self.capabilities()
+        await self._login()
+        _status, result = await self._request(
+            "POST",
+            "app/getDirectoryContent",
+            data={"dirPath": absolute_path(path)},
+        )
+        try:
+            entries = json.loads(result)
+        except json.JSONDecodeError as error:
+            raise AdapterError(
+                FailureKind.PARSER, "qBittorrent returned an unreadable folder listing."
+            ) from error
+        if not isinstance(entries, list) or any(not isinstance(item, str) for item in entries):
+            raise AdapterError(
+                FailureKind.PARSER, "qBittorrent returned an unreadable folder listing."
+            )
+        return entries
 
     async def census(self, *, known_hashes: set[str], categories: set[str], pulse):
         """Enumerate the whole client, then observe application-relevant transfers.

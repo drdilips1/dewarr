@@ -26,6 +26,7 @@ from app.importing.filesystem import (
     beneath,
     digest,
     directory,
+    enumerate_files,
     identity,
     relative_parts,
     source_scope,
@@ -65,7 +66,7 @@ class PublicationSpec(StrictModel):
     destination_root: Path
     staging_root: Path
     folder: str
-    mode: Literal["hardlink", "copy"] = "hardlink"
+    mode: Literal["hardlink", "copy", "rename"] = "hardlink"
     files: list[PublishFile] = Field(min_length=1, max_length=5000)
     sidecars: dict[str, str] = Field(default_factory=dict)
     binary_sidecars: dict[str, str] = Field(default_factory=dict)
@@ -141,6 +142,14 @@ def object_id(fd):
 
 def same_object(fd, expected):
     return object_id(fd) == {key: expected[key] for key in ("device", "inode")}
+
+
+def seeding_same_file(fd, expected):
+    """A same-device rename keeps the inode. A cross-filesystem move only keeps the bytes."""
+    info = os.fstat(fd)
+    if info.st_dev != expected["device"]:
+        return True
+    return info.st_ino == expected["inode"]
 
 
 def no_replace(source_fd, source_name, destination_fd, destination_name):
@@ -258,9 +267,16 @@ def checked_source(source, file, deadline):
             raise PublicationError("Source changed while being verified")
 
 
+def leaf_names(folder, spec):
+    present = set(os.listdir(folder))
+    if spec.mode == "rename":
+        present.discard(".torrent")
+    return present
+
+
 def verify_item(folder, spec, deadline):
     expected = {file.name for file in spec.files} | set(generated_files(spec))
-    if set(os.listdir(folder)) != expected:
+    if leaf_names(folder, spec) != expected:
         raise PublicationError("Item contains missing or unplanned files")
     for file in spec.files:
         with beneath(folder, file.name) as fd:
@@ -268,6 +284,8 @@ def verify_item(folder, spec, deadline):
                 raise PublicationError("Published media does not match its frozen manifest")
             if spec.mode == "hardlink" and not same_object(fd, file.identity):
                 raise PublicationError("Published media is not the expected hardlink")
+            if spec.mode == "rename" and not seeding_same_file(fd, file.identity):
+                raise PublicationError("The library file is not the seeding copy")
     for name, content in generated_files(spec).items():
         with beneath(folder, name) as fd:
             if digest(fd, deadline) != hashlib.sha256(content).hexdigest():
@@ -447,6 +465,9 @@ def remaining_import_bytes(spec, *, timeout=600):
                     "destination_identity"
                 ) != object_id(target):
                     raise PublicationError("Publication settings or destination identity changed")
+            if spec.mode == "rename":
+                return remaining_rename_bytes(target, receipt, spec, deadline)
+            if receipt:
                 try:
                     with beneath(target, spec.folder, folder=True) as existing:
                         if not receipt.get("stage_identity") or not same_object(
@@ -460,6 +481,202 @@ def remaining_import_bytes(spec, *, timeout=600):
             return remaining_stage_bytes(staging, receipt, spec, deadline)
 
 
+def seeding_copy_bytes(library_device, spec) -> int:
+    """Bytes qBittorrent copies when the download and library are different filesystems."""
+    if all(file.identity["device"] == library_device for file in spec.files):
+        return 0
+    if spec.source_kind == "file":
+        return sum(file.identity["size"] for file in spec.files)
+    try:
+        with directory(spec.source_root) as root:
+            with beneath(root, spec.source_relative, folder=True) as folder:
+                return sum(info["size"] for _, info in enumerate_files(folder))
+    except (FileNotFoundError, InspectionError, OSError):
+        return sum(file.identity["size"] for file in spec.files)
+
+
+def remaining_rename_bytes(target, receipt, spec, deadline):
+    sidecars = sum(len(value) for value in generated_files(spec).values())
+    copy = seeding_copy_bytes(os.fstat(target).st_dev, spec)
+    try:
+        with beneath(target, spec.folder, folder=True) as existing:
+            if (
+                receipt
+                and receipt.get("stage_identity")
+                and not same_object(existing, receipt["stage_identity"])
+            ):
+                raise PublicationError("Destination belongs to another item")
+            try:
+                verify_item(existing, spec, deadline)
+            except PublicationError:
+                return sidecars + copy
+            return 0
+    except FileNotFoundError:
+        return sidecars + copy
+
+
+def load_rename_plan(spec):
+    with private_staging(spec.staging_root) as staging, directory(spec.destination_root) as target:
+        with publication_lock(staging, json.dumps(object_id(target), sort_keys=True)):
+            receipt = read_receipt(staging, str(spec.entry_id) + ".json")
+            if receipt is None or "rename_plan" not in receipt:
+                return None
+            if receipt.get("spec_hash") != specification_fingerprint(spec) or receipt.get(
+                "destination_identity"
+            ) != object_id(target):
+                raise PublicationError("Publication settings or destination identity changed")
+            return receipt["rename_plan"]
+
+
+def remember_rename_plan(spec, plan):
+    spec_hash = specification_fingerprint(spec)
+    receipt_name = str(spec.entry_id) + ".json"
+    with private_staging(spec.staging_root) as staging, directory(spec.destination_root) as target:
+        if same_object(staging, object_id(target)):
+            raise PublicationError("Staging and library refer to the same directory")
+        with publication_lock(staging, json.dumps(object_id(target), sort_keys=True)):
+            receipt = read_receipt(staging, receipt_name)
+            if receipt is None:
+                receipt = {
+                    "schema_version": 1,
+                    "entry_id": str(spec.entry_id),
+                    "spec_hash": spec_hash,
+                    "stage_name": "rename-" + spec.entry_id.hex,
+                    "state": "preparing",
+                    "destination_identity": object_id(target),
+                    "rename_plan": plan,
+                }
+                write_receipt(staging, receipt_name, receipt, create=True)
+                return plan
+            if receipt.get("spec_hash") != spec_hash or receipt.get(
+                "destination_identity"
+            ) != object_id(target):
+                raise PublicationError("Publication settings or destination identity changed")
+            stored = receipt.get("rename_plan")
+            if stored and stored != plan:
+                raise PublicationError(
+                    "The seeding rename plan changed after qBittorrent was asked to move files"
+                )
+            receipt["rename_plan"] = plan
+            write_receipt(staging, receipt_name, receipt)
+            return plan
+
+
+def write_generated(folder, staging, receipt_name, receipt, spec, deadline):
+    for name, content in generated_files(spec).items():
+        try:
+            output = os.open(
+                name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o644, dir_fd=folder
+            )
+        except FileExistsError:
+            with beneath(folder, name) as fd:
+                if digest(fd, deadline) != hashlib.sha256(content).hexdigest():
+                    owned = receipt.get("partial_files", {}).get(name)
+                    if not owned or not same_object(fd, owned) or os.fstat(fd).st_nlink != 1:
+                        raise PublicationError(
+                            "Existing sidecar conflicts with this import"
+                        ) from None
+                    os.unlink(name, dir_fd=folder)
+                    output = os.open(
+                        name,
+                        os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
+                        0o644,
+                        dir_fd=folder,
+                    )
+                else:
+                    continue
+        try:
+            receipt.setdefault("partial_files", {})[name] = object_id(output)
+            write_receipt(staging, receipt_name, receipt)
+            write_all(output, content)
+            os.fsync(output)
+        finally:
+            os.close(output)
+    sync_directory(folder)
+
+
+def publish_renamed(
+    spec: PublicationSpec,
+    *,
+    checkpoint: Callable[[str], None] = lambda _: None,
+    timeout=600,
+    publication_guard: Callable = nullcontext,
+):
+    """Verify files qBittorrent already placed, then write sidecars beside them."""
+    deadline = time.monotonic() + timeout
+    spec_hash = specification_fingerprint(spec)
+    receipt_name = str(spec.entry_id) + ".json"
+    with (
+        private_staging(spec.staging_root) as staging,
+        directory(spec.destination_root) as destination,
+    ):
+        if same_object(staging, object_id(destination)):
+            raise PublicationError("Staging and library refer to the same directory")
+        with publication_lock(staging, json.dumps(object_id(destination), sort_keys=True)):
+            receipt = read_receipt(staging, receipt_name)
+            if receipt is None:
+                receipt = {
+                    "schema_version": 1,
+                    "entry_id": str(spec.entry_id),
+                    "spec_hash": spec_hash,
+                    "stage_name": "rename-" + spec.entry_id.hex,
+                    "state": "preparing",
+                    "destination_identity": object_id(destination),
+                }
+                write_receipt(staging, receipt_name, receipt, create=True)
+            if receipt.get("spec_hash") != spec_hash or receipt.get(
+                "destination_identity"
+            ) != object_id(destination):
+                raise PublicationError("Publication settings or destination identity changed")
+            if receipt["state"] in {"cancelling", "cancelled"}:
+                raise PublicationError("This import was cancelled; review a new plan")
+            try:
+                with beneath(destination, spec.folder, folder=True) as leaf:
+                    if receipt.get("stage_identity") and not same_object(
+                        leaf, receipt["stage_identity"]
+                    ):
+                        raise PublicationError("Destination exists and belongs to another item")
+                    verify_item_media(leaf, spec, deadline)
+                    if not receipt.get("stage_identity"):
+                        receipt["stage_identity"] = object_id(leaf)
+                        write_receipt(staging, receipt_name, receipt)
+                    with publication_guard():
+                        checkpoint("before-publish")
+                        with directory(spec.destination_root) as current:
+                            if not same_object(current, receipt["destination_identity"]):
+                                raise PublicationError(
+                                    "Destination mount changed before publication"
+                                )
+                        write_generated(leaf, staging, receipt_name, receipt, spec, deadline)
+                        verify_item(leaf, spec, deadline)
+                        checkpoint("published-before-receipt")
+                        receipt["state"] = "published"
+                        write_receipt(staging, receipt_name, receipt)
+                        return receipt
+            except FileNotFoundError:
+                raise PublicationError(
+                    "qBittorrent has not placed the renamed files in the library folder"
+                ) from None
+
+
+def verify_item_media(folder, spec, deadline):
+    expected = {file.name for file in spec.files}
+    allowed = expected | set(generated_files(spec))
+    present = leaf_names(folder, spec)
+    if present - allowed:
+        raise PublicationError("The library folder already contains other files")
+    if not expected <= present:
+        raise PublicationError(
+            "qBittorrent has not finished renaming every file into the library folder"
+        )
+    for file in spec.files:
+        with beneath(folder, file.name) as fd:
+            if os.fstat(fd).st_size != file.identity["size"] or digest(fd, deadline) != file.sha256:
+                raise PublicationError("The renamed file does not match the downloaded bytes")
+            if not seeding_same_file(fd, file.identity):
+                raise PublicationError("The library file is not the seeding copy")
+
+
 def publish_item(
     spec: PublicationSpec,
     *,
@@ -467,6 +684,10 @@ def publish_item(
     timeout=600,
     publication_guard: Callable = nullcontext,
 ):
+    if spec.mode == "rename":
+        return publish_renamed(
+            spec, checkpoint=checkpoint, timeout=timeout, publication_guard=publication_guard
+        )
     deadline = time.monotonic() + timeout
     spec_hash = specification_fingerprint(spec)
     receipt_name = str(spec.entry_id) + ".json"

@@ -883,6 +883,7 @@ class ImportStorageSettings(Base):
     __tablename__ = "import_storage_settings"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     destinations: Mapped[dict[str, str]] = mapped_column(JSONB, default=dict)
+    sources: Mapped[dict[str, str]] = mapped_column(JSONB, default=dict)
     staging_root: Mapped[str | None] = mapped_column(String(1024))
 
 
@@ -897,6 +898,8 @@ class ImportDestination(Identity, Base):
     medium: Mapped[str] = mapped_column(String(10))
     backend_path: Mapped[str] = mapped_column(String(1024))
     mode: Mapped[str] = mapped_column(String(10), default="hardlink")
+    seeding_rename: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
+    client_path: Mapped[str | None] = mapped_column(String(1024))
     enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     probe: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
     probe_operation_id: Mapped[UUID | None] = mapped_column(ForeignKey("operations.id"))

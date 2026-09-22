@@ -38,6 +38,7 @@ from app.domain.operations import transaction_lock
 from app.domain.release_profiles import DEFAULTS_LOCK
 from app.domain.source_artifacts import artifact_bytes, member
 from app.importing.naming import fingerprint
+from app.importing.storage import import_sources
 from app.jobs.queue import enqueue
 from app.security import decrypt_secrets
 
@@ -498,7 +499,7 @@ async def create_inspection(db, attempt, selection, user, *, key=None):
         owner_id=user.id,
         operation_id=operation.id,
         source_key=mapping["source_key"],
-        source_path=str(get_settings().import_sources[mapping["source_key"]]),
+        source_path=str((await import_sources(db))[mapping["source_key"]]),
         relative_path=relative,
     )
     db.add(inspection)

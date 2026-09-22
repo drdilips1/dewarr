@@ -157,6 +157,26 @@
 .settings-section-body .connection-grid {
   gap: 12px;
 }
+.path-map {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0;
+}
+.path-map fieldset {
+  display: grid;
+  gap: 10px;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+.path-map-row {
+  display: grid;
+  gap: 8px;
+}
+.path-map label {
+  display: grid;
+  gap: 4px;
+}
 .settings-section-body article.panel {
   border-bottom: 1px solid var(--line);
   padding-block: 12px;
@@ -1669,6 +1689,9 @@ button.help-button:hover {
 }
 .folder-picker-body .folder-path-mapping label {
   margin-top: 10px;
+}
+.folder-picker-body .folder-path-mapping input {
+  width: 100%;
 }
 .folder-picker-footer {
   display: flex;
