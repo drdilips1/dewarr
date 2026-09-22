@@ -7,7 +7,14 @@ from pydantic import BaseModel, Field, SecretStr, field_validator, model_validat
 
 from app.adapters.contracts import AdapterError, FailureKind
 from app.adapters.http import configured_url
-from app.adapters.mam import MAMRelease, MAMSearch, ReleasePage, cookie_value
+from app.adapters.mam import (
+    AccountAutomation,
+    MAMRelease,
+    MAMSearch,
+    ReleasePage,
+    cookie_value,
+    stored_automation,
+)
 from app.api.dependencies import Admin, CurrentUser, Database
 from app.api.metadata import adapter_http_error
 from app.db.models import AuditEvent, SourceConnection
@@ -27,6 +34,7 @@ class MAMConnectionInput(BaseModel):
     proxy_password: SecretStr | None = Field(default=None, min_length=1, max_length=1000)
     clear_proxy_credentials: bool = False
     enabled: bool = True
+    automation: AccountAutomation = Field(default_factory=AccountAutomation)
     expected_generation: int = Field(default=0, ge=0)
 
     @field_validator("base_url")
@@ -69,6 +77,7 @@ class MAMConnectionView(BaseModel):
     last_error: str | None
     last_success_at: datetime | None
     route: str
+    automation: AccountAutomation = Field(default_factory=AccountAutomation)
 
 
 def view(row):
@@ -85,6 +94,7 @@ def view(row):
         last_error=row.last_error if row else None,
         last_success_at=row.last_success_at if row else None,
         route="required-proxy" if row and row.proxy_url else "direct",
+        automation=stored_automation(row.automation) if row else AccountAutomation(),
     )
 
 
@@ -118,6 +128,7 @@ async def save_connection(body: MAMConnectionInput, admin: Admin, db: Database):
             proxy_password=body.proxy_password.get_secret_value(),
         )
     row.base_url, row.proxy_url, row.enabled = body.base_url, body.proxy_url, body.enabled
+    row.automation = body.automation.model_dump()
     row.encrypted_secrets = encrypt_secrets(secrets)
     row.generation += 1
     row.status, row.last_error, row.last_success_at = "untested", None, None

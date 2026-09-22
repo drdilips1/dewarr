@@ -383,7 +383,7 @@ async def repair(db, operation):
         operation.message = "Quick add stopped. Check Downloads before retrying."
 
 
-async def selected_release(db, user, search_id, result_id, key):
+async def selected_release(db, user, search_id, result_id, key, *, use_wedge=False):
     """Download only the clicked result using the reader's configured route."""
     from app.adapters.source_releases import release_value
     from app.db.models import SourceResult
@@ -399,6 +399,7 @@ async def selected_release(db, user, search_id, result_id, key):
             previous.kind != automatic_selection.KIND
             or command.get("search_id") != str(search_id)
             or command.get("result_id") != str(result_id)
+            or bool(command.get("use_wedge")) != bool(use_wedge)
         ):
             raise HTTPException(409, "This download key was already used for another release")
         return previous
@@ -458,6 +459,7 @@ async def _selected_release(db, user, search, search_id, result_id, key, release
             search_id=search_id,
             result_id=result_id,
             download_when_ready=True,
+            use_wedge=use_wedge,
             **automatic_routes.selection_clients(routes, release.medium),
         ),
         key,

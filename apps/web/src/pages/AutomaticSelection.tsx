@@ -162,6 +162,7 @@ export default function AutomaticSelection({
             }
           : {}),
         download_when_ready: downloadWhenReady,
+        use_wedge: false,
       };
       const serialized = JSON.stringify(body);
       if (command.current.body !== serialized)

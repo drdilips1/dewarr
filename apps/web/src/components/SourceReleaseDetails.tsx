@@ -12,9 +12,10 @@ type Item = components["schemas"]["BookSearchView"]["items"][number];
 export function ReleaseTags({ release }: { release: Item["release"] }) {
   return (
     <span className="release-tags">
-      {release.source === "mam" && release.freeleech && (
-        <span className="release-tag freeleech">Freeleech</span>
-      )}
+      {release.source === "mam" &&
+        (release.freeleech || release.personal_freeleech) && (
+          <span className="release-tag freeleech">Freeleech</span>
+        )}
       {release.source === "mam" && release.vip && (
         <span className="release-tag vip">VIP</span>
       )}

@@ -330,6 +330,12 @@ class SourceConnection(Base):
     blocked_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     lease_token: Mapped[UUID | None] = mapped_column()
     lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    automation: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, default=dict, server_default=text("'{}'::jsonb")
+    )
+    automation_state: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, default=dict, server_default=text("'{}'::jsonb")
+    )
 
 
 class AcquisitionDefaults(Base):

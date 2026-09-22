@@ -10,17 +10,20 @@ export default function SourceReleaseDownload({
   resultId,
   title,
   disabled,
+  offerWedge = false,
 }: {
   searchId: string;
   resultId: string;
   title: string;
   disabled: boolean;
+  offerWedge?: boolean;
 }) {
   const key = useRef(randomUUID());
   const cache = useQueryClient();
   const [operationId, setOperationId] = useState<string>();
+  const [useWedge, setUseWedge] = useState(false);
   const start = useMutation({
-    mutationFn: async () =>
+    mutationFn: async (spendWedge: boolean) =>
       result(
         await api.POST(
           "/api/source-searches/{search_id}/results/{result_id}/download",
@@ -28,6 +31,7 @@ export default function SourceReleaseDownload({
             params: {
               path: { search_id: searchId, result_id: resultId },
               header: { "idempotency-key": key.current },
+              query: spendWedge ? { use_wedge: true } : {},
             },
           },
         ),
@@ -67,6 +71,23 @@ export default function SourceReleaseDownload({
     start.error?.message || status.error?.message || receipt?.message;
   return (
     <div className="source-row-download">
+      {offerWedge && (
+        <label className="check-label wedge-choice">
+          <input
+            type="checkbox"
+            checked={useWedge}
+            disabled={disabled || busy}
+            onChange={(event) => {
+              setUseWedge(event.target.checked);
+              if (!busy) {
+                key.current = randomUUID();
+                setOperationId(undefined);
+              }
+            }}
+          />
+          Use a Freeleech wedge
+        </label>
+      )}
       <button
         className="release-info-button"
         aria-label={`Download ${title}`}
@@ -77,7 +98,7 @@ export default function SourceReleaseDownload({
             key.current = randomUUID();
             setOperationId(undefined);
           }
-          start.mutate();
+          start.mutate(offerWedge && useWedge);
         }}
       >
         {busy ? (

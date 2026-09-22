@@ -446,3 +446,13 @@ async def quick_add_book(operation_id: str) -> None:
     from app.domain.quick_add import run
 
     await run(UUID(operation_id))
+
+
+@tasks.periodic(cron="* * * * *")
+@tasks.task(name="sources.mam.account", queue="system", retry=3)
+async def schedule_mam_account(timestamp: int) -> None:
+    if get_settings().recovery_mode:
+        return
+    from app.domain.account_automation import run
+
+    await run()

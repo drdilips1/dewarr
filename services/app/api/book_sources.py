@@ -2,7 +2,7 @@ from copy import deepcopy
 from datetime import UTC, datetime
 from uuid import UUID
 
-from fastapi import APIRouter, Header, HTTPException
+from fastapi import APIRouter, Header, HTTPException, Query
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 
@@ -278,10 +278,13 @@ async def download_release(
     user: Member,
     db: Database,
     idempotency_key: str = Header(min_length=8, max_length=160),
+    use_wedge: bool = Query(False),
 ):
     from app.domain.quick_add import selected_release
 
-    operation = await selected_release(db, user, search_id, result_id, idempotency_key)
+    operation = await selected_release(
+        db, user, search_id, result_id, idempotency_key, use_wedge=use_wedge
+    )
     await db.flush()
     await db.refresh(operation)
     response = OperationView.model_validate(operation)

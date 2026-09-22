@@ -363,6 +363,383 @@ function TorrentInspection({ sourceId }: { sourceId: string }) {
   );
 }
 
+type AutomationSettings = {
+  seedbox_ip: boolean;
+  seedbox_interval_seconds: number;
+  auto_vip: boolean;
+  vip_interval_hours: number;
+  use_wedge: boolean;
+  wedge_min_size: boolean;
+  wedge_min_size_mb: number;
+  protect_ratio: boolean;
+  ratio_below: number;
+  ratio_buy_gb: number;
+  maintain_buffer: boolean;
+  buffer_below_gb: number;
+  buffer_buy_gb: number;
+  spend_bonus: boolean;
+  bonus_above: number;
+  bonus_buy_gb: number;
+  upload_interval_hours: number;
+};
+
+const AUTOMATION_DEFAULTS: AutomationSettings = {
+  seedbox_ip: false,
+  seedbox_interval_seconds: 300,
+  auto_vip: false,
+  vip_interval_hours: 24,
+  use_wedge: false,
+  wedge_min_size: false,
+  wedge_min_size_mb: 0,
+  protect_ratio: false,
+  ratio_below: 1.5,
+  ratio_buy_gb: 50,
+  maintain_buffer: false,
+  buffer_below_gb: 10,
+  buffer_buy_gb: 50,
+  spend_bonus: false,
+  bonus_above: 5000,
+  bonus_buy_gb: 50,
+  upload_interval_hours: 6,
+};
+
+function automationSettings(connection: Connection): AutomationSettings {
+  return { ...AUTOMATION_DEFAULTS, ...connection.automation };
+}
+
+function wholeNumber(value: string) {
+  const next = Number.parseInt(value, 10);
+  return Number.isInteger(next) ? next : null;
+}
+
+function boundedNumber(value: string, min: number, max: number) {
+  const next = Number(value);
+  return Number.isFinite(next) && next >= min && next <= max ? next : null;
+}
+
+function AccountAutomation({
+  value,
+  onChange,
+}: {
+  value: AutomationSettings;
+  onChange: (value: AutomationSettings) => void;
+}) {
+  return (
+    <fieldset className="account-automation">
+      <legend>Account automation</legend>
+      <p className="muted">
+        These stay off until you turn them on. They can spend bonus points, use
+        a Freeleech wedge you already own, or change the IP MyAnonamouse treats
+        as your seedbox.
+      </p>
+      <div className="helper-option">
+        <div className="helper-toggle">
+          <label className="check-label">
+            <input
+              type="checkbox"
+              checked={value.seedbox_ip}
+              onChange={(event) =>
+                onChange({ ...value, seedbox_ip: event.target.checked })
+              }
+            />
+            Auto-authorize seedbox IP
+          </label>
+          <SettingHelp label="seedbox IP">
+            Checks the public IP of this server&apos;s route to MyAnonamouse on
+            the interval below. When that IP or network changes, or the last
+            update is a day old, Dewarr updates the dynamic seedbox so the
+            tracker accepts the address. The IP check does not send your MAM
+            cookie.
+          </SettingHelp>
+        </div>
+        {value.seedbox_ip && (
+          <label>
+            Check interval (seconds)
+            <input
+              type="number"
+              min={60}
+              max={86400}
+              value={value.seedbox_interval_seconds}
+              onChange={(event) => {
+                const next = wholeNumber(event.target.value);
+                if (next !== null)
+                  onChange({ ...value, seedbox_interval_seconds: next });
+              }}
+            />
+          </label>
+        )}
+      </div>
+      <div className="helper-option">
+        <div className="helper-toggle">
+          <label className="check-label">
+            <input
+              type="checkbox"
+              checked={value.auto_vip}
+              onChange={(event) =>
+                onChange({ ...value, auto_vip: event.target.checked })
+              }
+            />
+            Auto-max VIP
+          </label>
+          <SettingHelp label="VIP top-up">
+            Spends bonus points to extend VIP, up to the longest purchase
+            MyAnonamouse allows. Skips the purchase when you cannot afford one
+            week or VIP is already at that cap.
+          </SettingHelp>
+        </div>
+        {value.auto_vip && (
+          <label>
+            Top-up interval (hours)
+            <input
+              type="number"
+              min={1}
+              max={168}
+              value={value.vip_interval_hours}
+              onChange={(event) => {
+                const next = wholeNumber(event.target.value);
+                if (next !== null)
+                  onChange({ ...value, vip_interval_hours: next });
+              }}
+            />
+          </label>
+        )}
+      </div>
+      <div className="helper-option">
+        <div className="helper-toggle">
+          <label className="check-label">
+            <input
+              type="checkbox"
+              checked={value.use_wedge}
+              onChange={(event) =>
+                onChange({ ...value, use_wedge: event.target.checked })
+              }
+            />
+            Use a Freeleech wedge on download
+          </label>
+          <SettingHelp label="Freeleech wedge">
+            On each manual or automatic download, ask MyAnonamouse to spend one
+            Freeleech wedge you already own when the torrent is not already
+            free. This does not buy a wedge. A search result can also spend one
+            wedge for that torrent alone. Public freeleech, a wedge already
+            applied, and VIP freeleech while VIP is active are left alone. If
+            MyAnonamouse refuses, the torrent is not sent to the download
+            client.
+          </SettingHelp>
+        </div>
+        {value.use_wedge && (
+          <>
+            <label className="check-label">
+              <input
+                type="checkbox"
+                checked={value.wedge_min_size}
+                onChange={(event) =>
+                  onChange({ ...value, wedge_min_size: event.target.checked })
+                }
+              />
+              Only for torrents larger than a minimum size
+            </label>
+            {value.wedge_min_size && (
+              <label>
+                Minimum size (MB)
+                <input
+                  type="number"
+                  min={0}
+                  step="0.1"
+                  value={value.wedge_min_size_mb}
+                  onChange={(event) => {
+                    const next = boundedNumber(
+                      event.target.value,
+                      0,
+                      10_000_000,
+                    );
+                    if (next !== null)
+                      onChange({ ...value, wedge_min_size_mb: next });
+                  }}
+                />
+              </label>
+            )}
+          </>
+        )}
+      </div>
+      <div className="setting-subheading">
+        <h3>Upload credit</h3>
+        <SettingHelp label="upload credit">
+          Buys the amount you set while the matching rule is on. Ratio is
+          checked before the reserve. Extra bonus points can buy again in the
+          same check until the balance falls to the threshold.
+        </SettingHelp>
+      </div>
+      <div className="helper-option">
+        <div className="helper-toggle">
+          <label className="check-label">
+            <input
+              type="checkbox"
+              checked={value.protect_ratio}
+              onChange={(event) =>
+                onChange({ ...value, protect_ratio: event.target.checked })
+              }
+            />
+            Protect minimum ratio
+          </label>
+          <SettingHelp label="minimum ratio">
+            Buys upload credit when your ratio falls below the number you set.
+          </SettingHelp>
+        </div>
+        {value.protect_ratio && (
+          <div className="automation-fields">
+            <label>
+              If ratio falls below
+              <input
+                type="number"
+                min={0.1}
+                max={1000}
+                step="0.1"
+                value={value.ratio_below}
+                onChange={(event) => {
+                  const next = boundedNumber(event.target.value, 0.1, 1000);
+                  if (next !== null) onChange({ ...value, ratio_below: next });
+                }}
+              />
+            </label>
+            <label>
+              Buy (GB)
+              <input
+                type="number"
+                min={50}
+                max={100000}
+                value={value.ratio_buy_gb}
+                onChange={(event) => {
+                  const next = wholeNumber(event.target.value);
+                  if (next !== null && next >= 50)
+                    onChange({ ...value, ratio_buy_gb: next });
+                }}
+              />
+            </label>
+          </div>
+        )}
+      </div>
+      <div className="helper-option">
+        <div className="helper-toggle">
+          <label className="check-label">
+            <input
+              type="checkbox"
+              checked={value.maintain_buffer}
+              onChange={(event) =>
+                onChange({ ...value, maintain_buffer: event.target.checked })
+              }
+            />
+            Maintain credit reserve
+          </label>
+          <SettingHelp label="credit reserve">
+            Buys upload credit when uploaded minus downloaded falls below this
+            many gigabytes. Skipped when the ratio rule already bought credit in
+            the same check.
+          </SettingHelp>
+        </div>
+        {value.maintain_buffer && (
+          <div className="automation-fields">
+            <label>
+              If reserve falls below (GB)
+              <input
+                type="number"
+                min={0}
+                max={10000000}
+                step="0.1"
+                value={value.buffer_below_gb}
+                onChange={(event) => {
+                  const next = boundedNumber(event.target.value, 0, 10_000_000);
+                  if (next !== null)
+                    onChange({ ...value, buffer_below_gb: next });
+                }}
+              />
+            </label>
+            <label>
+              Buy (GB)
+              <input
+                type="number"
+                min={50}
+                max={100000}
+                value={value.buffer_buy_gb}
+                onChange={(event) => {
+                  const next = wholeNumber(event.target.value);
+                  if (next !== null && next >= 50)
+                    onChange({ ...value, buffer_buy_gb: next });
+                }}
+              />
+            </label>
+          </div>
+        )}
+      </div>
+      <div className="helper-option">
+        <div className="helper-toggle">
+          <label className="check-label">
+            <input
+              type="checkbox"
+              checked={value.spend_bonus}
+              onChange={(event) =>
+                onChange({ ...value, spend_bonus: event.target.checked })
+              }
+            />
+            Spend excess bonus points
+          </label>
+          <SettingHelp label="bonus points">
+            Buys upload credit while bonus points are above this number. Stops
+            when the balance does not fall, or when it reaches the threshold.
+          </SettingHelp>
+        </div>
+        {value.spend_bonus && (
+          <div className="automation-fields">
+            <label>
+              If bonus points exceed
+              <input
+                type="number"
+                min={0}
+                max={100000000}
+                value={value.bonus_above}
+                onChange={(event) => {
+                  const next = wholeNumber(event.target.value);
+                  if (next !== null && next >= 0)
+                    onChange({ ...value, bonus_above: next });
+                }}
+              />
+            </label>
+            <label>
+              Buy (GB)
+              <input
+                type="number"
+                min={50}
+                max={100000}
+                value={value.bonus_buy_gb}
+                onChange={(event) => {
+                  const next = wholeNumber(event.target.value);
+                  if (next !== null && next >= 50)
+                    onChange({ ...value, bonus_buy_gb: next });
+                }}
+              />
+            </label>
+          </div>
+        )}
+      </div>
+      {(value.protect_ratio || value.maintain_buffer || value.spend_bonus) && (
+        <label>
+          Check interval (hours)
+          <input
+            type="number"
+            min={1}
+            max={168}
+            value={value.upload_interval_hours}
+            onChange={(event) => {
+              const next = wholeNumber(event.target.value);
+              if (next !== null && next >= 1 && next <= 168)
+                onChange({ ...value, upload_interval_hours: next });
+            }}
+          />
+        </label>
+      )}
+    </fieldset>
+  );
+}
+
 export function MamConnectionForm({ value }: { value: Connection }) {
   const cache = useQueryClient();
   const [base, setBase] = useState(value.base_url);
@@ -374,11 +751,14 @@ export function MamConnectionForm({ value }: { value: Connection }) {
   const [enabled, setEnabled] = useState(
     value.configured ? value.enabled : true,
   );
+  const savedAutomation = automationSettings(value);
+  const [automation, setAutomation] = useState(savedAutomation);
   const dirty =
     base !== value.base_url ||
     proxy !== (value.proxy_url || "") ||
     Boolean(cookie || username || password || clearAuth) ||
-    enabled !== value.enabled;
+    enabled !== value.enabled ||
+    JSON.stringify(automation) !== JSON.stringify(savedAutomation);
   const persist = async () =>
     result(
       await api.PUT("/api/sources/mam/connection", {
@@ -390,6 +770,7 @@ export function MamConnectionForm({ value }: { value: Connection }) {
           proxy_password: password || null,
           clear_proxy_credentials: clearAuth,
           enabled,
+          automation,
           expected_generation: value.generation,
         },
       }),
@@ -608,6 +989,7 @@ export function MamConnectionForm({ value }: { value: Connection }) {
         <p className="notice">{value.last_error}</p>
       )}
       <p role="status">Connection: {value.status}</p>
+      <AccountAutomation value={automation} onChange={setAutomation} />
       <div className="actions">
         <button className="primary" disabled={save.isPending || test.isPending}>
           Save connection

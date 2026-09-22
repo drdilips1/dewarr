@@ -12803,6 +12803,16 @@
             }
           },
           {
+            "name": "use_wedge",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Use Wedge"
+            }
+          },
+          {
             "name": "idempotency-key",
             "in": "header",
             "required": true,
@@ -15025,6 +15035,118 @@
         ],
         "title": "AccessStateView"
       },
+      "AccountAutomation": {
+        "properties": {
+          "seedbox_ip": {
+            "type": "boolean",
+            "title": "Seedbox Ip",
+            "default": false
+          },
+          "seedbox_interval_seconds": {
+            "type": "integer",
+            "maximum": 86400.0,
+            "minimum": 60.0,
+            "title": "Seedbox Interval Seconds",
+            "default": 300
+          },
+          "auto_vip": {
+            "type": "boolean",
+            "title": "Auto Vip",
+            "default": false
+          },
+          "vip_interval_hours": {
+            "type": "integer",
+            "maximum": 168.0,
+            "minimum": 1.0,
+            "title": "Vip Interval Hours",
+            "default": 24
+          },
+          "use_wedge": {
+            "type": "boolean",
+            "title": "Use Wedge",
+            "default": false
+          },
+          "wedge_min_size": {
+            "type": "boolean",
+            "title": "Wedge Min Size",
+            "default": false
+          },
+          "wedge_min_size_mb": {
+            "type": "number",
+            "maximum": 10000000.0,
+            "minimum": 0.0,
+            "title": "Wedge Min Size Mb",
+            "default": 0
+          },
+          "protect_ratio": {
+            "type": "boolean",
+            "title": "Protect Ratio",
+            "default": false
+          },
+          "ratio_below": {
+            "type": "number",
+            "maximum": 1000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Ratio Below",
+            "default": 1.5
+          },
+          "ratio_buy_gb": {
+            "type": "integer",
+            "maximum": 100000.0,
+            "minimum": 50.0,
+            "title": "Ratio Buy Gb",
+            "default": 50
+          },
+          "maintain_buffer": {
+            "type": "boolean",
+            "title": "Maintain Buffer",
+            "default": false
+          },
+          "buffer_below_gb": {
+            "type": "number",
+            "maximum": 10000000.0,
+            "minimum": 0.0,
+            "title": "Buffer Below Gb",
+            "default": 10
+          },
+          "buffer_buy_gb": {
+            "type": "integer",
+            "maximum": 100000.0,
+            "minimum": 50.0,
+            "title": "Buffer Buy Gb",
+            "default": 50
+          },
+          "spend_bonus": {
+            "type": "boolean",
+            "title": "Spend Bonus",
+            "default": false
+          },
+          "bonus_above": {
+            "type": "integer",
+            "maximum": 100000000.0,
+            "minimum": 0.0,
+            "title": "Bonus Above",
+            "default": 5000
+          },
+          "bonus_buy_gb": {
+            "type": "integer",
+            "maximum": 100000.0,
+            "minimum": 50.0,
+            "title": "Bonus Buy Gb",
+            "default": 50
+          },
+          "upload_interval_hours": {
+            "type": "integer",
+            "maximum": 168.0,
+            "minimum": 1.0,
+            "title": "Upload Interval Hours",
+            "default": 6
+          }
+        },
+        "type": "object",
+        "title": "AccountAutomation",
+        "description": "Account actions an administrator can turn on. All of them default off."
+      },
       "AccountInput": {
         "properties": {
           "token": {
@@ -16128,6 +16250,11 @@
           "download_when_ready": {
             "type": "boolean",
             "title": "Download When Ready",
+            "default": false
+          },
+          "use_wedge": {
+            "type": "boolean",
+            "title": "Use Wedge",
             "default": false
           }
         },
@@ -23416,6 +23543,9 @@
             "title": "Enabled",
             "default": true
           },
+          "automation": {
+            "$ref": "#/components/schemas/AccountAutomation"
+          },
           "expected_generation": {
             "type": "integer",
             "minimum": 0.0,
@@ -23493,6 +23623,9 @@
           "route": {
             "type": "string",
             "title": "Route"
+          },
+          "automation": {
+            "$ref": "#/components/schemas/AccountAutomation"
           }
         },
         "type": "object",
@@ -23795,6 +23928,28 @@
               }
             ],
             "title": "Freeleech"
+          },
+          "personal_freeleech": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Personal Freeleech"
+          },
+          "vip_freeleech": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vip Freeleech"
           },
           "vip": {
             "anyOf": [
