@@ -37,6 +37,6 @@ New subscriptions queue their first check immediately and default to hourly chec
 
 **Check for updates** queues a manual observation. Turning **Track** off pauses checks, fences in-flight observations, and preserves saved books/exclusions. Turn it on again to schedule another check. Discovery, list counts, and last/next-check times are distinct: a feed count is not proof that a complete Goodreads library has been imported.
 
-Deploy the API and UI together and run `uv run alembic upgrade head` for migrations `0046_goodreads_accounts` and `0057_storygraph_accounts`. The backup schema revision is updated accordingly. Keep the worker running for automatic checks.
+Deploy the API and UI together and run `uv run alembic upgrade head`. That applies `0046_goodreads_accounts`, `0057_storygraph_accounts`, and the `0058_join_release_heads` revision that backups expect. Keep the worker running for automatic checks.
 
 Tests cover URL validation, bounded same-account profile redirects, tag/empty-shelf discovery, RSS fallback, encrypted keys, per-user isolation, duplicate follows, scheduled checks, pause preservation, private Hardcover lists, StoryGraph shelf and tag follows, and onboarding/settings controls on desktop/mobile. Browser Goodreads and StoryGraph responses are fixtures; no test calls StoryGraph.
