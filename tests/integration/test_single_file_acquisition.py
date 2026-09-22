@@ -289,13 +289,15 @@ async def test_single_epub_download_to_confirmed_library_keeps_neighbor_private(
                 policy.enabled = False
                 policy.generation += 1
 
-        def publish(spec, *, checkpoint, publication_guard):
+        def publish(spec, *, checkpoint, publication_guard, **kwargs):
             def before(phase):
                 if phase == "prepared":
                     asyncio.run_coroutine_threadsafe(disable(), loop).result(timeout=10)
                 checkpoint(phase)
 
-            return original_publish(spec, checkpoint=before, publication_guard=publication_guard)
+            return original_publish(
+                spec, checkpoint=before, publication_guard=publication_guard, **kwargs
+            )
 
         monkeypatch.setattr(execution, "publish_item", publish)
     await get_queue().run_worker_async(wait=False, concurrency=1)

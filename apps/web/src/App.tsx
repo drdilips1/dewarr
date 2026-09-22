@@ -384,9 +384,9 @@ function Shell({ auth }: { auth: Auth }) {
     if (location.pathname === "/search")
       setSearch(new URLSearchParams(location.search).get("q") || "");
   }, [location.pathname, location.search]);
+  const permissions = auth.user.permissions ?? [];
   const canApprove =
-    auth.user.role === "admin" ||
-    auth.user.permissions.includes("manage_requests");
+    auth.user.role === "admin" || permissions.includes("manage_requests");
   const pendingApprovals = usePendingApprovals(canApprove);
   const waiting = pendingApprovals.data?.total ?? 0;
   const logout = useMutation({
@@ -526,7 +526,7 @@ function Shell({ auth }: { auth: Auth }) {
                 element={
                   <SettingsPage
                     role={auth.user.role}
-                    permissions={auth.user.permissions}
+                    permissions={permissions}
                   />
                 }
               />
@@ -650,12 +650,12 @@ function Shell({ auth }: { auth: Auth }) {
                   <RequestsPage
                     admin={auth.user.role === "admin"}
                     canRequest={canManageOwnRequests(
-                      auth.user.permissions,
+                      permissions,
                       auth.user.role,
                     )}
                     canApprove={
                       auth.user.role === "admin" ||
-                      auth.user.permissions.includes("manage_requests")
+                      permissions.includes("manage_requests")
                     }
                   />
                 }

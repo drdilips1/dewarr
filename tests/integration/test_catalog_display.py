@@ -90,7 +90,7 @@ async def test_grouped_covers_prefer_requested_format_and_fall_back(
     calls = []
     fail = False
 
-    async def fetch(base, token, item):
+    async def fetch(base, token, item, **_extra):
         calls.append(bases[base])
         if fail and bases[base] == "ebook":
             raise HTTPException(404)

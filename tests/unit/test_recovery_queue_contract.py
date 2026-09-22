@@ -2,6 +2,7 @@ import inspect
 
 from app.jobs.queue import get_queue, recovery_queue
 from app.recovery_queue import (
+    ACTOR_ARGUMENTS,
     RECOVERY_TASKS,
     RESTORE_HELD_TASK_ARGUMENTS,
     SUBJECT_ARGUMENTS,
@@ -13,7 +14,7 @@ def test_worker_fence_covers_all_registered_record_arguments():
     queue = get_queue()
     assert queue.worker_defaults["worker_middleware"] == [guard_job]
     assert set(recovery_queue().tasks) == RECOVERY_TASKS
-    allowed = set(SUBJECT_ARGUMENTS) | {"timestamp", "source"}
+    allowed = set(SUBJECT_ARGUMENTS) | set(ACTOR_ARGUMENTS) | {"timestamp", "source"}
     for name, task in queue.tasks.items():
         if name in RECOVERY_TASKS or name.startswith(("procrastinate.", "builtin:")):
             continue

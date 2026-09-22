@@ -48,11 +48,26 @@ test("Discover opens a full book page with safe reviews and explicit actions", a
     page.getByText("Your catalog connection was saved.", { exact: true }),
   ).toBeVisible();
   const auth = await (await page.request.get("/api/auth/me")).json();
-  const list = await page.request.post("/api/lists", {
-    headers: {
-      Origin: "http://127.0.0.1:8001",
-      "X-CSRF-Token": auth.csrf_token,
+  const headers = {
+    Origin: "http://127.0.0.1:8001",
+    "X-CSRF-Token": auth.csrf_token,
+  };
+  const prefs = await page.request.get("/api/acquisition/preferences/personal");
+  expect(prefs.ok()).toBeTruthy();
+  const current = await prefs.json();
+  const savedPrefs = await page.request.put(
+    "/api/acquisition/preferences/personal",
+    {
+      headers,
+      data: {
+        overrides: { ...current.overrides, desired_media: "ebook" },
+        expected_revision: current.revision,
+      },
     },
+  );
+  expect(savedPrefs.ok()).toBeTruthy();
+  const list = await page.request.post("/api/lists", {
+    headers,
     data: { name: "Detail page reading list" },
   });
   expect(list.ok()).toBe(true);

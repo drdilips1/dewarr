@@ -209,7 +209,7 @@ async def test_unreadable_backend_secret_finishes_with_repair_message(
     await get_queue().run_worker_async(wait=False, concurrency=1)
     async with database() as db:
         operation = await db.get(Operation, UUID(response.json()["id"]))
-        assert operation.status == "failed" and "save the connection token" in operation.message
+        assert operation.status == "failed" and "save the connection again" in operation.message
     assert not route["backend"].path_checks and not list(route["target"].iterdir())
 
 

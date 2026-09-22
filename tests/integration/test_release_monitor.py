@@ -191,6 +191,12 @@ async def test_follow_without_a_saved_medium_waits_for_a_choice(
         json={"work_id": str(catalog["work"]), "basis": "work", "mode": "ebook"},
     )
     assert chosen.status_code == 201, chosen.text
+    assert chosen.json()["state"] == "available"
     async with database() as db:
-        intent = await db.scalar(select(AcquisitionIntent))
-        assert intent.specification["mode"] == "ebook"
+        # The route fixture already requested audio. The follow adds the ebook.
+        followed = [
+            intent
+            for intent in await db.scalars(select(AcquisitionIntent))
+            if intent.specification.get("mode") == "ebook"
+        ]
+        assert len(followed) == 1

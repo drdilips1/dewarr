@@ -27,6 +27,11 @@ test("unified search keeps local ownership usable during a provider outage and o
     Origin: "http://127.0.0.1:8001",
     "X-CSRF-Token": auth.csrf_token,
   };
+  const account = await page.request.put("/api/metadata/account", {
+    headers,
+    data: { token: "browser-hardcover-token", enabled: true },
+  });
+  expect(account.ok()).toBeTruthy();
   const imported = await page.request.post(
     "/api/metadata/books/hardcover/42/import",
     { headers },
@@ -105,7 +110,7 @@ test("unified search keeps local ownership usable during a provider outage and o
   // an accepted provider identity, even when a title-text match is absent.
   await search("The Catalog Journey");
   const known = page.getByRole("link", {
-    name: /View The Catalog Journey/,
+    name: /View My protected catalog title/,
   });
   await expect(known).toHaveAttribute("href", `/books/${work.id}`);
   await expect(
@@ -123,6 +128,19 @@ test("unified search keeps local ownership usable during a provider outage and o
   await page.goBack();
   await expect(page.getByLabel("Title, author or identifier")).toHaveValue(
     "The Catalog Journey",
+  );
+  execFileSync(
+    "uv",
+    [
+      "run",
+      "python",
+      "-c",
+      "import os, psycopg; url=os.environ['BOOK_E2E_DATABASE_URL'].replace('postgresql+psycopg://','postgresql://'); c=psycopg.connect(url); c.execute('DELETE FROM provider_budgets'); c.commit()",
+    ],
+    {
+      cwd: fileURLToPath(new URL("../../../", import.meta.url)),
+      stdio: "pipe",
+    },
   );
   await search("My protected catalog title");
   await expect(

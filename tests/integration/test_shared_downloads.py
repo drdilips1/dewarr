@@ -301,13 +301,23 @@ async def test_migration_preserves_single_attempt_and_guards_shared_history(
     assert response.status_code == 202
     await get_engine().dispose()
     refused = await migrate("downgrade", "0035_source_queries")
-    assert refused.returncode != 0 and "Shared download history" in refused.stderr
+    assert refused.returncode != 0 and "discarding request decisions" in refused.stderr
     async with database() as db, db.begin():
         # Historical fixture: model the one-member shape that existed before 0036.
         await db.execute(
             text("DELETE FROM download_memberships WHERE selection_id=:id"),
             {"id": UUID(second["id"])},
         )
+        # Request decisions and saved roles sit in front of the membership
+        # history this round trip is checking.
+        await db.execute(
+            text(
+                "UPDATE acquisition_reasons SET approval_status = 'approved', "
+                "decided_by = NULL, decided_at = NULL, decision_note = NULL"
+            )
+        )
+        await db.execute(text("UPDATE users SET permission_role_id = NULL"))
+        await db.execute(text("DELETE FROM permission_roles"))
     await get_engine().dispose()
     try:
         downgraded = await migrate("downgrade", "0035_source_queries")

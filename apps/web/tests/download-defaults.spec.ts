@@ -45,6 +45,18 @@ test("download defaults inherit per field and persist after reload", async ({
     })
     .press("ArrowUp");
   await panel
+    .getByRole("button", {
+      name: "Reorder pdf in Ebook format preference",
+      exact: true,
+    })
+    .press("ArrowUp");
+  await panel
+    .getByRole("button", {
+      name: "Reorder pdf in Ebook format preference",
+      exact: true,
+    })
+    .press("ArrowUp");
+  await panel
     .getByRole("button", { name: "Save download defaults", exact: true })
     .click();
   await expect(panel.getByRole("status")).toContainText(

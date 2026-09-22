@@ -79,6 +79,11 @@ test("MAM masks saved secrets and saves edited proxy before testing", async ({
     return route.fulfill({ json: data });
   });
   await page.goto("/settings#sources");
+  await page
+    .getByRole("region", { name: "MAM settings" })
+    .locator("summary")
+    .first()
+    .click();
   const form = page.getByRole("form", { name: "MAM connection settings" });
   const cookie = form.getByLabel("mam_id", { exact: true });
   await expect(cookie).toHaveValue("");
@@ -86,6 +91,7 @@ test("MAM masks saved secrets and saves edited proxy before testing", async ({
   await expect(
     form.getByLabel("Proxy password", { exact: true }),
   ).toHaveAttribute("placeholder", "••••••••");
+  await form.getByText("Proxy options", { exact: true }).click();
   const proxy = form.locator('input[type="url"]').nth(1);
   await expect(proxy).toBeVisible();
   await expect(
@@ -128,6 +134,12 @@ test("MAM masks saved secrets and saves edited proxy before testing", async ({
     ),
   ).toBe(true);
   await page.reload();
+  await page
+    .getByRole("region", { name: "MAM settings" })
+    .locator("summary")
+    .first()
+    .click();
+  await form.getByText("Proxy options", { exact: true }).click();
   await expect(cookie).toHaveAttribute("placeholder", "••••••••");
   await expect(cookie).toHaveValue("");
   await expect(proxy).toHaveValue("http://proxy.internal:8888");

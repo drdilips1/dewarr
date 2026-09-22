@@ -430,7 +430,7 @@ async def test_saved_request_policy_blocks_lossy_migration_downgrade(
     await request(client, policy_fixture, reason=False)
     result = await migrate("downgrade", "0031_acquisition_defaults")
     assert result.returncode != 0
-    assert "request preferences require a pre-upgrade backup" in result.stderr
+    assert "discarding request decisions" in result.stderr
 
 
 async def test_list_series_search_override_reaches_request_bound_source_queries(

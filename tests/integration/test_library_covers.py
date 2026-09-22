@@ -17,7 +17,7 @@ async def test_covers_require_library_access_and_keep_credentials_server_side(
 
     calls = []
 
-    async def fetch(base_url, token, item_id):
+    async def fetch(base_url, token, item_id, **_extra):
         calls.append((base_url, token, item_id))
         return b"image fixture", "image/jpeg"
 

@@ -235,7 +235,7 @@ async def test_primary_recording_drives_the_audio_cover(client, admin, database,
             integration.encrypted_secrets = encrypt_secrets({"token": "fixture"})
         work_id, version_id = str(first.id), str(version.id)
 
-    async def fetch(base, token, item):
+    async def fetch(base, token, item, **_extra):
         return base.encode(), "image/jpeg"
 
     monkeypatch.setattr(library_covers, "fetch_cover", fetch)

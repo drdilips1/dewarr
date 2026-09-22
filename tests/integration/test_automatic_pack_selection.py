@@ -301,7 +301,7 @@ async def test_manifest_reranking_uses_target_format_instead_of_sibling_format(
         winning_result = result.id
     calls = []
 
-    async def resolve(owner, row):
+    async def resolve(owner, row, use_wedge=False):
         calls.append(row.id)
         return resolved[row.id]
 

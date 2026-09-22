@@ -416,7 +416,9 @@ async def require_download_allowed(db, user, intent):
         )
     ).all()
     statuses = [reason.approval_status for reason in reasons]
-    if "approved" not in statuses:
+    # A withdrawn request has no active reason. Preparation then reports that
+    # the target is no longer wanted, rather than calling the withdrawal a decline.
+    if reasons and "approved" not in statuses:
         if "pending" in statuses:
             raise HTTPException(403, "This request is waiting for approval")
         raise HTTPException(403, "This request was declined")

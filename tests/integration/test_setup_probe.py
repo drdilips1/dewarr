@@ -200,7 +200,7 @@ async def test_setup_probe_requires_fresh_settings_and_admin_consent(
         assert await db.scalar(select(func.count()).select_from(Operation)) == 0
 
 
-@pytest.mark.parametrize("failure", ["missing-folder", "symlink", "backend"])
+@pytest.mark.parametrize("failure", ["missing-folder", "symlink", "audiobooks-only"])
 async def test_failed_setup_does_not_touch_downloaded_files(
     client, admin, empty_route, failure, tmp_path
 ):
@@ -214,7 +214,7 @@ async def test_failed_setup_does_not_touch_downloaded_files(
         folder.rmdir()
         folder.symlink_to(tmp_path)
     else:
-        empty_route["backend"].version = "unsupported"
+        empty_route["backend"].settings["audiobooksOnly"] = True
     assert (await start(client, empty_route)).status_code == 202
     await get_queue().run_worker_async(wait=False, concurrency=1)
     checked = await current(client)

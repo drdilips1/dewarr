@@ -38,6 +38,7 @@ from app.domain.release_monitor import (
     save_genres,
     saved_genres,
     stop,
+    sync_monitor,
 )
 from app.domain.visibility import visible_work
 from app.domain.work_graph import canonical_work
@@ -409,6 +410,21 @@ async def follow(body: FollowInput, user: Member, db: Database):
             MonitoredRelease.owner_id == user.id, MonitoredRelease.work_id == work.id
         )
     )
+    if not row or row.operation_id != operation.id:
+        # Quick add skips monitoring when the copy is already owned. A follow
+        # still records that available state.
+        await sync_monitor(
+            db,
+            user,
+            work,
+            operation,
+            operation.payload["command"]["specification"],
+        )
+        row = await db.scalar(
+            select(MonitoredRelease).where(
+                MonitoredRelease.owner_id == user.id, MonitoredRelease.work_id == work.id
+            )
+        )
     if not row or row.operation_id != operation.id:
         raise HTTPException(409, operation.message)
     await db.commit()

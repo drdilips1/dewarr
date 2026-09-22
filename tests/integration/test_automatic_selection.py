@@ -58,7 +58,7 @@ async def test_automatic_popularity_uses_same_source_counts_and_freezes_selected
             (await db.get(SourceArtifact, art_id)).release_snapshot = value.model_dump(mode="json")
     calls = []
 
-    async def resolve(owner, row):
+    async def resolve(owner, row, use_wedge=False):
         calls.append(row.id)
         return (
             (artifact_id, popular.model_copy(update={"snatches": refreshed_count}))
@@ -370,7 +370,7 @@ async def test_rejected_first_candidate_falls_back_to_next_and_retains_decisions
     )
     calls = []
 
-    async def resolve(owner, row):
+    async def resolve(owner, row, use_wedge=False):
         calls.append(row.id)
         if row.id == second:
             return artifact_id, release
@@ -405,7 +405,7 @@ async def test_format_preference_precedes_seed_count_then_seed_count_breaks_form
     )
     calls = []
 
-    async def resolve(owner, row):
+    async def resolve(owner, row, use_wedge=False):
         calls.append(row.id)
         return (
             (artifact_id, release) if row.id == second else (source["artifact"], source["release"])
@@ -426,7 +426,7 @@ async def test_failed_inspection_budget_survives_redelivery_and_stops_before_six
         await additional_candidate(database, source, source_id=str(502 + n), seeders=8 - n)
     calls = []
 
-    async def reject(owner, row):
+    async def reject(owner, row, use_wedge=False):
         calls.append(row.id)
         raise AdapterError(FailureKind.PARSER, "Fixture parse failure")
 
@@ -473,7 +473,7 @@ async def test_actual_formats_rerank_candidates_and_reuse_already_inspected_torr
             }
     calls = []
 
-    async def resolve(owner, row):
+    async def resolve(owner, row, use_wedge=False):
         calls.append(row.id)
         return (
             (artifact_id, release) if row.id == second else (source["artifact"], source["release"])
@@ -516,7 +516,7 @@ async def test_inspection_limit_still_selects_best_verified_candidate_without_si
             }
     calls = []
 
-    async def resolve(owner, row):
+    async def resolve(owner, row, use_wedge=False):
         calls.append(row.id)
         return resolved[row.id]
 

@@ -25,6 +25,17 @@ async def legacy_request_policy_fixture(database):
     async with database() as db, db.begin():
         await db.execute(text("UPDATE acquisition_intents SET release_policy = NULL"))
         await db.execute(text("UPDATE acquisition_reasons SET release_policy = NULL"))
+        # Request decisions and saved roles now stop a downgrade before older
+        # guards. Historical fixtures clear that newer history so those guards
+        # can still be tested on their own.
+        await db.execute(
+            text(
+                "UPDATE acquisition_reasons SET approval_status = 'approved', "
+                "decided_by = NULL, decided_at = NULL, decision_note = NULL"
+            )
+        )
+        await db.execute(text("UPDATE users SET permission_role_id = NULL"))
+        await db.execute(text("DELETE FROM permission_roles"))
 
 
 async def migrate(*args):

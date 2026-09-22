@@ -18,6 +18,9 @@ SUBJECT_ARGUMENTS = {
     "continuation_id": "import-continuation",
     "work_id": "work",
 }
+# The account that asked for the job, not a restored record. Old job ids stay
+# blocked by the queue ceiling; a new scan of the same account may run.
+ACTOR_ARGUMENTS = {"user_id"}
 RESTORE_HELD_TASK_ARGUMENTS = {
     # Discovery follows use a composite, non-UUID key and have no recovery activation yet.
     "discovery.refresh": {"user_id", "collection_id", "generation"},
@@ -109,7 +112,7 @@ async def denial(db, job):
     if job.task_name.startswith(("procrastinate.", "builtin:")):
         return "Queue history cleanup remains held after restore"
     for name, value in job.task_kwargs.items():
-        if not name.endswith("_id"):
+        if not name.endswith("_id") or name in ACTOR_ARGUMENTS:
             continue
         kind = SUBJECT_ARGUMENTS.get(name)
         if not kind:

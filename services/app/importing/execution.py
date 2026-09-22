@@ -842,6 +842,9 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                 await adapter.scan(external_library)
             await asyncio.to_thread(verify_published_media, spec, receipt)
             item = await find_item(adapter, entry, external_library)
+            if item is None and capabilities["scan_capable"] and not published_now:
+                await adapter.scan(external_library)
+                item = await find_item(adapter, entry, external_library)
             if detection_needs_another_scan(
                 integration.kind,
                 capabilities,
@@ -849,6 +852,7 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                 found=item is not None,
             ):
                 await adapter.scan(external_library)
+                item = await find_item(adapter, entry, external_library)
             if item is None:
                 async with session_factory()() as db:
                     current = await db.get(ImportEntry, entry_id)

@@ -63,7 +63,7 @@ test("two media rows choose ABS folders and verify before activation", async ({
       ];
     else if (path === "/api/organization/destinations")
       data = destination
-        ? [{ ...destination, publication_available: verified }]
+        ? [{ ...destination, publication_available: !failure }]
         : [];
     else if (path === "/api/downloaders")
       data = [
@@ -278,7 +278,9 @@ test("a Windows Audiobookshelf path asks for the Dewarr mount", async ({
         },
       ];
     else if (path === "/api/organization/destinations")
-      data = destination ? [destination] : [];
+      data = destination
+        ? [{ ...destination, publication_available: true }]
+        : [];
     else if (path === "/api/downloaders")
       data = [
         {
@@ -412,7 +414,9 @@ test("a UNC Audiobookshelf path is not used as the Dewarr mount", async ({
         },
       ];
     else if (path === "/api/organization/destinations")
-      data = destination ? [destination] : [];
+      data = destination
+        ? [{ ...destination, publication_available: true }]
+        : [];
     else if (path === "/api/downloaders")
       data = [
         {

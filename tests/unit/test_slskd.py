@@ -59,7 +59,7 @@ def test_a_windows_download_root_does_not_crash_selection():
         config={"save_path": r"D:\downloads", "mappings": [], "client_managed": True}
     )
     with pytest.raises(HTTPException) as caught:
-        mapped_path(row, r"D:\downloads")
+        mapped_path(row, r"D:\downloads", {})
     assert caught.value.status_code == 422
 
 

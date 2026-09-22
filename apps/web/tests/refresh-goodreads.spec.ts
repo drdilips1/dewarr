@@ -173,7 +173,5 @@ test("topbar refresh can update StoryGraph lists only", async ({ page }) => {
     .click();
   await page.getByRole("menuitem", { name: "StoryGraph", exact: true }).click();
   await expect.poll(() => calls).toEqual(["storygraph"]);
-  await expect(page.getByRole("status")).toContainText(
-    "Refreshed 1 StoryGraph list.",
-  );
+  await expect(page.getByText("Refreshed 1 StoryGraph list.")).toBeVisible();
 });

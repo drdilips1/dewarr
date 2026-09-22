@@ -496,7 +496,7 @@ async def test_acquisition_migration_refuses_to_discard_saved_requests(
     try:
         refused = await migrate("downgrade", "0005_corrections")
         assert refused.returncode != 0
-        assert "Acquisition history cannot be preserved" in refused.stderr
+        assert "discarding request decisions" in refused.stderr
         async with database() as db:
             assert await db.get(AcquisitionIntent, UUID(saved["request"]["id"])) is not None
             assert (

@@ -20,14 +20,20 @@ def canonical_map():
         )
     )
     return (
-        select(paths.c.origin_id, paths.c.work_id).where(paths.c.redirect_to.is_(None)).subquery()
+        select(paths.c.origin_id, paths.c.work_id)
+        .where(paths.c.redirect_to.is_(None))
+        .distinct()
+        .subquery()
     )
 
 
 def family_ids(work_id):
     """All origins whose canonical root is the root of the given work."""
     mapping = canonical_map()
-    root = select(mapping.c.work_id).where(mapping.c.origin_id == work_id).scalar_subquery()
+    roots = canonical_map()
+    # A second map keeps this scalar from correlating against the outer family
+    # rows. Reusing one subquery makes Postgres see every intent as a match.
+    root = select(roots.c.work_id).where(roots.c.origin_id == work_id).limit(1).scalar_subquery()
     return select(mapping.c.origin_id).where(mapping.c.work_id == root)
 
 
