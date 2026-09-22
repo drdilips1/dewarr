@@ -182,8 +182,26 @@ class RenameGuard:
             asyncio.run_coroutine_threadsafe(self.leave(), self.loop).result()
 
 
-def verify_published_media(spec):
+def published_sizes(spec, receipt):
+    sizes = {file.name: file.identity["size"] for file in spec.files}
+    if spec.conversion:
+        recorded = (receipt or {}).get("derived", {}).get(spec.conversion.output_name)
+        if not recorded or "size" not in recorded:
+            raise PublicationError("Converted audiobook has no recorded size")
+        sizes[spec.conversion.output_name] = recorded["size"]
+    return sizes
+
+
+def verify_published_media(spec, receipt=None):
     with directory(spec.destination_root) as root, beneath(root, spec.folder, folder=True) as item:
+        derived = (receipt or {}).get("derived") or {}
+        if spec.conversion:
+            recorded = derived.get(spec.conversion.output_name)
+            with beneath(item, spec.conversion.output_name) as media:
+                if not recorded or digest(media, time.monotonic() + 300) != recorded["sha256"]:
+                    raise PublicationError(
+                        "Converted audiobook changed; library confirmation is held"
+                    )
         for file in spec.files:
             with beneath(item, file.name) as media:
                 if digest(media, time.monotonic() + 300) != file.sha256:
@@ -197,7 +215,8 @@ def matches(entry, item):
         return False
     spec = PublicationSpec.model_validate(entry.specification)
     selected = {
-        str(PurePosixPath(folder) / file.name): file.identity["size"] for file in spec.files
+        str(PurePosixPath(folder) / name): size
+        for name, size in published_sizes(spec, entry.receipt).items()
     }
     media = {file.path: file.size for file in item.library_files if file.format in AUDIO | EBOOK}
     if (
@@ -450,6 +469,39 @@ async def confirm_observation(db, current, integration, library, item, observed_
     return version, contents, asset
 
 
+def _still_publishing(loop, entry_id, token):
+    def should_continue():
+        try:
+            asyncio.run_coroutine_threadsafe(_require_publishing(entry_id, token), loop).result(
+                timeout=10
+            )
+        except Superseded:
+            raise
+        except Exception:
+            return
+
+    return should_continue
+
+
+async def _require_publishing(entry_id, token):
+    async with session_factory()() as db:
+        entry = await db.get(ImportEntry, entry_id)
+        if entry is None or entry.run_token != token or entry.state != "publishing":
+            raise Superseded("This import was cancelled or superseded")
+
+
+def _note_progress(loop, entry_id, required):
+    def on_progress(written):
+        try:
+            asyncio.run_coroutine_threadsafe(
+                capacity.note_landed(entry_id, required, written), loop
+            ).result(timeout=10)
+        except Exception:
+            return
+
+    return on_progress
+
+
 async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda _: None):
     client_factory = client_factory or Audiobookshelf
     token = uuid4()
@@ -478,6 +530,7 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
             secret = decrypt_secrets(integration.encrypted_secrets)["token"]
             url, external_library = integration.base_url, library.external_id
             spec = PublicationSpec.model_validate(entry.specification)
+            receipt = entry.receipt
         async with client_factory(url, secret) as adapter:
             capabilities = await verify_backend(
                 adapter,
@@ -502,10 +555,23 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                     current = await db.get(ImportEntry, entry_id)
                     await context(db, current, token, lock=True)
                     await capacity.reserve_import(db, current, spec, observation)
-                guard = RenameGuard(asyncio.get_running_loop(), entry_id, token, spec)
+                loop = asyncio.get_running_loop()
+                required = observation["required_bytes"]
+                guard = RenameGuard(loop, entry_id, token, spec)
+                timeout = 12 * 3600 if spec.conversion else 600
                 task = asyncio.create_task(
                     asyncio.to_thread(
-                        publish_item, spec, checkpoint=checkpoint, publication_guard=guard.hold
+                        publish_item,
+                        spec,
+                        checkpoint=checkpoint,
+                        timeout=timeout,
+                        publication_guard=guard.hold,
+                        should_continue=(
+                            _still_publishing(loop, entry_id, token) if spec.conversion else None
+                        ),
+                        on_progress=(
+                            _note_progress(loop, entry_id, required) if spec.conversion else None
+                        ),
                     )
                 )
                 try:
@@ -514,6 +580,7 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                     await task
                     raise
                 checkpoint("published-before-database")
+                entry.receipt = receipt
                 async with session_factory()() as db, db.begin():
                     current = await db.get(ImportEntry, entry_id, with_for_update=True)
                     if current.run_token != token:
@@ -534,7 +601,7 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                     )
             if capabilities["scan_capable"]:
                 await adapter.scan(external_library)
-            await asyncio.to_thread(verify_published_media, spec)
+            await asyncio.to_thread(verify_published_media, spec, receipt)
             item = await find_item(adapter, entry, external_library)
             if item is None:
                 async with session_factory()() as db:
@@ -581,8 +648,8 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
         await finish_state(entry_id, token, "skipped", str(error))
     except capacity.CapacityWait as error:
         await finish_state(entry_id, token, "queued", str(error))
-    except PublicationBusy:
-        raise
+    except PublicationBusy as error:
+        await finish_state(entry_id, token, "queued", f"{error}. This import will retry.")
     except (PublicationError, AdapterError, OSError, ValueError, InvalidToken, KeyError) as error:
         message = (
             str(error)[:500]

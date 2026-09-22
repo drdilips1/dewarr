@@ -242,6 +242,29 @@ function Editor({
                 keep their names for seeding; only library filenames change.
               </SettingHelp>
             </label>
+            {medium === "audio" && (
+              <label className="check-label">
+                <input
+                  type="checkbox"
+                  checked={draft.merge_mp3_chapters ?? false}
+                  disabled={save.isPending}
+                  onChange={(event) =>
+                    setDraft({
+                      ...draft,
+                      merge_mp3_chapters: event.target.checked,
+                    })
+                  }
+                />
+                Merge MP3 chapters into one M4B
+                <SettingHelp label="chapter merging">
+                  A manual import can turn a multi-file MP3 download into one M4B
+                  before it enters the library. Each file becomes a chapter. The
+                  download stays unchanged for seeding. Automatic imports stop
+                  for review when this would transcode the audio. Leave this off
+                  to import the MP3s.
+                </SettingHelp>
+              </label>
+            )}
             {draft.rename_files && (
               <label className="naming-filename-style">
                 Filename style

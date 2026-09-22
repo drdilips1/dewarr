@@ -8,7 +8,9 @@ import time
 from app.importing.filesystem import InspectionError
 
 
-def probe_output(command, fd, deadline, *, label, seconds=20, max_output=1024 * 1024):
+def probe_output(
+    command, fd, deadline, *, label, seconds=20, max_output=1024 * 1024, should_continue=None
+):
     expires = min(deadline, time.monotonic() + seconds)
     if expires <= time.monotonic():
         raise InspectionError(f"{label} metadata probe timed out")
@@ -24,8 +26,15 @@ def probe_output(command, fd, deadline, *, label, seconds=20, max_output=1024 * 
             with selectors.DefaultSelector() as selector:
                 selector.register(process.stdout, selectors.EVENT_READ)
                 while True:
+                    if should_continue is not None:
+                        should_continue()
                     remaining = expires - time.monotonic()
-                    if remaining <= 0 or not selector.select(remaining):
+                    if remaining <= 0:
+                        raise InspectionError(f"{label} metadata probe timed out")
+                    wait = min(2.0, remaining) if should_continue is not None else remaining
+                    if not selector.select(wait):
+                        if should_continue is not None and expires - time.monotonic() > 0:
+                            continue
                         raise InspectionError(f"{label} metadata probe timed out")
                     block = os.read(process.stdout.fileno(), 65536)
                     if not block:

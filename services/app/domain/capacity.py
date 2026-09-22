@@ -476,3 +476,19 @@ async def release_import(db, entry):
         pool = await db.get(DownloadCapacity, parent.id)
         if pool and not pending and parent.state == "complete":
             pool.import_resources = {}
+
+
+def remaining_after_landing(required, written):
+    return max(MIB, required - max(0, int(written)))
+
+
+async def note_landed(entry_id, required, written):
+    async with session_factory()() as db, db.begin():
+        await transaction_lock(db, LOCK)
+        row = await db.get(ImportCapacity, entry_id, populate_existing=True)
+        if not row or not row.resources:
+            return
+        key = next(iter(row.resources))
+        updated = {key: remaining_after_landing(required, written)}
+        if row.resources != updated:
+            row.resources = updated

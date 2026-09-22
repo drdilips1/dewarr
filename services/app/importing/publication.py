@@ -21,6 +21,7 @@ from uuid import UUID, uuid4
 
 from pydantic import Field, model_validator
 
+from app.importing.converters import AudioConversion, convert, descriptor_path
 from app.importing.filesystem import (
     InspectionError,
     beneath,
@@ -66,19 +67,26 @@ class PublicationSpec(StrictModel):
     staging_root: Path
     folder: str
     mode: Literal["hardlink", "copy"] = "hardlink"
-    files: list[PublishFile] = Field(min_length=1, max_length=5000)
+    files: list[PublishFile] = Field(default_factory=list, max_length=5000)
+    conversion: AudioConversion | None = None
     sidecars: dict[str, str] = Field(default_factory=dict)
     binary_sidecars: dict[str, str] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def confined(self):
         relative_parts(self.source_relative)
+        if self.conversion and self.source_kind != "directory":
+            raise ValueError("Chapter merging requires the download directory")
+        if not self.files and self.conversion is None:
+            raise ValueError("Publish at least one media file")
         if self.source_kind == "file" and (
             len(self.files) != 1 or self.files[0].source != PurePosixPath(self.source_relative).name
         ):
             raise ValueError("A single-file import can publish only its inspected file")
         relative_parts(self.folder)
         names = [file.name for file in self.files]
+        if self.conversion:
+            names.append(self.conversion.output_name)
         for name in self.sidecars:
             if name not in {"metadata.opf", "reader.txt", "desc.txt"}:
                 raise ValueError(
@@ -131,6 +139,8 @@ def specification_fingerprint(spec):
         payload.pop("source_kind")  # Preserve existing directory publication receipts.
     if not spec.binary_sidecars:
         payload.pop("binary_sidecars")  # Preserve receipts created before cover support.
+    if spec.conversion is None:
+        payload.pop("conversion")  # Preserve receipts created before chapter merging.
     return fingerprint(payload)
 
 
@@ -179,22 +189,59 @@ def private_staging(path):
         yield fd
 
 
-@contextmanager
-def publication_lock(staging, key):
-    name = "lock-" + hashlib.sha256(key.encode()).hexdigest()
+def _lock_file(staging, name):
     flags = os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK
     try:
-        fd = os.open(name, flags | os.O_CREAT | os.O_EXCL, 0o600, dir_fd=staging)
+        return os.open(name, flags | os.O_CREAT | os.O_EXCL, 0o600, dir_fd=staging)
     except FileExistsError:
-        fd = os.open(name, flags, dir_fd=staging)
+        return os.open(name, flags, dir_fd=staging)
+
+
+def _acquire(fd, message):
+    info = os.fstat(fd)
+    if not stat.S_ISREG(info.st_mode) or info.st_uid != os.geteuid() or info.st_nlink != 1:
+        raise PublicationError("Invalid publication lock file")
     try:
-        info = os.fstat(fd)
-        if not stat.S_ISREG(info.st_mode) or info.st_uid != os.geteuid() or info.st_nlink != 1:
-            raise PublicationError("Invalid publication lock file")
-        try:
-            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError as error:
-            raise PublicationBusy("Another worker is publishing to this library") from error
+        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError as error:
+        raise PublicationBusy(message) from error
+
+
+@contextmanager
+def publication_lock(staging, key):
+    """Library-wide lock. pause() drops it while this book is encoding."""
+    name = "lock-" + hashlib.sha256(key.encode()).hexdigest()
+    fd = _lock_file(staging, name)
+    message = "Another worker is publishing to this library"
+    try:
+        _acquire(fd, message)
+
+        @contextmanager
+        def pause():
+            fcntl.flock(fd, fcntl.LOCK_UN)
+            try:
+                yield
+            finally:
+                pending = sys.exc_info()[0]
+                if pending is None:
+                    fcntl.flock(fd, fcntl.LOCK_EX)
+                else:
+                    try:
+                        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    except BlockingIOError:
+                        pass
+
+        yield pause
+    finally:
+        os.close(fd)
+
+
+@contextmanager
+def entry_lock(staging, entry_id):
+    name = "lock-entry-" + hashlib.sha256(str(entry_id).encode()).hexdigest()
+    fd = _lock_file(staging, name)
+    try:
+        _acquire(fd, "Another worker is publishing this book")
         yield
     finally:
         os.close(fd)
@@ -258,10 +305,30 @@ def checked_source(source, file, deadline):
             raise PublicationError("Source changed while being verified")
 
 
-def verify_item(folder, spec, deadline):
-    expected = {file.name for file in spec.files} | set(generated_files(spec))
+def published_names(spec):
+    names = {file.name for file in spec.files}
+    if spec.conversion:
+        names.add(spec.conversion.output_name)
+    return names
+
+
+def conversion_inputs(spec):
+    return spec.conversion.chapters if spec.conversion else []
+
+
+def verify_item(folder, spec, deadline, derived=None):
+    expected = published_names(spec) | set(generated_files(spec))
     if set(os.listdir(folder)) != expected:
         raise PublicationError("Item contains missing or unplanned files")
+    if spec.conversion:
+        recorded = (derived or {}).get(spec.conversion.output_name)
+        with beneath(folder, spec.conversion.output_name) as fd:
+            if (
+                not recorded
+                or os.fstat(fd).st_size != recorded["size"]
+                or digest(fd, deadline) != recorded["sha256"]
+            ):
+                raise PublicationError("Converted audiobook does not match its journal")
     for file in spec.files:
         with beneath(folder, file.name) as fd:
             if os.fstat(fd).st_size != file.identity["size"] or digest(fd, deadline) != file.sha256:
@@ -328,7 +395,108 @@ def prepare_stage(staging, receipt_name, receipt, spec):
     write_receipt(staging, receipt_name, receipt)
 
 
-def stage_files(staging, stage, source, receipt_name, receipt, spec, deadline, checkpoint):
+def stage_conversion(
+    staging,
+    stage,
+    source,
+    receipt_name,
+    receipt,
+    spec,
+    deadline,
+    checkpoint,
+    *,
+    should_continue=None,
+    on_progress=None,
+    pause_library_lock=nullcontext,
+):
+    plan = spec.conversion
+    if plan is None:
+        return
+    name = plan.output_name
+    for chapter in plan.chapters:
+        checked_source(source, chapter, deadline)
+    checkpoint("before-convert")
+    journaled_mismatch = False
+    try:
+        with beneath(stage, name) as current:
+            recorded = receipt.get("derived", {}).get(name)
+            info = os.fstat(current)
+            matched = (
+                recorded
+                and info.st_size == recorded["size"]
+                and digest(current, deadline) == recorded["sha256"]
+            )
+            if matched:
+                return
+            owned = receipt.get("partial_files", {}).get(name)
+            if not owned or not same_object(current, owned) or info.st_nlink != 1:
+                raise PublicationError("Existing staged audiobook cannot be safely resumed")
+            if recorded and info.st_size == recorded["size"]:
+                journaled_mismatch = True
+        os.unlink(name, dir_fd=stage)
+    except FileNotFoundError:
+        pass
+    if journaled_mismatch:
+        _require_free_space(staging, conversion_reservation(spec))
+    output = os.open(name, os.O_RDWR | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o644, dir_fd=stage)
+    try:
+        receipt.setdefault("partial_files", {})[name] = object_id(output)
+        write_receipt(staging, receipt_name, receipt)
+        checkpoint("convert-created")
+        try:
+            with pause_library_lock():
+                convert(
+                    source,
+                    plan,
+                    str(Path(descriptor_path(stage)) / name),
+                    deadline,
+                    should_continue=should_continue,
+                    on_progress=on_progress,
+                )
+                os.fsync(output)
+                info = os.fstat(output)
+                receipt.setdefault("derived", {})[name] = {
+                    "sha256": digest(output, deadline),
+                    "size": info.st_size,
+                }
+                write_receipt(staging, receipt_name, receipt)
+        except PublicationError:
+            raise
+        except InspectionError as error:
+            raise PublicationError(str(error)) from error
+    finally:
+        os.close(output)
+    sync_directory(stage)
+    checkpoint("converted")
+
+
+def stage_files(
+    staging,
+    stage,
+    source,
+    receipt_name,
+    receipt,
+    spec,
+    deadline,
+    checkpoint,
+    *,
+    should_continue=None,
+    on_progress=None,
+    pause_library_lock=nullcontext,
+):
+    stage_conversion(
+        staging,
+        stage,
+        source,
+        receipt_name,
+        receipt,
+        spec,
+        deadline,
+        checkpoint,
+        should_continue=should_continue,
+        on_progress=on_progress,
+        pause_library_lock=pause_library_lock,
+    )
     for file in spec.files:
         checkpoint("before-file")
         checked_source(source, file, deadline)
@@ -422,18 +590,60 @@ def stage_files(staging, stage, source, receipt_name, receipt, spec, deadline, c
     sync_directory(stage)
 
 
+def conversion_reservation(spec):
+    sources = conversion_inputs(spec)
+    if not sources:
+        return 0
+    total = sum(chapter.identity["size"] for chapter in sources)
+    overhead = min(8 * 1024 * 1024, max(256 * 1024, total // 20))
+    return total + overhead
+
+
+def _conversion_credit(stage, receipt, spec):
+    plan = spec.conversion
+    if plan is None:
+        return 0
+    name = plan.output_name
+    try:
+        with beneath(stage, name) as current:
+            info = os.fstat(current)
+            owned = (receipt or {}).get("partial_files", {}).get(name)
+            if not owned or not same_object(current, owned) or info.st_nlink != 1:
+                return 0
+            recorded = (receipt or {}).get("derived", {}).get(name) or {}
+            if recorded.get("size", 0) > 0 and info.st_size == recorded["size"]:
+                return conversion_reservation(spec)
+            return info.st_size
+    except FileNotFoundError:
+        return 0
+
+
+def _require_free_space(staging, needed):
+    space = os.fstatvfs(staging)
+    if space.f_bavail * space.f_frsize < needed + 1024 * 1024:
+        raise PublicationError("Not enough free space for this import")
+
+
 def remaining_stage_bytes(staging, receipt, spec, deadline):
     if receipt and receipt.get("stage_identity"):
         try:
             with beneath(staging, receipt["stage_name"], folder=True) as stage:
                 if same_object(stage, receipt["stage_identity"]):
-                    verify_item(stage, spec, deadline)
+                    verify_item(stage, spec, deadline, receipt.get("derived"))
                     return 0
         except (FileNotFoundError, PublicationError):
             pass  # Incomplete staging conservatively reserves a fresh complete copy.
-    return sum(len(value) for value in generated_files(spec).values()) + (
-        sum(file.identity["size"] for file in spec.files) if spec.mode == "copy" else 0
-    )
+    copied = sum(file.identity["size"] for file in spec.files) if spec.mode == "copy" else 0
+    sidecars = sum(len(value) for value in generated_files(spec).values())
+    credit = 0
+    if receipt and receipt.get("stage_identity") and spec.conversion:
+        try:
+            with beneath(staging, receipt["stage_name"], folder=True) as stage:
+                if same_object(stage, receipt["stage_identity"]):
+                    credit = _conversion_credit(stage, receipt, spec)
+        except FileNotFoundError:
+            pass
+    return max(0, sidecars + copied + conversion_reservation(spec) - credit)
 
 
 def remaining_import_bytes(spec, *, timeout=600):
@@ -453,7 +663,7 @@ def remaining_import_bytes(spec, *, timeout=600):
                             existing, receipt["stage_identity"]
                         ):
                             raise PublicationError("Destination belongs to another item")
-                        verify_item(existing, spec, deadline)
+                        verify_item(existing, spec, deadline, receipt.get("derived"))
                         return 0
                 except FileNotFoundError:
                     pass
@@ -466,6 +676,8 @@ def publish_item(
     checkpoint: Callable[[str], None] = lambda _: None,
     timeout=600,
     publication_guard: Callable = nullcontext,
+    should_continue: Callable[[], None] | None = None,
+    on_progress: Callable[[int], None] | None = None,
 ):
     deadline = time.monotonic() + timeout
     spec_hash = specification_fingerprint(spec)
@@ -476,7 +688,10 @@ def publish_item(
     ):
         if same_object(staging, object_id(destination)):
             raise PublicationError("Staging and library refer to the same directory")
-        with publication_lock(staging, json.dumps(object_id(destination), sort_keys=True)):
+        with (
+            entry_lock(staging, spec.entry_id),
+            publication_lock(staging, json.dumps(object_id(destination), sort_keys=True)) as pause,
+        ):
             receipt = read_receipt(staging, receipt_name)
             if receipt is None:
                 receipt = {
@@ -502,7 +717,7 @@ def publish_item(
                         existing, receipt["stage_identity"]
                     ):
                         raise PublicationError("Destination exists and belongs to another item")
-                    verify_item(existing, spec, deadline)
+                    verify_item(existing, spec, deadline, receipt.get("derived"))
                     receipt["state"] = "published"
                     write_receipt(staging, receipt_name, receipt)
                     return receipt
@@ -517,20 +732,28 @@ def publish_item(
             ):
                 if not same_object(source, spec.source_directory):
                     raise PublicationError("Completed-download directory identity changed")
-                for file in spec.files:
+                for file in (*spec.files, *conversion_inputs(spec)):
                     checked_source(source, file, deadline)
                 needed = remaining_stage_bytes(staging, receipt, spec, deadline)
-                space = os.fstatvfs(staging)
-                if space.f_bavail * space.f_frsize < needed + 1024 * 1024:
-                    raise PublicationError("Not enough free space for this import")
+                _require_free_space(staging, needed)
                 prepare_stage(staging, receipt_name, receipt, spec)
                 checkpoint("stage-created")
                 with beneath(staging, receipt["stage_name"], folder=True) as stage:
                     stage_files(
-                        staging, stage, source, receipt_name, receipt, spec, deadline, checkpoint
+                        staging,
+                        stage,
+                        source,
+                        receipt_name,
+                        receipt,
+                        spec,
+                        deadline,
+                        checkpoint,
+                        should_continue=should_continue,
+                        on_progress=on_progress,
+                        pause_library_lock=pause,
                     )
-                    verify_item(stage, spec, deadline)
-                    for file in spec.files:
+                    verify_item(stage, spec, deadline, receipt.get("derived"))
+                    for file in (*spec.files, *conversion_inputs(spec)):
                         checked_source(source, file, deadline)
                     receipt["state"] = "prepared"
                     write_receipt(staging, receipt_name, receipt)

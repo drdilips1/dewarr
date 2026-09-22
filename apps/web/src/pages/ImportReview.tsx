@@ -520,11 +520,23 @@ function Review({ inspection }: { inspection: Inspection }) {
                     .join(" · ")}
                 </span>
               )}
-              {(item.files || []).map((file) => (
-                <span key={file.source}>
-                  {file.source} → {file.destination}
+              {(item.conversion?.sources ?? []).map((source) => (
+                <span key={source}>
+                  {source} →{" "}
+                  {item.files?.find((file) =>
+                    item.conversion?.sources?.includes(file.source),
+                  )?.destination ?? item.conversion?.output_name}
                 </span>
               ))}
+              {(item.files || [])
+                .filter(
+                  (file) => !item.conversion?.sources?.includes(file.source),
+                )
+                .map((file) => (
+                  <span key={file.source}>
+                    {file.source} → {file.destination}
+                  </span>
+                ))}
             </div>
           ))}
           <ImportExecution plan={frozen.data} />

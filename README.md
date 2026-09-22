@@ -7,6 +7,7 @@
 ## Features
 
 - **Audiobookshelf integration** — browse your library, see what you own, and import completed downloads into verified library folders.
+- **Chapterized M4B** — merge a multi-file MP3 download into one audiobook, with a chapter per file, before library import. The download itself stays unchanged.
 - **Goodreads sync** — follow shelves, import CSV exports, and check for new books automatically.
 - **Hardcover sync** — track your lists and lists you follow, including private lists your account can access.
 - **Custom Goodreads lists** — add public lists, track changes, and pin them to your discovery page.

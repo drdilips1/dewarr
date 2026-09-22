@@ -391,4 +391,5 @@ def test_directory_receipt_fingerprint_remains_backward_compatible(specification
     old_document = specification.model_dump(mode="json")
     old_document.pop("source_kind")
     old_document.pop("binary_sidecars")
+    old_document.pop("conversion")
     assert publication.specification_fingerprint(specification) == fingerprint(old_document)

@@ -23793,6 +23793,12 @@
             "title": "Rename Files",
             "default": true
           },
+          "merge_mp3_chapters": {
+            "type": "boolean",
+            "title": "Merge Mp3 Chapters",
+            "description": "Merge a multi-file MP3 audiobook into one chapterized M4B before library import",
+            "default": false
+          },
           "audio_folder": {
             "type": "string",
             "title": "Audio Folder",
@@ -24503,6 +24509,38 @@
         ],
         "title": "PersonalListURL"
       },
+      "PlannedConversion": {
+        "properties": {
+          "converter": {
+            "type": "string",
+            "enum": [
+              "ffmpeg-chapterized-m4b"
+            ],
+            "title": "Converter"
+          },
+          "output_name": {
+            "type": "string",
+            "title": "Output Name"
+          },
+          "sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2000,
+            "title": "Sources"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "converter",
+          "output_name",
+          "sources"
+        ],
+        "title": "PlannedConversion"
+      },
       "PlannedItem": {
         "properties": {
           "group_id": {
@@ -24579,6 +24617,16 @@
             },
             "type": "array",
             "title": "Warnings"
+          },
+          "conversion": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PlannedConversion"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
