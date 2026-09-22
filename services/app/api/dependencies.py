@@ -1,4 +1,5 @@
 import hmac
+import ipaddress
 import re
 from datetime import UTC, datetime
 from typing import Annotated
@@ -15,6 +16,57 @@ from app.security import csrf_token, token_hash
 
 Database = Annotated[AsyncSession, Depends(database)]
 COOKIE = "book_session"
+
+
+def _ip(value: str) -> str | None:
+    try:
+        return str(ipaddress.ip_address(value))
+    except ValueError:
+        return None
+
+
+def _same_token(left: str, right: str) -> bool:
+    if not left or len(left) != len(right):
+        return False
+    return hmac.compare_digest(left, right)
+
+
+def _header_values(headers, name: str) -> list[str]:
+    getlist = getattr(headers, "getlist", None)
+    if getlist is not None:
+        return [value for value in getlist(name) if value]
+    value = headers.get(name, "")
+    return [value] if value else []
+
+
+def _last_address(values: list[str]) -> str | None:
+    found = None
+    for value in values:
+        for part in value.split(","):
+            parsed = _ip(part.strip())
+            if parsed:
+                found = parsed
+    return found
+
+
+def _forwarded_client(request: Request) -> str | None:
+    real = _last_address(_header_values(request.headers, "x-real-ip"))
+    last = _last_address(_header_values(request.headers, "x-forwarded-for"))
+    if real and last and real != last:
+        return None
+    return real or last
+
+
+def client_host(request: Request) -> str:
+    peer = request.client.host if request.client else ""
+    if not peer:
+        return "local"
+    configured = get_settings().proxy_token
+    token = configured.get_secret_value() if configured is not None else ""
+    supplied = _header_values(request.headers, "x-dewarr-proxy-token")
+    if not _same_token(token, supplied[-1] if supplied else ""):
+        return peer
+    return _forwarded_client(request) or peer
 
 
 def require_origin(request: Request) -> None:

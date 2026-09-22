@@ -123,6 +123,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/auth/finish": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Finish */
+    get: operations["finish_api_auth_finish_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/auth/logout": {
     parameters: {
       query?: never;
@@ -168,6 +185,195 @@ export interface paths {
     get?: never;
     /** Automation Permission */
     put: operations["automation_permission_api_auth_users__user_id__automation_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/oidc": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Oidc Status */
+    get: operations["oidc_status_api_auth_oidc_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/oidc/settings": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Oidc Settings */
+    get: operations["oidc_settings_api_auth_oidc_settings_get"];
+    /** Save Oidc Settings */
+    put: operations["save_oidc_settings_api_auth_oidc_settings_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/oidc/discover": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Discover Provider */
+    post: operations["discover_provider_api_auth_oidc_discover_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/oidc/start": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Start */
+    get: operations["start_api_auth_oidc_start_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/oidc/callback": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Callback */
+    get: operations["callback_api_auth_oidc_callback_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/plex": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Plex Status */
+    get: operations["plex_status_api_auth_plex_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/plex/settings": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Plex Settings */
+    get: operations["plex_settings_api_auth_plex_settings_get"];
+    /** Save Plex Settings */
+    put: operations["save_plex_settings_api_auth_plex_settings_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/plex/pending": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Plex Pending */
+    get: operations["plex_pending_api_auth_plex_pending_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/plex/link": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Link */
+    get: operations["link_api_auth_plex_link_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/plex/start": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Start */
+    get: operations["start_api_auth_plex_start_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/plex/callback": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Callback */
+    get: operations["callback_api_auth_plex_callback_get"];
+    put?: never;
     post?: never;
     delete?: never;
     options?: never;
@@ -5780,6 +5986,11 @@ export interface components {
        */
       publication_available: boolean;
     };
+    /** DiscoverInput */
+    DiscoverInput: {
+      /** Issuer */
+      issuer: string;
+    };
     /** DiscoveryBookPage */
     DiscoveryBookPage: {
       /** Items */
@@ -5860,6 +6071,21 @@ export interface components {
       publication_year?: number | null;
       /** Release Date */
       release_date?: string | null;
+    };
+    /** DiscoveryView */
+    DiscoveryView: {
+      /** Issuer */
+      issuer: string;
+      /** Authorization Endpoint */
+      authorization_endpoint: string;
+      /** Token Endpoint */
+      token_endpoint: string;
+      /** Userinfo Endpoint */
+      userinfo_endpoint: string;
+      /** Jwks Uri */
+      jwks_uri: string;
+      /** Signing Algorithm */
+      signing_algorithm: string;
     };
     /** DownloadConstraints */
     DownloadConstraints: {
@@ -7932,6 +8158,144 @@ export interface components {
        */
       last_seen_at: string;
     };
+    /** OidcPublicView */
+    OidcPublicView: {
+      /** Enabled */
+      enabled: boolean;
+      /** Label */
+      label?: string | null;
+    };
+    /** OidcSettingsInput */
+    OidcSettingsInput: {
+      /**
+       * Enabled
+       * @default false
+       */
+      enabled: boolean;
+      /**
+       * Label
+       * @default your identity provider
+       */
+      label: string;
+      /**
+       * Issuer
+       * @default
+       */
+      issuer: string;
+      /**
+       * Authorization Endpoint
+       * @default
+       */
+      authorization_endpoint: string;
+      /**
+       * Token Endpoint
+       * @default
+       */
+      token_endpoint: string;
+      /**
+       * Userinfo Endpoint
+       * @default
+       */
+      userinfo_endpoint: string;
+      /**
+       * Jwks Uri
+       * @default
+       */
+      jwks_uri: string;
+      /**
+       * Client Id
+       * @default
+       */
+      client_id: string;
+      /** Client Secret */
+      client_secret?: string | null;
+      /**
+       * Signing Algorithm
+       * @default RS256
+       */
+      signing_algorithm: string;
+      /**
+       * Match Existing
+       * @default off
+       */
+      match_existing: string;
+      /**
+       * Auto Register
+       * @default false
+       */
+      auto_register: boolean;
+      /**
+       * Default Role
+       * @default member
+       */
+      default_role: string;
+      /**
+       * Group Claim
+       * @default
+       */
+      group_claim: string;
+      /**
+       * Group Scope
+       * @default
+       */
+      group_scope: string;
+      /**
+       * Admin Group
+       * @default
+       */
+      admin_group: string;
+      /**
+       * Member Group
+       * @default
+       */
+      member_group: string;
+      /**
+       * Viewer Group
+       * @default
+       */
+      viewer_group: string;
+    };
+    /** OidcSettingsView */
+    OidcSettingsView: {
+      /** Enabled */
+      enabled: boolean;
+      /** Label */
+      label: string;
+      /** Issuer */
+      issuer: string;
+      /** Authorization Endpoint */
+      authorization_endpoint: string;
+      /** Token Endpoint */
+      token_endpoint: string;
+      /** Userinfo Endpoint */
+      userinfo_endpoint: string;
+      /** Jwks Uri */
+      jwks_uri: string;
+      /** Client Id */
+      client_id: string;
+      /** Signing Algorithm */
+      signing_algorithm: string;
+      /** Match Existing */
+      match_existing: string;
+      /** Auto Register */
+      auto_register: boolean;
+      /** Default Role */
+      default_role: string;
+      /** Group Claim */
+      group_claim: string;
+      /** Group Scope */
+      group_scope: string;
+      /** Admin Group */
+      admin_group: string;
+      /** Member Group */
+      member_group: string;
+      /** Viewer Group */
+      viewer_group: string;
+      /** Secret Set */
+      secret_set: boolean;
+      /** Redirect Uri */
+      redirect_uri: string;
+    };
     /** OmittedSeriesBook */
     OmittedSeriesBook: {
       /**
@@ -8223,6 +8587,59 @@ export interface components {
       track?: number | null;
       /** Disc */
       disc?: number | null;
+    };
+    /** PlexPendingView */
+    PlexPendingView: {
+      /** Servers */
+      servers: components["schemas"]["PlexServerView"][];
+    };
+    /** PlexPublicView */
+    PlexPublicView: {
+      /** Enabled */
+      enabled: boolean;
+    };
+    /** PlexServerView */
+    PlexServerView: {
+      /** Name */
+      name: string;
+      /** Machine Id */
+      machine_id: string;
+    };
+    /** PlexSettingsInput */
+    PlexSettingsInput: {
+      /**
+       * Enabled
+       * @default false
+       */
+      enabled: boolean;
+      /**
+       * Machine Id
+       * @default
+       */
+      machine_id: string;
+      /**
+       * Auto Register
+       * @default false
+       */
+      auto_register: boolean;
+      /**
+       * Default Role
+       * @default member
+       */
+      default_role: string;
+    };
+    /** PlexSettingsView */
+    PlexSettingsView: {
+      /** Enabled */
+      enabled: boolean;
+      /** Machine Id */
+      machine_id: string;
+      /** Server Name */
+      server_name: string;
+      /** Auto Register */
+      auto_register: boolean;
+      /** Default Role */
+      default_role: string;
     };
     /** PolicyConfiguration */
     PolicyConfiguration: {
@@ -10972,6 +11389,26 @@ export interface operations {
       };
     };
   };
+  finish_api_auth_finish_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+        };
+      };
+    };
+  };
   logout_api_auth_logout_post: {
     parameters: {
       query?: never;
@@ -11074,6 +11511,305 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  oidc_status_api_auth_oidc_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OidcPublicView"];
+        };
+      };
+    };
+  };
+  oidc_settings_api_auth_oidc_settings_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OidcSettingsView"];
+        };
+      };
+    };
+  };
+  save_oidc_settings_api_auth_oidc_settings_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["OidcSettingsInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OidcSettingsView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  discover_provider_api_auth_oidc_discover_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DiscoverInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DiscoveryView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  start_api_auth_oidc_start_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+        };
+      };
+    };
+  };
+  callback_api_auth_oidc_callback_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+        };
+      };
+    };
+  };
+  plex_status_api_auth_plex_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PlexPublicView"];
+        };
+      };
+    };
+  };
+  plex_settings_api_auth_plex_settings_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PlexSettingsView"];
+        };
+      };
+    };
+  };
+  save_plex_settings_api_auth_plex_settings_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PlexSettingsInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PlexSettingsView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  plex_pending_api_auth_plex_pending_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PlexPendingView"];
+        };
+      };
+    };
+  };
+  link_api_auth_plex_link_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+        };
+      };
+    };
+  };
+  start_api_auth_plex_start_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
+        };
+      };
+    };
+  };
+  callback_api_auth_plex_callback_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": unknown;
         };
       };
     };

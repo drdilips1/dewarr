@@ -1090,6 +1090,55 @@ nav a.active {
 .auth-form button {
   margin-top: 9px;
 }
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #97a5be;
+  font-size: 12px;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid #29354b;
+}
+a.auth-provider {
+  display: block;
+  margin-top: 9px;
+  text-align: center;
+  text-decoration: none;
+  border: 1px solid #43516b;
+  background: #263249;
+  color: #f3f4f6;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+a.plex-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  border: 1px solid #43516b;
+  background: #263249;
+  color: #f3f4f6;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+a.plex-link:hover {
+  background: #36435e;
+}
+a.auth-provider:hover {
+  background: #36435e;
+}
+.oidc-redirect {
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 13px;
+}
 .spines {
   display: flex;
   gap: 8px;

@@ -144,7 +144,7 @@ Already have PostgreSQL? Skip its container and use your existing database host,
 
 </details>
 
-Open [localhost:8000](http://localhost:8000), or your server's address, and create your first account. Connect Audiobookshelf, Goodreads, Hardcover, and download clients in **Settings**.
+Open [localhost:8000](http://localhost:8000), or your server's address, and create your first account. Connect Audiobookshelf, Goodreads, Hardcover, and download clients in **Settings**. To let Authentik, Pocket ID, or Authelia manage later sign-ins, see [OpenID Connect](docs/OIDC.md). To let a household sign in with Plex, see [Plex sign-in](docs/PLEX.md).
 
 Dewarr creates its encryption key in `/config` on first start. Keep that folder and the PostgreSQL volume when updating.
 
