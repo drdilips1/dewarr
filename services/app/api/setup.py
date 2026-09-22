@@ -124,7 +124,7 @@ async def readiness(admin: Admin, db: Database):
                 ),
             )
             for row in integrations
-            if row.kind == "audiobookshelf"
+            if row.kind in {"audiobookshelf", "grimmory"}
         ],
         catalog=SetupService(**service(account, "Hardcover")) if account else None,
         sources=[

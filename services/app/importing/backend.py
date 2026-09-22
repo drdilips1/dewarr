@@ -1,4 +1,9 @@
-"""Read backend import settings and prove the configured shared folder route."""
+"""Read backend import settings and prove the configured shared folder route.
+
+Server release numbers are recorded on the route receipt. A newer Audiobookshelf
+or Grimmory release stays usable; a route fails only when a required library
+behavior is missing.
+"""
 
 import os
 import re
@@ -35,7 +40,54 @@ def mapping_marker(root: Path, name: str):
                     pass
 
 
+async def verify_grimmory(adapter, library_id, backend_root, worker_root, medium):
+    from app.adapters.grimmory import AUDIO_EXTENSIONS
+
+    version = await adapter.server_version()
+    configuration = await adapter.import_configuration(library_id)
+    capabilities, _ = await adapter.authorize()
+    if backend_root not in configuration.folders:
+        raise PublicationError("Selected path is not an exact folder root of this Grimmory library")
+    if configuration.organization_mode != "BOOK_PER_FOLDER":
+        raise PublicationError("Set this Grimmory library to Book per folder before importing")
+    if medium == "ebook" and configuration.audiobooks_only:
+        raise PublicationError("Choose a Grimmory library that accepts ebooks")
+    if medium == "audio" and not configuration.audio_allowed:
+        raise PublicationError("Choose a Grimmory library that accepts audiobooks")
+    if "scan" not in capabilities.operations and not configuration.watcher_enabled:
+        raise PublicationError(
+            "Enable Grimmory folder watch or provide a library-management connection"
+        )
+    if "metadata" not in capabilities.operations:
+        raise PublicationError(
+            "Grimmory needs permission to edit metadata "
+            "so imported books keep their catalog details"
+        )
+    name = "book-search-check-" + uuid4().hex
+    if await adapter.path_exists(backend_root, name):
+        raise PublicationError("Unexpected existing mapping challenge; no directory was changed")
+    with mapping_marker(worker_root, name):
+        if not await adapter.path_exists(backend_root, name):
+            raise PublicationError("Worker and Grimmory do not see the same library folder")
+    if await adapter.path_exists(backend_root, name):
+        raise PublicationError("Grimmory still sees the removed challenge; mapping is not reliable")
+    if await adapter.import_configuration(library_id) != configuration:
+        raise PublicationError("Grimmory library settings changed during mapping verification")
+    return {
+        "version": version,
+        "library_id": library_id,
+        "configuration": configuration.model_dump(),
+        "root_mapping": True,
+        "scan_capable": "scan" in capabilities.operations,
+        "watcher_enabled": configuration.watcher_enabled,
+        "layout": "conventional",
+        "audio_extensions": sorted(AUDIO_EXTENSIONS),
+    }
+
+
 async def verify_backend(adapter, library_id, backend_root, worker_root, medium):
+    if getattr(adapter, "kind", "audiobookshelf") == "grimmory":
+        return await verify_grimmory(adapter, library_id, backend_root, worker_root, medium)
     version = await adapter.server_version()
     configuration = await adapter.import_configuration(library_id)
     capabilities, _ = await adapter.authorize()
@@ -66,8 +118,6 @@ async def verify_backend(adapter, library_id, backend_root, worker_root, medium)
         )
     if "scan" not in capabilities.operations and not configuration.watcher_enabled:
         raise PublicationError("Enable the ABS watcher or provide a scan-capable connection")
-    if version != "2.36.1":
-        raise PublicationError("This ABS version has not passed the import compatibility checks")
     name = "book-search-check-" + uuid4().hex
     if await adapter.path_exists(backend_root, name):
         raise PublicationError("Unexpected existing mapping challenge; no directory was changed")

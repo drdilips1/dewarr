@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.adapters.audiobookshelf import ABSItem
 from app.db.models import ProviderObject, Version, Work
+from app.domain.catalog_language import catalog_language
 from app.domain.work_graph import canonical_work
 
 
@@ -56,7 +57,7 @@ async def resolve_abs_work(db: AsyncSession, item: ABSItem, link: ProviderObject
         and (
             not candidate.language
             or not item.language
-            or normalized(candidate.language) == normalized(item.language)
+            or catalog_language(candidate.language) == catalog_language(item.language)
         )
     ]
     by_root = {}
@@ -96,6 +97,8 @@ async def resolve_abs_version(
     # Unknown recording metadata cannot establish equivalence to another recording.
     version = None
     identifier = "asin" if medium == "audio" else "isbn"
+    if not item.identifiers.get(identifier) and item.identifiers.get("hardcover"):
+        identifier = "hardcover"
     if item.identifiers.get(identifier):
         candidates = (
             await db.scalars(

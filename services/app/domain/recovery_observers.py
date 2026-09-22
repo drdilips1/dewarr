@@ -6,6 +6,7 @@ from functools import partial
 from app.adapters.audiobookshelf import Audiobookshelf
 from app.adapters.contracts import AdapterError, FailureKind
 from app.adapters.goodreads import fetch_feed
+from app.adapters.grimmory import Grimmory
 from app.adapters.qbittorrent import QbitClient, verify_association
 from app.domain import hardcover_subscriptions
 from app.domain.inventory import summary_fingerprint
@@ -120,7 +121,11 @@ async def downloads(inputs, writer, integration):
     )
 
 
-async def abs_library(client, library_id, pulse):
+# Audiobookshelf and Grimmory sync both accept this many items in one library.
+LIBRARY_ITEM_LIMIT = 100_000
+
+
+async def abs_library(client, library_id, pulse, *, expand=True, verify=True):
     async def listing(*, expand):
         seen, items, page, expected = {}, [], 0, None
         while True:
@@ -128,14 +133,14 @@ async def abs_library(client, library_id, pulse):
             records, total = await client.page(library_id, page)
             current = summary_fingerprint(records)
             if (
-                total > 10000
+                total > LIBRARY_ITEM_LIMIT
                 or (expected is not None and expected != total)
                 or len(current) != len(records)
                 or seen.keys() & current.keys()
             ):
                 raise AdapterError(
                     FailureKind.UNCERTAIN,
-                    "Library size or pagination changed, or exceeded 10,000 items",
+                    "Library size or pagination changed, or exceeded 100,000 items",
                 )
             if expand and records:
                 expanded = await client.expanded(list(current))
@@ -153,11 +158,13 @@ async def abs_library(client, library_id, pulse):
                 )
             expected, page = total, page + 1
 
-    first, items = await listing(expand=True)
+    first, items = await listing(expand=expand)
+    if not verify:
+        return first, items
     second, _ = await listing(expand=False)
     if first != second:
         raise AdapterError(FailureKind.UNCERTAIN, "Library changed during verification")
-    return items
+    return first, items
 
 
 async def read_inventory(client, pulse):
@@ -167,14 +174,22 @@ async def read_inventory(client, pulse):
     libraries = await client.libraries()
     if len(libraries) > 100:
         raise ScanHeld("Recovery supports at most 100 libraries per backend")
-    collected, seen = {}, set()
+    collected, seen, staged = {}, set(), []
+    batched = hasattr(client, "refresh_snapshot")
     for library in libraries:
-        items = await abs_library(client, library["id"], pulse)
+        fingerprint, items = await abs_library(client, library["id"], pulse, verify=not batched)
+        staged.append((library["id"], fingerprint))
         ids = {item.id for item in items}
         if seen & ids:
             raise AdapterError(FailureKind.UNCERTAIN, "An item appeared in multiple libraries")
         seen.update(ids)
         collected[library["id"]] = items
+    if batched:
+        await client.refresh_snapshot()
+        for library_id, fingerprint in staged:
+            again, _ = await abs_library(client, library_id, pulse, expand=False, verify=False)
+            if again != fingerprint:
+                raise AdapterError(FailureKind.UNCERTAIN, "Library changed during verification")
     await pulse()
     _, final_scope = await client.authorize()
     if scope != final_scope or sorted(libraries, key=lambda row: row["id"]) != sorted(
@@ -249,8 +264,10 @@ async def inventory(inputs, writer, integration):
         for row in inputs["libraries"]
         if row["integration_id"] == integration["id"]
     }
-    secret = decrypt_secrets(integration["encrypted_secrets"])["token"]
-    async with Audiobookshelf(integration["base_url"], secret) as client:
+    secrets = decrypt_secrets(integration["encrypted_secrets"])
+    client_type = Grimmory if integration["kind"] == "grimmory" else Audiobookshelf
+    secret = secrets if integration["kind"] == "grimmory" else secrets["token"]
+    async with client_type(integration["base_url"], secret) as client:
         observation = await read_inventory(client, writer.pulse)
     scope, libraries, collected = (
         observation["scope"],
@@ -542,7 +559,11 @@ async def collect(inputs, writer):
             )
 
     for integration in inputs["integrations"]:
-        observer = {"qbittorrent": downloads, "audiobookshelf": inventory}.get(integration["kind"])
+        observer = {
+            "qbittorrent": downloads,
+            "audiobookshelf": inventory,
+            "grimmory": inventory,
+        }.get(integration["kind"])
         if not observer:
             continue
         domain = "downloads" if integration["kind"] == "qbittorrent" else "library"

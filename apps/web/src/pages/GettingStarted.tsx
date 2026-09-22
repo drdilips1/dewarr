@@ -57,7 +57,8 @@ export default function GettingStarted({ role }: { role: string }) {
       "Connect Hardcover for discovery, or use Open Library without an account.",
     reading:
       "Connect Goodreads or Hardcover once, then choose the lists you want to keep up with.",
-    libraries: "Connect Audiobookshelf to see the books you already own.",
+    libraries:
+      "Connect Audiobookshelf or Grimmory to see the books you already own.",
     sources: "Choose where to find ebook and audiobook releases.",
     downloaders:
       "Connect qBittorrent for torrents, or SABnzbd or NZBGet for Usenet.",

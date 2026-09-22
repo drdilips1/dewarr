@@ -51,11 +51,22 @@ class JsonEndpoint:
     async def __aexit__(self, *args):
         await self.client.aclose()
 
-    async def request(self, method: str, path: str, *, params=None, json=None, empty=False):
+    async def request(
+        self,
+        method: str,
+        path: str,
+        *,
+        params=None,
+        json=None,
+        empty=False,
+        allow_list=False,
+        timeout_seconds=45,
+        max_bytes=16 * 1024 * 1024,
+    ):
         self.response_headers = {}
         try:
             async with (
-                asyncio.timeout(45),
+                asyncio.timeout(timeout_seconds),
                 self.client.stream(
                     method,
                     path,
@@ -94,7 +105,7 @@ class JsonEndpoint:
                 content = bytearray()
                 async for chunk in response.aiter_bytes():
                     content.extend(chunk)
-                    if len(content) > 16 * 1024 * 1024:
+                    if len(content) > max_bytes:
                         raise AdapterError(
                             FailureKind.PARSER, "The server response exceeded the page size limit."
                         )
@@ -106,6 +117,8 @@ class JsonEndpoint:
                     raise AdapterError(
                         FailureKind.PARSER, "The server returned an unreadable API response."
                     ) from error
+                if allow_list and isinstance(value, list):
+                    return value
                 if not isinstance(value, dict):
                     raise AdapterError(
                         FailureKind.PARSER, "The server returned an unexpected API response."

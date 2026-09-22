@@ -32,7 +32,7 @@ Most configuration belongs in the app: connect libraries, reading accounts, sour
 
 Dewarr initializes `/config` and runs the app as `PUID:PGID`. It does not change ownership of existing media. Give that user/group access to your shared folders.
 
-Use the same paths in Dewarr, qBittorrent, and Audiobookshelf when possible. For example:
+Use the same paths in Dewarr, qBittorrent, and your library server (Audiobookshelf or Grimmory) when possible. Grimmory's image is `grimmory/grimmory` and listens on port 6060. For example:
 
 ```text
 /data/downloads

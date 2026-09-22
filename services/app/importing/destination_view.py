@@ -23,6 +23,7 @@ class DestinationView(StrictModel):
     configured: bool
     probe: dict[str, Any] | None
     publication_available: bool = False
+    server_kind: str
 
 
 async def view(db, row):
@@ -63,4 +64,5 @@ async def view(db, row):
             and probe.get("backend", {}).get("root_mapping")
             and row.enabled
         ),
+        server_kind=(configuration["backend"] or {}).get("kind") or "audiobookshelf",
     )

@@ -79,8 +79,14 @@ async def asset_target(db, asset_id, *, lock=False):
     asset = await db.get(LibraryAsset, asset_id, with_for_update=lock, populate_existing=True)
     if not asset:
         raise HTTPException(404, "Library item not found")
+    kind = (
+        await db.scalar(select(Integration.kind).where(Integration.id == integration_id))
+        if integration_id
+        else None
+    )
+    prefix = "grimmory" if kind == "grimmory" else "abs"
     link_query = select(ProviderObject).where(
-        ProviderObject.provider == f"abs:{integration_id}",
+        ProviderObject.provider == f"{prefix}:{integration_id}",
         ProviderObject.kind == f"item:{asset.medium}",
         ProviderObject.external_id == asset.external_id,
     )

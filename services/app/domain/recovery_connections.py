@@ -13,6 +13,7 @@ from pydantic import BaseModel, ConfigDict, Field, SecretStr, field_validator, m
 from sqlalchemy import select, update
 
 from app.adapters.audiobookshelf import Audiobookshelf
+from app.adapters.grimmory import Grimmory
 from app.adapters.http import configured_url
 from app.adapters.qbittorrent import QbitClient, absolute_path
 from app.config import get_settings
@@ -25,14 +26,14 @@ from app.domain.recovery_scans import MAX_RECORDS, ScanHeld, digest
 from app.security import decrypt_secrets, encrypt_secrets
 
 KIND = "recovery.connections"
-SUPPORTED = {"audiobookshelf", "qbittorrent"}
+SUPPORTED = {"audiobookshelf", "grimmory", "qbittorrent"}
 SECRET_FIELDS = {"token", "username", "password"}
 
 
 class ConnectionChoice(BaseModel):
     model_config = ConfigDict(extra="forbid")
     finding_id: UUID
-    kind: Literal["audiobookshelf", "qbittorrent"]
+    kind: Literal["audiobookshelf", "grimmory", "qbittorrent"]
     name: str = Field(min_length=1, max_length=120)
     base_url: str = Field(max_length=2000)
     enabled: bool
@@ -71,6 +72,14 @@ class ConnectionChoice(BaseModel):
                 for name in ("username", "password", "save_path", "category", "mappings")
             ):
                 raise ValueError("Use Audiobookshelf settings for this connection")
+        elif self.kind == "grimmory":
+            if any(
+                getattr(self, name) is not None
+                for name in ("token", "save_path", "category", "mappings")
+            ):
+                raise ValueError("Use Grimmory settings for this connection")
+            if bool(self.username) != bool(self.password):
+                raise ValueError("Replace both the Grimmory username and password together")
         else:
             if self.token is not None or self.public_url is not None:
                 raise ValueError("Use qBittorrent settings for this connection")
@@ -83,6 +92,15 @@ class ConnectionChoice(BaseModel):
     def replacement(self):
         if self.kind == "audiobookshelf":
             return {"token": self.token.get_secret_value()} if self.token else None
+        if self.kind == "grimmory":
+            return (
+                {
+                    "username": self.username.get_secret_value(),
+                    "password": self.password.get_secret_value(),
+                }
+                if self.username and self.password
+                else None
+            )
         return (
             {
                 "username": self.username.get_secret_value(),
@@ -132,7 +150,7 @@ def public_settings(row):
     result = {key: row[key] for key in ("kind", "name", "base_url", "enabled")}
     result["has_credentials"] = bool(row["encrypted_secrets"])
     config = row["config"]
-    if row["kind"] == "audiobookshelf":
+    if row["kind"] in {"audiobookshelf", "grimmory"}:
         result["public_url"] = config.get("public_url") or row["base_url"]
     else:
         result.update(
@@ -212,7 +230,7 @@ def draft_settings(row, choice):
     if choice.enabled and not row.encrypted_secrets and replacement is None:
         raise HTTPException(422, "Enter credentials before enabling this connection")
     config = dict(row.config)
-    if choice.kind == "audiobookshelf":
+    if choice.kind in {"audiobookshelf", "grimmory"}:
         public_url = choice.public_url or choice.base_url
         if public_url != (config.get("public_url") or row.base_url):
             config["public_url"] = public_url
@@ -326,6 +344,16 @@ async def read_current(identifier, token, payload):
                     async with Audiobookshelf(draft["base_url"], credentials["token"]) as client:
                         result, _ = await client.authorize()
                         await client.libraries()
+                elif draft["kind"] == "grimmory":
+                    async with Grimmory(
+                        draft["base_url"],
+                        {
+                            "username": credentials["username"],
+                            "password": credentials["password"],
+                        },
+                    ) as client:
+                        result, _ = await client.authorize()
+                        await client.libraries()
                 else:
                     async with QbitClient(
                         draft["base_url"], credentials["username"], credentials["password"]
@@ -351,7 +379,7 @@ async def apply(db, review, item, capabilities):
             setattr(row, key, value)
         row.credential_generation += 1
         row.lease_token, row.lease_until, row.next_sync_at = None, None, None
-        if row.kind == "audiobookshelf":
+        if row.kind in {"audiobookshelf", "grimmory"}:
             await db.execute(
                 update(Library).where(Library.integration_id == row.id).values(accessible=False)
             )

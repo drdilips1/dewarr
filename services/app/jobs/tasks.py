@@ -191,7 +191,7 @@ async def schedule_inventory(timestamp: int) -> None:
             await db.scalars(
                 select(Integration)
                 .where(
-                    Integration.kind == "audiobookshelf",
+                    Integration.kind.in_(["audiobookshelf", "grimmory"]),
                     Integration.enabled.is_(True),
                     Integration.next_sync_at <= datetime.now(UTC),
                 )

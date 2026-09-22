@@ -2,7 +2,7 @@ import hashlib
 import json
 import re
 from pathlib import PurePosixPath
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field, ValidationError
 
@@ -25,6 +25,8 @@ class ABSFile(BaseModel):
     inode: str | None = None
     modified: float | None = None
     playback_index: int | None = Field(default=None, ge=1)
+    # Grimmory reports kilobytes. size is then fileSizeKb * 1024, not an exact byte count.
+    size_unit: Literal["byte", "kilobyte"] = "byte"
 
 
 class ABSItem(BaseModel):
@@ -46,6 +48,8 @@ class ABSItem(BaseModel):
     full_audio: bool = False
     full_ebook: bool = False
     ebook_supplementary: bool = False
+    # One unreadable library row must not abort the rest of the sync.
+    unreadable: bool = False
     path: str | None = None
     library_files: list[ABSFile] = Field(default_factory=list)
     series: list[dict] = Field(default_factory=list)

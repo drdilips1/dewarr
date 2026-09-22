@@ -27,7 +27,9 @@ export default function Connections({
   connectionOnly?: boolean;
 }) {
   const cache = useQueryClient();
-  const [editing, setEditing] = useState<Connection | "new" | null>(null);
+  const [editing, setEditing] = useState<
+    Connection | "audiobookshelf" | "grimmory" | null
+  >(null);
   const [message, setMessage] = useState("");
   const connections = useQuery({
     queryKey: ["connections"],
@@ -79,7 +81,7 @@ export default function Connections({
             <p className="eyebrow">CONNECTED LIBRARIES</p>
             <h1>Connections</h1>
             <p className="muted">
-              Keep your catalog in sync with Audiobookshelf.
+              Keep your catalog in sync with Audiobookshelf or Grimmory.
             </p>
             <Link to="/settings#downloaders">Downloaders</Link>
           </div>
@@ -88,10 +90,16 @@ export default function Connections({
           className={
             connections.data?.length ? "settings-add-connection" : "primary"
           }
-          onClick={() => setEditing("new")}
+          onClick={() => setEditing("audiobookshelf")}
         >
           <Plus size={16} />{" "}
           {connections.data?.length ? "Add server" : "Connect Audiobookshelf"}
+        </button>
+        <button
+          className="settings-add-connection"
+          onClick={() => setEditing("grimmory")}
+        >
+          <Plus size={16} /> Connect Grimmory
         </button>
       </div>
       <Notice error={connections.error || libraries.error || command.error} />
@@ -102,8 +110,15 @@ export default function Connections({
       )}
       {editing && (
         <ConnectionForm
-          key={editing === "new" ? "new" : editing.id}
-          connection={editing === "new" ? undefined : editing}
+          key={typeof editing === "string" ? editing : editing.id}
+          kind={
+            typeof editing === "string"
+              ? editing
+              : editing.kind === "grimmory"
+                ? "grimmory"
+                : "audiobookshelf"
+          }
+          connection={typeof editing === "string" ? undefined : editing}
           close={() => setEditing(null)}
         />
       )}
@@ -171,8 +186,8 @@ export default function Connections({
         <p className="muted">No libraries connected.</p>
       ) : (
         <Empty title="Bring your library into view">
-          Connect Audiobookshelf to see which books and recordings you already
-          have.
+          Connect Audiobookshelf or Grimmory to see which books and recordings
+          you already have.
         </Empty>
       )}
       {!connectionOnly && (
@@ -202,12 +217,16 @@ export default function Connections({
 }
 
 function ConnectionForm({
+  kind,
   connection,
   close,
 }: {
+  kind: "audiobookshelf" | "grimmory";
   connection?: Connection;
   close: () => void;
 }) {
+  const grimmory = kind === "grimmory";
+  const appName = grimmory ? "Grimmory" : "Audiobookshelf";
   const cache = useQueryClient();
   const formRef = useRef<HTMLFormElement>(null);
   const [revision, setRevision] = useState(0);
@@ -219,11 +238,13 @@ function ConnectionForm({
   function bodyFrom(form: HTMLFormElement) {
     const fields = new FormData(form);
     return {
-      kind: "audiobookshelf" as const,
+      kind,
       name: String(fields.get("name")),
       base_url: String(fields.get("base_url")),
       public_url: String(fields.get("public_url")) || null,
-      token: String(fields.get("token")) || null,
+      token: grimmory ? null : String(fields.get("token")) || null,
+      username: grimmory ? String(fields.get("username")) || null : null,
+      password: grimmory ? String(fields.get("password")) || null : null,
       enabled: fields.get("enabled") === "on",
     };
   }
@@ -258,15 +279,7 @@ function ConnectionForm({
   }, [revision, connection?.id]);
   const save = useMutation({
     mutationFn: async (form: HTMLFormElement) => {
-      const fields = new FormData(form);
-      const body = {
-        kind: "audiobookshelf" as const,
-        name: String(fields.get("name")),
-        base_url: String(fields.get("base_url")),
-        public_url: String(fields.get("public_url")) || null,
-        token: String(fields.get("token")) || null,
-        enabled: fields.get("enabled") === "on",
-      };
+      const body = bodyFrom(form);
       if (connection)
         result(
           await api.PUT("/api/integrations/{integration_id}", {
@@ -297,15 +310,13 @@ function ConnectionForm({
         if (check) save.mutate(event.currentTarget);
       }}
     >
-      <h2>
-        {connection ? "Edit Audiobookshelf" : "Connect your Audiobookshelf"}
-      </h2>
+      <h2>{connection ? `Edit ${appName}` : `Connect your ${appName}`}</h2>
       <Notice error={save.error} />
       <label>
         Connection name
         <input
           name="name"
-          defaultValue={connection?.name || "Audiobookshelf"}
+          defaultValue={connection?.name || appName}
           required
           maxLength={120}
         />
@@ -322,7 +333,9 @@ function ConnectionForm({
           aria-label="Server URL"
           type="url"
           defaultValue={connection?.base_url}
-          placeholder="http://audiobookshelf:80"
+          placeholder={
+            grimmory ? "http://grimmory:6060" : "http://audiobookshelf:80"
+          }
           required
           maxLength={2000}
         />
@@ -331,8 +344,7 @@ function ConnectionForm({
         <span className="setting-subheading">
           Browser URL (optional){" "}
           <SettingHelp label="Browser URL">
-            Address for Open in Audiobookshelf links. Defaults to the server
-            URL.
+            Address for Open in {appName} links. Defaults to the server URL.
           </SettingHelp>
         </span>
         <input
@@ -343,19 +355,45 @@ function ConnectionForm({
           maxLength={2000}
         />
       </label>
-      <label>
-        API token
-        <input
-          name="token"
-          type="password"
-          autoComplete="new-password"
-          required={!connection}
-          maxLength={8192}
-          placeholder={
-            connection ? "••••••••" : "Paste your Audiobookshelf token"
-          }
-        />
-      </label>
+      {grimmory ? (
+        <>
+          <label>
+            Username
+            <input
+              name="username"
+              autoComplete="username"
+              required={!connection}
+              maxLength={200}
+              placeholder={connection ? "Saved username" : "Grimmory username"}
+            />
+          </label>
+          <label>
+            Password
+            <input
+              name="password"
+              type="password"
+              autoComplete="new-password"
+              required={!connection}
+              maxLength={1000}
+              placeholder={connection ? "••••••••" : "Grimmory password"}
+            />
+          </label>
+        </>
+      ) : (
+        <label>
+          API token
+          <input
+            name="token"
+            type="password"
+            autoComplete="new-password"
+            required={!connection}
+            maxLength={8192}
+            placeholder={
+              connection ? "••••••••" : "Paste your Audiobookshelf token"
+            }
+          />
+        </label>
+      )}
       <label className="check-label">
         <input
           type="checkbox"
@@ -385,6 +423,8 @@ function ConnectionForm({
             <XCircle size={16} />
             {checkError}
           </>
+        ) : grimmory ? (
+          "Enter the server, username, and password to check the connection."
         ) : (
           "Enter your server and token to check the connection."
         )}

@@ -5,8 +5,15 @@ from uuid import uuid4
 
 import pytest
 
+from app.adapters.audiobookshelf import ABSItem
 from app.importing.publication import publish_item
-from app.importing.recovery import journal_census, observe_entry, read_publication
+from app.importing.recovery import (
+    grimmory_publication_ids,
+    journal_census,
+    observe_entry,
+    publication_state,
+    read_publication,
+)
 from tests.unit.test_import_publication import specification  # noqa: F401
 
 
@@ -60,7 +67,10 @@ def test_deleted_publication_and_untracked_journal_are_reported(specification):
     for p in (spec.destination_root / spec.folder).iterdir():
         p.unlink()
     (spec.destination_root / spec.folder).rmdir()
-    assert observe_entry(*inputs(spec))[0] == "missing"
+    state, _, evidence = observe_entry(*inputs(spec))
+    assert state == "relocated"
+    assert evidence["relocated"] is True
+    assert "media_identities" not in evidence
     key = uuid4()
     (spec.staging_root / f"{key}.json").write_text(
         json.dumps({"entry_id": str(key), "state": "prepared"})
@@ -69,6 +79,78 @@ def test_deleted_publication_and_untracked_journal_are_reported(specification):
         str(spec.entry_id),
         str(key),
     }
+
+
+def test_only_a_grimmory_destination_keeps_a_moved_publication_reviewable(specification):
+    spec = specification
+    publish_item(spec)
+    for path in (spec.destination_root / spec.folder).iterdir():
+        path.unlink()
+    (spec.destination_root / spec.folder).rmdir()
+    entry, roots = inputs(spec)
+    assert publication_state(entry, roots, grimmory=True)[0] == "relocated"
+    assert publication_state(entry, roots, grimmory=False)[0] == "missing"
+    destination_id, library_id, integration_id = uuid4(), uuid4(), uuid4()
+    entry["destination_id"] = destination_id
+    assert (
+        grimmory_publication_ids(
+            {
+                "import_entries": [entry],
+                "import_destinations": [{"id": destination_id, "library_id": library_id}],
+                "libraries": [{"id": library_id, "integration_id": integration_id}],
+                "integrations": [{"id": integration_id, "kind": "audiobookshelf"}],
+            }
+        )
+        == set()
+    )
+    assert grimmory_publication_ids(
+        {
+            "import_entries": [entry],
+            "import_destinations": [{"id": destination_id, "library_id": library_id}],
+            "libraries": [{"id": library_id, "integration_id": integration_id}],
+            "integrations": [{"id": integration_id, "kind": "grimmory"}],
+        }
+    ) == {str(entry["id"])}
+
+
+async def test_recovery_library_read_allows_the_sync_limit_and_stops_above_it():
+    from app.adapters.contracts import AdapterError
+    from app.domain.recovery_observers import abs_library
+
+    async def pulse():
+        return None
+
+    class Client:
+        def __init__(self, total):
+            self.total = total
+
+        async def page(self, library_id, page):
+            assert page == 0
+            return [{"id": str(number)} for number in range(self.total)], self.total
+
+        async def expanded(self, ids):
+            return [
+                ABSItem(
+                    id=item_id,
+                    library_id="7",
+                    title="Harbor",
+                    authors=[],
+                    narrators=[],
+                )
+                for item_id in ids
+            ]
+
+    fingerprint, items = await abs_library(Client(10_001), "7", pulse, verify=False)
+    assert len(fingerprint) == len(items) == 10_001
+    with pytest.raises(AdapterError, match="100,000"):
+        await abs_library(Client(100_001), "7", pulse, verify=False)
+
+
+def test_missing_sidecar_stays_unpublished_while_the_book_file_remains(specification):
+    spec = specification
+    publish_item(spec)
+    (spec.destination_root / spec.folder / "metadata.opf").unlink()
+    assert observe_entry(*inputs(spec))[0] == "missing"
 
 
 def test_symlinked_destination_and_changed_root_are_not_adopted(specification, tmp_path):

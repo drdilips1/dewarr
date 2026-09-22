@@ -25,6 +25,21 @@ from app.state_bundle import journal_name
 MAX_JOURNAL_BYTES = 256 * 1024 * 1024
 
 
+def _published_media_left(destination, spec) -> bool:
+    """True when a published book file is no longer in its folder."""
+    try:
+        with beneath(destination, spec.folder, folder=True) as folder:
+            for file in spec.files:
+                try:
+                    with beneath(folder, file.name):
+                        pass
+                except FileNotFoundError:
+                    return True
+            return False
+    except FileNotFoundError:
+        return True
+
+
 def read_publication(entry, roots):
     """Return verified evidence and its original receipt without modifying either."""
     if not entry["specification"]:
@@ -112,6 +127,19 @@ def read_publication(entry, roots):
                         )
                 except FileNotFoundError:
                     pass
+            # Grimmory can rename a published book onto its library pattern and
+            # remove the original folder. The journal still proves publication.
+            if (
+                state == "missing"
+                and receipt
+                and receipt.get("state") == "published"
+                and _published_media_left(destination, spec)
+            ):
+                evidence["relocated"] = True
+                state, message = (
+                    "relocated",
+                    "Published files left their folder. Grimmory can still confirm the book.",
+                )
         try:
             with (
                 directory(spec.source_root) as source_root,
@@ -122,7 +150,7 @@ def read_publication(entry, roots):
             evidence["source"] = "matches-frozen-files"
         except (OSError, ValueError):
             evidence["source"] = "unavailable-or-changed"
-            if state != "published":
+            if state not in {"published", "relocated"}:
                 state, message = (
                     "changed",
                     "The source or staged publication needs reconciliation before any file action",
@@ -159,6 +187,30 @@ def publication_identities(folder, spec):
 
 def observe_entry(entry, roots):
     return read_publication(entry, roots)[:3]
+
+
+def grimmory_publication_ids(inputs) -> set[str]:
+    """Import entries whose destination library is Grimmory."""
+    destinations = {str(row["id"]): row for row in inputs.get("import_destinations", [])}
+    libraries = {str(row["id"]): row for row in inputs.get("libraries", [])}
+    integrations = {str(row["id"]): row for row in inputs.get("integrations", [])}
+    selected = set()
+    for entry in inputs.get("import_entries", []):
+        destination = destinations.get(str(entry.get("destination_id")))
+        library = libraries.get(str(destination["library_id"])) if destination else None
+        integration = integrations.get(str(library["integration_id"])) if library else None
+        if integration and integration.get("kind") == "grimmory":
+            selected.add(str(entry["id"]))
+    return selected
+
+
+def publication_state(entry, roots, *, grimmory: bool):
+    """Filesystem observation. Only Grimmory keeps a moved book reviewable."""
+    state, message, evidence = observe_entry(entry, roots)
+    if state == "relocated" and not grimmory:
+        evidence = {key: value for key, value in evidence.items() if key != "relocated"}
+        return "missing", "The saved publication is not visible at its destination", evidence
+    return state, message, evidence
 
 
 def journal_census(path):
@@ -208,10 +260,16 @@ def journal_census(path):
 
 async def observe_files(inputs, writer):
     roots = inputs["roots"]
+    grimmory_ids = grimmory_publication_ids(inputs)
     for entry in inputs["import_entries"]:
         await writer.pulse()
         try:
-            state, message, evidence = await asyncio.to_thread(observe_entry, entry, roots)
+            state, message, evidence = await asyncio.to_thread(
+                publication_state,
+                entry,
+                roots,
+                grimmory=str(entry["id"]) in grimmory_ids,
+            )
         except Exception:
             state, message, evidence = (
                 "blocked",

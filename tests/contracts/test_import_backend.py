@@ -20,9 +20,7 @@ async def test_actual_folder_mapping_challenge_with_watcher_only_token(tmp_path)
     assert not list(fixture.root.iterdir())
 
 
-@pytest.mark.parametrize(
-    "condition", ["audio-only", "precedence", "no-detection", "wrong-root", "unknown-version"]
-)
+@pytest.mark.parametrize("condition", ["audio-only", "precedence", "no-detection", "wrong-root"])
 async def test_incompatible_backend_settings_fail_before_creating_marker(tmp_path, condition):
     fixture = ImportBackendFixture(tmp_path.resolve())
     root = "/books"
@@ -33,14 +31,22 @@ async def test_incompatible_backend_settings_fail_before_creating_marker(tmp_pat
     elif condition == "no-detection":
         fixture.user_type = "user"
         fixture.settings["disableWatcher"] = True
-    elif condition == "wrong-root":
-        root = "/different"
     else:
-        fixture.version = "2.99.0"
+        root = "/different"
     async with fixture.client() as adapter:
         with pytest.raises(PublicationError):
             await verify_backend(adapter, "synthetic", root, fixture.root, "ebook")
     assert not fixture.path_checks and not list(fixture.root.iterdir())
+
+
+@pytest.mark.parametrize("version", ["2.19.1", "2.36.1", "2.41.0"])
+async def test_other_audiobookshelf_releases_still_verify_the_folder(tmp_path, version):
+    fixture = ImportBackendFixture(tmp_path.resolve())
+    fixture.version = version
+    async with fixture.client() as adapter:
+        result = await verify_backend(adapter, "synthetic", "/books", fixture.root, "ebook")
+    assert result["version"] == version and result["root_mapping"]
+    assert not list(fixture.root.iterdir())
 
 
 async def test_different_worker_backend_mounts_are_not_verified(tmp_path):

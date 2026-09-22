@@ -26,6 +26,7 @@ from app.importing.converters import audio_conversion
 from app.importing.destination_view import view as destination_view
 from app.importing.destinations import destination_configuration
 from app.importing.grouping import current_grouping
+from app.importing.metadata import grimmory_sidecars
 from app.importing.naming import StrictModel
 from app.importing.ownership import already_owned
 from app.importing.planning import assert_admin
@@ -179,6 +180,16 @@ async def start_import(db, admin, plan_id: UUID, body: ImportInput, idempotency_
             entry.message = str(error)[:500]
             continue
         converted = {chapter.source for chapter in conversion.chapters} if conversion else set()
+        sidecars = dict(document["initial_sidecars"][item["group_id"]])
+        published_names = [
+            PurePosixPath(mapping["destination"]).name
+            for mapping in item["files"]
+            if mapping["source"] not in converted
+        ]
+        if conversion:
+            published_names.append(conversion.output_name)
+        if (configuration["backend"] or {}).get("kind") == "grimmory":
+            sidecars.update(grimmory_sidecars(group["metadata"], item["medium"], published_names))
         specification = PublicationSpec(
             entry_id=entry.id,
             plan_revision=plan.revision,
@@ -201,7 +212,7 @@ async def start_import(db, admin, plan_id: UUID, body: ImportInput, idempotency_
                 if mapping["source"] not in converted
             ],
             conversion=conversion,
-            sidecars=document["initial_sidecars"][item["group_id"]],
+            sidecars=sidecars,
         )
         entry.specification = specification.model_dump(mode="json")
         entry.configuration = {

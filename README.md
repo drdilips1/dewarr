@@ -6,7 +6,7 @@
 
 ## Features
 
-- **Audiobookshelf integration** — browse your library, see what you own, and import completed downloads into verified library folders.
+- **Library integration** — connect Audiobookshelf or Grimmory, see what you own, and import completed downloads into verified library folders.
 - **Chapterized M4B** — merge a multi-file MP3 download into one audiobook, with a chapter per file, before library import. The download itself stays unchanged.
 - **Goodreads sync** — follow shelves, import CSV exports, and check for new books automatically.
 - **Hardcover sync** — track your lists and lists you follow, including private lists your account can access.
@@ -145,7 +145,7 @@ Already have PostgreSQL? Skip its container and use your existing database host,
 
 </details>
 
-Open [localhost:8000](http://localhost:8000), or your server's address, and create your first account. Connect Audiobookshelf, Goodreads, Hardcover, and download clients in **Settings**.
+Open [localhost:8000](http://localhost:8000), or your server's address, and create your first account. Connect Audiobookshelf or Grimmory, Goodreads, Hardcover, and download clients in **Settings**.
 
 Before creating a Hardcover token, enable `read:catalog`, `read:me:content`, `read:lists`, `read:library:public`, `read:users`, and `write:lists`. [Create a token with those scopes selected](https://hardcover.app/account/api/keys/new?scope=read:catalog+read:me:content+read:lists+read:library:public+read:users+write:lists). The Metadata setup screen lists what each scope is for. Details are in [reading accounts](docs/READING-ACCOUNTS.md).
 

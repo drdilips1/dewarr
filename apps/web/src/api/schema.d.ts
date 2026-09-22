@@ -4295,9 +4295,9 @@ export interface components {
       /**
        * Kind
        * @default audiobookshelf
-       * @constant
+       * @enum {string}
        */
-      kind: "audiobookshelf";
+      kind: "audiobookshelf" | "grimmory";
       /** Name */
       name: string;
       /** Base Url */
@@ -4306,6 +4306,10 @@ export interface components {
       public_url?: string | null;
       /** Token */
       token?: string | null;
+      /** Username */
+      username?: string | null;
+      /** Password */
+      password?: string | null;
       /**
        * Enabled
        * @default true
@@ -4634,6 +4638,8 @@ export interface components {
       authors?: string[];
       /** Medium */
       medium: string;
+      /** Server Kind */
+      server_kind: string;
       /** State */
       state: string;
       /** Full Content */
@@ -5516,7 +5522,7 @@ export interface components {
        * Kind
        * @enum {string}
        */
-      kind: "audiobookshelf" | "qbittorrent";
+      kind: "audiobookshelf" | "grimmory" | "qbittorrent";
       /** Name */
       name: string;
       /** Base Url */
@@ -5981,6 +5987,8 @@ export interface components {
        * @default false
        */
       publication_available: boolean;
+      /** Server Kind */
+      server_kind: string;
     };
     /** DiscoveryBookPage */
     DiscoveryBookPage: {
@@ -6426,6 +6434,8 @@ export interface components {
       library_name: string;
       /** Server Name */
       server_name: string;
+      /** Server Kind */
+      server_kind: string;
       /**
        * Folders
        * @default []
@@ -6436,6 +6446,11 @@ export interface components {
        * @default true
        */
       ebooks_allowed: boolean;
+      /**
+       * Audio Allowed
+       * @default true
+       */
+      audio_allowed: boolean;
       /** Error */
       error?: string | null;
     };

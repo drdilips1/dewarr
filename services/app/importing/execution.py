@@ -19,6 +19,7 @@ from sqlalchemy import select
 
 from app.adapters.audiobookshelf import Audiobookshelf
 from app.adapters.contracts import AdapterError, FailureKind
+from app.adapters.grimmory import FORMAT_TYPES, Grimmory
 from app.config import get_settings
 from app.db.models import (
     AuditEvent,
@@ -36,6 +37,7 @@ from app.db.models import (
 )
 from app.db.session import session_factory
 from app.domain import capacity, download_reviews
+from app.domain.catalog_language import catalog_language
 from app.domain.identity import normalized
 from app.domain.inventory import apply_item
 from app.importing.backend import verify_backend
@@ -208,7 +210,47 @@ def verify_published_media(spec, receipt=None):
                     raise PublicationError("Published media changed; library confirmation is held")
 
 
-def matches(entry, item):
+def _size_matches(expected_bytes: int, file) -> bool:
+    if getattr(file, "size_unit", "byte") != "kilobyte":
+        return file.size == expected_bytes
+    return abs(file.size - expected_bytes) < 1024
+
+
+def detection_needs_another_scan(kind, capabilities, *, published_now, found) -> bool:
+    """Grimmory ignores a refresh that arrives while one is already running.
+
+    A later confirmation asks again when the book is still absent and folder watch
+    is not there to notice it. The publish attempt already requested the first refresh.
+    """
+    return (
+        kind == "grimmory"
+        and not found
+        and not published_now
+        and bool(capabilities.get("scan_capable"))
+        and not capabilities.get("watcher_enabled")
+    )
+
+
+def _app_name(item) -> str:
+    if str(getattr(item, "cover_path", "") or "").startswith("grimmory:"):
+        return "Grimmory"
+    return "Audiobookshelf"
+
+
+def _same_sequence(expected, actual) -> bool:
+    if not expected:
+        return True
+    if actual is None:
+        return False
+    if str(actual) == str(expected):
+        return True
+    try:
+        return float(expected) == float(actual)
+    except (TypeError, ValueError):
+        return False
+
+
+def _same_files(entry, item) -> bool:
     config, metadata = entry.configuration["destination"], entry.expected_metadata
     folder = str(PurePosixPath(config["backend_path"]) / entry.specification["folder"])
     if item.path != folder:
@@ -216,19 +258,37 @@ def matches(entry, item):
     spec = PublicationSpec.model_validate(entry.specification)
     selected = {
         str(PurePosixPath(folder) / name): size
-        for name, size in published_sizes(spec, entry.receipt).items()
+        for name, size in published_sizes(spec, getattr(entry, "receipt", None)).items()
     }
-    media = {file.path: file.size for file in item.library_files if file.format in AUDIO | EBOOK}
+    media = {file.path: file for file in item.library_files if file.format in AUDIO | EBOOK}
     if (
-        media != selected
+        set(media) != set(selected)
+        or any(not _size_matches(selected[path], file) for path, file in media.items())
         or item.missing
         or item.invalid
+        or getattr(item, "unreadable", False)
         or not getattr(item, "full_" + metadata["medium"])
     ):
-        raise PublicationError("ABS item boundaries or media files differ from the frozen import")
+        raise PublicationError(
+            "Library item boundaries or media files differ from the frozen import"
+        )
+    return True
+
+
+def _same_narrators(expected, actual, *, grimmory: bool) -> bool:
+    if sorted(map(normalized, expected)) == sorted(map(normalized, actual)):
+        return True
+    # Grimmory keeps one string, so a comma can belong to a name. The written
+    # form is ", ".join, and that still matches after a comma split.
+    return grimmory and normalized(", ".join(expected)) == normalized(", ".join(actual))
+
+
+def _same_metadata(entry, item, *, playback_order: bool = True) -> None:
+    metadata = entry.expected_metadata
+    library = _app_name(item)
     if normalized(item.title) != normalized(metadata["title"]):
-        raise PublicationError("ABS title differs from the exported title")
-    if expected_order := metadata.get("audio_order"):
+        raise PublicationError(f"{library} title differs from the exported title")
+    if playback_order and (expected_order := metadata.get("audio_order")):
         indices = [file.playback_index for file in item.audio]
         if (
             any(index is None for index in indices)
@@ -237,28 +297,163 @@ def matches(entry, item):
             != expected_order
         ):
             raise PublicationError(
-                "ABS playback order differs from the reviewed disc and track order"
+                f"{library} playback order differs from the reviewed disc and track order"
             )
     for key in ("authors", "narrators"):
         expected = metadata[key] if key == "authors" or metadata["medium"] == "audio" else []
-        if expected and sorted(map(normalized, expected)) != sorted(
-            map(normalized, getattr(item, key))
-        ):
-            raise PublicationError(f"ABS {key} differ from the exported metadata")
+        if not expected:
+            continue
+        actual = getattr(item, key)
+        same = (
+            _same_narrators(expected, actual, grimmory=library == "Grimmory")
+            if key == "narrators"
+            else sorted(map(normalized, expected)) == sorted(map(normalized, actual))
+        )
+        if not same:
+            raise PublicationError(f"{library} {key} differ from the exported metadata")
     year = metadata["edition_year" if metadata["medium"] == "ebook" else "recording_year"]
     if year and year != item.year:
-        raise PublicationError("ABS publication year differs from the exported version")
-    if metadata.get("language") and normalized(metadata["language"]) != normalized(
+        raise PublicationError(f"{library} publication year differs from the exported version")
+    if metadata.get("language") and catalog_language(metadata["language"]) != catalog_language(
         item.language or ""
     ):
-        raise PublicationError("ABS language differs from the exported version")
+        raise PublicationError(f"{library} language differs from the exported version")
     if metadata.get("series") and not any(
         series.get("name") == metadata["series"]
-        and (not metadata.get("sequence") or str(series.get("sequence")) == metadata["sequence"])
+        and _same_sequence(metadata.get("sequence"), series.get("sequence"))
         for series in item.series
     ):
-        raise PublicationError("ABS series metadata differs from the export")
+        raise PublicationError(f"{library} series metadata differs from the export")
+
+
+def _published_names(entry) -> dict[str, int]:
+    spec = PublicationSpec.model_validate(entry.specification)
+    return {file.name: file.identity["size"] for file in spec.files}
+
+
+def _media_files(item):
+    return [file for file in item.library_files if file.format in AUDIO | EBOOK]
+
+
+def _published_folder(entry) -> str:
+    return str(
+        PurePosixPath(entry.configuration["destination"]["backend_path"])
+        / entry.specification["folder"]
+    )
+
+
+def _grimmory_ready(entry, item) -> bool:
+    metadata = entry.expected_metadata
+    return not (
+        item.missing
+        or item.invalid
+        or getattr(item, "unreadable", False)
+        or not getattr(item, "full_" + metadata["medium"])
+    )
+
+
+def _grimmory_same_names(entry, item) -> bool:
+    """Same folder and filenames after Grimmory rewrites a file in place."""
+    if item.path != _published_folder(entry) or not _grimmory_ready(entry, item):
+        return False
+    actual = {PurePosixPath(file.path).name for file in _media_files(item)}
+    return actual == set(_published_names(entry))
+
+
+def _grimmory_same_sizes(entry, item) -> bool:
+    """Same file count and sizes after Grimmory renames a book onto its library pattern."""
+    if not _grimmory_ready(entry, item):
+        return False
+    expected = list(_published_names(entry).values())
+    remaining = _media_files(item)
+    if len(remaining) != len(expected):
+        return False
+    for size in expected:
+        match = next((file for file in remaining if _size_matches(size, file)), None)
+        if match is None:
+            return False
+        remaining.remove(match)
     return True
+
+
+def grimmory_relocated_match(entry, item) -> bool:
+    """A journaled book Grimmory moved. File size still has to match.
+
+    Extension alone is not enough: the published file may have been deleted
+    while another copy of the same edition remains.
+    """
+    try:
+        return matches(entry, item)
+    except PublicationError:
+        return False
+
+
+def published_file(item, name, identity, used, *, grimmory: bool):
+    """The library file for one published name, including a Grimmory pattern rename."""
+    direct = next(
+        (
+            file
+            for file in item.library_files
+            if file not in used and file.path == str(PurePosixPath(item.path or "") / name)
+        ),
+        None,
+    )
+    if direct is not None:
+        return direct
+    if not grimmory:
+        return None
+    extension = PurePosixPath(name).suffix.lower().lstrip(".")
+    return next(
+        (
+            file
+            for file in _media_files(item)
+            if file not in used
+            and (not extension or file.format == extension)
+            and _size_matches(identity["size"], file)
+        ),
+        None,
+    )
+
+
+def matches(entry, item):
+    grimmory = _app_name(item) == "Grimmory"
+    try:
+        same_folder = _same_files(entry, item)
+    except PublicationError:
+        # A metadata rewrite can change the byte size while leaving the filename.
+        if not (grimmory and _grimmory_same_names(entry, item)):
+            raise
+        same_folder = True
+    if not same_folder and not (grimmory and _grimmory_same_sizes(entry, item)):
+        return False
+    # Grimmory orders tracks by filename and may rename them after metadata is saved.
+    _same_metadata(entry, item, playback_order=not grimmory)
+    return True
+
+
+def verified_ebook_files(entry, item, *, grimmory: bool) -> list[dict]:
+    """Ebook files confirmed for this import.
+
+    Audiobookshelf exposes one primary file, so extra formats stay tied to the
+    published paths. Grimmory's library pattern renames those paths; the files
+    it reports now are the ones this import placed.
+    """
+    if grimmory:
+        published = {
+            PurePosixPath(file["name"]).suffix.lower().lstrip(".")
+            for file in entry.specification["files"]
+        }
+        selected = [
+            file for file in item.library_files if file.format in published and file.format in EBOOK
+        ]
+    else:
+        paths = set(
+            entry.expected_metadata.get("ebook_media_paths") or [file.path for file in item.ebook]
+        )
+        selected = [
+            file for file in item.library_files if file.path in paths and file.format in EBOOK
+        ]
+    return [{**file.model_dump(), "import_verified": True} for file in selected]
 
 
 async def prepare_cover(entry_id, token):
@@ -322,23 +517,41 @@ async def find_item(adapter, entry, library_external_id):
     while True:
         rows, total = await adapter.page(library_external_id, page)
         if expected_total is not None and total != expected_total:
-            raise PublicationError("ABS inventory changed during confirmation; retry detection")
+            raise PublicationError("Library inventory changed during confirmation; retry detection")
         expected_total = total
         for item in await adapter.expanded([row["id"] for row in rows]) if rows else []:
             if item.library_id != library_external_id:
-                raise PublicationError("ABS item moved during confirmation")
-            if matches(entry, item):
+                raise PublicationError(f"{_app_name(item)} item moved during confirmation")
+            if getattr(item, "unreadable", False):
+                continue
+            if _same_files(entry, item):
                 found.append(item)
         if (page + 1) * adapter.page_size >= total:
             break
         page += 1
     if len(found) > 1:
-        raise PublicationError("ABS reports duplicate items for this import folder")
+        raise PublicationError(
+            f"{_app_name(found[0])} reports duplicate items for this import folder"
+        )
     if not found:
         return None
     current = await adapter.item(found[0].id)
-    if current.library_id != library_external_id or not matches(entry, current):
-        raise PublicationError("ABS item changed during confirmation")
+    if current.library_id != library_external_id or not _same_files(entry, current):
+        raise PublicationError(f"{_app_name(current)} item changed during confirmation")
+    if hasattr(adapter, "apply_catalog_metadata"):
+        await adapter.apply_catalog_metadata(
+            current.id, entry.expected_metadata, observed_year=current.year
+        )
+        current = await adapter.item(current.id)
+        if current.library_id != library_external_id:
+            raise PublicationError(f"{_app_name(current)} item changed during confirmation")
+        # Grimmory may write those fields into the file or move it onto its library
+        # pattern, and it orders folder tracks by filename. The book was already
+        # identified by its files; keep its new location and its own playback order.
+        _same_metadata(entry, current, playback_order=False)
+        return current
+    if not matches(entry, current):
+        raise PublicationError(f"{_app_name(current)} item changed during confirmation")
     return current
 
 
@@ -377,7 +590,10 @@ async def confirm_observation(db, current, integration, library, item, observed_
     """
     spec = PublicationSpec.model_validate(current.specification)
     version = await db.get(Version, current.version_id)
-    namespace = f"abs:{integration.id}"
+    namespace = (
+        f"grimmory:{integration.id}" if integration.kind == "grimmory" else f"abs:{integration.id}"
+    )
+    library_name = "Grimmory" if integration.kind == "grimmory" else "Audiobookshelf"
     link = await db.scalar(
         select(ProviderObject)
         .where(
@@ -412,19 +628,11 @@ async def confirm_observation(db, current, integration, library, item, observed_
         )
     )
     if not asset or not asset.full_content or asset.version_id != version.id:
-        raise PublicationError("ABS observation did not produce the intended full library asset")
-    if version.medium == "ebook":
-        # A reviewed ebook group may contain several complete formats.
-        # The exact file set was checked by matches; ABS exposes only
-        # one of those as its primary ebookFile.
-        selected_paths = set(
-            current.expected_metadata.get("ebook_media_paths") or [file.path for file in item.ebook]
+        raise PublicationError(
+            f"{library_name} observation did not produce the intended full library asset"
         )
-        asset.files = [
-            {**file.model_dump(), "import_verified": True}
-            for file in item.library_files
-            if file.path in selected_paths and file.format in EBOOK
-        ]
+    if version.medium == "ebook":
+        asset.files = verified_ebook_files(current, item, grimmory=integration.kind == "grimmory")
     current.asset_id, current.confirmed_at = asset.id, datetime.now(UTC)
     contents = current.expected_metadata.get("collection_contents", [])
     if contents:
@@ -443,26 +651,31 @@ async def confirm_observation(db, current, integration, library, item, observed_
         except HTTPException as error:
             raise PublicationError(str(error.detail)) from error
     if current.cover_export and current.cover_export["state"] == "prepared":
-        selected = item.cover_path == str(
+        expected_cover = str(
             PurePosixPath(current.configuration["destination"]["backend_path"])
             / spec.folder
             / "cover.jpg"
         )
         unchanged = observed_cover == current.cover_export["sha256"]
+        # Grimmory's folder scan uses cover.jpg in the book folder and does not
+        # report that path back. An unchanged export is the cover it can select.
+        selected = item.cover_path == expected_cover or (
+            integration.kind == "grimmory" and unchanged
+        )
         current.cover_export = {
             **current.cover_export,
             "backend_selected": selected,
             "unchanged": unchanged,
-            "message": "Selected cover detected in Audiobookshelf"
+            "message": f"Selected cover detected in {library_name}"
             if selected and unchanged
             else (
-                "Artwork changed or ABS selected another cover; "
+                f"Artwork changed or {library_name} selected another cover; "
                 "the initial export will not overwrite it"
             ),
         }
     current.state, current.message, current.run_token, current.next_check_at = (
         "confirmed",
-        "Available in Audiobookshelf",
+        f"Available in {library_name}",
         None,
         None,
     )
@@ -503,7 +716,6 @@ def _note_progress(loop, entry_id, required):
 
 
 async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda _: None):
-    client_factory = client_factory or Audiobookshelf
     token = uuid4()
     async with session_factory()() as db, db.begin():
         operation = await db.get(Operation, operation_id)
@@ -527,11 +739,16 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
         async with session_factory()() as db:
             entry = await db.get(ImportEntry, entry_id)
             _, _, integration, library = await context(db, entry, token)
-            secret = decrypt_secrets(integration.encrypted_secrets)["token"]
+            secrets = decrypt_secrets(integration.encrypted_secrets)
+            secret = secrets if integration.kind == "grimmory" else secrets["token"]
             url, external_library = integration.base_url, library.external_id
+            factory = client_factory or (
+                Grimmory if integration.kind == "grimmory" else Audiobookshelf
+            )
+            library_name = "Grimmory" if integration.kind == "grimmory" else "Audiobookshelf"
             spec = PublicationSpec.model_validate(entry.specification)
             receipt = entry.receipt
-        async with client_factory(url, secret) as adapter:
+        async with factory(url, secret) as adapter:
             capabilities = await verify_backend(
                 adapter,
                 external_library,
@@ -539,7 +756,24 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                 spec.destination_root,
                 entry.expected_metadata["medium"],
             )
-            if not entry.published_at:
+            if integration.kind == "grimmory":
+                allowed = set(
+                    (capabilities.get("configuration") or {}).get("allowed_formats") or []
+                )
+                for media in spec.files:
+                    extension = PurePosixPath(media.name).suffix.lower().lstrip(".")
+                    book_type = FORMAT_TYPES.get(extension)
+                    if book_type is None:
+                        raise PublicationError(
+                            "Grimmory indexes EPUB, PDF, MOBI, AZW3, FB2, CBZ, CBR, CB7, "
+                            "M4B, M4A, MP3, and Opus. This file uses another format."
+                        )
+                    if allowed and book_type not in allowed:
+                        raise PublicationError(
+                            f"This Grimmory library does not accept {book_type} files."
+                        )
+            published_now = not entry.published_at
+            if published_now:
                 spec = await prepare_cover(entry_id, token)
                 entry.specification = spec.model_dump(mode="json")
                 observation = await capacity.observe_import(spec)
@@ -588,7 +822,7 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                     current.receipt, current.published_at = receipt, datetime.now(UTC)
                     current.state, current.message = (
                         "awaiting-library",
-                        "Published; awaiting ABS item confirmation",
+                        f"Published; waiting for {library_name} to confirm the item",
                     )
                     current.next_check_at = datetime.now(UTC) + timedelta(minutes=1)
                     await capacity.release_import(db, current)
@@ -599,10 +833,17 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                             entity_id=current.id,
                         )
                     )
-            if capabilities["scan_capable"]:
+            if capabilities["scan_capable"] and published_now:
                 await adapter.scan(external_library)
             await asyncio.to_thread(verify_published_media, spec, receipt)
             item = await find_item(adapter, entry, external_library)
+            if detection_needs_another_scan(
+                integration.kind,
+                capabilities,
+                published_now=published_now,
+                found=item is not None,
+            ):
+                await adapter.scan(external_library)
             if item is None:
                 async with session_factory()() as db:
                     current = await db.get(ImportEntry, entry_id)
@@ -613,9 +854,12 @@ async def execute(operation_id: UUID, *, client_factory=None, checkpoint=lambda 
                     entry_id,
                     token,
                     "held" if overdue else "awaiting-library",
-                    "ABS has not detected the expected item; check the library and retry detection"
-                    if overdue
-                    else "Published; waiting for Audiobookshelf to detect the complete item",
+                    (
+                        f"{library_name} has not detected the expected item; "
+                        "check the library and retry detection"
+                        if overdue
+                        else f"Published; waiting for {library_name} to detect the complete item"
+                    ),
                 )
                 return
             observed_cover = await asyncio.to_thread(observe_cover, spec)

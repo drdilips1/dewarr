@@ -5,7 +5,7 @@ from fastapi import HTTPException
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.models import Operation
+from app.db.models import Integration, Operation
 from app.jobs.queue import enqueue
 
 
@@ -55,12 +55,16 @@ async def enqueue_sync(
             return current
         current.status = "failed"
         current.message = "Previous inventory job ended before completion; a new sync was requested"
+    integration = await db.get(Integration, integration_id)
+    library_name = (
+        "Grimmory" if integration and integration.kind == "grimmory" else "Audiobookshelf"
+    )
     operation = Operation(
         owner_id=owner_id,
         kind="library.sync",
         integration_id=integration_id,
         idempotency_key=key,
-        message="Waiting to sync Audiobookshelf",
+        message=f"Waiting to sync {library_name}",
     )
     db.add(operation)
     await db.flush()

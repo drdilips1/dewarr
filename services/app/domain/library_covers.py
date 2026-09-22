@@ -9,6 +9,7 @@ from sqlalchemy import select
 
 from app.adapters.audiobookshelf import external_id
 from app.adapters.contracts import AdapterError
+from app.adapters.grimmory import Grimmory
 from app.adapters.http import configured_url
 from app.db.models import Integration, LibraryAsset, Version
 from app.domain.availability import availability_rows
@@ -17,7 +18,20 @@ from app.domain.primary_editions import asset_narrators, edition_order, primary_
 from app.security import decrypt_secrets
 
 
-async def fetch_cover(base_url: str, token: str, item_id: str) -> tuple[bytes, str]:
+async def fetch_cover(
+    base_url: str,
+    token: str,
+    item_id: str,
+    *,
+    kind: str = "audiobookshelf",
+    secrets: dict | None = None,
+) -> tuple[bytes, str]:
+    if kind == "grimmory":
+        try:
+            async with Grimmory(base_url, secrets or {}) as client:
+                return await client.cover(item_id)
+        except AdapterError as error:
+            raise HTTPException(404, "Cover unavailable") from error
     try:
         item_id = external_id(item_id)
         async with (
@@ -59,7 +73,10 @@ async def library_cover(db, user, work_id: UUID, medium: str):
         availability_rows(user, mapping)
         .with_only_columns(LibraryAsset, Integration, Version.narrators)
         .outerjoin(Version, Version.id == LibraryAsset.version_id)
-        .where(mapping.c.work_id == root, Integration.kind == "audiobookshelf")
+        .where(
+            mapping.c.work_id == root,
+            Integration.kind.in_(["audiobookshelf", "grimmory"]),
+        )
         .order_by((LibraryAsset.medium == medium).desc(), LibraryAsset.created_at.desc())
     )
     rows = sorted(
@@ -75,10 +92,13 @@ async def library_cover(db, user, work_id: UUID, medium: str):
         if not asset.metadata_snapshot.get("cover_path"):
             continue
         try:
+            secrets = decrypt_secrets(integration.encrypted_secrets)
             data, kind = await fetch_cover(
                 integration.base_url,
-                decrypt_secrets(integration.encrypted_secrets)["token"],
+                secrets.get("token", ""),
                 asset.external_id,
+                kind=integration.kind,
+                secrets=secrets,
             )
         except HTTPException:
             continue
