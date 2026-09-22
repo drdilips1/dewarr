@@ -590,6 +590,50 @@ class CatalogAccount(Base):
     status: Mapped[str] = mapped_column(String(40), default="untested")
     last_error: Mapped[str | None] = mapped_column(String(500))
     last_success_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    suggest_series_gaps: Mapped[bool] = mapped_column(
+        Boolean, default=False, server_default="false"
+    )
+    series_gap_checked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class SeriesGapDismissal(Base):
+    __tablename__ = "series_gap_dismissals"
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    provider: Mapped[str] = mapped_column(String(40), primary_key=True)
+    external_id: Mapped[str] = mapped_column(String(200), primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class SeriesGapBaseline(Base):
+    """First observation of a series; later published gaps can be marked new."""
+
+    __tablename__ = "series_gap_baselines"
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    provider: Mapped[str] = mapped_column(String(40), primary_key=True)
+    external_id: Mapped[str] = mapped_column(String(200), primary_key=True)
+    baselined_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class SeriesGapSighting(Identity, Base):
+    __tablename__ = "series_gap_sightings"
+    __table_args__ = (
+        UniqueConstraint("user_id", "provider", "external_id", "work_id"),
+        Index(
+            "ix_series_gap_sightings_unseen",
+            "user_id",
+            postgresql_where=text("seen_at IS NULL"),
+        ),
+    )
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    provider: Mapped[str] = mapped_column(String(40))
+    external_id: Mapped[str] = mapped_column(String(200))
+    work_id: Mapped[UUID] = mapped_column(ForeignKey("works.id", ondelete="CASCADE"), index=True)
+    first_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    seen_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 class GoodreadsAccount(Base):

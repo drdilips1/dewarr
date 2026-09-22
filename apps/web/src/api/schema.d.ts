@@ -1218,6 +1218,40 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/discovery/series/seen": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** See Series Gaps */
+    post: operations["see_series_gaps_api_discovery_series_seen_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/discovery/series/{external_id}/dismiss": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Dismiss Series Gaps */
+    post: operations["dismiss_series_gaps_api_discovery_series__external_id__dismiss_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/discovery/lists": {
     parameters: {
       query?: never;
@@ -2377,6 +2411,23 @@ export interface paths {
     get: operations["get_account_api_metadata_account_get"];
     /** Save Account */
     put: operations["save_account_api_metadata_account_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/metadata/account/series-suggestions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Save Series Suggestions */
+    put: operations["save_series_suggestions_api_metadata_account_series_suggestions_put"];
     post?: never;
     delete?: never;
     options?: never;
@@ -4407,6 +4458,11 @@ export interface components {
       last_error?: string | null;
       /** Last Success At */
       last_success_at?: string | null;
+      /**
+       * Suggest Series Gaps
+       * @default false
+       */
+      suggest_series_gaps: boolean;
     };
     /** ActivateInput */
     ActivateInput: {
@@ -9857,6 +9913,11 @@ export interface components {
       /** Query */
       query?: string | null;
     };
+    /** SeenInput */
+    SeenInput: {
+      /** External Id */
+      external_id?: string | null;
+    };
     /** SelectionInput */
     SelectionInput: {
       /**
@@ -10040,6 +10101,11 @@ export interface components {
       unknown_publication: number;
       /** Future Publication */
       future_publication: number;
+      /**
+       * Unseen
+       * @default 0
+       */
+      unseen: number;
       /** Books */
       books: components["schemas"]["SeriesGapBook"][];
     };
@@ -10050,6 +10116,11 @@ export interface components {
       position: string | null;
       /** Ambiguous Position */
       ambiguous_position: boolean;
+      /**
+       * Unseen
+       * @default false
+       */
+      unseen: boolean;
     };
     /** SeriesGapShelf */
     SeriesGapShelf: {
@@ -10064,6 +10135,26 @@ export interface components {
       page: number;
       /** Has More */
       has_more: boolean;
+      /**
+       * Unseen
+       * @default 0
+       */
+      unseen: number;
+      /**
+       * Suggestions Enabled
+       * @default false
+       */
+      suggestions_enabled: boolean;
+      /**
+       * Hardcover Connected
+       * @default false
+       */
+      hardcover_connected: boolean;
+      /**
+       * Monitored Series
+       * @default 0
+       */
+      monitored_series: number;
       /**
        * Attribution
        * @default Your observed Hardcover catalogs and accessible library holdings
@@ -10214,6 +10305,11 @@ export interface components {
        * @default false
        */
       selected_pack_only: boolean;
+    };
+    /** SeriesSuggestionInput */
+    SeriesSuggestionInput: {
+      /** Enabled */
+      enabled: boolean;
     };
     /** SeriesView */
     SeriesView: {
@@ -13523,6 +13619,7 @@ export interface operations {
         medium?: "any" | "ebook" | "audio";
         page?: number;
         limit?: number;
+        full?: boolean;
       };
       header?: never;
       path?: never;
@@ -13538,6 +13635,66 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["SeriesGapShelf"];
         };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  see_series_gaps_api_discovery_series_seen_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SeenInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  dismiss_series_gaps_api_discovery_series__external_id__dismiss_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        external_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
       /** @description Validation Error */
       422: {
@@ -16107,6 +16264,39 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["AccountInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AccountView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  save_series_suggestions_api_metadata_account_series_suggestions_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SeriesSuggestionInput"];
       };
     };
     responses: {

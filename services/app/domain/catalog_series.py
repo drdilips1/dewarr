@@ -246,6 +246,9 @@ async def run(operation_id):
             "completed",
             f"Verified {len(stage['items'])} series entries",
         )
+        from app.domain.series_gap_watch import record_sightings
+
+        await record_sightings(db, owner, row)
 
 
 async def operation_status(db, operation):

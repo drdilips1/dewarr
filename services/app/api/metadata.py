@@ -74,6 +74,11 @@ class AccountView(BaseModel):
     status: str
     last_error: str | None = None
     last_success_at: datetime | None = None
+    suggest_series_gaps: bool = False
+
+
+class SeriesSuggestionInput(BaseModel):
+    enabled: bool
 
 
 def account_view(row):
@@ -83,6 +88,7 @@ def account_view(row):
         status=row.status if row else "not-configured",
         last_error=row.last_error if row else None,
         last_success_at=row.last_success_at if row else None,
+        suggest_series_gaps=bool(row and row.suggest_series_gaps),
     )
 
 
@@ -168,6 +174,30 @@ async def save_account(body: AccountInput, user: CurrentUser, db: Database):
     account.last_success_at = None
     account.generation += 1
     db.add(AuditEvent(actor_id=user.id, action="metadata.account.updated", entity_id=user.id))
+    await db.commit()
+    return account_view(account)
+
+
+@router.put("/account/series-suggestions", response_model=AccountView)
+async def save_series_suggestions(body: SeriesSuggestionInput, user: Member, db: Database):
+    await transaction_lock(db, f"catalog-account:{user.id}")
+    account = await db.get(CatalogAccount, user.id)
+    if not account or not account.enabled:
+        raise HTTPException(409, "Connect and enable your Hardcover account first")
+    account.suggest_series_gaps = body.enabled
+    if body.enabled:
+        from app.domain.series_gap_watch import SCAN_TASK
+        from app.jobs.queue import enqueue
+
+        account.series_gap_checked_at = datetime.now(UTC)
+        await enqueue(db, SCAN_TASK, user_id=str(user.id))
+    db.add(
+        AuditEvent(
+            actor_id=user.id,
+            action="metadata.series-suggestions.updated",
+            entity_id=user.id,
+        )
+    )
     await db.commit()
     return account_view(account)
 

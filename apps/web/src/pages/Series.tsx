@@ -2,7 +2,7 @@ import { usePagedQuery } from "../hooks/usePagedQuery";
 import InfiniteScroll from "../components/InfiniteScroll";
 import BookLink from "../components/BookLink";
 import ListChoice from "./ListChoice";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
@@ -13,6 +13,39 @@ import DetailTabs from "../components/DetailTabs";
 import SeriesRequests from "./SeriesRequests";
 import SeriesScopeReview from "./SeriesScopeReview";
 import { randomUUID } from "../randomUUID";
+
+function missingWorkIds(
+  items: {
+    compilation: boolean;
+    partial: boolean;
+    merged_record: boolean;
+    ambiguous_position: boolean;
+    publication: string;
+    work: {
+      id: string;
+      availability: { owned: boolean; ebook: boolean; audio: boolean };
+    };
+  }[],
+  medium: "any" | "ebook" | "audio",
+) {
+  return [
+    ...new Set(
+      items
+        .filter(
+          (entry) =>
+            !entry.compilation &&
+            !entry.partial &&
+            !entry.merged_record &&
+            !entry.ambiguous_position &&
+            entry.publication === "published" &&
+            (medium === "any"
+              ? !entry.work.availability.owned
+              : !entry.work.availability[medium]),
+        )
+        .map((entry) => entry.work.id),
+    ),
+  ];
+}
 
 export default function Series({ canEdit }: { canEdit: boolean }) {
   const { externalId = "" } = useParams();
@@ -29,7 +62,7 @@ function SeriesContent({
   canEdit: boolean;
 }) {
   const cache = useQueryClient();
-  const [params] = useSearchParams();
+  const [params, setParams] = useSearchParams();
   const tabs = canEdit
     ? ([
         ["books", "Reading order"],
@@ -141,6 +174,59 @@ function SeriesContent({
         );
     },
   });
+  const gapsRequested = params.get("gaps") === "1";
+  const gapMedium =
+    params.get("medium") === "ebook" || params.get("medium") === "audio"
+      ? (params.get("medium") as "ebook" | "audio")
+      : "any";
+  const gapsApplied = useRef(false);
+  useEffect(() => {
+    void (async () => {
+      try {
+        result(
+          await api.POST("/api/discovery/series/seen", {
+            body: { external_id: externalId },
+          }),
+        );
+      } catch {
+        // The series page still works if the new marker cannot be cleared.
+      }
+    })();
+  }, [externalId]);
+  useEffect(() => {
+    if (
+      !gapsRequested ||
+      !catalog.hasNextPage ||
+      catalog.isFetchingNextPage ||
+      catalog.isFetchNextPageError
+    )
+      return;
+    void catalog.fetchNextPage();
+  }, [
+    gapsRequested,
+    catalog.hasNextPage,
+    catalog.isFetchingNextPage,
+    catalog.isFetchNextPageError,
+    catalog.fetchNextPage,
+  ]);
+  useEffect(() => {
+    if (
+      !gapsRequested ||
+      gapsApplied.current ||
+      !catalog.data ||
+      catalog.hasNextPage ||
+      catalog.isFetchingNextPage
+    )
+      return;
+    gapsApplied.current = true;
+    setSelected(missingWorkIds(catalog.data.items, gapMedium));
+  }, [
+    gapsRequested,
+    gapMedium,
+    catalog.data,
+    catalog.hasNextPage,
+    catalog.isFetchingNextPage,
+  ]);
   if (catalog.isPending) return <Loading />;
   if (!catalog.data) return <Notice error={catalog.error} />;
   const data = catalog.data;
@@ -252,12 +338,33 @@ function SeriesContent({
         }
       />
       {canEdit && (
-        <button
-          disabled={refresh.isPending || loading || add.isPending}
-          onClick={() => refresh.mutate()}
-        >
-          {data.fetched_at ? "Refresh series" : "Load series from Hardcover"}
-        </button>
+        <div className="button-row">
+          <button
+            disabled={refresh.isPending || loading || add.isPending}
+            onClick={() => refresh.mutate()}
+          >
+            {data.fetched_at ? "Refresh series" : "Load series from Hardcover"}
+          </button>
+          {data.fetched_at && data.books > data.owned && (
+            <button
+              type="button"
+              onClick={() => {
+                setParams({ tab: "requests", gaps: "1" });
+                if (catalog.data && !catalog.hasNextPage) {
+                  gapsApplied.current = true;
+                  setSelected(missingWorkIds(catalog.data.items, "any"));
+                } else gapsApplied.current = false;
+              }}
+            >
+              Request missing books
+            </button>
+          )}
+        </div>
+      )}
+      {gapsRequested && (catalog.hasNextPage || catalog.isFetchingNextPage) && (
+        <p className="muted" role="status">
+          Loading the rest of this series to select missing books.
+        </p>
       )}
       <DetailTabs tabs={tabs} selected={tab} label="Series sections" />
       <div
