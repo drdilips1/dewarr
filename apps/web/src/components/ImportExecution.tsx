@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
+import { randomUUID } from "../randomUUID";
 
 type Plan = components["schemas"]["FrozenPlanView"];
 type Medium = "ebook" | "audio";
@@ -78,7 +79,7 @@ export default function ImportExecution({ plan }: { plan: Plan }) {
       const body = { plan_revision: plan.revision, destinations };
       const payload = JSON.stringify(body);
       if (attempt.current?.payload !== payload)
-        attempt.current = { payload, key: crypto.randomUUID() };
+        attempt.current = { payload, key: randomUUID() };
       return result(
         await api.POST("/api/organization/plans/{plan_id}/imports", {
           params: {

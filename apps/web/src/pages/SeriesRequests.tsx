@@ -13,6 +13,7 @@ import type { MainBookReview } from "./SeriesScopeReview";
 import SeriesAutomaticRoutes, {
   useSeriesRoutes,
 } from "./SeriesAutomaticRoutes";
+import { randomUUID } from "../randomUUID";
 
 type Spec = components["schemas"]["RequestOptions"];
 type Preview = components["schemas"]["SeriesRequestView"];
@@ -57,7 +58,7 @@ export default function SeriesRequests({
   const [automatic, setAutomatic] = useState(false);
   const routes = useSeriesRoutes(automatic, spec.mode, preferences);
 
-  const key = useRef(crypto.randomUUID());
+  const key = useRef(randomUUID());
   const panel = useRef<HTMLElement>(null);
   const path = { external_id: externalId };
   const history = usePagedQuery({
@@ -185,7 +186,7 @@ export default function SeriesRequests({
   const lastDraft = useRef(draft);
   useEffect(() => {
     if (lastDraft.current !== draft) {
-      key.current = crypto.randomUUID();
+      key.current = randomUUID();
       lastDraft.current = draft;
       preview.reset();
     }
@@ -467,7 +468,7 @@ export default function SeriesRequests({
               disabled={busy}
               onClick={() => {
                 setId(null);
-                key.current = crypto.randomUUID();
+                key.current = randomUUID();
                 preview.reset();
                 submit.reset();
                 cancel.reset();

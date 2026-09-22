@@ -45,6 +45,8 @@ import {
   PrepareSourceReview,
   type SourceReview,
 } from "./RecoverySources";
+import { randomUUID } from "../randomUUID";
+
 type RecoveryReview = components["schemas"]["ReconciliationView"];
 
 export default function Recovery() {
@@ -215,10 +217,10 @@ function RecoveryChecks({
   sourceReview?: SourceReview;
 }) {
   const client = useQueryClient();
-  const [key, setKey] = useState(() => crypto.randomUUID());
+  const [key, setKey] = useState(() => randomUUID());
   const [domain, setDomain] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
-  const [prepareKey, setPrepareKey] = useState(() => crypto.randomUUID());
+  const [prepareKey, setPrepareKey] = useState(() => randomUUID());
   const reviews = [
     review,
     inventoryReview,
@@ -248,7 +250,7 @@ function RecoveryChecks({
       ),
     onSuccess: async () => {
       setSelected([]);
-      setPrepareKey(crypto.randomUUID());
+      setPrepareKey(randomUUID());
       await client.invalidateQueries({ queryKey: ["recovery"] });
     },
   });
@@ -256,7 +258,7 @@ function RecoveryChecks({
     setSelected((previous) =>
       checked ? [...previous, id] : previous.filter((item) => item !== id),
     );
-    setPrepareKey(crypto.randomUUID());
+    setPrepareKey(randomUUID());
   }
 
   const start = useMutation({
@@ -267,7 +269,7 @@ function RecoveryChecks({
         }),
       ),
     onSuccess: () => {
-      setKey(crypto.randomUUID());
+      setKey(randomUUID());
       client.invalidateQueries({ queryKey: ["recovery"] });
     },
   });
@@ -586,7 +588,7 @@ function ReconciliationReview({
   otherBusy: boolean;
 }) {
   const client = useQueryClient();
-  const [key] = useState(() => crypto.randomUUID());
+  const [key] = useState(() => randomUUID());
   const heading = useRef<HTMLHeadingElement>(null);
   const prepared = review.status === "prepared";
   useEffect(() => {

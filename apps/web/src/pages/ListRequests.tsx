@@ -9,6 +9,7 @@ import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
 import DownloadConstraints from "./DownloadConstraints";
+import { randomUUID } from "../randomUUID";
 
 type Spec = components["schemas"]["RequestOptions"];
 const states: Record<string, string> = {
@@ -76,7 +77,7 @@ function ListRequestEditor({
   const [selectionValid, setSelectionValid] = useState(false);
   const [contentRevision, setContentRevision] = useState<string>();
   const [historyOffset, setHistoryOffset] = useState(0);
-  const key = useRef(crypto.randomUUID());
+  const key = useRef(randomUUID());
   const completed = useRef<string | null>(null);
   const history = useQuery({
     queryKey: ["list-request-history", listId, historyOffset],
@@ -175,7 +176,7 @@ function ListRequestEditor({
     },
   });
   const changed = () => {
-    key.current = crypto.randomUUID();
+    key.current = randomUUID();
     preview.reset();
   };
   const value = saved.data;
@@ -271,7 +272,7 @@ function ListRequestEditor({
               inherited={profile}
               onChange={(value) => {
                 setPreferences(value);
-                key.current = crypto.randomUUID();
+                key.current = randomUUID();
               }}
             />
             <button

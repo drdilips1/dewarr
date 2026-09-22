@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
+import { randomUUID } from "../randomUUID";
 
 type Prepared = components["schemas"]["ManualPackPrepared"];
 
@@ -17,7 +18,7 @@ export default function ManualPack({
   onClose: () => void;
 }) {
   const [selected, setSelected] = useState<string[] | null>(null);
-  const key = useRef(crypto.randomUUID());
+  const key = useRef(randomUUID());
   const query = useQuery({
     queryKey: ["manual-pack-preview", selectionId],
     queryFn: async () =>
@@ -83,7 +84,7 @@ export default function ManualPack({
                         ? [...ids, book.work_id]
                         : ids.filter((id) => id !== book.work_id),
                     );
-                    key.current = crypto.randomUUID();
+                    key.current = randomUUID();
                     prepare.reset();
                   }}
                 />
@@ -119,7 +120,7 @@ export default function ManualPack({
           disabled={prepare.isPending || query.isFetching}
           onClick={() => {
             setSelected(null);
-            key.current = crypto.randomUUID();
+            key.current = randomUUID();
             prepare.reset();
             void query.refetch();
           }}

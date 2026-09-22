@@ -7,6 +7,7 @@ import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
 import ListWriteback from "./ListWriteback";
+import { randomUUID } from "../randomUUID";
 
 type Subscription = components["schemas"]["SubscriptionView"];
 
@@ -19,7 +20,7 @@ export default function ListSubscription({
 }) {
   const cache = useQueryClient();
   const [choice, setChoice] = useState<"goodreads" | "hardcover">("goodreads");
-  const key = useRef(crypto.randomUUID());
+  const key = useRef(randomUUID());
   const path = { list_id: listId };
   const subscription = useQuery({
     queryKey: ["list-subscription", listId],
@@ -59,7 +60,7 @@ export default function ListSubscription({
         }),
       ),
     onSuccess: () => {
-      key.current = crypto.randomUUID();
+      key.current = randomUUID();
       refresh();
     },
   });

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, result } from "../api/client";
+import { randomUUID } from "../randomUUID";
 
 const active = (state: string) => ["queued", "running"].includes(state);
 
@@ -77,7 +78,7 @@ export function useRefreshGoodreads() {
             await api.POST("/api/lists/{list_id}/subscription/sync", {
               params: {
                 path: { list_id: item.list_id },
-                header: { "idempotency-key": crypto.randomUUID() },
+                header: { "idempotency-key": randomUUID() },
               },
             }),
           );
@@ -88,7 +89,7 @@ export function useRefreshGoodreads() {
           );
         }
       }
-      if (ids.length) setBatch({ ids, failures, key: crypto.randomUUID() });
+      if (ids.length) setBatch({ ids, failures, key: randomUUID() });
       else
         setMessage(
           failures.length

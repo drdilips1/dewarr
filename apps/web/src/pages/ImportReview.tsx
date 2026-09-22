@@ -7,6 +7,7 @@ import { Loading, Notice } from "../components";
 import ImportExecution from "../components/ImportExecution";
 import GroupingEditor from "../components/GroupingEditor";
 import ImportCollectionContents from "../components/ImportCollectionContents";
+import { randomUUID } from "../randomUUID";
 
 type Group = components["schemas"]["InspectedGroup"];
 type Selection = components["schemas"]["GroupSelection"];
@@ -79,7 +80,7 @@ export default function ImportReview() {
       };
       const payload = JSON.stringify(body);
       if (attempt.current?.payload !== payload)
-        attempt.current = { payload, key: crypto.randomUUID() };
+        attempt.current = { payload, key: randomUUID() };
       return result(
         await api.POST("/api/organization/inspections", {
           body,

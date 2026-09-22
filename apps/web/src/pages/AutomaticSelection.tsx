@@ -12,6 +12,7 @@ import {
   protocolPreference,
 } from "./RouteFields";
 import { effectiveSeriesScope } from "./PreferenceFields";
+import { randomUUID } from "../randomUUID";
 
 type Search = components["schemas"]["BookSearchView"];
 type Receipt = components["schemas"]["AutomaticSelectionView"];
@@ -30,7 +31,7 @@ export default function AutomaticSelection({
   const [usenetId, setUsenetId] = useState("");
   const [destinationId, setDestinationId] = useState("");
   const [alternateDestinationId, setAlternateDestinationId] = useState("");
-  const command = useRef({ body: "", key: crypto.randomUUID() });
+  const command = useRef({ body: "", key: randomUUID() });
   const queryKey = ["automatic-selection", requestId, slot];
   const request = useQuery({
     queryKey: ["requests", "selection-linked", requestId],
@@ -164,7 +165,7 @@ export default function AutomaticSelection({
       };
       const serialized = JSON.stringify(body);
       if (command.current.body !== serialized)
-        command.current = { body: serialized, key: crypto.randomUUID() };
+        command.current = { body: serialized, key: randomUUID() };
       return result(
         await api.POST("/api/acquisition/automatic-selections", {
           params: { header: { "idempotency-key": command.current.key } },
@@ -173,7 +174,7 @@ export default function AutomaticSelection({
       );
     },
     onSuccess: (value) => {
-      command.current = { body: "", key: crypto.randomUUID() };
+      command.current = { body: "", key: randomUUID() };
       saveReceipt(value);
     },
   });

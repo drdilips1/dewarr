@@ -11,6 +11,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
+import { randomUUID } from "../randomUUID";
 
 const AutomaticSelection = lazy(() => import("./AutomaticSelection"));
 
@@ -31,7 +32,7 @@ export default function BookSources({
   const [medium, setMedium] = useState("all");
 
   const initial = useRef(false);
-  const key = useRef(crypto.randomUUID());
+  const key = useRef(randomUUID());
   const requestId = params.get("request");
   const queryKey = ["book-sources", work.id, requestId];
   const request = useQuery({
@@ -92,7 +93,7 @@ export default function BookSources({
         }),
       ),
     onSuccess: (value) => {
-      key.current = crypto.randomUUID();
+      key.current = randomUUID();
       cache.setQueryData(queryKey, value);
     },
   });
@@ -178,7 +179,7 @@ export default function BookSources({
         className="source-search-toolbar compact-source-search"
         onSubmit={(event) => {
           event.preventDefault();
-          key.current = crypto.randomUUID();
+          key.current = randomUUID();
           begin.mutate(0);
         }}
       >
@@ -241,7 +242,7 @@ export default function BookSources({
         <button
           disabled={!!busy || data.offset >= 10000}
           onClick={() => {
-            key.current = crypto.randomUUID();
+            key.current = randomUUID();
             begin.mutate(data.offset + 50);
           }}
         >

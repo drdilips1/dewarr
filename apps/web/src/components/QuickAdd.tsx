@@ -4,6 +4,7 @@ import { BookOpen, ChevronDown, Download, Headphones } from "lucide-react";
 import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import { Notice } from "../components";
+import { randomUUID } from "../randomUUID";
 
 type Mode = "both" | "ebook" | "audio" | undefined;
 export default function QuickAdd({
@@ -20,7 +21,7 @@ export default function QuickAdd({
   const menu = useRef<HTMLDetailsElement>(null);
   const [resolvedId, setResolvedId] = useState(workId);
   const id = workId || resolvedId;
-  const command = useRef({ mode: undefined as Mode, key: crypto.randomUUID() });
+  const command = useRef({ mode: undefined as Mode, key: randomUUID() });
   const defaults = useQuery({
     queryKey: ["quick-add-defaults"],
     queryFn: async () =>
@@ -50,7 +51,7 @@ export default function QuickAdd({
   const add = useMutation({
     mutationFn: async (mode: Mode) => {
       if (command.current.mode !== mode)
-        command.current = { mode, key: crypto.randomUUID() };
+        command.current = { mode, key: randomUUID() };
       const work = id || (await resolveWork!());
       setResolvedId(work);
       const receipt = result(
@@ -64,7 +65,7 @@ export default function QuickAdd({
       return receipt;
     },
     onSuccess: () => {
-      command.current.key = crypto.randomUUID();
+      command.current.key = randomUUID();
       for (const name of ["requests", "activity", "downloads"])
         void cache.invalidateQueries({ queryKey: [name] });
     },

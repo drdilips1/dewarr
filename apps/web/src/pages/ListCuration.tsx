@@ -5,6 +5,7 @@ import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Empty, Loading, Notice } from "../components";
 import EnrichedBookCard from "../components/EnrichedBookCard";
+import { randomUUID } from "../randomUUID";
 
 type Detail = components["schemas"]["ListDetail"];
 type Input = components["schemas"]["CurationInput"];
@@ -91,7 +92,7 @@ export default function ListCuration({
           ? selectionRevision
           : list.content_revision,
       },
-      key: crypto.randomUUID(),
+      key: randomUUID(),
     });
   }
   return (
@@ -437,7 +438,7 @@ function CatalogPicker({
           onClick={() =>
             save.mutate({
               body: { action: "add", work_ids: selected },
-              key: crypto.randomUUID(),
+              key: randomUUID(),
             })
           }
         >

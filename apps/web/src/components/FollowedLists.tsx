@@ -11,6 +11,7 @@ import { Loading, Notice } from "../components";
 import EnrichedBookCard from "./EnrichedBookCard";
 import ListDownloads from "./ListDownloads";
 import ShelfPagination from "./ShelfPagination";
+import { randomUUID } from "../randomUUID";
 
 export default function FollowedLists({
   home = true,
@@ -75,7 +76,7 @@ export function PersonalRow({
   manage: boolean;
   canEdit: boolean;
 }) {
-  const syncKey = useRef(crypto.randomUUID());
+  const syncKey = useRef(randomUUID());
   const shelf = useRef<HTMLUListElement>(null);
   const cache = useQueryClient();
   const books = usePagedQuery({
@@ -135,7 +136,7 @@ export function PersonalRow({
       );
     },
     onSuccess: () => {
-      syncKey.current = crypto.randomUUID();
+      syncKey.current = randomUUID();
       void cache.invalidateQueries({
         queryKey: ["list-subscription", list.id],
       });

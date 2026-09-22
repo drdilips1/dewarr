@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Download, LoaderCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
+import { randomUUID } from "../randomUUID";
 
 export default function SourceReleaseDownload({
   searchId,
@@ -15,7 +16,7 @@ export default function SourceReleaseDownload({
   title: string;
   disabled: boolean;
 }) {
-  const key = useRef(crypto.randomUUID());
+  const key = useRef(randomUUID());
   const cache = useQueryClient();
   const [operationId, setOperationId] = useState<string>();
   const start = useMutation({
@@ -73,7 +74,7 @@ export default function SourceReleaseDownload({
         disabled={disabled || busy || complete}
         onClick={() => {
           if (receipt && !busy) {
-            key.current = crypto.randomUUID();
+            key.current = randomUUID();
             setOperationId(undefined);
           }
           start.mutate();

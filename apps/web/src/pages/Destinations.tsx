@@ -19,6 +19,7 @@ import {
   useLibraryFolderSettings,
   selectLibraryDestination,
 } from "./libraryFolderSettings";
+import { randomUUID } from "../randomUUID";
 
 type Destination = components["schemas"]["DestinationView"];
 type Medium = "ebook" | "audio";
@@ -259,7 +260,7 @@ function FolderPicker({
           {
             params: {
               path: { destination_id: destination.id },
-              header: { "idempotency-key": crypto.randomUUID() },
+              header: { "idempotency-key": randomUUID() },
             },
             body: {
               downloader_id: downloader.id,

@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
+import { randomUUID } from "../randomUUID";
 
 type Inspection = components["schemas"]["InspectionView"];
 type Grouping =
@@ -179,7 +180,7 @@ export default function GroupingEditor({
                 onChange={(event) => {
                   const group =
                     event.target.value === "__new__"
-                      ? crypto.randomUUID()
+                      ? randomUUID()
                       : event.target.value;
                   change(file.path, {
                     group,

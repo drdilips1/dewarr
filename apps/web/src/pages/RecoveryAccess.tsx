@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { api, result } from "../api/client";
 import { Loading, Notice } from "../components";
 import type { components } from "../api/schema";
+import { randomUUID } from "../randomUUID";
 
 export type AccessReview = components["schemas"]["AccessReconciliationView"];
 type Choice = components["schemas"]["AccessChoice"];
@@ -91,10 +92,10 @@ function AccessEditor({
       evidence.before.role === "viewer" ? false : evidence.before.can_automate,
     library_ids: evidence.before.library_ids,
   });
-  const [key, setKey] = useState(() => crypto.randomUUID());
+  const [key, setKey] = useState(() => randomUUID());
   function edit(patch: Partial<Choice>) {
     setChoice((previous) => ({ ...previous, ...patch }));
-    setKey(crypto.randomUUID());
+    setKey(randomUUID());
   }
   const prepare = useMutation({
     mutationFn: async () =>
@@ -253,7 +254,7 @@ export function AccessRecoveryReview({
   otherBusy: boolean;
 }) {
   const client = useQueryClient();
-  const [key] = useState(() => crypto.randomUUID());
+  const [key] = useState(() => randomUUID());
   const heading = useRef<HTMLHeadingElement>(null);
   const prepared = review.status === "prepared";
   useEffect(() => {

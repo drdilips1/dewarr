@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { api, result } from "../api/client";
 import { Notice } from "../components";
 import type { components } from "../api/schema";
+import { randomUUID } from "../randomUUID";
 
 export type CommandReview = components["schemas"]["CommandReconciliationView"];
 
@@ -20,7 +21,7 @@ export function PrepareCommandReview({
   automation?: boolean;
 }) {
   const client = useQueryClient();
-  const [key] = useState(() => crypto.randomUUID());
+  const [key] = useState(() => randomUUID());
   const prepare = useMutation({
     mutationFn: async () =>
       result(
@@ -58,7 +59,7 @@ export function CommandRecoveryReview({
   otherBusy: boolean;
 }) {
   const client = useQueryClient();
-  const [key] = useState(() => crypto.randomUUID());
+  const [key] = useState(() => randomUUID());
   const heading = useRef<HTMLHeadingElement>(null);
   const prepared = review.status === "prepared";
   const hasAutomation = review.items.some((item) =>

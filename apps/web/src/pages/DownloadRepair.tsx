@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, result } from "../api/client";
 import { Notice } from "../components";
+import { randomUUID } from "../randomUUID";
 
 export default function DownloadRepair({ attemptId }: { attemptId: string }) {
   const cache = useQueryClient();
@@ -19,8 +20,7 @@ export default function DownloadRepair({ attemptId }: { attemptId: string }) {
   });
   const repair = useMutation({
     mutationFn: async (revision: string) => {
-      if (!keys.current.has(revision))
-        keys.current.set(revision, crypto.randomUUID());
+      if (!keys.current.has(revision)) keys.current.set(revision, randomUUID());
       return result(
         await api.POST("/api/acquisition/downloads/{attempt_id}/repairs", {
           params: {

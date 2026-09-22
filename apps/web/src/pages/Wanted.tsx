@@ -13,6 +13,7 @@ import DownloadConstraints from "./DownloadConstraints";
 import RequestNextAction, {
   requestTargetLabel,
 } from "../components/RequestNextAction";
+import { randomUUID } from "../randomUUID";
 
 type Spec = components["schemas"]["RequestOptions"];
 export type WantedVersion = components["schemas"]["VersionView"];
@@ -45,7 +46,7 @@ export default function Wanted({
   );
   const [preferred, setPreferred] = useState<"ebook" | "audio">("ebook");
   const [preferences, setPreferences] = useState<Choice>({});
-  const key = useRef(crypto.randomUUID());
+  const key = useRef(randomUUID());
   useEffect(() => {
     if (version) heading.current?.focus();
   }, [version]);
@@ -118,7 +119,7 @@ export default function Wanted({
         }),
       ),
     onSuccess: async () => {
-      key.current = crypto.randomUUID();
+      key.current = randomUUID();
       await refresh();
     },
   });
@@ -138,7 +139,7 @@ export default function Wanted({
     onSuccess: refresh,
   });
   const changed = () => {
-    key.current = crypto.randomUUID();
+    key.current = randomUUID();
     save.reset();
   };
   return (

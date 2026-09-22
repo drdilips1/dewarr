@@ -4,6 +4,7 @@ import { ChevronDown, Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import { Notice } from "../components";
+import { randomUUID } from "../randomUUID";
 
 type Mode = "both" | "ebook" | "audio";
 export default function ListDownloads({
@@ -138,7 +139,7 @@ export default function ListDownloads({
           if (seen.has(id)) continue;
           seen.add(id);
           const command = `${id}:${mode}`;
-          const key = keys.current.get(command) || crypto.randomUUID();
+          const key = keys.current.get(command) || randomUUID();
           keys.current.set(command, key);
           const receipt = result(
             await api.POST("/api/requests/quick-add", {
