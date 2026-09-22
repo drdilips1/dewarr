@@ -30,10 +30,7 @@ export default function SourceSettings() {
   return (
     <div className="source-settings">
       <section aria-label="MAM settings">
-        <details
-          className="source-connection"
-          open={mam.data?.configured || undefined}
-        >
+        <details className="source-connection">
           <summary>
             <span>MAM</span>
             <span className="connection-state">
@@ -48,10 +45,7 @@ export default function SourceSettings() {
         </details>
       </section>
       <section aria-label="Prowlarr settings">
-        <details
-          className="source-connection"
-          open={prowlarr.data?.configured || undefined}
-        >
+        <details className="source-connection">
           <summary>
             <span>Prowlarr</span>
             <span className="connection-state">
@@ -73,10 +67,7 @@ export default function SourceSettings() {
         </details>
       </section>
       <section aria-label="Soulseek settings">
-        <details
-          className="source-connection"
-          open={slskd.data?.configured || undefined}
-        >
+        <details className="source-connection">
           <summary>
             <span>Soulseek</span>
             <span className="connection-state">
@@ -94,10 +85,7 @@ export default function SourceSettings() {
         </details>
       </section>
       <section aria-label="AudiobookBay settings">
-        <details
-          className="source-connection"
-          open={abb.data?.configured || undefined}
-        >
+        <details className="source-connection">
           <summary>
             <span>AudiobookBay</span>
             <span className="connection-state">

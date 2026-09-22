@@ -270,6 +270,9 @@
   gap: 12px 16px;
   padding: 0 0 8px;
 }
+.settings-section-body .source-settings details:not([open]) > :not(summary) {
+  display: none;
+}
 .source-connection > form > :not(label) {
   grid-column: 1 / -1;
 }

@@ -839,7 +839,7 @@ export function MamConnectionForm({ value }: { value: Connection }) {
           maxLength={8192}
         />
       </label>
-      <details open={Boolean(value.proxy_url) || value.status === "route"}>
+      <details>
         <summary>Proxy options</summary>{" "}
         <label>
           <span className="setting-subheading">
