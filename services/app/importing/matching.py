@@ -14,8 +14,10 @@ from app.db.models import (
     Work,
     WorkMetadataSource,
 )
+from app.domain.catalog_titles import display_title, display_title_sql, titles_agree
 from app.domain.identity import normalized
 from app.domain.work_graph import canonical_work
+from app.importing.file_editions import FILE_EDITION_PROVIDER
 from app.importing.match_evidence import (
     ISBN_KEYS,
     MatchEvidence,
@@ -93,7 +95,16 @@ def usable_version():
             LibraryAsset.match_status == "matched",
         )
     )
-    return or_(catalog, library)
+    # An edition created from a reviewed file is local evidence for the next import.
+    recorded = exists(
+        select(ProviderObject.id).where(
+            ProviderObject.version_id == Version.id,
+            ProviderObject.provider == FILE_EDITION_PROVIDER,
+            ProviderObject.kind == "edition",
+            ProviderObject.match_status == "matched",
+        )
+    )
+    return or_(catalog, library, recorded)
 
 
 def candidate_evidence(facts, version, origin, work, needs_review):
@@ -105,8 +116,7 @@ def candidate_evidence(facts, version, origin, work, needs_review):
         reasons.append("Embedded edition identifier matches")
     if expected_ids and not expected_ids <= ids:
         conflicts.append("Catalog identifiers do not support all embedded assertions")
-    titles = {normalized(title) for title in (origin.title, work.title, version.title) if title}
-    if facts.titles and set(facts.titles) <= titles:
+    if titles_agree(facts.titles, (origin.title, work.title, version.title)):
         reasons.append("Embedded title agrees")
     else:
         conflicts.append("Embedded title is missing or differs")
@@ -203,9 +213,13 @@ async def match_group(db, snapshot, grouping_revision, group):
     # display limit must not hide an edition or manufacture uniqueness.
     identifier_condition = or_(*conditions) if conditions else false()
     identifier_order = [identifier_condition.desc().nulls_last()] if conditions else []
-    if facts.titles:
+    stripped = sorted({display_title(title) for title in facts.titles if display_title(title)})
+    if stripped:
         conditions.extend(
-            [func.lower(Work.title).in_(facts.titles), func.lower(Version.title).in_(facts.titles)]
+            [
+                display_title_sql(Work.title).in_(stripped),
+                display_title_sql(Version.title).in_(stripped),
+            ]
         )
     needs_review = exists(
         select(ProviderObject.id).where(
@@ -261,7 +275,10 @@ async def match_group(db, snapshot, grouping_revision, group):
             "Possible catalog matches need review; title similarity is not an edition identifier"
         )
     else:
-        message = "No supported local catalog match; search or add the edition first"
+        message = (
+            "No catalog edition of this format matches. "
+            "Search for the book and add an edition from the file"
+        )
     content = {
         "group_key": group.key,
         "status": status,

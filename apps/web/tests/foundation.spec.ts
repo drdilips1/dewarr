@@ -49,13 +49,16 @@ test("first account, saved books, library connection and worker", async ({
     page.getByRole("heading", { name: "The Synthetic Archive", exact: true }),
   ).toBeVisible();
   await page.goto("/settings#libraries");
-  await page
-    .getByRole("button", { name: "Connect Audiobookshelf", exact: true })
-    .click();
   const libraries = page.getByRole("region", {
     name: "Libraries",
     exact: true,
   });
+  await libraries
+    .getByRole("button", { name: "Add server", exact: true })
+    .click();
+  await libraries
+    .getByRole("button", { name: "Audiobookshelf", exact: true })
+    .click();
   await libraries.getByLabel("Connection name").fill("Fixture ABS");
   await libraries.getByLabel(/^Server URL/).fill("http://127.0.0.1:13379/abs");
   await page

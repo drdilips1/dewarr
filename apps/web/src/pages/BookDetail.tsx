@@ -13,7 +13,12 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { api, result } from "../api/client";
-import { BookHero, BookOverview } from "../components/BookPresentation";
+import {
+  BookHero,
+  BookOverview,
+  releaseIsAhead,
+} from "../components/BookPresentation";
+import FollowRelease, { useReleaseWatch } from "../components/FollowRelease";
 import BookReaderDetails, {
   useLocalBookMetadata,
   useReaderDetails,
@@ -152,6 +157,13 @@ function BookDetailContent({
   useEffect(() => {
     heading.current?.focus({ preventScroll: true });
   }, [book.data?.id]);
+  const watch = useReleaseWatch(
+    book.data?.id,
+    !!book.data &&
+      releaseIsAhead(community.data?.release_date, book.data.publication_year),
+  );
+  const watching =
+    watch.data?.state === "waiting" || watch.data?.state === "wanted";
   if (book.isPending) return <Loading />;
   if (book.error || !book.data) return <Notice error={book.error} />;
   const work = book.data;
@@ -176,6 +188,7 @@ function BookDetailContent({
       ? null
       : provider.data?.book?.publication_year ||
         source?.book?.publication_year);
+  const unreleased = releaseIsAhead(community.data?.release_date, year);
   const cover = locked("cover_url")
     ? undefined
     : provider.data?.book?.cover_url || source?.cover_url;
@@ -205,7 +218,11 @@ function BookDetailContent({
         work={work}
         cover={cover}
         caption={
-          work.availability.owned ? "In your library" : "Saved in your catalog"
+          work.availability.owned
+            ? "In your library"
+            : watching
+              ? "Waiting for release"
+              : "Saved in your catalog"
         }
         eyebrow={work.availability.owned ? "YOUR LIBRARY" : "YOUR CATALOG"}
         details={community.data}
@@ -245,6 +262,11 @@ function BookDetailContent({
               <Check size={15} /> In library
             </span>
           )}
+          {unreleased && !work.availability.owned && (
+            <span className="status">
+              {watching ? "Waiting for release" : "In your catalog"}
+            </span>
+          )}
           <LibraryFormatBadges work={work} />
           {work.availability.stale && (
             <span className="muted">Last known availability</span>
@@ -256,24 +278,45 @@ function BookDetailContent({
               View library copies
             </Link>
           )}
-          {canEdit && (
-            <>
-              <QuickAdd workId={work.id} />
-              <Link
-                className="reader-action-link source-search-action"
-                to={href("sources")}
-              >
-                Search sources
-              </Link>
-              <button
-                onClick={() => {
-                  add.reset();
-                  setAction("list");
+          {canEdit &&
+            (unreleased ? (
+              <FollowRelease
+                canEdit={canEdit}
+                following={watching}
+                workId={work.id}
+                idleLabel="Request on release day"
+                activeLabel="Waiting for release"
+                body={{
+                  work_id: work.id,
+                  provider: hardcover ? "hardcover" : null,
+                  external_id: hardcover?.external_id,
+                  title: work.title,
+                  authors: work.authors,
+                  cover_url: cover,
+                  release_date: community.data?.release_date,
+                  basis: community.data?.release_date ? "work" : "unknown",
                 }}
-              >
-                Add to reading list
-              </button>
-            </>
+              />
+            ) : (
+              <QuickAdd workId={work.id} />
+            ))}
+          {canEdit && !unreleased && (
+            <Link
+              className="reader-action-link source-search-action"
+              to={href("sources")}
+            >
+              Search sources
+            </Link>
+          )}
+          {canEdit && (
+            <button
+              onClick={() => {
+                add.reset();
+                setAction("list");
+              }}
+            >
+              Add to reading list
+            </button>
           )}
           <div className="reader-outbound">
             {hardcover && (
@@ -303,6 +346,25 @@ function BookDetailContent({
             </a>
           </div>
         </div>
+        {canEdit && unreleased && !work.availability.owned && (
+          <p className="muted reader-action-note">
+            {watching ? (
+              <>
+                A request is saved and searching starts on the release day. It
+                is listed in <Link to="/requests">Requests</Link>. This book is
+                under <Link to="/library?view=saved">All saved titles</Link>,
+                not in your library copies. Waiting for release stops that
+                request.
+              </>
+            ) : (
+              <>
+                Saved in your catalog only. It is not in your library, and it is
+                not in Requests until you request the release day. Find it under{" "}
+                <Link to="/library?view=saved">All saved titles</Link>.
+              </>
+            )}
+          </p>
+        )}
         {(metadata.isPending ||
           matching ||
           (hardcover && community.isPending)) && (

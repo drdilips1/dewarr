@@ -5,16 +5,35 @@ import { randomUUID } from "../randomUUID";
 
 const active = (state: string) => ["queued", "running"].includes(state);
 
-export function useRefreshGoodreads() {
+export type ReadingProvider = "goodreads" | "storygraph" | "hardcover";
+
+const providers: ReadingProvider[] = ["goodreads", "storygraph", "hardcover"];
+const names: Record<ReadingProvider, string> = {
+  goodreads: "Goodreads",
+  storygraph: "StoryGraph",
+  hardcover: "Hardcover",
+};
+
+type Scope = ReadingProvider | "reading";
+
+function named(scope: Scope, count?: number) {
+  if (scope === "reading") return count === 1 ? "list" : "lists";
+  const provider = names[scope];
+  return count === 1 ? `${provider} list` : `${provider} lists`;
+}
+
+export function useRefreshReadingLists() {
   const cache = useQueryClient();
   const [batch, setBatch] = useState<{
     ids: string[];
     failures: string[];
     key: string;
+    scope: Scope;
   } | null>(null);
+  const [scope, setScope] = useState<Scope>("reading");
   const [message, setMessage] = useState("");
   const progress = useQuery({
-    queryKey: ["goodreads-refresh", batch?.key],
+    queryKey: ["reading-list-refresh", batch?.key],
     enabled: !!batch,
     queryFn: async () =>
       result(await api.GET("/api/reading-accounts/subscriptions")),
@@ -42,10 +61,11 @@ export function useRefreshGoodreads() {
     }
     const missing = batch.ids.length - lists.length;
     if (missing) failures.push(`${missing} list(s) are no longer available.`);
+    const title = named(batch.scope, lists.length);
     setMessage(
       failures.length
-        ? `Some Goodreads lists could not be refreshed. ${failures.join(" ")}`
-        : `Refreshed ${lists.length} Goodreads ${lists.length === 1 ? "list" : "lists"}.`,
+        ? `Some ${named(batch.scope)} could not be refreshed. ${failures.join(" ")}`
+        : `Refreshed ${lists.length} ${title}.`,
     );
     setBatch(null);
     for (const key of [
@@ -59,19 +79,22 @@ export function useRefreshGoodreads() {
   }, [batch, progress.data, progress.error, cache]);
 
   const refresh = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (provider?: ReadingProvider) => {
+      const next: Scope = provider ?? "reading";
+      setScope(next);
       setMessage("");
-      // Read settings at click time, including lists outside the current page.
       const subscriptions = result(
         await api.GET("/api/reading-accounts/subscriptions"),
       );
       const lists = subscriptions.filter(
         ({ subscription }) =>
-          subscription.provider === "goodreads" && subscription.enabled,
+          subscription.enabled &&
+          (provider
+            ? subscription.provider === provider
+            : providers.includes(subscription.provider)),
       );
       const ids: string[] = [];
       const failures: string[] = [];
-      // Keep large collections from flooding the API with simultaneous requests.
       for (const item of lists) {
         try {
           result(
@@ -89,19 +112,21 @@ export function useRefreshGoodreads() {
           );
         }
       }
-      if (ids.length) setBatch({ ids, failures, key: randomUUID() });
+      if (ids.length)
+        setBatch({ ids, failures, key: randomUUID(), scope: next });
       else
         setMessage(
           failures.length
-            ? `Goodreads refresh failed. ${failures.join(" ")}`
-            : "No enabled Goodreads lists. Enable lists in Settings → Reading accounts.",
+            ? `${named(next)} refresh failed. ${failures.join(" ")}`
+            : `No enabled ${next === "reading" ? "reading lists" : named(next)}. Track lists in Settings → Reading accounts.`,
         );
       void cache.invalidateQueries({ queryKey: ["list-subscription"] });
     },
   });
   return {
-    refresh: () => refresh.mutate(),
+    refresh: (provider?: ReadingProvider) => refresh.mutate(provider),
     busy: refresh.isPending || !!batch,
+    scope,
     message,
     error: refresh.error,
   };

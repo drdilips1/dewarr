@@ -665,6 +665,8 @@ async def work_metadata(
             WorkMetadataSource.provider.in_(["hardcover", "openlibrary"]),
         )
     )
+    from app.importing.file_editions import FILE_EDITION_PROVIDER
+
     accessible_asset = (
         select(LibraryAsset.id)
         .join(Library)
@@ -678,6 +680,15 @@ async def work_metadata(
             visible_library(user),
         )
     )
+    file_edition = exists(
+        select(ProviderObject.id).where(
+            ProviderObject.version_id == Version.id,
+            ProviderObject.provider == FILE_EDITION_PROVIDER,
+            ProviderObject.kind == "edition",
+            ProviderObject.match_status == "matched",
+            ProviderObject.work_id.in_(members),
+        )
+    )
     owned = exists(
         accessible_asset.where(
             AssetContains.verified.is_(True),
@@ -686,7 +697,7 @@ async def work_metadata(
         )
     )
     conditions = [Version.work_id.in_(members)]
-    conditions.append(or_(catalog_version, exists(accessible_asset)))
+    conditions.append(or_(catalog_version, exists(accessible_asset), file_edition))
     needs_review = exists(
         select(ProviderObject.id).where(
             ProviderObject.version_id == Version.id, ProviderObject.match_status == "needs-review"

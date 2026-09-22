@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
@@ -8,14 +8,14 @@ import { Loading, Notice } from "../components";
 import BookCover from "../components/BookCover";
 import { genreLabel } from "../components/DiscoveryCollections";
 import FollowRelease, { basisLabel } from "../components/FollowRelease";
+import QuickAdd from "../components/QuickAdd";
 import BookLink from "../components/BookLink";
-import InfiniteScroll from "../components/InfiniteScroll";
-import { usePagedQuery } from "../hooks/usePagedQuery";
 
 type Entry = components["schemas"]["ReleaseEntry"];
 type Month = components["schemas"]["ReleaseMonth"];
 
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const DAY_TITLES = 4;
 
 function monthKey(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
@@ -38,39 +38,118 @@ function entryKey(entry: Entry) {
   return entry.work_id || `${entry.provider}:${entry.external_id}`;
 }
 
-function prefer(previous: Entry | undefined, entry: Entry): Entry {
-  if (!previous) return entry;
-  return {
-    ...previous,
-    ...entry,
-    work_id: previous.work_id || entry.work_id,
-    external_id: previous.external_id || entry.external_id,
-    followed: Boolean(previous.followed || entry.followed),
-    in_library: Boolean(previous.in_library || entry.in_library),
-    state: previous.state || entry.state,
-    release_date: entry.release_date || previous.release_date,
-    basis: entry.release_date ? entry.basis : previous.basis,
-    genres: entry.genres?.length ? entry.genres : previous.genres,
-  };
+function sameGenres(left: string[], right: string[]) {
+  return (
+    left.length === right.length && left.every((genre) => right.includes(genre))
+  );
 }
 
-function mergePages(pages: Month[] | undefined) {
-  const items = new Map<string, Entry>();
-  const undated = new Map<string, Entry>();
-  for (const page of pages || []) {
-    for (const entry of page.items || []) {
-      const key = entryKey(entry);
-      items.set(key, prefer(items.get(key), entry));
+function GenreMenu({
+  choices,
+  selected,
+  disabled,
+  onToggle,
+}: {
+  choices: string[];
+  selected: string[];
+  disabled: boolean;
+  onToggle: (genre: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const root = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const labels = selected.map(genreLabel);
+  const summary =
+    labels.length === 0
+      ? "None selected"
+      : labels.length <= 2
+        ? labels.join(", ")
+        : `${labels.length} selected`;
+  useEffect(() => {
+    if (!open) return;
+    function onPointer(event: PointerEvent) {
+      if (!root.current?.contains(event.target as Node)) setOpen(false);
     }
-    for (const entry of page.undated || []) {
-      const key = entryKey(entry);
-      undated.set(key, prefer(undated.get(key), entry));
+    function onKey(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      setOpen(false);
+      trigger.current?.focus({ preventScroll: true });
     }
-  }
-  return {
-    items: [...items.values()],
-    undated: [...undated.values()],
-  };
+    document.addEventListener("pointerdown", onPointer);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onPointer);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+  return (
+    <div className="genre-menu" ref={root}>
+      <button
+        ref={trigger}
+        type="button"
+        className="genre-menu-trigger"
+        aria-haspopup="true"
+        aria-expanded={open}
+        aria-controls="release-genre-menu"
+        disabled={!choices.length}
+        onClick={() => setOpen((current) => !current)}
+      >
+        <span className="genre-menu-label">Genres</span>
+        <span className="genre-menu-value">{summary}</span>
+        <ChevronDown size={14} aria-hidden="true" />
+      </button>
+      {open && (
+        <fieldset id="release-genre-menu" className="genre-menu-panel">
+          <legend className="sr-only">Genres to track</legend>
+          {choices.map((genre) => (
+            <label key={genre}>
+              <input
+                type="checkbox"
+                checked={selected.includes(genre)}
+                disabled={disabled}
+                onChange={() => onToggle(genre)}
+              />
+              {genreLabel(genre)}
+            </label>
+          ))}
+        </fieldset>
+      )}
+    </div>
+  );
+}
+
+function dayTitle(day: string) {
+  const [year, mon, date] = day.split("-").map(Number);
+  return new Date(year, mon - 1, date).toLocaleDateString(undefined, {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+function entryHref(entry: Entry) {
+  if (entry.work_id) return `/books/${entry.work_id}`;
+  if (entry.external_id)
+    return `/discover/books/hardcover/${encodeURIComponent(entry.external_id)}`;
+  return null;
+}
+
+function entryStatus(entry: Entry) {
+  if (entry.in_library) return "In library";
+  if (entry.state === "available") return "Available";
+  if (entry.state === "wanted") return "Searching";
+  if (entry.state === "waiting" || entry.followed) return "Waiting for release";
+  if (entry.work_id) return "In your catalog";
+  return "";
+}
+
+async function importHardcover(externalId: string) {
+  const work = result(
+    await api.POST("/api/metadata/books/{provider}/{external_id}/import", {
+      params: { path: { provider: "hardcover", external_id: externalId } },
+    }),
+  );
+  return work.id;
 }
 
 function daysInMonth(month: string) {
@@ -89,46 +168,196 @@ function daysInMonth(month: string) {
   return cells;
 }
 
-function ReleaseBook({ entry, canEdit }: { entry: Entry; canEdit: boolean }) {
-  const href = entry.work_id
-    ? `/books/${entry.work_id}`
-    : entry.external_id
-      ? `/discover/books/hardcover/${encodeURIComponent(entry.external_id)}`
-      : null;
-  return (
-    <article className="release-book">
+function utcToday() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function releaseIsAhead(day: string | null | undefined) {
+  if (!day) return true;
+  return day.slice(0, 10) > utcToday();
+}
+
+function alsoLabel(entry: Entry, section: string | null, selected: string[]) {
+  if (!section) return "";
+  const extra = selected.filter(
+    (genre) => genre !== section && entry.genres?.includes(genre),
+  );
+  return extra.length ? `Also ${extra.map(genreLabel).join(", ")}` : "";
+}
+
+function genreSections(entries: Entry[], selected: string[]) {
+  if (selected.length < 2) return [{ genre: null as string | null, entries }];
+  const buckets = new Map(selected.map((genre) => [genre, [] as Entry[]]));
+  const other: Entry[] = [];
+  for (const entry of entries) {
+    const match = selected.find((genre) => entry.genres?.includes(genre));
+    if (match) buckets.get(match)?.push(entry);
+    else other.push(entry);
+  }
+  const sections = [...buckets.entries()]
+    .filter(([, items]) => items.length > 0)
+    .map(([genre, items]) => ({ genre, entries: items }));
+  if (other.length) sections.push({ genre: null, entries: other });
+  return sections;
+}
+
+function ReleaseCard({
+  entry,
+  canEdit,
+  upcoming,
+  note,
+}: {
+  entry: Entry;
+  canEdit: boolean;
+  upcoming: boolean;
+  note?: string;
+}) {
+  const href = entryHref(entry);
+  const status = entryStatus(entry);
+  const canRequest =
+    canEdit &&
+    (entry.work_id || (entry.provider === "hardcover" && entry.external_id));
+  const summary = (
+    <>
       <BookCover title={entry.title} cover={entry.cover_url} actions={false} />
-      <div>
-        <h3>{href ? <Link to={href}>{entry.title}</Link> : entry.title}</h3>
-        <p>{entry.authors.join(", ") || "Author unknown"}</p>
-        <p className="muted">{basisLabel(entry.basis)}</p>
-        <p className="muted">
-          {[
-            entry.followed && "Following",
-            entry.in_library && "In library",
-            entry.state === "waiting" && "Waiting for release",
-            entry.state === "wanted" && "Searching when it matches",
-          ]
-            .filter(Boolean)
-            .join(" · ")}
-        </p>
-        <FollowRelease
-          canEdit={canEdit}
-          following={entry.followed}
-          workId={entry.work_id}
-          body={{
-            work_id: entry.work_id,
-            provider: entry.provider === "hardcover" ? "hardcover" : null,
-            external_id: entry.external_id,
-            title: entry.title,
-            authors: entry.authors,
-            cover_url: entry.cover_url,
-            release_date: entry.release_date,
-            basis: entry.basis,
-          }}
-        />
-      </div>
+      <span className="release-day-card-copy">
+        <span className="release-day-card-title">{entry.title}</span>
+        <span>{entry.authors.join(", ") || "Author unknown"}</span>
+        <span className="muted">{basisLabel(entry.basis)}</span>
+        {note && <span className="muted">{note}</span>}
+        {status && <span className="muted">{status}</span>}
+      </span>
+    </>
+  );
+  return (
+    <article className="release-day-card">
+      {href ? (
+        <Link
+          className="release-day-card-main"
+          to={href}
+          aria-label={`View ${entry.title}`}
+        >
+          {summary}
+        </Link>
+      ) : (
+        <div className="release-day-card-main">{summary}</div>
+      )}
+      {canEdit && (upcoming || entry.followed || canRequest) && (
+        <div className="release-day-card-actions">
+          {(upcoming || entry.followed) && (
+            <FollowRelease
+              canEdit={canEdit}
+              following={entry.followed}
+              workId={entry.work_id}
+              idleLabel={upcoming ? "Request on release day" : "Follow"}
+              activeLabel={upcoming ? "Waiting for release" : "Following"}
+              body={{
+                work_id: entry.work_id,
+                provider: entry.provider === "hardcover" ? "hardcover" : null,
+                external_id: entry.external_id,
+                title: entry.title,
+                authors: entry.authors,
+                cover_url: entry.cover_url,
+                release_date: entry.release_date,
+                basis: entry.basis,
+              }}
+            />
+          )}
+          {canRequest && !upcoming && (
+            <QuickAdd
+              workId={entry.work_id || undefined}
+              resolveWork={
+                entry.provider === "hardcover" && entry.external_id
+                  ? () => importHardcover(entry.external_id!)
+                  : undefined
+              }
+            />
+          )}
+        </div>
+      )}
     </article>
+  );
+}
+
+function DayPanel({
+  dayKey,
+  title,
+  entries,
+  genres,
+  canEdit,
+  upcoming,
+  onClose,
+}: {
+  dayKey: string;
+  title: string;
+  entries: Entry[];
+  genres: string[];
+  canEdit: boolean;
+  upcoming: boolean;
+  onClose: () => void;
+}) {
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    heading.current?.focus({ preventScroll: true });
+  }, [dayKey]);
+  return (
+    <aside
+      id="release-day-panel"
+      className="release-drawer"
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby="release-day-heading"
+    >
+      <header className="release-drawer-heading">
+        <div>
+          <h2 id="release-day-heading" tabIndex={-1} ref={heading}>
+            {title}
+          </h2>
+          <p className="muted">
+            {entries.length === 1 ? "1 release" : `${entries.length} releases`}
+          </p>
+        </div>
+        <button
+          type="button"
+          className="icon-button"
+          aria-label="Close day"
+          onClick={onClose}
+        >
+          <X size={16} aria-hidden="true" />
+        </button>
+      </header>
+      {canEdit && upcoming && entries.length > 0 && (
+        <p className="muted release-drawer-note">
+          Request on release day waits until the book is out, then starts
+          searching.
+        </p>
+      )}
+      {entries.length === 0 ? (
+        <p className="muted">Nothing is scheduled this day.</p>
+      ) : (
+        genreSections(entries, genres).map((section) => (
+          <section key={section.genre ?? "other"}>
+            {genres.length > 1 && (
+              <h3 className="release-drawer-genre">
+                {section.genre ? genreLabel(section.genre) : "Other"}
+              </h3>
+            )}
+            <ul className="release-drawer-list">
+              {section.entries.map((entry) => (
+                <li key={entryKey(entry)}>
+                  <ReleaseCard
+                    entry={entry}
+                    canEdit={canEdit}
+                    upcoming={upcoming}
+                    note={alsoLabel(entry, section.genre, genres)}
+                  />
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      )}
+    </aside>
   );
 }
 
@@ -221,18 +450,23 @@ export function UpcomingShelf({ canEdit }: { canEdit: boolean }) {
 
 export default function ReleaseCalendar({ canEdit }: { canEdit: boolean }) {
   const cache = useQueryClient();
+  const section = useRef<HTMLElement>(null);
+  const heldScroll = useRef<number | null>(null);
+  const writing = useRef(false);
+  const desiredGenres = useRef<string[] | null>(null);
   const [month, setMonth] = useState(() => monthKey(new Date()));
-  const query = usePagedQuery({
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
+  const [draftGenres, setDraftGenres] = useState<string[] | null>(null);
+  const remembered = useRef<Month | undefined>(undefined);
+  const query = useQuery({
     queryKey: ["release-calendar", month],
-    queryFn: async (page, signal) =>
+    queryFn: async ({ signal }) =>
       result(
         await api.GET("/api/releases/calendar", {
-          params: { query: { month, page } },
+          params: { query: { month } },
           signal,
         }),
       ),
-    next: (last, pages) =>
-      last.has_more && pages.length < 25 ? pages.length + 1 : undefined,
     retry: false,
   });
   const saveGenres = useMutation({
@@ -244,13 +478,14 @@ export default function ReleaseCalendar({ canEdit }: { canEdit: boolean }) {
     },
   });
   const data: Month | undefined = query.data;
-  const merged = useMemo(
-    () => mergePages(query.loadedPages),
-    [query.loadedPages],
-  );
+  if (data) remembered.current = data;
+  const settled = data?.month === month;
+  const genreSource = settled ? data : remembered.current;
+  const items = settled ? data?.items || [] : [];
+  const undated = settled ? data?.undated || [] : [];
   const byDay = useMemo(() => {
     const grouped = new Map<string, Entry[]>();
-    for (const item of merged.items) {
+    for (const item of items) {
       if (!item.release_date) continue;
       grouped.set(item.release_date, [
         ...(grouped.get(item.release_date) || []),
@@ -258,16 +493,95 @@ export default function ReleaseCalendar({ canEdit }: { canEdit: boolean }) {
       ]);
     }
     return grouped;
-  }, [merged.items]);
-  const cells = daysInMonth(data?.month || month);
-  function toggleGenre(genre: string) {
-    const selected = new Set(data?.genres || []);
-    if (selected.has(genre)) selected.delete(genre);
-    else selected.add(genre);
-    saveGenres.mutate([...selected]);
+  }, [items]);
+  const cells = daysInMonth(month);
+  const selectedGenres = draftGenres ?? genreSource?.genres ?? [];
+  useEffect(() => {
+    if (
+      draftGenres &&
+      data?.genres &&
+      sameGenres(draftGenres, data.genres) &&
+      !writing.current &&
+      !desiredGenres.current
+    ) {
+      setDraftGenres(null);
+    }
+  }, [data?.genres, draftGenres]);
+  useLayoutEffect(() => {
+    const scroller = document.scrollingElement;
+    const done = settled || query.isError;
+    if (done && section.current) section.current.style.minHeight = "";
+    if (heldScroll.current != null && scroller) {
+      scroller.scrollTop = heldScroll.current;
+      if (done) heldScroll.current = null;
+    }
+  }, [month, query.isError, settled]);
+  function changeMonth(delta: number) {
+    const scroller = document.scrollingElement;
+    if (section.current && scroller) {
+      section.current.style.minHeight = `${section.current.offsetHeight}px`;
+      heldScroll.current = scroller.scrollTop;
+    }
+    setSelectedDay(null);
+    setMonth((current) => shiftMonth(current, delta));
   }
+  function closeDay() {
+    const key = selectedDay;
+    setSelectedDay(null);
+    if (!key) return;
+    document
+      .getElementById(`release-day-${key}`)
+      ?.focus({ preventScroll: true });
+  }
+  useEffect(() => {
+    if (!selectedDay) return;
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") closeDay();
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [selectedDay]);
+  function toggleGenre(genre: string) {
+    if (!canEdit) return;
+    const current = desiredGenres.current ?? selectedGenres;
+    const next = current.includes(genre)
+      ? current.filter((item) => item !== genre)
+      : [...current, genre];
+    setDraftGenres(next);
+    desiredGenres.current = next;
+    if (writing.current) return;
+    void flushGenres(genreSource?.genres ?? []);
+  }
+  async function flushGenres(fallback: string[]) {
+    writing.current = true;
+    try {
+      while (desiredGenres.current) {
+        const value = desiredGenres.current;
+        desiredGenres.current = null;
+        await saveGenres.mutateAsync(value);
+        fallback = value;
+      }
+    } catch {
+      desiredGenres.current = null;
+      setDraftGenres(fallback);
+    } finally {
+      writing.current = false;
+      if (desiredGenres.current) void flushGenres(fallback);
+    }
+  }
+  const panelEntries =
+    selectedDay === "undated"
+      ? undated
+      : selectedDay
+        ? byDay.get(selectedDay) || []
+        : [];
   return (
-    <section className="release-calendar" aria-label="Upcoming releases">
+    <section
+      ref={section}
+      className="release-calendar"
+      aria-label="Upcoming releases"
+      aria-busy={!settled && !query.isError}
+    >
       <div className="explore-view-heading">
         <div>
           <h1>Calendar</h1>
@@ -276,135 +590,136 @@ export default function ReleaseCalendar({ canEdit }: { canEdit: boolean }) {
             labeled when the audiobook day is still unknown.
           </p>
         </div>
-        <div className="button-row">
-          <button
-            type="button"
-            aria-label="Previous month"
-            onClick={() => setMonth((current) => shiftMonth(current, -1))}
+        <div className="release-toolbar">
+          <GenreMenu
+            choices={genreSource?.choices ?? []}
+            selected={selectedGenres}
+            disabled={!canEdit}
+            onToggle={toggleGenre}
+          />
+          <div
+            className="button-row release-month-nav"
+            role="group"
+            aria-label="Month"
           >
-            <ChevronLeft size={16} />
-          </button>
-          <strong>{monthTitle(data?.month || month)}</strong>
-          <button
-            type="button"
-            aria-label="Next month"
-            onClick={() => setMonth((current) => shiftMonth(current, 1))}
-          >
-            <ChevronRight size={16} />
-          </button>
+            <button
+              type="button"
+              className="icon-button"
+              aria-label="Previous month"
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => changeMonth(-1)}
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <strong aria-live="polite">{monthTitle(month)}</strong>
+            <button
+              type="button"
+              className="icon-button"
+              aria-label="Next month"
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => changeMonth(1)}
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
         </div>
       </div>
-      <fieldset className="release-genres">
-        <legend>Genres to discover</legend>
-        <div>
-          {(data?.choices || []).map((genre) => (
-            <label key={genre}>
-              <input
-                type="checkbox"
-                checked={data?.genres.includes(genre) || false}
-                disabled={!canEdit || saveGenres.isPending || !data}
-                onChange={() => toggleGenre(genre)}
-              />
-              {genreLabel(genre)}
-            </label>
-          ))}
-        </div>
-      </fieldset>
       <Notice error={query.error || saveGenres.error} />
-      {data?.warning && (
+      {settled && data?.warning && (
         <p className="notice" role="status">
           {data.warning}
         </p>
       )}
-      {query.isPending && <Loading />}
-      {data &&
-        !merged.items.length &&
-        !merged.undated.length &&
-        !query.hasNextPage && (
-          <p className="muted">Nothing is scheduled this month.</p>
-        )}
-      {query.hasNextPage && !merged.items.length && (
-        <InfiniteScroll query={query} manual />
+      {!settled && !query.isError && (
+        <p className="muted" role="status">
+          Loading {monthTitle(month)}.
+        </p>
       )}
-      {data && (
-        <>
-          <div className="release-weekdays" aria-hidden="true">
-            {WEEKDAYS.map((day) => (
-              <span key={day}>{day}</span>
-            ))}
-          </div>
-          <div className="release-month">
-            {cells.map((cell, index) =>
-              cell ? (
-                <section
-                  key={cell.key}
-                  className="release-day"
-                  aria-label={cell.key}
-                >
-                  <h2>{cell.day}</h2>
-                  <ul className="release-marks">
-                    {(byDay.get(cell.key) || []).map((entry) => {
-                      const mark =
-                        entry.work_id ||
-                        `${entry.provider}:${entry.external_id}`;
-                      return (
-                        <li key={mark}>
-                          <a href={`#release-${mark}`}>{entry.title}</a>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </section>
-              ) : (
-                <div key={`pad-${index}`} className="release-pad" />
-              ),
-            )}
-          </div>
-          {merged.items.some((entry) => entry.release_date) && (
-            <ul className="release-agenda">
-              {merged.items
-                .filter((entry) => entry.release_date)
-                .sort((left, right) =>
-                  (left.release_date || "").localeCompare(
-                    right.release_date || "",
-                  ),
+      {settled && !items.length && !undated.length && (
+        <p className="muted">Nothing is scheduled this month.</p>
+      )}
+      <div className="release-weekdays" aria-hidden="true">
+        {WEEKDAYS.map((day) => (
+          <span key={day}>{day}</span>
+        ))}
+      </div>
+      <div className="release-month">
+        {cells.map((cell, index) => {
+          if (!cell)
+            return <div key={`pad-${index}`} className="release-pad" />;
+          const entries = byDay.get(cell.key) || [];
+          const visible =
+            entries.length > DAY_TITLES ? DAY_TITLES - 1 : entries.length;
+          const shown = entries.slice(0, visible);
+          const extra = entries.length - shown.length;
+          const open = selectedDay === cell.key;
+          if (!entries.length) {
+            return (
+              <div key={cell.key} className="release-day">
+                <span className="release-day-number">{cell.day}</span>
+              </div>
+            );
+          }
+          return (
+            <button
+              key={cell.key}
+              id={`release-day-${cell.key}`}
+              type="button"
+              className="release-day"
+              aria-expanded={open}
+              aria-controls="release-day-panel"
+              aria-label={`${dayTitle(cell.key)}, ${entries.length} ${entries.length === 1 ? "release" : "releases"}`}
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() =>
+                setSelectedDay((current) =>
+                  current === cell.key ? null : cell.key,
                 )
-                .map((entry) => {
-                  const mark =
-                    entry.work_id || `${entry.provider}:${entry.external_id}`;
-                  return (
-                    <li key={mark} id={`release-${mark}`}>
-                      <p className="muted">{entry.release_date}</p>
-                      <ReleaseBook entry={entry} canEdit={canEdit} />
-                    </li>
-                  );
-                })}
-            </ul>
-          )}
-          {merged.undated.length > 0 && (
-            <section aria-label="Undated upcoming books">
-              <h2>Undated upcoming</h2>
-              <p className="muted">
-                These are marked coming soon and do not have a full release day
-                yet.
-              </p>
-              <ul className="release-undated">
-                {merged.undated.map((entry) => (
-                  <li
-                    key={
-                      entry.work_id || `${entry.provider}:${entry.external_id}`
-                    }
-                  >
-                    <ReleaseBook entry={entry} canEdit={canEdit} />
-                  </li>
+              }
+            >
+              <span className="release-day-number">{cell.day}</span>
+              <span className="release-count">{entries.length}</span>
+              <span className="release-marks">
+                {shown.map((entry) => (
+                  <span key={entryKey(entry)}>{entry.title}</span>
                 ))}
-              </ul>
-            </section>
-          )}
-          {query.hasNextPage && merged.items.length > 0 && (
-            <InfiniteScroll query={query} manual />
-          )}
-        </>
+                {extra > 0 && (
+                  <span className="release-more">+{extra} more</span>
+                )}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+      {undated.length > 0 && (
+        <button
+          id="release-day-undated"
+          type="button"
+          className="text-button release-undated-open"
+          aria-expanded={selectedDay === "undated"}
+          aria-controls="release-day-panel"
+          onClick={() =>
+            setSelectedDay((current) =>
+              current === "undated" ? null : "undated",
+            )
+          }
+        >
+          {undated.length} without a release day
+        </button>
+      )}
+      {selectedDay && (
+        <DayPanel
+          dayKey={selectedDay}
+          title={
+            selectedDay === "undated"
+              ? "Undated upcoming"
+              : dayTitle(selectedDay)
+          }
+          entries={panelEntries}
+          genres={settled ? data?.genres || [] : []}
+          canEdit={canEdit}
+          upcoming={selectedDay === "undated" || releaseIsAhead(selectedDay)}
+          onClose={closeDay}
+        />
       )}
     </section>
   );

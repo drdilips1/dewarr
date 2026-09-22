@@ -51,6 +51,10 @@ export default function SettingHelp({
       onMouseLeave={() => {
         if (!pinned) setOpen(false);
       }}
+      onClick={(event) => {
+        event.preventDefault();
+        event.stopPropagation();
+      }}
     >
       <button
         type="button"

@@ -6,13 +6,31 @@ from sqlalchemy import Text, case, cast, exists, func, literal, or_, select, tru
 from sqlalchemy.dialects.postgresql import JSONB
 
 from app.db.models import CatalogSeries, SeriesMembership, Version, WorkMetadataSource
+from app.domain.catalog_titles import display_title, display_title_sql
 from app.importing.match_evidence import ISBN_KEYS, identifier, isbn_forms
+
+
+def like_pattern(value):
+    return "%" + value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
 
 
 def local_match(user, origin, query):
     query = query.strip()
-    pattern = "%" + query.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
+    pattern = like_pattern(query)
     matches = [origin.title.ilike(pattern), cast(origin.authors, Text).ilike(pattern)]
+    # "Cloud Atlas (Unabridged)" is the same title as "Cloud Atlas" for lookup.
+    phrase = display_title(query)
+    if phrase:
+        phrase_pattern = like_pattern(phrase)
+        matches.append(display_title_sql(origin.title).ilike(phrase_pattern))
+        matches.append(
+            exists(
+                select(Version.id).where(
+                    Version.work_id == origin.id,
+                    display_title_sql(Version.title).ilike(phrase_pattern),
+                )
+            )
+        )
     # Expand only the declared series names, never arbitrary snapshot text.
     series = WorkMetadataSource.snapshot["series"]
     entries = func.jsonb_array_elements(

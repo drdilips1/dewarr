@@ -50,9 +50,24 @@ def display_text_sql(value):
     return func.trim(func.regexp_replace(value, r"\s+", " ", "g"))
 
 
+def stripped_title(value):
+    """Drop trailing edition labels while keeping the title's original casing."""
+    if not value:
+        return ""
+    value = unicodedata.normalize("NFKC", value)
+    return re.sub(DISPLAY_SUFFIX, "", value, flags=re.IGNORECASE).strip()
+
+
 def display_title(value):
     value = display_text(value)
     return re.sub(DISPLAY_SUFFIX, "", value).strip()
+
+
+def titles_agree(expected, actual):
+    """Edition labels such as (Unabridged) are not a different book."""
+    left = {display_title(title) for title in expected if title and display_title(title)}
+    right = {display_title(title) for title in actual if title and display_title(title)}
+    return bool(left) and left <= right
 
 
 def display_title_sql(value):

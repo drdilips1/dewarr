@@ -168,6 +168,35 @@ async def test_upcoming_skips_a_redirect_and_a_second_edition_without_failing_th
     assert "book: {canonical_id: {_is_null: true}}" in calls[0]["query"]
 
 
+async def test_upcoming_reads_genres_grouped_by_category():
+    source, _ = adapter(
+        {
+            HC_UPCOMING: {
+                "editions": [
+                    edition(
+                        4,
+                        "2026-10-08",
+                        tags={
+                            "Genre": [
+                                {
+                                    "tag": "Dark Fantasy",
+                                    "count": 4,
+                                    "category": "Genre",
+                                },
+                                {"tag": "Science Fiction & Fantasy", "count": 2},
+                            ],
+                            "Mood": [{"tag": "Adventurous", "count": 3}],
+                            "Content Warning": [{"tag": "Violence", "count": 1}],
+                        },
+                    )
+                ]
+            }
+        }
+    )
+    result = await source.upcoming(date(2026, 10, 1), date(2026, 10, 31), 1)
+    assert result.items[0].genres == ["fantasy", "science-fiction"]
+
+
 async def test_upcoming_rejects_a_date_outside_the_month_and_an_unknown_tag_shape():
     outside, _ = adapter({HC_UPCOMING: {"editions": [edition(1, "2026-11-01")]}})
     with pytest.raises(AdapterError):
@@ -177,6 +206,32 @@ async def test_upcoming_rejects_a_date_outside_the_month_and_an_unknown_tag_shap
     )
     with pytest.raises(AdapterError):
         await unknown.upcoming(date(2026, 10, 1), date(2026, 10, 31), 1)
+
+
+async def test_upcoming_month_walks_every_page_and_keeps_the_first_edition():
+    calls = []
+
+    async def request(method, path, *, json):
+        calls.append(json)
+        offset = json["variables"]["offset"]
+        if offset == 0:
+            editions = [edition(key, "2026-10-02") for key in range(1, 102)]
+        else:
+            editions = [
+                edition(100, "2026-10-20"),
+                edition(101, "2026-10-03"),
+                edition(102, "2026-10-04"),
+            ]
+        return {"data": {"editions": editions}}
+
+    result = await Hardcover(request).upcoming_month(date(2026, 10, 1), date(2026, 10, 31))
+    assert [call["variables"]["offset"] for call in calls] == [0, 100]
+    assert "limit: 101" in calls[0]["query"]
+    kept = {item.external_id: item.release_date for item in result.items}
+    assert list(kept) == [str(key) for key in range(1, 103)]
+    assert kept["100"] == date(2026, 10, 2)
+    assert kept["101"] == date(2026, 10, 3)
+    assert not result.has_more and result.warning is None
 
 
 async def test_related_suggestions_preserve_provider_order_and_exclude_the_seed():

@@ -14,6 +14,7 @@ from app.db.models import (
     Operation,
 )
 from app.domain.operations import transaction_lock
+from app.importing.file_editions import attach_file_edition
 from app.importing.filesystem import relative_parts
 from app.importing.inspection import InspectionSnapshot
 from app.importing.naming import (
@@ -36,6 +37,20 @@ class InspectInput(StrictModel):
     def valid_path(self):
         relative_parts(self.relative_path)
         return self
+
+
+class FileEditionInput(StrictModel):
+    work_id: UUID
+    group_key: str = Field(pattern=r"^[a-f0-9]{64}$")
+    grouping_revision: str = Field(pattern=r"^[a-f0-9]{64}$")
+
+
+class FileEditionView(BaseModel):
+    work_id: UUID
+    version_id: UUID
+    medium: str
+    title: str | None
+    created: bool
 
 
 class InspectionView(BaseModel):
@@ -133,6 +148,26 @@ async def inspections(admin: Admin, db: Database, offset: int = Query(0, ge=0)):
 @router.get("/inspections/{inspection_id}", response_model=InspectionView)
 async def inspection(inspection_id: UUID, admin: Admin, db: Database):
     return await owned_inspection(db, admin.id, inspection_id)
+
+
+@router.post(
+    "/inspections/{inspection_id}/editions",
+    response_model=FileEditionView,
+)
+async def create_file_edition(
+    inspection_id: UUID, body: FileEditionInput, admin: Admin, db: Database
+):
+    version, created = await attach_file_edition(
+        db, admin, inspection_id, body.work_id, body.group_key, body.grouping_revision
+    )
+    await db.commit()
+    return FileEditionView(
+        work_id=version.work_id,
+        version_id=version.id,
+        medium=version.medium,
+        title=version.title,
+        created=created,
+    )
 
 
 @router.post("/inspections/{inspection_id}/plans", response_model=FrozenPlanView, status_code=201)

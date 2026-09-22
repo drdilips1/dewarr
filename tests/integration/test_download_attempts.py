@@ -324,6 +324,38 @@ async def test_changed_completed_paths_are_held(client, database, selected, down
     assert attempt.state == "held" and attempt.inspection_id is None
 
 
+async def test_duplicate_can_merge_into_a_book_with_an_outstanding_download(
+    client, database, selected, admin
+):
+    assert (await start(client, selected)).status_code == 202
+    async with database() as db:
+        selection = await db.get(AcquisitionSelection, UUID(selected["id"]))
+        holder = UUID(selection.frozen["work_id"])
+        duplicate = Work(
+            title="Cloud Atlas (Unabridged)",
+            authors=["David Mitchell"],
+            provisional=True,
+            catalog_public=False,
+        )
+        db.add(duplicate)
+        await db.flush()
+        duplicate_id = duplicate.id
+        preview = await preview_merge(db, duplicate_id, holder, UUID(admin["id"]))
+        await merge_works(db, UUID(admin["id"]), duplicate_id, holder, preview["revision"])
+        await db.commit()
+    async with database() as db:
+        assert (await db.get(Work, duplicate_id)).redirect_to == holder
+        assert (
+            await db.scalar(
+                select(AcquisitionReservation).where(
+                    AcquisitionReservation.work_id == holder,
+                    AcquisitionReservation.state == "committed",
+                )
+            )
+        )
+        assert (await db.get(AcquisitionSelection, UUID(selected["id"]))).state == "committed"
+
+
 async def test_identity_merge_cannot_release_inflight_reservation(
     client, database, selected, admin
 ):

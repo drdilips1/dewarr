@@ -117,6 +117,7 @@ test("connect Goodreads in onboarding, choose shelves, pause and refresh from se
     page.getByRole("heading", { name: "Reading accounts", exact: true }),
   ).toBeVisible();
   const goodreads = page.getByRole("region", { name: "Goodreads connection" });
+  await goodreads.locator(".reading-connection > summary").click();
   await expect(
     goodreads.getByRole("link", { name: /Open my Goodreads books/ }),
   ).toHaveAttribute("href", "https://www.goodreads.com/review/list");
@@ -157,6 +158,7 @@ test("connect Goodreads in onboarding, choose shelves, pause and refresh from se
   await page.getByRole("button", { name: "Next step" }).click();
   await page.getByRole("button", { name: "Start browsing" }).click();
   await page.goto("/settings#reading");
+  await goodreads.locator(".reading-connection > summary").click();
   await expect(
     lists.getByRole("button", { name: "Pause tracking Want to read" }),
   ).toBeVisible();
@@ -219,6 +221,7 @@ test("tracked lists remain manageable when account discovery fails", async ({
           role: "member",
           display_name: "Reader",
           onboarding_status: "complete",
+          permissions: [],
         },
         csrf_token: "test",
       };
@@ -268,6 +271,7 @@ test("tracked lists remain manageable when account discovery fails", async ({
   });
   await page.goto("/settings#reading");
   const hardcover = page.getByRole("region", { name: "Hardcover connection" });
+  await hardcover.locator(".reading-connection > summary").click();
   await expect(
     hardcover.getByText("Needs attention", { exact: true }),
   ).toBeVisible();
@@ -317,6 +321,7 @@ test("connect StoryGraph, follow a shelf, and paste a tag list", async ({
           role: "member",
           display_name: "Reader",
           onboarding_status: "complete",
+          permissions: [],
         },
         csrf_token: "test",
       };
@@ -390,6 +395,19 @@ test("connect StoryGraph, follow a shelf, and paste a tag list", async ({
   const storygraph = page.getByRole("region", {
     name: "StoryGraph connection",
   });
+  await storygraph.locator(".reading-connection > summary").click();
+  const guide = storygraph.locator(".storygraph-setup");
+  await expect(guide).toBeVisible();
+  await expect(guide.locator("ol")).toBeHidden();
+  await guide.locator("summary").click();
+  const login = guide.getByRole("link", { name: "Sign in to StoryGraph ↗" });
+  await expect(login).toHaveAttribute(
+    "href",
+    "https://app.thestorygraph.com/users/sign_in",
+  );
+  await expect(login).toHaveAttribute("target", "_blank");
+  await expect(guide).toContainText("_storygraph_session");
+  await expect(guide).toContainText("remember_user_token");
   await storygraph.getByLabel("_storygraph_session").fill("session-token");
   await storygraph.getByLabel("remember_user_token").fill("remember-token");
   await storygraph
@@ -432,6 +450,7 @@ test("connect StoryGraph, follow a shelf, and paste a tag list", async ({
   await expect(page).toHaveURL(/\/discover\?view=yours/);
   await expect.poll(() => pasted).toBe(true);
   await page.goto("/settings#reading");
+  await storygraph.locator(".reading-connection > summary").click();
   await expect(
     storygraph.getByRole("link", { name: "To-read", exact: true }),
   ).toBeVisible();

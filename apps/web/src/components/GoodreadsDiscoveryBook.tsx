@@ -137,10 +137,7 @@ export default function GoodreadsBook() {
       </Link>
       <Notice error={query.error} />
       {query.isPending && (
-        <>
-          <Loading />
-          <p role="status">Finding book details on Hardcover…</p>
-        </>
+        <Loading label="Finding book details on Hardcover…" />
       )}
       {query.error && (
         <button onClick={() => query.refetch()}>Retry book details</button>

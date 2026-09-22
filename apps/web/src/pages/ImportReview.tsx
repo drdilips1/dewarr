@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import { api, result } from "../api/client";
@@ -389,6 +389,8 @@ function Review({ inspection }: { inspection: Inspection }) {
             groups.slice(groupOffset, groupOffset + 10).map((group) => (
               <GroupMatch
                 key={`${grouping.data?.revision}:${group.key}`}
+                inspectionId={inspection.id}
+                groupingRevision={grouping.data?.revision || ""}
                 group={group}
                 match={matches.data?.items.find(
                   (item) => item.group_key === group.key,
@@ -451,6 +453,14 @@ function Review({ inspection }: { inspection: Inspection }) {
             />
             Include selected catalog covers in new imports
           </label>
+          {Object.values(selections).some(
+            (selection) => !selection.full_content,
+          ) && (
+            <p className="muted">
+              Confirm that each selected group contains the complete book
+              before saving.
+            </p>
+          )}
           <button
             className="primary"
             disabled={
@@ -461,10 +471,10 @@ function Review({ inspection }: { inspection: Inspection }) {
               !Object.keys(selections).length ||
               Object.values(selections).some(
                 (selection) =>
-                  !!selection.contained_work_ids?.length &&
-                  (!selection.contents_confirmed ||
-                    !selection.full_content ||
-                    selection.contained_work_ids.length < 2),
+                  !selection.full_content ||
+                  (!!selection.contained_work_ids?.length &&
+                    (!selection.contents_confirmed ||
+                      selection.contained_work_ids.length < 2)),
               )
             }
             onClick={() => save.mutate()}
@@ -546,21 +556,95 @@ function Review({ inspection }: { inspection: Inspection }) {
   );
 }
 
+function editionLabel(medium: string) {
+  if (medium === "audio") return "Audiobook";
+  if (medium === "ebook") return "Ebook";
+  if (medium === "print") return "Print";
+  return "Unspecified format";
+}
+
+function EditionGap({
+  group,
+  versions,
+  disabled,
+  pending,
+  note,
+  onCreate,
+}: {
+  group: Group;
+  versions: {
+    id: string;
+    medium: string;
+    title: string | null;
+    publication_year: number | null;
+    needs_review: boolean;
+  }[];
+  disabled: boolean;
+  pending: boolean;
+  note: string;
+  onCreate: () => void;
+}) {
+  const format = group.medium === "audio" ? "audiobook" : "ebook";
+  const sameMedium = versions.some(
+    (version) => version.medium === group.medium && !version.needs_review,
+  );
+  const others = versions.filter((version) => version.medium !== group.medium);
+  return (
+    <>
+      {!sameMedium && (
+        <>
+          <p>
+            No {format} edition is listed on this page
+            {others.length ? ". Other editions:" : "."}
+          </p>
+          {others.slice(0, 6).map((version) => (
+            <div className="import-path" key={version.id}>
+              {editionLabel(version.medium)} · {version.title || "Untitled"} ·{" "}
+              {version.publication_year || "Year unknown"}
+            </div>
+          ))}
+          {others.length > 6 && (
+            <p className="muted">More editions are on the next page.</p>
+          )}
+          <button type="button" disabled={disabled} onClick={onCreate}>
+            {pending
+              ? "Adding edition…"
+              : `Add an ${format} edition from this file`}
+          </button>
+          <p className="muted">
+            Uses the file&apos;s title, narrators and identifiers. Saving the
+            plan still asks you to confirm the files contain the complete book.
+          </p>
+        </>
+      )}
+      {note && <p role="status">{note}</p>}
+    </>
+  );
+}
+
 function GroupMatch({
+  inspectionId,
+  groupingRevision,
   group,
   match,
   selection,
   disabled,
   onChange,
 }: {
+  inspectionId: string;
+  groupingRevision: string;
   group: Group;
   match?: CatalogMatch;
   selection?: Selection;
   disabled: boolean;
   onChange: (selection: Selection | null) => void;
 }) {
+  const cache = useQueryClient();
+  const searchTouched = useRef(false);
+  const autoSearched = useRef(false);
   const [input, setInput] = useState(group.title || "");
   const [q, setQ] = useState("");
+  const [editionNote, setEditionNote] = useState("");
   const [offset, setOffset] = useState(0);
   const [manualWorkId, setWorkId] = useState("");
   const workId = selection?.work_id || manualWorkId;
@@ -593,6 +677,76 @@ function GroupMatch({
           },
         }),
       ),
+  });
+  useEffect(() => {
+    if (
+      searchTouched.current ||
+      autoSearched.current ||
+      match?.status !== "unmatched" ||
+      !group.title?.trim()
+    )
+      return;
+    autoSearched.current = true;
+    setQ(group.title.trim().slice(0, 300));
+  }, [match, group.title]);
+  function candidateBlocked(candidate: CatalogMatch["candidates"][number]) {
+    return candidate.conflicts.some(
+      (conflict) =>
+        conflict ===
+          "Resolve this catalog version's pending metadata conflict" ||
+        conflict === "This catalog identity was explicitly rejected",
+    );
+  }
+  function choose(candidate: CatalogMatch["candidates"][number]) {
+    setWorkId(candidate.work_id);
+    setVersionOffset(0);
+    setEditionNote("");
+    const automatic =
+      match?.status === "matched" &&
+      match.selected_version_id === candidate.version_id;
+    onChange({
+      group_key: group.key,
+      work_id: candidate.work_id,
+      version_id: candidate.version_id,
+      full_content: false,
+      contents_confirmed: false,
+      ...(automatic && match ? { match_revision: match.revision } : {}),
+    });
+  }
+  const createEdition = useMutation({
+    mutationFn: async () =>
+      result(
+        await api.POST(
+          "/api/organization/inspections/{inspection_id}/editions",
+          {
+            params: { path: { inspection_id: inspectionId } },
+            body: {
+              work_id: workId,
+              group_key: group.key,
+              grouping_revision: groupingRevision,
+            },
+          },
+        ),
+      ),
+    onSuccess: (edition) => {
+      setWorkId(edition.work_id);
+      setVersionOffset(0);
+      setEditionNote(
+        edition.created
+          ? "Added an edition from this file. Confirm these files contain the complete book, then save the import plan."
+          : "Using the catalog edition that already matches this file. Confirm these files contain the complete book, then save the import plan.",
+      );
+      onChange({
+        group_key: group.key,
+        work_id: edition.work_id,
+        version_id: edition.version_id,
+        full_content: false,
+        contents_confirmed: false,
+      });
+      cache.invalidateQueries({
+        queryKey: ["import-match-versions", edition.work_id],
+      });
+    },
   });
   function update(
     version: string,
@@ -654,13 +808,38 @@ function GroupMatch({
             <button
               disabled={disabled}
               onClick={() => {
-                setWorkId(suggested.work_id);
-                setVersionOffset(0);
-                onChange(suggested);
+                const candidate = match?.candidates.find(
+                  (item) => item.version_id === suggested.version_id,
+                );
+                if (candidate) choose(candidate);
               }}
             >
               Use matched edition
             </button>
+          )}
+          {!!match.candidates.length && !suggested && (
+            <div className="actions">
+              {match.candidates
+                .filter((candidate) => !candidateBlocked(candidate))
+                .slice(0, 5)
+                .map((candidate) => (
+                  <button
+                    type="button"
+                    key={candidate.version_id}
+                    disabled={disabled}
+                    onClick={() => choose(candidate)}
+                  >
+                    Use {candidate.version_title || candidate.title}
+                    {candidate.authors.length
+                      ? ` · ${candidate.authors.join(", ")}`
+                      : ""}
+                    {candidate.narrators.length
+                      ? ` · ${candidate.narrators.join(", ")}`
+                      : ""}
+                    {candidate.year ? ` · ${candidate.year}` : ""}
+                  </button>
+                ))}
+            </div>
           )}
           {selection?.match_revision && (
             <p className="muted">
@@ -704,6 +883,7 @@ function GroupMatch({
         className="inline-form"
         onSubmit={(event) => {
           event.preventDefault();
+          searchTouched.current = true;
           setQ(input);
           setOffset(0);
         }}
@@ -718,7 +898,7 @@ function GroupMatch({
         </label>
         <button disabled={disabled || !input.trim()}>Find matching book</button>
       </form>
-      <Notice error={books.error || versions.error} />
+      <Notice error={books.error || versions.error || createEdition.error} />
       {books.data && (
         <>
           <label>
@@ -729,6 +909,7 @@ function GroupMatch({
               onChange={(event) => {
                 setWorkId(event.target.value);
                 setVersionOffset(0);
+                setEditionNote("");
                 onChange(null);
               }}
             >
@@ -758,6 +939,14 @@ function GroupMatch({
       )}
       {versions.data && (
         <>
+          <EditionGap
+            group={group}
+            versions={versions.data.versions}
+            disabled={disabled || createEdition.isPending || !workId}
+            pending={createEdition.isPending}
+            note={editionNote}
+            onCreate={() => createEdition.mutate()}
+          />
           <label>
             Catalog version
             <select

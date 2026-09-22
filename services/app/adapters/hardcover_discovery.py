@@ -58,25 +58,43 @@ def ids(values, maximum):
     return [int(identifier("hardcover", str(value))) for value in values]
 
 
-def genres_from_tags(raw):
-    if raw is None:
+def _tag_name(item):
+    if isinstance(item, str):
+        return item
+    if not isinstance(item, dict) or ("tag" not in item and "name" not in item):
+        raise parse_failure()
+    name = item.get("tag") if isinstance(item.get("tag"), str) else item.get("name")
+    if not isinstance(name, str):
+        raise parse_failure()
+    return name
+
+
+def _slugs(items):
+    if items is None:
         return []
-    if not isinstance(raw, list):
+    if not isinstance(items, list):
         raise parse_failure()
     found = []
-    for item in raw:
-        if isinstance(item, str):
-            name = item
-        elif isinstance(item, dict) and ("tag" in item or "name" in item):
-            name = item.get("tag") if isinstance(item.get("tag"), str) else item.get("name")
-            if not isinstance(name, str):
-                raise parse_failure()
-        else:
-            raise parse_failure()
-        slug = genre_slug(name)
-        if slug and slug not in found:
-            found.append(slug)
+    for item in items:
+        for part in _tag_name(item).split("&"):
+            slug = genre_slug(part)
+            if slug and slug not in found:
+                found.append(slug)
     return found
+
+
+def genres_from_tags(raw):
+    """Hardcover sends either a flat tag list or tags grouped by category."""
+    if raw is None:
+        return []
+    if isinstance(raw, list):
+        return _slugs(raw)
+    if isinstance(raw, dict):
+        grouped = raw.items()
+        if any(not isinstance(key, str) or not isinstance(value, list) for key, value in grouped):
+            raise parse_failure()
+        return _slugs(raw.get("Genre"))
+    raise parse_failure()
 
 
 def book(row, *, release_date=None, genres=None, date_basis="unknown"):
@@ -143,52 +161,90 @@ async def browse(query, shelf, page, today):
         raise parse_failure() from error
 
 
-async def upcoming(query, start, end, page):
-    """One month of audiobook edition dates. Work dates are resolved per book, not here."""
-    try:
-        rows = (
-            await query(
-                HC_UPCOMING,
-                {"from": start.isoformat(), "to": end.isoformat(), "offset": (page - 1) * 20},
-            )
-        )["editions"]
-        if not isinstance(rows, list) or len(rows) > 21:
+def _month_query(limit):
+    return HC_UPCOMING.replace("limit: 21", f"limit: {limit}")
+
+
+async def _edition_page(query, statement, start, end, offset, limit):
+    rows = (
+        await query(
+            statement,
+            {"from": start.isoformat(), "to": end.isoformat(), "offset": offset},
+        )
+    )["editions"]
+    if not isinstance(rows, list) or len(rows) > limit + 1:
+        raise parse_failure()
+    books = []
+    seen = set()
+    for row in rows:
+        if not isinstance(row, dict):
             raise parse_failure()
-        books = []
-        seen = set()
-        for row in rows:
-            if not isinstance(row, dict):
-                raise parse_failure()
-            parent = row.get("book")
-            if not isinstance(parent, dict):
-                raise parse_failure()
-            edition_day = row.get("release_date")
-            if not isinstance(edition_day, str) or not (
-                start.isoformat() <= edition_day <= end.isoformat()
-            ):
-                raise parse_failure()
-            parsed = date.fromisoformat(edition_day)
-            if not start <= parsed <= end:
-                raise parse_failure()
-            # A redirect, or a second audio edition of a book already kept, is ordinary.
-            # The first edition wins because the query is ordered by release day.
-            if parent.get("canonical_id"):
-                continue
-            external = identifier("hardcover", str(parent.get("id")))
-            if external in seen:
-                continue
-            seen.add(external)
-            books.append(
-                book(
-                    parent,
-                    release_date=edition_day,
-                    genres=genres_from_tags(parent.get("cached_tags")),
-                    date_basis="audiobook",
-                )
+        parent = row.get("book")
+        if not isinstance(parent, dict):
+            raise parse_failure()
+        edition_day = row.get("release_date")
+        if not isinstance(edition_day, str) or not (
+            start.isoformat() <= edition_day <= end.isoformat()
+        ):
+            raise parse_failure()
+        parsed = date.fromisoformat(edition_day)
+        if not start <= parsed <= end:
+            raise parse_failure()
+        # A redirect, or a second audio edition of a book already kept, is ordinary.
+        # The first edition wins because the query is ordered by release day.
+        if parent.get("canonical_id"):
+            continue
+        external = identifier("hardcover", str(parent.get("id")))
+        if external in seen:
+            continue
+        seen.add(external)
+        books.append(
+            book(
+                parent,
+                release_date=edition_day,
+                genres=genres_from_tags(parent.get("cached_tags")),
+                date_basis="audiobook",
             )
-        return DiscoveryBatch(items=books[:20], has_more=len(rows) > 20)
+        )
+    return books[:limit], len(rows) > limit
+
+
+async def upcoming(query, start, end, page):
+    """One page of audiobook edition dates. Work dates are resolved per book, not here."""
+    try:
+        books, has_more = await _edition_page(
+            query, HC_UPCOMING, start, end, (page - 1) * 20, 20
+        )
+        return DiscoveryBatch(items=books, has_more=has_more)
     except (TypeError, ValueError, KeyError, AttributeError, ValidationError) as error:
         raise parse_failure() from error
+
+
+async def upcoming_month(query, start, end):
+    """Every audiobook edition in the month, walked in large pages."""
+    items = []
+    seen = set()
+    offset = 0
+    try:
+        for _ in range(20):
+            books, has_more = await _edition_page(
+                query, _month_query(101), start, end, offset, 100
+            )
+            for value in books:
+                if value.external_id in seen:
+                    continue
+                seen.add(value.external_id)
+                items.append(value)
+            if not has_more:
+                return DiscoveryBatch(items=items, has_more=False)
+            offset += 100
+    except (TypeError, ValueError, KeyError, AttributeError, ValidationError) as error:
+        raise parse_failure() from error
+    return DiscoveryBatch(
+        items=items,
+        has_more=False,
+        warning="Some later releases in this month could not be loaded.",
+    )
 
 
 async def related(query, external_id):

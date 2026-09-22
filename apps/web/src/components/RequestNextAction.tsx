@@ -21,11 +21,9 @@ export function requestTargetLabel(target: Target) {
 export default function RequestNextAction({
   request,
   target,
-  inActivity = false,
 }: {
   request: Request;
   target: Target;
-  inActivity?: boolean;
 }) {
   if (!request.can_open_book) return null;
   switch (target.next_action) {
@@ -44,11 +42,7 @@ export default function RequestNextAction({
         </Link>
       ) : null;
     case "downloads":
-      return inActivity ? (
-        <a href="#downloads">View download queue</a>
-      ) : (
-        <Link to="/requests#downloads">View download queue</Link>
-      );
+      return <Link to="/requests?status=downloading">View download queue</Link>;
     case "book":
       return (
         <Link to={`/books/${request.work_id}`}>

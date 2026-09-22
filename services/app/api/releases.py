@@ -14,7 +14,7 @@ from app.adapters.librofm import LibroHit
 from app.api.dependencies import CurrentUser, Database, Member
 from app.api.discovery import DiscoveryShelf, project
 from app.api.metadata import accessible_work, adapter_http_error, current_actor, provider_call
-from app.db.models import MonitoredRelease, Work, WorkMetadataSource
+from app.db.models import MonitoredRelease, Operation, Work, WorkMetadataSource
 from app.domain.acquisition import RequestOptions
 from app.domain.availability import availability_for
 from app.domain.catalog_bindings import displayed_provider_works
@@ -91,6 +91,7 @@ class FollowInput(BaseModel):
     cover_url: str | None = None
     release_date: str | None = None
     basis: Literal["audiobook", "work", "unknown"] = "unknown"
+    mode: Literal["ebook", "audio", "both", "either"] | None = None
 
 
 class FollowView(BaseModel):
@@ -180,7 +181,6 @@ async def calendar(
     user: CurrentUser,
     db: Database,
     month: str = Query(min_length=7, max_length=7),
-    page: int = Query(default=1, ge=1, le=25),
 ):
     today = datetime.now(UTC).date()
     start, end = _month(month, today)
@@ -192,7 +192,7 @@ async def calendar(
         choices=list(GENRES),
         items=[],
         undated=[],
-        page=page,
+        page=1,
     )
     discover = []
     if selected:
@@ -207,7 +207,7 @@ async def calendar(
         else:
             try:
                 batch, result.stale, result.warning = await provider_call(
-                    db, user_id, "hardcover", "upcoming", start, end, page
+                    db, user_id, "hardcover", "upcoming_month", start, end
                 )
                 user = await current_actor(db, user_id)
                 linked = await displayed_provider_works(db, user, "hardcover", batch.items)
@@ -236,7 +236,9 @@ async def calendar(
                             "state": None,
                         }
                     )
-                result.has_more = batch.has_more
+                if batch.warning and not result.warning:
+                    result.warning = batch.warning
+                result.has_more = False
             except AdapterError as error:
                 result.status = "unavailable"
                 result.warning = str(error)
@@ -393,7 +395,14 @@ async def follow(body: FollowInput, user: Member, db: Database):
     generation = row.generation if row else 0
     if row and row.state == "stopped":
         row.state = "waiting"
-    options = RequestOptions(mode="audio") if body.basis == "audiobook" else RequestOptions()
+    # An explicit format wins. An audiobook release date still defaults to audio
+    # when the caller leaves the format to saved preferences.
+    if body.mode is not None:
+        options = RequestOptions(mode=body.mode)
+    elif body.basis == "audiobook":
+        options = RequestOptions(mode="audio")
+    else:
+        options = RequestOptions()
     operation = await begin(db, user, work.id, options, f"release-follow:{work.id}:{generation}")
     row = await db.scalar(
         select(MonitoredRelease).where(
@@ -404,6 +413,27 @@ async def follow(body: FollowInput, user: Member, db: Database):
         raise HTTPException(409, operation.message)
     await db.commit()
     return _follow_view(row, operation.message)
+
+
+@router.get("/follow/{work_id}", response_model=FollowView)
+async def follow_status(work_id: UUID, user: CurrentUser, db: Database):
+    work = await canonical_work(db, work_id)
+    row = await db.scalar(
+        select(MonitoredRelease).where(
+            MonitoredRelease.owner_id == user.id,
+            MonitoredRelease.work_id == work.id,
+            MonitoredRelease.state != "stopped",
+        )
+    )
+    if not row:
+        raise HTTPException(404, "You are not following this book")
+    operation = await db.get(Operation, row.operation_id) if row.operation_id else None
+    message = (
+        operation.message
+        if operation and operation.message
+        else "Waiting for the release day"
+    )
+    return _follow_view(row, message)
 
 
 @router.delete("/follow/{work_id}", response_model=FollowView)

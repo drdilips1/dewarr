@@ -180,6 +180,15 @@ test("settings use compact controls and naming presets persist with planner prev
   await libraries
     .getByRole("button", { name: "Add server", exact: true })
     .click();
+  await expect(
+    libraries.getByRole("button", { name: "Audiobookshelf", exact: true }),
+  ).toBeVisible();
+  await expect(
+    libraries.getByRole("button", { name: "Grimmory", exact: true }),
+  ).toBeVisible();
+  await libraries
+    .getByRole("button", { name: "Audiobookshelf", exact: true })
+    .click();
   const connectionForm = libraries.locator("form").filter({
     has: page.getByRole("heading", { name: "Connect your Audiobookshelf" }),
   });

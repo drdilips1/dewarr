@@ -115,7 +115,7 @@ export default function Wanted({
       result(
         await api.GET("/api/requests", {
           signal,
-          params: { query: { work_id: workId, offset, limit: 10 } },
+          params: { query: { work_id: workId, offset, limit: 10, mine: true } },
         }),
       ),
     initial: 0,
@@ -385,7 +385,7 @@ export default function Wanted({
                     {reason.label}
                     {reason.active ? "" : " · Cancelled"}
                   </span>
-                  {reason.active && (
+                  {intent.can_withdraw && reason.active && (
                     <button
                       type="button"
                       disabled={cancel.isPending}

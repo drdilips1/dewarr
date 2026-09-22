@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BookOpen, ChevronDown, Download, Headphones } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -8,14 +8,33 @@ import { Notice } from "../components";
 import { randomUUID } from "../randomUUID";
 
 type Mode = "both" | "ebook" | "audio" | undefined;
+const MISSING_MEDIA = "Choose media to request or set a default";
+
+function PreferencePrompt({ cover = false }: { cover?: boolean }) {
+  const hint = useId();
+  return (
+    <div className={cover ? "cover-quick-preference" : "quick-add-preference"}>
+      <p id={hint}>Preference not set</p>
+      <Link
+        className={cover ? "cover-quick-set" : "button-link"}
+        to="/settings#preferences"
+        aria-describedby={hint}
+      >
+        Set here
+      </Link>
+    </div>
+  );
+}
 export default function QuickAdd({
   workId,
   resolveWork,
   coverFormats,
+  actionLabel = "Quick add",
 }: {
   coverFormats?: { ebook: boolean; audio: boolean };
   workId?: string;
   resolveWork?: () => Promise<string>;
+  actionLabel?: string;
 }) {
   const cache = useQueryClient();
   const { data: session } = useQuery<Auth | null>({
@@ -29,6 +48,21 @@ export default function QuickAdd({
   const eitherDownload = canStartDownload(grants, role);
   const [engaged, setEngaged] = useState(!coverFormats);
   const menu = useRef<HTMLDetailsElement>(null);
+  const stopWatching = useRef<(() => void) | null>(null);
+  const bind = useCallback((node: HTMLDivElement | null) => {
+    stopWatching.current?.();
+    stopWatching.current = null;
+    const parent = node?.closest(".book-link") || node?.closest(".book-cover");
+    if (!parent) return;
+    const enter = () => setEngaged(true);
+    parent.addEventListener("mouseenter", enter);
+    parent.addEventListener("focusin", enter);
+    stopWatching.current = () => {
+      parent.removeEventListener("mouseenter", enter);
+      parent.removeEventListener("focusin", enter);
+    };
+  }, []);
+  useEffect(() => () => stopWatching.current?.(), []);
   const [resolvedId, setResolvedId] = useState(workId);
   const id = workId || resolvedId;
   const command = useRef({ mode: undefined as Mode, key: randomUUID() });
@@ -84,6 +118,14 @@ export default function QuickAdd({
     add.isPending ||
     !!(status.data && ["queued", "running"].includes(status.data.status));
   const preference = defaults.data?.effective.desired_media;
+  const preferenceUnset = defaults.isSuccess && preference == null;
+  const [needsPreference, setNeedsPreference] = useState(false);
+  const preferenceError = add.error?.message === MISSING_MEDIA;
+  const missingPreference =
+    (needsPreference || preferenceError) &&
+    (preferenceUnset || !defaults.isSuccess);
+  const feedbackError =
+    (preferenceError ? null : add.error) || status.error || null;
   const label =
     preference === "audio"
       ? "Audiobook"
@@ -97,13 +139,22 @@ export default function QuickAdd({
   function choose(mode: Mode) {
     if (menu.current) menu.current.open = false;
     setEngaged(true);
+    if (
+      mode == null &&
+      (preferenceUnset || (!defaults.isSuccess && preferenceError))
+    ) {
+      setNeedsPreference(true);
+      return;
+    }
+    setNeedsPreference(false);
     add.mutate(mode);
   }
   if (!ebookDownload && !audioDownload) return null;
   if (coverFormats)
     return (
       <div
-        className={`cover-quick-add ${add.error || status.error || (engaged && status.data) ? "has-feedback" : ""}`}
+        ref={bind}
+        className={`cover-quick-add ${missingPreference || feedbackError || (engaged && status.data) ? "has-feedback" : ""}`}
         onMouseEnter={() => setEngaged(true)}
         onFocus={() => setEngaged(true)}
       >
@@ -114,13 +165,15 @@ export default function QuickAdd({
           disabled={busy || !eitherDownload}
           onClick={() => choose(undefined)}
           title={
-            eitherDownload
-              ? `Quick add · ${label}`
-              : "Choose a format you can download"
+            !eitherDownload
+              ? "Choose a format you can download"
+              : preferenceUnset
+                ? "Quick add preference not set"
+                : `${actionLabel} · ${label}. Uses your saved format priorities.`
           }
         >
           <Download size={16} aria-hidden="true" />
-          {busy ? "Adding…" : "Quick add"}
+          {busy ? "Adding…" : actionLabel}
         </button>
         <div className="cover-quick-formats">
           <button
@@ -154,8 +207,12 @@ export default function QuickAdd({
             <Headphones size={18} aria-hidden="true" />
           </button>
         </div>
-        <Notice error={add.error || status.error} />
-        {engaged && status.data && (
+        {missingPreference ? (
+          <PreferencePrompt cover />
+        ) : (
+          <Notice error={feedbackError} />
+        )}
+        {engaged && status.data && !missingPreference && (
           <span className="cover-quick-status" role="status">
             {status.data.message} <Link to="/requests">View downloads</Link>
           </span>
@@ -163,20 +220,24 @@ export default function QuickAdd({
       </div>
     );
   return (
-    <div className="quick-add">
+    <div className="quick-add" ref={bind}>
       <div className="quick-add-split">
         <button
           className="primary"
           disabled={busy || !eitherDownload}
           onClick={() => choose(undefined)}
           title={
-            eitherDownload
-              ? `Quick add · ${label}. Uses your saved format priorities.`
-              : "Choose a format you can download"
+            !eitherDownload
+              ? "Choose a format you can download"
+              : preferenceUnset
+                ? "Quick add preference not set"
+                : actionLabel === "Quick add"
+                  ? `Quick add · ${label}. Uses your saved format priorities.`
+                  : `${actionLabel} · ${label}. Looks for a file today using your saved format priorities.`
           }
         >
           <Download size={16} />
-          {busy ? "Adding…" : "Quick add"}
+          {busy ? "Adding…" : actionLabel}
         </button>
         <details
           ref={menu}
@@ -192,7 +253,7 @@ export default function QuickAdd({
             }
           }}
         >
-          <summary aria-label="Quick add format" title="Choose a format">
+          <summary aria-label={`${actionLabel} format`} title="Choose a format">
             <ChevronDown size={16} />
           </summary>
           <div className="quick-add-options">
@@ -218,9 +279,15 @@ export default function QuickAdd({
           </div>
         </details>
       </div>
-      <Notice error={add.error || status.error} />
-      {add.error && (
-        <Link to="/settings#preferences">Download preferences</Link>
+      {missingPreference ? (
+        <PreferencePrompt />
+      ) : (
+        <>
+          <Notice error={feedbackError} />
+          {add.error && (
+            <Link to="/settings#preferences">Download preferences</Link>
+          )}
+        </>
       )}
       {status.data && (
         <div className="quick-add-status" role="status">

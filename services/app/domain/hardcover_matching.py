@@ -88,7 +88,10 @@ def compatible(evidence, book, *, identified=False):
     ):
         return False
     a, b = authors_key(evidence.authors), authors_key(book.authors)
-    if not a or not b or (not (a & b) if identified else a != b):
+    # Identifier hits can share one author. A title search can include an
+    # illustrator or other credit the catalog does not treat as an author.
+    # Extra catalog authors stay distinct: that can be a different book.
+    if not a or not b or (not (a & b) if identified else not b <= a):
         return False
     language = catalog_language(evidence.language)
     if language and book.language and language != catalog_language(book.language):

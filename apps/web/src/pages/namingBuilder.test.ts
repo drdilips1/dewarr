@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+  filenameStyles,
+  illustrate,
   parseSegment,
   readChoices,
   seriesIndexFilename,
@@ -38,6 +40,36 @@ test("join controls build a space-separated sequence folder and a wrapped year",
   assert.equal(withJoin("{author}/", "dash"), "{author} - ");
   assert.equal(withJoin("[{disc}-]", "space"), "[{disc}-]");
   assert.equal(parseSegment("{title}")?.join, null);
+});
+
+test("style examples show the punctuation each choice changes", () => {
+  assert.equal(illustrate("{title}", "ebook"), "Philosopher’s Stone");
+  assert.equal(
+    illustrate("[{sequence} - ]{title}", "ebook"),
+    "01 - Philosopher’s Stone",
+  );
+  assert.equal(
+    illustrate(seriesIndexFolder, "ebook"),
+    "J. K. Rowling/Harry Potter/01 Philosopher’s Stone",
+  );
+  assert.equal(
+    illustrate(seriesIndexFilename, "audio"),
+    "01 - Harry Potter - Philosopher’s Stone (1999)",
+  );
+  assert.equal(
+    illustrate("[{disc}-][{track} - ]{title}", "audio"),
+    "01-001 - Philosopher’s Stone",
+  );
+  assert.deepEqual(
+    filenameStyles("ebook").map((style) => style.name),
+    [
+      "Title only",
+      "Author and title",
+      "Number and title",
+      "Number, series, and year",
+    ],
+  );
+  assert.equal(filenameStyles("audio")[0].name, "Disc and track");
 });
 
 test("the year checkbox treats the shared year token as the medium year", () => {

@@ -67,7 +67,10 @@ export default function SourcePriorities({
     !indexers.isFetching &&
     !indexers.isError;
   return (
-    <section aria-label="Source preference editor">
+    <section
+      className="source-preference-editor"
+      aria-label="Source preference editor"
+    >
       <Order
         label="Source preference"
         help={
@@ -85,7 +88,7 @@ export default function SourcePriorities({
           onChange(values.filter((entry) => entry !== value))
         }
       />
-      <div className="button-row">
+      <div className="button-row source-add-actions">
         {Object.entries(standard)
           .filter(([key]) => !values.includes(key))
           .map(([key, name]) => (
@@ -99,77 +102,88 @@ export default function SourcePriorities({
             </button>
           ))}
       </div>
-      <details>
-        <summary>Individual Prowlarr priorities</summary>
-        <div className="setting-help-row">
-          <SettingHelp label="source priority">
-            Load your connected indexers, then add the ones you want to rank
-            individually. Loading contacts Prowlarr; editing these priorities
-            takes effect when you save this form.
-          </SettingHelp>
+      <details className="indexer-priorities">
+        <summary>
+          <span className="setting-subheading">
+            Individual Prowlarr priorities
+            <SettingHelp label="source priority">
+              Load your connected indexers, then add the ones you want to rank
+              individually. Loading contacts Prowlarr; editing these priorities
+              takes effect when you save this form.
+            </SettingHelp>
+          </span>
+        </summary>
+        <div className="indexer-priority-actions">
+          <button
+            type="button"
+            disabled={indexers.isFetching}
+            onClick={() => {
+              void indexers.refetch();
+            }}
+          >
+            {indexers.isFetching
+              ? "Loading indexers…"
+              : "Load Prowlarr indexers"}
+          </button>
+          <Link className="button-link" to="/settings#sources">
+            Configure Prowlarr
+          </Link>
         </div>
-        <button
-          type="button"
-          disabled={indexers.isFetching}
-          onClick={() => {
-            void indexers.refetch();
-          }}
-        >
-          {indexers.isFetching ? "Loading indexers…" : "Load Prowlarr indexers"}
-        </button>
         <Notice error={indexers.error} />
         {indexers.isError && (
-          <div className="setting-help-row">
-            <SettingHelp label="source priority">
-              Current indexers could not be loaded. Saved priorities are
-              retained and can still be reordered or removed.
-            </SettingHelp>
-          </div>
+          <p className="muted">
+            Current indexers could not be loaded. Saved priorities are retained
+            and can still be reordered or removed.
+          </p>
         )}
         {indexers.data && (
           <>
-            <div className="setting-help-row">
-              <SettingHelp label="source priority">
-                Last loaded {new Date(indexers.dataUpdatedAt).toLocaleString()}.
-                Reload to check current names and availability.
-              </SettingHelp>
-            </div>
-            <label>
-              Indexer to prioritize
-              <select
-                value={selected}
-                onChange={(event) => setSelected(event.target.value)}
-                disabled={indexers.isFetching || indexers.isError}
-              >
-                <option value="">Choose an indexer</option>
-                {indexers.data.map((indexer) => {
-                  const key = `prowlarr:${indexer.id}`;
-                  const reason = values.includes(key)
-                    ? "Already prioritized"
-                    : unavailable(indexer);
-                  return (
-                    <option key={key} value={key} disabled={!!reason}>
-                      {names[key]}
-                      {reason ? ` — ${reason}` : ""}
-                    </option>
+            <p className="muted">
+              Last loaded {new Date(indexers.dataUpdatedAt).toLocaleString()}.
+              Reload to check current names and availability.
+            </p>
+            <div className="indexer-add-row">
+              <label>
+                Indexer to prioritize
+                <select
+                  value={selected}
+                  onChange={(event) => setSelected(event.target.value)}
+                  disabled={indexers.isFetching || indexers.isError}
+                >
+                  <option value="">Choose an indexer</option>
+                  {indexers.data.map((indexer) => {
+                    const key = `prowlarr:${indexer.id}`;
+                    const reason = values.includes(key)
+                      ? "Already prioritized"
+                      : unavailable(indexer);
+                    return (
+                      <option key={key} value={key} disabled={!!reason}>
+                        {names[key]}
+                        {reason ? ` — ${reason}` : ""}
+                      </option>
+                    );
+                  })}
+                </select>
+              </label>
+              <button
+                type="button"
+                disabled={!canAdd}
+                onClick={() => {
+                  if (!canAdd) return;
+                  const next = [...values];
+                  const fallback = next.indexOf("prowlarr");
+                  next.splice(
+                    fallback < 0 ? next.length : fallback,
+                    0,
+                    selected,
                   );
-                })}
-              </select>
-            </label>
-            <button
-              type="button"
-              disabled={!canAdd}
-              onClick={() => {
-                if (!canAdd) return;
-                const next = [...values];
-                const fallback = next.indexOf("prowlarr");
-                next.splice(fallback < 0 ? next.length : fallback, 0, selected);
-                onChange(next);
-                setSelected("");
-              }}
-            >
-              Add indexer priority
-            </button>
+                  onChange(next);
+                  setSelected("");
+                }}
+              >
+                Add indexer priority
+              </button>
+            </div>
             {!indexers.data.length && (
               <p>No indexers were returned by Prowlarr.</p>
             )}
@@ -195,7 +209,6 @@ export default function SourcePriorities({
             The source preference list has reached its 100-entry limit.
           </p>
         )}
-        <Link to="/settings#sources">Configure Prowlarr</Link>
       </details>
     </section>
   );

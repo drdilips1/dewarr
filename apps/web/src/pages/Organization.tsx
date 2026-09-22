@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, result } from "../api/client";
 import type { components } from "../api/schema";
@@ -21,6 +21,8 @@ import {
   namingExamples,
   seriesIndexFilename,
   seriesIndexFolder,
+  illustrate,
+  filenameStyles,
   parseSegment,
   withJoin,
   type Medium,
@@ -78,6 +80,7 @@ function Editor({
   const folders = useLibraryFolderSettings();
   const [draft, setDraft] = useState(settings.profile);
   const [previewProfile, setPreviewProfile] = useState(draft);
+  const [showJoins, setShowJoins] = useState(false);
   useEffect(() => {
     const timer = window.setTimeout(() => setPreviewProfile(draft), 250);
     return () => window.clearTimeout(timer);
@@ -131,10 +134,33 @@ function Editor({
     ["language", "Language"],
     ["publisher", "Publisher"],
   ];
-  const presets = [
-    ["By author", simpleChoices],
-    ["By series", seriesChoices],
-  ] as const;
+  const extension = medium === "audio" ? "mp3" : "epub";
+  const folderExample = (template: string) =>
+    illustrate(template, medium).replaceAll("/", " / ");
+  const fileExample = (template: string) =>
+    `${illustrate(template, medium)}.${extension}`;
+  const styles = filenameStyles(medium);
+  const layouts = [
+    { name: "Recommended", template: defaults[folder] },
+    { name: "By author", template: folderTemplate(medium, simpleChoices) },
+    { name: "By series", template: folderTemplate(medium, seriesChoices) },
+    { name: "Sequence title", template: seriesIndexFolder },
+  ];
+  const recommendedOn =
+    draft.layout === defaults.layout && draft[folder] === defaults[folder];
+  const pathParts = fullPath?.split("/") ?? [];
+  const previewFile = pathParts.at(-1);
+  const previewFolder = pathParts.slice(0, -1).join("/");
+  const libraryRoot =
+    destination?.backend_path?.replace(/\/$/, "") ||
+    (medium === "audio" ? "audiobooks" : "ebooks");
+  const previewFolderLabel = previewFolder.startsWith(libraryRoot)
+    ? [
+        libraryRoot,
+        ...previewFolder.slice(libraryRoot.length).split("/").filter(Boolean),
+      ].join(" / ")
+    : previewFolder;
+  const filenameSegments = templateSegments(draft[filename]);
   return (
     <section className="naming-builder" aria-label="Organization settings">
       {!embedded && <h1>File naming</h1>}
@@ -158,218 +184,6 @@ function Editor({
       </div>
       <div className="naming-workspace">
         <div className="naming-options">
-          <fieldset>
-            <legend>Layout preset</legend>
-            <div className="preset-options">
-              <button
-                type="button"
-                disabled={save.isPending}
-                aria-pressed={
-                  draft.layout === defaults.layout &&
-                  draft[folder] === defaults[folder]
-                }
-                onClick={() =>
-                  setDraft({
-                    ...draft,
-                    layout: defaults.layout,
-                    [folder]: defaults[folder],
-                  })
-                }
-              >
-                Recommended
-              </button>
-              {presets.map(([name, preset]) => (
-                <button
-                  key={name}
-                  type="button"
-                  aria-pressed={
-                    draft.layout === "conventional" &&
-                    draft[folder] === folderTemplate(medium, preset)
-                  }
-                  disabled={save.isPending}
-                  onClick={() =>
-                    setDraft({
-                      ...draft,
-                      layout: "conventional",
-                      [folder]: folderTemplate(medium, preset),
-                    })
-                  }
-                >
-                  {name}
-                </button>
-              ))}
-              <button
-                type="button"
-                aria-pressed={
-                  draft.layout === "conventional" &&
-                  draft[folder] === seriesIndexFolder &&
-                  draft[filename] === seriesIndexFilename
-                }
-                disabled={save.isPending}
-                title="Author/Series/Sequence Title, with file Sequence - Series - Title (Year)"
-                onClick={() =>
-                  setDraft({
-                    ...draft,
-                    layout: "conventional",
-                    [folder]: seriesIndexFolder,
-                    [filename]: seriesIndexFilename,
-                  })
-                }
-              >
-                Sequence title
-              </button>
-            </div>
-          </fieldset>
-          {choices && draft.layout === "conventional" ? (
-            <fieldset>
-              <legend>Include in path</legend>
-              <div className="metadata-toggles">
-                <label className="check-label">
-                  <input type="checkbox" checked disabled />
-                  Title
-                </label>
-                {options.map(([key, label]) => (
-                  <label className="check-label" key={key}>
-                    <input
-                      type="checkbox"
-                      checked={choices[key]}
-                      disabled={save.isPending}
-                      onChange={() =>
-                        setDraft({
-                          ...draft,
-                          [folder]: toggleSegment(draft[folder], medium, key),
-                        })
-                      }
-                    />
-                    {label}
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-          ) : (
-            <p className="notice">
-              Custom layout active. Choose a preset to use the path builder.
-            </p>
-          )}
-          <div className="naming-file-controls">
-            <label className="check-label">
-              <input
-                type="checkbox"
-                checked={draft.rename_files}
-                disabled={save.isPending}
-                onChange={(event) =>
-                  setDraft({ ...draft, rename_files: event.target.checked })
-                }
-              />
-              Rename imported files
-              <SettingHelp label="renaming files">
-                Applies to both ebooks and audiobooks. Hardlinks and copies
-                leave the torrent filenames in place for seeding and use this
-                pattern for the library file. Renaming the seeding copy uses
-                this pattern for that same file. Multi-file audiobooks need disc
-                and track in the filename so playback order is preserved.
-              </SettingHelp>
-            </label>
-            {medium === "audio" && (
-              <label className="check-label">
-                <input
-                  type="checkbox"
-                  checked={draft.merge_mp3_chapters ?? false}
-                  disabled={save.isPending}
-                  onChange={(event) =>
-                    setDraft({
-                      ...draft,
-                      merge_mp3_chapters: event.target.checked,
-                    })
-                  }
-                />
-                Merge MP3 chapters into one M4B
-                <SettingHelp label="chapter merging">
-                  When this is on, a finished multi-file MP3 download becomes
-                  one M4B before it enters the library. Quick add does this on
-                  its own. Each file becomes a chapter. The download stays
-                  unchanged for seeding. Leave this off to import the MP3s.
-                </SettingHelp>
-              </label>
-            )}
-            {draft.rename_files && (
-              <label className="naming-filename-style">
-                Filename style
-                <select
-                  value={
-                    [
-                      "{title}",
-                      "[{sequence} - ]{title}",
-                      ...(medium === "audio"
-                        ? ["[{disc}-][{track} - ]{title}"]
-                        : []),
-                      "{author} - {title}",
-                      seriesIndexFilename,
-                    ].includes(draft[filename])
-                      ? draft[filename]
-                      : "custom"
-                  }
-                  disabled={save.isPending}
-                  onChange={(event) => {
-                    if (event.target.value !== "custom")
-                      setDraft({ ...draft, [filename]: event.target.value });
-                  }}
-                >
-                  <option value="{title}">Book title</option>
-                  <option value="[{sequence} - ]{title}">
-                    Sequence · Book title
-                  </option>
-                  {medium === "audio" && (
-                    <option value="[{disc}-][{track} - ]{title}">
-                      Disc · Track · Book title
-                    </option>
-                  )}
-                  <option value="{author} - {title}">
-                    Author · Book title
-                  </option>
-                  <option value={seriesIndexFilename}>
-                    Sequence · Series · Title (Year)
-                  </option>
-                  <option value="custom" disabled>
-                    Custom template
-                  </option>
-                </select>
-              </label>
-            )}
-          </div>
-          {draft.rename_files && (
-            <div className="naming-path-editor">
-              <div className="naming-lane-heading">
-                <h3>Filename order</h3>
-                <span>Drag to reorder</span>
-              </div>
-              <TokenLane
-                template={draft[filename]}
-                label="Filename token order"
-                allowFolder={false}
-                disabled={save.isPending}
-                onChange={(value) => setDraft({ ...draft, [filename]: value })}
-              />
-            </div>
-          )}
-          <div className="naming-path-editor">
-            <div className="naming-lane-heading">
-              <h3>Folder order</h3>
-              <span>Drag to reorder</span>
-            </div>
-            {folders.error && (
-              <p className="muted">
-                Library folder unavailable. The preview uses an example root.
-              </p>
-            )}
-            <TokenLane
-              template={draft[folder]}
-              label="Folder token order"
-              allowFolder
-              disabled={save.isPending || draft.layout !== "conventional"}
-              onChange={(value) => setDraft({ ...draft, [folder]: value })}
-            />
-          </div>
           <div
             className="folder-preview"
             aria-label="Folder preview"
@@ -377,22 +191,28 @@ function Editor({
           >
             <div className="folder-preview-heading">
               <span className="setting-subheading">
-                LIVE PREVIEW{" "}
+                Preview{" "}
                 <SettingHelp label="naming preview">
-                  Illustrative metadata and folders. Actual paths use the
-                  selected library folder and the book’s available metadata.
-                  Extensions are added automatically.
+                  A sample book, so the folder and the file can be read
+                  separately. Imports use the selected library folder and the
+                  metadata available for that book.
                 </SettingHelp>
               </span>
               <span>{medium === "audio" ? "Audiobook" : "Ebook"}</span>
             </div>
-            {fullPath && (
+            {fullPath && previewFile && (
               <div
-                className="naming-full-path"
-                tabIndex={0}
+                className="naming-result"
                 aria-label="Example destination path"
               >
-                <code>{fullPath}</code>
+                <div className="naming-result-line">
+                  <span>Folder</span>
+                  <code>{previewFolderLabel}</code>
+                </div>
+                <div className="naming-result-line">
+                  <span>File</span>
+                  <code>{previewFile}</code>
+                </div>
               </div>
             )}
             {!path && (
@@ -410,35 +230,233 @@ function Editor({
                 {warning}
               </p>
             ))}
-          </div>
-          {path && (
-            <section className="naming-tree-section" aria-label="Folder tree">
-              <h3>Folder tree</h3>
-              <ol className="folder-tree">
-                <li>
-                  <Folder size={14} />
-                  <code>
-                    {destination?.backend_path ||
-                      (medium === "audio" ? "audiobooks" : "ebooks")}
-                  </code>
-                  <Link to="/settings#libraries">Change folder</Link>
-                </li>
-                {relativePath?.split("/").map((part, index, parts) => (
-                  <li
-                    key={index}
-                    style={{ paddingInlineStart: `${(index + 1) * 12}px` }}
-                  >
-                    {index === parts.length - 1 ? (
-                      <FileText size={14} />
-                    ) : (
-                      <Folder size={14} />
-                    )}
-                    <span>{part}</span>
+            {path && (
+              <section className="naming-tree-section" aria-label="Folder tree">
+                <ol className="folder-tree">
+                  <li>
+                    <Folder size={14} />
+                    <code>
+                      {destination?.backend_path ||
+                        (medium === "audio" ? "audiobooks" : "ebooks")}
+                    </code>
+                    <Link to="/settings#libraries">Change folder</Link>
                   </li>
-                ))}
-              </ol>
-            </section>
-          )}
+                  {relativePath?.split("/").map((part, index, parts) => (
+                    <li
+                      key={index}
+                      style={{ paddingInlineStart: `${(index + 1) * 12}px` }}
+                    >
+                      {index === parts.length - 1 ? (
+                        <FileText size={14} />
+                      ) : (
+                        <Folder size={14} />
+                      )}
+                      <span>{part}</span>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            )}
+          </div>
+          <fieldset className="naming-block">
+            <legend>Folder layout</legend>
+            <p className="naming-section-note">These folders group the book.</p>
+            <div className="naming-choice-grid">
+              {layouts.map((layout) => (
+                <ChoiceButton
+                  key={layout.name}
+                  name={layout.name}
+                  example={folderExample(layout.template)}
+                  pressed={
+                    layout.name === "Recommended"
+                      ? recommendedOn
+                      : !recommendedOn &&
+                        draft.layout === "conventional" &&
+                        draft[folder] === layout.template
+                  }
+                  disabled={save.isPending}
+                  onClick={() => {
+                    setShowJoins(false);
+                    setDraft({
+                      ...draft,
+                      layout:
+                        layout.name === "Recommended"
+                          ? defaults.layout
+                          : "conventional",
+                      [folder]: layout.template,
+                    });
+                  }}
+                />
+              ))}
+            </div>
+            {draft[folder] === seriesIndexFolder &&
+              draft[filename] !== seriesIndexFilename && (
+                <div className="naming-pair-hint">
+                  <p>
+                    The number shares the title’s folder. The matching file name
+                    is “{fileExample(seriesIndexFilename)}”.
+                  </p>
+                  <button
+                    type="button"
+                    className="naming-text-button"
+                    disabled={save.isPending}
+                    onClick={() =>
+                      setDraft({
+                        ...draft,
+                        rename_files: true,
+                        [filename]: seriesIndexFilename,
+                      })
+                    }
+                  >
+                    Use number, series, and year
+                  </button>
+                </div>
+              )}
+            {choices && draft.layout === "conventional" ? (
+              <div>
+                <h3>Fields in the folder</h3>
+                <div className="metadata-toggles">
+                  <label className="check-label">
+                    <input type="checkbox" checked disabled />
+                    Title
+                  </label>
+                  {options.map(([key, label]) => (
+                    <label className="check-label" key={key}>
+                      <input
+                        type="checkbox"
+                        checked={choices[key]}
+                        disabled={save.isPending}
+                        onChange={() =>
+                          setDraft({
+                            ...draft,
+                            [folder]: toggleSegment(draft[folder], medium, key),
+                          })
+                        }
+                      />
+                      {label}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <p className="notice">
+                This folder pattern is custom. Choose a layout to edit its
+                fields.
+              </p>
+            )}
+            <div className="naming-path-editor">
+              <div className="naming-lane-heading">
+                <h3>Field order</h3>
+                <span>Drag to rearrange</span>
+                <button
+                  type="button"
+                  className="naming-text-button"
+                  aria-expanded={showJoins}
+                  disabled={save.isPending || draft.layout !== "conventional"}
+                  onClick={() => setShowJoins((open) => !open)}
+                >
+                  {showJoins
+                    ? "Hide dash and folder options"
+                    : "Adjust dashes and folders"}
+                </button>
+              </div>
+              {showJoins && (
+                <p className="naming-section-note">
+                  A slash gives that field its own folder. A dash or a space
+                  joins it to the next field. Parentheses wrap it, as in (1997).
+                </p>
+              )}
+              {folders.error && (
+                <p className="muted">
+                  Library folder unavailable. The preview uses an example root.
+                </p>
+              )}
+              <TokenLane
+                template={draft[folder]}
+                label="Folder token order"
+                allowFolder
+                showJoins={showJoins}
+                disabled={save.isPending || draft.layout !== "conventional"}
+                onChange={(value) => setDraft({ ...draft, [folder]: value })}
+              />
+            </div>
+          </fieldset>
+          <fieldset className="naming-block">
+            <legend>File name</legend>
+            <p className="naming-section-note">
+              This is the name of the imported file, inside the last folder.
+            </p>
+            <div className="naming-file-controls">
+              <label className="check-label">
+                <input
+                  type="checkbox"
+                  checked={draft.rename_files}
+                  disabled={save.isPending}
+                  onChange={(event) =>
+                    setDraft({ ...draft, rename_files: event.target.checked })
+                  }
+                />
+                Rename imported files
+                <SettingHelp label="renaming files">
+                  Applies to both ebooks and audiobooks. Hardlinks and copies
+                  leave the torrent filenames in place for seeding and use this
+                  pattern for the library file. Renaming the seeding copy uses
+                  this pattern for that same file. Multi-file audiobooks need
+                  disc and track in the filename so playback order is preserved.
+                </SettingHelp>
+              </label>
+            </div>
+            {draft.rename_files ? (
+              <>
+                {!styles.some(
+                  (style) => style.template === draft[filename],
+                ) && (
+                  <p className="naming-section-note">
+                    This file name uses a custom pattern. Choose a style to
+                    replace it.
+                  </p>
+                )}
+                <div className="naming-choice-grid">
+                  {styles.map((style) => (
+                    <ChoiceButton
+                      key={style.name}
+                      name={style.name}
+                      example={fileExample(style.template)}
+                      wide={style.name === "Disc and track"}
+                      pressed={draft[filename] === style.template}
+                      disabled={save.isPending}
+                      onClick={() => {
+                        setShowJoins(false);
+                        setDraft({ ...draft, [filename]: style.template });
+                      }}
+                    />
+                  ))}
+                </div>
+                {filenameSegments.length > 1 && (
+                  <div className="naming-path-editor">
+                    <div className="naming-lane-heading">
+                      <h3>File name order</h3>
+                      <span>Drag to rearrange</span>
+                    </div>
+                    <TokenLane
+                      template={draft[filename]}
+                      label="Filename token order"
+                      allowFolder={false}
+                      showJoins={showJoins}
+                      disabled={save.isPending}
+                      onChange={(value) =>
+                        setDraft({ ...draft, [filename]: value })
+                      }
+                    />
+                  </div>
+                )}
+              </>
+            ) : (
+              <p className="naming-section-note">
+                Imported files keep the names they were downloaded with.
+              </p>
+            )}
+          </fieldset>
         </div>
       </div>
       <Notice error={save.error || preview.error} />
@@ -462,7 +480,10 @@ function Editor({
           <button
             type="button"
             disabled={save.isPending}
-            onClick={() => setDraft(defaults)}
+            onClick={() => {
+              setShowJoins(false);
+              setDraft(defaults);
+            }}
           >
             Reset naming defaults
           </button>
@@ -491,7 +512,7 @@ const tokenLabels: Record<string, string> = {
   year: "Year",
 };
 const joinLabels: [TokenJoin, string][] = [
-  ["folder", "Folder"],
+  ["folder", "Own folder"],
   ["dash", "Dash"],
   ["space", "Space"],
   ["parentheses", "Parentheses"],
@@ -501,12 +522,14 @@ function TokenLane({
   label,
   disabled,
   allowFolder,
+  showJoins,
   onChange,
 }: {
   template: string;
   label: string;
   disabled: boolean;
   allowFolder: boolean;
+  showJoins: boolean;
   onChange: (value: string) => void;
 }) {
   return (
@@ -523,31 +546,35 @@ function TokenLane({
             parsed?.token || segment.match(/\{([^}]+)\}/)?.[1] || "";
           const name =
             tokenLabels[token] || token.replaceAll("_", " ") || "Custom text";
-          const join = parsed?.join ? (
-            <select
-              className="naming-token-join"
-              aria-label={`Join ${name} in ${label}`}
-              value={parsed.join}
-              disabled={disabled}
-              onPointerDown={(event) => event.stopPropagation()}
-              onChange={(event) => {
-                const next = withJoin(segment, event.target.value as TokenJoin);
-                onChange(
-                  templateSegments(template)
-                    .map((item) => (item === segment ? next : item))
-                    .join(""),
-                );
-              }}
-            >
-              {joinLabels
-                .filter(([value]) => allowFolder || value !== "folder")
-                .map(([value, joinName]) => (
-                  <option key={value} value={value}>
-                    {joinName}
-                  </option>
-                ))}
-            </select>
-          ) : null;
+          const join =
+            showJoins && parsed?.join ? (
+              <select
+                className="naming-token-join"
+                aria-label={`Join ${name} in ${label}`}
+                value={parsed.join}
+                disabled={disabled}
+                onPointerDown={(event) => event.stopPropagation()}
+                onChange={(event) => {
+                  const next = withJoin(
+                    segment,
+                    event.target.value as TokenJoin,
+                  );
+                  onChange(
+                    templateSegments(template)
+                      .map((item) => (item === segment ? next : item))
+                      .join(""),
+                  );
+                }}
+              >
+                {joinLabels
+                  .filter(([value]) => allowFolder || value !== "folder")
+                  .map(([value, joinName]) => (
+                    <option key={value} value={value}>
+                      {joinName}
+                    </option>
+                  ))}
+              </select>
+            ) : null;
           return (
             <>
               {parsed?.leading && join}
@@ -558,5 +585,42 @@ function TokenLane({
         }}
       />
     </div>
+  );
+}
+
+function ChoiceButton({
+  name,
+  example,
+  pressed,
+  disabled,
+  wide = false,
+  onClick,
+}: {
+  name: string;
+  example: string;
+  pressed: boolean;
+  disabled: boolean;
+  wide?: boolean;
+  onClick: () => void;
+}) {
+  const nameId = useId();
+  const exampleId = useId();
+  return (
+    <button
+      type="button"
+      className={`naming-choice${wide ? " naming-choice-wide" : ""}`}
+      aria-pressed={pressed}
+      aria-labelledby={nameId}
+      aria-describedby={exampleId}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      <span id={nameId} className="naming-choice-name">
+        {name}
+      </span>
+      <span id={exampleId} className="naming-choice-example">
+        {example}
+      </span>
+    </button>
   );
 }

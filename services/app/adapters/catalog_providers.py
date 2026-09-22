@@ -96,6 +96,11 @@ class Hardcover:
 
         return await upcoming(self.query, start, end, page)
 
+    async def upcoming_month(self, start, end):
+        from app.adapters.hardcover_discovery import upcoming_month
+
+        return await upcoming_month(self.query, start, end)
+
     async def related(self, external_id):
         from app.adapters.hardcover_discovery import related
 

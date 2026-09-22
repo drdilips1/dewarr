@@ -261,6 +261,79 @@ async def test_hunting_adeline_saved_book_resolves_full_canonical_details():
     assert len(calls) == 2
 
 
+def test_extra_listed_contributor_matches_the_catalog_author():
+    evidence = MatchEvidence(
+        title="Harry Potter and the Prisoner of Azkaban",
+        authors=["J.K. Rowling", "Mary GrandPré"],
+    )
+    novel = BookData(
+        provider="hardcover",
+        external_id="1",
+        title="Harry Potter and the Prisoner of Azkaban",
+        authors=["J.K. Rowling"],
+        cover_url="https://assets.hardcover.app/azkaban.jpg",
+    )
+    assert compatible(evidence, novel)
+    assert not compatible(
+        MatchEvidence(title=novel.title, authors=["J.K. Rowling"]),
+        novel.model_copy(update={"authors": ["J.K. Rowling", "Mary GrandPré"]}),
+    )
+
+
+async def test_storygraph_illustrator_credit_resolves_one_hardcover_book():
+    evidence = MatchEvidence(
+        title="Harry Potter and the Prisoner of Azkaban",
+        authors=["J.K. Rowling", "Mary GrandPré"],
+    )
+    novel = BookData(
+        provider="hardcover",
+        external_id="1",
+        title=evidence.title,
+        authors=["J.K. Rowling"],
+        description="Harry's third year at Hogwarts.",
+        cover_url="https://assets.hardcover.app/azkaban.jpg",
+    )
+    others = [
+        novel.model_copy(
+            update={
+                "external_id": "2",
+                "title": "Harry Potter and the Prisoner of Azkaban by J.K. Rowling",
+                "authors": ["Bright Summaries"],
+            }
+        ),
+        novel.model_copy(
+            update={
+                "external_id": "3",
+                "title": (
+                    "Harry Potter and the Prisoner of Azkaban / Harry Potter and the Goblet of Fire"
+                ),
+            }
+        ),
+        novel.model_copy(update={"external_id": "4", "title": "Harry Potter Series: 1-3"}),
+    ]
+
+    async def call(operation, *args):
+        if operation == "search":
+            return (
+                SearchPage(
+                    provider="hardcover",
+                    items=[others[0], novel, *others[1:]],
+                    page=1,
+                    has_more=False,
+                ),
+                False,
+                None,
+            )
+        assert operation == "fetch" and args == ("1",)
+        return novel, False, None
+
+    result = await lookup(evidence, call)
+    assert result.status == "matched"
+    assert result.basis == "title-author"
+    assert result.book.cover_url == novel.cover_url
+    assert result.book.authors == ["J.K. Rowling"]
+
+
 def test_conflicting_explicit_series_numbers_stay_distinct():
     evidence = MatchEvidence(title="Same Title (Series, #1)", authors=["Writer"])
     candidate = BookData(

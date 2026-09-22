@@ -47,7 +47,7 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
       result(
         await api.GET("/api/requests", {
           signal,
-          params: { query: { offset, limit: 20 } },
+          params: { query: { offset, limit: 20, mine: true } },
         }),
       ),
     initial: 0,
@@ -512,7 +512,7 @@ export default function ReleaseSelection({ artifact }: { artifact: Artifact }) {
                 </button>
               )}
               {["committed", "fulfilled"].includes(item.state) && (
-                <Link to="/requests#downloads">View download</Link>
+                <Link to="/requests?status=downloading">View download</Link>
               )}
               {item.state === "prepared" && (
                 <button

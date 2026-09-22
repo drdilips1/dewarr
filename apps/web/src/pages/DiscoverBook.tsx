@@ -5,7 +5,12 @@ import QuickAdd from "../components/QuickAdd";
 import GoodreadsBook from "../components/GoodreadsDiscoveryBook";
 import LibraryFormatBadges from "../components/LibraryFormatBadges";
 import { languageName } from "../components/LanguageSelect";
-import { BookHero, BookOverview } from "../components/BookPresentation";
+import {
+  BookHero,
+  BookOverview,
+  releaseIsAhead,
+} from "../components/BookPresentation";
+import FollowRelease, { useReleaseWatch } from "../components/FollowRelease";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, BookOpen, Check } from "lucide-react";
@@ -123,6 +128,13 @@ function BookPage({
           cover_url: work.cover_url || providerBook.cover_url,
         }
       : providerBook;
+  const unreleased = releaseIsAhead(
+    community.data?.release_date,
+    book?.publication_year,
+  );
+  const watch = useReleaseWatch(work?.id, unreleased);
+  const watching =
+    watch.data?.state === "waiting" || watch.data?.state === "wanted";
   useEffect(() => {
     if (book) {
       heading.current?.focus({ preventScroll: true });
@@ -185,7 +197,9 @@ function BookPage({
         {fromSearch ? "Back to search results" : "Back to Discover"}
       </Link>
       <Notice error={preview.error} />
-      {preview.isPending && <Loading />}
+      {preview.isPending && (
+        <Loading label={`Finding book details on ${sourceName}…`} />
+      )}
       {preview.error && (
         <button onClick={() => preview.refetch()} disabled={preview.isFetching}>
           Retry book details
@@ -244,6 +258,8 @@ function BookPage({
                       <>
                         <Check size={16} /> In library
                       </>
+                    ) : watching ? (
+                      "Waiting for release"
                     ) : (
                       "In your catalog"
                     )}
@@ -260,27 +276,52 @@ function BookPage({
             <div className="reader-actions">
               {canEdit && (
                 <>
-                  <QuickAdd
-                    workId={work?.id}
-                    resolveWork={async () => {
-                      const value = await save.mutateAsync();
-                      return value.id;
-                    }}
-                  />
+                  {unreleased ? (
+                    <FollowRelease
+                      canEdit={canEdit}
+                      workId={work?.id}
+                      idleLabel="Request on release day"
+                      activeLabel="Waiting for release"
+                      following={watching}
+                      body={{
+                        work_id: work?.id,
+                        provider: provider === "hardcover" ? "hardcover" : null,
+                        external_id:
+                          provider === "hardcover" ? externalId : null,
+                        title: book.title,
+                        authors: book.authors || [],
+                        cover_url: book.cover_url,
+                        release_date: community.data?.release_date,
+                        basis: community.data?.release_date
+                          ? "work"
+                          : "unknown",
+                      }}
+                    />
+                  ) : (
+                    <QuickAdd
+                      workId={work?.id}
+                      resolveWork={async () => {
+                        const value = await save.mutateAsync();
+                        return value.id;
+                      }}
+                    />
+                  )}
                   <button
                     disabled={save.isPending}
                     onClick={() => choose("list")}
                   >
                     Add to list
                   </button>
-                  <button
-                    disabled={save.isPending}
-                    className="source-search-action"
-                    onClick={() => choose("sources")}
-                  >
-                    Search sources
-                  </button>
-                  {!work && (
+                  {!unreleased && (
+                    <button
+                      disabled={save.isPending}
+                      className="source-search-action"
+                      onClick={() => choose("sources")}
+                    >
+                      Search sources
+                    </button>
+                  )}
+                  {!work && !unreleased && (
                     <button
                       disabled={save.isPending}
                       onClick={() => choose("catalog")}
@@ -311,7 +352,35 @@ function BookPage({
             {save.isPending && (
               <p role="status">Adding book to your catalog…</p>
             )}
-            {canEdit && !work && canQuickAdd && (
+            {canEdit && unreleased && (
+              <p className="muted reader-action-note">
+                {watching ? (
+                  <>
+                    A request is saved and searching starts on the release day.
+                    It is listed in <Link to="/requests">Requests</Link>. The
+                    book itself is under{" "}
+                    <Link to="/library?view=saved">All saved titles</Link>, not
+                    in your library copies.
+                  </>
+                ) : work ? (
+                  <>
+                    This book is saved in your catalog, but no release request
+                    was created. Request on release day adds that request. Saved
+                    titles are under{" "}
+                    <Link to="/library?view=saved">All saved titles</Link>.
+                  </>
+                ) : (
+                  <>
+                    Request on release day saves this book and adds a request.
+                    Searching starts on the release day. The request appears in{" "}
+                    <Link to="/requests">Requests</Link>, and the book appears
+                    under <Link to="/library?view=saved">All saved titles</Link>
+                    .
+                  </>
+                )}
+              </p>
+            )}
+            {canEdit && !work && canQuickAdd && !unreleased && (
               <p className="muted reader-action-note">
                 Quick add downloads using your saved preferences and adds this
                 title to your catalog.

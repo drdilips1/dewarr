@@ -18,6 +18,7 @@ from app.db.models import (
     ProviderObject,
 )
 from app.db.session import session_factory
+from app.domain.catalog_titles import display_title
 from app.domain.identity import normalized, resolve_abs_version, resolve_abs_work, version_changed
 from app.domain.operations import transaction_lock
 from app.security import decrypt_secrets
@@ -183,7 +184,10 @@ async def apply_item(db, library, item, generation, integration_id, seen):
             link = ProviderObject(provider=namespace, kind=f"item:{medium}", external_id=item.id)
             db.add(link)
         # Serialize same-title resolution across independent backend connections.
-        await transaction_lock(db, "identity:" + normalized(item.title))
+        # Edition labels share a lock with the short title so both cannot create a book.
+        identity = display_title(item.title) or normalized(item.title)
+        await transaction_lock(db, "identity:" + identity)
+        previous_work_id = link.work_id
         work = None if asset and asset.containment else await resolve_abs_work(db, item, link)
         if not (asset and asset.containment) and version_changed(item, link, medium):
             work = None
@@ -227,6 +231,10 @@ async def apply_item(db, library, item, generation, integration_id, seen):
                         else:
                             observed_files.append({**current, "import_verified": True})
             asset.version_id = version.id
+            if previous_work_id and previous_work_id != work.id:
+                previous = await db.get(AssetContains, (asset.id, previous_work_id))
+                if previous:
+                    previous.verified = False
             coverage = await db.get(AssetContains, (asset.id, work.id))
             if not coverage:
                 db.add(AssetContains(asset_id=asset.id, work_id=work.id, verified=True))

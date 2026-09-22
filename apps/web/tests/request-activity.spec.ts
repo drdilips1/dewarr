@@ -84,29 +84,25 @@ test("activity requests preserve independent reasons and route missing media to 
   });
   await page.getByRole("link", { name: "Requests", exact: true }).click();
   const requests = page.getByRole("region", {
-    name: "Your media requests",
+    name: "Requests",
     exact: true,
   });
   await expect
-    .poll(() => requests.locator("tbody > tr").count())
+    .poll(() => requests.getByRole("article").count())
     .toBeGreaterThanOrEqual(10);
-  await requests.locator("tbody > tr").last().scrollIntoViewIfNeeded();
-  const card = requests.getByRole("row", {
+  await requests.getByRole("article").last().scrollIntoViewIfNeeded();
+  const card = requests.getByRole("article", {
     name: "Activity Journey Alpha request",
     exact: true,
   });
   await expect(card).toBeVisible();
   await expect(card).toContainText("Audiobook · Wanted");
-  await card
-    .getByText("Saved requirements and download preferences", { exact: true })
-    .click();
+  await card.getByText("Details", { exact: true }).click();
   await expect(card).toContainText("Effective request scope");
-  await card
-    .getByText("Saved requirements and download preferences", { exact: true })
-    .click();
+  await card.getByText("Details", { exact: true }).click();
   expect(writes).toEqual([]);
   await card
-    .getByRole("link", { name: "Choose a source release", exact: true })
+    .getByRole("link", { name: "Choose release", exact: true })
     .click();
   await expect(page).toHaveURL(
     new RegExp(`request=${saved.request.id}&slot=audio`),
@@ -115,7 +111,7 @@ test("activity requests preserve independent reasons and route missing media to 
     page.getByRole("region", { name: "Book download sources" }),
   ).toBeVisible();
   await page.getByRole("link", { name: "Requests", exact: true }).click();
-  await requests.locator("tbody > tr").last().scrollIntoViewIfNeeded();
+  await requests.getByRole("article").last().scrollIntoViewIfNeeded();
   await expect(card).toBeVisible();
   await page.screenshot({
     path: testInfo.outputPath("request-activity-desktop.png"),
@@ -138,22 +134,20 @@ test("activity requests preserve independent reasons and route missing media to 
     card.getByText("Your request · Withdrawn", { exact: true }),
   ).toBeVisible();
   await expect(
-    card.getByRole("link", { name: "Choose a source release", exact: true }),
+    card.getByRole("link", { name: "Choose release", exact: true }),
   ).toBeVisible();
   await card
     .getByRole("button", { name: "Withdraw activity follow list", exact: true })
     .click();
   await expect(card).toHaveCount(0);
-  await requests
-    .getByRole("checkbox", { name: "Include withdrawn requests" })
-    .click();
+  await page.getByRole("button", { name: "Withdrawn", exact: true }).click();
   await expect(
-    requests.getByRole("checkbox", { name: "Include withdrawn requests" }),
-  ).toBeChecked();
-  await requests.locator("tbody > tr").last().scrollIntoViewIfNeeded();
-  await expect(card).toContainText("Audiobook · Cancelled");
+    page.getByRole("button", { name: "Withdrawn", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await requests.getByRole("article").last().scrollIntoViewIfNeeded();
+  await expect(card).toContainText("Audiobook · Withdrawn");
   await expect(
-    card.getByRole("link", { name: "Choose a source release", exact: true }),
+    card.getByRole("link", { name: "Choose release", exact: true }),
   ).toHaveCount(0);
   await page.route("**/api/requests?*", (route) =>
     route.fulfill({
@@ -182,20 +176,25 @@ test("activity requests preserve independent reasons and route missing media to 
     (await (await page.request.get("/api/library/assets")).json()).total,
   ).toBe(inventory.total);
   await page.setViewportSize({ width: 1440, height: 1000 });
-  const tabs = page.getByRole("navigation", { name: "Request views" });
-  const tabPositions = await tabs
-    .getByRole("link")
-    .evaluateAll((links) =>
-      links.map((link) => link.getBoundingClientRect().top),
+  const filters = page.getByRole("navigation", { name: "Request filters" });
+  const filterPositions = await filters
+    .getByRole("button")
+    .evaluateAll((buttons) =>
+      buttons.map((button) => button.getBoundingClientRect().top),
     );
-  expect(new Set(tabPositions).size).toBe(1);
-  await tabs.getByRole("link", { name: "Download queue" }).click();
+  expect(new Set(filterPositions).size).toBe(1);
+  await filters
+    .getByRole("button", { name: "Downloading", exact: true })
+    .click();
   await expect(
-    page.getByRole("region", { name: "Downloads", exact: true }),
-  ).toBeVisible();
-  await tabs.getByRole("link", { name: "Import reviews" }).click();
+    filters.getByRole("button", { name: "Downloading", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await filters.getByRole("button", { name: "Review", exact: true }).click();
   await expect(
-    page.getByRole("region", { name: "Download import reviews", exact: true }),
+    filters.getByRole("button", { name: "Review", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(
+    page.getByRole("region", { name: "Requests", exact: true }),
   ).toBeVisible();
   expect(errors).toEqual([]);
 });

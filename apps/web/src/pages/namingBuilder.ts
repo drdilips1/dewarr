@@ -118,6 +118,56 @@ const YEAR_TOKENS = ["year", "recording_year", "edition_year"];
 export const seriesIndexFolder = "{author}/[{series}/][{sequence} ]{title}";
 export const seriesIndexFilename =
   "[{sequence} - ][{series} - ]{title}[ ({year})]";
+
+const SAMPLE: Record<string, string> = {
+  author: "J. K. Rowling",
+  title: "Philosopher’s Stone",
+  series: "Harry Potter",
+  sequence: "01",
+  edition_year: "1997",
+  recording_year: "1999",
+  edition: "First edition",
+  narrator: "Stephen Fry",
+  language: "English",
+  publisher: "Bloomsbury",
+  disc: "01",
+  track: "001",
+};
+
+// Short stand-in for the style cards. The live preview still comes from the planner.
+export function illustrate(template: string, medium: Medium): string {
+  const values: Record<string, string> = {
+    ...SAMPLE,
+    year: medium === "audio" ? SAMPLE.recording_year : SAMPLE.edition_year,
+  };
+  const filled = template.replace(/\[[^\]]*\]/g, (block) => {
+    const tokens = [...block.matchAll(/\{([a-z_]+)\}/g)].map(
+      (match) => match[1],
+    );
+    return tokens.length > 0 && tokens.every((token) => values[token])
+      ? block.slice(1, -1)
+      : "";
+  });
+  return filled.replace(
+    /\{([a-z_]+)\}/g,
+    (_, token: string) => values[token] || "",
+  );
+}
+
+export function filenameStyles(medium: Medium) {
+  const styles = [
+    { name: "Title only", template: "{title}" },
+    { name: "Author and title", template: "{author} - {title}" },
+    { name: "Number and title", template: "[{sequence} - ]{title}" },
+    { name: "Number, series, and year", template: seriesIndexFilename },
+  ];
+  if (medium === "audio")
+    styles.unshift({
+      name: "Disc and track",
+      template: "[{disc}-][{track} - ]{title}",
+    });
+  return styles;
+}
 export type TokenJoin = "folder" | "dash" | "space" | "parentheses";
 export type ParsedSegment = {
   optional: boolean;

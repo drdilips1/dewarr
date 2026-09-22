@@ -18,13 +18,16 @@ import CustomizeDiscover, {
   type DiscoverLayout,
 } from "../components/CustomizeDiscover";
 import { useDiscoverShelfSources } from "../hooks/useDiscoverShelfSources";
-import { PersonalListPage, PersonalRow } from "../components/FollowedLists";
+import FollowedLists, {
+  PersonalListPage,
+  PersonalRow,
+} from "../components/FollowedLists";
 import DiscoveryShelf from "../components/DiscoveryShelf";
 import ListDownloads from "../components/ListDownloads";
 import ShelfPagination from "../components/ShelfPagination";
 import SeriesContinuation from "../components/SeriesContinuation";
 import RecentLibrary from "../components/RecentLibrary";
-import FollowedLists from "../components/FollowedLists";
+import { useTrackStoryGraphToRead } from "../hooks/useTrackStoryGraphToRead";
 import {
   CollectionActions,
   CollectionBooks,
@@ -746,6 +749,7 @@ function CollectionPage({ id, canEdit }: { id: string; canEdit: boolean }) {
 
 function YourLists({ canEdit }: { canEdit: boolean }) {
   const saved = useCollections({ saved: true, limit: 100 });
+  const toRead = useTrackStoryGraphToRead(canEdit);
   return (
     <>
       <div className="explore-view-heading">
@@ -763,7 +767,7 @@ function YourLists({ canEdit }: { canEdit: boolean }) {
         </Link>
       </div>
       <FollowedLists home={false} canEdit={canEdit} />
-      <Notice error={saved.error} />
+      <Notice error={saved.error || toRead.error} />
       {saved.isPending && <Loading />}
       {!!saved.data?.items.length && (
         <>

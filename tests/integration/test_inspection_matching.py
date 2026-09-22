@@ -16,8 +16,8 @@ from app.db.models import (
     WorkMetadataSource,
 )
 from app.jobs.queue import get_queue
-from tests.integration.test_import_inspections import submit
-from tests.media_fixtures import epub
+from tests.integration.test_import_inspections import run_worker, submit
+from tests.media_fixtures import audio, epub
 
 pytestmark = pytest.mark.integration
 
@@ -320,3 +320,93 @@ async def test_inspection_owner_and_source_boundaries(
         params={"grouping_revision": grouping["revision"]},
     )
     assert response.status_code == 409
+
+
+async def ready_inspection(client, monkeypatch, root):
+    monkeypatch.setattr(get_settings(), "import_sources", {"fixture": root})
+    request = await submit(client)
+    assert request.status_code == 202, request.text
+    await run_worker()
+    inspection = (await client.get(f"/api/organization/inspections/{request.json()['id']}")).json()
+    assert inspection["state"] == "ready", inspection
+    grouping = (
+        await client.get(f"/api/organization/inspections/{inspection['id']}/grouping")
+    ).json()
+    return inspection, grouping
+
+
+async def test_edition_label_still_matches_an_edition_of_the_same_format(
+    client, admin, database, tmp_path, monkeypatch
+):
+    root = tmp_path.resolve()
+    epub(root / "pack/book.epub", title="First Harbor (Unabridged)", isbn="urn:isbn:1-234-56789-X")
+    chosen = await edition(database, title="First Harbor")
+    inspection, grouping = await ready_inspection(client, monkeypatch, root)
+    report = await matches(client, (inspection, grouping))
+    match = report["items"][0]
+    assert match["status"] == "matched"
+    assert match["selected_version_id"] == str(chosen["version"])
+    assert "Embedded title agrees" in match["candidates"][0]["reasons"]
+    found = (
+        await client.get("/api/catalog/works", params={"q": "First Harbor (Unabridged)"})
+    ).json()
+    assert [row["id"] for row in found["items"]] == [str(chosen["work"])]
+
+
+async def test_missing_format_can_be_added_from_the_file_and_imported(
+    client, admin, database, tmp_path, monkeypatch
+):
+    root = tmp_path.resolve()
+    audio(root / "pack/book.mp3", title="First Harbor (Unabridged)")
+    chosen = await edition(database, title="First Harbor", medium="ebook")
+    inspection, grouping = await ready_inspection(client, monkeypatch, root)
+    match = (await matches(client, (inspection, grouping)))["items"][0]
+    assert match["status"] == "unmatched" and match["candidates"] == []
+    assert "add an edition from the file" in match["message"]
+    found = (
+        await client.get("/api/catalog/works", params={"q": "First Harbor (Unabridged)"})
+    ).json()
+    assert found["items"][0]["id"] == str(chosen["work"])
+    group = grouping["content"]["groups"][0]
+    body = {
+        "work_id": str(chosen["work"]),
+        "group_key": group["key"],
+        "grouping_revision": grouping["revision"],
+    }
+    created = await client.post(
+        f"/api/organization/inspections/{inspection['id']}/editions", json=body
+    )
+    assert created.status_code == 200, created.text
+    edition_row = created.json()
+    assert edition_row["created"] and edition_row["medium"] == "audio"
+    assert edition_row["title"] == "First Harbor"
+    again = await client.post(
+        f"/api/organization/inspections/{inspection['id']}/editions", json=body
+    )
+    assert again.status_code == 200, again.text
+    assert again.json()["created"] is False
+    assert again.json()["version_id"] == edition_row["version_id"]
+    metadata = (await client.get(f"/api/metadata/works/{chosen['work']}")).json()
+    recorded = next(row for row in metadata["versions"] if row["id"] == edition_row["version_id"])
+    assert recorded["medium"] == "audio" and recorded["abridged"] is False
+    assert recorded["narrators"] == ["Jordan Lee"]
+    settings = (await client.get("/api/organization/settings")).json()
+    planned = await client.post(
+        f"/api/organization/inspections/{inspection['id']}/plans",
+        json={
+            "inspection_revision": inspection["snapshot"]["revision"],
+            "grouping_revision": grouping["revision"],
+            "profile_revision": settings["revision"],
+            "selections": [
+                {
+                    "group_key": group["key"],
+                    "work_id": edition_row["work_id"],
+                    "version_id": edition_row["version_id"],
+                    "full_content": True,
+                }
+            ],
+        },
+    )
+    assert planned.status_code == 201, planned.text
+    saved = planned.json()["document"]["groups"][0]
+    assert saved["medium"] == "audio" and saved["metadata"]["title"] == "First Harbor"

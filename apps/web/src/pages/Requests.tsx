@@ -1,10 +1,36 @@
 import { lazy, Suspense } from "react";
-import { Link, useLocation } from "react-router-dom";
+import {
+  ArrowUpDown,
+  ClipboardCheck,
+  Clock,
+  Download,
+  Library,
+  List,
+  Undo2,
+  X,
+} from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Loading } from "../components";
 import { usePendingApprovals } from "../hooks/usePendingApprovals";
+import { requestFilter, type RequestFilter } from "./requestFilters";
+
 const SavedRequests = lazy(() => import("./ActivityRequests"));
-const Downloads = lazy(() => import("./Downloads"));
-const Reviews = lazy(() => import("./DownloadReviews"));
+
+const filters: {
+  id: RequestFilter;
+  title: string;
+  icon: typeof List;
+  approve?: boolean;
+  admin?: boolean;
+}[] = [
+  { id: "all", title: "All", icon: List },
+  { id: "pending", title: "Pending", icon: Clock, approve: true },
+  { id: "downloading", title: "Downloading", icon: Download },
+  { id: "library", title: "In library", icon: Library },
+  { id: "declined", title: "Declined", icon: X },
+  { id: "withdrawn", title: "Withdrawn", icon: Undo2 },
+  { id: "review", title: "Review", icon: ClipboardCheck, admin: true },
+];
 
 export default function Requests({
   admin,
@@ -15,58 +41,77 @@ export default function Requests({
   canRequest: boolean;
   canApprove: boolean;
 }) {
-  const { hash } = useLocation();
+  const { hash, search } = useLocation();
+  const navigate = useNavigate();
+  const params = new URLSearchParams(search);
+  const selected = requestFilter(hash, params.get("status"));
+  const sort = params.get("sort") === "title" ? "title" : "newest";
   const pendingApprovals = usePendingApprovals(canApprove);
   const waiting = pendingApprovals.data?.total ?? 0;
-  const tabs = [
-    { id: "requests", title: "All requests" },
-    ...(canApprove ? [{ id: "approvals", title: "Needs approval" }] : []),
-    { id: "downloads", title: "Download queue" },
-    ...(admin ? [{ id: "reviews", title: "Import reviews" }] : []),
-  ];
-  const active = tabs.find((tab) => `#${tab.id}` === hash)?.id || "requests";
+  const visible = filters.filter(
+    (filter) => (!filter.approve || canApprove) && (!filter.admin || admin),
+  );
+  const status =
+    (selected === "review" && !admin) || (selected === "pending" && !canApprove)
+      ? "all"
+      : selected;
+
+  function visit(nextStatus: RequestFilter, nextSort = sort) {
+    const next = new URLSearchParams(search);
+    if (nextStatus === "all") next.delete("status");
+    else next.set("status", nextStatus);
+    if (nextSort === "newest") next.delete("sort");
+    else next.set("sort", nextSort);
+    const query = next.toString();
+    navigate(query ? `/requests?${query}` : "/requests");
+  }
+
   return (
     <div className="requests-page">
       <h1 className="sr-only">Requests</h1>
-      <div className="page-view-toolbar">
-        <nav className="requests-tabs" aria-label="Request views">
-          {tabs.map((tab) => (
-            <Link
-              key={tab.id}
-              to={`/requests#${tab.id}`}
-              aria-current={active === tab.id ? "page" : undefined}
-            >
-              {tab.title}
-              {tab.id === "approvals" && waiting > 0 && (
-                <span className="requests-tab-count">
-                  {waiting > 99 ? "99+" : waiting}
-                  <span className="sr-only"> waiting</span>
-                </span>
-              )}
-            </Link>
-          ))}
+      <div className="page-view-toolbar requests-toolbar">
+        <nav className="request-filters" aria-label="Request filters">
+          {visible.map((filter) => {
+            const Icon = filter.icon;
+            return (
+              <button
+                key={filter.id}
+                type="button"
+                aria-pressed={status === filter.id}
+                onClick={() => visit(filter.id)}
+              >
+                <Icon size={15} aria-hidden />
+                {filter.title}
+                {filter.id === "pending" && waiting > 0 && (
+                  <span className="requests-tab-count">
+                    {waiting > 99 ? "99+" : waiting}
+                    <span className="sr-only"> waiting</span>
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </nav>
+        <label className="request-sort">
+          <ArrowUpDown size={15} aria-hidden />
+          <span className="sr-only">Sort</span>
+          <select
+            aria-label="Sort requests"
+            value={sort}
+            onChange={(event) =>
+              visit(status, event.target.value === "title" ? "title" : "newest")
+            }
+          >
+            <option value="newest">Newest</option>
+            <option value="title">Title</option>
+          </select>
+        </label>
         <Link className="page-view-action" to="/discover">
           Find books
         </Link>
       </div>
-      {active === "reviews" && admin && (
-        <p className="requests-review-link">
-          <Link className="button" to="/organization/inspections">
-            Inspect completed downloads
-          </Link>
-        </p>
-      )}
-      <Suspense key={active} fallback={<Loading />}>
-        {active === "downloads" ? (
-          <Downloads canManage={canRequest} />
-        ) : active === "reviews" ? (
-          <Reviews />
-        ) : active === "approvals" ? (
-          <SavedRequests canManage={false} pendingOnly />
-        ) : (
-          <SavedRequests canManage={canRequest} />
-        )}
+      <Suspense fallback={<Loading />}>
+        <SavedRequests canManage={canRequest} status={status} sort={sort} />
       </Suspense>
     </div>
   );

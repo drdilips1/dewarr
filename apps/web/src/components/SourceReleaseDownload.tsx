@@ -70,24 +70,7 @@ export default function SourceReleaseDownload({
   const message =
     start.error?.message || status.error?.message || receipt?.message;
   return (
-    <div className="source-row-download">
-      {offerWedge && (
-        <label className="check-label wedge-choice">
-          <input
-            type="checkbox"
-            checked={useWedge}
-            disabled={disabled || busy}
-            onChange={(event) => {
-              setUseWedge(event.target.checked);
-              if (!busy) {
-                key.current = randomUUID();
-                setOperationId(undefined);
-              }
-            }}
-          />
-          Use a Freeleech wedge
-        </label>
-      )}
+    <>
       <button
         className="release-info-button"
         aria-label={`Download ${title}`}
@@ -107,6 +90,23 @@ export default function SourceReleaseDownload({
           <Download size={18} />
         )}
       </button>
+      {offerWedge && (
+        <label className="check-label wedge-choice">
+          <input
+            type="checkbox"
+            checked={useWedge}
+            disabled={disabled || busy}
+            onChange={(event) => {
+              setUseWedge(event.target.checked);
+              if (!busy) {
+                key.current = randomUUID();
+                setOperationId(undefined);
+              }
+            }}
+          />
+          Use a Freeleech wedge
+        </label>
+      )}
       {message && (
         <span
           className="source-download-message"
@@ -115,6 +115,6 @@ export default function SourceReleaseDownload({
           {message} {receipt && <Link to="/requests">View downloads</Link>}
         </span>
       )}
-    </div>
+    </>
   );
 }

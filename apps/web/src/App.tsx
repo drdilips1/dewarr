@@ -1,6 +1,7 @@
 import { ApplicationRelease } from "./components/ApplicationRelease";
-import { useRefreshGoodreads } from "./hooks/useRefreshGoodreads";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { useRefreshReadingLists } from "./hooks/useRefreshReadingLists";
+import type { ReadingProvider } from "./hooks/useRefreshReadingLists";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -9,6 +10,7 @@ import {
   Compass,
   ListPlus,
   RefreshCw,
+  ChevronDown,
   LogOut,
   Search,
   Settings,
@@ -287,13 +289,97 @@ function SignIn({ onSuccess }: { onSuccess: (auth: Auth) => void }) {
   );
 }
 
+function RefreshLists({
+  refresh,
+}: {
+  refresh: ReturnType<typeof useRefreshReadingLists>;
+}) {
+  const [open, setOpen] = useState(false);
+  const root = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const close = (event: PointerEvent) => {
+      if (!root.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", close);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", close);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+  function choose(provider?: ReadingProvider) {
+    setOpen(false);
+    refresh.refresh(provider);
+  }
+  return (
+    <div
+      className="list-refresh"
+      data-busy={refresh.busy ? "true" : "false"}
+      ref={root}
+    >
+      <button
+        className="topbar-action list-refresh-main"
+        aria-label="Refresh lists"
+        title="Refresh tracked Goodreads, StoryGraph, and Hardcover lists. Community lists keep their own schedule."
+        disabled={refresh.busy}
+        onClick={() => choose()}
+      >
+        <RefreshCw
+          size={18}
+          aria-hidden="true"
+          className={refresh.busy ? "list-refresh-spinning" : undefined}
+        />
+        <span className="list-refresh-label">
+          {refresh.busy ? "Refreshing…" : "Refresh lists"}
+        </span>
+      </button>
+      <button
+        type="button"
+        className="list-refresh-toggle"
+        aria-label="Choose which lists to refresh"
+        aria-expanded={open}
+        aria-haspopup="menu"
+        disabled={refresh.busy}
+        onClick={() => setOpen((value) => !value)}
+      >
+        <ChevronDown size={16} aria-hidden="true" />
+      </button>
+      {open && (
+        <div className="list-refresh-menu" role="menu">
+          {(
+            [
+              ["goodreads", "Goodreads"],
+              ["storygraph", "StoryGraph"],
+              ["hardcover", "Hardcover"],
+            ] as const
+          ).map(([provider, name]) => (
+            <button
+              key={provider}
+              type="button"
+              role="menuitem"
+              disabled={refresh.busy}
+              onClick={() => choose(provider)}
+            >
+              {name}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Shell({ auth }: { auth: Auth }) {
   const client = useQueryClient();
   const navigate = useNavigate();
   const location = useLocation();
   const [search, setSearch] = useState("");
   const [addingList, setAddingList] = useState(false);
-  const goodreadsRefresh = useRefreshGoodreads();
+  const listsRefresh = useRefreshReadingLists();
   useEffect(() => {
     if (location.pathname === "/search")
       setSearch(new URLSearchParams(location.search).get("q") || "");
@@ -356,7 +442,7 @@ function Shell({ auth }: { auth: Auth }) {
             <BookOpen size={19} />
             My Library
           </NavLink>
-          <NavLink to={waiting > 0 ? "/requests#approvals" : "/requests"}>
+          <NavLink to={waiting > 0 ? "/requests?status=pending" : "/requests"}>
             <Download size={19} />
             Requests
             {waiting > 0 && (
@@ -412,26 +498,7 @@ function Shell({ auth }: { auth: Auth }) {
                 <ListPlus size={18} aria-hidden="true" />
                 Add list
               </button>
-              <button
-                className="topbar-action"
-                aria-label="Refresh Goodreads lists"
-                title="Refresh all enabled Goodreads lists"
-                disabled={goodreadsRefresh.busy}
-                onClick={goodreadsRefresh.refresh}
-              >
-                <RefreshCw
-                  size={18}
-                  aria-hidden="true"
-                  className={
-                    goodreadsRefresh.busy ? "list-refresh-spinning" : undefined
-                  }
-                />
-                <span className="goodreads-refresh-label">
-                  {goodreadsRefresh.busy
-                    ? "Refreshing…"
-                    : "Refresh Goodreads lists"}
-                </span>
-              </button>
+              <RefreshLists refresh={listsRefresh} />
             </div>
           )}
         </header>
@@ -442,12 +509,10 @@ function Shell({ auth }: { auth: Auth }) {
         )}
         <main id="main" className="main-content">
           <Notice error={logout.error} />
-          <Notice error={goodreadsRefresh.error} />
-          {(goodreadsRefresh.busy || goodreadsRefresh.message) && (
+          <Notice error={listsRefresh.error} />
+          {(listsRefresh.busy || listsRefresh.message) && (
             <p role="status">
-              {goodreadsRefresh.busy
-                ? "Refreshing Goodreads lists…"
-                : goodreadsRefresh.message}
+              {listsRefresh.busy ? "Refreshing lists…" : listsRefresh.message}
             </p>
           )}
           <Suspense fallback={<Loading />}>

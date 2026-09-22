@@ -6,11 +6,11 @@ import {
   Clock3,
   Pause,
   RefreshCw,
-  BookOpen,
   AlertCircle,
   Ellipsis,
 } from "lucide-react";
 import SettingHelp from "../components/SettingHelp";
+import { connectionLabel } from "./settingLabels";
 import { lazy, Suspense, useState, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -23,12 +23,60 @@ import { api, result } from "../api/client";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
 import { randomUUID } from "../randomUUID";
+import { useTrackStoryGraphToRead } from "../hooks/useTrackStoryGraphToRead";
 
 const ReadingListDetails = lazy(() => import("./ReadingListDetails"));
 
 type Subscription = components["schemas"]["ReadingSubscription"];
 type Choice = { external_id: string; name: string; count: number | null };
 type Provider = "goodreads" | "hardcover" | "storygraph";
+
+function ConnectionEditor({
+  connected,
+  openLabel,
+  children,
+}: {
+  connected: boolean;
+  openLabel: string;
+  children: ReactNode;
+}) {
+  if (!connected) return children;
+  return (
+    <details>
+      <summary>{openLabel}</summary>
+      {children}
+    </details>
+  );
+}
+
+function ReadingSection({
+  label,
+  title,
+  status,
+  className = "",
+  children,
+}: {
+  label: string;
+  title: string;
+  status: string;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <section
+      className={`reading-account ${className}`.trim()}
+      aria-label={label}
+    >
+      <details className="reading-connection">
+        <summary>
+          <span>{title}</span>
+          <span className="connection-state">{status}</span>
+        </summary>
+        <div className="reading-connection-body">{children}</div>
+      </details>
+    </section>
+  );
+}
 
 export default function ReadingAccounts({
   onConfigureHardcover,
@@ -119,30 +167,18 @@ function GoodreadsConnection({
   });
   const data = account.data;
   return (
-    <section
-      className="panel editor reading-account"
-      aria-label="Goodreads connection"
+    <ReadingSection
+      label="Goodreads connection"
+      title="Goodreads"
+      status={
+        account.isPending ? "Checking…" : data ? "Connected" : "Not connected"
+      }
     >
-      <div className="setting-subheading">
-        <span className="reading-provider-mark" aria-hidden="true">
-          g
-        </span>
-        <div className="reading-account-title">
-          <h2>Goodreads</h2>
-          {data && (
-            <a
-              href={data.profile_url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {data.name} ↗
-            </a>
-          )}
-        </div>
+      <div className="reading-connection-tools">
         {data && (
-          <span className="reading-status">
-            <CircleCheck size={14} aria-hidden="true" /> Connected
-          </span>
+          <a href={data.profile_url} target="_blank" rel="noopener noreferrer">
+            {data.name} ↗
+          </a>
         )}
         <a
           className="reading-profile-link"
@@ -195,12 +231,10 @@ function GoodreadsConnection({
         subscriptions
           .filter((entry) => entry.subscription.provider === "goodreads")
           .map((entry) => <TrackedList key={entry.list_id} entry={entry} />)}
-      <details open={!data}>
-        <summary>
-          {data
-            ? "Change Goodreads connection"
-            : "Connect your Goodreads account"}
-        </summary>
+      <ConnectionEditor
+        openLabel="Change Goodreads connection"
+        connected={!!data}
+      >
         <form
           className="editor reading-connect-form"
           onSubmit={(event) => {
@@ -230,8 +264,44 @@ function GoodreadsConnection({
                 : "Find my Goodreads shelves"}
           </button>
         </form>
-      </details>
-    </section>
+      </ConnectionEditor>
+    </ReadingSection>
+  );
+}
+
+function StoryGraphSetupGuide() {
+  return (
+    <details className="storygraph-setup">
+      <summary>How to copy these values</summary>
+      <ol>
+        <li>
+          <a
+            href="https://app.thestorygraph.com/users/sign_in"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Sign in to StoryGraph ↗
+          </a>{" "}
+          and leave that tab open.
+        </li>
+        <li>
+          On that tab, open the cookies for <code>app.thestorygraph.com</code>:
+          <ul>
+            <li>Chrome, Edge, or Brave: Inspect → Application → Cookies</li>
+            <li>Firefox: Inspect → Storage → Cookies</li>
+            <li>
+              Safari: Settings → Advanced → Show features for web developers,
+              then Develop → Show Web Inspector → Storage → Cookies
+            </li>
+          </ul>
+        </li>
+        <li>
+          Copy the Value of <code>_storygraph_session</code> into the first
+          field, and the Value of <code>remember_user_token</code> into the
+          second. Extra spaces or a copied row are fine.
+        </li>
+      </ol>
+    </details>
   );
 }
 
@@ -277,32 +347,21 @@ function StoryGraphConnection({
     },
     onSuccess: () => cache.setQueryData(["storygraph-account"], null),
   });
+  const toRead = useTrackStoryGraphToRead();
   const data = account.data;
   return (
-    <section
-      className="panel editor reading-account"
-      aria-label="StoryGraph connection"
+    <ReadingSection
+      label="StoryGraph connection"
+      title="StoryGraph"
+      status={
+        account.isPending ? "Checking…" : data ? "Connected" : "Not connected"
+      }
     >
-      <div className="setting-subheading">
-        <span className="reading-provider-mark" aria-hidden="true">
-          s
-        </span>
-        <div className="reading-account-title">
-          <h2>StoryGraph</h2>
-          {data && (
-            <a
-              href={data.profile_url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {data.username} ↗
-            </a>
-          )}
-        </div>
+      <div className="reading-connection-tools">
         {data && (
-          <span className="reading-status">
-            <CircleCheck size={14} aria-hidden="true" /> Connected
-          </span>
+          <a href={data.profile_url} target="_blank" rel="noopener noreferrer">
+            {data.username} ↗
+          </a>
         )}
         <SettingHelp label="StoryGraph">
           Paste the _storygraph_session and remember_user_token cookies from
@@ -313,7 +372,11 @@ function StoryGraphConnection({
       </div>
       <Notice
         error={
-          account.error || connect.error || discover.error || disconnect.error
+          account.error ||
+          connect.error ||
+          discover.error ||
+          disconnect.error ||
+          toRead.error
         }
       />
       {account.isPending && <Loading />}
@@ -362,12 +425,10 @@ function StoryGraphConnection({
         subscriptions
           .filter((entry) => entry.subscription.provider === "storygraph")
           .map((entry) => <TrackedList key={entry.list_id} entry={entry} />)}
-      <details open={!data}>
-        <summary>
-          {data
-            ? "Change StoryGraph connection"
-            : "Connect your StoryGraph account"}
-        </summary>
+      <ConnectionEditor
+        openLabel="Change StoryGraph connection"
+        connected={!!data}
+      >
         <form
           className="editor reading-connect-form"
           onSubmit={(event) => {
@@ -408,8 +469,9 @@ function StoryGraphConnection({
                 : "Find my StoryGraph lists"}
           </button>
         </form>
-      </details>
-    </section>
+      </ConnectionEditor>
+      <StoryGraphSetupGuide />
+    </ReadingSection>
   );
 }
 
@@ -427,20 +489,20 @@ function HardcoverConnection({
     queryFn: async () => result(await api.GET("/api/metadata/account")),
   });
   return (
-    <section
-      className="panel editor reading-account"
-      aria-label="Hardcover connection"
+    <ReadingSection
+      label="Hardcover connection"
+      title="Hardcover"
+      status={
+        account.isPending
+          ? "Checking…"
+          : account.data?.status
+            ? connectionLabel(account.data.status)
+            : account.data?.enabled
+              ? "Connected"
+              : "Not connected"
+      }
     >
-      <div className="setting-subheading">
-        <span className="reading-provider-mark" aria-hidden="true">
-          <BookOpen size={20} />
-        </span>
-        <h2>Hardcover</h2>
-        {account.data?.enabled && (
-          <span className="reading-status">
-            <CircleCheck size={14} aria-hidden="true" /> Connected
-          </span>
-        )}
+      <div className="reading-connection-tools">
         <SettingHelp label="Hardcover lists">
           Uses the connection in Metadata. Choose your own or followed lists to
           track here.
@@ -464,7 +526,7 @@ function HardcoverConnection({
           .filter((entry) => entry.subscription.provider === "hardcover")
           .map((entry) => <TrackedList key={entry.list_id} entry={entry} />)
       )}
-    </section>
+    </ReadingSection>
   );
 }
 
@@ -891,20 +953,15 @@ function LocalLists({ subscriptions }: { subscriptions: Subscription[] }) {
   if (lists.isPending) return <Loading />;
   if (lists.error) return <Notice error={lists.error} />;
   if (!local.length && (lists.data?.total || 0) <= 25) return null;
+  const count = local.length;
   return (
-    <section
-      className="panel editor reading-account reading-local"
-      aria-label="Local lists"
+    <ReadingSection
+      className="reading-local"
+      label="Local lists"
+      title="Local lists"
+      status={count === 1 ? "1 list" : `${count} lists`}
     >
-      <div className="setting-subheading">
-        <span className="reading-provider-mark">
-          <BookOpen size={20} />
-        </span>
-        <div className="reading-account-title">
-          <h2>Local lists</h2>
-          <p className="muted">Lists you keep in this app.</p>
-        </div>
-      </div>
+      <p className="muted">Lists you keep in this app.</p>
       {local.map((list) => (
         <div className="reading-list-row" key={list.id}>
           <Link to="/discover?view=yours" className="reading-list-name">
@@ -927,6 +984,6 @@ function LocalLists({ subscriptions }: { subscriptions: Subscription[] }) {
         </p>
       )}
       <InfiniteScroll query={lists} />
-    </section>
+    </ReadingSection>
   );
 }

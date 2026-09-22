@@ -14,6 +14,7 @@ test.beforeEach(async ({ page }) => {
           role: "member",
           display_name: "Reader",
           onboarding_status: "completed",
+          permissions: [],
         },
       },
     }),
@@ -48,8 +49,13 @@ const subscriptions = [
   },
   {
     list_id: "hardcover",
-    name: "Hardcover",
+    name: "Want to read",
     subscription: { provider: "hardcover", enabled: true, state: "idle" },
+  },
+  {
+    list_id: "storygraph",
+    name: "To-read",
+    subscription: { provider: "storygraph", enabled: true, state: "idle" },
   },
 ];
 
@@ -66,7 +72,10 @@ for (const scenario of [
       route.fulfill({
         json:
           scenario === "empty"
-            ? subscriptions.slice(2)
+            ? subscriptions.map((item) => ({
+                ...item,
+                subscription: { ...item.subscription, enabled: false },
+              }))
             : subscriptions.map((item) => ({
                 ...item,
                 subscription: {
@@ -97,7 +106,7 @@ for (const scenario of [
     });
     await page.goto("/requests");
     const button = page.getByRole("button", {
-      name: "Refresh Goodreads lists",
+      name: "Refresh lists",
       exact: true,
     });
     await expect(
@@ -107,23 +116,27 @@ for (const scenario of [
     ).toBeVisible();
     await button.click();
     if (scenario !== "empty") {
-      await expect.poll(() => calls).toEqual(["one", "two"]);
+      await expect
+        .poll(() => calls)
+        .toEqual(["one", "two", "hardcover", "storygraph"]);
       await expect(button).toBeDisabled();
       finished = true;
     }
     const expected =
       scenario === "empty"
-        ? "No enabled Goodreads lists."
+        ? "No enabled reading lists."
         : scenario === "partial failure"
           ? "Want to read: Shelf was paused"
           : scenario === "worker failure"
             ? "Favorites: Goodreads unavailable"
-            : "Refreshed 2 Goodreads lists.";
+            : "Refreshed 4 lists.";
     await expect(
       page.getByRole("status").filter({ hasText: expected }),
     ).toBeVisible();
     await expect(button).toBeEnabled();
-    expect(calls).toEqual(scenario === "empty" ? [] : ["one", "two"]);
+    expect(calls).toEqual(
+      scenario === "empty" ? [] : ["one", "two", "hardcover", "storygraph"],
+    );
     await page.setViewportSize({ width: 390, height: 844 });
     await expect(button).toBeVisible();
     expect(
@@ -133,3 +146,34 @@ for (const scenario of [
     ).toBe(true);
   });
 }
+
+test("topbar refresh can update StoryGraph lists only", async ({ page }) => {
+  const calls: string[] = [];
+  await page.route("**/api/reading-accounts/subscriptions", (route) =>
+    route.fulfill({
+      json: subscriptions.map((item) => ({
+        ...item,
+        subscription: {
+          ...item.subscription,
+          state: calls.includes(item.list_id)
+            ? "idle"
+            : item.subscription.state,
+          message: "Updated",
+        },
+      })),
+    }),
+  );
+  await page.route("**/api/lists/*/subscription/sync", (route) => {
+    calls.push(route.request().url().split("/").at(-3)!);
+    return route.fulfill({ status: 202, json: { status: "queued" } });
+  });
+  await page.goto("/requests");
+  await page
+    .getByRole("button", { name: "Choose which lists to refresh" })
+    .click();
+  await page.getByRole("menuitem", { name: "StoryGraph", exact: true }).click();
+  await expect.poll(() => calls).toEqual(["storygraph"]);
+  await expect(page.getByRole("status")).toContainText(
+    "Refreshed 1 StoryGraph list.",
+  );
+});

@@ -58,7 +58,7 @@ class ReleasePreferences(ScopePreferences):
         return self.effective_series_scope != "just_book"
 
     ebook_formats: list[str] = Field(
-        default=["epub", "pdf", "azw3", "mobi", "azw", "cbz", "cbr"], min_length=1, max_length=20
+        default=["epub", "azw3", "mobi", "pdf", "azw", "cbz", "cbr"], min_length=1, max_length=20
     )
     audio_formats: list[str] = Field(
         default=["m4b", "mp3", "flac", "aac", "ogg", "opus"], min_length=1, max_length=20

@@ -13,6 +13,18 @@ import ListDownloads from "./ListDownloads";
 import ShelfPagination from "./ShelfPagination";
 import { randomUUID } from "../randomUUID";
 
+function emptyShelfCopy(
+  provider: string | undefined,
+  count: number,
+  settled: boolean,
+  failed: boolean,
+) {
+  if (failed) return "This list needs attention.";
+  if (provider && settled && count === 0) return "No books on this list.";
+  if (provider) return "Books will appear after the first update.";
+  return "Add books from their book pages.";
+}
+
 export default function FollowedLists({
   home = true,
   canEdit = true,
@@ -51,7 +63,7 @@ export default function FollowedLists({
         <div className="explore-empty">
           <p>Your reading lists belong here.</p>
           <Link className="back-link" to="/settings#reading">
-            Connect Goodreads or Hardcover <ArrowRight size={15} />
+            Connect Goodreads, StoryGraph, or Hardcover <ArrowRight size={15} />
           </Link>
         </div>
       )}
@@ -265,11 +277,13 @@ export function PersonalRow({
         </ul>
       ) : (
         <p className="explore-footnote">
-          {subscription.data?.state === "failed"
-            ? "This list needs attention."
-            : provider
-              ? "Books will appear after the first update."
-              : "Add books from their book pages."}{" "}
+          {emptyShelfCopy(
+            provider,
+            books.data?.count ?? list.count,
+            Boolean(subscription.data?.last_success_at) &&
+              subscription.data?.state === "idle",
+            subscription.data?.state === "failed",
+          )}{" "}
           {canEdit && (
             <Link to={`/settings?list=${list.id}#reading`}>
               List settings →
@@ -336,6 +350,9 @@ export function PersonalListPage({
             ))}
           </ul>
           <InfiniteScroll query={query} />
+          {query.data.count === 0 && (
+            <p className="explore-footnote">No books on this list.</p>
+          )}
         </>
       )}
     </>

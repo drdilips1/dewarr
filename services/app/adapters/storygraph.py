@@ -6,7 +6,7 @@ import logging
 import re
 from contextlib import AsyncExitStack
 from dataclasses import dataclass
-from urllib.parse import parse_qsl, urlencode, urljoin, urlsplit, urlunsplit
+from urllib.parse import parse_qsl, unquote, urlencode, urljoin, urlsplit, urlunsplit
 
 import httpx
 from bs4 import BeautifulSoup
@@ -32,7 +32,10 @@ SHELVES = {
 }
 USER_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{0,39}$")
 UUID_RE = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
-TOKEN_RE = re.compile(r"^[A-Za-z0-9._~+/=%-]{8,4096}$")
+# RFC 6265 cookie-octet: no spaces, quotes, commas, semicolons, or backslashes.
+TOKEN_RE = re.compile(r"^[\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]{8,4096}$")
+COOKIE_NAMES = ("_storygraph_session", "remember_user_token")
+_INVISIBLE = re.compile(r"[\u200b\u200c\u200d\ufeff\xa0]")
 HELD = "StoryGraph did not return this list; existing books are preserved"
 SIGN_IN = "StoryGraph asked for a sign-in. Reconnect the account; existing books are preserved"
 BLOCKED = "StoryGraph blocked this check. Existing books are preserved"
@@ -69,13 +72,64 @@ class ListResult:
     name: str
 
 
+def _clean_cookie(value):
+    """Keep a copied cookie value. Browser panes wrap it, quote it, or encode '='."""
+    value = _INVISIBLE.sub("", value or "").strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
+        value = value[1:-1]
+    value = re.sub(r"\s+", "", value)
+    if "%" in value:
+        decoded = re.sub(r"\s+", "", unquote(value))
+        if TOKEN_RE.fullmatch(decoded):
+            return decoded
+    return value
+
+
+def _pasted_cookies(text):
+    """Pull named cookies out of a header, a name=value pair, or a devtools row."""
+    if not isinstance(text, str) or not text.strip():
+        return {}
+    found = {}
+    labeled = re.sub(r"(?i)^cookie:\s*", "", text.strip())
+    for chunk in re.split(r"[;\r\n]+", labeled):
+        chunk = chunk.strip()
+        if "=" not in chunk:
+            continue
+        name, value = chunk.split("=", 1)
+        name = _INVISIBLE.sub("", name).strip()
+        if name in COOKIE_NAMES:
+            found[name] = _clean_cookie(value)
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    if len(lines) >= 2 and lines[0] in COOKIE_NAMES and lines[0] not in found:
+        found[lines[0]] = _clean_cookie(lines[1])
+    columns = re.split(r"[\t ]+", text.strip())
+    if len(columns) >= 2 and columns[0] in COOKIE_NAMES and columns[0] not in found:
+        found[columns[0]] = _clean_cookie(columns[1])
+    return found
+
+
 def cookies(session_cookie, remember_token):
-    session_cookie, remember_token = session_cookie.strip(), remember_token.strip()
-    if not TOKEN_RE.fullmatch(session_cookie) or not TOKEN_RE.fullmatch(remember_token):
-        raise ValueError(
-            "Paste the _storygraph_session and remember_user_token values from your browser"
+    found = {}
+    for raw in (session_cookie, remember_token):
+        for name, value in _pasted_cookies(raw).items():
+            found.setdefault(name, value)
+    session_cookie = found.get("_storygraph_session") or _clean_cookie(session_cookie)
+    remember_token = found.get("remember_user_token") or _clean_cookie(remember_token)
+    if TOKEN_RE.fullmatch(session_cookie) and TOKEN_RE.fullmatch(remember_token):
+        return {"session_cookie": session_cookie, "remember_token": remember_token}
+    bad = [
+        name
+        for name, value in (
+            ("_storygraph_session", session_cookie),
+            ("remember_user_token", remember_token),
         )
-    return {"session_cookie": session_cookie, "remember_token": remember_token}
+        if not TOKEN_RE.fullmatch(value)
+    ]
+    raise ValueError(
+        "Copy only the Value of "
+        + " and ".join(bad)
+        + ". Leave out the cookie name, quotes, and any other columns."
+    )
 
 
 def session(config):
@@ -730,10 +784,19 @@ async def discover(
     username = username_from(journal.html)
     if not username:
         raise AdapterError(FailureKind.AUTHENTICATION, SIGN_IN)
-    to_read = await load(f"/to-read/{username}")
+    to_read_path = f"/to-read/{username}"
+    to_read = await load(to_read_path)
     tags = await load("/your-tags")
+    to_read_count = (
+        len(parse_records(to_read.html)) if _next_step(to_read.html, to_read_path) is None else None
+    )
     shelves = [
-        {"external_id": key, "name": label, "count": None, "kind": "shelf"}
+        {
+            "external_id": key,
+            "name": label,
+            "count": to_read_count if key == "to-read" else None,
+            "kind": "shelf",
+        }
         for key, label in SHELVES.items()
         if key != "up-next"
     ]

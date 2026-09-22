@@ -92,15 +92,21 @@ async def reconcile_groups(db, work_ids):
 
     from app.db.models import AcquisitionReservation, AcquisitionSelection, AcquisitionTarget
 
-    if await db.scalar(
-        select(AcquisitionReservation.id)
-        .where(
-            AcquisitionReservation.work_id.in_(work_ids),
-            AcquisitionReservation.state == "committed",
+    # A committed download stays on its book. Redirecting that book would leave the
+    # transfer on an identity that undo cannot put back. A download already on the
+    # surviving book, including one stuck in file review, does not block merging a
+    # duplicate into it.
+    reservations = (
+        await db.scalars(
+            select(AcquisitionReservation).where(
+                AcquisitionReservation.work_id.in_(work_ids),
+                AcquisitionReservation.state == "committed",
+            )
         )
-        .limit(1)
-    ):
-        raise HTTPException(409, "Resolve outstanding downloads before changing book identity")
+    ).all()
+    for reservation in reservations:
+        if (await canonical_work(db, reservation.work_id)).id != reservation.work_id:
+            raise HTTPException(409, "Resolve outstanding downloads before changing book identity")
 
     await db.execute(
         update(AcquisitionSelection)

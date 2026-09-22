@@ -155,3 +155,88 @@ test("cover shortcuts acquire missing formats without navigating, including prov
   await expect(page.locator(".cover-quick-add")).toHaveCount(0);
   expect(errors).toEqual([]);
 });
+
+test("cover quick add links to preferences when no default media is saved", async ({
+  page,
+}) => {
+  const writes: unknown[] = [];
+  const art = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="300"><rect width="200" height="300" fill="#243044"/><text x="16" y="150" fill="white" font-size="18">COVER</text></svg>')}`;
+  await page.route("**/api/**", async (route) => {
+    const path = new URL(route.request().url()).pathname;
+    let data: unknown = { items: [], total: 0 };
+    if (path === "/api/auth/me")
+      data = {
+        user: {
+          id: "reader",
+          username: "reader",
+          display_name: "Reader",
+          role: "admin",
+        },
+        csrf_token: "test",
+      };
+    else if (path === "/api/setup/onboarding") data = { status: "completed" };
+    else if (path === "/api/metadata/account") data = { enabled: true };
+    else if (path.endsWith("/cover")) return route.fulfill({ status: 404 });
+    else if (path === "/api/discovery/hardcover/trending")
+      data = {
+        title: "Trending on Hardcover",
+        status: "ready",
+        items: [
+          {
+            book: {
+              provider: "hardcover",
+              external_id: "unset",
+              title: "Unset preference",
+              authors: ["Test Author"],
+              cover_url: art,
+            },
+            work: {
+              id: "unset",
+              title: "Unset preference",
+              authors: ["Test Author"],
+              cover_url: art,
+              availability: { owned: false, ebook: false, audio: false },
+            },
+          },
+        ],
+      };
+    else if (path.startsWith("/api/discovery/"))
+      data = { title: "Other books", status: "ready", items: [], total: 0 };
+    else if (path === "/api/acquisition/preferences/personal")
+      data = { effective: { desired_media: null } };
+    else if (path.includes("/quick-add/latest/")) data = null;
+    else if (path === "/api/requests/quick-add") {
+      writes.push(route.request().postDataJSON());
+      data = {
+        id: "receipt",
+        status: "completed",
+        message: "Downloads queued",
+      };
+    }
+    await route.fulfill({ json: data });
+  });
+  await page.goto("/discover");
+  const card = page.locator(".book-card").filter({
+    has: page.getByRole("heading", { name: "Unset preference", exact: true }),
+  });
+  await card.hover();
+  const quickAdd = card.getByRole("button", { name: "Quick add from cover" });
+  await expect(quickAdd).toHaveAttribute(
+    "title",
+    "Quick add preference not set",
+  );
+  await quickAdd.click();
+  await expect(card.getByText("Preference not set")).toBeVisible();
+  const settings = card.getByRole("link", { name: "Set here" });
+  await expect(settings).toBeVisible();
+  await expect(settings).toHaveAttribute("href", "/settings#preferences");
+  await expect(card.getByRole("alert")).toHaveCount(0);
+  expect(writes).toEqual([]);
+  await card
+    .getByRole("button", { name: "Download ebook", exact: true })
+    .click();
+  await expect.poll(() => writes.length).toBe(1);
+  await quickAdd.click();
+  await card.getByRole("link", { name: "Set here" }).click();
+  await expect(page).toHaveURL(/\/settings#preferences$/);
+});

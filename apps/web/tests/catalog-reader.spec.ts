@@ -281,7 +281,7 @@ for (const unlinked of [false, true]) {
       name: "Add to reading list",
       exact: true,
     });
-    await list.getByLabel("Reading list", { exact: true }).selectOption("list");
+    await list.getByRole("radio", { name: "Weekend reads" }).click();
     await list
       .getByRole("button", { name: "Add to list", exact: true })
       .click();

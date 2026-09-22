@@ -7,6 +7,28 @@ import { languageName } from "./LanguageSelect";
 import { HardcoverRating } from "./BookReaderDetails";
 
 type ReaderDetails = components["schemas"]["ReaderDetails"];
+
+export function releaseIsAhead(
+  releaseDate?: string | null,
+  year?: number | null,
+) {
+  const today = new Date().toISOString().slice(0, 10);
+  const dated =
+    releaseDate && releaseDate.length >= 10 ? releaseDate.slice(0, 10) : null;
+  if (dated) return dated > today;
+  return typeof year === "number" && year > Number(today.slice(0, 4));
+}
+
+function publicationFact(releaseDate?: string | null, year?: number | null) {
+  const dated =
+    releaseDate && releaseDate.length >= 10 ? releaseDate.slice(0, 10) : null;
+  const ahead = releaseIsAhead(releaseDate, year);
+  return {
+    label: ahead ? "Release date" : "First published",
+    showDate: !!dated && (ahead || !year || dated.startsWith(String(year))),
+  };
+}
+
 export function BookHero({
   title,
   providerBook,
@@ -46,6 +68,7 @@ export function BookHero({
   const splitTitle = longTitle && colon > 5 && colon < 90;
   const headline = splitTitle ? title.slice(0, colon) : title;
   const subtitle = splitTitle ? title.slice(colon + 2) : null;
+  const published = publicationFact(details?.release_date, year);
   return (
     <header className="reader-hero book-detail-hero">
       <div className="reader-cover-wrap">
@@ -127,10 +150,9 @@ export function BookHero({
         <dl className="reader-facts">
           {(year || details?.release_date) && (
             <div>
-              <dt>First published</dt>
+              <dt>{published.label}</dt>
               <dd>
-                {details?.release_date &&
-                (!year || details.release_date.startsWith(String(year))) ? (
+                {published.showDate && details?.release_date ? (
                   <time dateTime={details.release_date}>
                     {new Date(details.release_date).toLocaleDateString(
                       undefined,

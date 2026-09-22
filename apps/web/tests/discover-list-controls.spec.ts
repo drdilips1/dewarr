@@ -285,6 +285,10 @@ test("reading accounts owns monitoring and compact list details", async ({
   await dialog.getByLabel("Share with this household").check();
   await dialog.getByRole("button", { name: "Save changes" }).click();
   await expect(dialog).toHaveCount(0);
+  await page
+    .getByRole("region", { name: "Goodreads connection" })
+    .locator(".reading-connection > summary")
+    .click();
   const row = page.getByRole("article", { name: "Evening reading monitoring" });
   await expect(row).toBeVisible();
   await expect(
@@ -326,10 +330,10 @@ test("reading accounts owns monitoring and compact list details", async ({
     .getByRole("button", { name: "Stop monitoring", exact: true })
     .click();
   await expect(dialog).toHaveCount(0);
+  const localLists = page.getByRole("region", { name: "Local lists" });
+  await localLists.locator(".reading-connection > summary").click();
   await expect(
-    page
-      .getByRole("region", { name: "Local lists" })
-      .getByRole("link", { name: "Evening reading", exact: true }),
+    localLists.getByRole("link", { name: "Evening reading", exact: true }),
   ).toBeVisible();
   await page.getByRole("link", { name: "Edit Evening reading" }).click();
   await dialog

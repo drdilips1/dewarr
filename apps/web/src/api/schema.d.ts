@@ -21,6 +21,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/application/releases": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Application Releases */
+    get: operations["application_releases_api_application_releases_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/health/live": {
     parameters: {
       query?: never;
@@ -3390,6 +3407,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organization/inspections/{inspection_id}/editions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Create File Edition */
+    post: operations["create_file_edition_api_organization_inspections__inspection_id__editions_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organization/inspections/{inspection_id}/plans": {
     parameters: {
       query?: never;
@@ -4050,7 +4084,8 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get?: never;
+    /** Follow Status */
+    get: operations["follow_status_api_releases_follow__work_id__get"];
     put?: never;
     post?: never;
     /** Unfollow */
@@ -5105,6 +5140,30 @@ export interface components {
       update_available: boolean;
       /** Status */
       status: string;
+    };
+    /** ApplicationReleaseHistory */
+    ApplicationReleaseHistory: {
+      /** Installed Version */
+      installed_version: string;
+      /** Status */
+      status: string;
+      /** Releases */
+      releases: components["schemas"]["ApplicationReleaseNote"][];
+    };
+    /** ApplicationReleaseNote */
+    ApplicationReleaseNote: {
+      /** Version */
+      version: string;
+      /** Name */
+      name: string;
+      /** Notes */
+      notes: string;
+      /** Url */
+      url: string;
+      /** Published At */
+      published_at: string | null;
+      /** Prerelease */
+      prerelease: boolean;
     };
     /** AssetFileView */
     AssetFileView: {
@@ -6928,6 +6987,37 @@ export interface components {
       state: string;
       /** Meets Requirements */
       meets_requirements: boolean;
+    };
+    /** FileEditionInput */
+    FileEditionInput: {
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /** Group Key */
+      group_key: string;
+      /** Grouping Revision */
+      grouping_revision: string;
+    };
+    /** FileEditionView */
+    FileEditionView: {
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /**
+       * Version Id
+       * Format: uuid
+       */
+      version_id: string;
+      /** Medium */
+      medium: string;
+      /** Title */
+      title: string | null;
+      /** Created */
+      created: boolean;
     };
     /** FileMapping */
     FileMapping: {
@@ -10333,9 +10423,9 @@ export interface components {
        * Ebook Formats
        * @default [
        *       "epub",
-       *       "pdf",
        *       "azw3",
        *       "mobi",
+       *       "pdf",
        *       "azw",
        *       "cbz",
        *       "cbr"
@@ -10473,6 +10563,13 @@ export interface components {
       offset: number;
       /** Limit */
       limit: number;
+      /** Next Offset */
+      next_offset?: number | null;
+      /**
+       * Total Bounded
+       * @default false
+       */
+      total_bounded: boolean;
     };
     /** RequestReason */
     RequestReason: {
@@ -10545,10 +10642,21 @@ export interface components {
        */
       can_start_download: boolean;
       /**
+       * Can Withdraw
+       * @default false
+       */
+      can_withdraw: boolean;
+      /**
        * Approval Status
        * @default approved
        */
       approval_status: string;
+      /** Cover Url */
+      cover_url?: string | null;
+      /** Authors */
+      authors?: string[];
+      /** Created At */
+      created_at?: string | null;
       specification: components["schemas"]["RequestSpec"];
       /** Targets */
       targets: components["schemas"]["TargetView"][];
@@ -11926,6 +12034,66 @@ export interface components {
        */
       next_action:
         "none" | "search" | "selected-release" | "downloads" | "book";
+      /** Progress */
+      progress?: number | null;
+      /** Attempt State */
+      attempt_state?: string | null;
+      /** Attempt Id */
+      attempt_id?: string | null;
+      /**
+       * Can Cancel
+       * @default false
+       */
+      can_cancel: boolean;
+      /**
+       * Can Recheck
+       * @default false
+       */
+      can_recheck: boolean;
+      /**
+       * Needs Review
+       * @default false
+       */
+      needs_review: boolean;
+      /**
+       * Shared Download
+       * @default false
+       */
+      shared_download: boolean;
+      /**
+       * Can Claim
+       * @default false
+       */
+      can_claim: boolean;
+      /** Review Revision */
+      review_revision?: string | null;
+      /** Inspection Id */
+      inspection_id?: string | null;
+      /**
+       * Review Retry
+       * @default false
+       */
+      review_retry: boolean;
+      /**
+       * Review Reassignment
+       * @default false
+       */
+      review_reassignment: boolean;
+      /** Review Message */
+      review_message?: string | null;
+      /** Attempt Message */
+      attempt_message?: string | null;
+      /** Repair Message */
+      repair_message?: string | null;
+      /**
+       * Can Repair
+       * @default false
+       */
+      can_repair: boolean;
+      /** Shared Books */
+      shared_books?: string[];
+      /** Transfer Notes */
+      transfer_notes?: string[];
     };
     /** TorrentDescriptor */
     TorrentDescriptor: {
@@ -12349,6 +12517,8 @@ export interface components {
        * @enum {string}
        */
       basis: "audiobook" | "work" | "unknown";
+      /** Mode */
+      mode?: ("ebook" | "audio" | "both" | "either") | null;
     };
     /** FollowInput */
     app__domain__community_lists__FollowInput: {
@@ -12380,6 +12550,26 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["ApplicationRelease"];
+        };
+      };
+    };
+  };
+  application_releases_api_application_releases_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ApplicationReleaseHistory"];
         };
       };
     };
@@ -18705,6 +18895,18 @@ export interface operations {
         active_only?: boolean;
         pending_only?: boolean;
         download_ready?: boolean;
+        mine?: boolean;
+        status?:
+          | (
+              | "pending"
+              | "downloading"
+              | "library"
+              | "declined"
+              | "withdrawn"
+              | "review"
+            )
+          | null;
+        sort?: "newest" | "title";
         offset?: number;
         limit?: number;
       };
@@ -19378,6 +19580,41 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["InspectionView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  create_file_edition_api_organization_inspections__inspection_id__editions_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        inspection_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["FileEditionInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FileEditionView"];
         };
       };
       /** @description Validation Error */
@@ -20680,7 +20917,6 @@ export interface operations {
     parameters: {
       query: {
         month: string;
-        page?: number;
       };
       header?: never;
       path?: never;
@@ -20754,6 +20990,37 @@ export interface operations {
     responses: {
       /** @description Successful Response */
       201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FollowView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  follow_status_api_releases_follow__work_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        work_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
         headers: {
           [name: string]: unknown;
         };

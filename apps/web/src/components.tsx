@@ -28,11 +28,12 @@ export function Empty({
   );
 }
 
-export function Loading() {
+export function Loading({ label = "Loading…" }: { label?: string }) {
   return (
-    <p className="loading" role="status">
-      Loading your shelves…
-    </p>
+    <div className="loading" role="status">
+      <span className="loading-spinner" aria-hidden="true" />
+      <p>{label}</p>
+    </div>
   );
 }
 

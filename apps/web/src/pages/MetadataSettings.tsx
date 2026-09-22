@@ -114,7 +114,7 @@ export default function MetadataSettings({
           </div>
         </div>
       )}
-      <section className="settings-block">
+      <section className="settings-block metadata-connection">
         <div className="setting-subheading">
           <h3>Hardcover</h3>
           <SettingHelp label="Hardcover">
@@ -128,6 +128,11 @@ export default function MetadataSettings({
               </span>
             ))}
           </SettingHelp>
+          {account.data && (
+            <span className="connection-state">
+              {connectionLabel(account.data.status)}
+            </span>
+          )}
         </div>
         <p className="muted">
           <a href={hardcoverTokenUrl} target="_blank" rel="noreferrer">
@@ -136,20 +141,16 @@ export default function MetadataSettings({
           with {hardcoverScopes.map(([scope]) => scope).join(", ")} selected.
         </p>
         <Notice
-          error={
-            account.error || save.error || test.error || suggestions.error
-          }
+          error={account.error || save.error || test.error || suggestions.error}
         />
         {account.isPending && <Loading />}
         {account.data && (
           <>
-            <p className="connection-state">
-              {connectionLabel(account.data.status)}
-            </p>
             {account.data.last_error && (
               <p className="notice error">{account.data.last_error}</p>
             )}
             <form
+              className="metadata-form"
               onSubmit={(e) => {
                 e.preventDefault();
                 save.mutate(true);
@@ -169,7 +170,7 @@ export default function MetadataSettings({
                   }
                 />
               </label>
-              <div className="button-row">
+              <div className="button-row metadata-actions">
                 <button className="primary" disabled={save.isPending}>
                   Save connection
                 </button>
@@ -196,22 +197,24 @@ export default function MetadataSettings({
               </div>
             </form>
             {account.data.configured && account.data.enabled && (
-              <label className="check-label">
-                <input
-                  type="checkbox"
-                  checked={account.data.suggest_series_gaps}
-                  disabled={suggestions.isPending}
-                  onChange={(event) => suggestions.mutate(event.target.checked)}
-                />
-                Suggest missing books in series I own
-              </label>
-            )}
-            {account.data.configured && account.data.enabled && (
-              <p className="muted">
-                Uses Hardcover links on books you already matched. Dewarr loads
-                those series catalogs and lists published books that are not in
-                your library. Nothing is downloaded.
-              </p>
+              <div className="metadata-option">
+                <label className="check-label">
+                  <input
+                    type="checkbox"
+                    checked={account.data.suggest_series_gaps}
+                    disabled={suggestions.isPending}
+                    onChange={(event) =>
+                      suggestions.mutate(event.target.checked)
+                    }
+                  />
+                  Suggest missing books in series I own
+                </label>
+                <p className="muted">
+                  Uses Hardcover links on books you already matched. Dewarr
+                  loads those series catalogs and lists published books that are
+                  not in your library. Nothing is downloaded.
+                </p>
+              </div>
             )}
           </>
         )}
@@ -249,7 +252,7 @@ function PreferenceForm({ value }: { value: Preferences }) {
   });
   return (
     <form
-      className="settings-block editor"
+      className="settings-block editor metadata-defaults"
       onChange={() => setSaved(false)}
       onSubmit={(e) => {
         e.preventDefault();
@@ -391,7 +394,7 @@ function PreferenceForm({ value }: { value: Preferences }) {
         </button>
       </details>
       <Notice error={save.error} />
-      <div className="button-row">
+      <div className="button-row metadata-actions">
         <button className="primary" disabled={save.isPending}>
           Save metadata defaults
         </button>

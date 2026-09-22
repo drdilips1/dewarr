@@ -1086,21 +1086,110 @@
 .release-calendar {
   display: grid;
   gap: 20px;
+  overflow-anchor: none;
 }
-.release-genres {
+.release-calendar .explore-view-heading {
+  align-items: stretch;
+  flex-direction: column;
+  gap: 16px;
+}
+.release-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+}
+.release-month-nav {
+  flex-wrap: nowrap;
+}
+.release-month-nav strong {
+  min-width: 9.5rem;
+  text-align: center;
+  font-size: 14px;
+}
+.release-month-nav button {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+}
+.genre-menu {
+  position: relative;
+}
+.genre-menu-trigger {
+  height: 36px;
+  max-width: min(280px, 70vw);
+  padding: 0 10px 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 550;
+}
+.genre-menu-trigger:hover:not(:disabled) {
+  background: #243044;
+}
+.genre-menu-label {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 650;
+}
+.genre-menu-value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.genre-menu-panel {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 6px);
+  right: 0;
+  width: min(240px, calc(100vw - 48px));
+  max-height: min(420px, calc(100vh - 140px));
+  margin: 0;
+  padding: 6px;
+  overflow: auto;
   border: 1px solid var(--line);
   border-radius: 12px;
-  padding: 12px 14px;
+  background: var(--surface);
+  box-shadow: 0 18px 40px #0006;
 }
-.release-genres div {
+.genre-menu-panel label {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px 14px;
-}
-.release-genres label {
-  display: inline-flex;
+  flex-direction: row;
   align-items: center;
-  gap: 6px;
+  justify-content: flex-start;
+  gap: 10px;
+  min-height: 36px;
+  margin: 0;
+  padding: 0 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.genre-menu-panel label:hover,
+.genre-menu-panel label:focus-within {
+  background: #ffffff10;
+}
+.genre-menu-panel label:has(input:checked) {
+  background: #a5b4fc18;
+}
+.genre-menu-panel label:has(input:checked):hover {
+  background: #a5b4fc28;
+}
+.genre-menu-panel input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+.genre-menu-trigger:focus-visible,
+.release-month-nav button:focus-visible,
+.release-marks button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 .release-weekdays,
 .release-month {
@@ -1108,76 +1197,234 @@
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 8px;
 }
+.release-month {
+  grid-auto-rows: 132px;
+}
 .release-weekdays span {
   color: var(--muted);
   font-size: 12px;
+  line-height: 16px;
   text-align: center;
 }
 .release-day,
 .release-pad {
-  min-height: 88px;
-  border: 1px solid var(--line);
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
   border-radius: 10px;
-  padding: 8px;
-  background: var(--surface);
 }
 .release-pad {
-  border-color: transparent;
+  border: 1px solid transparent;
   background: transparent;
 }
-.release-day h2 {
-  margin: 0 0 8px;
-  font-size: 13px;
-}
 .release-day {
-  min-width: 0;
-  overflow: hidden;
-}
-.release-marks,
-.release-undated,
-.release-agenda {
-  display: grid;
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 6px;
+  width: 100%;
   margin: 0;
-  padding: 0;
-  list-style: none;
+  padding: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  text-align: left;
+}
+button.release-day {
+  cursor: pointer;
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+}
+button.release-day:hover {
+  background: #243044;
+  border-color: var(--accent);
+}
+button.release-day[aria-expanded="true"] {
+  background: #a5b4fc18;
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.release-day-number {
+  display: block;
+  flex: 0 0 16px;
+  width: 100%;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 16px;
+  text-align: left;
 }
 .release-marks {
+  display: grid;
   gap: 2px;
+  width: 100%;
+  min-width: 0;
+  justify-items: start;
+  text-align: left;
 }
-.release-marks a {
+.release-marks span {
   display: block;
+  min-width: 0;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 11px;
+  font-weight: 550;
+  line-height: 15px;
+  text-align: left;
 }
-.release-day:has(.release-marks li) {
-  border-color: var(--accent);
+.release-more {
+  color: var(--accent);
+  font-weight: 650;
 }
-.release-book {
-  display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
+.release-count {
+  display: none;
+}
+.release-undated-open {
+  justify-self: start;
+  width: fit-content;
+}
+.release-drawer {
+  position: fixed;
+  z-index: 40;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(520px, calc(100vw - 240px));
+  padding: 22px 18px 28px;
+  border-left: 1px solid var(--line);
+  background: #141e2e;
+  box-shadow: -24px 0 48px #0008;
+  overflow: auto;
+}
+.release-drawer-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
   gap: 12px;
-  align-items: start;
 }
-.release-book .book-cover {
-  width: 72px;
-}
-.release-book h3 {
+.release-drawer-heading h2 {
   margin: 0;
-  font-size: 13px;
+  font-size: 20px;
+  line-height: 1.25;
+  letter-spacing: -0.3px;
 }
-.release-book p {
-  margin: 2px 0 0;
+.release-drawer-heading h2:focus {
+  outline: none;
+}
+.release-drawer-heading p {
+  margin: 4px 0 0;
+}
+.release-drawer-note {
+  margin: -8px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.release-drawer-genre {
+  margin: 18px 0 8px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.release-drawer > section:first-of-type .release-drawer-genre {
+  margin-top: 0;
+}
+.release-drawer-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.release-day-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px 10px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.release-day-card-main {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+  color: inherit;
+}
+.release-day-card:has(.release-day-card-actions) > .release-day-card-main {
+  grid-column: 1;
+}
+.release-day-card .book-cover {
+  width: 48px;
+}
+.release-day-card .cover-formats,
+.release-day-card .cover-rating {
+  display: none;
+}
+.release-day-card-copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
   font-size: 12px;
+  line-height: 1.35;
+}
+.release-day-card-copy span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.release-day-card-copy .release-day-card-title {
+  display: -webkit-box;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.3;
+  white-space: normal;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.release-day-card-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+}
+.release-day-card .release-follow {
+  justify-items: end;
+  margin-top: 0;
+}
+.release-day-card .quick-add {
+  align-items: flex-end;
+}
+.release-day-card .quick-add-options {
+  left: auto;
+  right: 0;
 }
 .release-follow {
   display: grid;
   gap: 4px;
+  justify-items: start;
   margin-top: 6px;
 }
-.release-follow button {
+.release-follow > .quick-add-split {
+  width: fit-content;
+}
+.release-follow > button {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -1187,16 +1434,40 @@
   margin: 8px 0 0;
 }
 @media (max-width: 720px) {
+  .release-toolbar {
+    justify-content: flex-start;
+  }
+  .genre-menu-panel {
+    right: auto;
+    left: 0;
+  }
   .release-weekdays,
   .release-month {
     gap: 4px;
   }
-  .release-day,
-  .release-pad {
-    min-height: 44px;
+  .release-month {
+    grid-auto-rows: 84px;
+  }
+  .release-day {
+    gap: 3px;
     padding: 4px;
   }
-  .release-book {
-    grid-template-columns: 1fr;
+  .release-marks {
+    display: none;
+  }
+  .release-count {
+    display: block;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 650;
+    line-height: 14px;
+  }
+  .release-drawer {
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .release-drawer {
+    scroll-behavior: auto;
   }
 }

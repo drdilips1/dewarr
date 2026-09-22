@@ -173,6 +173,53 @@ def test_identifier_does_not_override_contradictory_recording_evidence(changed):
     assert candidate.conflicts
 
 
+def test_edition_labels_are_not_a_different_title():
+    from app.domain.catalog_titles import stripped_title, titles_agree
+
+    facts, version, work = facts_and_version()
+    facts.titles = ["first harbor (unabridged)"]
+    assert stripped_title("First Harbor (Unabridged)") == "First Harbor"
+    assert titles_agree(facts.titles, [work.title, version.title])
+    candidate = candidate_evidence(facts, version, work, work, False)
+    assert "Embedded title agrees" in candidate.reasons
+    facts.titles = ["first harbor: the graphic novel"]
+    assert (
+        "Embedded title is missing or differs"
+        in candidate_evidence(facts, version, work, work, False).conflicts
+    )
+
+
+def test_file_edition_survives_identifier_noise_and_a_language_name():
+    from app.importing.file_editions import edition_blocker, edition_fields
+
+    work = SimpleNamespace(title="Cloud Atlas", language="en")
+    group = SimpleNamespace(
+        title="Cloud Atlas (Unabridged)", medium="audio", narrators=["Scott Brick"]
+    )
+    facts = MatchEvidence(
+        languages=["english"],
+        identifiers=[
+            {"namespace": "isbn", "value": "9780812994735"},
+            {"namespace": "isbn", "value": "9780340822780"},
+        ],
+        issues=[
+            "An embedded edition identifier is invalid",
+            "Multiple edition identifiers require review",
+        ],
+    )
+    assert edition_blocker(facts) is None
+    fields = edition_fields(work, group, facts)
+    assert fields["title"] == "Cloud Atlas"
+    assert fields["language"] == "en"
+    assert fields["abridged"] is False
+    assert fields["identifiers"] == {}
+    assert fields["narrators"] == ["Scott Brick"]
+    facts.issues = ["Some files have not passed content inspection"]
+    assert edition_blocker(facts) == "Some files have not passed content inspection"
+    facts.issues = ["Files disagree about title"]
+    assert edition_blocker(facts) == "Files disagree about title"
+
+
 def test_unknown_narrator_and_missing_title_are_not_automatic_evidence():
     facts, version, work = facts_and_version()
     facts.narrators = []

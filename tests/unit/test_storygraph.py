@@ -224,7 +224,30 @@ def test_list_url_accepts_shelves_and_tags_only():
     with pytest.raises(ValueError):
         list_url("https://example.com/to-read/nadia")
     with pytest.raises(ValueError):
-        cookies("session-token", "bad token")
+        cookies("nope", "remember-token")
+    with pytest.raises(ValueError):
+        cookies("session-token", "remember;token")
+
+
+def test_cookies_accept_a_wrapped_or_labeled_paste():
+    session = "eyJfcmFpbHMi--session-signature"
+    remember = "eyJfcmVlbWJlci--remember-signature"
+    assert cookies(f"  {session}  ", f'"{remember}"') == {
+        "session_cookie": session,
+        "remember_token": remember,
+    }
+    assert cookies(f"{session[:12]} {session[12:]}", remember)["session_cookie"] == session
+    header = f"Cookie: _storygraph_session={session}; remember_user_token={remember}; _ga=1"
+    assert cookies(header, header) == {
+        "session_cookie": session,
+        "remember_token": remember,
+    }
+    row = f"_storygraph_session\t{session}\tapp.thestorygraph.com\t/\tSession"
+    assert cookies(row, f"remember_user_token {remember} .thestorygraph.com") == {
+        "session_cookie": session,
+        "remember_token": remember,
+    }
+    assert cookies("session-token%3D%3D", remember)["session_cookie"] == "session-token=="
 
 
 async def resolver(_host):
@@ -675,8 +698,34 @@ async def test_discover_reads_profile_up_next_and_tags():
     assert account["username"] == "nadia"
     ids = [shelf["external_id"] for shelf in account["shelves"]]
     assert ids[:4] == ["to-read", "currently-reading", "books-read", "favorites"]
+    assert (
+        next(shelf["count"] for shelf in account["shelves"] if shelf["external_id"] == "to-read")
+        == 1
+    )
     assert "up-next" in ids
     assert TAG in ids
+
+
+@pytest.mark.asyncio
+async def test_discover_counts_an_empty_to_read_shelf():
+    def handler(request):
+        if request.url.path == "/journal":
+            return response(
+                "<html><title>Journal | The StoryGraph</title>"
+                '<header><a href="/profile/nadia">Nadia</a></header></html>'
+            )
+        if request.url.path.startswith("/to-read/"):
+            return response(
+                "<html><title>To-read | The StoryGraph</title>"
+                "<h2>To-read</h2><p>No books yet</p></html>"
+            )
+        return response("<html><title>Tags | The StoryGraph</title></html>")
+
+    account = await discover(
+        SECRET, transport=httpx.MockTransport(handler), resolver=resolver, pause=0
+    )
+    to_read = next(shelf for shelf in account["shelves"] if shelf["external_id"] == "to-read")
+    assert to_read["count"] == 0
 
 
 def test_a_book_heading_named_up_next_does_not_hide_the_shelf():

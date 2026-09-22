@@ -8,6 +8,16 @@ import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
 import { settingsSections } from "./SettingsSections";
 
+function setupCount(
+  count: number,
+  singular: string,
+  plural: string,
+  empty = "None connected",
+) {
+  if (count === 0) return empty;
+  return `${count} ${count === 1 ? singular : plural}`;
+}
+
 const Libraries = lazy(() => import("./Connections"));
 const Destinations = lazy(() => import("./Destinations"));
 const ReadingAccounts = lazy(() => import("./ReadingAccounts"));
@@ -175,44 +185,77 @@ export default function GettingStarted({ role }: { role: string }) {
             </div>
             {id === "finish" ? (
               <div className="onboarding-finish">
-                <Check size={36} />
-                <h3>You’re ready to explore</h3>
+                <div className="onboarding-finish-lead">
+                  <span className="onboarding-finish-mark" aria-hidden="true">
+                    <Check size={18} />
+                  </span>
+                  <div>
+                    <h3>You’re ready to explore</h3>
+                    <p>Your setup is saved. Change it anytime in Settings.</p>
+                  </div>
+                </div>
                 {admin && (
                   <>
                     <Notice error={readiness.error} />
+                    {readiness.isPending && (
+                      <p className="onboarding-finish-note">
+                        Checking your setup…
+                      </p>
+                    )}
                     {readiness.data && (
-                      <ul>
-                        <li>
-                          {readiness.data.catalog?.enabled
-                            ? "Hardcover configured"
-                            : "Open Library available"}
-                        </li>
-                        <li>
-                          {readiness.data.libraries.length} library connections
-                        </li>
-                        <li>
-                          {
-                            readiness.data.sources.filter(
-                              (source) => source.enabled,
-                            ).length
-                          }{" "}
-                          enabled download sources
-                        </li>
-                        <li>
-                          {readiness.data.downloaders.length} download clients
-                        </li>
-                      </ul>
+                      <dl className="onboarding-summary">
+                        <div>
+                          <dt>Catalog</dt>
+                          <dd>
+                            {readiness.data.catalog?.enabled
+                              ? "Hardcover"
+                              : "Open Library"}
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>Libraries</dt>
+                          <dd>
+                            {setupCount(
+                              readiness.data.libraries.length,
+                              "connection",
+                              "connections",
+                            )}
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>Download sources</dt>
+                          <dd>
+                            {setupCount(
+                              readiness.data.sources.filter(
+                                (source) => source.enabled,
+                              ).length,
+                              "enabled",
+                              "enabled",
+                              "None enabled",
+                            )}
+                          </dd>
+                        </div>
+                        <div>
+                          <dt>Download clients</dt>
+                          <dd>
+                            {setupCount(
+                              readiness.data.downloaders.length,
+                              "connected",
+                              "connected",
+                            )}
+                          </dd>
+                        </div>
+                      </dl>
                     )}
                     {readiness.data &&
                       !readiness.data.download_dispatch_enabled && (
-                        <p className="notice">
+                        <p className="onboarding-finish-note">
                           Downloads are disabled on this server. Browsing and
                           lists are ready.
                         </p>
                       )}
                   </>
                 )}
-                <p>Skipped a step? Open Settings whenever you’re ready.</p>
               </div>
             ) : (
               <div className="settings-section-body">

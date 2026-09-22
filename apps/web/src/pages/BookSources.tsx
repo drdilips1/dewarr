@@ -568,7 +568,7 @@ function Results({
                       !item.release.freeleech &&
                       !item.release.vip && <span className="muted">—</span>}
                   </td>
-                  <td>
+                  <td className="source-actions-cell">
                     <div className="source-row-actions">
                       <button
                         className="release-info-button"

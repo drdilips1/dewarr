@@ -4,12 +4,13 @@ from uuid import UUID
 import pytest
 from sqlalchemy import func, select, update
 
-from app.db.models import AcquisitionSelection, DownloadAttempt, LibraryAsset, User
+from app.db.models import AcquisitionSelection, DownloadAttempt, LibraryAsset, User, Work
 from app.domain import download_attempts as downloads
 from tests.integration.test_acquisition import body, catalog, request  # noqa: F401
 from tests.integration.test_acquisition_selections import prepare, selection_route  # noqa: F401
 from tests.integration.test_discovery import login_member
 from tests.integration.test_download_attempts import downloader, selected, start  # noqa: F401
+from tests.integration.test_request_approvals import session_for
 
 pytestmark = pytest.mark.integration
 
@@ -125,5 +126,114 @@ async def test_committed_transfer_links_activity_without_any_read_side_effect(
         assert request["targets"][0]["next_action"] == "downloads"
         assert request["targets"][0]["state"] == "wanted"
     assert downloader.calls == before
-    async with database() as db:
+    async with database() as db, db.begin():
+        attempt = await db.scalar(select(DownloadAttempt))
+        attempt.observation = {"progress": 0.42}
         assert await db.scalar(select(func.count()).select_from(DownloadAttempt)) == 1
+    current = (await client.get("/api/requests/" + selection_route["intent_id"])).json()
+    target = current["targets"][0]
+    assert target["attempt_state"]
+    assert target["progress"] == 0.42
+    downloading = (await client.get("/api/requests?status=downloading")).json()
+    assert downloading["total"] >= 1
+    assert any(item["id"] == selection_route["intent_id"] for item in downloading["items"])
+
+
+async def test_request_cards_filter_by_status_and_role(client, admin, catalog, database):
+    async with database() as db, db.begin():
+        work = await db.get(Work, catalog["work"])
+        work.cover_url = "https://covers.example/harbor.jpg"
+    saved = (await request(client, body(catalog, "both")))["request"]
+    assert saved["authors"] == ["Writer"]
+    assert saved["cover_url"] == "https://covers.example/harbor.jpg"
+    assert saved["created_at"]
+    assert saved["can_withdraw"] is True
+    assert saved["targets"][0]["progress"] is None
+
+    created = await client.post(
+        "/api/auth/users",
+        json={
+            "username": "patron",
+            "display_name": "Patron Reader",
+            "password": "a long patron password",
+            "role": "requester",
+        },
+    )
+    assert created.status_code == 201, created.text
+    patron = await session_for("patron", "a long patron password")
+    try:
+        waiting = (await request(patron, body(catalog, "audio")))["request"]
+        assert waiting["approval_status"] == "pending"
+        assert waiting["can_decide"] is False
+        own = (await patron.get("/api/requests?active_only=true")).json()
+        assert [item["id"] for item in own["items"]] == [waiting["id"]]
+        assert (await patron.get("/api/requests?status=review")).status_code == 403
+        pending = (await patron.get("/api/requests?status=pending")).json()
+        assert pending["total"] == 1
+    finally:
+        await patron.aclose()
+
+    visible = (await client.get("/api/requests?active_only=true&sort=newest")).json()
+    assert {item["id"] for item in visible["items"]} == {saved["id"], waiting["id"]}
+    queue = (await client.get("/api/requests?status=pending")).json()
+    assert [item["id"] for item in queue["items"]] == [waiting["id"]]
+    library = (await client.get("/api/requests?status=library")).json()
+    assert saved["id"] in {item["id"] for item in library["items"]}
+
+    alpha = (
+        await client.post("/api/catalog/works", json={"title": "Alpha Tale", "authors": ["A"]})
+    ).json()
+    zebra = (
+        await client.post("/api/catalog/works", json={"title": "Zebra Tale", "authors": ["Z"]})
+    ).json()
+    await request(client, {"work_id": zebra["id"], "specification": {"mode": "audio"}})
+    await request(client, {"work_id": alpha["id"], "specification": {"mode": "audio"}})
+    titles = [
+        item["work_title"]
+        for item in (await client.get("/api/requests?sort=title&active_only=true")).json()["items"]
+        if item["work_title"] in {"Alpha Tale", "Zebra Tale"}
+    ]
+    assert titles == ["Alpha Tale", "Zebra Tale"]
+
+    declined = await client.post(
+        f"/api/requests/{waiting['id']}/decision",
+        json={"status": "declined", "expected_status": "pending"},
+        headers={"Idempotency-Key": "decline-patron-card"},
+    )
+    assert declined.status_code == 200, declined.text
+    declined_list = (await client.get("/api/requests?status=declined")).json()
+    assert waiting["id"] in {item["id"] for item in declined_list["items"]}
+    await client.delete(f"/api/requests/{saved['id']}/reasons/{saved['reasons'][0]['id']}")
+    withdrawn = (await client.get("/api/requests?status=withdrawn")).json()
+    assert saved["id"] in {item["id"] for item in withdrawn["items"]}
+    assert saved["id"] not in {
+        item["id"] for item in (await client.get("/api/requests?active_only=true")).json()["items"]
+    }
+
+
+async def test_approver_status_follows_the_requesters_library(client, admin, catalog):
+    created = await client.post(
+        "/api/auth/users",
+        json={
+            "username": "shelf",
+            "display_name": "Shelf Reader",
+            "password": "a long shelf password",
+            "role": "requester",
+        },
+    )
+    assert created.status_code == 201, created.text
+    patron = await session_for("shelf", "a long shelf password")
+    try:
+        waiting = (await request(patron, body(catalog, "ebook")))["request"]
+        decided = await client.post(
+            f"/api/requests/{waiting['id']}/decision",
+            json={"status": "approved", "download": False, "expected_status": "pending"},
+            headers={"Idempotency-Key": "approve-shelf-ebook"},
+        )
+        assert decided.status_code == 200, decided.text
+        seen = decided.json()["request"]["targets"][0]
+        own = (await patron.get("/api/requests/" + waiting["id"])).json()["targets"][0]
+        assert seen["state"] == own["state"] == "wanted"
+        assert seen["message"] != "Already available in your library"
+    finally:
+        await patron.aclose()

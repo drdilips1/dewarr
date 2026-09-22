@@ -25,6 +25,7 @@ from app.db.session import session_factory
 from app.domain import download_reviews
 from app.domain.catalog_metadata import attach_source, preferences
 from app.domain.catalog_network import CatalogGateway
+from app.domain.catalog_titles import display_title
 from app.domain.identity import normalized, work_key
 from app.domain.operations import transaction_lock
 from app.domain.work_graph import canonical_work, family_ids, graph_lock
@@ -138,9 +139,9 @@ async def schedule(db, row, matches):
     except HTTPException:
         return False
     facts = match.evidence
-    if facts.titles != [normalized(work.title)] or facts.authors != [
-        sorted(normalized(name) for name in work.authors)
-    ]:
+    if {display_title(title) for title in facts.titles} != {display_title(work.title)} or (
+        facts.authors != [sorted(normalized(name) for name in work.authors)]
+    ):
         return False
     inspection = await db.get(DownloadInspection, row.inspection_id)
     _, grouping = await current_grouping(db, inspection)

@@ -26,6 +26,8 @@ _ALIASES = {
     "scifi": "science-fiction",
     "sciencefiction": "science-fiction",
     "sf": "science-fiction",
+    "space-opera": "science-fiction",
+    "spaceopera": "science-fiction",
     "ya": "young-adult",
     "youngadult": "young-adult",
     "nonfiction": "non-fiction",
@@ -34,6 +36,13 @@ _ALIASES = {
     "kids": "children",
     "childrens": "children",
 }
+_SUFFIXES = (
+    ("-fantasy", "fantasy"),
+    ("-science-fiction", "science-fiction"),
+    ("-romance", "romance"),
+    ("-mystery", "mystery"),
+    ("-horror", "horror"),
+)
 
 _BASIS = {"audiobook": 2, "work": 1, "unknown": 0}
 _MONTHS = {
@@ -58,7 +67,13 @@ def genre_slug(value):
     text = "-".join(value.strip().casefold().replace("_", " ").replace("-", " ").split())
     compact = text.replace("-", "")
     slug = _ALIASES.get(text) or _ALIASES.get(compact) or text
-    return slug if slug in GENRES else None
+    if slug in GENRES:
+        return slug
+    # "Dark Fantasy" and "Hard Science Fiction" are shelves of a tracked genre.
+    for suffix, genre in _SUFFIXES:
+        if slug.endswith(suffix):
+            return genre
+    return None
 
 
 def parse_iso_day(value):

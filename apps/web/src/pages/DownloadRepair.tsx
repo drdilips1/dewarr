@@ -34,7 +34,7 @@ export default function DownloadRepair({ attemptId }: { attemptId: string }) {
     onSuccess: async () => {
       preview.reset();
       await Promise.all(
-        ["downloads", "activity"].map((key) =>
+        ["downloads", "activity", "requests"].map((key) =>
           cache.invalidateQueries({ queryKey: [key] }),
         ),
       );

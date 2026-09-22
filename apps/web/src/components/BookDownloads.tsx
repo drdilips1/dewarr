@@ -31,7 +31,7 @@ export default function BookDownloads({ workId }: { workId: string }) {
           <p className="eyebrow">FROM SOURCE TO SHELF</p>
           <h2 id="downloads-heading">Your download history</h2>
         </div>
-        <Link to="/requests#downloads">View download queue →</Link>
+        <Link to="/requests?status=downloading">View download queue →</Link>
       </div>
       <Notice error={query.error} />
       {query.isPending && <Loading />}

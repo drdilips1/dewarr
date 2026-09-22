@@ -2,6 +2,7 @@ import Destinations from "./Destinations";
 import SettingHelp from "../components/SettingHelp";
 import {
   CheckCircle2,
+  ChevronDown,
   XCircle,
   LoaderCircle,
   Pencil,
@@ -75,7 +76,7 @@ export default function Connections({
   });
   return (
     <>
-      <div className="page-heading">
+      <div className="page-heading library-page-heading">
         {!embedded && (
           <div>
             <p className="eyebrow">CONNECTED LIBRARIES</p>
@@ -86,21 +87,10 @@ export default function Connections({
             <Link to="/settings#downloaders">Downloaders</Link>
           </div>
         )}
-        <button
-          className={
-            connections.data?.length ? "settings-add-connection" : "primary"
-          }
-          onClick={() => setEditing("audiobookshelf")}
-        >
-          <Plus size={16} />{" "}
-          {connections.data?.length ? "Add server" : "Connect Audiobookshelf"}
-        </button>
-        <button
-          className="settings-add-connection"
-          onClick={() => setEditing("grimmory")}
-        >
-          <Plus size={16} /> Connect Grimmory
-        </button>
+        <AddServerMenu
+          emphasized={!connections.data?.length}
+          onChoose={setEditing}
+        />
       </div>
       <Notice error={connections.error || libraries.error || command.error} />
       {message && (
@@ -214,6 +204,71 @@ export default function Connections({
         </>
       )}
     </>
+  );
+}
+
+function AddServerMenu({
+  emphasized,
+  onChoose,
+}: {
+  emphasized: boolean;
+  onChoose: (kind: "audiobookshelf" | "grimmory") => void;
+}) {
+  const root = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (!open) return;
+    const close = (event: PointerEvent) => {
+      if (!root.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setOpen(false);
+      trigger.current?.focus();
+    };
+    document.addEventListener("pointerdown", close);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", close);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+  function choose(kind: "audiobookshelf" | "grimmory") {
+    setOpen(false);
+    onChoose(kind);
+  }
+  return (
+    <div className="add-server-menu" ref={root}>
+      <button
+        ref={trigger}
+        type="button"
+        className={emphasized ? "primary" : undefined}
+        aria-expanded={open}
+        aria-haspopup="true"
+        aria-controls="add-server-options"
+        onClick={() => setOpen((value) => !value)}
+      >
+        <Plus size={14} aria-hidden="true" />
+        Add server
+        <ChevronDown size={14} aria-hidden="true" />
+      </button>
+      {open && (
+        <div
+          id="add-server-options"
+          className="add-server-options"
+          role="group"
+          aria-label="Library server"
+        >
+          <button type="button" onClick={() => choose("audiobookshelf")}>
+            Audiobookshelf
+          </button>
+          <button type="button" onClick={() => choose("grimmory")}>
+            Grimmory
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 

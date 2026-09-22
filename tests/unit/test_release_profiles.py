@@ -25,6 +25,18 @@ from tests.torrent_fixture import torrent_bytes
 WORK = {"title": "Harbor", "authors": ["Writer"]}
 
 
+def test_builtin_ebook_format_preference_order():
+    assert ReleasePreferences().ebook_formats == [
+        "epub",
+        "azw3",
+        "mobi",
+        "pdf",
+        "azw",
+        "cbz",
+        "cbr",
+    ]
+
+
 def test_series_scope_inheritance_and_legacy_boolean_compatibility():
     defaults = ReleasePreferences()
     assert "series_scope" not in defaults.model_dump(mode="json")

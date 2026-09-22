@@ -18,6 +18,7 @@ for (const role of ["admin", "member", "viewer"]) {
             role,
             display_name: "Reader",
             onboarding_status: "complete",
+            permissions: [],
           },
           csrf_token: "test",
         };
@@ -107,13 +108,11 @@ for (const role of ["admin", "member", "viewer"]) {
       page.getByRole("heading", { name: "Background activity" }),
     ).toHaveCount(0);
     await page
-      .getByRole("link", { name: "Download queue", exact: true })
+      .getByRole("button", { name: "Downloading", exact: true })
       .click();
+    await expect(page.getByText("No downloads yet.", { exact: true })).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "No downloads yet" }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("link", { name: "Import reviews", exact: true }),
+      page.getByRole("button", { name: "Review", exact: true }),
     ).toHaveCount(role === "admin" ? 1 : 0);
     await page.goto("/activity#downloads");
     await expect(page).toHaveURL(/\/requests#downloads$/);
@@ -131,9 +130,7 @@ for (const role of ["admin", "member", "viewer"]) {
       ),
     ).toBe(true);
     await page.goto("/requests#downloads");
-    await expect(
-      page.getByRole("heading", { name: "No downloads yet" }),
-    ).toBeVisible();
+    await expect(page.getByText("No downloads yet.", { exact: true })).toBeVisible();
     await page.screenshot({ path: testInfo.outputPath("requests-mobile.png") });
     expect(
       await page.evaluate(
@@ -141,27 +138,32 @@ for (const role of ["admin", "member", "viewer"]) {
       ),
     ).toBe(true);
     if (role === "admin") {
-      await page.route("**/api/acquisition/downloads?*", (route) =>
+      await page.route("**/api/requests?*", (route) =>
         route.fulfill({
           json: {
             total: 1,
+            offset: 0,
+            limit: 10,
             items: [
               {
                 id: "transfer",
+                work_id: "work",
                 work_title: "The Long Way Home",
-                release_title: "Audiobook edition",
-                state: "downloading",
-                message: "Downloading selected release",
-                progress: 0.25,
-                members: [
+                description: "Audiobook edition",
+                approval_status: "approved",
+                reasons: [],
+                specification: { mode: "audio" },
+                targets: [
                   {
-                    work_title: "The Long Way Home",
-                    medium: "audio",
-                    target_state: "wanted",
+                    slot: "audio",
+                    state: "wanted",
+                    message: "Downloading selected release",
+                    progress: 0.25,
+                    attempt_state: "downloading",
+                    attempt_id: "attempt",
+                    next_action: "downloads",
                   },
                 ],
-                can_cancel: false,
-                can_recheck: true,
               },
             ],
           },

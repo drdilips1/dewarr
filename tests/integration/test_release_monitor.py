@@ -7,7 +7,7 @@ from uuid import UUID
 import pytest
 from sqlalchemy import func, select
 
-from app.db.models import DownloadAttempt, MonitoredRelease, Operation, Work
+from app.db.models import AcquisitionIntent, DownloadAttempt, MonitoredRelease, Operation, Work
 from app.domain import automatic_selection
 from app.domain.release_monitor import schedule
 from tests.integration.test_acquisition import catalog
@@ -152,6 +152,10 @@ async def test_a_later_follow_records_the_first_known_release_day(
     assert learned.status_code == 201, learned.text
     assert learned.json()["release_date"] == day
     assert day in learned.json()["message"]
+    status = await client.get(f"/api/releases/follow/{catalog['work']}")
+    assert status.status_code == 200, status.text
+    assert status.json()["state"] == "waiting"
+    assert status.json()["release_date"] == day
     async with database() as db:
         monitor = await db.scalar(select(MonitoredRelease))
         assert monitor.state == "waiting" and monitor.release_date.isoformat() == day
@@ -170,3 +174,23 @@ async def test_a_later_follow_records_the_first_known_release_day(
     assert again.status_code == 201, again.text
     assert again.json()["message"] == "Already following this book"
     assert again.json()["release_date"] == day
+
+
+async def test_follow_without_a_saved_medium_waits_for_a_choice(
+    client, database, authorized, catalog
+):
+    await defaults(client, authorized, desired_media=None)
+    missing = await client.post(
+        "/api/releases/follow",
+        json={"work_id": str(catalog["work"]), "basis": "work"},
+    )
+    assert missing.status_code == 422, missing.text
+    assert missing.json()["detail"] == "Choose media to request or set a default"
+    chosen = await client.post(
+        "/api/releases/follow",
+        json={"work_id": str(catalog["work"]), "basis": "work", "mode": "ebook"},
+    )
+    assert chosen.status_code == 201, chosen.text
+    async with database() as db:
+        intent = await db.scalar(select(AcquisitionIntent))
+        assert intent.specification["mode"] == "ebook"

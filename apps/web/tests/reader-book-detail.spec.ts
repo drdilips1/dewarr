@@ -195,9 +195,7 @@ test("Discover opens a full book page with safe reviews and explicit actions", a
   await expect(
     page.getByRole("heading", { name: "Add to a reading list" }),
   ).toBeVisible();
-  await page
-    .getByLabel("Reading list", { exact: true })
-    .selectOption({ label: "Detail page reading list" });
+  await page.getByRole("radio", { name: "Detail page reading list" }).click();
   await page.getByRole("button", { name: "Save to list", exact: true }).click();
   await expect(
     page.getByText("Added to your list.", { exact: true }),
