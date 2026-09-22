@@ -8,14 +8,20 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import select
 
-from app.adapters import goodreads_profile
+from app.adapters import goodreads_profile, storygraph
 from app.adapters.contracts import AdapterError
 from app.api.dependencies import Database, Member
 from app.api.list_subscriptions import SubscriptionView
 from app.api.list_subscriptions import view as subscription_view
 from app.api.metadata import adapter_http_error, current_actor, provider_call
 from app.config import get_settings
-from app.db.models import AuditEvent, BookList, GoodreadsAccount, ListSubscription
+from app.db.models import (
+    AuditEvent,
+    BookList,
+    GoodreadsAccount,
+    ListSubscription,
+    StorygraphAccount,
+)
 from app.domain.list_subscriptions import begin
 from app.domain.operations import transaction_lock
 from app.security import decrypt_secrets, encrypt_secrets
@@ -49,6 +55,25 @@ class GoodreadsAccountView(BaseModel):
     warning: str | None
 
 
+class StorygraphConnect(BaseModel):
+    session_cookie: str = Field(min_length=8, max_length=4096)
+    remember_token: str = Field(min_length=8, max_length=4096)
+
+
+class StorygraphShelf(BaseModel):
+    external_id: str
+    name: str
+    count: int | None
+    kind: Literal["shelf", "tag"]
+
+
+class StorygraphAccountView(BaseModel):
+    username: str
+    profile_url: str
+    shelves: list[StorygraphShelf]
+    discovered_at: datetime
+
+
 class ReadingSubscription(BaseModel):
     list_id: UUID
     name: str
@@ -58,7 +83,7 @@ class ReadingSubscription(BaseModel):
 
 
 class FollowReadingList(BaseModel):
-    provider: Literal["goodreads", "hardcover"]
+    provider: Literal["goodreads", "hardcover", "storygraph"]
     external_id: str = Field(min_length=1, max_length=200)
     interval_minutes: int = Field(default=60, ge=30, le=1440)
 
@@ -78,6 +103,16 @@ def account_view(row):
         shelves=config["shelves"],
         discovered_at=row.discovered_at,
         warning=config.get("warning"),
+    )
+
+
+def storygraph_view(row):
+    config = decrypt_secrets(row.encrypted_config)
+    return StorygraphAccountView(
+        username=config["username"],
+        profile_url=f"https://app.thestorygraph.com/profile/{config['username']}",
+        shelves=config["shelves"],
+        discovered_at=row.discovered_at,
     )
 
 
@@ -123,6 +158,133 @@ async def discover_goodreads(user: Member, db: Database):
     return await save_discovery(db, user, decrypt_secrets(expected), expected)
 
 
+async def retarget_storygraph_lists(db, user_id, previous, username):
+    if not previous or previous == username:
+        return
+    rows = await db.scalars(
+        select(ListSubscription)
+        .join(BookList, BookList.id == ListSubscription.list_id)
+        .where(BookList.owner_id == user_id, ListSubscription.provider == "storygraph")
+    )
+    for sub in rows:
+        config = decrypt_secrets(sub.encrypted_config)
+        if config.get("username") != previous:
+            continue
+        config["username"] = username
+        sub.encrypted_config = encrypt_secrets(config)
+
+
+async def save_storygraph(db, user, secret, expected=None):
+    from app.db.session import session_factory
+    from app.domain.storygraph_subscriptions import (
+        BUSY,
+        LIMITED,
+        fetch_lock,
+        save_rotation,
+        storygraph_budget,
+    )
+
+    user_id = user.id
+    await db.rollback()
+    async with fetch_lock(user_id, wait=False) as acquired:
+        if not acquired:
+            raise HTTPException(429, BUSY)
+        async with session_factory()() as gate, gate.begin():
+            wait = await storygraph_budget(gate, user_id)
+        if wait:
+            raise HTTPException(429, LIMITED)
+        if expected is not None:
+            row = await db.get(StorygraphAccount, user_id)
+            if not row or row.encrypted_config != expected:
+                raise HTTPException(
+                    409, "Your StoryGraph connection changed. Reload before checking again."
+                )
+            try:
+                secret = storygraph.open_session(decrypt_secrets(row.encrypted_config))
+            except AdapterError as error:
+                raise adapter_http_error(error) from error
+            expected = row.encrypted_config
+            await db.rollback()
+        live = {}
+        try:
+            result = await storygraph.discover(secret, session_out=live)
+        except AdapterError as error:
+            await save_rotation(db, user_id, secret["session_cookie"], live.get("session_cookie"))
+            await db.commit()
+            raise adapter_http_error(error) from error
+        await transaction_lock(db, f"storygraph-account:{user_id}")
+        user = await current_actor(db, user_id, edit=True)
+        row = await db.get(StorygraphAccount, user_id, populate_existing=True)
+        if expected is not None and (not row or row.encrypted_config != expected):
+            await save_rotation(db, user_id, secret["session_cookie"], result.get("session_cookie"))
+            await db.commit()
+            raise HTTPException(
+                409, "Your StoryGraph connection changed. Reload before checking again."
+            )
+        previous = decrypt_secrets(row.encrypted_config).get("username") if row else None
+        if not row:
+            row = StorygraphAccount(user_id=user.id)
+            db.add(row)
+        row.encrypted_config = encrypt_secrets(result)
+        await retarget_storygraph_lists(db, user.id, previous, result["username"])
+        row.discovered_at = datetime.now(UTC)
+        db.add(
+            AuditEvent(actor_id=user.id, action="storygraph.account.connected", entity_id=user.id)
+        )
+        await db.commit()
+        return storygraph_view(row)
+
+
+@router.get("/storygraph", response_model=StorygraphAccountView | None)
+async def storygraph_account(user: Member, db: Database):
+    row = await db.get(StorygraphAccount, user.id)
+    return storygraph_view(row) if row else None
+
+
+@router.put("/storygraph", response_model=StorygraphAccountView)
+async def connect_storygraph(body: StorygraphConnect, user: Member, db: Database):
+    try:
+        secret = storygraph.cookies(body.session_cookie, body.remember_token)
+    except ValueError as error:
+        raise HTTPException(422, str(error)) from error
+    return await save_storygraph(db, user, secret)
+
+
+@router.post("/storygraph/discover", response_model=StorygraphAccountView)
+async def discover_storygraph(user: Member, db: Database):
+    row = await db.get(StorygraphAccount, user.id)
+    if not row:
+        raise HTTPException(409, "Connect StoryGraph first")
+    expected = row.encrypted_config
+    try:
+        secret = storygraph.open_session(decrypt_secrets(expected))
+    except AdapterError as error:
+        raise adapter_http_error(error) from error
+    return await save_storygraph(db, user, secret, expected)
+
+
+@router.delete("/storygraph", status_code=204)
+async def disconnect_storygraph(user: Member, db: Database):
+    from app.domain.storygraph_subscriptions import BUSY, fetch_lock
+
+    async with fetch_lock(user.id, wait=False) as acquired:
+        if not acquired:
+            raise HTTPException(429, BUSY)
+        return await _disconnect_storygraph(user, db)
+
+
+async def _disconnect_storygraph(user, db):
+    row = await db.get(StorygraphAccount, user.id)
+    if row:
+        await db.delete(row)
+        db.add(
+            AuditEvent(
+                actor_id=user.id, action="storygraph.account.disconnected", entity_id=user.id
+            )
+        )
+    await db.commit()
+
+
 @router.get("/subscriptions", response_model=list[ReadingSubscription])
 async def subscriptions(user: Member, db: Database):
     rows = (
@@ -139,6 +301,9 @@ async def subscriptions(user: Member, db: Database):
         if sub.provider == "goodreads":
             source = goodreads_profile.profile_input(config["url"])
             account_id, external_id = source["user_id"], source["selected"] or "all"
+        elif sub.provider == "storygraph":
+            account_id = config.get("username") or "storygraph"
+            external_id = config.get("id") or "storygraph"
         else:
             account_id, external_id = None, config["external_id"]
         results.append(
@@ -171,6 +336,24 @@ async def follow(body: FollowReadingList, user: Member, db: Database):
         source_config = {"url": goodreads_profile.shelf_url(config, body.external_id)}
         identity = f"{config['user_id']}:{body.external_id}"
         lock = f"goodreads-follow:{user.id}:{identity}"
+    elif body.provider == "storygraph":
+        await transaction_lock(db, f"storygraph-account:{user.id}")
+        account = await db.get(StorygraphAccount, user.id)
+        if not account:
+            raise HTTPException(409, "Connect StoryGraph first")
+        config = decrypt_secrets(account.encrypted_config)
+        choice = next((s for s in config["shelves"] if s["external_id"] == body.external_id), None)
+        if not choice:
+            raise HTTPException(422, "Find your StoryGraph lists again before following this one")
+        name = choice["name"]
+        source_config = {
+            "kind": choice["kind"],
+            "id": choice["external_id"],
+            "name": name,
+            "username": config["username"],
+        }
+        identity = storygraph.identity(source_config)
+        lock = f"storygraph-follow:{user.id}:{identity}"
     else:
         if (
             not body.external_id.isascii()
@@ -203,6 +386,8 @@ async def follow(body: FollowReadingList, user: Member, db: Database):
         if body.provider == "goodreads":
             source = goodreads_profile.profile_input(saved["url"])
             saved_identity = f"{source['user_id']}:{source['selected']}"
+        elif body.provider == "storygraph":
+            saved_identity = storygraph.identity(saved)
         else:
             saved_identity = saved["external_id"]
         if saved_identity == identity:

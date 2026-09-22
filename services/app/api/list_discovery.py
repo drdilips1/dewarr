@@ -21,7 +21,7 @@ router = APIRouter(prefix="/discovery", tags=["discovery"])
 class FollowedListCard(BaseModel):
     id: UUID
     name: str
-    provider: Literal["hardcover", "goodreads"]
+    provider: Literal["hardcover", "goodreads", "storygraph"]
     enabled: bool
     sync_state: str
     last_success_at: datetime | None
@@ -43,13 +43,13 @@ class FollowedListShelf(BaseModel):
 async def followed_lists(
     user: CurrentUser,
     db: Database,
-    provider: Literal["all", "hardcover", "goodreads"] = "all",
+    provider: Literal["all", "hardcover", "goodreads", "storygraph"] = "all",
     offset: int = Query(default=0, ge=0),
     limit: int = Query(default=4, ge=1, le=12),
 ):
     conditions = [
         BookList.owner_id == user.id,
-        ListSubscription.provider.in_(["hardcover", "goodreads"]),
+        ListSubscription.provider.in_(["hardcover", "goodreads", "storygraph"]),
     ]
     if provider != "all":
         conditions.append(ListSubscription.provider == provider)

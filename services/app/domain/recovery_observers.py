@@ -429,6 +429,45 @@ async def read_shelf(inputs, subscription, pulse):
             raise ScanHeld("Goodreads did not return fresh feed content")
         records, complete_snapshot = response.items, False
         info = {}
+    elif subscription["provider"] == "storygraph":
+        from app.adapters.storygraph import open_session, read_list, stored_target
+        from app.db.models import StorygraphAccount
+        from app.db.session import session_factory
+        from app.domain.storygraph_subscriptions import fetch_lock, save_rotation, storygraph_budget
+
+        if not keyed(inputs.get("storygraph_accounts", []), "user_id").get(item["owner_id"]):
+            raise ScanHeld("Reconnect StoryGraph before reviewing this list")
+        await pulse()
+        live = {}
+        try:
+            async with fetch_lock(item["owner_id"]):
+                async with session_factory()() as db, db.begin():
+                    row = await db.get(StorygraphAccount, item["owner_id"])
+                    if not row:
+                        raise ScanHeld("Reconnect StoryGraph before reviewing this list")
+                    secret = decrypt_secrets(row.encrypted_config)
+                    wait = await storygraph_budget(db, item["owner_id"])
+                if wait:
+                    raise ScanHeld(
+                        "StoryGraph is limiting requests; wait before starting another observation"
+                    )
+                sent = secret.get("session_cookie")
+                try:
+                    page = await read_list(
+                        open_session(secret),
+                        stored_target(config),
+                        pause=1.5,
+                        session_out=live,
+                    )
+                finally:
+                    rotated = live.get("session_cookie")
+                    if rotated and rotated != sent:
+                        async with session_factory()() as db, db.begin():
+                            await save_rotation(db, item["owner_id"], sent, rotated)
+        except AdapterError as error:
+            raise ScanHeld(str(error)) from error
+        records, complete_snapshot = page.items, False
+        info = {"name": page.name}
     else:
         raise ScanHeld("This external list provider has no recovery observer")
     return {"records": records, "complete": complete_snapshot, "info": info}

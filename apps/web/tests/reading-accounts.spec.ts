@@ -226,6 +226,7 @@ test("tracked lists remain manageable when account discovery fails", async ({
     else if (path === "/api/lists/page")
       data = { items: [], total: 0, offset: 0, limit: 25 };
     else if (path === "/api/reading-accounts/goodreads") data = null;
+    else if (path === "/api/reading-accounts/storygraph") data = null;
     else if (path === "/api/metadata/account") data = { enabled: true };
     else if (path === "/api/reading-accounts/subscriptions")
       data = [
@@ -281,4 +282,166 @@ test("tracked lists remain manageable when account discovery fails", async ({
     hardcover.getByRole("link", { name: "Weekend reading", exact: true }),
   ).toHaveCount(1);
   await expect(hardcover.getByText("12 books", { exact: true })).toHaveCount(1);
+});
+
+test("connect StoryGraph, follow a shelf, and paste a tag list", async ({
+  page,
+}, testInfo) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  const shelves = [
+    { external_id: "to-read", name: "To-read", count: 2, kind: "shelf" },
+    {
+      external_id: "9d7e824e-e4d8-40b1-8fef-6d6b5a6a44ba",
+      name: "Summer",
+      count: null,
+      kind: "tag",
+    },
+  ];
+  const account = {
+    username: "nadia",
+    profile_url: "https://app.thestorygraph.com/profile/nadia",
+    shelves,
+    discovered_at: new Date().toISOString(),
+  };
+  let connected = false;
+  const tracked: any[] = [];
+  let pasted = false;
+  await page.route("**/api/**", async (route) => {
+    const path = new URL(route.request().url()).pathname;
+    let data: unknown = [];
+    if (path === "/api/auth/me")
+      data = {
+        user: {
+          id: "reader",
+          role: "member",
+          display_name: "Reader",
+          onboarding_status: "complete",
+        },
+        csrf_token: "test",
+      };
+    else if (path === "/api/setup/onboarding") data = { status: "completed" };
+    else if (path === "/api/lists/page")
+      data = { items: [], total: 0, offset: 0, limit: 25 };
+    else if (path === "/api/reading-accounts/goodreads") data = null;
+    else if (path === "/api/reading-accounts/storygraph") {
+      if (route.request().method() === "PUT") {
+        const body = route.request().postDataJSON();
+        expect(body.session_cookie).toBe("session-token");
+        expect(body.remember_token).toBe("remember-token");
+        connected = true;
+      }
+      data = connected ? account : null;
+    } else if (path === "/api/metadata/account") data = { enabled: true };
+    else if (path === "/api/reading-accounts/subscriptions") data = tracked;
+    else if (path === "/api/reading-accounts/follow") {
+      const body = route.request().postDataJSON();
+      expect(body.provider).toBe("storygraph");
+      expect(body.external_id).toBe("to-read");
+      tracked.push({
+        list_id: "00000000-0000-0000-0000-000000000031",
+        name: "To-read",
+        external_id: "to-read",
+        account_id: "nadia",
+        subscription: {
+          id: "00000000-0000-0000-0000-000000000032",
+          provider: "storygraph",
+          enabled: true,
+          interval_minutes: 60,
+          generation: 1,
+          state: "idle",
+          message: "Waiting for the next shelf observation",
+          observed_count: 0,
+          shelf: "To-read",
+        },
+      });
+      data = { list_id: tracked[0].list_id, reused: false };
+    } else if (path === "/api/discovery/layout")
+      data = { hidden: [], order: [] };
+    else if (path === "/api/discovery/collections")
+      data = {
+        items: [],
+        total: 0,
+        years: [],
+        genres: [],
+        categories: [],
+        archive_gaps: [],
+      };
+    else if (path === "/api/discovery/personal-list/preview") {
+      expect(route.request().postDataJSON().url).toBe(
+        "https://app.thestorygraph.com/tags/9d7e824e-e4d8-40b1-8fef-6d6b5a6a44ba",
+      );
+      data = { name: "Summer", count: 1, titles: ["Harbor"], list_id: null };
+    } else if (path === "/api/discovery/personal-list") {
+      pasted = true;
+      data = {
+        name: "Summer",
+        count: 1,
+        titles: [],
+        list_id: "00000000-0000-0000-0000-000000000033",
+      };
+    }
+    if (path.includes("/acquisition/preferences/"))
+      data = { effective: { desired_media: "both" } };
+    return route.fulfill({ json: data });
+  });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/settings#reading");
+  const storygraph = page.getByRole("region", {
+    name: "StoryGraph connection",
+  });
+  await storygraph.getByLabel("_storygraph_session").fill("session-token");
+  await storygraph.getByLabel("remember_user_token").fill("remember-token");
+  await storygraph
+    .getByRole("button", { name: "Find my StoryGraph lists" })
+    .click();
+  await expect(
+    storygraph.getByRole("checkbox", { name: /To-read/ }),
+  ).toBeChecked();
+  await storygraph
+    .getByRole("button", { name: "Track selected lists" })
+    .click();
+  await expect(
+    storygraph.getByRole("link", { name: "To-read", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Add list" }).click();
+  const dialog = page.getByRole("dialog", { name: "Add a list" });
+  await dialog
+    .getByLabel("List URL")
+    .fill(
+      "https://app.thestorygraph.com/tags/9d7e824e-e4d8-40b1-8fef-6d6b5a6a44ba",
+    );
+  await dialog.getByRole("button", { name: "Preview" }).click();
+  await expect(dialog.getByRole("heading", { name: "Summer" })).toBeVisible();
+  await expect(dialog).toContainText("1 book on this list");
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await dialog.screenshot({
+    path: testInfo.outputPath("storygraph-add-list-narrow.png"),
+  });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await dialog.getByRole("button", { name: "Add list" }).click();
+  await expect(page).toHaveURL(/\/discover\?view=yours/);
+  await expect.poll(() => pasted).toBe(true);
+  await page.goto("/settings#reading");
+  await expect(
+    storygraph.getByRole("link", { name: "To-read", exact: true }),
+  ).toBeVisible();
+  await page.locator("#reading").screenshot({
+    path: testInfo.outputPath("storygraph-reading-narrow.png"),
+  });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  expect(errors).toEqual([]);
 });

@@ -6830,7 +6830,8 @@
               "enum": [
                 "all",
                 "hardcover",
-                "goodreads"
+                "goodreads",
+                "storygraph"
               ],
               "type": "string",
               "default": "all",
@@ -6967,6 +6968,107 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GoodreadsAccountView"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reading-accounts/storygraph": {
+      "get": {
+        "tags": [
+          "reading-accounts"
+        ],
+        "summary": "Storygraph Account",
+        "operationId": "storygraph_account_api_reading_accounts_storygraph_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/StorygraphAccountView"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Storygraph Account Api Reading Accounts Storygraph Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "reading-accounts"
+        ],
+        "summary": "Connect Storygraph",
+        "operationId": "connect_storygraph_api_reading_accounts_storygraph_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StorygraphConnect"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StorygraphAccountView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "reading-accounts"
+        ],
+        "summary": "Disconnect Storygraph",
+        "operationId": "disconnect_storygraph_api_reading_accounts_storygraph_delete",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        }
+      }
+    },
+    "/api/reading-accounts/storygraph/discover": {
+      "post": {
+        "tags": [
+          "reading-accounts"
+        ],
+        "summary": "Discover Storygraph",
+        "operationId": "discover_storygraph_api_reading_accounts_storygraph_discover_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StorygraphAccountView"
                 }
               }
             }
@@ -20883,7 +20985,8 @@
             "type": "string",
             "enum": [
               "goodreads",
-              "hardcover"
+              "hardcover",
+              "storygraph"
             ],
             "title": "Provider"
           },
@@ -20954,7 +21057,8 @@
             "type": "string",
             "enum": [
               "hardcover",
-              "goodreads"
+              "goodreads",
+              "storygraph"
             ],
             "title": "Provider"
           },
@@ -26290,6 +26394,11 @@
               }
             ],
             "title": "List Id"
+          },
+          "partial": {
+            "type": "boolean",
+            "title": "Partial",
+            "default": false
           }
         },
         "type": "object",
@@ -33119,6 +33228,99 @@
         ],
         "title": "StartInput"
       },
+      "StorygraphAccountView": {
+        "properties": {
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "profile_url": {
+            "type": "string",
+            "title": "Profile Url"
+          },
+          "shelves": {
+            "items": {
+              "$ref": "#/components/schemas/StorygraphShelf"
+            },
+            "type": "array",
+            "title": "Shelves"
+          },
+          "discovered_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Discovered At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "username",
+          "profile_url",
+          "shelves",
+          "discovered_at"
+        ],
+        "title": "StorygraphAccountView"
+      },
+      "StorygraphConnect": {
+        "properties": {
+          "session_cookie": {
+            "type": "string",
+            "maxLength": 4096,
+            "minLength": 8,
+            "title": "Session Cookie"
+          },
+          "remember_token": {
+            "type": "string",
+            "maxLength": 4096,
+            "minLength": 8,
+            "title": "Remember Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_cookie",
+          "remember_token"
+        ],
+        "title": "StorygraphConnect"
+      },
+      "StorygraphShelf": {
+        "properties": {
+          "external_id": {
+            "type": "string",
+            "title": "External Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Count"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "shelf",
+              "tag"
+            ],
+            "title": "Kind"
+          }
+        },
+        "type": "object",
+        "required": [
+          "external_id",
+          "name",
+          "count",
+          "kind"
+        ],
+        "title": "StorygraphShelf"
+      },
       "SubmittedView": {
         "properties": {
           "request": {
@@ -33143,7 +33345,8 @@
                 "type": "string",
                 "enum": [
                   "goodreads",
-                  "hardcover"
+                  "hardcover",
+                  "storygraph"
                 ]
               },
               {
@@ -33205,7 +33408,8 @@
             "type": "string",
             "enum": [
               "goodreads",
-              "hardcover"
+              "hardcover",
+              "storygraph"
             ],
             "title": "Provider"
           },

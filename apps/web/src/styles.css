@@ -2651,6 +2651,18 @@ img.detail-cover {
   gap: 1.25rem;
   min-width: 0;
 }
+.reading-account,
+.reading-connect-form,
+.reading-connect-form input,
+.reading-account p,
+.reading-account label {
+  min-width: 0;
+  max-width: 100%;
+}
+.reading-account p,
+.reading-account label {
+  overflow-wrap: anywhere;
+}
 .reading-choices {
   display: grid;
   gap: 0.75rem;

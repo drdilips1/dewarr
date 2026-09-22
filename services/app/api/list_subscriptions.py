@@ -28,7 +28,7 @@ router = APIRouter(prefix="/lists/{list_id}/subscription", tags=["list-subscript
 
 
 class SubscriptionInput(BaseModel):
-    provider: Literal["goodreads", "hardcover"] | None = None
+    provider: Literal["goodreads", "hardcover", "storygraph"] | None = None
     hardcover_list_id: int | None = Field(default=None, ge=1, le=2147483647, strict=True)
     feed_url: str | None = Field(default=None, max_length=2000)
     enabled: bool = True
@@ -42,7 +42,7 @@ class SubscriptionInput(BaseModel):
 
 
 class SubscriptionView(BaseModel):
-    provider: Literal["goodreads", "hardcover"]
+    provider: Literal["goodreads", "hardcover", "storygraph"]
     hardcover_list_id: int | None = None
     present_count: int
     id: UUID
@@ -108,23 +108,28 @@ async def view(db, row):
         .select_from(ListObservation)
         .where(ListObservation.subscription_id == row.id, ListObservation.present.is_(True))
     )
+    if row.provider == "hardcover":
+        shelf = config.get("name") or f"Hardcover list {config['external_id']}"
+        completeness = "verified-observation" if config.get("complete") else "not-observed"
+    elif row.provider == "storygraph":
+        shelf = config.get("name") or config.get("id") or "StoryGraph"
+        completeness = "partial-feed"
+    else:
+        shelf = feed_identity(config["url"])[1]
+        completeness = "partial-feed"
     return SubscriptionView(
         provider=row.provider,
         feed_configured=row.provider == "goodreads",
         hardcover_list_id=int(config["external_id"]) if row.provider == "hardcover" else None,
         present_count=count_present or 0,
-        completeness=("verified-observation" if config.get("complete") else "not-observed")
-        if row.provider == "hardcover"
-        else "partial-feed",
+        completeness=completeness,
         id=row.id,
         generation=row.generation,
         enabled=row.enabled,
         interval_minutes=row.interval_minutes,
         state=row.state,
         message=row.message,
-        shelf=(config.get("name") or f"Hardcover list {config['external_id']}")
-        if row.provider == "hardcover"
-        else feed_identity(config["url"])[1],
+        shelf=shelf,
         last_success_at=row.last_success_at,
         baseline_at=row.baseline_at,
         next_sync_at=row.next_sync_at,
@@ -147,7 +152,14 @@ async def configure(list_id: UUID, body: SubscriptionInput, user: Member, db: Da
     provider = body.provider or (row.provider if row else "goodreads")
     if row and provider != row.provider:
         raise HTTPException(422, "Detach the current subscription before changing its provider")
-    if provider == "hardcover":
+    if provider == "storygraph":
+        if body.feed_url or body.hardcover_list_id is not None:
+            raise HTTPException(422, "StoryGraph lists keep the link chosen when you followed them")
+        if not row:
+            raise HTTPException(
+                422, "Connect StoryGraph and follow a shelf, or paste its list from Discover"
+            )
+    elif provider == "hardcover":
         if body.feed_url:
             raise HTTPException(422, "Hardcover lists use your connected account, not an RSS URL")
         account = await db.get(CatalogAccount, user.id)

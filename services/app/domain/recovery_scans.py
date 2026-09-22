@@ -8,6 +8,7 @@ from collections import Counter
 from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
+from cryptography.fernet import InvalidToken
 from fastapi import HTTPException
 from sqlalchemy import delete, select, text
 
@@ -53,6 +54,7 @@ from app.db.models import (
     RecoveryScan,
     RestoreCheckpoint,
     SourceConnection,
+    StorygraphAccount,
     User,
     Version,
     Work,
@@ -63,6 +65,7 @@ from app.domain.operations import transaction_lock
 from app.importing.storage import storage_settings
 from app.jobs.queue import enqueue
 from app.jobs.retry import ShelfRetry
+from app.security import decrypt_secrets
 
 MAX_RECORDS = 10000
 MAX_FINDINGS = 30000
@@ -74,10 +77,33 @@ class ScanHeld(RuntimeError):
     pass
 
 
+def _digest_value(value):
+    # Session rotation is not a configuration change. Username and shelf edits still are.
+    accounts = value.get("storygraph_accounts") if isinstance(value, dict) else None
+    if not isinstance(accounts, list):
+        return value
+    redacted = []
+    for row in accounts:
+        config = row.get("encrypted_config") if isinstance(row, dict) else None
+        if not isinstance(config, str):
+            redacted.append(row)
+            continue
+        try:
+            saved = decrypt_secrets(config)
+        except (InvalidToken, ValueError, TypeError):
+            redacted.append(row)
+            continue
+        if not isinstance(saved, dict):
+            redacted.append(row)
+            continue
+        stable = {key: item for key, item in saved.items() if key != "session_cookie"}
+        redacted.append({**row, "encrypted_config": stable})
+    return {**value, "storygraph_accounts": redacted}
+
+
 def digest(value):
-    return hashlib.sha256(
-        json.dumps(value, sort_keys=True, default=str, separators=(",", ":")).encode()
-    ).hexdigest()
+    payload = json.dumps(_digest_value(value), sort_keys=True, default=str, separators=(",", ":"))
+    return hashlib.sha256(payload.encode()).hexdigest()
 
 
 async def require_checkpoint(db, checkpoint_id, owner_id):
@@ -102,6 +128,7 @@ async def context(db):
         Integration,
         SourceConnection,
         CatalogAccount,
+        StorygraphAccount,
         Library,
         LibraryAsset,
         LibraryGrant,

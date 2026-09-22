@@ -24,7 +24,7 @@ from app.config import Settings, get_settings
 from app.db.models import Base
 from app.recovery import MAINTENANCE_LOCK
 
-SCHEMA = "0055_seeding_rename"
+SCHEMA = "0057_storygraph_accounts"
 CONFIG_FIELDS = {
     "public_url",
     "cookie_secure",

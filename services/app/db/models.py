@@ -726,6 +726,15 @@ class GoodreadsAccount(Base):
     discovered_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
+class StorygraphAccount(Base):
+    __tablename__ = "storygraph_accounts"
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    encrypted_config: Mapped[str] = mapped_column(Text)
+    discovered_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
 class MetadataSettings(Base):
     __tablename__ = "metadata_settings"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)

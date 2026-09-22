@@ -2163,6 +2163,42 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/reading-accounts/storygraph": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Storygraph Account */
+    get: operations["storygraph_account_api_reading_accounts_storygraph_get"];
+    /** Connect Storygraph */
+    put: operations["connect_storygraph_api_reading_accounts_storygraph_put"];
+    post?: never;
+    /** Disconnect Storygraph */
+    delete: operations["disconnect_storygraph_api_reading_accounts_storygraph_delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/reading-accounts/storygraph/discover": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Discover Storygraph */
+    post: operations["discover_storygraph_api_reading_accounts_storygraph_discover_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/reading-accounts/subscriptions": {
     parameters: {
       query?: never;
@@ -6845,7 +6881,7 @@ export interface components {
        * Provider
        * @enum {string}
        */
-      provider: "goodreads" | "hardcover";
+      provider: "goodreads" | "hardcover" | "storygraph";
       /** External Id */
       external_id: string;
       /**
@@ -6887,7 +6923,7 @@ export interface components {
        * Provider
        * @enum {string}
        */
-      provider: "hardcover" | "goodreads";
+      provider: "hardcover" | "goodreads" | "storygraph";
       /** Enabled */
       enabled: boolean;
       /** Sync State */
@@ -8971,6 +9007,11 @@ export interface components {
       titles: string[];
       /** List Id */
       list_id?: string | null;
+      /**
+       * Partial
+       * @default false
+       */
+      partial: boolean;
     };
     /** PersonalListURL */
     PersonalListURL: {
@@ -11450,6 +11491,41 @@ export interface components {
       /** Additional Selection Ids */
       additional_selection_ids?: string[];
     };
+    /** StorygraphAccountView */
+    StorygraphAccountView: {
+      /** Username */
+      username: string;
+      /** Profile Url */
+      profile_url: string;
+      /** Shelves */
+      shelves: components["schemas"]["StorygraphShelf"][];
+      /**
+       * Discovered At
+       * Format: date-time
+       */
+      discovered_at: string;
+    };
+    /** StorygraphConnect */
+    StorygraphConnect: {
+      /** Session Cookie */
+      session_cookie: string;
+      /** Remember Token */
+      remember_token: string;
+    };
+    /** StorygraphShelf */
+    StorygraphShelf: {
+      /** External Id */
+      external_id: string;
+      /** Name */
+      name: string;
+      /** Count */
+      count: number | null;
+      /**
+       * Kind
+       * @enum {string}
+       */
+      kind: "shelf" | "tag";
+    };
     /** SubmittedView */
     SubmittedView: {
       request: components["schemas"]["RequestView"];
@@ -11458,7 +11534,7 @@ export interface components {
     /** SubscriptionInput */
     SubscriptionInput: {
       /** Provider */
-      provider?: ("goodreads" | "hardcover") | null;
+      provider?: ("goodreads" | "hardcover" | "storygraph") | null;
       /** Hardcover List Id */
       hardcover_list_id?: number | null;
       /** Feed Url */
@@ -11485,7 +11561,7 @@ export interface components {
        * Provider
        * @enum {string}
        */
-      provider: "goodreads" | "hardcover";
+      provider: "goodreads" | "hardcover" | "storygraph";
       /** Hardcover List Id */
       hardcover_list_id?: number | null;
       /** Present Count */
@@ -16296,7 +16372,7 @@ export interface operations {
   followed_lists_api_discovery_followed_lists_get: {
     parameters: {
       query?: {
-        provider?: "all" | "hardcover" | "goodreads";
+        provider?: "all" | "hardcover" | "goodreads" | "storygraph";
         offset?: number;
         limit?: number;
       };
@@ -16396,6 +16472,98 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["GoodreadsAccountView"];
+        };
+      };
+    };
+  };
+  storygraph_account_api_reading_accounts_storygraph_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json":
+            components["schemas"]["StorygraphAccountView"] | null;
+        };
+      };
+    };
+  };
+  connect_storygraph_api_reading_accounts_storygraph_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["StorygraphConnect"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StorygraphAccountView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  disconnect_storygraph_api_reading_accounts_storygraph_delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  discover_storygraph_api_reading_accounts_storygraph_discover_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StorygraphAccountView"];
         };
       };
     };

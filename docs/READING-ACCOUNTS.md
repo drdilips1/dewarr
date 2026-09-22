@@ -8,6 +8,12 @@ Open **My Goodreads books**, sign in on Goodreads if needed, and paste the resul
 
 Goodreads data travels one way into local lists. RSS is a partial observation: missing books never imply removal. A one-time CSV import remains available from each list for historical coverage. **Find new Goodreads shelves** explicitly refreshes discovery; new shelves are not automatically followed. The profile/RSS key is stored encrypted per reader and never returned in account views. Changing the linked profile leaves previously tracked lists intact, and they remain visible under Tracked lists.
 
+## StoryGraph
+
+Paste `_storygraph_session` and `remember_user_token` from the browser cookie list for `app.thestorygraph.com`. Those cookies are a full StoryGraph login. They are stored encrypted per reader and are never returned in account views. Connecting validates the session, then discovers to-read, currently reading, read, favorites, Up Next when that queue has books, and custom tags. Disconnecting deletes the cookies and leaves followed lists in place; the next check asks the reader to reconnect.
+
+**Add a list** also accepts a StoryGraph shelf or public tag link. Preview and later checks use the saved session, so each reader follows their own copy. One reader's checks run one at a time. A check follows that list's own next page, including the filters on that link, and a blank page does not end it. A redirect away from the page does not replace the saved session. It stops after 20 pages; a preview says when that view stopped early. Connecting, refreshing, and previews wait when StoryGraph has asked for a pause. Refreshing lists after a username change keeps followed shelves and tags pointed at the new name. A sign-in wall or a Cloudflare block holds the check without replacing the saved session or removing books. An account page that names more than one reader is not used to retarget followed lists. Books missing from a later page stay on the local list. Migration `0057_storygraph_accounts` creates the account row.
+
 ## Hardcover
 
 Create the API token before pasting it into onboarding or **Settings → Metadata**. [Open Hardcover’s new-key form with these scopes selected](https://hardcover.app/account/api/keys/new?scope=read:catalog+read:me:content+read:lists+read:library:public+read:users+write:lists):
@@ -31,6 +37,6 @@ New subscriptions queue their first check immediately and default to hourly chec
 
 **Check for updates** queues a manual observation. Turning **Track** off pauses checks, fences in-flight observations, and preserves saved books/exclusions. Turn it on again to schedule another check. Discovery, list counts, and last/next-check times are distinct: a feed count is not proof that a complete Goodreads library has been imported.
 
-Deploy the API and UI together and run `uv run alembic upgrade head` for migration `0046_goodreads_accounts`. The backup schema revision is updated accordingly. Keep the worker running for automatic checks.
+Deploy the API and UI together and run `uv run alembic upgrade head` for migrations `0046_goodreads_accounts` and `0057_storygraph_accounts`. The backup schema revision is updated accordingly. Keep the worker running for automatic checks.
 
-Tests cover URL validation, bounded same-account profile redirects, tag/empty-shelf discovery, RSS fallback, encrypted keys, per-user isolation, duplicate follows, scheduled checks, pause preservation, private Hardcover lists, and onboarding/settings controls on desktop/mobile. Browser Goodreads responses are fixtures; the actual discovery adapter was separately checked against the supplied public profile.
+Tests cover URL validation, bounded same-account profile redirects, tag/empty-shelf discovery, RSS fallback, encrypted keys, per-user isolation, duplicate follows, scheduled checks, pause preservation, private Hardcover lists, StoryGraph shelf and tag follows, and onboarding/settings controls on desktop/mobile. Browser Goodreads and StoryGraph responses are fixtures; no test calls StoryGraph.

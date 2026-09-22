@@ -172,7 +172,7 @@ export function PersonalRow({
         <div>
           <p className="explore-kicker">
             {provider
-              ? `${provider === "goodreads" ? "Goodreads" : "Hardcover"} · `
+              ? `${provider === "goodreads" ? "Goodreads" : provider === "storygraph" ? "StoryGraph" : "Hardcover"} · `
               : ""}
             Your list · {books.data?.count ?? list.count} books
           </p>
