@@ -417,12 +417,16 @@ async def selected_release(db, user, search_id, result_id, key, *, use_wedge=Fal
         raise HTTPException(403, "This account can request books, but a download needs approval")
     grant = download_authorization.set(granted)
     try:
-        return await _selected_release(db, user, search, search_id, result_id, key, release)
+        return await _selected_release(
+            db, user, search, search_id, result_id, key, release, use_wedge=use_wedge
+        )
     finally:
         download_authorization.reset(grant)
 
 
-async def _selected_release(db, user, search, search_id, result_id, key, release):
+async def _selected_release(
+    db, user, search, search_id, result_id, key, release, *, use_wedge=False
+):
     automatic_routes.permitted(user)
     bound = search.payload.get("command", {}).get("request_id")
     if bound:
