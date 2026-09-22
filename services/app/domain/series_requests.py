@@ -32,6 +32,12 @@ from app.domain.acquisition import (
 from app.domain.automatic_routes import AutomaticRoutes
 from app.domain.list_requests import BatchInput, identity, pending_targets
 from app.domain.operations import require_live_command, transaction_lock
+from app.domain.permissions import (
+    apply_approval_wait,
+    auto_approves,
+    series_batch_message,
+    waiting_for_approval,
+)
 from app.domain.request_preferences import resolve
 from app.domain.visibility import visible_work
 from app.domain.work_graph import acquisition_lock, canonical_map, canonical_work, graph_lock
@@ -192,7 +198,11 @@ async def preview(db, user, external_id, body, key):
         kind=KIND,
         idempotency_key=key,
         status="preview",
-        message="Review this finite set of books and requested media",
+        message=(
+            "Review this finite set of books before sending them for approval"
+            if not automatic and not auto_approves(user, spec)
+            else "Review this finite set of books and requested media"
+        ),
         payload={
             "command": command,
             "records": records,
@@ -373,12 +383,17 @@ async def run(operation_id):
                 f"series-request:{operation.id}:{work.id}",
                 frozen_preferences=operation.payload["release_policy"],
                 series_reference=operation.id,
+                hold_for_approval=not operation.payload.get("automatic_configuration"),
             )
             receipts.append({"work_id": str(work.id), "request_id": str(intent.id)})
         operation.payload = {**operation.payload, "receipt": receipts}
+        waiting = 0
+        for receipt in receipts:
+            if await waiting_for_approval(db, UUID(receipt["request_id"])):
+                waiting += 1
         operation.status, operation.message = (
             "completed",
-            f"Saved requests for {len(receipts)} books; choose releases to continue",
+            series_batch_message(len(receipts), waiting),
         )
         if operation.payload.get("automatic_configuration"):
             from app.domain.series_acquisition import initialize
@@ -462,6 +477,8 @@ async def status_records(db, user, operation):
                         target.update(
                             state="cancelled", message="This series request was cancelled"
                         )
+            elif receipt and await waiting_for_approval(db, UUID(receipt["request_id"])):
+                apply_approval_wait(outcomes)
             records.append(
                 {
                     **record,

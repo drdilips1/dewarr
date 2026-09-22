@@ -9,9 +9,24 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 from sqlalchemy import delete, func, select, text
 from sqlalchemy.dialects.postgresql import insert
 
-from app.api.dependencies import COOKIE, Admin, CurrentUser, Database, require_origin
+from app.api.dependencies import COOKIE, CurrentUser, Database, require_origin
 from app.config import get_settings
-from app.db.models import AuditEvent, LoginSession, RateLimit, User
+from app.db.models import AuditEvent, LoginSession, PermissionRole, RateLimit, User
+from app.domain.permissions import (
+    ADMIN,
+    AUTOMATE,
+    CATALOG,
+    MANAGE_USERS,
+    PRESETS,
+    access_label,
+    bits_from_names,
+    effective_permissions,
+    has,
+    names_from_bits,
+    preset_bits,
+    sync_user_permissions,
+    unauthorized_grant,
+)
 from app.recovery import active_restore, restore_pending
 from app.security import csrf_token, hash_password, token_hash, verify_password
 
@@ -34,7 +49,8 @@ class BootstrapInput(Credentials):
 
 class UserInput(Credentials):
     display_name: str = Field(min_length=1, max_length=120)
-    role: Literal["admin", "member", "viewer"] = "member"
+    role: Literal["admin", "member", "viewer", "requester", "approver"] = "member"
+    permissions: list[str] | None = None
 
 
 class UserView(BaseModel):
@@ -44,6 +60,9 @@ class UserView(BaseModel):
     display_name: str
     role: str
     can_automate: bool
+    permissions: list[str]
+    access_label: str
+    permission_role_id: str | None = None
     onboarding_status: str = "pending"
 
 
@@ -57,15 +76,62 @@ class SetupView(BaseModel):
     needs_setup: bool
 
 
-def user_view(user: User) -> UserView:
+async def named_user_view(db: Database, user: User) -> UserView:
+    role_name = None
+    if user.permission_role_id:
+        role_name = await db.scalar(
+            select(PermissionRole.name).where(PermissionRole.id == user.permission_role_id)
+        )
+    return user_view(user, role_name)
+
+
+def user_view(user: User, role_name: str | None = None) -> UserView:
     return UserView(
         id=str(user.id),
         username=user.username,
         display_name=user.display_name,
         role=user.role,
         can_automate=user.can_automate,
+        permissions=names_from_bits(effective_permissions(user)),
+        access_label=access_label(user, role_name),
+        permission_role_id=str(user.permission_role_id) if user.permission_role_id else None,
         onboarding_status=(user.onboarding or {}).get("status", "pending"),
     )
+
+
+def require_user_manager(user: User) -> None:
+    if not has(user, MANAGE_USERS):
+        raise HTTPException(403, "You cannot manage accounts")
+
+
+def guard_grant_scope(actor: User, permissions: int, *, current: int | None = None) -> None:
+    message = unauthorized_grant(actor, permissions, current=current)
+    if message:
+        raise HTTPException(403, message)
+
+
+def guard_admin_target(actor: User, user: User) -> None:
+    if user.role == "admin" and actor.role != "admin":
+        raise HTTPException(403, "Only an administrator can change an administrator")
+
+
+async def guard_admin_loss(db: Database, updates: list[tuple[User, int]]) -> None:
+    demoted = {
+        user.id
+        for user, permissions in updates
+        if user.role == "admin" and user.active and not permissions & ADMIN
+    }
+    if not demoted:
+        return
+    # Held until commit so two administrators cannot both pass the count below.
+    await db.execute(text("SELECT pg_advisory_xact_lock(720003)"))
+    remaining = await db.scalar(
+        select(func.count())
+        .select_from(User)
+        .where(User.role == "admin", User.active.is_(True), User.id.not_in(demoted))
+    )
+    if not remaining:
+        raise HTTPException(409, "Keep at least one active administrator")
 
 
 async def enforce_auth_budget(db: Database, key: str) -> None:
@@ -113,7 +179,9 @@ async def establish_session(user: User, db: Database, response: Response) -> Aut
         max_age=settings.session_hours * 3600,
         path="/",
     )
-    return AuthView(user=user_view(user), csrf_token=csrf_token(token), recovery=recovering)
+    return AuthView(
+        user=await named_user_view(db, user), csrf_token=csrf_token(token), recovery=recovering
+    )
 
 
 @router.get("/setup", response_model=SetupView)
@@ -136,6 +204,7 @@ async def bootstrap(body: BootstrapInput, request: Request, response: Response, 
         role="admin",
         can_automate=True,
     )
+    sync_user_permissions(user, preset_bits("admin"))
     db.add(user)
     await db.flush()
     db.add(AuditEvent(actor_id=user.id, action="admin.bootstrapped", entity_id=user.id))
@@ -165,7 +234,7 @@ async def login(body: Credentials, request: Request, response: Response, db: Dat
 @router.get("/me", response_model=AuthView)
 async def me(request: Request, user: CurrentUser, db: Database):
     return AuthView(
-        user=user_view(user),
+        user=await named_user_view(db, user),
         csrf_token=csrf_token(request.cookies[COOKIE]),
         recovery=await restore_pending(db),
     )
@@ -181,15 +250,25 @@ async def logout(request: Request, response: Response, user: CurrentUser, db: Da
 
 
 @router.get("/users", response_model=list[UserView])
-async def users(admin: Admin, db: Database):
+async def users(actor: CurrentUser, db: Database):
+    require_user_manager(actor)
+    roles = {role.id: role.name for role in (await db.scalars(select(PermissionRole))).all()}
     return [
-        user_view(user) for user in (await db.scalars(select(User).order_by(User.username))).all()
+        user_view(user, roles.get(user.permission_role_id))
+        for user in (await db.scalars(select(User).order_by(User.username))).all()
     ]
 
 
 @router.post("/users", response_model=UserView, status_code=201)
-async def create_user(body: UserInput, admin: Admin, db: Database):
-    admin_id = admin.id
+async def create_user(body: UserInput, actor: CurrentUser, db: Database):
+    require_user_manager(actor)
+    permissions = (
+        bits_from_names(body.permissions)
+        if body.permissions is not None
+        else preset_bits(body.role)
+    )
+    guard_grant_scope(actor, permissions)
+    actor_id = actor.id
     await db.rollback()
     encoded = await asyncio.to_thread(hash_password, body.password)
     # Serialize account creation to turn a duplicate into a stable API conflict.
@@ -200,11 +279,12 @@ async def create_user(body: UserInput, admin: Admin, db: Database):
         username=body.username,
         display_name=body.display_name,
         password_hash=encoded,
-        role=body.role,
+        role="member",
     )
+    sync_user_permissions(user, permissions)
     db.add(user)
     await db.flush()
-    db.add(AuditEvent(actor_id=admin_id, action="user.created", entity_id=user.id))
+    db.add(AuditEvent(actor_id=actor_id, action="user.created", entity_id=user.id))
     await db.commit()
     return user_view(user)
 
@@ -216,32 +296,40 @@ class AutomationPermissionInput(BaseModel):
 
 @router.put("/users/{user_id}/automation", response_model=UserView)
 async def automation_permission(
-    user_id: UUID, body: AutomationPermissionInput, admin: Admin, db: Database
+    user_id: UUID, body: AutomationPermissionInput, actor: CurrentUser, db: Database
 ):
+    require_user_manager(actor)
     rows = {
         u.id: u
         for u in await db.scalars(
             select(User)
-            .where(User.id.in_([admin.id, user_id]))
+            .where(User.id.in_([actor.id, user_id]))
             .order_by(User.id)
             .with_for_update()
             .execution_options(populate_existing=True)
         )
     }
-    actor = rows.get(admin.id)
-    if not actor or not actor.active or actor.role != "admin":
+    actor = rows.get(actor.id)
+    if not actor or not actor.active or not has(actor, MANAGE_USERS):
         raise HTTPException(403, "Administrator access changed")
     user = rows.get(user_id)
     if not user:
         raise HTTPException(404, "Account not found")
     if user.role != "member":
         raise HTTPException(422, "List automation grants apply to member accounts")
+    guard_admin_target(actor, user)
+    if body.allowed and not user.can_automate and not has(actor, AUTOMATE):
+        raise HTTPException(403, "You can only grant permissions you already have")
     if user.can_automate != body.expected_allowed:
         raise HTTPException(409, "This permission changed; reload the account")
     user.can_automate = body.allowed
+    if user.permissions is not None:
+        user.permissions = (
+            int(user.permissions) | AUTOMATE if body.allowed else int(user.permissions) & ~AUTOMATE
+        )
     db.add(
         AuditEvent(
-            actor_id=admin.id,
+            actor_id=actor.id,
             action="user.automation.changed",
             entity_id=user.id,
             detail={"allowed": body.allowed},
@@ -249,3 +337,188 @@ async def automation_permission(
     )
     await db.commit()
     return user_view(user)
+
+
+class PermissionInfo(BaseModel):
+    name: str
+    label: str
+    description: str
+    group: str
+
+
+class PresetInfo(BaseModel):
+    id: str
+    label: str
+    description: str
+    permissions: list[str]
+
+
+class RoleInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    name: str = Field(min_length=1, max_length=80)
+    description: str = Field(default="", max_length=300)
+    permissions: list[str] = Field(min_length=1)
+
+
+class RoleView(BaseModel):
+    id: str
+    name: str
+    description: str
+    permissions: list[str]
+
+
+class AccessCatalog(BaseModel):
+    permissions: list[PermissionInfo]
+    presets: list[PresetInfo]
+    roles: list[RoleView]
+
+
+class PermissionInput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    permissions: list[str]
+    role_id: UUID | None = None
+    expected_permissions: list[str]
+
+
+def role_view(role: PermissionRole) -> RoleView:
+    return RoleView(
+        id=str(role.id),
+        name=role.name,
+        description=role.description,
+        permissions=names_from_bits(int(role.permissions)),
+    )
+
+
+@router.get("/access", response_model=AccessCatalog)
+async def access_catalog(actor: CurrentUser, db: Database):
+    require_user_manager(actor)
+    roles = (await db.scalars(select(PermissionRole).order_by(PermissionRole.name))).all()
+    return AccessCatalog(
+        permissions=[
+            PermissionInfo(name=name, label=label, description=description, group=group)
+            for name, _bit, label, group, description in CATALOG
+        ],
+        presets=[
+            PresetInfo(
+                id=key, label=label, description=description, permissions=names_from_bits(bits)
+            )
+            for key, label, description, bits in PRESETS
+        ],
+        roles=[role_view(role) for role in roles],
+    )
+
+
+@router.post("/roles", response_model=RoleView, status_code=201)
+async def create_role(body: RoleInput, actor: CurrentUser, db: Database):
+    require_user_manager(actor)
+    permissions = bits_from_names(body.permissions)
+    guard_grant_scope(actor, permissions)
+    name = body.name.strip()
+    if await db.scalar(
+        select(PermissionRole.id).where(func.lower(PermissionRole.name) == name.lower())
+    ):
+        raise HTTPException(409, "A role with that name already exists")
+    role = PermissionRole(name=name, description=body.description.strip(), permissions=permissions)
+    db.add(role)
+    await db.flush()
+    db.add(AuditEvent(actor_id=actor.id, action="role.created", entity_id=role.id))
+    await db.commit()
+    return role_view(role)
+
+
+@router.put("/roles/{role_id}", response_model=RoleView)
+async def update_role(role_id: UUID, body: RoleInput, actor: CurrentUser, db: Database):
+    require_user_manager(actor)
+    permissions = bits_from_names(body.permissions)
+    role = await db.get(PermissionRole, role_id, with_for_update=True)
+    if not role:
+        raise HTTPException(404, "Role not found")
+    name = body.name.strip()
+    if await db.scalar(
+        select(PermissionRole.id).where(
+            func.lower(PermissionRole.name) == name.lower(),
+            PermissionRole.id != role.id,
+        )
+    ):
+        raise HTTPException(409, "A role with that name already exists")
+    members = list(
+        await db.scalars(select(User).where(User.permission_role_id == role.id).with_for_update())
+    )
+    if any(user.role == "admin" for user in members):
+        guard_admin_target(actor, next(user for user in members if user.role == "admin"))
+    guard_grant_scope(actor, permissions, current=int(role.permissions))
+    await guard_admin_loss(db, [(user, permissions) for user in members])
+    role.name, role.description, role.permissions = name, body.description.strip(), permissions
+    for user in members:
+        sync_user_permissions(user, permissions, role.id)
+    db.add(AuditEvent(actor_id=actor.id, action="role.updated", entity_id=role.id))
+    await db.commit()
+    return role_view(role)
+
+
+@router.delete("/roles/{role_id}", status_code=204)
+async def delete_role(role_id: UUID, actor: CurrentUser, db: Database):
+    require_user_manager(actor)
+    role = await db.get(PermissionRole, role_id)
+    if not role:
+        raise HTTPException(404, "Role not found")
+    db.add(
+        AuditEvent(
+            actor_id=actor.id,
+            action="role.deleted",
+            entity_id=role.id,
+            detail={"name": role.name},
+        )
+    )
+    await db.delete(role)
+    await db.commit()
+
+
+@router.put("/users/{user_id}/permissions", response_model=UserView)
+async def update_permissions(
+    user_id: UUID, body: PermissionInput, actor: CurrentUser, db: Database
+):
+    require_user_manager(actor)
+    rows = {
+        user.id: user
+        for user in await db.scalars(
+            select(User)
+            .where(User.id.in_([actor.id, user_id]))
+            .order_by(User.id)
+            .with_for_update()
+            .execution_options(populate_existing=True)
+        )
+    }
+    actor = rows.get(actor.id)
+    if not actor or not actor.active or not has(actor, MANAGE_USERS):
+        raise HTTPException(403, "Administrator access changed")
+    user = rows.get(user_id)
+    if not user:
+        raise HTTPException(404, "Account not found")
+    guard_admin_target(actor, user)
+    if set(body.expected_permissions) != set(names_from_bits(effective_permissions(user))):
+        raise HTTPException(409, "These permissions changed; reload the account")
+    role = None
+    if body.role_id:
+        role = await db.get(PermissionRole, body.role_id)
+        if not role:
+            raise HTTPException(404, "Role not found")
+        permissions = int(role.permissions)
+    else:
+        permissions = bits_from_names(body.permissions)
+    guard_grant_scope(actor, permissions, current=effective_permissions(user))
+    await guard_admin_loss(db, [(user, permissions)])
+    sync_user_permissions(user, permissions, role.id if role else None)
+    db.add(
+        AuditEvent(
+            actor_id=actor.id,
+            action="user.permissions.changed",
+            entity_id=user.id,
+            detail={
+                "permissions": names_from_bits(int(user.permissions or 0)),
+                "role_id": str(role.id) if role else None,
+            },
+        )
+    )
+    await db.commit()
+    return user_view(user, role.name if role else None)

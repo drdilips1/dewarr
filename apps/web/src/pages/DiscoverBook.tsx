@@ -16,7 +16,8 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import { api, result, type Work } from "../api/client";
+import { api, result, type Auth, type Work } from "../api/client";
+import { canStartDownload } from "../permissions";
 import { Loading, Notice } from "../components";
 import BookReaderDetails, {
   useReaderDetails,
@@ -75,6 +76,21 @@ function BookPage({
   const fromSearch =
     typeof searchReturn === "string" && searchReturn.startsWith("/search?");
   const cache = useQueryClient();
+  const session = useQuery<Auth | null>({
+    queryKey: ["session"],
+    enabled: false,
+  });
+  const canQuickAdd =
+    canStartDownload(
+      session.data?.user.permissions,
+      session.data?.user.role,
+      "ebook",
+    ) ||
+    canStartDownload(
+      session.data?.user.permissions,
+      session.data?.user.role,
+      "audio",
+    );
   const heading = useRef<HTMLHeadingElement>(null);
   const actionPanel = useRef<HTMLElement>(null);
   const [localWork, setLocalWork] = useState<Work | null>(null);
@@ -295,7 +311,7 @@ function BookPage({
             {save.isPending && (
               <p role="status">Adding book to your catalog…</p>
             )}
-            {canEdit && !work && (
+            {canEdit && !work && canQuickAdd && (
               <p className="muted reader-action-note">
                 Quick add downloads using your saved preferences and adds this
                 title to your catalog.

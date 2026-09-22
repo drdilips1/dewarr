@@ -31,6 +31,7 @@ class AccessChoice(BaseModel):
     active: bool
     role: Literal["admin", "member", "viewer"]
     can_automate: bool
+    permissions: int | None = None
     library_ids: list[UUID] = Field(max_length=10000)
 
     @model_validator(mode="after")
@@ -43,10 +44,15 @@ class AccessChoice(BaseModel):
 
 
 def access_state(user, grants):
+    from app.domain.permissions import coerce_recovery_permissions
+
     return {
         "active": user["active"],
         "role": user["role"],
         "can_automate": user["can_automate"],
+        "permissions": coerce_recovery_permissions(
+            user["role"], user["can_automate"], user.get("permissions")
+        ),
         "library_ids": sorted(str(g["library_id"]) for g in grants if g["user_id"] == user["id"]),
     }
 
@@ -214,10 +220,15 @@ async def prepare(db, checkpoint, owner_id, scan_id, choices, key):
                     409, "Reconcile current backend inventory before adding a library grant"
                 )
             await require_inventory_review(db, checkpoint, scan, identifier)
+        from app.domain.permissions import coerce_recovery_permissions
+
         after = {
             "active": choice.active,
             "role": choice.role,
             "can_automate": choice.can_automate,
+            "permissions": coerce_recovery_permissions(
+                choice.role, choice.can_automate, choice.permissions
+            ),
             "library_ids": desired,
         }
         seen.add(user.id)
@@ -265,6 +276,8 @@ async def apply(db, review, item, unused):
         after["role"],
         after["can_automate"],
     )
+    user.permissions = after["permissions"]
+    user.permission_role_id = None
     if item["before"]["library_ids"] != after["library_ids"]:
         await db.execute(delete(LibraryGrant).where(LibraryGrant.user_id == user_id))
         db.add_all(

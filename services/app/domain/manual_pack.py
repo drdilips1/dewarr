@@ -268,6 +268,7 @@ async def prepare(db, user, selection_id, revision, work_ids, key):
             f"pack-request:{batch}:{identifier}",
             frozen_preferences=evidence["profile"],
             series_reference=parent.id,
+            hold_for_approval=False,
         )
         requests.append({"work_id": identifier, "request_id": str(intent.id)})
         target = await db.scalar(

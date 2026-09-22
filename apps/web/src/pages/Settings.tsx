@@ -1,14 +1,30 @@
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { Loading } from "../components";
 import { settingsSections } from "./SettingsSections";
 
-export default function Settings({ role }: { role: string }) {
-  const sections = settingsSections(role);
+export default function Settings({
+  role,
+  permissions = [],
+}: {
+  role: string;
+  permissions?: string[];
+}) {
+  const sections = settingsSections(role, permissions);
   const location = useLocation();
   const selected =
     sections.find((section) => section.id === location.hash.slice(1)) ||
     sections[0];
+  useEffect(() => {
+    const current = document.querySelector(
+      ".settings-tabs a[aria-current='page']",
+    );
+    const bar = current?.parentElement;
+    if (!(current instanceof HTMLElement) || !bar) return;
+    const left =
+      current.offsetLeft - (bar.clientWidth - current.offsetWidth) / 2;
+    bar.scrollTo({ left: Math.max(0, left) });
+  }, [selected.id]);
   if (location.hash === "#lists")
     return <Navigate replace to={`/settings${location.search}#reading`} />;
   if (location.hash === "#profiles")

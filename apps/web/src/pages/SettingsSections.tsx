@@ -11,8 +11,9 @@ const Preferences = lazy(() => import("./DownloadPreferences"));
 const Naming = lazy(() => import("./Organization"));
 const Accounts = lazy(() => import("./Accounts"));
 
-export function settingsSections(role: string) {
+export function settingsSections(role: string, permissions: string[] = []) {
   const admin = role === "admin";
+  const manageUsers = admin || permissions.includes("manage_users");
   return [
     { id: "display", title: "General", content: <Display /> },
     {
@@ -63,8 +64,10 @@ export function settingsSections(role: string) {
         ]
       : []),
     ...(admin
+      ? [{ id: "naming", title: "File naming", content: <Naming embedded /> }]
+      : []),
+    ...(manageUsers
       ? [
-          { id: "naming", title: "File naming", content: <Naming embedded /> },
           {
             id: "accounts",
             title: "Users & access",

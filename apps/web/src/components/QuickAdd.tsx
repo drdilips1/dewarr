@@ -2,7 +2,8 @@ import { useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { BookOpen, ChevronDown, Download, Headphones } from "lucide-react";
 import { Link } from "react-router-dom";
-import { api, result } from "../api/client";
+import { api, result, type Auth } from "../api/client";
+import { canStartDownload } from "../permissions";
 import { Notice } from "../components";
 
 type Mode = "both" | "ebook" | "audio" | undefined;
@@ -16,6 +17,15 @@ export default function QuickAdd({
   resolveWork?: () => Promise<string>;
 }) {
   const cache = useQueryClient();
+  const { data: session } = useQuery<Auth | null>({
+    queryKey: ["session"],
+    enabled: false,
+  });
+  const grants = session?.user.permissions;
+  const role = session?.user.role;
+  const ebookDownload = canStartDownload(grants, role, "ebook");
+  const audioDownload = canStartDownload(grants, role, "audio");
+  const eitherDownload = canStartDownload(grants, role);
   const [engaged, setEngaged] = useState(!coverFormats);
   const menu = useRef<HTMLDetailsElement>(null);
   const [resolvedId, setResolvedId] = useState(workId);
@@ -88,6 +98,7 @@ export default function QuickAdd({
     setEngaged(true);
     add.mutate(mode);
   }
+  if (!ebookDownload && !audioDownload) return null;
   if (coverFormats)
     return (
       <div
@@ -99,9 +110,13 @@ export default function QuickAdd({
           type="button"
           aria-label="Quick add from cover"
           className="primary"
-          disabled={busy}
+          disabled={busy || !eitherDownload}
           onClick={() => choose(undefined)}
-          title={`Quick add · ${label}`}
+          title={
+            eitherDownload
+              ? `Quick add · ${label}`
+              : "Choose a format you can download"
+          }
         >
           <Download size={16} aria-hidden="true" />
           {busy ? "Adding…" : "Quick add"}
@@ -109,7 +124,7 @@ export default function QuickAdd({
         <div className="cover-quick-formats">
           <button
             type="button"
-            disabled={busy || coverFormats.ebook}
+            disabled={busy || coverFormats.ebook || !ebookDownload}
             aria-label={
               coverFormats.ebook ? "Ebook already in library" : "Download ebook"
             }
@@ -122,7 +137,7 @@ export default function QuickAdd({
           </button>
           <button
             type="button"
-            disabled={busy || coverFormats.audio}
+            disabled={busy || coverFormats.audio || !audioDownload}
             aria-label={
               coverFormats.audio
                 ? "Audiobook already in library"
@@ -151,9 +166,13 @@ export default function QuickAdd({
       <div className="quick-add-split">
         <button
           className="primary"
-          disabled={busy}
+          disabled={busy || !eitherDownload}
           onClick={() => choose(undefined)}
-          title={`Quick add · ${label}. Uses your saved format priorities.`}
+          title={
+            eitherDownload
+              ? `Quick add · ${label}. Uses your saved format priorities.`
+              : "Choose a format you can download"
+          }
         >
           <Download size={16} />
           {busy ? "Adding…" : "Quick add"}
@@ -176,13 +195,22 @@ export default function QuickAdd({
             <ChevronDown size={16} />
           </summary>
           <div className="quick-add-options">
-            <button disabled={busy} onClick={() => choose("both")}>
+            <button
+              disabled={busy || !eitherDownload}
+              onClick={() => choose("both")}
+            >
               Both
             </button>
-            <button disabled={busy} onClick={() => choose("ebook")}>
+            <button
+              disabled={busy || !ebookDownload}
+              onClick={() => choose("ebook")}
+            >
               Ebook
             </button>
-            <button disabled={busy} onClick={() => choose("audio")}>
+            <button
+              disabled={busy || !audioDownload}
+              onClick={() => choose("audio")}
+            >
               Audiobook
             </button>
             <small>Uses your saved format priorities.</small>

@@ -87,12 +87,34 @@ async def inherit(db, user, spec, profile, options):
 
 
 def permitted(user):
+    from app.domain.permissions import (
+        MANAGE_REQUESTS,
+        approval_dispatch,
+        auto_approves,
+        automation_allowed,
+        download_authorization,
+        has,
+    )
+
+    spec = download_authorization.get()
     if (
-        not user
-        or not user.active
-        or user.role == "viewer"
-        or (user.role != "admin" and not user.can_automate)
+        spec is not None
+        and user
+        and user.active
+        and user.role != "viewer"
+        and auto_approves(user, spec)
     ):
+        return
+    if (
+        approval_dispatch.get()
+        and user
+        and user.active
+        and user.role != "viewer"
+        and has(user, MANAGE_REQUESTS)
+        and auto_approves(user, spec)
+    ):
+        return
+    if not automation_allowed(user):
         raise HTTPException(403, "An administrator must grant automation permission")
 
 

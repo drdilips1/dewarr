@@ -969,6 +969,7 @@ class AccessStateView(BaseModel):
     active: bool
     role: str
     can_automate: bool
+    permissions: int = 0
     library_ids: list[UUID]
 
 

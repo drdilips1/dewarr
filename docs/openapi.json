@@ -322,6 +322,208 @@
         }
       }
     },
+    "/api/auth/access": {
+      "get": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Access Catalog",
+        "operationId": "access_catalog_api_auth_access_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessCatalog"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/roles": {
+      "post": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Create Role",
+        "operationId": "create_role_api_auth_roles_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/roles/{role_id}": {
+      "put": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Update Role",
+        "operationId": "update_role_api_auth_roles__role_id__put",
+        "parameters": [
+          {
+            "name": "role_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Role Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Delete Role",
+        "operationId": "delete_role_api_auth_roles__role_id__delete",
+        "parameters": [
+          {
+            "name": "role_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Role Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/users/{user_id}/permissions": {
+      "put": {
+        "tags": [
+          "authentication"
+        ],
+        "summary": "Update Permissions",
+        "operationId": "update_permissions_api_auth_users__user_id__permissions_put",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "User Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PermissionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/setup/readiness": {
       "get": {
         "tags": [
@@ -9445,6 +9647,26 @@
             }
           },
           {
+            "name": "pending_only",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Pending Only"
+            }
+          },
+          {
+            "name": "download_ready",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Download Ready"
+            }
+          },
+          {
             "name": "offset",
             "in": "query",
             "required": false,
@@ -9518,6 +9740,70 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/RequestView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/requests/{intent_id}/decision": {
+      "post": {
+        "tags": [
+          "requests"
+        ],
+        "summary": "Decision",
+        "operationId": "decision_api_requests__intent_id__decision_post",
+        "parameters": [
+          {
+            "name": "intent_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Intent Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionView"
                 }
               }
             }
@@ -13875,6 +14161,38 @@
         ],
         "title": "ABSConnectionInput"
       },
+      "AccessCatalog": {
+        "properties": {
+          "permissions": {
+            "items": {
+              "$ref": "#/components/schemas/PermissionInfo"
+            },
+            "type": "array",
+            "title": "Permissions"
+          },
+          "presets": {
+            "items": {
+              "$ref": "#/components/schemas/PresetInfo"
+            },
+            "type": "array",
+            "title": "Presets"
+          },
+          "roles": {
+            "items": {
+              "$ref": "#/components/schemas/RoleView"
+            },
+            "type": "array",
+            "title": "Roles"
+          }
+        },
+        "type": "object",
+        "required": [
+          "permissions",
+          "presets",
+          "roles"
+        ],
+        "title": "AccessCatalog"
+      },
       "AccessChoice": {
         "properties": {
           "finding_id": {
@@ -13898,6 +14216,17 @@
           "can_automate": {
             "type": "boolean",
             "title": "Can Automate"
+          },
+          "permissions": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Permissions"
           },
           "library_ids": {
             "items": {
@@ -14100,6 +14429,11 @@
           "can_automate": {
             "type": "boolean",
             "title": "Can Automate"
+          },
+          "permissions": {
+            "type": "integer",
+            "title": "Permissions",
+            "default": 0
           },
           "library_ids": {
             "items": {
@@ -17896,6 +18230,79 @@
           "selected"
         ],
         "title": "CurationReceipt"
+      },
+      "DecisionInput": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "approved",
+              "declined"
+            ],
+            "title": "Status"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "download": {
+            "type": "boolean",
+            "title": "Download",
+            "default": false
+          },
+          "expected_status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "approved",
+              "declined"
+            ],
+            "title": "Expected Status"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "expected_status"
+        ],
+        "title": "DecisionInput"
+      },
+      "DecisionView": {
+        "properties": {
+          "request": {
+            "$ref": "#/components/schemas/RequestView"
+          },
+          "download_started": {
+            "type": "boolean",
+            "title": "Download Started"
+          },
+          "download_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Download Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "request",
+          "download_started"
+        ],
+        "title": "DecisionView"
       },
       "DefaultsView": {
         "properties": {
@@ -24446,6 +24853,71 @@
         ],
         "title": "PathPreviewView"
       },
+      "PermissionInfo": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "group": {
+            "type": "string",
+            "title": "Group"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "label",
+          "description",
+          "group"
+        ],
+        "title": "PermissionInfo"
+      },
+      "PermissionInput": {
+        "properties": {
+          "permissions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Permissions"
+          },
+          "role_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Role Id"
+          },
+          "expected_permissions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Expected Permissions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "permissions",
+          "expected_permissions"
+        ],
+        "title": "PermissionInput"
+      },
       "PersonalListPreview": {
         "properties": {
           "name": {
@@ -25102,6 +25574,37 @@
         "type": "object",
         "title": "PreferenceOverrides",
         "description": "Omitted fields inherit; explicit empty block lists and null limits override."
+      },
+      "PresetInfo": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "permissions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Permissions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "description",
+          "permissions"
+        ],
+        "title": "PresetInfo"
       },
       "PreviewInput": {
         "properties": {
@@ -26325,6 +26828,22 @@
               }
             ],
             "title": "List Id"
+          },
+          "approval_status": {
+            "type": "string",
+            "title": "Approval Status",
+            "default": "approved"
+          },
+          "decision_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decision Note"
           },
           "release_policy": {
             "anyOf": [
@@ -27702,10 +28221,30 @@
             "type": "string",
             "title": "Work Title"
           },
+          "owner_name": {
+            "type": "string",
+            "title": "Owner Name",
+            "default": ""
+          },
           "can_open_book": {
             "type": "boolean",
             "title": "Can Open Book",
             "default": false
+          },
+          "can_decide": {
+            "type": "boolean",
+            "title": "Can Decide",
+            "default": false
+          },
+          "can_start_download": {
+            "type": "boolean",
+            "title": "Can Start Download",
+            "default": false
+          },
+          "approval_status": {
+            "type": "string",
+            "title": "Approval Status",
+            "default": "approved"
           },
           "specification": {
             "$ref": "#/components/schemas/RequestSpec"
@@ -27941,6 +28480,68 @@
           "files"
         ],
         "title": "ReviewedGroup"
+      },
+      "RoleInput": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 300,
+            "title": "Description",
+            "default": ""
+          },
+          "permissions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Permissions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "permissions"
+        ],
+        "title": "RoleInput"
+      },
+      "RoleView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "permissions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Permissions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "description",
+          "permissions"
+        ],
+        "title": "RoleView"
       },
       "RunView": {
         "properties": {
@@ -30872,10 +31473,26 @@
             "enum": [
               "admin",
               "member",
-              "viewer"
+              "viewer",
+              "requester",
+              "approver"
             ],
             "title": "Role",
             "default": "member"
+          },
+          "permissions": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Permissions"
           }
         },
         "type": "object",
@@ -30908,6 +31525,28 @@
             "type": "boolean",
             "title": "Can Automate"
           },
+          "permissions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Permissions"
+          },
+          "access_label": {
+            "type": "string",
+            "title": "Access Label"
+          },
+          "permission_role_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Permission Role Id"
+          },
           "onboarding_status": {
             "type": "string",
             "title": "Onboarding Status",
@@ -30920,7 +31559,9 @@
           "username",
           "display_name",
           "role",
-          "can_automate"
+          "can_automate",
+          "permissions",
+          "access_label"
         ],
         "title": "UserView"
       },

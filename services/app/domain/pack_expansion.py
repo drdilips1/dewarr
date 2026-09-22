@@ -122,7 +122,9 @@ async def create(db, user, operation, selection, coverage):
             },
         }
         return
-    if user.role != "admin" and not user.can_automate:
+    from app.domain.permissions import automation_allowed
+
+    if not automation_allowed(user):
         operation.payload = {
             **operation.payload,
             "pack_expansion": {

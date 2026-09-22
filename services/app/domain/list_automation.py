@@ -351,6 +351,7 @@ async def advance_book(db, user, policy, book, now):
             f"list-request:{book.id}:{policy.generation}:{book.progress.get('activation', 1)}",
             policy_reference=list_policies.reason_reference(policy),
             frozen_preferences=policy.configuration["profile"],
+            hold_for_approval=False,
         )
         book.intent_id = intent.id
         await db.flush()

@@ -8,11 +8,25 @@ import { transferSize } from "./DownloadConstraints";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { api, result } from "../api/client";
+import { api, result, type Auth } from "../api/client";
+import { canStartDownload } from "../permissions";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
 
 const AutomaticSelection = lazy(() => import("./AutomaticSelection"));
+
+function useCanDownloadRelease() {
+  const { data: session } = useQuery<Auth | null>({
+    queryKey: ["session"],
+    enabled: false,
+  });
+  return (medium?: string | null) =>
+    canStartDownload(
+      session?.user.permissions,
+      session?.user.role,
+      medium === "ebook" || medium === "audio" ? medium : undefined,
+    );
+}
 
 type Work = components["schemas"]["WorkView"];
 type Search = components["schemas"]["BookSearchView"];
@@ -25,6 +39,7 @@ export default function BookSources({
   canAcquire: boolean;
 }) {
   const cache = useQueryClient();
+  const canDownload = useCanDownloadRelease();
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const [q, setQ] = useState(work.title.slice(0, 300));
@@ -221,11 +236,13 @@ export default function BookSources({
           data={data}
           inspecting={inspect.isPending}
           canAcquire={canAcquire}
+          canDownload={canDownload}
           onInspect={(id) => inspect.mutate(id)}
         />
       )}
       {data &&
         canAcquire &&
+        canDownload(params.get("slot") || undefined) &&
         params.get("request") &&
         ["ebook", "audio", "either"].includes(params.get("slot") || "") && (
           <Suspense fallback={<p>Loading release preparation…</p>}>
@@ -256,11 +273,13 @@ function Results({
   data,
   inspecting,
   canAcquire,
+  canDownload,
   onInspect,
 }: {
   data: Search;
   inspecting: boolean;
   canAcquire: boolean;
+  canDownload: (medium?: string | null) => boolean;
   onInspect: (id: string) => void;
 }) {
   const [pageIndex, setPageIndex] = useState(0);
@@ -556,7 +575,7 @@ function Results({
                       >
                         <Info size={18} />
                       </button>
-                      {canAcquire && (
+                      {canAcquire && canDownload(item.release.medium) && (
                         <SourceReleaseDownload
                           searchId={data.id}
                           resultId={item.id}
@@ -585,7 +604,7 @@ function Results({
           rank={detailIndex}
           searchId={data.id}
           close={() => setDetailId(null)}
-          canAcquire={canAcquire}
+          canAcquire={canAcquire && canDownload(detailItem.release.medium)}
           onInspect={() => onInspect(detailItem.id)}
           disabled={
             inspecting ||

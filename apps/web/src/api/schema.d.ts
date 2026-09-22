@@ -175,6 +175,75 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/auth/access": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Access Catalog */
+    get: operations["access_catalog_api_auth_access_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/roles": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Create Role */
+    post: operations["create_role_api_auth_roles_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/roles/{role_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Update Role */
+    put: operations["update_role_api_auth_roles__role_id__put"];
+    post?: never;
+    /** Delete Role */
+    delete: operations["delete_role_api_auth_roles__role_id__delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/users/{user_id}/permissions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** Update Permissions */
+    put: operations["update_permissions_api_auth_users__user_id__permissions_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/setup/readiness": {
     parameters: {
       query?: never;
@@ -2769,6 +2838,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/requests/{intent_id}/decision": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Decision */
+    post: operations["decision_api_requests__intent_id__decision_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/requests/{intent_id}/reasons/{reason_id}": {
     parameters: {
       query?: never;
@@ -4175,6 +4261,15 @@ export interface components {
        */
       enabled: boolean;
     };
+    /** AccessCatalog */
+    AccessCatalog: {
+      /** Permissions */
+      permissions: components["schemas"]["PermissionInfo"][];
+      /** Presets */
+      presets: components["schemas"]["PresetInfo"][];
+      /** Roles */
+      roles: components["schemas"]["RoleView"][];
+    };
     /** AccessChoice */
     AccessChoice: {
       /**
@@ -4191,6 +4286,8 @@ export interface components {
       role: "admin" | "member" | "viewer";
       /** Can Automate */
       can_automate: boolean;
+      /** Permissions */
+      permissions?: number | null;
       /** Library Ids */
       library_ids: string[];
     };
@@ -4280,6 +4377,11 @@ export interface components {
       role: string;
       /** Can Automate */
       can_automate: boolean;
+      /**
+       * Permissions
+       * @default 0
+       */
+      permissions: number;
       /** Library Ids */
       library_ids: string[];
     };
@@ -5659,6 +5761,34 @@ export interface components {
       changed: number;
       /** Selected */
       selected: number;
+    };
+    /** DecisionInput */
+    DecisionInput: {
+      /**
+       * Status
+       * @enum {string}
+       */
+      status: "approved" | "declined";
+      /** Note */
+      note?: string | null;
+      /**
+       * Download
+       * @default false
+       */
+      download: boolean;
+      /**
+       * Expected Status
+       * @enum {string}
+       */
+      expected_status: "pending" | "approved" | "declined";
+    };
+    /** DecisionView */
+    DecisionView: {
+      request: components["schemas"]["RequestView"];
+      /** Download Started */
+      download_started: boolean;
+      /** Download Message */
+      download_message?: string | null;
     };
     /** DefaultsView */
     DefaultsView: {
@@ -8146,6 +8276,26 @@ export interface components {
        */
       filesystem_verified: boolean;
     };
+    /** PermissionInfo */
+    PermissionInfo: {
+      /** Name */
+      name: string;
+      /** Label */
+      label: string;
+      /** Description */
+      description: string;
+      /** Group */
+      group: string;
+    };
+    /** PermissionInput */
+    PermissionInput: {
+      /** Permissions */
+      permissions: string[];
+      /** Role Id */
+      role_id?: string | null;
+      /** Expected Permissions */
+      expected_permissions: string[];
+    };
     /** PersonalListPreview */
     PersonalListPreview: {
       /** Name */
@@ -8340,6 +8490,17 @@ export interface components {
       blocked_formats?: string[];
       /** Maximum Bytes */
       maximum_bytes?: number | null;
+    };
+    /** PresetInfo */
+    PresetInfo: {
+      /** Id */
+      id: string;
+      /** Label */
+      label: string;
+      /** Description */
+      description: string;
+      /** Permissions */
+      permissions: string[];
     };
     /** PreviewInput */
     PreviewInput: {
@@ -8793,6 +8954,13 @@ export interface components {
       active: boolean;
       /** List Id */
       list_id: string | null;
+      /**
+       * Approval Status
+       * @default approved
+       */
+      approval_status: string;
+      /** Decision Note */
+      decision_note?: string | null;
       release_policy?: components["schemas"]["ProfileSnapshot"] | null;
     };
     /** ReconciliationAcceptance */
@@ -9255,10 +9423,30 @@ export interface components {
       /** Work Title */
       work_title: string;
       /**
+       * Owner Name
+       * @default
+       */
+      owner_name: string;
+      /**
        * Can Open Book
        * @default false
        */
       can_open_book: boolean;
+      /**
+       * Can Decide
+       * @default false
+       */
+      can_decide: boolean;
+      /**
+       * Can Start Download
+       * @default false
+       */
+      can_start_download: boolean;
+      /**
+       * Approval Status
+       * @default approved
+       */
+      approval_status: string;
       specification: components["schemas"]["RequestSpec"];
       /** Targets */
       targets: components["schemas"]["TargetView"][];
@@ -9337,6 +9525,29 @@ export interface components {
        * @default false
        */
       same_edition: boolean;
+    };
+    /** RoleInput */
+    RoleInput: {
+      /** Name */
+      name: string;
+      /**
+       * Description
+       * @default
+       */
+      description: string;
+      /** Permissions */
+      permissions: string[];
+    };
+    /** RoleView */
+    RoleView: {
+      /** Id */
+      id: string;
+      /** Name */
+      name: string;
+      /** Description */
+      description: string;
+      /** Permissions */
+      permissions: string[];
     };
     /** RunView */
     RunView: {
@@ -10448,7 +10659,9 @@ export interface components {
        * @default member
        * @enum {string}
        */
-      role: "admin" | "member" | "viewer";
+      role: "admin" | "member" | "viewer" | "requester" | "approver";
+      /** Permissions */
+      permissions?: string[] | null;
     };
     /** UserView */
     UserView: {
@@ -10462,6 +10675,12 @@ export interface components {
       role: string;
       /** Can Automate */
       can_automate: boolean;
+      /** Permissions */
+      permissions: string[];
+      /** Access Label */
+      access_label: string;
+      /** Permission Role Id */
+      permission_role_id?: string | null;
       /**
        * Onboarding Status
        * @default pending
@@ -11055,6 +11274,158 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["AutomationPermissionInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["UserView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  access_catalog_api_auth_access_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AccessCatalog"];
+        };
+      };
+    };
+  };
+  create_role_api_auth_roles_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RoleInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RoleView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_role_api_auth_roles__role_id__put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        role_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RoleInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["RoleView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  delete_role_api_auth_roles__role_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        role_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  update_permissions_api_auth_users__user_id__permissions_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        user_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PermissionInput"];
       };
     };
     responses: {
@@ -16486,6 +16857,8 @@ export interface operations {
       query?: {
         work_id?: string | null;
         active_only?: boolean;
+        pending_only?: boolean;
+        download_ready?: boolean;
         offset?: number;
         limit?: number;
       };
@@ -16568,6 +16941,43 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["RequestView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  decision_api_requests__intent_id__decision_post: {
+    parameters: {
+      query?: never;
+      header: {
+        "idempotency-key": string;
+      };
+      path: {
+        intent_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DecisionInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DecisionView"];
         };
       };
       /** @description Validation Error */

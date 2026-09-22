@@ -5,7 +5,8 @@ import { EffectivePreferences } from "./PreferenceFields";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { api, result } from "../api/client";
+import { api, result, type Auth } from "../api/client";
+import { canRequestMedium, canStartDownload } from "../permissions";
 import type { components } from "../api/schema";
 import { Loading, Notice } from "../components";
 import DownloadConstraints from "./DownloadConstraints";
@@ -16,7 +17,7 @@ const states: Record<string, string> = {
   wanted: "Missing",
   pending: "Already requested",
   "awaiting-inventory": "Check inventory",
-  paused: "Needs a decision",
+  paused: "Waiting for approval",
   unresolved: "Needs review",
 };
 const media: Record<string, string> = {
@@ -66,6 +67,35 @@ function ListRequestEditor({
   profile?: components["schemas"]["ProfileSnapshot"];
 }) {
   const client = useQueryClient();
+  const session = useQuery<Auth | null>({
+    queryKey: ["session"],
+    enabled: false,
+  });
+  const requestEbook = canRequestMedium(
+    session.data?.user.permissions,
+    session.data?.user.role,
+    "ebook",
+  );
+  const requestAudio = canRequestMedium(
+    session.data?.user.permissions,
+    session.data?.user.role,
+    "audio",
+  );
+  const requestBoth = canRequestMedium(
+    session.data?.user.permissions,
+    session.data?.user.role,
+  );
+  const canDownloadAny =
+    canStartDownload(
+      session.data?.user.permissions,
+      session.data?.user.role,
+      "ebook",
+    ) ||
+    canStartDownload(
+      session.data?.user.permissions,
+      session.data?.user.role,
+      "audio",
+    );
   const path = { list_id: listId };
   const [id, setId] = useState<string | null>(null);
   const [selected, setSelected] = useState<string[]>([]);
@@ -179,12 +209,22 @@ function ListRequestEditor({
     preview.reset();
   };
   const value = saved.data;
+  const batchMode = value?.specification.mode;
+  const canDownloadBatch = canStartDownload(
+    session.data?.user.permissions,
+    session.data?.user.role,
+    batchMode === "ebook" || batchMode === "audio" ? batchMode : undefined,
+  );
+  const waitingForApproval = value?.records.some((record) =>
+    record.targets.some((target) => target.message === "Waiting for approval"),
+  );
   return (
     <section className="panel editor" aria-label="List wanted media">
       <h2>Request books from this list</h2>
       <p className="muted">
-        Choose up to 100 books, check what you already have, then save the media
-        you want. Release selection and download remain separate steps.
+        {canDownloadAny
+          ? "Choose up to 100 books, check what you already have, then save the media you want. Release selection and download remain separate steps."
+          : "Choose up to 100 books, then send the requests for approval. Downloads stay paused until a request is approved."}
       </p>
       {defaults && (
         <p className="muted">
@@ -242,10 +282,14 @@ function ListRequestEditor({
                 }}
               >
                 <option value="">Use list or profile media</option>
-                <option value="either">Either ebook or audiobook</option>
-                <option value="both">Both ebook and audiobook</option>
-                <option value="ebook">Ebook</option>
-                <option value="audio">Audiobook</option>
+                {requestBoth && (
+                  <option value="either">Either ebook or audiobook</option>
+                )}
+                {requestBoth && (
+                  <option value="both">Both ebook and audiobook</option>
+                )}
+                {requestEbook && <option value="ebook">Ebook</option>}
+                {requestAudio && <option value="audio">Audiobook</option>}
               </select>
             </label>
             {spec.mode === "either" && (
@@ -333,8 +377,9 @@ function ListRequestEditor({
                 ) : (
                   record.targets.map((t) => (
                     <p key={t.slot}>
-                      {media[t.slot]}: {states[t.state] || t.state} ·{" "}
-                      {t.message}
+                      {t.message === "Waiting for approval"
+                        ? `${media[t.slot]}: Waiting for approval`
+                        : `${media[t.slot]}: ${states[t.state] || t.state} · ${t.message}`}
                     </p>
                   ))
                 )}
@@ -353,8 +398,12 @@ function ListRequestEditor({
                 onClick={() => submit.mutate()}
               >
                 {value.status === "failed"
-                  ? "Retry saving wanted media"
-                  : "Save wanted media"}
+                  ? canDownloadBatch
+                    ? "Retry saving wanted media"
+                    : "Retry sending for approval"
+                  : canDownloadBatch
+                    ? "Save wanted media"
+                    : "Send for approval"}
               </button>
             )}
             {!["completed", "cancelled"].includes(value.status) && (
@@ -383,8 +432,10 @@ function ListRequestEditor({
             <p>
               Saved {value.receipt.length} request{" "}
               {value.receipt.length === 1 ? "link" : "links"}. Reopening this
-              receipt does not request these books again. Open a book to choose
-              a release or manage its request reasons.
+              receipt does not request these books again.{" "}
+              {waitingForApproval
+                ? "They are waiting for approval before a download can start."
+                : "Open a book to choose a release or manage its request reasons."}
             </p>
           )}
         </>

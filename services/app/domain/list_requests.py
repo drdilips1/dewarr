@@ -31,6 +31,12 @@ from app.domain.acquisition import (
     validate_request,
 )
 from app.domain.operations import require_live_command, transaction_lock
+from app.domain.permissions import (
+    apply_approval_wait,
+    auto_approves,
+    list_batch_message,
+    waiting_for_approval,
+)
 from app.domain.request_preferences import PreferenceChoice, resolve
 from app.domain.request_scope import same_command
 from app.domain.visibility import visible_work
@@ -163,7 +169,11 @@ async def preview(db, user, list_id, body, key):
         kind=KIND,
         idempotency_key=key,
         status="preview",
-        message="Review the selected books before saving wanted media",
+        message=(
+            "Review the selected books before sending them for approval"
+            if not auto_approves(user, specification)
+            else "Review the selected books before saving wanted media"
+        ),
         payload={
             "command": command,
             "records": records,
@@ -333,6 +343,16 @@ async def status_records(db, user, operation):
             )
             continue
         targets = await pending_targets(db, user, work_id, spec, outcomes)
+        request_id = next(
+            (
+                item["request_id"]
+                for item in operation.payload.get("receipt") or []
+                if item["work_id"] == str(work_id)
+            ),
+            None,
+        )
+        if request_id and await waiting_for_approval(db, UUID(request_id)):
+            apply_approval_wait(targets)
         records.append({"work_id": work_id, "title": work.title, "targets": targets, "issue": None})
     return records
 
@@ -385,10 +405,13 @@ async def run(operation_id):
             )
             receipts.append({"work_id": str(work.id), "request_id": str(intent.id)})
         operation.payload = {**operation.payload, "receipt": receipts}
+        waiting = 0
+        for receipt in receipts:
+            if await waiting_for_approval(db, UUID(receipt["request_id"])):
+                waiting += 1
         operation.status, operation.message = (
             "completed",
-            f"Saved wanted media for {len(receipts)} "
-            f"{'book' if len(receipts) == 1 else 'books'}; downloads have not been started",
+            list_batch_message(len(receipts), waiting),
         )
         db.add(
             AuditEvent(actor_id=user.id, action="lists.requests.completed", entity_id=operation.id)
