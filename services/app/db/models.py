@@ -34,10 +34,19 @@ class Identity:
 
 class User(Identity, Base):
     __tablename__ = "users"
-    __table_args__ = (CheckConstraint("role IN ('admin', 'member', 'viewer')"),)
+    __table_args__ = (
+        CheckConstraint("role IN ('admin', 'member', 'viewer')"),
+        Index(
+            "users_email_key",
+            "email",
+            unique=True,
+            postgresql_where=text("email IS NOT NULL"),
+        ),
+    )
     username: Mapped[str] = mapped_column(String(100), unique=True)
     display_name: Mapped[str] = mapped_column(String(120))
-    password_hash: Mapped[str] = mapped_column(Text)
+    password_hash: Mapped[str | None] = mapped_column(Text)
+    email: Mapped[str | None] = mapped_column(String(254))
     role: Mapped[str] = mapped_column(String(20), default="member")
     active: Mapped[bool] = mapped_column(Boolean, default=True)
     can_automate: Mapped[bool] = mapped_column(Boolean, default=False)
@@ -65,6 +74,72 @@ class LoginSession(Base):
     token_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+
+
+class OidcIdentity(Base):
+    __tablename__ = "oidc_identities"
+    __table_args__ = (UniqueConstraint("issuer", "subject"),)
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    issuer: Mapped[str] = mapped_column(String(300))
+    subject: Mapped[str] = mapped_column(String(300))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class OidcProvider(Base):
+    __tablename__ = "oidc_provider"
+    __table_args__ = (
+        CheckConstraint("id = 1"),
+        CheckConstraint("match_existing IN ('off', 'email', 'username')"),
+        CheckConstraint("default_role IN ('member', 'viewer')"),
+        CheckConstraint("signing_algorithm IN ('RS256', 'ES256')"),
+    )
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    enabled: Mapped[bool] = mapped_column(Boolean, default=False)
+    label: Mapped[str] = mapped_column(String(80), default="your identity provider")
+    issuer: Mapped[str] = mapped_column(String(300), default="")
+    authorization_endpoint: Mapped[str] = mapped_column(Text, default="")
+    token_endpoint: Mapped[str] = mapped_column(Text, default="")
+    userinfo_endpoint: Mapped[str] = mapped_column(Text, default="")
+    jwks_uri: Mapped[str] = mapped_column(Text, default="")
+    client_id: Mapped[str] = mapped_column(String(200), default="")
+    encrypted_secret: Mapped[str | None] = mapped_column(Text)
+    signing_algorithm: Mapped[str] = mapped_column(String(20), default="RS256")
+    match_existing: Mapped[str] = mapped_column(String(20), default="off")
+    auto_register: Mapped[bool] = mapped_column(Boolean, default=False)
+    default_role: Mapped[str] = mapped_column(String(20), default="member")
+    group_claim: Mapped[str] = mapped_column(String(80), default="")
+    group_scope: Mapped[str] = mapped_column(String(80), default="")
+    admin_group: Mapped[str] = mapped_column(String(120), default="")
+    member_group: Mapped[str] = mapped_column(String(120), default="")
+    viewer_group: Mapped[str] = mapped_column(String(120), default="")
+
+
+class PlexIdentity(Base):
+    __tablename__ = "plex_identities"
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    plex_user_id: Mapped[str] = mapped_column(String(20), unique=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class PlexLogin(Base):
+    __tablename__ = "plex_login"
+    __table_args__ = (
+        CheckConstraint("id = 1"),
+        CheckConstraint("default_role IN ('member', 'viewer')"),
+        CheckConstraint("client_id <> ''"),
+        CheckConstraint("NOT enabled OR machine_id <> ''"),
+    )
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    enabled: Mapped[bool] = mapped_column(Boolean, default=False)
+    client_id: Mapped[str] = mapped_column(String(36))
+    machine_id: Mapped[str] = mapped_column(String(80), default="")
+    server_name: Mapped[str] = mapped_column(String(120), default="")
+    auto_register: Mapped[bool] = mapped_column(Boolean, default=False)
+    default_role: Mapped[str] = mapped_column(String(20), default="member")
 
 
 class RestoreCheckpoint(Identity, Base):

@@ -25,6 +25,9 @@ class Settings(BaseSettings):
     db_pool_size: int = 5
     hardcover_url: str = "https://api.hardcover.app"
     openlibrary_url: str = "https://openlibrary.org"
+    plex_api_origin: str = "https://plex.tv"
+    plex_auth_origin: str = "https://app.plex.tv"
+    proxy_token: SecretStr | None = None
     import_sources: dict[str, Path] = {}
     import_destinations: dict[str, Path] = {}
     import_staging_root: Path | None = None
@@ -57,7 +60,7 @@ class Settings(BaseSettings):
             raise ValueError("Use a GitHub owner/repository name")
         return value
 
-    @field_validator("public_url")
+    @field_validator("public_url", "plex_api_origin", "plex_auth_origin")
     @classmethod
     def validate_url(cls, value: str) -> str:
         parts = urlsplit(value)
@@ -73,6 +76,10 @@ class Settings(BaseSettings):
             self.secret_key = SecretStr(self.secret_key_file.read_text().strip())
         if self.secret_key:
             Fernet(self.secret_key.get_secret_value().encode())
+        if urlsplit(self.public_url).scheme == "https":
+            for origin in (self.plex_api_origin, self.plex_auth_origin):
+                if urlsplit(origin).scheme != "https":
+                    raise ValueError("Plex sign-in uses HTTPS")
         return self
 
     def encryption_key(self) -> bytes:

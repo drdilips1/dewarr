@@ -99,10 +99,51 @@ export default function App() {
   return <Shell auth={session.data} />;
 }
 
+const OIDC_ERRORS: Record<string, string> = {
+  denied: "Your identity provider did not sign you in.",
+  mismatch: "That sign-in attempt expired. Try again.",
+  rejected: "This account cannot sign in with the identity provider.",
+  unavailable: "The identity provider could not be reached.",
+  paused: "Sign-in is paused during recovery review.",
+  limited: "Too many sign-in attempts. Try again in ten minutes.",
+};
+
+const PLEX_ERRORS: Record<string, string> = {
+  denied: "Plex did not sign you in.",
+  mismatch: "That sign-in attempt expired. Try again.",
+  rejected: "This Plex account cannot sign in.",
+  unavailable: "Plex could not be reached.",
+  paused: "Sign-in is paused during recovery review.",
+  limited: "Too many sign-in attempts. Try again in ten minutes.",
+};
+
 function SignIn({ onSuccess }: { onSuccess: (auth: Auth) => void }) {
+  const [oidcError] = useState(() => {
+    const code = new URLSearchParams(window.location.search).get("oidc_error");
+    return code ? OIDC_ERRORS[code] : "";
+  });
+  const [plexError] = useState(() => {
+    const code = new URLSearchParams(window.location.search).get("plex_error");
+    return code ? PLEX_ERRORS[code] : "";
+  });
+  useEffect(() => {
+    if (!oidcError && !plexError) return;
+    const url = new URL(window.location.href);
+    url.searchParams.delete("oidc_error");
+    url.searchParams.delete("plex_error");
+    window.history.replaceState(null, "", url.pathname + url.search + url.hash);
+  }, [oidcError, plexError]);
   const setup = useQuery({
     queryKey: ["setup"],
     queryFn: async () => result(await api.GET("/api/auth/setup")),
+  });
+  const oidc = useQuery({
+    queryKey: ["oidc-status"],
+    queryFn: async () => result(await api.GET("/api/auth/oidc")),
+  });
+  const plex = useQuery({
+    queryKey: ["plex-status"],
+    queryFn: async () => result(await api.GET("/api/auth/plex")),
   });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -169,7 +210,14 @@ function SignIn({ onSuccess }: { onSuccess: (auth: Auth) => void }) {
             ? "Create the administrator account for this installation."
             : "Sign in to browse your catalog and lists."}
         </p>
-        <Notice error={setup.error || mutation.error} />
+        <Notice
+          error={
+            setup.error ||
+            mutation.error ||
+            (oidcError ? new Error(oidcError) : null) ||
+            (plexError ? new Error(plexError) : null)
+          }
+        />
         {setup.data?.needs_setup ? (
           <label>
             Your name
@@ -218,6 +266,22 @@ function SignIn({ onSuccess }: { onSuccess: (auth: Auth) => void }) {
               ? "Create administrator"
               : "Sign in"}
         </button>
+        {!setup.data?.needs_setup &&
+        ((oidc.data?.enabled && oidc.data.label) || plex.data?.enabled) ? (
+          <>
+            <p className="auth-divider">or</p>
+            {oidc.data?.enabled && oidc.data.label ? (
+              <a className="auth-provider" href="/api/auth/oidc/start">
+                Sign in with {oidc.data.label}
+              </a>
+            ) : null}
+            {plex.data?.enabled ? (
+              <a className="auth-provider" href="/api/auth/plex/start">
+                Sign in with Plex
+              </a>
+            ) : null}
+          </>
+        ) : null}
       </form>
     </main>
   );

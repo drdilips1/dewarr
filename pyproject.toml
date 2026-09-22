@@ -20,6 +20,8 @@ dependencies = [
   "pypdf>=6.19,<7",
   "libtorrent==2.1.1",
   "beautifulsoup4>=4.15,<5",
+  "authlib>=1.6,<2",
+  "joserfc>=1.7,<2",
 ]
 
 [dependency-groups]

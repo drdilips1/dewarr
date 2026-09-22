@@ -4,12 +4,14 @@ from datetime import UTC, datetime, timedelta
 from typing import Literal
 from uuid import UUID
 
+from cryptography.fernet import InvalidToken
 from fastapi import APIRouter, HTTPException, Request, Response
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 from sqlalchemy import delete, func, select, text
 from sqlalchemy.dialects.postgresql import insert
 
-from app.api.dependencies import COOKIE, CurrentUser, Database, require_origin
+from app.api.dependencies import COOKIE, CurrentUser, Database, client_host, require_origin
 from app.config import get_settings
 from app.db.models import AuditEvent, LoginSession, PermissionRole, RateLimit, User
 from app.domain.permissions import (
@@ -28,9 +30,18 @@ from app.domain.permissions import (
     unauthorized_grant,
 )
 from app.recovery import active_restore, restore_pending
-from app.security import csrf_token, hash_password, token_hash, verify_password
+from app.security import (
+    csrf_token,
+    decrypt_secrets,
+    encrypt_secrets,
+    hash_password,
+    token_hash,
+    verify_password,
+)
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
+HANDOFF = "book_handoff"
+FINISH = "/api/auth/finish"
 
 
 class Credentials(BaseModel):
@@ -153,7 +164,7 @@ async def enforce_auth_budget(db: Database, key: str) -> None:
         raise HTTPException(429, "Too many sign-in attempts. Try again in ten minutes")
 
 
-async def establish_session(user: User, db: Database, response: Response) -> AuthView:
+async def start_session(user: User, db: Database) -> str:
     settings = get_settings()
     checkpoint = await active_restore(db)
     recovering = await restore_pending(db)
@@ -170,6 +181,11 @@ async def establish_session(user: User, db: Database, response: Response) -> Aut
         )
     )
     await db.commit()
+    return token
+
+
+def write_session_cookie(response: Response, token: str) -> None:
+    settings = get_settings()
     response.set_cookie(
         COOKIE,
         token,
@@ -179,8 +195,27 @@ async def establish_session(user: User, db: Database, response: Response) -> Aut
         max_age=settings.session_hours * 3600,
         path="/",
     )
+
+
+def write_handoff(response: Response, token: str) -> None:
+    response.set_cookie(
+        HANDOFF,
+        encrypt_secrets({"token": token}),
+        httponly=True,
+        secure=get_settings().cookie_secure,
+        samesite="lax",
+        max_age=60,
+        path=FINISH,
+    )
+
+
+async def establish_session(user: User, db: Database, response: Response) -> AuthView:
+    token = await start_session(user, db)
+    write_session_cookie(response, token)
     return AuthView(
-        user=await named_user_view(db, user), csrf_token=csrf_token(token), recovery=recovering
+        user=await named_user_view(db, user),
+        csrf_token=csrf_token(token),
+        recovery=await restore_pending(db),
     )
 
 
@@ -214,9 +249,7 @@ async def bootstrap(body: BootstrapInput, request: Request, response: Response, 
 @router.post("/login", response_model=AuthView)
 async def login(body: Credentials, request: Request, response: Response, db: Database):
     require_origin(request)
-    await enforce_auth_budget(
-        db, "ip:" + token_hash(request.client.host if request.client else "local")
-    )
+    await enforce_auth_budget(db, "ip:" + token_hash(client_host(request)))
     await enforce_auth_budget(db, "login:" + token_hash(body.username))
     user = await db.scalar(select(User).where(User.username == body.username))
     encoded = user.password_hash if user and user.active else None
@@ -238,6 +271,26 @@ async def me(request: Request, user: CurrentUser, db: Database):
         csrf_token=csrf_token(request.cookies[COOKIE]),
         recovery=await restore_pending(db),
     )
+
+
+@router.get("/finish")
+async def finish(request: Request):
+    raw = request.cookies.get(HANDOFF)
+    token = None
+    if raw:
+        try:
+            payload = decrypt_secrets(raw)
+        except (InvalidToken, ValueError, TypeError):
+            payload = None
+        if isinstance(payload, dict) and isinstance(payload.get("token"), str):
+            token = payload["token"]
+    response = RedirectResponse("/", status_code=303)
+    response.delete_cookie(
+        HANDOFF, path=FINISH, secure=get_settings().cookie_secure, samesite="lax"
+    )
+    if token:
+        write_session_cookie(response, token)
+    return response
 
 
 @router.post("/logout", status_code=204)

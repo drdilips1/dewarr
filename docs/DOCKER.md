@@ -64,6 +64,15 @@ Existing `BOOK_DATABASE_URL`, `BOOK_SECRET_KEY`, and `BOOK_SECRET_KEY_FILE` over
 
 Proxy to port 8000 and set `PUBLIC_URL=https://books.example.com`. Secure cookies are enabled automatically for HTTPS. Keep the browser's original Host header. A proxy on the Compose network can use `http://dewarr:8000` as its upstream.
 
+Set `BOOK_PROXY_TOKEN` to a long random value. The proxy must send that value in `X-Dewarr-Proxy-Token`, set `X-Real-IP` to the connecting client, and append that client to `X-Forwarded-For`. When a header is repeated, the last value is the one that counts. Sign-in limits use that client when those two addresses agree, or when only one is present. If they disagree, Dewarr keeps the connection's own address, so a visitor-supplied address cannot replace the one the proxy appended. Requests without the token keep that connection address too, including visitors who open port 8000 directly.
+
+```nginx
+proxy_set_header Host $host;
+proxy_set_header X-Dewarr-Proxy-Token your-long-random-token;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+```
+
 ## Updating
 
 ```sh
@@ -103,7 +112,7 @@ Changing `POSTGRES_PASSWORD` in Compose does not change an existing database pas
 
 ## Troubleshooting
 
-- **Cannot sign in:** make `PUBLIC_URL` exactly match the browser address.
+- **Cannot sign in:** make `PUBLIC_URL` exactly match the browser address. Identity provider sign-in uses that same address for its redirect URL; see [OpenID Connect](OIDC.md). Plex sign-in uses it the same way; see [Plex](PLEX.md).
 - **Permission denied:** check `PUID`, `PGID`, and shared-folder ownership.
 - **Database unavailable:** check the database host and matching passwords.
 - **Existing database / missing key:** restore the original key to `config/app_key`.

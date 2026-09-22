@@ -45,7 +45,9 @@ from app.db.models import (
     ListSubscription,
     ListWritebackLease,
     ListWritebackPolicy,
+    OidcIdentity,
     Operation,
+    PlexIdentity,
     ProviderObject,
     RecoveryFinding,
     RecoveryScan,
@@ -146,6 +148,23 @@ async def context(db):
             ],
             key=lambda row: json.dumps(row, sort_keys=True, default=str),
         )
+    identities = (await db.scalars(select(OidcIdentity).limit(MAX_RECORDS + 1))).all()
+    if len(identities) > MAX_RECORDS:
+        raise ScanHeld("Recovery review exceeds the supported 10,000 records per entity type")
+    subjects = {row.user_id: row.subject for row in identities}
+    plex_ids = {
+        row.user_id: row.plex_user_id
+        for row in (await db.scalars(select(PlexIdentity).limit(MAX_RECORDS + 1))).all()
+    }
+    if len(plex_ids) > MAX_RECORDS:
+        raise ScanHeld("Recovery review exceeds the supported 10,000 records per entity type")
+    for user in result["users"]:
+        subject = subjects.get(user["id"])
+        if subject:
+            user["oidc_subject"] = subject
+        plex_user_id = plex_ids.get(user["id"])
+        if plex_user_id:
+            user["plex_user_id"] = plex_user_id
     operations = (
         await db.scalars(
             select(Operation).where(Operation.kind == "lists.writeback").limit(MAX_RECORDS + 1)
