@@ -65,6 +65,14 @@ test("settings use compact controls and naming presets persist with planner prev
     .getByRole("button", { name: "About Hardcover", exact: true })
     .focus();
   await expect(catalog.getByRole("tooltip")).toContainText("Open Library");
+  await expect(catalog.getByRole("tooltip")).toContainText("read:catalog");
+  await expect(catalog.getByRole("tooltip")).toContainText("write:lists");
+  await expect(
+    catalog.getByRole("link", { name: "Create a Hardcover API token" }),
+  ).toHaveAttribute(
+    "href",
+    /scope=read:catalog\+read:me:content\+read:lists\+read:library:public\+read:users\+write:lists/,
+  );
   await page.keyboard.press("Escape");
   await expect(catalog.getByRole("tooltip")).toHaveCount(0);
   await page.screenshot({
@@ -214,24 +222,22 @@ test("settings use compact controls and naming presets persist with planner prev
     name: "Users & access",
     exact: true,
   });
-  await accounts
+  await accounts.getByRole("button", { name: "Add user", exact: true }).click();
+  const addUser = page.getByRole("dialog", { name: "Add user" });
+  await addUser
     .getByLabel("Name", { exact: true })
     .fill("A reader with a deliberately long display name");
-  await accounts.getByLabel("Username", { exact: true }).fill("layout-reader");
-  await accounts
-    .getByLabel("Password", { exact: true })
-    .fill("layout reader password");
-  await accounts
-    .getByRole("combobox", { name: "Access", exact: true })
-    .selectOption("member");
-  await accounts
-    .getByRole("button", { name: "Create account", exact: true })
-    .click();
+  await addUser.getByLabel("Username", { exact: true }).fill("layout-reader");
+  await addUser.getByLabel("Password").fill("layout reader password");
+  await addUser
+    .getByRole("combobox", { name: "Role", exact: true })
+    .selectOption("Member");
+  await addUser.getByRole("button", { name: "Add user", exact: true }).click();
   await expect(
-    accounts.getByRole("button", {
-      name: "Allow list automation for A reader with a deliberately long display name",
+    accounts.getByRole("row", {
+      name: /A reader with a deliberately long display name/,
     }),
-  ).toBeVisible();
+  ).toContainText("Member");
   await page.setViewportSize({ width: 390, height: 844 });
   await jump("naming");
   await naming.screenshot({ path: testInfo.outputPath("naming-mobile.png") });

@@ -146,6 +146,8 @@ Already have PostgreSQL? Skip its container and use your existing database host,
 
 Open [localhost:8000](http://localhost:8000), or your server's address, and create your first account. Connect Audiobookshelf, Goodreads, Hardcover, and download clients in **Settings**.
 
+Before creating a Hardcover token, enable `read:catalog`, `read:me:content`, `read:lists`, `read:library:public`, `read:users`, and `write:lists`. [Create a token with those scopes selected](https://hardcover.app/account/api/keys/new?scope=read:catalog+read:me:content+read:lists+read:library:public+read:users+write:lists). The Metadata setup screen lists what each scope is for. Details are in [reading accounts](docs/READING-ACCOUNTS.md).
+
 Dewarr creates its encryption key in `/config` on first start. Keep that folder and the PostgreSQL volume when updating.
 
 [Settings, folders, backups, and upgrades](docs/DOCKER.md) · [Contributing](docs/DEVELOPMENT.md)

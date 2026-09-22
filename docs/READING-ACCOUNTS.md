@@ -10,7 +10,20 @@ Goodreads data travels one way into local lists. RSS is a partial observation: m
 
 ## Hardcover
 
-Use the saved Hardcover API token, or add it in the reading-accounts step. Browse paginated **My lists** and **Lists I follow**, then select lists to track. The same scheduling, manual refresh, and tracking controls apply. Private lists are supported when the token grants access. Existing verified-membership and opt-in writeback controls remain available within each local list. Connecting or following a list does not enable writeback or downloads.
+Create the API token before pasting it into onboarding or **Settings → Metadata**. [Open Hardcover’s new-key form with these scopes selected](https://hardcover.app/account/api/keys/new?scope=read:catalog+read:me:content+read:lists+read:library:public+read:users+write:lists):
+
+| Scope | Dewarr uses it for |
+| --- | --- |
+| `read:catalog` | Search, book, author, series, and edition details. Test connection runs a catalog search. |
+| `read:me:content` | Your user id, so your lists stay separate from lists you follow. Email and role access are not required. |
+| `read:lists` | Your lists, lists you follow, and private lists. |
+| `read:library:public` | Public reviews on book pages. |
+| `read:users` | Usernames on those reviews. |
+| `write:lists` | Adding and removing books on lists you own. |
+
+These six scopes cover discovery, list tracking, reviews, and list write-back. Tokens created before August 2026 already include this access. The same list is in the Metadata setup info button.
+
+Use the saved Hardcover API token, or add it in the reading-accounts step. Browse paginated **My lists** and **Lists I follow**, then select lists to track. The same scheduling, manual refresh, and tracking controls apply. Private lists are supported when the token grants `read:lists`. Existing verified-membership and opt-in writeback controls remain available within each local list and need `write:lists`. Connecting or following a list does not enable writeback or downloads.
 
 ## Checks and persistence
 

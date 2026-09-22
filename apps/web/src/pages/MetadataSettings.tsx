@@ -19,6 +19,25 @@ export const fieldLabel = (field: string) =>
   ({ publication_year: "Publication year", cover_url: "Cover" })[field] ||
   field.charAt(0).toUpperCase() + field.slice(1);
 
+/** Minimum Hardcover personal-access-token scopes for full Dewarr use. */
+const hardcoverScopes = [
+  [
+    "read:catalog",
+    "Search, plus book, author, series, and edition details. Required to test the connection.",
+  ],
+  [
+    "read:me:content",
+    "Your user id, so your lists stay separate from lists you follow.",
+  ],
+  ["read:lists", "Your lists, lists you follow, and private lists."],
+  ["read:library:public", "Public reviews on book pages."],
+  ["read:users", "Usernames on those reviews."],
+  ["write:lists", "Add and remove books on lists you own."],
+] as const;
+const hardcoverTokenUrl = `https://hardcover.app/account/api/keys/new?scope=${hardcoverScopes
+  .map(([scope]) => scope)
+  .join("+")}`;
+
 export default function MetadataSettings({
   admin,
   embedded = false,
@@ -82,9 +101,22 @@ export default function MetadataSettings({
           <h3>Hardcover</h3>
           <SettingHelp label="Hardcover">
             Optional. Open Library works without an account. Your token is
-            private to your account.
+            private to your account. Create it with these scopes so discovery,
+            lists, reviews, and list write-back all work:
+            {hardcoverScopes.map(([scope, reason]) => (
+              <span key={scope}>
+                <br />
+                {scope} — {reason}
+              </span>
+            ))}
           </SettingHelp>
         </div>
+        <p className="muted">
+          <a href={hardcoverTokenUrl} target="_blank" rel="noreferrer">
+            Create a Hardcover API token
+          </a>{" "}
+          with {hardcoverScopes.map(([scope]) => scope).join(", ")} selected.
+        </p>
         <Notice error={account.error || save.error || test.error} />
         {account.isPending && <Loading />}
         {account.data && (
