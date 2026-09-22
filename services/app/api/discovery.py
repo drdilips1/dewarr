@@ -31,6 +31,8 @@ class DiscoveryTitle(BaseModel):
     cover_url: str | None = None
     publication_year: int | None = None
     release_date: date | None = None
+    genres: list[str] = []
+    date_basis: Literal["audiobook", "work", "unknown"] = "unknown"
 
 
 class DiscoveryItem(BaseModel):

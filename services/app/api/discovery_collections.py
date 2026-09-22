@@ -127,7 +127,8 @@ async def save_layout(body: DiscoveryPreferences, user: CurrentUser, db: Databas
     if not row:
         row = DiscoveryLayout(user_id=user.id)
         db.add(row)
-    row.preferences = body.model_dump()
+    kept = (row.preferences or {}).get("release_genres", []) if row else []
+    row.preferences = {**body.model_dump(), "release_genres": kept}
     await db.commit()
     return body
 

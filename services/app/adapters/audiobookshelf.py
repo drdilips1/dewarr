@@ -4,6 +4,7 @@ import re
 from pathlib import PurePosixPath
 from typing import Any, Literal
 
+import httpx
 from pydantic import BaseModel, Field, ValidationError
 
 from app.adapters.contracts import AdapterError, Capabilities, FailureKind
@@ -70,6 +71,17 @@ _UNCONFINED = "Backend library path must be a confined absolute path"
 def _confined(parts: list[str], *, minimum: int) -> None:
     if len(parts) < minimum or any(part in {".", "..", ""} for part in parts):
         raise ValueError(_UNCONFINED)
+
+
+def metadata_patch(title, authors, narrators):
+    """Narrators are omitted when the new list is empty so an existing list is left alone."""
+    metadata = {
+        "title": title,
+        "authors": [{"name": name} for name in authors if name.strip()],
+    }
+    if narrators:
+        metadata["narrators"] = [{"name": name} for name in narrators if name.strip()]
+    return {"metadata": metadata}
 
 
 def backend_path(value):
@@ -382,3 +394,25 @@ class Audiobookshelf(JsonEndpoint):
 
     async def scan(self, library_id: str) -> None:
         await self.request("POST", f"api/libraries/{external_id(library_id)}/scan", empty=True)
+
+    async def update_item(self, item_id: str, *, title: str, authors: list[str], narrators):
+        """Write metadata only. Audio files are not renamed or retagged."""
+        await self.request(
+            "PATCH",
+            f"api/items/{external_id(item_id)}/media",
+            json=metadata_patch(title, authors, narrators),
+        )
+
+    async def update_cover(self, item_id: str, content: bytes) -> None:
+        item = external_id(item_id)
+        try:
+            response = await self.client.post(
+                f"api/items/{item}/cover",
+                files={"cover": ("cover.jpg", content, "image/jpeg")},
+            )
+        except httpx.HTTPError as error:
+            raise AdapterError(
+                FailureKind.ROUTE, "The server could not be reached. Check its URL and network."
+            ) from error
+        if not 200 <= response.status_code < 300:
+            raise AdapterError(FailureKind.UNAVAILABLE, "The server could not update the cover.")

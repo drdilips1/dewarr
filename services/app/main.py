@@ -54,6 +54,7 @@ from app.api import (
     reading_accounts,
     recovery,
     release_profiles,
+    releases,
     requests,
     series,
     series_discovery,
@@ -182,6 +183,7 @@ def create_app() -> FastAPI:
     app.include_router(sources.router, prefix="/api")
     app.include_router(book_sources.router, prefix="/api")
     app.include_router(release_profiles.router, prefix="/api")
+    app.include_router(releases.router, prefix="/api")
     app.include_router(prowlarr.router, prefix="/api")
     app.include_router(audiobookbay.router, prefix="/api")
     app.include_router(slskd.router, prefix="/api")

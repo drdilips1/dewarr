@@ -4293,7 +4293,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FollowInput"
+                "$ref": "#/components/schemas/app__domain__community_lists__FollowInput"
               }
             }
           }
@@ -12965,6 +12965,391 @@
         }
       }
     },
+    "/api/releases/genres": {
+      "get": {
+        "tags": [
+          "releases"
+        ],
+        "summary": "Genres",
+        "operationId": "genres_api_releases_genres_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenrePreferences"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "releases"
+        ],
+        "summary": "Update Genres",
+        "operationId": "update_genres_api_releases_genres_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenreInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenrePreferences"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/releases/calendar": {
+      "get": {
+        "tags": [
+          "releases"
+        ],
+        "summary": "Calendar",
+        "operationId": "calendar_api_releases_calendar_get",
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 7,
+              "maxLength": 7,
+              "title": "Month"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 25,
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseMonth"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/releases/upcoming": {
+      "get": {
+        "tags": [
+          "releases"
+        ],
+        "summary": "Upcoming",
+        "operationId": "upcoming_api_releases_upcoming_get",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 25,
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscoveryShelf"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/releases/follow": {
+      "post": {
+        "tags": [
+          "releases"
+        ],
+        "summary": "Follow",
+        "operationId": "follow_api_releases_follow_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/app__api__releases__FollowInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/releases/follow/{work_id}": {
+      "delete": {
+        "tags": [
+          "releases"
+        ],
+        "summary": "Unfollow",
+        "operationId": "unfollow_api_releases_follow__work_id__delete",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/releases/works/{work_id}": {
+      "get": {
+        "tags": [
+          "releases"
+        ],
+        "summary": "Pre Release",
+        "operationId": "pre_release_api_releases_works__work_id__get",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreReleaseView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/releases/works/{work_id}/search": {
+      "post": {
+        "tags": [
+          "releases"
+        ],
+        "summary": "Search Pre Release",
+        "operationId": "search_pre_release_api_releases_works__work_id__search_post",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreReleaseView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/releases/works/{work_id}/confirm": {
+      "post": {
+        "tags": [
+          "releases"
+        ],
+        "summary": "Confirm Pre Release",
+        "description": "Choosing a listed candidate applies it, including a unique title-and-author match.",
+        "operationId": "confirm_pre_release_api_releases_works__work_id__confirm_post",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Work Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreReleaseView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/sources/prowlarr/connection": {
       "get": {
         "tags": [
@@ -18023,6 +18408,20 @@
         ],
         "title": "CommunityListPreview"
       },
+      "ConfirmInput": {
+        "properties": {
+          "isbn": {
+            "type": "string",
+            "pattern": "\\d{10}|\\d{13}",
+            "title": "Isbn"
+          }
+        },
+        "type": "object",
+        "required": [
+          "isbn"
+        ],
+        "title": "ConfirmInput"
+      },
       "ConnectionCheck": {
         "properties": {
           "library_count": {
@@ -19644,6 +20043,24 @@
               }
             ],
             "title": "Release Date"
+          },
+          "genres": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Genres",
+            "default": []
+          },
+          "date_basis": {
+            "type": "string",
+            "enum": [
+              "audiobook",
+              "work",
+              "unknown"
+            ],
+            "title": "Date Basis",
+            "default": "unknown"
           }
         },
         "type": "object",
@@ -20856,27 +21273,6 @@
         ],
         "title": "FolderOption"
       },
-      "FollowInput": {
-        "properties": {
-          "name": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 200,
-                "minLength": 1,
-                "pattern": "\\S"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Name"
-          }
-        },
-        "additionalProperties": false,
-        "type": "object",
-        "title": "FollowInput"
-      },
       "FollowReadingList": {
         "properties": {
           "provider": {
@@ -20938,6 +21334,57 @@
           "receipt_id"
         ],
         "title": "FollowResult"
+      },
+      "FollowView": {
+        "properties": {
+          "work_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Work Id"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "waiting",
+              "wanted",
+              "available",
+              "stopped"
+            ],
+            "title": "State"
+          },
+          "release_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Release Date"
+          },
+          "basis": {
+            "type": "string",
+            "enum": [
+              "audiobook",
+              "work",
+              "unknown"
+            ],
+            "title": "Basis"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "work_id",
+          "state",
+          "basis",
+          "message"
+        ],
+        "title": "FollowView"
       },
       "FollowedListCard": {
         "properties": {
@@ -21287,6 +21734,44 @@
           "available_now"
         ],
         "title": "FulfillmentView"
+      },
+      "GenreInput": {
+        "properties": {
+          "genres": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 11,
+            "title": "Genres"
+          }
+        },
+        "type": "object",
+        "title": "GenreInput"
+      },
+      "GenrePreferences": {
+        "properties": {
+          "selected": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Selected"
+          },
+          "choices": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Choices"
+          }
+        },
+        "type": "object",
+        "required": [
+          "selected",
+          "choices"
+        ],
+        "title": "GenrePreferences"
       },
       "GoodreadsAccountView": {
         "properties": {
@@ -26819,6 +27304,101 @@
         ],
         "title": "PolicyView"
       },
+      "PreReleaseCandidate": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Authors"
+          },
+          "narrators": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Narrators"
+          },
+          "isbn": {
+            "type": "string",
+            "title": "Isbn"
+          },
+          "cover_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cover Url"
+          },
+          "coming_soon": {
+            "type": "boolean",
+            "title": "Coming Soon",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "authors",
+          "isbn"
+        ],
+        "title": "PreReleaseCandidate"
+      },
+      "PreReleaseView": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/PreReleaseCandidate"
+            },
+            "type": "array",
+            "title": "Candidates"
+          },
+          "release_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Release Date"
+          },
+          "basis": {
+            "type": "string",
+            "enum": [
+              "audiobook",
+              "work",
+              "unknown"
+            ],
+            "title": "Basis",
+            "default": "unknown"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "PreReleaseView"
+      },
       "PreferenceChoice": {
         "properties": {
           "profile_id": {
@@ -29001,6 +29581,201 @@
         ],
         "title": "ReleaseAssessment"
       },
+      "ReleaseEntry": {
+        "properties": {
+          "work_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Work Id"
+          },
+          "provider": {
+            "type": "string",
+            "enum": [
+              "hardcover",
+              "local",
+              "librofm"
+            ],
+            "title": "Provider"
+          },
+          "external_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Authors"
+          },
+          "cover_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cover Url"
+          },
+          "release_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Release Date"
+          },
+          "basis": {
+            "type": "string",
+            "enum": [
+              "audiobook",
+              "work",
+              "unknown"
+            ],
+            "title": "Basis"
+          },
+          "followed": {
+            "type": "boolean",
+            "title": "Followed",
+            "default": false
+          },
+          "in_library": {
+            "type": "boolean",
+            "title": "In Library",
+            "default": false
+          },
+          "genres": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Genres"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State"
+          }
+        },
+        "type": "object",
+        "required": [
+          "provider",
+          "title",
+          "authors",
+          "basis"
+        ],
+        "title": "ReleaseEntry"
+      },
+      "ReleaseMonth": {
+        "properties": {
+          "month": {
+            "type": "string",
+            "title": "Month"
+          },
+          "genres": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Genres"
+          },
+          "choices": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Choices"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ReleaseEntry"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "undated": {
+            "items": {
+              "$ref": "#/components/schemas/ReleaseEntry"
+            },
+            "type": "array",
+            "title": "Undated"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More",
+            "default": false
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "not-connected",
+              "unavailable"
+            ],
+            "title": "Status",
+            "default": "ready"
+          },
+          "warning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Warning"
+          },
+          "stale": {
+            "type": "boolean",
+            "title": "Stale",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "month",
+          "genres",
+          "choices",
+          "items",
+          "undated",
+          "page"
+        ],
+        "title": "ReleaseMonth"
+      },
       "ReleasePage": {
         "properties": {
           "source": {
@@ -31052,6 +31827,11 @@
           "publication": {
             "type": "string",
             "title": "Publication"
+          },
+          "followed": {
+            "type": "boolean",
+            "title": "Followed",
+            "default": false
           },
           "work": {
             "$ref": "#/components/schemas/WorkView"
@@ -34513,6 +35293,121 @@
           "external_id"
         ],
         "title": "MatchInput"
+      },
+      "app__api__releases__FollowInput": {
+        "properties": {
+          "work_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Work Id"
+          },
+          "provider": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "hardcover"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider"
+          },
+          "external_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External Id"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 600
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 40,
+            "title": "Authors"
+          },
+          "cover_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cover Url"
+          },
+          "release_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Release Date"
+          },
+          "basis": {
+            "type": "string",
+            "enum": [
+              "audiobook",
+              "work",
+              "unknown"
+            ],
+            "title": "Basis",
+            "default": "unknown"
+          }
+        },
+        "type": "object",
+        "title": "FollowInput"
+      },
+      "app__domain__community_lists__FollowInput": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "FollowInput"
       }
     }
   }

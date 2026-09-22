@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Search } from "lucide-react";
 import { api, result, type Work } from "../api/client";
 import type { components } from "../api/schema";
 import { Notice } from "../components";
 import BookCover from "../components/BookCover";
+import { basisLabel } from "../components/FollowRelease";
 import ProviderSearch, { Preview } from "./ProviderSearch";
 
 type Source = components["schemas"]["SourceView"];
@@ -167,6 +168,127 @@ export default function BookMatch({
           onClose={() => setSelected(null)}
         />
       )}
+      {!source && work.availability.audio && (
+        <PreRelease work={work} admin={admin} updated={updated} />
+      )}
     </section>
+  );
+}
+
+function PreRelease({
+  work,
+  admin,
+  updated,
+}: {
+  work: Work;
+  admin: boolean;
+  updated: () => void;
+}) {
+  const cache = useQueryClient();
+  const query = useQuery({
+    queryKey: ["pre-release", work.id],
+    queryFn: async () =>
+      result(
+        await api.GET("/api/releases/works/{work_id}", {
+          params: { path: { work_id: work.id } },
+        }),
+      ),
+    retry: false,
+  });
+  const search = useMutation({
+    mutationFn: async () =>
+      result(
+        await api.POST("/api/releases/works/{work_id}/search", {
+          params: { path: { work_id: work.id } },
+        }),
+      ),
+    onSuccess: (value) => {
+      cache.setQueryData(["pre-release", work.id], value);
+      if (value.status === "matched") updated();
+    },
+  });
+  const confirm = useMutation({
+    mutationFn: async (isbn: string) =>
+      result(
+        await api.POST("/api/releases/works/{work_id}/confirm", {
+          params: { path: { work_id: work.id } },
+          body: { isbn },
+        }),
+      ),
+    onSuccess: (value) => {
+      cache.setQueryData(["pre-release", work.id], value);
+      if (value.status === "matched") updated();
+    },
+  });
+  const view = search.data || query.data;
+  if (view?.status === "skipped") return null;
+  const candidates = view?.candidates || [];
+  return (
+    <div className="book-match-prerelease">
+      <h3>Pre-release audiobook</h3>
+      <p className="muted">
+        Search when Hardcover does not know this audiobook. A unique ISBN match
+        is applied. A title match waits until you confirm it.
+      </p>
+      {view?.release_date && (
+        <p>
+          {basisLabel(view.basis)} · {view.release_date}
+        </p>
+      )}
+      {view?.message && (
+        <p className="muted" role="status">
+          {view.message}
+        </p>
+      )}
+      <Notice error={query.error || search.error || confirm.error} />
+      {admin && (
+        <button
+          type="button"
+          disabled={search.isPending || confirm.isPending}
+          onClick={() => search.mutate()}
+        >
+          <Search size={16} />{" "}
+          {search.isPending ? "Searching…" : "Search pre-release"}
+        </button>
+      )}
+      {candidates.length > 0 && (
+        <div className="book-match-choices">
+          {candidates.map((candidate) => (
+            <article className="book-match-choice" key={candidate.isbn}>
+              <div className="book-match-cover">
+                <BookCover
+                  title={candidate.title}
+                  cover={candidate.cover_url}
+                  actions={false}
+                />
+              </div>
+              <div className="book-match-copy">
+                <h3>{candidate.title}</h3>
+                <p>{candidate.authors.join(", ") || "Author unknown"}</p>
+                <small className="muted">
+                  {[
+                    (candidate.narrators || []).join(", "),
+                    `ISBN ${candidate.isbn}`,
+                    candidate.coming_soon && "Coming soon",
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </small>
+                {admin && (
+                  <button
+                    type="button"
+                    className="primary"
+                    disabled={confirm.isPending || search.isPending}
+                    onClick={() => confirm.mutate(candidate.isbn)}
+                  >
+                    {confirm.isPending ? "Applying…" : "Use this audiobook"}
+                  </button>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }

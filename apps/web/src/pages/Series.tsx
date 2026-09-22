@@ -12,6 +12,7 @@ import BookCover from "../components/BookCover";
 import DetailTabs from "../components/DetailTabs";
 import SeriesRequests from "./SeriesRequests";
 import SeriesScopeReview from "./SeriesScopeReview";
+import FollowRelease from "../components/FollowRelease";
 import { randomUUID } from "../randomUUID";
 
 function missingWorkIds(
@@ -483,6 +484,7 @@ function SeriesContent({
                           disabled={
                             add.isPending ||
                             loading ||
+                            entry.publication === "unreleased" ||
                             (!selected.includes(entry.work.id) &&
                               selected.length >= 100)
                           }
@@ -520,7 +522,7 @@ function SeriesContent({
                         entry.ambiguous_position &&
                           "Multiple works at this position",
                         entry.publication === "unreleased" &&
-                          `Unreleased · ${entry.release_date}`,
+                          `Unreleased · ${entry.release_date || "date unknown"}`,
                         entry.publication === "unknown" &&
                           "Publication date unknown",
                         entry.details !== entry.position && entry.details,
@@ -528,6 +530,20 @@ function SeriesContent({
                         .filter(Boolean)
                         .join(" · ")}
                     </p>
+                    {entry.publication === "unreleased" && (
+                      <FollowRelease
+                        canEdit={canEdit}
+                        following={entry.followed}
+                        workId={entry.work.id}
+                        body={{
+                          work_id: entry.work.id,
+                          title: entry.work.title,
+                          authors: entry.work.authors,
+                          release_date: entry.release_date,
+                          basis: "work",
+                        }}
+                      />
+                    )}
                   </div>
                 </article>
               ))}

@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 
 export default function InfiniteScroll({
   query,
+  manual = false,
 }: {
   query: {
     hasNextPage: boolean;
@@ -9,12 +10,13 @@ export default function InfiniteScroll({
     isFetchNextPageError: boolean;
     fetchNextPage: () => Promise<unknown>;
   };
+  manual?: boolean;
 }) {
   const target = useRef<HTMLDivElement>(null);
   const { hasNextPage, isFetching, isFetchNextPageError, fetchNextPage } =
     query;
   useEffect(() => {
-    if (!hasNextPage || isFetching || isFetchNextPageError) return;
+    if (manual || !hasNextPage || isFetching || isFetchNextPageError) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -26,7 +28,7 @@ export default function InfiniteScroll({
     );
     if (target.current) observer.observe(target.current);
     return () => observer.disconnect();
-  }, [hasNextPage, isFetching, isFetchNextPageError, fetchNextPage]);
+  }, [manual, hasNextPage, isFetching, isFetchNextPageError, fetchNextPage]);
   if (!hasNextPage) return null;
   return (
     <div ref={target} className="infinite-scroll" aria-live="polite">

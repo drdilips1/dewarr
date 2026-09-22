@@ -3683,6 +3683,13 @@ img.detail-cover {
 .book-match-search {
   margin-top: 24px;
 }
+.book-match-prerelease {
+  display: grid;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
 .book-match-search .catalog-search-form {
   padding: 0;
   background: none;

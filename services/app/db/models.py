@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any
 from uuid import UUID, uuid4
 
@@ -6,6 +6,7 @@ from sqlalchemy import (
     BigInteger,
     Boolean,
     CheckConstraint,
+    Date,
     DateTime,
     ForeignKey,
     Index,
@@ -1142,6 +1143,33 @@ class ImportEntry(Identity, Base):
     confirmed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     asset_id: Mapped[UUID | None] = mapped_column(ForeignKey("library_assets.id"))
     next_check_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), index=True)
+
+
+class MonitoredRelease(Identity, Base):
+    """A followed or quick-added book that waits for its release day before any source search."""
+
+    __tablename__ = "monitored_releases"
+    __table_args__ = (
+        UniqueConstraint("owner_id", "work_id"),
+        CheckConstraint(
+            "state IN ('waiting', 'wanted', 'available', 'stopped')",
+            name="monitored_release_state",
+        ),
+        CheckConstraint(
+            "basis IN ('audiobook', 'work', 'unknown')",
+            name="monitored_release_basis",
+        ),
+    )
+    owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    work_id: Mapped[UUID] = mapped_column(ForeignKey("works.id", ondelete="CASCADE"), index=True)
+    release_date: Mapped[date | None] = mapped_column(Date)
+    basis: Mapped[str] = mapped_column(String(20), default="unknown")
+    state: Mapped[str] = mapped_column(String(20), default="waiting")
+    round: Mapped[int] = mapped_column(Integer, default=0)
+    generation: Mapped[int] = mapped_column(Integer, default=0)
+    next_check_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), index=True)
+    operation_id: Mapped[UUID | None] = mapped_column(ForeignKey("operations.id"))
+    specification: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
 
 
 class DiscoveryLayout(Base):

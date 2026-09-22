@@ -3938,6 +3938,146 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/releases/genres": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Genres */
+    get: operations["genres_api_releases_genres_get"];
+    /** Update Genres */
+    put: operations["update_genres_api_releases_genres_put"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/releases/calendar": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Calendar */
+    get: operations["calendar_api_releases_calendar_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/releases/upcoming": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Upcoming */
+    get: operations["upcoming_api_releases_upcoming_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/releases/follow": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Follow */
+    post: operations["follow_api_releases_follow_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/releases/follow/{work_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** Unfollow */
+    delete: operations["unfollow_api_releases_follow__work_id__delete"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/releases/works/{work_id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Pre Release */
+    get: operations["pre_release_api_releases_works__work_id__get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/releases/works/{work_id}/search": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Search Pre Release */
+    post: operations["search_pre_release_api_releases_works__work_id__search_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/releases/works/{work_id}/confirm": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Confirm Pre Release
+     * @description Choosing a listed candidate applies it, including a unique title-and-author match.
+     */
+    post: operations["confirm_pre_release_api_releases_works__work_id__confirm_post"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/sources/prowlarr/connection": {
     parameters: {
       query?: never;
@@ -5839,6 +5979,11 @@ export interface components {
       /** Warning */
       warning?: string | null;
     };
+    /** ConfirmInput */
+    ConfirmInput: {
+      /** Isbn */
+      isbn: string;
+    };
     /** ConnectionCheck */
     ConnectionCheck: {
       /** Library Count */
@@ -6426,6 +6571,17 @@ export interface components {
       publication_year?: number | null;
       /** Release Date */
       release_date?: string | null;
+      /**
+       * Genres
+       * @default []
+       */
+      genres: string[];
+      /**
+       * Date Basis
+       * @default unknown
+       * @enum {string}
+       */
+      date_basis: "audiobook" | "work" | "unknown";
     };
     /** DiscoveryView */
     DiscoveryView: {
@@ -6834,11 +6990,6 @@ export interface components {
       /** Error */
       error?: string | null;
     };
-    /** FollowInput */
-    FollowInput: {
-      /** Name */
-      name?: string | null;
-    };
     /** FollowReadingList */
     FollowReadingList: {
       /**
@@ -6873,6 +7024,28 @@ export interface components {
        * Format: uuid
        */
       receipt_id: string;
+    };
+    /** FollowView */
+    FollowView: {
+      /**
+       * Work Id
+       * Format: uuid
+       */
+      work_id: string;
+      /**
+       * State
+       * @enum {string}
+       */
+      state: "waiting" | "wanted" | "available" | "stopped";
+      /** Release Date */
+      release_date?: string | null;
+      /**
+       * Basis
+       * @enum {string}
+       */
+      basis: "audiobook" | "work" | "unknown";
+      /** Message */
+      message: string;
     };
     /** FollowedListCard */
     FollowedListCard: {
@@ -7015,6 +7188,18 @@ export interface components {
       basis: string;
       /** Available Now */
       available_now: boolean;
+    };
+    /** GenreInput */
+    GenreInput: {
+      /** Genres */
+      genres?: string[];
+    };
+    /** GenrePreferences */
+    GenrePreferences: {
+      /** Selected */
+      selected: string[];
+      /** Choices */
+      choices: string[];
     };
     /** GoodreadsAccountView */
     GoodreadsAccountView: {
@@ -9165,6 +9350,44 @@ export interface components {
       /** Message */
       message: string;
     };
+    /** PreReleaseCandidate */
+    PreReleaseCandidate: {
+      /** Title */
+      title: string;
+      /** Authors */
+      authors: string[];
+      /** Narrators */
+      narrators?: string[];
+      /** Isbn */
+      isbn: string;
+      /** Cover Url */
+      cover_url?: string | null;
+      /**
+       * Coming Soon
+       * @default false
+       */
+      coming_soon: boolean;
+    };
+    /** PreReleaseView */
+    PreReleaseView: {
+      /** Status */
+      status: string;
+      /** Candidates */
+      candidates?: components["schemas"]["PreReleaseCandidate"][];
+      /** Release Date */
+      release_date?: string | null;
+      /**
+       * Basis
+       * @default unknown
+       * @enum {string}
+       */
+      basis: "audiobook" | "work" | "unknown";
+      /**
+       * Message
+       * @default
+       */
+      message: string;
+    };
     /** PreferenceChoice */
     PreferenceChoice: {
       /** Profile Id */
@@ -9919,6 +10142,78 @@ export interface components {
       formats: string[];
       /** Source Origin */
       source_origin: string;
+    };
+    /** ReleaseEntry */
+    ReleaseEntry: {
+      /** Work Id */
+      work_id?: string | null;
+      /**
+       * Provider
+       * @enum {string}
+       */
+      provider: "hardcover" | "local" | "librofm";
+      /** External Id */
+      external_id?: string | null;
+      /** Title */
+      title: string;
+      /** Authors */
+      authors: string[];
+      /** Cover Url */
+      cover_url?: string | null;
+      /** Release Date */
+      release_date?: string | null;
+      /**
+       * Basis
+       * @enum {string}
+       */
+      basis: "audiobook" | "work" | "unknown";
+      /**
+       * Followed
+       * @default false
+       */
+      followed: boolean;
+      /**
+       * In Library
+       * @default false
+       */
+      in_library: boolean;
+      /** Genres */
+      genres?: string[];
+      /** State */
+      state?: string | null;
+    };
+    /** ReleaseMonth */
+    ReleaseMonth: {
+      /** Month */
+      month: string;
+      /** Genres */
+      genres: string[];
+      /** Choices */
+      choices: string[];
+      /** Items */
+      items: components["schemas"]["ReleaseEntry"][];
+      /** Undated */
+      undated: components["schemas"]["ReleaseEntry"][];
+      /** Page */
+      page: number;
+      /**
+       * Has More
+       * @default false
+       */
+      has_more: boolean;
+      /**
+       * Status
+       * @default ready
+       * @enum {string}
+       */
+      status: "ready" | "not-connected" | "unavailable";
+      /** Warning */
+      warning?: string | null;
+      /**
+       * Stale
+       * @default false
+       */
+      stale: boolean;
     };
     /** ReleasePage */
     ReleasePage: {
@@ -10683,6 +10978,11 @@ export interface components {
       release_date: string | null;
       /** Publication */
       publication: string;
+      /**
+       * Followed
+       * @default false
+       */
+      followed: boolean;
       work: components["schemas"]["WorkView"];
     };
     /** SeriesGap */
@@ -11950,6 +12250,34 @@ export interface components {
        * @default false
        */
       confirm_match: boolean;
+    };
+    /** FollowInput */
+    app__api__releases__FollowInput: {
+      /** Work Id */
+      work_id?: string | null;
+      /** Provider */
+      provider?: "hardcover" | null;
+      /** External Id */
+      external_id?: string | null;
+      /** Title */
+      title?: string | null;
+      /** Authors */
+      authors?: string[];
+      /** Cover Url */
+      cover_url?: string | null;
+      /** Release Date */
+      release_date?: string | null;
+      /**
+       * Basis
+       * @default unknown
+       * @enum {string}
+       */
+      basis: "audiobook" | "work" | "unknown";
+    };
+    /** FollowInput */
+    app__domain__community_lists__FollowInput: {
+      /** Name */
+      name?: string | null;
     };
   };
   responses: never;
@@ -14845,7 +15173,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["FollowInput"];
+        "application/json": components["schemas"]["app__domain__community_lists__FollowInput"];
       };
     };
     responses: {
@@ -20114,6 +20442,283 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["ProfileSnapshot"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  genres_api_releases_genres_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GenrePreferences"];
+        };
+      };
+    };
+  };
+  update_genres_api_releases_genres_put: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["GenreInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GenrePreferences"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  calendar_api_releases_calendar_get: {
+    parameters: {
+      query: {
+        month: string;
+        page?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ReleaseMonth"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  upcoming_api_releases_upcoming_get: {
+    parameters: {
+      query?: {
+        page?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DiscoveryShelf"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  follow_api_releases_follow_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["app__api__releases__FollowInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FollowView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  unfollow_api_releases_follow__work_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        work_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["FollowView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  pre_release_api_releases_works__work_id__get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        work_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PreReleaseView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  search_pre_release_api_releases_works__work_id__search_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        work_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PreReleaseView"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  confirm_pre_release_api_releases_works__work_id__confirm_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        work_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ConfirmInput"];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PreReleaseView"];
         };
       };
       /** @description Validation Error */

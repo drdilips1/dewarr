@@ -412,6 +412,16 @@ async def reuse_completed_transfer(continuation_id: str) -> None:
 
 
 @tasks.periodic(cron="*/10 * * * *")
+@tasks.task(name="releases.schedule", queue="metadata", retry=3)
+async def schedule_releases(timestamp: int) -> None:
+    from app.domain.libro_library import schedule as schedule_enrichment
+    from app.domain.release_monitor import schedule as schedule_monitors
+
+    await schedule_monitors()
+    await schedule_enrichment()
+
+
+@tasks.periodic(cron="*/10 * * * *")
 @tasks.task(name="discovery.schedule", queue="metadata", retry=3)
 async def schedule_discovery(timestamp: int) -> None:
     from app.domain.discovery_catalog import schedule
