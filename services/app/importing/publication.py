@@ -10,6 +10,7 @@ import fcntl
 import hashlib
 import json
 import os
+import re
 import stat
 import sys
 import time
@@ -80,7 +81,9 @@ class PublicationSpec(StrictModel):
         relative_parts(self.folder)
         names = [file.name for file in self.files]
         for name in self.sidecars:
-            if name not in {"metadata.opf", "reader.txt", "desc.txt"}:
+            if name not in {"metadata.opf", "reader.txt", "desc.txt"} and not re.fullmatch(
+                r"[^/\\.\x00][^/\\\x00]{0,180}\.metadata\.json", name
+            ):
                 raise ValueError(
                     "Only independently generated supported metadata sidecars are allowed"
                 )

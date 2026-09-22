@@ -13819,7 +13819,10 @@
         "properties": {
           "kind": {
             "type": "string",
-            "const": "audiobookshelf",
+            "enum": [
+              "audiobookshelf",
+              "grimmory"
+            ],
             "title": "Kind",
             "default": "audiobookshelf"
           },
@@ -13861,6 +13864,36 @@
               }
             ],
             "title": "Token"
+          },
+          "username": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1,
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Username"
+          },
+          "password": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000,
+                "minLength": 1,
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Password"
           },
           "enabled": {
             "type": "boolean",
@@ -14605,6 +14638,10 @@
             "type": "string",
             "title": "Medium"
           },
+          "server_kind": {
+            "type": "string",
+            "title": "Server Kind"
+          },
           "state": {
             "type": "string",
             "title": "State"
@@ -14717,6 +14754,7 @@
           "library_name",
           "title",
           "medium",
+          "server_kind",
           "state",
           "full_content",
           "match_status",
@@ -16936,6 +16974,7 @@
             "type": "string",
             "enum": [
               "audiobookshelf",
+              "grimmory",
               "qbittorrent"
             ],
             "title": "Kind"
@@ -18140,6 +18179,10 @@
             "type": "boolean",
             "title": "Publication Available",
             "default": false
+          },
+          "server_kind": {
+            "type": "string",
+            "title": "Server Kind"
           }
         },
         "additionalProperties": false,
@@ -18154,7 +18197,8 @@
           "enabled",
           "revision",
           "configured",
-          "probe"
+          "probe",
+          "server_kind"
         ],
         "title": "DestinationView"
       },
@@ -19433,6 +19477,10 @@
             "type": "string",
             "title": "Server Name"
           },
+          "server_kind": {
+            "type": "string",
+            "title": "Server Kind"
+          },
           "folders": {
             "items": {
               "type": "string"
@@ -19444,6 +19492,11 @@
           "ebooks_allowed": {
             "type": "boolean",
             "title": "Ebooks Allowed",
+            "default": true
+          },
+          "audio_allowed": {
+            "type": "boolean",
+            "title": "Audio Allowed",
             "default": true
           },
           "error": {
@@ -19463,7 +19516,8 @@
         "required": [
           "library_id",
           "library_name",
-          "server_name"
+          "server_name",
+          "server_kind"
         ],
         "title": "FolderOption"
       },

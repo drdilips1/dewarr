@@ -58,6 +58,7 @@ class AssetView(BaseModel):
     title: str
     authors: list[str] = Field(default_factory=list)
     medium: str
+    server_kind: str
     state: str
     full_content: bool
     match_status: str
@@ -324,7 +325,12 @@ async def assets(
         (
             await db.scalars(
                 select(ProviderObject).where(
-                    ProviderObject.provider.in_([f"abs:{row[2].id}" for row in rows]),
+                    ProviderObject.provider.in_(
+                        [
+                            f"{'grimmory' if row[2].kind == 'grimmory' else 'abs'}:{row[2].id}"
+                            for row in rows
+                        ]
+                    ),
                     ProviderObject.external_id.in_([row[0].external_id for row in rows]),
                 )
             )
@@ -354,7 +360,8 @@ async def assets(
     )
     views = []
     for asset, library, connection in rows:
-        link = by_key.get((f"abs:{connection.id}", f"item:{asset.medium}", asset.external_id))
+        prefix = "grimmory" if connection.kind == "grimmory" else "abs"
+        link = by_key.get((f"{prefix}:{connection.id}", f"item:{asset.medium}", asset.external_id))
         match_revision = (
             revision(
                 await asset_state(
@@ -372,6 +379,7 @@ async def assets(
                 title=asset.title or "Unidentified book",
                 authors=asset.metadata_snapshot.get("authors", []),
                 medium=asset.medium,
+                server_kind=connection.kind,
                 state=asset.state,
                 full_content=asset.full_content,
                 match_status=asset.match_status,
@@ -412,7 +420,7 @@ async def assets(
                     if isinstance(file.get("path"), str)
                 ],
                 open_url=(connection.config.get("public_url") or connection.base_url)
-                + "/item/"
+                + ("/book/" if connection.kind == "grimmory" else "/item/")
                 + asset.external_id,
             )
         )

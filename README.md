@@ -6,7 +6,7 @@
 
 ## Features
 
-- **Audiobookshelf integration** — browse your library, see what you own, and import completed downloads into verified library folders.
+- **Library integration** — connect Audiobookshelf or Grimmory, see what you own, and import completed downloads into verified library folders.
 - **Goodreads sync** — follow shelves, import CSV exports, and check for new books automatically.
 - **Hardcover sync** — track your lists and lists you follow, including private lists your account can access.
 - **Custom Goodreads lists** — add public lists, track changes, and pin them to your discovery page.
@@ -144,7 +144,7 @@ Already have PostgreSQL? Skip its container and use your existing database host,
 
 </details>
 
-Open [localhost:8000](http://localhost:8000), or your server's address, and create your first account. Connect Audiobookshelf, Goodreads, Hardcover, and download clients in **Settings**.
+Open [localhost:8000](http://localhost:8000), or your server's address, and create your first account. Connect Audiobookshelf or Grimmory, Goodreads, Hardcover, and download clients in **Settings**.
 
 Dewarr creates its encryption key in `/config` on first start. Keep that folder and the PostgreSQL volume when updating.
 

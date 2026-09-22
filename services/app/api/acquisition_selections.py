@@ -191,7 +191,7 @@ async def options(user: Member, db: Database):
             ImportDestination.enabled.is_(True),
             Library.accessible.is_(True),
             Integration.enabled.is_(True),
-            Integration.kind == "audiobookshelf",
+            Integration.kind.in_(["audiobookshelf", "grimmory"]),
             visible_library(user),
         )
         .order_by(Library.name, ImportDestination.id)

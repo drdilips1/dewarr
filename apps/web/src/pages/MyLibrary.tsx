@@ -13,6 +13,10 @@ import IdentityHistory from "./IdentityHistory";
 import CollectionContents from "./CollectionContents";
 
 type Asset = components["schemas"]["AssetView"];
+
+function libraryApp(kind: string) {
+  return kind === "grimmory" ? "Grimmory" : "Audiobookshelf";
+}
 type Medium = "any" | "ebook" | "audio";
 type AssetState =
   | "any"
@@ -384,7 +388,7 @@ export function LibraryAssets({
             </p>
           )}
           <a href={fileDetails.open_url} target="_blank" rel="noreferrer">
-            Open in Audiobookshelf →
+            Open in {libraryApp(fileDetails.server_kind)} →
           </a>
         </BookDialog>
       )}
@@ -477,7 +481,7 @@ export function LibraryAssets({
                           href={asset.open_url}
                           target="_blank"
                           rel="noreferrer"
-                          aria-label="Open in Audiobookshelf"
+                          aria-label={`Open in ${libraryApp(asset.server_kind)}`}
                         >
                           Open ↗
                         </a>
@@ -616,7 +620,7 @@ export function LibraryAssets({
                   )}
                   <div className="button-row">
                     <a href={asset.open_url} target="_blank" rel="noreferrer">
-                      Open in Audiobookshelf
+                      Open in {libraryApp(asset.server_kind)}
                     </a>
                     {admin && (
                       <button

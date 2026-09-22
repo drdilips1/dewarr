@@ -10,6 +10,7 @@ from sqlalchemy import select
 
 from app.adapters.audiobookshelf import Audiobookshelf
 from app.adapters.contracts import AdapterError
+from app.adapters.grimmory import Grimmory
 from app.config import get_settings
 from app.db.models import AuditEvent, ImportDestination, Integration, Library, Operation, User
 from app.db.session import session_factory
@@ -39,6 +40,7 @@ async def destination_configuration(db, destination):
             "enabled": integration.enabled,
             "library_external_id": library.external_id,
             "accessible": library.accessible,
+            "kind": integration.kind,
         }
         if integration and library
         else None,
@@ -84,7 +86,7 @@ async def permitted(db, operation, destination):
         and library
         and library.accessible
         and integration
-        and integration.kind == "audiobookshelf"
+        and integration.kind in {"audiobookshelf", "grimmory"}
         and integration.enabled
         and destination.enabled
         and not get_settings().recovery_mode
@@ -116,7 +118,6 @@ async def setup_route_current(db, evidence):
 
 
 async def probe_route(operation_id: UUID, *, client_factory=None):
-    client_factory = client_factory or Audiobookshelf
     token = uuid4()
     async with session_factory()() as db, db.begin():
         operation = await db.get(Operation, operation_id)
@@ -152,13 +153,22 @@ async def probe_route(operation_id: UUID, *, client_factory=None):
             Integration, UUID(payload["configuration"]["backend"]["integration_id"])
         )
         try:
-            secret = decrypt_secrets(integration.encrypted_secrets)["token"]
-            if not isinstance(secret, str) or not secret:
-                raise ValueError("Missing token")
+            secrets = decrypt_secrets(integration.encrypted_secrets)
+            if integration.kind == "grimmory":
+                secret = secrets
+                if not secret.get("username") or not secret.get("password"):
+                    raise ValueError("Missing username")
+            else:
+                secret = secrets["token"]
+                if not isinstance(secret, str) or not secret:
+                    raise ValueError("Missing token")
+            factory = client_factory or (
+                Grimmory if integration.kind == "grimmory" else Audiobookshelf
+            )
         except (InvalidToken, KeyError, TypeError, ValueError):
             operation.status, operation.message = (
                 "failed",
-                "ABS credentials could not be read; save the connection token again",
+                "Library credentials could not be read; save the connection again",
             )
             destination.probe_token, destination.probe = None, None
             return
@@ -193,7 +203,7 @@ async def probe_route(operation_id: UUID, *, client_factory=None):
         ok = report["no_replace"] and report[configuration["mode"]]
         if ok:
             backend = configuration["backend"]
-            async with client_factory(backend["base_url"], secret) as adapter:
+            async with factory(backend["base_url"], secret) as adapter:
                 report["backend"] = await verify_backend(
                     adapter,
                     backend["library_external_id"],
@@ -203,7 +213,7 @@ async def probe_route(operation_id: UUID, *, client_factory=None):
                 )
 
         message = (
-            "Filesystem and ABS folder mapping verified; ready for a reviewed import plan"
+            "Filesystem and library folder mapping verified; ready for a reviewed import plan"
             if ok
             else ("Hardlink route unavailable; correct the mounts or explicitly choose copy mode")
         )

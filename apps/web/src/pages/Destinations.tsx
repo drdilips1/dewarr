@@ -20,6 +20,10 @@ import {
 } from "./libraryFolderSettings";
 
 type Destination = components["schemas"]["DestinationView"];
+
+function libraryApp(kind?: string) {
+  return kind === "grimmory" ? "Grimmory" : "Audiobookshelf";
+}
 type Medium = "ebook" | "audio";
 const names = { ebook: "Ebooks", audio: "Audiobooks" };
 
@@ -40,8 +44,9 @@ export default function Destinations({
     <div className="library-folder-settings">
       {!embedded && <h1>Library folders</h1>}
       <p className="muted">
-        Choose an Audiobookshelf folder for each format. Your naming rules build
-        the folders inside it; original downloads stay available for seeding.
+        Choose an Audiobookshelf or Grimmory folder for each format. Your naming
+        rules build the folders inside it; original downloads stay available for
+        seeding.
       </p>
       <Notice error={query.error} />
       {query.isPending ? (
@@ -70,7 +75,7 @@ export default function Destinations({
                       <h3>{names[medium]}</h3>
                       <p>
                         {destination
-                          ? `${library?.name || "Library"} · Audiobookshelf`
+                          ? `${library?.name || "Library"} · ${libraryApp(destination.server_kind)}`
                           : "No folder selected"}
                       </p>
                       {destination && (
@@ -212,7 +217,9 @@ function FolderPicker({
       ? options.data.downloaders[0]
       : undefined);
   const folders = (options.data?.libraries || [])
-    .filter((item) => medium === "audio" || item.ebooks_allowed)
+    .filter((item) =>
+      medium === "audio" ? item.audio_allowed : item.ebooks_allowed,
+    )
     .flatMap((item) =>
       item.folders.map((path) => ({
         ...item,
@@ -251,7 +258,9 @@ function FolderPicker({
         }),
       );
       current.current = destination;
-      setProgress("Checking hardlinks and Audiobookshelf access…");
+      setProgress(
+        `Checking hardlinks and ${libraryApp(library.server_kind)} access…`,
+      );
       const operation = result(
         await api.POST(
           "/api/organization/destinations/{destination_id}/setup-probe",
@@ -317,8 +326,8 @@ function FolderPicker({
     >
       <div className="settings-section-body folder-picker-body">
         <p className="muted">
-          Start with your Audiobookshelf folder. If Dewarr uses a different
-          mount path, choose Other path to map the same folder.
+          Start with your library folder. If Dewarr uses a different mount path,
+          choose Other path to map the same folder.
         </p>
         <Notice error={options.error} />
         {options.isPending && <Loading />}
@@ -346,7 +355,7 @@ function FolderPicker({
                   <span className="folder-option-copy">
                     <span className="folder-option-title">
                       {folders.length === 1
-                        ? "Audiobookshelf folder"
+                        ? `${libraryApp(folder.server_kind)} folder`
                         : folder.library_name}
                       {index === 0 && <small>Default</small>}
                     </span>
@@ -384,7 +393,7 @@ function FolderPicker({
                     />
                   </label>
                   <p className="muted">
-                    Same Audiobookshelf folder, using its path in Dewarr.
+                    Same library folder, using its path in Dewarr.
                   </p>
                   {folders.length > 1 && (
                     <p className="muted">
@@ -396,8 +405,8 @@ function FolderPicker({
               {!folders.length && (
                 <p className="muted">
                   {options.data.libraries.length
-                    ? "No compatible folders found. Check your Audiobookshelf library settings."
-                    : "Connect Audiobookshelf to choose a folder."}
+                    ? "No compatible folders found. Check the library settings."
+                    : "Connect Audiobookshelf or Grimmory to choose a folder."}
                 </p>
               )}
               {options.data.libraries
@@ -410,7 +419,7 @@ function FolderPicker({
               {choice && !eligible && (
                 <p className="notice">
                   The saved folder is no longer available. Choose another
-                  Audiobookshelf folder.
+                  library folder.
                 </p>
               )}
             </fieldset>

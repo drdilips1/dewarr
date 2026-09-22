@@ -1,3 +1,6 @@
+import json
+from uuid import uuid4
+
 import pytest
 from defusedxml.ElementTree import fromstring
 
@@ -74,3 +77,74 @@ def test_invalid_xml_characters_are_held(value):
 )
 def test_export_only_accepts_valid_isbn_checksum(value, expected):
     assert valid_isbn(value) == expected
+
+
+def test_grimmory_sidecar_matches_the_published_media_stem(tmp_path):
+    from app.importing.metadata import grimmory_sidecars
+    from app.importing.naming import fingerprint
+    from app.importing.publication import PublicationSpec, PublishFile
+
+    facts = {
+        "title": "The First Harbor",
+        "authors": ["Alex Morgan"],
+        "edition_year": 2024,
+        "isbn": "9780306406157",
+        "asin": "B012345678",
+        "series": "Harbor",
+        "sequence": "1",
+        "language": "en",
+    }
+    files = grimmory_sidecars(facts, "ebook", ["The First Harbor.epub", ".hidden.epub"])
+    assert list(files) == ["The First Harbor.metadata.json"]
+    assert files == grimmory_sidecars(facts, "ebook", ["The First Harbor.epub", ".hidden.epub"])
+    document = json.loads(files["The First Harbor.metadata.json"])
+    assert document["version"] == "1.0"
+    assert document["generatedBy"] == "grimmory"
+    assert document["metadata"]["isbn13"] == "9780306406157"
+    assert document["metadata"]["identifiers"] == {"asin": "B012345678"}
+    assert document["metadata"]["series"] == {"name": "Harbor", "number": 1.0}
+    assert "publishedDate" not in document["metadata"]
+    source, library, staging = (
+        tmp_path.resolve() / name for name in ("downloads", "library", "staging")
+    )
+    for path in (source, library, staging):
+        path.mkdir()
+    PublicationSpec(
+        entry_id=uuid4(),
+        plan_revision=fingerprint({"test": True}),
+        source_root=source,
+        source_relative="pack",
+        source_directory={"device": 1, "inode": 1},
+        destination_root=library,
+        staging_root=staging,
+        folder="Harbor",
+        files=[
+            PublishFile(
+                source="book.epub",
+                name="The First Harbor.epub",
+                sha256="a" * 64,
+                identity={"device": 1, "inode": 2, "size": 3},
+            )
+        ],
+        sidecars=files,
+    )
+    with pytest.raises(ValueError, match="sidecars"):
+        PublicationSpec(
+            entry_id=uuid4(),
+            plan_revision=fingerprint({"test": True}),
+            source_root=source,
+            source_relative="pack",
+            source_directory={"device": 1, "inode": 1},
+            destination_root=library,
+            staging_root=staging,
+            folder="Harbor",
+            files=[
+                PublishFile(
+                    source="book.epub",
+                    name="The First Harbor.epub",
+                    sha256="a" * 64,
+                    identity={"device": 1, "inode": 2, "size": 3},
+                )
+            ],
+            sidecars={"metadata.json": "{}"},
+        )

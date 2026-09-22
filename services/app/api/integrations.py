@@ -8,6 +8,7 @@ from sqlalchemy import select, update
 
 from app.adapters.audiobookshelf import Audiobookshelf
 from app.adapters.contracts import AdapterError
+from app.adapters.grimmory import Grimmory
 from app.adapters.http import configured_url
 from app.api.dependencies import Admin, Database
 from app.api.operations import OperationView
@@ -20,11 +21,13 @@ router = APIRouter(prefix="/integrations", tags=["integrations"])
 
 
 class ABSConnectionInput(BaseModel):
-    kind: Literal["audiobookshelf"] = "audiobookshelf"
+    kind: Literal["audiobookshelf", "grimmory"] = "audiobookshelf"
     name: str = Field(min_length=1, max_length=120, pattern=r"\S")
     base_url: str = Field(max_length=2000)
     public_url: str | None = Field(default=None, max_length=2000)
     token: SecretStr | None = Field(default=None, min_length=1, max_length=8192)
+    username: SecretStr | None = Field(default=None, min_length=1, max_length=200)
+    password: SecretStr | None = Field(default=None, min_length=1, max_length=1000)
     enabled: bool = True
 
     @field_validator("base_url", "public_url")
@@ -71,7 +74,7 @@ def connection_view(value: Integration) -> ConnectionView:
 
 async def connection_or_404(db, identifier):
     value = await db.get(Integration, identifier)
-    if not value or value.kind != "audiobookshelf":
+    if not value or value.kind not in {"audiobookshelf", "grimmory"}:
         raise HTTPException(404, "Connection not found")
     return value
 
@@ -81,7 +84,10 @@ async def connections(admin: Admin, db: Database):
     records = (
         await db.scalars(
             select(Integration)
-            .where(Integration.owner_id.is_(None), Integration.kind == "audiobookshelf")
+            .where(
+                Integration.owner_id.is_(None),
+                Integration.kind.in_(["audiobookshelf", "grimmory"]),
+            )
             .order_by(Integration.name)
         )
     ).all()
@@ -94,9 +100,29 @@ class ConnectionCheck(BaseModel):
     version: str | None
 
 
-async def inspect_connection(endpoint: str, token: str):
+def connection_secrets(body: ABSConnectionInput, saved: dict | None = None) -> dict:
+    saved = saved or {}
+    if body.kind == "grimmory":
+        if body.token:
+            raise HTTPException(422, "Grimmory uses a username and password")
+        username = body.username.get_secret_value() if body.username else saved.get("username")
+        password = body.password.get_secret_value() if body.password else saved.get("password")
+        if not username or not password:
+            raise HTTPException(422, "Enter the Grimmory username and password")
+        return {"username": username, "password": password}
+    if body.username or body.password:
+        raise HTTPException(422, "Audiobookshelf uses an API token")
+    token = body.token.get_secret_value() if body.token else saved.get("token")
+    if not token:
+        raise HTTPException(422, "Enter an Audiobookshelf API token")
+    return {"token": token}
+
+
+async def inspect_connection(kind: str, endpoint: str, secrets: dict):
+    client_type = Grimmory if kind == "grimmory" else Audiobookshelf
+    credential = secrets if kind == "grimmory" else secrets["token"]
     try:
-        async with Audiobookshelf(endpoint, token) as client:
+        async with client_type(endpoint, credential) as client:
             capabilities, _ = await client.authorize()
             libraries = await client.libraries()
             total = 0
@@ -116,26 +142,25 @@ async def inspect_connection(endpoint: str, token: str):
 async def check_connection(
     body: ABSConnectionInput, admin: Admin, db: Database, integration_id: UUID | None = None
 ):
-    token = body.token.get_secret_value() if body.token else None
-    if not token and integration_id:
+    saved = None
+    if integration_id:
         record = await connection_or_404(db, integration_id)
-        token = decrypt_secrets(record.encrypted_secrets).get("token")
-    if not token:
-        raise HTTPException(422, "Enter an Audiobookshelf API token")
-    return await inspect_connection(body.base_url, token)
+        if record.kind != body.kind:
+            raise HTTPException(422, "A connection cannot change library apps")
+        saved = decrypt_secrets(record.encrypted_secrets)
+    return await inspect_connection(body.kind, body.base_url, connection_secrets(body, saved))
 
 
 @router.post("", response_model=ConnectionView, status_code=201)
 async def create_connection(body: ABSConnectionInput, admin: Admin, db: Database):
-    if not body.token:
-        raise HTTPException(422, "Enter an Audiobookshelf API token")
-    capabilities = await inspect_connection(body.base_url, body.token.get_secret_value())
+    secrets = connection_secrets(body)
+    capabilities = await inspect_connection(body.kind, body.base_url, secrets)
     record = Integration(
         kind=body.kind,
         name=body.name.strip(),
         base_url=body.base_url,
         config={"public_url": body.public_url or body.base_url, "created_by": str(admin.id)},
-        encrypted_secrets=encrypt_secrets({"token": body.token.get_secret_value()}),
+        encrypted_secrets=encrypt_secrets(secrets),
         enabled=body.enabled,
         status="connected",
         capabilities=capabilities,
@@ -152,20 +177,18 @@ async def update_connection(
     integration_id: UUID, body: ABSConnectionInput, admin: Admin, db: Database
 ):
     record = await connection_or_404(db, integration_id)
+    if record.kind != body.kind:
+        raise HTTPException(422, "A connection cannot change library apps")
     generation = record.credential_generation
-    token = (
-        body.token.get_secret_value()
-        if body.token
-        else decrypt_secrets(record.encrypted_secrets)["token"]
-    )
-    capabilities = await inspect_connection(body.base_url, token)
+    secrets = connection_secrets(body, decrypt_secrets(record.encrypted_secrets))
+    capabilities = await inspect_connection(body.kind, body.base_url, secrets)
     await db.refresh(record, with_for_update=True)
     if record.credential_generation != generation:
         raise HTTPException(409, "Connection changed while checking. Try again.")
     record.name, record.base_url, record.enabled = body.name.strip(), body.base_url, body.enabled
     record.config = {**record.config, "public_url": body.public_url or body.base_url}
-    if body.token:
-        record.encrypted_secrets = encrypt_secrets({"token": body.token.get_secret_value()})
+    if body.token or body.username or body.password:
+        record.encrypted_secrets = encrypt_secrets(secrets)
     record.credential_generation += 1
     record.lease_token, record.lease_until = None, None
     record.status, record.last_error, record.next_sync_at = "connected", None, None
@@ -183,11 +206,13 @@ async def test_connection(integration_id: UUID, admin: Admin, db: Database):
     record = await connection_or_404(db, integration_id)
     if not record.enabled:
         raise HTTPException(409, "Enable this connection before testing it")
-    generation, endpoint = record.credential_generation, record.base_url
-    secret = decrypt_secrets(record.encrypted_secrets)["token"]
+    generation, endpoint, kind = record.credential_generation, record.base_url, record.kind
+    secrets = decrypt_secrets(record.encrypted_secrets)
+    credential = secrets if kind == "grimmory" else secrets["token"]
+    client_type = Grimmory if kind == "grimmory" else Audiobookshelf
     await db.rollback()
     try:
-        async with Audiobookshelf(endpoint, secret) as client:
+        async with client_type(endpoint, credential) as client:
             capabilities, _ = await client.authorize()
             libraries = await client.libraries()
             book_count = 0

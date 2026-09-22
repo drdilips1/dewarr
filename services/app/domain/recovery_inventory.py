@@ -9,6 +9,7 @@ from fastapi import HTTPException
 from sqlalchemy import select, update
 
 from app.adapters.audiobookshelf import Audiobookshelf
+from app.adapters.grimmory import Grimmory
 from app.db.models import (
     AuditEvent,
     Integration,
@@ -49,7 +50,7 @@ async def prepare(db, checkpoint, owner_id, scan_id, finding_ids, key):
         integration = await db.get(Integration, finding.entity_id)
         if (
             not integration
-            or integration.kind != "audiobookshelf"
+            or integration.kind not in {"audiobookshelf", "grimmory"}
             or not integration.enabled
             or integration.id in seen
             or str(integration.id) != finding.evidence.get("integration_id")
@@ -93,8 +94,10 @@ async def fresh_inventory(identifier, token, payload):
             ):
                 raise ScanHeld("The reviewed media connection changed")
             endpoint = integration.base_url
-            secret = decrypt_secrets(integration.encrypted_secrets)["token"]
-        async with asyncio.timeout(600), Audiobookshelf(endpoint, secret) as client:
+            secrets = decrypt_secrets(integration.encrypted_secrets)
+            client_type = Grimmory if integration.kind == "grimmory" else Audiobookshelf
+            secret = secrets if integration.kind == "grimmory" else secrets["token"]
+        async with asyncio.timeout(600), client_type(endpoint, secret) as client:
             current = await observers.read_inventory(
                 client, partial(reviews.pulse, identifier, token)
             )

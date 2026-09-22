@@ -10,7 +10,7 @@ type Medium = "ebook" | "audio";
 const labels: Record<string, string> = {
   queued: "Queued",
   publishing: "Publishing",
-  "awaiting-library": "Waiting for Audiobookshelf",
+  "awaiting-library": "Waiting for the library",
   confirmed: "Available",
   held: "Needs attention",
   skipped: "Already available",

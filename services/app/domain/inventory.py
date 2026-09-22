@@ -5,6 +5,7 @@ from sqlalchemy import delete, select, update
 
 from app.adapters.audiobookshelf import ABSItem, Audiobookshelf
 from app.adapters.contracts import AdapterError, FailureKind
+from app.adapters.grimmory import Grimmory
 from app.config import get_settings
 from app.db.models import (
     AssetContains,
@@ -48,7 +49,7 @@ def summary_fingerprint(items: list[dict]) -> dict[str, tuple]:
     }
 
 
-async def collect_library(client, external_library_id, run_id, integration_id, token, generation):
+async def read_library(client, external_library_id, run_id, integration_id, token, generation):
     seen, expected, page = {}, None, 0
     while True:
         records, total = await client.page(external_library_id, page)
@@ -84,6 +85,12 @@ async def collect_library(client, external_library_id, run_id, integration_id, t
         if len(seen) == total:
             break
         page += 1
+    return seen, expected
+
+
+async def verify_library(
+    client, external_library_id, seen, expected, integration_id, token, generation
+):
     # ABS pagination is not a transactional snapshot. Verify membership and update
     # markers again before publishing this run or inferring an absence.
     second, page = {}, 0
@@ -106,16 +113,39 @@ async def collect_library(client, external_library_id, run_id, integration_id, t
         page += 1
     if second != seen:
         raise AdapterError(FailureKind.UNCERTAIN, "Library changed during verification. Try again.")
+
+
+async def collect_library(client, external_library_id, run_id, integration_id, token, generation):
+    seen, expected = await read_library(
+        client, external_library_id, run_id, integration_id, token, generation
+    )
+    await verify_library(
+        client, external_library_id, seen, expected, integration_id, token, generation
+    )
     return set(seen)
 
 
 async def apply_item(db, library, item, generation, integration_id, seen):
     now = datetime.now(UTC)
+    if getattr(item, "unreadable", False):
+        # Keep the previous observation. A later successful read can replace it.
+        for medium in ("ebook", "audio"):
+            asset = await db.scalar(
+                select(LibraryAsset).where(
+                    LibraryAsset.library_id == library.id,
+                    LibraryAsset.external_id == item.id,
+                    LibraryAsset.medium == medium,
+                )
+            )
+            if asset:
+                asset.last_seen_at, asset.seen_generation = now, generation
+        return
     for medium in ("ebook", "audio"):
         files = getattr(item, medium)
         if not files:
             continue
-        namespace = f"abs:{integration_id}"
+        kind = await db.scalar(select(Integration.kind).where(Integration.id == integration_id))
+        namespace = f"{'grimmory' if kind == 'grimmory' else 'abs'}:{integration_id}"
         link = await db.scalar(
             select(ProviderObject).where(
                 ProviderObject.provider == namespace,
@@ -317,6 +347,10 @@ async def publish_library(
             continue
         try:
             detail = await client.item(external)
+            if getattr(detail, "unreadable", False):
+                async with session_factory()() as db, db.begin():
+                    await fence(db, integration_id, token, credential_generation)
+                continue
             if detail.library_id == library_info["id"] and not getattr(detail, medium):
                 confirmed.add(asset_id)
             elif external not in seen:
@@ -349,7 +383,7 @@ async def publish_library(
         library.scope_fingerprint, library.accessible = scope, True
 
 
-async def synchronize(operation_id: UUID, *, client_factory=Audiobookshelf):
+async def synchronize(operation_id: UUID, *, client_factory=None):
     token = uuid4()
     async with session_factory()() as db, db.begin():
         operation = await db.scalar(
@@ -367,7 +401,8 @@ async def synchronize(operation_id: UUID, *, client_factory=Audiobookshelf):
         if integration.lease_until and integration.lease_until > now:
             raise AdapterError(FailureKind.UNAVAILABLE, "Another sync is still active")
         integration.lease_token, integration.lease_until = token, now + timedelta(minutes=3)
-        operation.status, operation.message = "running", "Reading Audiobookshelf library inventory"
+        library_name = "Grimmory" if integration.kind == "grimmory" else "Audiobookshelf"
+        operation.status, operation.message = "running", f"Reading {library_name} library inventory"
         operation.payload = {**operation.payload, "lease_token": str(token)}
         # An expired owner cannot resume its staged snapshot after a new claim.
         abandoned = select(InventoryRun.id).where(
@@ -383,10 +418,12 @@ async def synchronize(operation_id: UUID, *, client_factory=Audiobookshelf):
             .values(status="interrupted", completed_at=now)
         )
         integration_id, generation = integration.id, integration.credential_generation
-        endpoint, secret = (
-            integration.base_url,
-            decrypt_secrets(integration.encrypted_secrets)["token"],
-        )
+        endpoint = integration.base_url
+        secrets = decrypt_secrets(integration.encrypted_secrets)
+        secret = secrets if integration.kind == "grimmory" else secrets["token"]
+        kind = integration.kind
+        library_name = "Grimmory" if kind == "grimmory" else "Audiobookshelf"
+        factory = client_factory or (Grimmory if kind == "grimmory" else Audiobookshelf)
         run = InventoryRun(
             integration_id=integration_id,
             operation_id=operation_id,
@@ -396,20 +433,41 @@ async def synchronize(operation_id: UUID, *, client_factory=Audiobookshelf):
         await db.flush()
         run_id = run.id
     try:
-        async with client_factory(endpoint, secret) as client:
+        async with factory(endpoint, secret) as client:
             capabilities, scope = await client.authorize()
             libraries = await client.libraries()
-            seen_by_library, locations = {}, {}
+            seen_by_library, locations, pending = {}, {}, {}
+            batched = hasattr(client, "refresh_snapshot")
             for library in libraries:
-                seen = await collect_library(
-                    client, library["id"], run_id, integration_id, token, generation
-                )
+                if batched:
+                    fingerprint, expected = await read_library(
+                        client, library["id"], run_id, integration_id, token, generation
+                    )
+                    pending[library["id"]] = (fingerprint, expected)
+                    seen = set(fingerprint)
+                else:
+                    seen = await collect_library(
+                        client, library["id"], run_id, integration_id, token, generation
+                    )
                 if locations.keys() & seen:
                     raise AdapterError(
                         FailureKind.UNCERTAIN, "An item appeared in multiple libraries."
                     )
                 locations.update({item_id: library["id"] for item_id in seen})
                 seen_by_library[library["id"]] = seen
+            if batched:
+                await client.refresh_snapshot()
+                for library in libraries:
+                    fingerprint, expected = pending[library["id"]]
+                    await verify_library(
+                        client,
+                        library["id"],
+                        fingerprint,
+                        expected,
+                        integration_id,
+                        token,
+                        generation,
+                    )
             for library in libraries:
                 seen = seen_by_library[library["id"]]
                 # Recheck permissions and library identity before publishing removals.
@@ -466,7 +524,7 @@ async def synchronize(operation_id: UUID, *, client_factory=Audiobookshelf):
             operation = await db.get(Operation, operation_id)
             operation.status, operation.message = (
                 "completed",
-                f"Synced {len(libraries)} Audiobookshelf libraries",
+                f"Synced {len(libraries)} {library_name} libraries",
             )
             await db.execute(
                 delete(InventoryObservation).where(InventoryObservation.run_id == run_id)

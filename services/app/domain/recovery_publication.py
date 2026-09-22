@@ -8,9 +8,11 @@ from pathlib import PurePosixPath
 from uuid import UUID
 
 from fastapi import HTTPException
+from pydantic import ValidationError
 from sqlalchemy import select
 
 from app.adapters.audiobookshelf import ABSItem, Audiobookshelf
+from app.adapters.grimmory import Grimmory
 from app.db.models import (
     AuditEvent,
     ImportDestination,
@@ -30,7 +32,13 @@ from app.domain import recovery_reconciliation as reviews
 from app.domain.recovery_scans import ScanHeld, digest
 from app.importing.collection_contents import verify as verify_contents
 from app.importing.destinations import destination_configuration
-from app.importing.execution import confirm_observation, matches, observe_cover
+from app.importing.execution import (
+    confirm_observation,
+    grimmory_relocated_match,
+    matches,
+    observe_cover,
+    published_file,
+)
 from app.importing.publication import PublicationError, PublicationSpec
 from app.importing.recovery import read_publication
 from app.importing.storage import storage_settings
@@ -57,7 +65,7 @@ async def confirmation_context(db, entry):
         or not library.accessible
         or not integration
         or not integration.enabled
-        or integration.kind != "audiobookshelf"
+        or integration.kind not in {"audiobookshelf", "grimmory"}
     ):
         raise ScanHeld("Restore the current destination and library access before confirmation")
     if await destination_configuration(db, destination) != entry.configuration["destination"]:
@@ -79,25 +87,77 @@ async def confirmation_context(db, entry):
     return integration, library
 
 
+def _file_identity_matches(file, identity, *, grimmory: bool) -> bool:
+    if file is None:
+        return False
+    kilobytes = getattr(file, "size_unit", "byte") == "kilobyte"
+    if kilobytes:
+        return abs(file.size - identity["size"]) < 1024
+    # Grimmory track listings are exact byte sizes without inode or modification time.
+    if grimmory and file.inode is None and file.modified is None:
+        return file.size == identity["size"]
+    return (
+        file.inode == str(identity["inode"])
+        and file.size == identity["size"]
+        and file.modified is not None
+        and math.isfinite(file.modified)
+        # ABS stores JavaScript millisecond timestamps; allow only rounding.
+        and abs(file.modified - identity["mtime_ns"] / 1_000_000) <= 1
+    )
+
+
 def match_files(entry, item, evidence):
+    grimmory = str(getattr(item, "cover_path", "") or "").startswith("grimmory:")
+    if evidence.get("relocated"):
+        if not grimmory or not grimmory_relocated_match(entry, item):
+            raise ScanHeld("The published files are no longer in their folder")
+        return
     if not matches(entry, item):
         raise ScanHeld("The backend item is outside this published book's folder")
     local = evidence.get("media_identities", {})
     if set(local) != {file["name"] for file in entry.specification["files"]}:
         raise ScanHeld("Observe fresh publication file identities before confirmation")
-    files = {file.path: file for file in item.library_files}
+    used = []
     for name, identity in local.items():
-        file = files.get(str(PurePosixPath(item.path) / name))
-        if (
-            not file
-            or file.inode != str(identity["inode"])
-            or file.size != identity["size"]
-            or file.modified is None
-            or not math.isfinite(file.modified)
-            # ABS stores JavaScript millisecond timestamps; allow only rounding.
-            or abs(file.modified - identity["mtime_ns"] / 1_000_000) > 1
-        ):
-            raise ScanHeld("ABS file identities do not corroborate the verified publication")
+        file = published_file(item, name, identity, used, grimmory=grimmory)
+        if file is not None:
+            used.append(file)
+        if not _file_identity_matches(file, identity, grimmory=grimmory):
+            raise ScanHeld("Library file identities do not corroborate the verified publication")
+
+
+def publication_candidates(
+    entry, findings, library_external_id, folder, *, grimmory: bool, relocated: bool = False
+):
+    """Prefer the published folder. A Grimmory pattern rename is the only other match."""
+
+    def relevant(finding) -> bool:
+        evidence = finding.evidence
+        return (
+            evidence.get("external_library_id") == library_external_id
+            and evidence.get("medium") == entry.expected_metadata["medium"]
+            and isinstance(evidence.get("item"), dict)
+        )
+
+    rows = [finding for finding in findings if relevant(finding)]
+    placed = [finding for finding in rows if finding.evidence["item"].get("path") == folder]
+    if placed or not grimmory:
+        return placed
+    moved = []
+    for finding in rows:
+        try:
+            observed = ABSItem.model_validate(finding.evidence["item"])
+        except ValidationError:
+            continue
+        try:
+            matched = (
+                grimmory_relocated_match(entry, observed) if relocated else matches(entry, observed)
+            )
+        except PublicationError:
+            continue
+        if matched:
+            moved.append(finding)
+    return moved
 
 
 async def confirmation_preview(db, scan_id, entry, evidence):
@@ -126,13 +186,15 @@ async def confirmation_preview(db, scan_id, entry, evidence):
         PurePosixPath(entry.configuration["destination"]["backend_path"])
         / entry.specification["folder"]
     )
-    candidates = [
-        finding
-        for finding in findings
-        if finding.evidence.get("external_library_id") == library.external_id
-        and finding.evidence.get("medium") == entry.expected_metadata["medium"]
-        and finding.evidence.get("item", {}).get("path") == folder
-    ]
+
+    candidates = publication_candidates(
+        entry,
+        findings,
+        library.external_id,
+        folder,
+        grimmory=integration.kind == "grimmory",
+        relocated=bool(evidence.get("relocated")),
+    )
     if len(candidates) != 1:
         raise ScanHeld("ABS has not uniquely detected this complete published book")
     candidate = candidates[0]
@@ -150,7 +212,8 @@ async def confirmation_preview(db, scan_id, entry, evidence):
         raise ScanHeld("This library item was intentionally suppressed; keep it awaiting review")
     link = await db.scalar(
         select(ProviderObject).where(
-            ProviderObject.provider == f"abs:{integration.id}",
+            ProviderObject.provider
+            == f"{'grimmory' if integration.kind == 'grimmory' else 'abs'}:{integration.id}",
             ProviderObject.kind == "item:" + entry.expected_metadata["medium"],
             ProviderObject.external_id == item.id,
         )
@@ -183,13 +246,19 @@ async def prepare(db, checkpoint, owner_id, scan_id, finding_ids, key):
             not finding
             or finding.scan_id != scan.id
             or finding.domain != "files"
-            or finding.state != "published"
+            or finding.state not in {"published", "relocated"}
             or not finding.entity_id
         ):
             raise HTTPException(409, "Choose a verified published book observation")
         entry = await db.get(ImportEntry, finding.entity_id)
         if not entry or not entry.specification or not entry.configuration or entry.id in seen:
             raise HTTPException(409, "Each frozen publication must appear exactly once")
+        if finding.state == "relocated":
+            destination = await db.get(ImportDestination, entry.destination_id)
+            library = await db.get(Library, destination.library_id) if destination else None
+            integration = await db.get(Integration, library.integration_id) if library else None
+            if not integration or integration.kind != "grimmory":
+                raise HTTPException(409, "Choose a verified published book observation")
         seen.add(entry.id)
         proof = {}
         outcome, reason = "awaiting-library", "Record publication; ABS confirmation is pending"
@@ -244,13 +313,18 @@ async def fresh_publications(identifier, token, payload):
                 if reviews.connection_signature(integration) != item["connection_signature"]:
                     raise ScanHeld("The reviewed backend connection changed")
                 endpoint = integration.base_url
-                secret = decrypt_secrets(integration.encrypted_secrets)["token"]
+                secrets = decrypt_secrets(integration.encrypted_secrets)
+                client_type = Grimmory if integration.kind == "grimmory" else Audiobookshelf
+                secret = secrets if integration.kind == "grimmory" else secrets["token"]
         state, _, evidence, receipt = await asyncio.to_thread(read_publication, saved, roots)
-        if state != "published" or digest(evidence) != item["file_evidence_digest"]:
+        if (
+            state not in {"published", "relocated"}
+            or digest(evidence) != item["file_evidence_digest"]
+        ):
             raise ScanHeld("Publication files or journal changed; observe and review again")
         record = None
         if item["outcome"] == "confirmed":
-            async with asyncio.timeout(600), Audiobookshelf(endpoint, secret) as client:
+            async with asyncio.timeout(600), client_type(endpoint, secret) as client:
                 current = await observers.read_inventory(
                     client, partial(reviews.pulse, identifier, token)
                 )
@@ -278,7 +352,10 @@ async def fresh_publications(identifier, token, payload):
             match_files(entry, record, evidence)
             # Remote reads cannot authorize a publication that changed while they ran.
             again = await asyncio.to_thread(read_publication, saved, roots)
-            if again[0] != "published" or digest(again[2]) != item["file_evidence_digest"]:
+            if (
+                again[0] not in {"published", "relocated"}
+                or digest(again[2]) != item["file_evidence_digest"]
+            ):
                 raise ScanHeld("Publication changed during backend confirmation")
         cover = await asyncio.to_thread(
             observe_cover, PublicationSpec.model_validate(entry.specification)

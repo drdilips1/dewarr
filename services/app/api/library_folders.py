@@ -12,6 +12,7 @@ from sqlalchemy import select
 
 from app.adapters.audiobookshelf import Audiobookshelf
 from app.adapters.contracts import AdapterError
+from app.adapters.grimmory import Grimmory
 from app.api.automatic_imports import view as policy_view
 from app.api.dependencies import Admin, Database
 from app.db.models import (
@@ -38,19 +39,32 @@ class FolderOption(StrictModel):
     library_id: UUID
     library_name: str
     server_name: str
+    server_kind: str
     folders: list[str] = []
     ebooks_allowed: bool = True
+    audio_allowed: bool = True
     error: str | None = None
+
+
+def library_client(integration):
+    secrets = decrypt_secrets(integration.encrypted_secrets)
+    if integration.kind == "grimmory":
+        return Grimmory(integration.base_url, secrets)
+    return Audiobookshelf(integration.base_url, secrets["token"])
 
 
 async def configuration(db, library_id):
     library = await db.get(Library, library_id)
     integration = await db.get(Integration, library.integration_id) if library else None
-    if not library or not library.accessible or not integration or not integration.enabled:
-        raise HTTPException(422, "Choose a library from a connected Audiobookshelf server")
-    async with Audiobookshelf(
-        integration.base_url, decrypt_secrets(integration.encrypted_secrets)["token"]
-    ) as adapter:
+    if (
+        not library
+        or not library.accessible
+        or not integration
+        or not integration.enabled
+        or integration.kind not in {"audiobookshelf", "grimmory"}
+    ):
+        raise HTTPException(422, "Choose a library from a connected library server")
+    async with library_client(integration) as adapter:
         config = await adapter.import_configuration(library.external_id)
     return library, config
 
@@ -64,7 +78,7 @@ async def folders(admin: Admin, db: Database):
             .where(
                 Library.accessible.is_(True),
                 Integration.enabled.is_(True),
-                Integration.kind == "audiobookshelf",
+                Integration.kind.in_(["audiobookshelf", "grimmory"]),
             )
             .order_by(Library.name)
         )
@@ -72,14 +86,17 @@ async def folders(admin: Admin, db: Database):
 
     async def option(library, integration):
         row = FolderOption(
-            library_id=library.id, library_name=library.name, server_name=integration.name
+            library_id=library.id,
+            library_name=library.name,
+            server_name=integration.name,
+            server_kind=integration.kind,
         )
         try:
-            async with Audiobookshelf(
-                integration.base_url, decrypt_secrets(integration.encrypted_secrets)["token"]
-            ) as adapter:
+            async with library_client(integration) as adapter:
                 config = await adapter.import_configuration(library.external_id)
-            row.folders, row.ebooks_allowed = config.folders, not config.audiobooks_only
+            row.folders = config.folders
+            row.ebooks_allowed = not config.audiobooks_only
+            row.audio_allowed = getattr(config, "audio_allowed", True)
         except (AdapterError, InvalidToken, ValueError, KeyError):
             row.error = (
                 "Could not read this library's folders. Check its connection and permissions."
@@ -113,16 +130,17 @@ async def choose(medium: Literal["ebook", "audio"], body: FolderInput, admin: Ad
         _, config = await configuration(db, body.library_id)
     except (AdapterError, InvalidToken, ValueError, KeyError) as error:
         raise HTTPException(
-            422, "Could not read Audiobookshelf folders. Check the connection and token."
+            422, "Could not read library folders. Check the connection and credentials."
         ) from error
     if body.backend_path not in config.folders:
-        raise HTTPException(422, "Choose a current folder from the selected Audiobookshelf library")
+        raise HTTPException(422, "Choose a current folder from the selected library")
     if medium == "ebook" and config.audiobooks_only:
         raise HTTPException(
             422,
-            "This library only accepts audiobooks. "
-            "Enable ebooks in Audiobookshelf or choose another library.",
+            "This library only accepts audiobooks. Choose another library or enable ebooks.",
         )
+    if medium == "audio" and getattr(config, "audio_allowed", True) is False:
+        raise HTTPException(422, "This library does not accept audiobooks. Choose another library.")
     root_key = f"library-{medium}"
     destination = (
         await db.get(ImportDestination, body.destination_id)

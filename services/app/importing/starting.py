@@ -25,6 +25,7 @@ from app.importing.collection_contents import verify as verify_contents
 from app.importing.destination_view import view as destination_view
 from app.importing.destinations import destination_configuration
 from app.importing.grouping import current_grouping
+from app.importing.metadata import grimmory_sidecars
 from app.importing.naming import StrictModel
 from app.importing.ownership import already_owned
 from app.importing.planning import assert_admin
@@ -170,6 +171,10 @@ async def start_import(db, admin, plan_id: UUID, body: ImportInput, idempotency_
             )
             continue
         configuration = await destination_configuration(db, destination)
+        sidecars = dict(document["initial_sidecars"][item["group_id"]])
+        published_names = [PurePosixPath(mapping["destination"]).name for mapping in item["files"]]
+        if (configuration["backend"] or {}).get("kind") == "grimmory":
+            sidecars.update(grimmory_sidecars(group["metadata"], item["medium"], published_names))
         specification = PublicationSpec(
             entry_id=entry.id,
             plan_revision=plan.revision,
@@ -190,7 +195,7 @@ async def start_import(db, admin, plan_id: UUID, body: ImportInput, idempotency_
                 )
                 for mapping in item["files"]
             ],
-            sidecars=document["initial_sidecars"][item["group_id"]],
+            sidecars=sidecars,
         )
         entry.specification = specification.model_dump(mode="json")
         entry.configuration = {

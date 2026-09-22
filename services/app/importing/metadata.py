@@ -1,6 +1,8 @@
-"""Deterministic initial sidecars; never rewrite media or existing ABS metadata."""
+"""Deterministic initial sidecars; never rewrite media or existing library metadata."""
 
+import json
 import re
+from pathlib import PurePosixPath
 from xml.etree import ElementTree as ET
 
 from pydantic import Field, model_validator
@@ -108,3 +110,50 @@ def initial_sidecars(metadata: ExportMetadata) -> dict[str, str]:
     # Edition labels, abridgment and app IDs have no certified OPF import contract
     # in ABS. Keep them in our version/manifest, never invent an ISBN or ASIN.
     return {"metadata.opf": ET.tostring(package, encoding="utf-8", xml_declaration=True).decode()}
+
+
+def grimmory_sidecars(facts: dict, medium: str, filenames: list[str]) -> dict[str, str]:
+    """Write Grimmory's {Book}.metadata.json beside each published media file."""
+    metadata = {
+        "title": facts["title"].strip(),
+        "authors": [name.strip() for name in facts.get("authors") or [] if name.strip()],
+    }
+    if facts.get("subtitle"):
+        metadata["subtitle"] = facts["subtitle"].strip()
+    if facts.get("publisher"):
+        metadata["publisher"] = facts["publisher"].strip()
+    # Grimmory already reads a full date from the file. A year-only catalog value
+    # would replace that date with January 1, so the sidecar leaves the date alone.
+    if facts.get("language"):
+        metadata["language"] = facts["language"].strip()
+    isbn = valid_isbn(facts.get("isbn"))
+    if isbn:
+        metadata["isbn13" if len(isbn) == 13 else "isbn10"] = isbn
+    if facts.get("asin") and re.fullmatch(r"[A-Z0-9]{10}", facts["asin"]):
+        metadata["identifiers"] = {"asin": facts["asin"]}
+    if facts.get("series") and facts["series"].strip():
+        series = {"name": facts["series"].strip()}
+        if facts.get("sequence") and str(facts["sequence"]).strip():
+            try:
+                series["number"] = float(facts["sequence"])
+            except ValueError:
+                series["number"] = facts["sequence"]
+        metadata["series"] = series
+    if medium == "audio" and facts.get("narrators"):
+        names = [name.strip() for name in facts["narrators"] if name.strip()]
+        if names:
+            metadata["narrator"] = ", ".join(names)
+    if type(facts.get("abridged")) is bool:
+        metadata["abridged"] = facts["abridged"]
+    document = json.dumps(
+        {"version": "1.0", "generatedBy": "grimmory", "metadata": metadata},
+        ensure_ascii=False,
+        sort_keys=True,
+    )
+    sidecars = {}
+    for name in filenames:
+        stem = PurePosixPath(name).stem
+        if not stem or stem.startswith("."):
+            continue
+        sidecars[f"{stem}.metadata.json"] = document
+    return sidecars

@@ -390,7 +390,7 @@ function RecoveryChecks({
                     />
                   )}
                 {state === "completed" &&
-                  finding.state === "published" &&
+                  ["published", "relocated"].includes(finding.state) &&
                   finding.domain === "files" &&
                   !applied && (
                     <PreparePublicationReview
