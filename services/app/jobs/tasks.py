@@ -426,6 +426,21 @@ async def refresh_discovery(user_id: str, collection_id: str, generation: int) -
     await refresh(UUID(user_id), collection_id, generation)
 
 
+@tasks.periodic(cron="*/15 * * * *")
+@tasks.task(name="series.gap-schedule", queue="metadata", retry=3)
+async def schedule_series_gaps(timestamp: int) -> None:
+    from app.domain.series_gap_watch import schedule
+
+    await schedule()
+
+
+@tasks.task(name="series.library_scan", queue="metadata", retry=3)
+async def library_scan(user_id: str) -> None:
+    from app.domain.series_gap_watch import scan_user
+
+    await scan_user(UUID(user_id))
+
+
 @tasks.task(name="acquisition.quick-add", queue="sources", retry=3)
 async def quick_add_book(operation_id: str) -> None:
     from app.domain.quick_add import run

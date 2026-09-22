@@ -35,6 +35,21 @@ WAIT_LIMIT = timedelta(minutes=10)
 ACTIVE = {"pending", "waiting"}
 
 
+def series_links(entries):
+    """Hardcover series ids from an accepted book snapshot. Compilations are skipped."""
+    candidates = {}
+    for entry in entries or []:
+        if not isinstance(entry, dict) or entry.get("compilation"):
+            continue
+        key = str(entry.get("external_id", ""))
+        try:
+            identifier("hardcover", key)
+        except AdapterError:
+            continue
+        candidates.setdefault(key, str(entry.get("name") or "Series")[:600])
+    return candidates
+
+
 async def references(db, user, work):
     sources = list(
         await db.scalars(
@@ -52,15 +67,11 @@ async def references(db, user, work):
     )
     candidates = {}
     for source in sources:
-        for entry in source.snapshot.get("series", [])[:50]:
-            if entry.get("compilation"):
-                continue
-            key = str(entry.get("external_id", ""))
-            try:
-                identifier("hardcover", key)
-            except AdapterError:
-                continue
-            candidates.setdefault(key, str(entry.get("name") or "Series")[:600])
+        raw = source.snapshot.get("series") if isinstance(source.snapshot, dict) else None
+        if not isinstance(raw, list):
+            continue
+        for key, name in series_links(raw[:50]).items():
+            candidates.setdefault(key, name)
     rows = list(
         await db.scalars(
             select(CatalogSeries)

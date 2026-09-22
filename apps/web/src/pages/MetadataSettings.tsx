@@ -52,6 +52,24 @@ export default function MetadataSettings({
       setMessage("Your catalog connection was saved.");
     },
   });
+  const suggestions = useMutation({
+    mutationFn: async (enabled: boolean) =>
+      result(
+        await api.PUT("/api/metadata/account/series-suggestions", {
+          body: { enabled },
+        }),
+      ),
+    onSuccess: (value) => {
+      client.setQueryData(["metadata-account"], value);
+      void client.invalidateQueries({ queryKey: ["discovery", "series"] });
+      void client.invalidateQueries({ queryKey: ["series-gaps"] });
+      setMessage(
+        value.suggest_series_gaps
+          ? "Dewarr will look for missing books in series linked to your library."
+          : "Series suggestions are off.",
+      );
+    },
+  });
   const test = useMutation({
     mutationFn: async () =>
       result(await api.POST("/api/metadata/account/test")),
@@ -85,7 +103,9 @@ export default function MetadataSettings({
             private to your account.
           </SettingHelp>
         </div>
-        <Notice error={account.error || save.error || test.error} />
+        <Notice
+          error={account.error || save.error || test.error || suggestions.error}
+        />
         {account.isPending && <Loading />}
         {account.data && (
           <>
@@ -141,6 +161,24 @@ export default function MetadataSettings({
                 )}
               </div>
             </form>
+            {account.data.configured && account.data.enabled && (
+              <label className="check-label">
+                <input
+                  type="checkbox"
+                  checked={account.data.suggest_series_gaps}
+                  disabled={suggestions.isPending}
+                  onChange={(event) => suggestions.mutate(event.target.checked)}
+                />
+                Suggest missing books in series I own
+              </label>
+            )}
+            {account.data.configured && account.data.enabled && (
+              <p className="muted">
+                Uses Hardcover links on books you already matched. Dewarr loads
+                those series catalogs and lists published books that are not in
+                your library. Nothing is downloaded.
+              </p>
+            )}
           </>
         )}
         {message && (

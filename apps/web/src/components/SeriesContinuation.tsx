@@ -2,7 +2,8 @@ import { usePagedQuery } from "../hooks/usePagedQuery";
 import BookLink from "./BookLink";
 import InfiniteScroll from "./InfiniteScroll";
 import BookCover from "./BookCover";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { BookOpen, Check, Headphones } from "lucide-react";
 import { api, result } from "../api/client";
@@ -11,31 +12,117 @@ import { Loading, Notice } from "../components";
 
 type Medium = "any" | "ebook" | "audio";
 type SeriesGap = components["schemas"]["SeriesGap"];
+type SeriesGapShelf = components["schemas"]["SeriesGapShelf"];
 const mediumLabel = { any: "books", ebook: "ebooks", audio: "audiobooks" };
 const singularLabel = { any: "book", ebook: "ebook", audio: "audiobook" };
 
+function emptyCopy(shelf: SeriesGapShelf, medium: Medium) {
+  if (!shelf.hardcover_connected)
+    return {
+      title: `Connect Hardcover to find missing ${mediumLabel[medium]}.`,
+      detail:
+        "Suggestions use Hardcover links on books you already matched. Nothing is downloaded.",
+      to: "/settings#catalog",
+      label: "Metadata settings →",
+    };
+  if (!shelf.suggestions_enabled)
+    return {
+      title: `No missing ${mediumLabel[medium]} found in these loaded series.`,
+      detail:
+        "Open a book you own, follow its series link and load the catalog. New or refreshed series can then appear here. This shelf describes your library, not your reading progress.",
+      to: "/",
+      label: "Browse your catalog →",
+    };
+  if (!shelf.monitored_series)
+    return {
+      title: "No Hardcover series are linked to books you own yet.",
+      detail:
+        "Match a book to Hardcover first. Audiobookshelf series names are not used, and nothing is downloaded.",
+      to: "/settings#catalog",
+      label: "Metadata settings →",
+    };
+  return {
+    title: `No missing ${mediumLabel[medium]} yet.`,
+    detail:
+      "Dewarr is checking series linked to books you own. Missing books appear here after each catalog loads.",
+    to: "/discover/series",
+    label: "See series gaps →",
+  };
+}
+
 export default function SeriesContinuation({
   hideEmpty = false,
-}: { hideEmpty?: boolean } = {}) {
+  variant = "shelf",
+  canEdit = false,
+}: {
+  hideEmpty?: boolean;
+  variant?: "shelf" | "page";
+  canEdit?: boolean;
+} = {}) {
+  const client = useQueryClient();
   const [medium, setMedium] = useState<Medium>("any");
+  const marked = useRef(false);
   const query = usePagedQuery({
-    queryKey: ["discovery", "series", medium],
+    queryKey:
+      variant === "page"
+        ? ["series-gaps", medium]
+        : ["discovery", "series", medium],
     queryFn: async (page, signal) =>
       result(
         await api.GET("/api/discovery/series", {
           signal,
-          params: { query: { medium, page, limit: 4 } },
+          params: {
+            query: {
+              medium,
+              page,
+              limit: variant === "page" ? 8 : 4,
+              full: variant === "page",
+            },
+          },
         }),
       ),
-    refetchInterval: 60_000,
+    refetchInterval: variant === "page" ? false : 60_000,
     staleTime: 0,
     gcTime: 0,
     retry: false,
     next: (last, pages) =>
       last.has_more && pages.length < 100 ? pages.length + 1 : undefined,
   });
+  const dismiss = useMutation({
+    mutationFn: async (externalId: string) =>
+      result(
+        await api.POST("/api/discovery/series/{external_id}/dismiss", {
+          params: { path: { external_id: externalId } },
+        }),
+      ),
+    onSuccess: async () => {
+      await client.invalidateQueries({ queryKey: ["series-gaps"] });
+      await client.invalidateQueries({ queryKey: ["discovery", "series"] });
+    },
+  });
+  useEffect(() => {
+    if (variant !== "page" || !query.data || marked.current) return;
+    marked.current = true;
+    void (async () => {
+      try {
+        result(await api.POST("/api/discovery/series/seen", { body: {} }));
+        await client.invalidateQueries({ queryKey: ["discovery", "series"] });
+      } catch {
+        marked.current = false;
+      }
+    })();
+  }, [variant, query.data, client]);
   const items = query.data?.items || [];
-  if (hideEmpty && medium === "any" && query.data && !items.length) return null;
+  const unseen = query.data?.unseen || 0;
+  if (
+    hideEmpty &&
+    medium === "any" &&
+    query.data &&
+    !items.length &&
+    !query.data.suggestions_enabled
+  )
+    return null;
+  const Heading = variant === "page" ? "h1" : "h2";
   return (
     <section
       className="discovery-section"
@@ -43,11 +130,22 @@ export default function SeriesContinuation({
     >
       <div className="page-heading discovery-heading series-gap-heading">
         <div>
-          <h2 id="series-continuation-title">Continue your series</h2>
-          <p className="muted">Find the missing books in your series.</p>
+          {variant === "page" && (
+            <Link className="back-link" to="/discover">
+              ← Discover
+            </Link>
+          )}
+          <Heading id="series-continuation-title">
+            Missing from your series
+          </Heading>
+          <p className="muted">
+            Published books from Hardcover series linked to books you own.
+            {unseen > 0
+              ? ` ${unseen} new ${unseen === 1 ? "book" : "books"}.`
+              : ""}
+          </p>
         </div>
         <div className="shelf-controls">
-          {" "}
           <label>
             Find missing
             <select
@@ -63,7 +161,7 @@ export default function SeriesContinuation({
           </label>
         </div>
       </div>
-      <Notice error={query.error} />
+      <Notice error={query.error || dismiss.error} />
       {query.isPending && <Loading />}
       {query.error && (
         <button disabled={query.isFetching} onClick={() => query.refetch()}>
@@ -79,32 +177,57 @@ export default function SeriesContinuation({
                   key={series.external_id}
                   series={series}
                   medium={medium}
+                  canEdit={canEdit}
+                  showActions={variant === "page"}
+                  onIgnore={(externalId) => dismiss.mutate(externalId)}
+                  ignoring={dismiss.isPending}
                 />
               ))}
             </div>
           ) : (
-            <div className="panel">
-              <p>
-                No missing {mediumLabel[medium]} found in these loaded series.
-              </p>
-              <p className="muted">
-                Open a book you own, follow its series link and load the
-                catalog. New or refreshed series can then appear here. This
-                shelf describes your library, not your reading progress.
-              </p>
-              <Link className="back-link" to="/">
-                Browse your catalog →
-              </Link>
-            </div>
+            <Empty shelf={query.data} medium={medium} />
           )}
         </>
+      )}
+      {variant === "shelf" && items.length > 0 && (
+        <Link className="back-link" to="/discover/series">
+          See all missing books
+          {unseen > 0 ? ` · ${unseen} new` : ""} →
+        </Link>
       )}
       <InfiniteScroll query={query} />
     </section>
   );
 }
 
-function SeriesCard({ series, medium }: { series: SeriesGap; medium: Medium }) {
+function Empty({ shelf, medium }: { shelf: SeriesGapShelf; medium: Medium }) {
+  const copy = emptyCopy(shelf, medium);
+  return (
+    <div className="panel">
+      <p>{copy.title}</p>
+      <p className="muted">{copy.detail}</p>
+      <Link className="back-link" to={copy.to}>
+        {copy.label}
+      </Link>
+    </div>
+  );
+}
+
+function SeriesCard({
+  series,
+  medium,
+  canEdit,
+  showActions,
+  onIgnore,
+  ignoring,
+}: {
+  series: SeriesGap;
+  medium: Medium;
+  canEdit: boolean;
+  showActions: boolean;
+  onIgnore: (externalId: string) => void;
+  ignoring: boolean;
+}) {
   return (
     <article
       className="panel series-gap-card"
@@ -117,6 +240,7 @@ function SeriesCard({ series, medium }: { series: SeriesGap; medium: Medium }) {
           >
             {series.name}
           </Link>
+          {series.unseen > 0 && <span className="series-gap-new">New</span>}
         </h3>
         <p className="muted">
           {series.owned} in library · {series.missing} missing{" "}
@@ -130,7 +254,7 @@ function SeriesCard({ series, medium }: { series: SeriesGap; medium: Medium }) {
         )}
       </header>
       <ol className="series-gap-books">
-        {series.books.map(({ work, position, ambiguous_position }) => (
+        {series.books.map(({ work, position, ambiguous_position, unseen }) => (
           <li key={work.id}>
             <BookLink
               aria-label={`View ${work.title}`}
@@ -144,6 +268,7 @@ function SeriesCard({ series, medium }: { series: SeriesGap; medium: Medium }) {
                 <span className="series-gap-note">
                   {position ? `Position ${position}` : "Order unknown"}
                   {ambiguous_position && " · Order needs review"}
+                  {unseen && " · New"}
                 </span>
                 <h4>{work.title}</h4>
                 <p className="muted">
@@ -187,17 +312,44 @@ function SeriesCard({ series, medium }: { series: SeriesGap; medium: Medium }) {
             These are excluded from the missing count.
           </p>
         )}
-        <Link
-          className="back-link"
-          to={`/series/hardcover/${encodeURIComponent(series.external_id)}`}
-        >
-          View series
-          {series.missing > series.books.length
-            ? ` · ${series.missing - series.books.length} more missing`
-            : ""}{" "}
-          →
-        </Link>
+        {showActions ? (
+          <div className="series-gap-actions">
+            {canEdit && (
+              <Link
+                to={`/series/hardcover/${encodeURIComponent(series.external_id)}?tab=requests&gaps=1&medium=${medium}`}
+              >
+                Request missing books
+              </Link>
+            )}
+            <button
+              type="button"
+              disabled={ignoring}
+              onClick={() => onIgnore(series.external_id)}
+            >
+              Ignore this series
+            </button>
+          </div>
+        ) : (
+          <Link
+            className="back-link"
+            to={`/series/hardcover/${encodeURIComponent(series.external_id)}`}
+          >
+            View series
+            {series.missing > series.books.length
+              ? ` · ${series.missing - series.books.length} more missing`
+              : ""}{" "}
+            →
+          </Link>
+        )}
       </footer>
     </article>
+  );
+}
+
+export function SeriesGapPage({ canEdit }: { canEdit: boolean }) {
+  return (
+    <div className="explore">
+      <SeriesContinuation variant="page" canEdit={canEdit} />
+    </div>
   );
 }

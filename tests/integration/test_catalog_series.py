@@ -13,6 +13,8 @@ from app.db.models import (
     CatalogAccount,
     CatalogSeries,
     Operation,
+    SeriesGapBaseline,
+    SeriesGapSighting,
     SeriesMembership,
     User,
 )
@@ -121,6 +123,32 @@ async def test_staged_refresh_reuses_known_work_without_downloads(
     await series.run(operation)
     assert len(service.calls) == 6
     assert await start(client) == operation
+
+
+async def test_completed_refresh_baselines_gaps_and_marks_a_later_book_new(
+    client, database, service, catalog
+):
+    async with database() as db, db.begin():
+        account = await db.scalar(select(CatalogAccount))
+        account.suggest_series_gaps = True
+    assert await finish(database, await start(client)) == "completed"
+    async with database() as db:
+        assert await db.scalar(select(func.count()).select_from(SeriesGapBaseline)) == 1
+        first = list(await db.scalars(select(SeriesGapSighting)))
+        assert first and all(row.seen_at for row in first)
+    service.items = [*service.items, record(3, 99)]
+    assert await finish(database, await start(client, "added-book")) == "completed"
+    async with database() as db:
+        rows = list(await db.scalars(select(SeriesGapSighting)))
+        assert sum(row.seen_at is None for row in rows) == 1
+        assert await db.scalar(select(func.count()).select_from(AcquisitionIntent)) == 0
+
+
+async def test_refresh_without_suggestions_does_not_baseline(client, database, service, catalog):
+    assert await finish(database, await start(client)) == "completed"
+    async with database() as db:
+        assert await db.scalar(select(func.count()).select_from(SeriesGapBaseline)) == 0
+        assert await db.scalar(select(func.count()).select_from(SeriesGapSighting)) == 0
 
 
 async def test_changed_verification_preserves_prior_memberships(client, database, service):

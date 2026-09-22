@@ -211,6 +211,12 @@ function Home({ canEdit }: { canEdit: boolean }) {
         content: <CollectionRow canEdit={canEdit} collection={collection} />,
       });
   }
+  const seriesRow = {
+    id: "series",
+    title: "Missing from your series",
+    content: <SeriesContinuation hideEmpty />,
+  };
+  if (account.data?.suggest_series_gaps) rows.push(seriesRow);
   rows.push({
     id: "library",
     title: "Recent library additions",
@@ -222,11 +228,7 @@ function Home({ canEdit }: { canEdit: boolean }) {
       title: "New releases",
       content: <ProviderShelf canEdit={canEdit} shelf="new-releases" />,
     });
-  rows.push({
-    id: "series",
-    title: "Continue a series",
-    content: <SeriesContinuation hideEmpty />,
-  });
+  if (!account.data?.suggest_series_gaps) rows.push(seriesRow);
   for (const c of sources.collections.data || []) {
     if (layout.data?.order?.includes(c.id) && !rows.some((r) => r.id === c.id))
       rows.push({

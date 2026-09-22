@@ -3504,6 +3504,16 @@
               "default": 4,
               "title": "Limit"
             }
+          },
+          {
+            "name": "full",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Full"
+            }
           }
         ],
         "responses": {
@@ -3516,6 +3526,75 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/discovery/series/seen": {
+      "post": {
+        "tags": [
+          "discovery"
+        ],
+        "summary": "See Series Gaps",
+        "operationId": "see_series_gaps_api_discovery_series_seen_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeenInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/discovery/series/{external_id}/dismiss": {
+      "post": {
+        "tags": [
+          "discovery"
+        ],
+        "summary": "Dismiss Series Gaps",
+        "operationId": "dismiss_series_gaps_api_discovery_series__external_id__dismiss_post",
+        "parameters": [
+          {
+            "name": "external_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "External Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
           },
           "422": {
             "description": "Validation Error",
@@ -8056,6 +8135,47 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/AccountInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metadata/account/series-suggestions": {
+      "put": {
+        "tags": [
+          "metadata"
+        ],
+        "summary": "Save Series Suggestions",
+        "operationId": "save_series_suggestions_api_metadata_account_series_suggestions_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeriesSuggestionInput"
               }
             }
           },
@@ -14181,6 +14301,11 @@
               }
             ],
             "title": "Last Success At"
+          },
+          "suggest_series_gaps": {
+            "type": "boolean",
+            "title": "Suggest Series Gaps",
+            "default": false
           }
         },
         "type": "object",
@@ -28493,6 +28618,23 @@
         ],
         "title": "SearchSourceView"
       },
+      "SeenInput": {
+        "properties": {
+          "external_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External Id"
+          }
+        },
+        "type": "object",
+        "title": "SeenInput"
+      },
       "SelectionInput": {
         "properties": {
           "intent_id": {
@@ -28904,6 +29046,11 @@
             "type": "integer",
             "title": "Future Publication"
           },
+          "unseen": {
+            "type": "integer",
+            "title": "Unseen",
+            "default": 0
+          },
           "books": {
             "items": {
               "$ref": "#/components/schemas/SeriesGapBook"
@@ -28949,6 +29096,11 @@
           "ambiguous_position": {
             "type": "boolean",
             "title": "Ambiguous Position"
+          },
+          "unseen": {
+            "type": "boolean",
+            "title": "Unseen",
+            "default": false
           }
         },
         "type": "object",
@@ -28984,6 +29136,26 @@
           "has_more": {
             "type": "boolean",
             "title": "Has More"
+          },
+          "unseen": {
+            "type": "integer",
+            "title": "Unseen",
+            "default": 0
+          },
+          "suggestions_enabled": {
+            "type": "boolean",
+            "title": "Suggestions Enabled",
+            "default": false
+          },
+          "hardcover_connected": {
+            "type": "boolean",
+            "title": "Hardcover Connected",
+            "default": false
+          },
+          "monitored_series": {
+            "type": "integer",
+            "title": "Monitored Series",
+            "default": 0
           },
           "attribution": {
             "type": "string",
@@ -29454,6 +29626,19 @@
           "receipt"
         ],
         "title": "SeriesRequestView"
+      },
+      "SeriesSuggestionInput": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          }
+        },
+        "type": "object",
+        "required": [
+          "enabled"
+        ],
+        "title": "SeriesSuggestionInput"
       },
       "SeriesView": {
         "properties": {
