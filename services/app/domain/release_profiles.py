@@ -63,6 +63,10 @@ class ReleasePreferences(ScopePreferences):
     audio_formats: list[str] = Field(
         default=["m4b", "mp3", "flac", "aac", "ogg", "opus"], min_length=1, max_length=20
     )
+    source_strategy: Literal["priority", "rank_all"] = Field(
+        default="priority", exclude_if=lambda value: value == "priority"
+    )
+    source_fallback: bool = Field(default=True, exclude_if=lambda value: value is True)
     source_order: list[str] = Field(default=["mam", "prowlarr"], min_length=1, max_length=100)
     criteria: list[Literal["format", "source", "seeders", "narrator", "popularity"]] = Field(
         default=["format", "source", "seeders"], min_length=3, max_length=5
@@ -102,7 +106,8 @@ class ReleasePreferences(ScopePreferences):
     @classmethod
     def sources(cls, values):
         if len(set(values)) != len(values) or any(
-            not re.fullmatch(r"mam|audiobookbay|prowlarr(?::[1-9][0-9]{0,9})?", v) for v in values
+            not re.fullmatch(r"mam|audiobookbay|slskd|prowlarr(?::[1-9][0-9]{0,9})?", v)
+            for v in values
         ):
             raise ValueError("Use distinct source names or Prowlarr indexer references")
         return values
@@ -136,6 +141,9 @@ class PreferenceOverrides(ReleasePreferences):
                 values[field] = None
         if "allow_unknown_seeders" in self.model_fields_set:
             values["allow_unknown_seeders"] = self.allow_unknown_seeders
+        for field in ("source_strategy", "source_fallback"):
+            if field in self.model_fields_set:
+                values[field] = getattr(self, field)
         return {key: value for key, value in values.items() if key in self.model_fields_set}
 
 
@@ -348,7 +356,10 @@ def assess_release(release, work, preferences, medium="all"):
         explanation.append(
             "Source title and author agree with the catalog; file identity still needs inspection"
         )
-    if (
+    if release.protocol == "soulseek":
+        if not getattr(release, "files", None):
+            blocked.append("Soulseek did not return a downloadable file list")
+    elif (
         release.protocol not in {"torrent", "nzb"}
         or getattr(release, "acquisition_supported", True) is False
     ):

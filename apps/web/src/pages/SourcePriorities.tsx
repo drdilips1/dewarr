@@ -12,6 +12,7 @@ const standard = {
   mam: "MAM",
   prowlarr: "Prowlarr (fallback)",
   audiobookbay: "AudiobookBay",
+  slskd: "Soulseek",
 };
 
 function unavailable(indexer: Indexer) {

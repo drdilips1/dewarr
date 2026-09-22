@@ -168,7 +168,7 @@ async def options(user: Member, db: Database):
     for row in await db.scalars(
         select(Integration)
         .where(
-            Integration.kind.in_(["qbittorrent", *USENET_KINDS]),
+            Integration.kind.in_(["qbittorrent", "slskd", *USENET_KINDS]),
             Integration.owner_id.is_(None),
             Integration.enabled.is_(True),
         )

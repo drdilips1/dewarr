@@ -7,10 +7,23 @@ from pydantic import Field
 from app.adapters.audiobookbay import ABBRelease
 from app.adapters.mam import MAMRelease
 from app.adapters.prowlarr import ProwlarrRelease
+from app.adapters.slskd import SlskdRelease
 
-SourceRelease = Annotated[MAMRelease | ProwlarrRelease | ABBRelease, Field(discriminator="source")]
-RELEASE_TYPES = {"mam": MAMRelease, "prowlarr": ProwlarrRelease, "audiobookbay": ABBRelease}
-SOURCE_NAMES = {"mam": "MAM", "prowlarr": "Prowlarr indexers", "audiobookbay": "AudiobookBay"}
+SourceRelease = Annotated[
+    MAMRelease | ProwlarrRelease | ABBRelease | SlskdRelease, Field(discriminator="source")
+]
+RELEASE_TYPES = {
+    "mam": MAMRelease,
+    "prowlarr": ProwlarrRelease,
+    "audiobookbay": ABBRelease,
+    "slskd": SlskdRelease,
+}
+SOURCE_NAMES = {
+    "mam": "MAM",
+    "prowlarr": "Prowlarr indexers",
+    "audiobookbay": "AudiobookBay",
+    "slskd": "Soulseek",
+}
 
 
 def release_value(source_key, snapshot):

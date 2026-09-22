@@ -13,6 +13,7 @@ EBOOKS = {"epub", "pdf", "cbz"}
 AUDIO = {"m4b", "mp3", "flac", "aac", "ogg", "opus"}
 SIDECARS = {"jpg", "jpeg", "png", "webp", "opf", "nfo", "txt", "cue", "m3u"}
 PARTIAL = re.compile(r"\b(sample|excerpt|preview|incomplete|truncated)\b", re.I)
+DISC_FOLDER = re.compile(r"(?:^|[\s_(\[])(?:cd|disc|disk|part)\s*\d+\b", re.I)
 PACK = re.compile(
     r"\b(omnibus|box[ -]?set|anthology|complete series|books?\s+\d+\s*[-–]\s*\d+)\b", re.I
 )
@@ -70,15 +71,27 @@ def eligibility(
     required_language = rule["language"] or (version.language if version else None)
     if not language_accepts(required_language, release.language):
         reasons.append("The source does not confirm the required language")
-    unknown_allowed = (
-        release.seeders is None
-        and preferences.allow_unknown_seeders
-        and release.source == "audiobookbay"
-    )
-    if release.protocol != "nzb" and (
-        release.seeders == 0 or (release.seeders is None and not unknown_allowed)
-    ):
-        reasons.append("At least one reported seeder is required for automatic selection")
+    if release.protocol == "soulseek":
+        if not getattr(release, "peer_online", False) or not getattr(release, "files", None):
+            reasons.append(
+                "A live Soulseek peer with a file list is required for automatic selection"
+            )
+        if getattr(release, "locked_files", 0):
+            reasons.append("Soulseek locked some files in this folder")
+        folder = str(getattr(release, "directory", "") or "").replace("\\", "/").rsplit("/", 1)[-1]
+        if DISC_FOLDER.search(folder):
+            reasons.append("Soulseek returned one disc folder from a larger book")
+        unknown_allowed = False
+    elif release.protocol == "nzb":
+        unknown_allowed = False
+    else:
+        unknown_allowed = (
+            release.seeders is None
+            and preferences.allow_unknown_seeders
+            and release.source == "audiobookbay"
+        )
+        if release.seeders == 0 or (release.seeders is None and not unknown_allowed):
+            reasons.append("At least one reported seeder is required for automatic selection")
     if unknown_allowed and descriptor and not getattr(release, "metadata_resolved", False):
         reasons.append("Unknown seed counts require resolved torrent metadata before selection")
     text = " ".join(

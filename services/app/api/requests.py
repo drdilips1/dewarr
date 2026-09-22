@@ -298,6 +298,19 @@ async def view(db, user, intent):
                         target.next_action = (
                             "downloads" if selection.state == "committed" else "selected-release"
                         )
+                else:
+                    quick = await db.scalar(
+                        select(Operation)
+                        .where(
+                            Operation.owner_id == intent.owner_id,
+                            Operation.kind == "acquisition.quick-add",
+                            Operation.payload["intent_id"].astext == str(intent.id),
+                        )
+                        .order_by(Operation.created_at.desc())
+                        .limit(1)
+                    )
+                    if quick and quick.status in {"queued", "running", "held"}:
+                        target.message = quick.message
             else:
                 target.next_action = "book"
     except HTTPException:

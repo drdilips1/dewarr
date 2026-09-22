@@ -87,6 +87,49 @@ async def persist_artifact(
         return row.id
 
 
+async def persist_file_list(user_id, release, generation):
+    """Store a Soulseek file list. There is no torrent to probe."""
+    from app.adapters.slskd import file_list_descriptor
+
+    descriptor, content = file_list_descriptor(release)
+    digest = hashlib.sha256(content).hexdigest()
+    if digest != descriptor.artifact_sha256:
+        raise AdapterError(FailureKind.PARSER, "Soulseek file list identity changed during save.")
+    async with session_factory()() as db, db.begin():
+        await transaction_lock(db, "source:slskd")
+        await member(db, user_id)
+        source = await db.get(SourceConnection, "slskd")
+        if not source or not source.enabled or source.generation != generation:
+            raise HTTPException(
+                409, "Source settings changed while saving the Soulseek folder. Search again."
+            )
+        existing = await db.scalar(
+            select(SourceArtifact).where(
+                SourceArtifact.owner_id == user_id,
+                SourceArtifact.source_key == "slskd",
+                SourceArtifact.source_id == release.source_id,
+                SourceArtifact.source_generation == generation,
+                SourceArtifact.sha256 == digest,
+            )
+        )
+        if existing:
+            return existing.id
+        row = SourceArtifact(
+            owner_id=user_id,
+            source_key="slskd",
+            source_id=release.source_id,
+            source_generation=generation,
+            sha256=digest,
+            descriptor=descriptor.model_dump(mode="json"),
+            encrypted_content=encrypt_secrets({"torrent": base64.b64encode(content).decode()}),
+            release_snapshot=release.model_dump(mode="json"),
+        )
+        db.add(row)
+        await db.flush()
+        db.add(AuditEvent(actor_id=user_id, action="source.artifact.inspected", entity_id=row.id))
+        return row.id
+
+
 def artifact_bytes(row):
     """Verified bytes for internal dispatch or explicit owner-authorized torrent export."""
     try:

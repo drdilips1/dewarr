@@ -312,6 +312,14 @@ async def submitted(db, attempt):
     row.submitted_at = row.submitted_at or datetime.now(UTC)
 
 
+async def release_slot(db, attempt):
+    """Free a slot after a submitted transfer has stopped without a library import."""
+    await transaction_lock(db, LOCK)
+    row = await db.get(DownloadCapacity, attempt.id)
+    if row:
+        row.slot_active, row.resources, row.import_resources = False, {}, {}
+
+
 async def release_unsubmitted(db, attempt):
     if attempt.external_may_exist:
         return

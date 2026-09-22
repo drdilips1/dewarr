@@ -33,7 +33,7 @@ from app.domain.acquisition import (
     reserve,
     validate_request,
 )
-from app.domain.downloaders import SETTINGS_LOCK, USENET_KINDS, connection_or_404, mapped_path
+from app.domain.downloaders import SETTINGS_LOCK, USENET_KINDS, mapped_path, transfer_connection
 from app.domain.operations import transaction_lock
 from app.domain.release_profiles import enforce_profile
 from app.domain.request_constraints import constrained_preferences
@@ -221,18 +221,26 @@ async def prepare(db, user, body, key, *, automatic_evidence=None):
     version = await db.get(Version, UUID(rule["version_id"])) if rule["version_id"] else None
     release_compatible(release, rule, version)
     await transaction_lock(db, SETTINGS_LOCK)
-    downloader = await connection_or_404(db, body.downloader_id)
-    if not downloader.enabled or downloader.credential_generation != body.downloader_generation:
+    route = await transfer_connection(db, body.downloader_id)
+    if not route.enabled or route.credential_generation != body.downloader_generation:
         raise HTTPException(409, "Downloader settings changed; refresh before selecting")
+    if route.status != "connected":
+        raise HTTPException(409, "An administrator must test the saved downloader first")
     usenet = artifact.descriptor.get("protocol") == "nzb"
     if usenet != (release.protocol == "nzb"):
         raise HTTPException(409, "Saved release type does not match its inspected file")
-    if usenet and downloader.kind not in USENET_KINDS:
+    if artifact.source_key != "slskd" and usenet and route.kind not in USENET_KINDS:
         raise HTTPException(422, "Choose a SABnzbd or NZBGet connection for Usenet releases")
-    if not usenet and downloader.kind != "qbittorrent":
+    if artifact.source_key != "slskd" and not usenet and route.kind != "qbittorrent":
         raise HTTPException(422, "Choose a qBittorrent connection for torrent releases")
-    if downloader.status != "connected":
-        raise HTTPException(409, "An administrator must test the saved downloader first")
+    if artifact.source_key == "slskd":
+        from app.domain.slskd_connection import integration as soulseek_integration
+
+        downloader = await soulseek_integration(db)
+        if not downloader or not downloader.enabled or downloader.status != "connected":
+            raise HTTPException(409, "Connect and test Soulseek before downloading this folder")
+    else:
+        downloader = route
     mapping = mapped_path(downloader, downloader.config["save_path"])
     destination = await db.scalar(
         select(ImportDestination)

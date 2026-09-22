@@ -7,16 +7,24 @@ from uuid import UUID
 from fastapi import HTTPException
 from sqlalchemy import select, text
 
+from app.adapters.source_releases import SOURCE_NAMES
 from app.config import get_settings
 from app.db.models import (
     AcquisitionIntent,
     AcquisitionReservation,
     AcquisitionTarget,
     Operation,
+    SourceConnection,
     User,
 )
 from app.db.session import session_factory
-from app.domain import acquisition, automatic_routes, automatic_selection, book_sources
+from app.domain import (
+    acquisition,
+    automatic_routes,
+    automatic_selection,
+    book_sources,
+    source_strategy,
+)
 from app.domain.operations import transaction_lock
 from app.domain.release_profiles import ProfileSnapshot
 from app.jobs.queue import enqueue
@@ -129,7 +137,27 @@ async def _begin(db, user, work_id, options, key, *, dispatch):
         await automatic_routes.resolve(
             db, user, route_spec, routes.downloader_id, routes.downloader_generation, routes.routes
         )
+        connected = {
+            row.key
+            for row in await db.scalars(
+                select(SourceConnection).where(SourceConnection.enabled.is_(True))
+            )
+            if row.key in SOURCE_NAMES
+        }
+        order = source_strategy.search_order(profile.preferences.source_order, connected)
+        plan = {
+            "strategy": profile.preferences.source_strategy,
+            "fallback": profile.preferences.source_fallback,
+            "order": order,
+            "index": 0,
+            "tried": [],
+        }
+        only = [order[0]] if plan["strategy"] == "priority" and order else None
         payload["routes"] = routes.model_dump(mode="json")
+        payload["source_plan"] = plan
+        operation.message = (
+            f"Searching {SOURCE_NAMES[order[0]]}" if only else "Searching connected sources"
+        )
         search = await book_sources.start(
             db,
             user,
@@ -137,7 +165,8 @@ async def _begin(db, user, work_id, options, key, *, dispatch):
             book_sources.SearchInput(
                 request_id=intent.id, medium=spec.mode if spec.mode in {"audio", "ebook"} else "all"
             ),
-            f"quick-search:{operation.id}",
+            f"quick-search:{operation.id}:{order[0] if only else 'all'}",
+            only_sources=only,
         )
         payload["search_id"] = str(search.id)
         payload["slots"] = {
@@ -195,6 +224,10 @@ async def run(identifier):
                             else:
                                 # Either requests use the preferred medium first, as configured.
                                 medium = spec.preferred_medium if slot == "either" else slot
+                                plan = payload.get("source_plan") or {}
+                                source_key = "all"
+                                if plan.get("strategy") == "priority" and plan.get("order"):
+                                    source_key = plan["order"][plan.get("index", 0)]
                                 child = await automatic_selection.begin(
                                     db,
                                     user,
@@ -205,17 +238,103 @@ async def run(identifier):
                                         **automatic_routes.selection_clients(routes, medium),
                                         download_when_ready=True,
                                     ),
-                                    f"quick-select:{operation.id}:{slot}",
+                                    f"quick-select:{operation.id}:{slot}:{source_key}",
                                 )
                             progress["operation_id"] = str(child.id)
                             progress["message"] = child.message
                             if child.status in automatic_selection.TERMINAL:
-                                progress["done"] = True
-                                progress["failed"] = child.status != "completed"
+                                plan = payload.setdefault(
+                                    "source_plan",
+                                    {
+                                        "strategy": "rank_all",
+                                        "fallback": False,
+                                        "order": [],
+                                        "index": 0,
+                                        "tried": [],
+                                    },
+                                )
+                                found = child.status == "completed"
+                                decision = source_strategy.outcome(
+                                    plan.get("strategy", "rank_all"),
+                                    bool(plan.get("fallback")),
+                                    int(plan.get("index") or 0),
+                                    len(plan.get("order") or []),
+                                    found=found,
+                                )
+                                if decision == "next":
+                                    progress["wants_next"] = True
+                                    progress["message"] = child.message
+                                else:
+                                    progress.pop("wants_next", None)
+                                    progress["done"] = True
+                                    progress["failed"] = not found
+                                    if not found:
+                                        tried = list(plan.get("tried") or [])
+                                        order = plan.get("order") or []
+                                        index = int(plan.get("index") or 0)
+                                        if order and index < len(order):
+                                            current = order[index]
+                                            tried.append(
+                                                {
+                                                    "name": SOURCE_NAMES.get(current, current),
+                                                    "message": child.message,
+                                                }
+                                            )
+                                        progress["message"] = source_strategy.review_message(
+                                            tried, None if tried else child.message
+                                        )
                     except automatic_selection.AlreadyAvailable:
                         progress.update(done=True, message="Already in your library")
                     except HTTPException as error:
                         progress.update(done=True, failed=True, message=str(error.detail))
+                if source_strategy.ready_for_next_source(payload["slots"]):
+                    plan = payload.setdefault(
+                        "source_plan",
+                        {
+                            "strategy": "rank_all",
+                            "fallback": False,
+                            "order": [],
+                            "index": 0,
+                            "tried": [],
+                        },
+                    )
+                    order = plan.get("order") or []
+                    index = int(plan.get("index") or 0)
+                    current = order[index]
+                    missed = next(
+                        (
+                            progress.get("message")
+                            for progress in payload["slots"].values()
+                            if not progress.get("done") and progress.get("wants_next")
+                        ),
+                        None,
+                    )
+                    plan["tried"].append(
+                        {
+                            "name": SOURCE_NAMES.get(current, current),
+                            "message": missed,
+                        }
+                    )
+                    plan["index"] = index + 1
+                    nxt = order[plan["index"]]
+                    search = await book_sources.start(
+                        db,
+                        user,
+                        intent.work_id,
+                        book_sources.SearchInput(
+                            request_id=intent.id,
+                            medium=spec.mode if spec.mode in {"audio", "ebook"} else "all",
+                        ),
+                        f"quick-search:{operation.id}:{nxt}",
+                        only_sources=[nxt],
+                    )
+                    payload["search_id"] = str(search.id)
+                    for progress in payload["slots"].values():
+                        if progress.get("done") or not progress.get("wants_next"):
+                            continue
+                        progress.pop("operation_id", None)
+                        progress.pop("wants_next", None)
+                        progress["message"] = f"Searching {SOURCE_NAMES.get(nxt, nxt)}"
                 complete = all(p.get("done") for p in payload["slots"].values())
                 operation.status = (
                     (
@@ -232,7 +351,14 @@ async def run(identifier):
                     for slot, p in payload["slots"].items()
                 )
             else:
-                operation.status, operation.message = "running", search.message
+                plan = payload.get("source_plan") or {}
+                current = None
+                if plan.get("strategy") == "priority" and plan.get("order"):
+                    current = plan["order"][int(plan.get("index") or 0)]
+                operation.status, operation.message = (
+                    "running",
+                    f"Searching {SOURCE_NAMES[current]}" if current else search.message,
+                )
         except HTTPException as error:
             operation.status, operation.message = "held", str(error.detail)
         finally:

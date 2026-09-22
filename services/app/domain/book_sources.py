@@ -59,7 +59,7 @@ def identity(work):
     return {"id": str(work.id), "title": work.title, "authors": work.authors}
 
 
-async def start(db, user, work_id, body, key, *, pack_origin=None):
+async def start(db, user, work_id, body, key, *, pack_origin=None, only_sources=None):
     if get_settings().recovery_mode:
         raise HTTPException(409, "Source searches are paused for recovery")
     work = await accessible_work(db, user, work_id)
@@ -152,7 +152,7 @@ async def start(db, user, work_id, body, key, *, pack_origin=None):
             "generation": row.generation,
         }
         for key, row in connections.items()
-        if key in SOURCE_NAMES
+        if key in SOURCE_NAMES and (only_sources is None or key in only_sources)
     }
     for native in ("mam", "audiobookbay"):
         if native not in sources:
@@ -182,7 +182,7 @@ async def start(db, user, work_id, body, key, *, pack_origin=None):
         },
         message="Searching connected sources"
         if sources
-        else "Connect MAM, AudiobookBay or Prowlarr to search releases",
+        else "Connect MAM, AudiobookBay, Prowlarr, or Soulseek to search releases",
         status="queued" if sources else "completed",
     )
     preparation = (
@@ -414,6 +414,50 @@ async def run(identifier, source):
         if datetime.fromisoformat(payload["expires_at"]) <= datetime.now(UTC):
             raise HTTPException(409, "Search expired. Start a new search.")
         generation = payload["sources"][source]["generation"]
+        if source == "slskd":
+            from app.domain.slskd_connection import search as slskd_search
+
+            try:
+                if not await update_unit(
+                    identifier,
+                    source,
+                    token,
+                    source,
+                    {"state": "running", "message": "Searching Soulseek"},
+                ):
+                    return
+                releases, generation = await slskd_search(
+                    owner_id,
+                    {
+                        "q": payload["sources"][source].get("query", payload["query"]),
+                        "title": payload["work"]["title"],
+                        "authors": payload["work"]["authors"],
+                        "observed_at": datetime.now(UTC),
+                    },
+                    expected_generation=generation,
+                )
+                if not await update_unit(
+                    identifier,
+                    source,
+                    token,
+                    source,
+                    {
+                        "state": "completed",
+                        "message": "Results received",
+                        "has_more": False,
+                        "observed_at": datetime.now(UTC).isoformat(),
+                    },
+                    [(release, None) for release in releases],
+                    generation,
+                ):
+                    return
+            except AdapterError as error:
+                if error.kind == FailureKind.RATE_LIMIT:
+                    raise
+                await update_unit(
+                    identifier, source, token, source, {"state": "failed", "message": str(error)}
+                )
+            return
         if source in {"mam", "audiobookbay"}:
             for unit, state in payload["sources"].items():
                 if not (unit == source or unit.startswith(source + ":")) or state["state"] in {

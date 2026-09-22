@@ -115,6 +115,8 @@ def release_value(row):
 def protocol_rejection(protocol):
     if protocol == "nzb":
         return "This release needs a SABnzbd or NZBGet connection"
+    if protocol == "soulseek":
+        return "Connect and test Soulseek before downloading this folder"
     return "This release needs a qBittorrent connection"
 
 
@@ -145,11 +147,28 @@ def route_ready(route):
 
 
 def wanted_protocol(protocol):
-    return "nzb" if protocol == "nzb" else "torrent"
+    if protocol == "nzb":
+        return "nzb"
+    if protocol == "soulseek":
+        return "soulseek"
+    return "torrent"
 
 
 async def matching_route(db, body, protocol):
     """Return the saved client whose protocol matches this release."""
+    if protocol == "soulseek":
+        from app.domain.slskd_connection import integration as soulseek_integration
+
+        downloader = await soulseek_integration(db)
+        if not downloader:
+            return None
+        return {
+            "downloader": downloader,
+            "generation": downloader.credential_generation,
+            "destination_id": body.destination_id,
+            "destination_revision": body.destination_revision,
+            "approval_key": "dispatch_approval",
+        }
     wanted = wanted_protocol(protocol)
     try:
         primary = await connection_or_404(db, body.downloader_id)
@@ -708,7 +727,9 @@ async def run(identifier):
         operation.payload = payload
         operation.status, operation.message = (
             "running",
-            "Inspecting the highest ranked eligible torrent",
+            "Inspecting the highest ranked eligible Soulseek folder"
+            if getattr(preview, "source", None) == "slskd"
+            else "Inspecting the highest ranked eligible torrent",
         )
         owner_id = operation.owner_id
         from app.domain.pack_expansion import pinned_source
@@ -773,259 +794,318 @@ async def run(identifier):
         if retry:
             raise SourceSearchRetry(getattr(error, "retry_after", None) or 60) from None
         return
-    async with session_factory()() as db, db.begin():
-        # Selection commands take their key before the acquisition lock. Match
-        # that order even when a user races the internally generated command.
-        child_key = f"auto-selected:{identifier}"
-        dispatch_key = f"auto-download:{identifier}"
-        if body.download_when_ready:
-            await transaction_lock(db, f"operation:{owner_id}:{dispatch_key}")
-        await transaction_lock(db, f"operation:{owner_id}:{child_key}")
-        await transaction_lock(db, f"auto-select:{identifier}")
-        operation = await db.get(Operation, identifier, populate_existing=True)
-        if operation.status in TERMINAL or operation.payload.get("token") != token:
-            return
-        await automatic_dispatch.lock_principals(
-            db,
-            owner_id,
-            operation.payload.get("dispatch_approval"),
-            operation.payload.get("list_authority"),
-            operation.payload.get("series_authority"),
-        )
-        try:
-            await require_authority(
-                db, owner_id, operation.payload.get("list_authority"), intent_id=body.intent_id
+    soulseek_batch = None
+    accepted_batch = False
+    try:
+        async with session_factory()() as db, db.begin():
+            # Selection commands take their key before the acquisition lock. Match
+            # that order even when a user races the internally generated command.
+            child_key = f"auto-selected:{identifier}"
+            dispatch_key = f"auto-download:{identifier}"
+            if body.download_when_ready:
+                await transaction_lock(db, f"operation:{owner_id}:{dispatch_key}")
+            await transaction_lock(db, f"operation:{owner_id}:{child_key}")
+            await transaction_lock(db, f"auto-select:{identifier}")
+            operation = await db.get(Operation, identifier, populate_existing=True)
+            if operation.status in TERMINAL or operation.payload.get("token") != token:
+                return
+            await automatic_dispatch.lock_principals(
+                db,
+                owner_id,
+                operation.payload.get("dispatch_approval"),
+                operation.payload.get("list_authority"),
+                operation.payload.get("series_authority"),
             )
-            await require_series(
-                db, owner_id, operation.payload.get("series_authority"), intent_id=body.intent_id
-            )
-            user, work, search, profile, rule, version = await context(db, owner_id, body)
-            verify_version_snapshot(operation.payload, version)
-            frozen_catalog = operation.payload.get("pack_catalog")
-            if frozen_catalog is not None and frozen_catalog != await pack_coverage.catalog(
-                db, user, work
-            ):
-                raise HTTPException(409, "Series coverage changed; refresh the automatic selection")
-            if (
-                rule != operation.payload["requirements"]
-                or search.payload["work"] != operation.payload["work"]
-            ):
-                raise HTTPException(
-                    409, "Request or catalog evidence changed; start a fresh selection"
+            try:
+                await require_authority(
+                    db, owner_id, operation.payload.get("list_authority"), intent_id=body.intent_id
                 )
-            result = await db.get(SourceResult, row.id, populate_existing=True)
-            source = await db.get(SourceConnection, row.source_key, populate_existing=True)
-            if (
-                not result
-                or result.expires_at <= datetime.now(UTC)
-                or not source
-                or not source.enabled
-                or source.generation != row.source_generation
-            ):
-                raise HTTPException(
-                    409, "Source observation changed during inspection; refresh results"
-                )
-            artifact = await db.get(SourceArtifact, artifact_id)
-            if (
-                not artifact
-                or artifact.owner_id != owner_id
-                or artifact.source_key != row.source_key
-                or artifact.source_generation != row.source_generation
-                or artifact.source_id != fresh.source_id
-                or fresh.source_id != release_value(row).source_id
-            ):
-                raise HTTPException(
-                    409, "Resolved torrent does not match the selected source result"
-                )
-            from app.domain.pack_expansion import pinned_source
-
-            pinned = pinned_source(operation.payload.get("series_authority"))
-            if pinned and (
-                str(artifact.id) != pinned["artifact_id"]
-                or artifact.sha256 != pinned["artifact_sha256"]
-            ):
-                await reject_candidate(
+                await require_series(
                     db,
-                    operation,
-                    row.id,
-                    [
-                        "The resolved torrent differs from the pack authorized "
-                        "for these additional books"
-                    ],
+                    owner_id,
+                    operation.payload.get("series_authority"),
+                    intent_id=body.intent_id,
                 )
-                return
-            descriptor = load_descriptor(artifact.descriptor)
-            route = await matching_route(db, body, fresh.protocol)
-            if not await accept_route(db, operation, row.id, route, fresh.protocol):
-                return
-            reasons = eligibility(
-                fresh,
-                operation.payload["work"],
-                rule,
-                profile.preferences,
-                version=version,
-                descriptor=descriptor,
-                unattended=body.download_when_ready,
-                catalog=operation.payload.get("pack_catalog"),
-            )
-            # Existing artifact snapshots are immutable. Metadata changes require
-            # review; fluctuating counts/timestamps cannot change book identity.
-            excluded = {
-                "observed_at",
-                "seeders",
-                "leechers",
-                "snatches",
-                "uploaded_at",
-                "description",
-                "media_info",
-            }
-            if release_value(artifact).model_dump(exclude=excluded) != fresh.model_dump(
-                exclude=excluded
-            ):
-                reasons.append(
-                    "Source metadata differs from the saved artifact; review this release"
-                )
-            if reasons:
-                await reject_candidate(db, operation, row.id, reasons)
-                return
-            coverage = (
-                pack_coverage.manifest(
+                user, work, search, profile, rule, version = await context(db, owner_id, body)
+                verify_version_snapshot(operation.payload, version)
+                frozen_catalog = operation.payload.get("pack_catalog")
+                if frozen_catalog is not None and frozen_catalog != await pack_coverage.catalog(
+                    db, user, work
+                ):
+                    raise HTTPException(
+                        409, "Series coverage changed; refresh the automatic selection"
+                    )
+                if (
+                    rule != operation.payload["requirements"]
+                    or search.payload["work"] != operation.payload["work"]
+                ):
+                    raise HTTPException(
+                        409, "Request or catalog evidence changed; start a fresh selection"
+                    )
+                result = await db.get(SourceResult, row.id, populate_existing=True)
+                source = await db.get(SourceConnection, row.source_key, populate_existing=True)
+                if (
+                    not result
+                    or result.expires_at <= datetime.now(UTC)
+                    or not source
+                    or not source.enabled
+                    or source.generation != row.source_generation
+                ):
+                    raise HTTPException(
+                        409, "Source observation changed during inspection; refresh results"
+                    )
+                artifact = await db.get(SourceArtifact, artifact_id)
+                if (
+                    not artifact
+                    or artifact.owner_id != owner_id
+                    or artifact.source_key != row.source_key
+                    or artifact.source_generation != row.source_generation
+                    or artifact.source_id != fresh.source_id
+                    or fresh.source_id != release_value(row).source_id
+                ):
+                    raise HTTPException(
+                        409, "Resolved torrent does not match the selected source result"
+                    )
+                from app.domain.pack_expansion import pinned_source
+
+                pinned = pinned_source(operation.payload.get("series_authority"))
+                if pinned and (
+                    str(artifact.id) != pinned["artifact_id"]
+                    or artifact.sha256 != pinned["artifact_sha256"]
+                ):
+                    await reject_candidate(
+                        db,
+                        operation,
+                        row.id,
+                        [
+                            "The resolved torrent differs from the pack authorized "
+                            "for these additional books"
+                        ],
+                    )
+                    return
+                descriptor = load_descriptor(artifact.descriptor)
+                route = await matching_route(db, body, fresh.protocol)
+                if not await accept_route(db, operation, row.id, route, fresh.protocol):
+                    return
+                reasons = eligibility(
                     fresh,
                     operation.payload["work"],
-                    operation.payload.get("pack_catalog"),
-                    descriptor,
-                    rule["medium"],
+                    rule,
+                    profile.preferences,
+                    version=version,
+                    descriptor=descriptor,
+                    unattended=body.download_when_ready,
+                    catalog=operation.payload.get("pack_catalog"),
                 )
-                if collection_candidate(
-                    fresh, operation.payload["work"], operation.payload.get("pack_catalog")
-                )
-                else None
-            )
-            payload = deepcopy(operation.payload)
-            if str(row.id) not in payload["inspected"]:
-                payload["inspected"].append(str(row.id))
-            payload["token"] = None
-            primary_formats = EBOOKS if rule["medium"] == "ebook" else AUDIO
-            payload.setdefault("verified", {})[str(row.id)] = {
-                "artifact_id": str(artifact.id),
-                "coverage": coverage,
-                **({"target_formats": pack_coverage.target_formats(coverage)} if coverage else {}),
-                "release": fresh.model_dump(mode="json"),
-                "formats": sorted(
-                    {PurePosixPath(f.path).suffix.lower().lstrip(".") for f in descriptor.files}
-                    & primary_formats
-                ),
-            }
-            for decision in payload["decisions"]:
-                if decision["result_id"] == str(row.id):
-                    decision["reasons"] = []
-                    decision["inspected"] = True
-                    decision["coverage"] = coverage
-            operation.payload = payload
-            remaining = eligible_candidates(
-                await candidates(db, operation, work, profile, rule, version), payload
-            )
-            if remaining and remaining[0][1].id != row.id:
-                operation.status, operation.message = (
-                    "queued",
-                    "Inspected release evidence changed the ranking; checking the next candidate",
-                )
-                operation.job_id = await enqueue(db, KIND, operation_id=str(identifier))
-                return
-            maximum = limit_bytes(
-                constrained_preferences(profile.preferences, rule),
-                rule["medium"],
-                pack=bool(coverage),
-            )
-            operation.payload = {**operation.payload, "maximum_bytes": maximum}
-            async with db.begin_nested():
-                selected = await prepare(
-                    db,
-                    user,
-                    SelectionInput(
-                        intent_id=body.intent_id,
-                        search_id=body.search_id,
-                        slot=body.slot,
-                        artifact_id=artifact_id,
-                        downloader_id=route["downloader"].id,
-                        downloader_generation=route["generation"],
-                        destination_id=route["destination_id"],
-                        destination_revision=route["destination_revision"],
-                        confirmed_work_id=work.id,
-                        profile_id=profile.id,
-                        profile_generation=profile.generation,
-                        profile_effective_revision=profile.base_effective_revision
-                        or profile.effective_revision,
-                    ),
-                    child_key,
-                    automatic_evidence={
-                        "operation_id": str(identifier),
-                        "search_id": str(body.search_id),
-                        "result_id": str(row.id),
-                        "maximum_bytes": operation.payload["maximum_bytes"],
-                        "inspections": len(payload["inspected"]),
-                        "reported_seeders": fresh.seeders,
-                        **(
-                            {
-                                "source_popularity": {
-                                    "origin": fresh.source
-                                    + (":" + fresh.indexer_id if fresh.indexer_id else ""),
-                                    "metric": "completed_downloads"
-                                    if fresh.source == "mam"
-                                    else None,
-                                    "value": source_popularity(fresh),
-                                }
-                            }
-                            if "popularity" in profile.preferences.criteria
-                            else {}
-                        ),
-                        "source_observed_at": fresh.observed_at.isoformat(),
-                        "inspected_formats": payload["verified"][str(row.id)]["formats"],
-                        "coverage": coverage,
-                        "pack_catalog": operation.payload.get("pack_catalog") if coverage else None,
-                        "scope": (
-                            "Catalog and manifest corroborate a bounded series pack; "
-                            "only requested books are authorized for import"
-                        )
-                        if coverage
-                        else (
-                            "Fetched source page; single-book manifest; "
-                            "actual file identity checked after downloading"
-                        ),
-                        "dispatch_approval": operation.payload.get(route["approval_key"]),
-                        "list_authority": operation.payload.get("list_authority"),
-                        "series_authority": operation.payload.get("series_authority"),
-                    },
-                )
-                operation.payload = {**operation.payload, "selection_id": str(selected.id)}
-                if body.download_when_ready and coverage:
-                    from app.domain.automatic_packs import defer
-                    from app.domain.pack_expansion import create
-
-                    await create(db, user, operation, selected, coverage)
-                    await defer(db, operation, selected)
-                elif body.download_when_ready:
-                    from app.domain.download_attempts import start as start_download
-
-                    attempt = await start_download(
-                        db, user, selected.id, dispatch_key, automatic=True
+                # Existing artifact snapshots are immutable. Metadata changes require
+                # review; fluctuating counts/timestamps cannot change book identity.
+                excluded = {
+                    "observed_at",
+                    "seeders",
+                    "leechers",
+                    "snatches",
+                    "uploaded_at",
+                    "description",
+                    "media_info",
+                }
+                if release_value(artifact).model_dump(exclude=excluded) != fresh.model_dump(
+                    exclude=excluded
+                ):
+                    reasons.append(
+                        "Source metadata differs from the saved artifact; review this release"
                     )
-                    operation.payload = {**operation.payload, "download_id": str(attempt.id)}
-            if body.download_when_ready and coverage:
-                return
-            finish(
-                operation,
-                "completed",
-                "Eligible release selected; automatic download queued"
-                if body.download_when_ready
-                else "Best eligible release prepared; download has not started",
-            )
-        except (HTTPException, AdapterError) as error:
-            # A failed dispatch rolls the nested selection/attempt transaction
-            # back together, including any in-memory operation payload changes.
-            await db.refresh(operation)
-            finish(
-                operation,
-                "completed" if isinstance(error, AlreadyAvailable) else "held",
-                str(error.detail) if isinstance(error, HTTPException) else str(error),
-            )
+                if reasons:
+                    await reject_candidate(db, operation, row.id, reasons)
+                    return
+                coverage = (
+                    pack_coverage.manifest(
+                        fresh,
+                        operation.payload["work"],
+                        operation.payload.get("pack_catalog"),
+                        descriptor,
+                        rule["medium"],
+                    )
+                    if collection_candidate(
+                        fresh, operation.payload["work"], operation.payload.get("pack_catalog")
+                    )
+                    else None
+                )
+                payload = deepcopy(operation.payload)
+                if str(row.id) not in payload["inspected"]:
+                    payload["inspected"].append(str(row.id))
+                payload["token"] = None
+                primary_formats = EBOOKS if rule["medium"] == "ebook" else AUDIO
+                payload.setdefault("verified", {})[str(row.id)] = {
+                    "artifact_id": str(artifact.id),
+                    "coverage": coverage,
+                    **(
+                        {"target_formats": pack_coverage.target_formats(coverage)}
+                        if coverage
+                        else {}
+                    ),
+                    "release": fresh.model_dump(mode="json"),
+                    "formats": sorted(
+                        {PurePosixPath(f.path).suffix.lower().lstrip(".") for f in descriptor.files}
+                        & primary_formats
+                    ),
+                }
+                for decision in payload["decisions"]:
+                    if decision["result_id"] == str(row.id):
+                        decision["reasons"] = []
+                        decision["inspected"] = True
+                        decision["coverage"] = coverage
+                operation.payload = payload
+                remaining = eligible_candidates(
+                    await candidates(db, operation, work, profile, rule, version), payload
+                )
+                if remaining and remaining[0][1].id != row.id:
+                    operation.status, operation.message = (
+                        "queued",
+                        "Inspected release evidence changed the ranking; "
+                        "checking the next candidate",
+                    )
+                    operation.job_id = await enqueue(db, KIND, operation_id=str(identifier))
+                    return
+                maximum = limit_bytes(
+                    constrained_preferences(profile.preferences, rule),
+                    rule["medium"],
+                    pack=bool(coverage),
+                )
+                operation.payload = {**operation.payload, "maximum_bytes": maximum}
+                if (
+                    body.download_when_ready
+                    and not coverage
+                    and getattr(fresh, "source", None) == "slskd"
+                ):
+                    from app.domain.slskd_transfers import queue_folder
+
+                    batch = str(uuid4())
+                    try:
+                        await queue_folder(fresh, batch)
+                    except AdapterError as error:
+                        retry = error.kind in {
+                            FailureKind.RATE_LIMIT,
+                            FailureKind.UNAVAILABLE,
+                            FailureKind.TIMEOUT,
+                            FailureKind.UNCERTAIN,
+                        }
+                        next_folder = error.kind == FailureKind.NOT_FOUND or (
+                            error.kind == FailureKind.UNSUPPORTED
+                            and not str(error).startswith("Connect and test")
+                        )
+                        if next_folder:
+                            await reject_candidate(db, operation, row.id, [str(error)])
+                            return
+                        finish(operation, "queued" if retry else "held", str(error))
+                        if retry:
+                            raise SourceSearchRetry(
+                                getattr(error, "retry_after", None) or 60
+                            ) from error
+                        return
+                    soulseek_batch = batch
+                async with db.begin_nested():
+                    selected = await prepare(
+                        db,
+                        user,
+                        SelectionInput(
+                            intent_id=body.intent_id,
+                            search_id=body.search_id,
+                            slot=body.slot,
+                            artifact_id=artifact_id,
+                            downloader_id=route["downloader"].id,
+                            downloader_generation=route["generation"],
+                            destination_id=route["destination_id"],
+                            destination_revision=route["destination_revision"],
+                            confirmed_work_id=work.id,
+                            profile_id=profile.id,
+                            profile_generation=profile.generation,
+                            profile_effective_revision=profile.base_effective_revision
+                            or profile.effective_revision,
+                        ),
+                        child_key,
+                        automatic_evidence={
+                            "operation_id": str(identifier),
+                            "search_id": str(body.search_id),
+                            "result_id": str(row.id),
+                            "maximum_bytes": operation.payload["maximum_bytes"],
+                            "inspections": len(payload["inspected"]),
+                            "reported_seeders": fresh.seeders,
+                            **(
+                                {
+                                    "source_popularity": {
+                                        "origin": fresh.source
+                                        + (":" + fresh.indexer_id if fresh.indexer_id else ""),
+                                        "metric": "completed_downloads"
+                                        if fresh.source == "mam"
+                                        else None,
+                                        "value": source_popularity(fresh),
+                                    }
+                                }
+                                if "popularity" in profile.preferences.criteria
+                                else {}
+                            ),
+                            "source_observed_at": fresh.observed_at.isoformat(),
+                            "inspected_formats": payload["verified"][str(row.id)]["formats"],
+                            "coverage": coverage,
+                            "pack_catalog": operation.payload.get("pack_catalog")
+                            if coverage
+                            else None,
+                            "scope": (
+                                "Catalog and manifest corroborate a bounded series pack; "
+                                "only requested books are authorized for import"
+                            )
+                            if coverage
+                            else (
+                                "Fetched source page; single-book manifest; "
+                                "actual file identity checked after downloading"
+                            ),
+                            "dispatch_approval": operation.payload.get(route["approval_key"]),
+                            "list_authority": operation.payload.get("list_authority"),
+                            "series_authority": operation.payload.get("series_authority"),
+                        },
+                    )
+                    operation.payload = {**operation.payload, "selection_id": str(selected.id)}
+                    if body.download_when_ready and coverage:
+                        from app.domain.automatic_packs import defer
+                        from app.domain.pack_expansion import create
+
+                        await create(db, user, operation, selected, coverage)
+                        await defer(db, operation, selected)
+                    elif body.download_when_ready:
+                        from app.domain.download_attempts import start as start_download
+
+                        attempt = await start_download(
+                            db,
+                            user,
+                            selected.id,
+                            dispatch_key,
+                            automatic=True,
+                            attempt_id=UUID(soulseek_batch) if soulseek_batch else None,
+                            already_queued=bool(soulseek_batch),
+                        )
+                        if soulseek_batch:
+                            accepted_batch = True
+                        operation.payload = {**operation.payload, "download_id": str(attempt.id)}
+                if body.download_when_ready and coverage:
+                    return
+                finish(
+                    operation,
+                    "completed",
+                    "Eligible release selected; automatic download queued"
+                    if body.download_when_ready
+                    else "Best eligible release prepared; download has not started",
+                )
+            except (HTTPException, AdapterError) as error:
+                # A failed dispatch rolls the nested selection/attempt transaction
+                # back together, including any in-memory operation payload changes.
+                await db.refresh(operation)
+                finish(
+                    operation,
+                    "completed" if isinstance(error, AlreadyAvailable) else "held",
+                    str(error.detail) if isinstance(error, HTTPException) else str(error),
+                )
+    finally:
+        if soulseek_batch and not accepted_batch:
+            from app.domain.slskd_transfers import cancel_folder
+
+            await cancel_folder(fresh.username, soulseek_batch)

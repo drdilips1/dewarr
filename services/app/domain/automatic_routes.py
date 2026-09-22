@@ -10,7 +10,12 @@ from sqlalchemy import select
 from app.db.models import ImportDestination, Integration, Library
 from app.domain.acquisition_selection import verified_probe
 from app.domain.automatic_dispatch import approve_route
-from app.domain.downloaders import client_protocol, connection_or_404, mapped_path
+from app.domain.downloaders import (
+    client_protocol,
+    connection_or_404,
+    mapped_path,
+    transfer_connection,
+)
 from app.domain.visibility import visible_library
 from app.importing.destinations import destination_configuration
 from app.importing.naming import fingerprint
@@ -82,7 +87,7 @@ async def inherit(db, user, spec, profile, options):
         )
     if not downloader_id:
         raise HTTPException(422, "Choose a tested downloader or save a downloader default")
-    downloader = await connection_or_404(db, downloader_id)
+    downloader = await transfer_connection(db, downloader_id)
     generation = options.downloader_generation
     if options.downloader_id:
         if generation is None:
@@ -273,7 +278,7 @@ async def resolve(db, user, spec, downloader_id, generation, routes):
     permitted(user)
     if not downloader_id or generation is None:
         raise HTTPException(422, "Choose a tested downloader")
-    downloader = await connection_or_404(db, downloader_id)
+    downloader = await transfer_connection(db, downloader_id)
     if (
         not downloader.enabled
         or downloader.status != "connected"
