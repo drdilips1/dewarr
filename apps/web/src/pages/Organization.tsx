@@ -284,11 +284,10 @@ function Editor({
                 />
                 Merge MP3 chapters into one M4B
                 <SettingHelp label="chapter merging">
-                  A manual import can turn a multi-file MP3 download into one M4B
-                  before it enters the library. Each file becomes a chapter. The
-                  download stays unchanged for seeding. Automatic imports stop
-                  for review when this would transcode the audio. Leave this off
-                  to import the MP3s.
+                  When this is on, a finished multi-file MP3 download becomes one
+                  M4B before it enters the library. Quick add does this on its
+                  own. Each file becomes a chapter. The download stays unchanged
+                  for seeding. Leave this off to import the MP3s.
                 </SettingHelp>
               </label>
             )}

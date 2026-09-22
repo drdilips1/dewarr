@@ -26,6 +26,7 @@ from app.domain import download_repairs as repairs
 from app.domain.acquisition import RequestSpec, assess
 from app.domain.acquisition_selection import configuration_current
 from app.domain.work_graph import family_ids
+from app.importing.starting import MERGE_PENDING_MESSAGE
 
 router = APIRouter(prefix="/acquisition/downloads", tags=["downloads"])
 
@@ -123,6 +124,14 @@ async def view(db, user, row, selection):
             )
         ):
             message = "Import needs administrator attention; the completed download is preserved"
+        elif await db.scalar(
+            select(ImportEntry.id).where(
+                ImportEntry.run_id == automatic.import_run_id,
+                ImportEntry.state.in_(["queued", "publishing"]),
+                ImportEntry.message == MERGE_PENDING_MESSAGE,
+            )
+        ):
+            message = automatic.message
     inspection = await db.get(DownloadInspection, row.inspection_id) if row.inspection_id else None
     repair = await repairs.latest(db, row.id)
     repairing = bool(repair and repair.state == "pending")

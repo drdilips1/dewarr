@@ -27,7 +27,6 @@ from app.domain import download_memberships, download_reviews
 from app.domain.acquisition import RequestSpec, assess
 from app.domain.operations import transaction_lock
 from app.domain.work_graph import canonical_work
-from app.importing.converters import mp3_chapter_merge
 from app.importing.destination_view import view as destination_view
 from app.importing.grouping import current_grouping
 from app.importing.matching import match_group
@@ -252,11 +251,12 @@ def content_reason(group, files, release):
     return None
 
 
-def conversion_review_reason(profile, group):
-    media = [file for file in group.files if getattr(file, "role", "media") == "media"]
-    if not mp3_chapter_merge(profile, media):
-        return None
-    return "Merging these MP3s into one M4B changes the audio; review this import before publishing"
+def importer_message(document):
+    """Status after a finished download is handed to the library importer."""
+    merging = any(item.get("conversion") for item in document.get("plan", {}).get("items", []))
+    if merging:
+        return "Creating one M4B from the MP3s, then adding it to the library"
+    return "Matched books sent to the importer; awaiting library confirmation"
 
 
 async def plan_ready(db, row, selection, inspection, approver, destination, current):
@@ -291,7 +291,6 @@ async def plan_ready(db, row, selection, inspection, approver, destination, curr
     files = {file["path"]: file for file in inspection.snapshot["files"]}
     choices, held, unresolved, skipped = [], [], [], []
     covered_by_existing = set()
-    profile = await current_profile(db)
     for group in grouping.groups:
         match = await match_group(db, inspection.snapshot, grouping_revision, group)
         reason = content_reason(group, files, selection.frozen["release"])
@@ -335,8 +334,6 @@ async def plan_ready(db, row, selection, inspection, approver, destination, curr
                 )
             except HTTPException as error:
                 reason = str(error.detail)
-        if not reason:
-            reason = conversion_review_reason(profile, group)
         if reason:
             held.append({"group_key": group.key, "reason": reason})
             continue
@@ -404,6 +401,7 @@ async def plan_ready(db, row, selection, inspection, approver, destination, curr
             "No book group qualifies for automatic import; open file review",
         )
         return
+    profile = await current_profile(db)
     plan = await freeze_plan(
         db,
         approver,
@@ -429,7 +427,7 @@ async def plan_ready(db, row, selection, inspection, approver, destination, curr
     )
     row.import_run_id, row.state = imported.id, "importing"
     await enqueue(db, "acquisition.fulfillment", work_id=selection.frozen["origin_work_id"])
-    row.message = "Matched books sent to the importer; awaiting library confirmation"
+    row.message = importer_message(plan.document)
     if held or grouping.excluded:
         row.message += "; other files remain for review"
 

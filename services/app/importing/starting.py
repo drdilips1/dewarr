@@ -33,6 +33,8 @@ from app.importing.publication import PublicationSpec, PublishFile
 from app.importing.versioning import version_revision
 from app.jobs.queue import enqueue
 
+MERGE_PENDING_MESSAGE = "Waiting to merge MP3 chapters into one M4B"
+
 
 class DestinationChoice(StrictModel):
     id: UUID
@@ -241,9 +243,7 @@ async def start_import(db, admin, plan_id: UUID, body: ImportInput, idempotency_
             ]
         entry.state, entry.message, entry.reserved = (
             "queued",
-            "Waiting to merge MP3 chapters into one M4B"
-            if specification.conversion
-            else "Waiting to publish this book",
+            MERGE_PENDING_MESSAGE if specification.conversion else "Waiting to publish this book",
             True,
         )
         operation = Operation(

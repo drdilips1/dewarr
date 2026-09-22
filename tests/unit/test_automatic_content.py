@@ -50,16 +50,14 @@ def test_partial_labels_and_noncertified_ebook_containers_need_review(extension,
     )
 
 
-def test_automatic_import_holds_a_lossy_chapter_merge_for_review():
-    from app.importing.automatic import conversion_review_reason
-    from app.importing.naming import NamingProfile
+def test_automatic_chapter_merge_goes_straight_to_the_library():
+    from app.importing.automatic import importer_message
 
-    group = SimpleNamespace(
-        files=[
-            SimpleNamespace(path="01.mp3", role="media"),
-            SimpleNamespace(path="02.mp3", role="media"),
-        ]
+    plain = {"plan": {"items": [{"title": "Harbor", "conversion": None}]}}
+    merged = {"plan": {"items": [{"title": "Harbor", "conversion": {"output_name": "Harbor.m4b"}}]}}
+    assert importer_message(plain) == (
+        "Matched books sent to the importer; awaiting library confirmation"
     )
-    assert conversion_review_reason(NamingProfile(), group) is None
-    reason = conversion_review_reason(NamingProfile(merge_mp3_chapters=True), group)
-    assert reason and "M4B" in reason
+    status = importer_message(merged)
+    assert "M4B" in status
+    assert "review" not in status.lower()
