@@ -70,7 +70,7 @@ def client_host(request: Request) -> str:
 
 
 def require_origin(request: Request) -> None:
-    if request.headers.get("origin") != get_settings().public_url:
+    if request.headers.get("origin") not in get_settings().allowed_origins:
         raise HTTPException(403, "The request origin is not allowed")
 
 

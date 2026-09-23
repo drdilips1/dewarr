@@ -35,6 +35,7 @@ def configure_environment() -> Path:
             database=os.environ.get("DB_NAME", "dewarr"),
         ).render_as_string(hide_password=False)
     os.environ.setdefault("BOOK_PUBLIC_URL", os.environ.get("PUBLIC_URL", "http://localhost:8000"))
+    os.environ.setdefault("BOOK_EXTRA_ORIGINS", os.environ.get("EXTRA_URLS", ""))
     os.environ.setdefault(
         "BOOK_COOKIE_SECURE", str(os.environ["BOOK_PUBLIC_URL"].startswith("https://")).lower()
     )

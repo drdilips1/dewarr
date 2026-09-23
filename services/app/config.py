@@ -13,6 +13,8 @@ class Settings(BaseSettings):
 
     database_url: SecretStr = SecretStr("postgresql+psycopg://book:book@localhost:5432/book")
     public_url: str = "http://localhost:8000"
+    # Further browser addresses for the same server, e.g. a LAN and a VPN address.
+    extra_origins: str = ""
     secret_key: SecretStr | None = None
     secret_key_file: Path | None = None
     cookie_secure: bool = True
@@ -76,6 +78,15 @@ class Settings(BaseSettings):
         if parts.path not in {"", "/"} or parts.query or parts.fragment:
             raise ValueError("Use an origin without a path, query or fragment")
         return value.rstrip("/")
+
+    @field_validator("extra_origins")
+    @classmethod
+    def validate_extra_origins(cls, value: str) -> str:
+        return ",".join(cls.validate_url(item.strip()) for item in value.split(",") if item.strip())
+
+    @property
+    def allowed_origins(self) -> set[str]:
+        return {self.public_url, *filter(None, self.extra_origins.split(","))}
 
     @model_validator(mode="after")
     def load_secrets(self) -> "Settings":
