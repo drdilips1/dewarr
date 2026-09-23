@@ -20,7 +20,9 @@ def shard_for(nodeid: str, count: int) -> int:
 
 
 def pytest_addoption(parser):
-    parser.addoption("--ci-shard", type=parse_shard, help="Run shard INDEX/COUNT of collected tests")
+    parser.addoption(
+        "--ci-shard", type=parse_shard, help="Run shard INDEX/COUNT of collected tests"
+    )
 
 
 def pytest_collection_modifyitems(config, items):
