@@ -67,6 +67,18 @@ class ABSImportConfiguration(BaseModel):
 
 _UNCONFINED = "Backend library path must be a confined absolute path"
 
+# ABS fills in missing library settings only when a library is edited, so older libraries
+# can omit keys. ABS reads a missing audiobooksOnly or disableWatcher as false and a missing
+# metadataPrecedence as this order.
+_DEFAULT_METADATA_PRECEDENCE = [
+    "folderStructure",
+    "audioMetatags",
+    "nfoFile",
+    "txtFiles",
+    "opfFile",
+    "absMetadata",
+]
+
 
 def _confined(parts: list[str], *, minimum: int) -> None:
     if len(parts) < minimum or any(part in {".", "..", ""} for part in parts):
@@ -216,12 +228,25 @@ class Audiobookshelf(JsonEndpoint):
             folders = response["folders"]
             if not isinstance(folders, list) or not folders:
                 raise ValueError("Missing library roots")
-            roots = [
-                backend_path(folder.get("fullPath") or folder.get("path")) for folder in folders
-            ]
-            settings = response["settings"]
-            audio_only, disabled = settings["audiobooksOnly"], settings["disableWatcher"]
-            precedence = settings["metadataPrecedence"]
+            roots = []
+            for folder in folders:
+                path = folder.get("fullPath") or folder.get("path")
+                try:
+                    roots.append(backend_path(path))
+                except ValueError as error:
+                    raise AdapterError(
+                        FailureKind.UNSUPPORTED,
+                        f"Dewarr cannot use the Audiobookshelf folder path {str(path)[:200]!r}.",
+                    ) from error
+            settings = response.get("settings") or {}
+
+            def setting(key, default):
+                value = settings.get(key)
+                return default if value is None else value
+
+            audio_only = setting("audiobooksOnly", False)
+            disabled = setting("disableWatcher", False)
+            precedence = setting("metadataPrecedence", list(_DEFAULT_METADATA_PRECEDENCE))
             if (
                 type(audio_only) is not bool
                 or type(disabled) is not bool

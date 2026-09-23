@@ -81,6 +81,24 @@ async def test_picker_persists_mounts_verifies_and_sets_both_defaults(
     assert next(d for d in saved if d["id"] == chosen["id"])["publication_available"]
 
 
+async def test_picker_lists_older_abs_library_and_explains_failures(
+    client, admin, empty_route, monkeypatch
+):
+    backend = empty_route["backend"]
+    monkeypatch.setattr(library_folders, "Audiobookshelf", backend.client)
+    backend.settings = {"coverAspectRatio": 1}
+    options = (await client.get("/api/organization/library-folders")).json()
+    assert options[0]["folders"] == ["/books"]
+    assert options[0]["error"] is None
+    backend.settings = {"disableWatcher": "false"}
+    options = (await client.get("/api/organization/library-folders")).json()
+    assert options[0]["folders"] == []
+    assert options[0]["error"] == (
+        "Could not read this library's folders. "
+        "Audiobookshelf library import settings are incomplete or unsupported."
+    )
+
+
 async def test_picker_rejects_unknown_abs_folder_and_overlapping_mount(
     client, admin, empty_route, monkeypatch
 ):

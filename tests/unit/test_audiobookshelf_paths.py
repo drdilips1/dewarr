@@ -6,6 +6,7 @@ import pytest
 from pydantic import ValidationError
 
 from app.adapters.audiobookshelf import Audiobookshelf, backend_path
+from app.adapters.contracts import AdapterError
 from app.api.destinations import DestinationInput
 from app.api.library_folders import FolderInput
 from app.importing.filesystem import InspectionError, directory
@@ -74,6 +75,56 @@ async def test_windows_full_path_is_listed_as_a_library_folder():
     async with Audiobookshelf("http://fixture", transport=httpx.MockTransport(respond)) as adapter:
         configuration = await adapter.import_configuration("synthetic")
     assert configuration.folders == ["D:/Books/Audiobooks"]
+
+
+@pytest.mark.parametrize(
+    "settings",
+    [
+        {"coverAspectRatio": 1},
+        {"audiobooksOnly": None, "disableWatcher": None, "metadataPrecedence": None},
+        None,
+    ],
+)
+async def test_library_settings_missing_from_older_abs_use_abs_defaults(settings):
+    payload = {
+        "id": "synthetic",
+        "mediaType": "book",
+        "folders": [{"id": "folder", "fullPath": "/audiobooks"}],
+        "settings": settings,
+    }
+
+    def respond(_request):
+        return httpx.Response(200, json=payload)
+
+    async with Audiobookshelf("http://fixture", transport=httpx.MockTransport(respond)) as adapter:
+        configuration = await adapter.import_configuration("synthetic")
+    assert configuration.folders == ["/audiobooks"]
+    assert configuration.audiobooks_only is False
+    assert configuration.watcher_enabled is True
+    assert configuration.metadata_precedence == [
+        "folderStructure",
+        "audioMetatags",
+        "nfoFile",
+        "txtFiles",
+        "opfFile",
+        "absMetadata",
+    ]
+
+
+async def test_unusable_folder_path_names_the_folder():
+    payload = {
+        "id": "synthetic",
+        "mediaType": "book",
+        "folders": [{"fullPath": "/audiobooks//nested"}],
+        "settings": {},
+    }
+
+    def respond(_request):
+        return httpx.Response(200, json=payload)
+
+    async with Audiobookshelf("http://fixture", transport=httpx.MockTransport(respond)) as adapter:
+        with pytest.raises(AdapterError, match="'/audiobooks//nested'"):
+            await adapter.import_configuration("synthetic")
 
 
 async def test_path_exists_posts_the_stored_windows_root():

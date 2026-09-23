@@ -104,7 +104,10 @@ async def test_malformed_import_settings_do_not_get_default_capabilities():
         },
     }
     for key, value in [
-        ("settings", {}),
+        ("settings", {"disableWatcher": "false"}),
+        ("settings", {"audiobooksOnly": 0}),
+        ("settings", {"metadataPrecedence": "opfFile"}),
+        ("settings", ["opfFile"]),
         ("folders", [{"fullPath": "/books/../private"}]),
         ("id", "different"),
     ]:

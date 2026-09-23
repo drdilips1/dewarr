@@ -1,6 +1,7 @@
 """Choose an ABS folder, persist its local mount, and activate a verified route."""
 
 import asyncio
+import logging
 from pathlib import Path
 from typing import Literal
 from uuid import UUID
@@ -34,6 +35,7 @@ from app.importing.storage import storage_settings
 from app.security import decrypt_secrets
 
 router = APIRouter(prefix="/organization/library-folders", tags=["organization"])
+logger = logging.getLogger(__name__)
 
 
 class FolderOption(StrictModel):
@@ -98,9 +100,10 @@ async def folders(admin: Admin, db: Database):
             row.folders = config.folders
             row.ebooks_allowed = not config.audiobooks_only
             row.audio_allowed = getattr(config, "audio_allowed", True)
-        except (AdapterError, InvalidToken, ValueError, KeyError):
-            row.error = (
-                "Could not read this library's folders. Check its connection and permissions."
+        except (AdapterError, InvalidToken, ValueError, KeyError) as error:
+            logger.warning("Could not read folders for library %s", library.id, exc_info=True)
+            row.error = "Could not read this library's folders. " + (
+                str(error) if isinstance(error, AdapterError) else "Reconnect the library server."
             )
         return row
 
@@ -156,7 +159,13 @@ async def choose(medium: Literal["ebook", "audio"], body: FolderInput, admin: Ad
         _, config = await configuration(db, body.library_id)
     except (AdapterError, InvalidToken, ValueError, KeyError) as error:
         raise HTTPException(
-            422, "Could not read library folders. Check the connection and credentials."
+            422,
+            "Could not read library folders. "
+            + (
+                str(error)
+                if isinstance(error, AdapterError)
+                else "Check the connection and credentials."
+            ),
         ) from error
     if body.backend_path not in config.folders:
         raise HTTPException(422, "Choose a current folder from the selected library")
