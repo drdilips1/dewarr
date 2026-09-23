@@ -29,6 +29,24 @@ MAX_RESPONSE_BYTES = 8 * 1024 * 1024
 # Some routes to MAM drop new connections intermittently. A connect timeout means
 # the request never reached MAM, so retrying it cannot repeat a purchase or wedge.
 CONNECT_RETRY_DELAYS = (1.0, 2.0)
+
+
+def connection_dropped(error, *, connect_only=False):
+    """A direct connection failed before MAM received the request (or, when not
+    connect_only, while talking to it). Refused connections are configuration."""
+    cause = error.__cause__
+    if isinstance(cause, httpx.ConnectTimeout):
+        return True
+    if not isinstance(cause, httpx.ConnectError if connect_only else httpx.TransportError):
+        return False
+    inner = cause.__cause__ or cause.__context__
+    while inner is not None:
+        if isinstance(inner, OSError) and inner.errno == errno.ECONNREFUSED:
+            return False
+        inner = inner.__cause__ or inner.__context__
+    return not isinstance(cause, httpx.ProxyError)
+
+
 SEARCH_PATH = "tor/js/loadSearchJSONbasic.php"
 VIP_POINTS_PER_WEEK = 1250
 VIP_MAX_WEEKS = 12.85
@@ -701,7 +719,7 @@ class MAMClient:
                     path, payload, binary=binary, params=params, authenticated=authenticated
                 )
             except AdapterError as error:
-                if delay is None or not isinstance(error.__cause__, httpx.ConnectTimeout):
+                if delay is None or not connection_dropped(error, connect_only=True):
                     raise
                 logger.info("MAM connection timed out; retrying in %.0f s", delay)
                 await asyncio.sleep(delay)
@@ -816,6 +834,13 @@ class MAMClient:
                 )
             if self.uses_proxy:
                 message += " No direct fallback was attempted."
+            elif message == "The configured MAM route could not be reached." and not isinstance(
+                error, httpx.ProxyError
+            ):
+                # A dropped direct connection is transient; let callers retry it later.
+                raise AdapterError(
+                    FailureKind.UNAVAILABLE, "The connection to MAM dropped. Retrying later."
+                ) from error
             raise AdapterError(
                 FailureKind.ROUTE,
                 message,

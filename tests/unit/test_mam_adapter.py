@@ -352,3 +352,34 @@ async def test_connect_timeouts_are_retried_but_other_failures_are_not(monkeypat
         with pytest.raises(AdapterError, match="did not respond in time"):
             await c.search(MAMSearch(q="Harbor"))
     assert len(attempts) == 1
+
+
+async def test_dropped_direct_connections_are_temporary_and_connect_errors_retry(monkeypatch):
+    async def no_wait(delay):
+        pass
+
+    monkeypatch.setattr("app.adapters.mam.asyncio.sleep", no_wait)
+    attempts = []
+
+    def unreachable(request):
+        attempts.append(request)
+        raise httpx.ConnectError("network unreachable", request=request)
+
+    async with MAMClient(
+        "https://mam.test", "fixture", transport=httpx.MockTransport(unreachable)
+    ) as c:
+        with pytest.raises(AdapterError) as error:
+            await c.search(MAMSearch(q="Harbor"))
+    assert error.value.kind == FailureKind.UNAVAILABLE and len(attempts) == 3
+
+    attempts.clear()
+
+    def reset(request):
+        attempts.append(request)
+        raise httpx.ReadError("connection reset", request=request)
+
+    async with MAMClient("https://mam.test", "fixture", transport=httpx.MockTransport(reset)) as c:
+        with pytest.raises(AdapterError) as error:
+            await c.search(MAMSearch(q="Harbor"))
+    # The request may have reached MAM, so it is not repeated now, only reported as temporary.
+    assert error.value.kind == FailureKind.UNAVAILABLE and len(attempts) == 1

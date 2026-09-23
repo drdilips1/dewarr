@@ -804,7 +804,9 @@ async def run(identifier):
                 "queued" if retry else "held",
                 "Source access is temporarily unavailable"
                 if retry
-                else "Release inspection needs review; inspect the source result manually",
+                else "Release inspection needs review; inspect the source result manually ("
+                + (str(error.detail) if isinstance(error, HTTPException) else str(error))[:200]
+                + ")",
             )
         if retry:
             raise SourceSearchRetry(getattr(error, "retry_after", None) or 60) from None
