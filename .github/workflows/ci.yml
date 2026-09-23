@@ -6,6 +6,7 @@ permissions:
 jobs:
   backend:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     services:
       postgres:
         image: postgres:18.3-bookworm
@@ -37,7 +38,7 @@ jobs:
       - run: pg_dump --version && pg_restore --version
       - run: uv run ruff check services tests scripts
       - run: uv run ruff format --check services tests scripts
-      - run: uv run pytest -q --junitxml=test-results/backend.xml
+      - run: uv run pytest -q -n auto --junitxml=test-results/backend.xml
       - run: uv run alembic check
       - run: uv run python scripts/export_openapi.py
       - run: git diff --exit-code -- docs/openapi.json

@@ -29,6 +29,7 @@ dev = [
   "pytest>=8.3,<10",
   "pytest-asyncio>=1,<2",
   "pytest-cov>=6,<8",
+  "pytest-xdist>=3.6,<4",
   "ruff>=0.11,<1",
 ]
 
@@ -52,6 +53,7 @@ testpaths = ["tests"]
 pythonpath = ["."]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
+faulthandler_timeout = 300
 markers = ["integration: requires isolated PostgreSQL"]
 
 [tool.ruff]
