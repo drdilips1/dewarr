@@ -38,6 +38,7 @@ backups/
 /scripts/*.py
 !/scripts/init_env.py
 !/scripts/export_openapi.py
+!/scripts/pytest_shard.py
 !/scripts/dependency_notices.py
 !/scripts/build_discovery_catalog.py
 !/scripts/e2e_abs.py

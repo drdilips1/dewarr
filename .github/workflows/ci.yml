@@ -1,12 +1,24 @@
 name: Application checks
-on: [push, pull_request]
+on:
+  push:
+    # Release pushes run these same checks through Publish container.
+    branches-ignore: [main]
+    tags-ignore: ['v*']
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
 permissions:
   contents: read
 
+# A newer commit supersedes checks on the same branch or pull request.
+concurrency:
+  group: checks-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref_type != 'tag' }}
+
 jobs:
-  backend:
+  backend-checks:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
     services:
       postgres:
         image: postgres:18.3-bookworm
@@ -26,6 +38,8 @@ jobs:
       - uses: astral-sh/setup-uv@v6
         with:
           version: "0.11.32"
+          enable-cache: true
+          cache-dependency-glob: uv.lock
       - run: uv sync --frozen
       - name: Install media and PostgreSQL 18 client tools
         run: |
@@ -38,17 +52,89 @@ jobs:
       - run: pg_dump --version && pg_restore --version
       - run: uv run ruff check services tests scripts
       - run: uv run ruff format --check services tests scripts
-      - run: uv run pytest -q -n auto --junitxml=test-results/backend.xml
-      - run: uv run alembic check
+      - name: Check migrations on a fresh database
+        run: |
+          uv run alembic upgrade head
+          uv run alembic check
       - run: uv run python scripts/export_openapi.py
       - run: git diff --exit-code -- docs/openapi.json
+      - name: Unit and contract tests
+        timeout-minutes: 5
+        run: >-
+          uv run pytest tests/unit tests/contracts -q -n 2
+          --timeout=120 --timeout-method=thread --max-worker-restart=0
+          --durations=20 --junitxml=test-results/backend-checks.xml
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: backend-evidence
+          name: backend-checks-evidence
           path: test-results/
+  backend-integration:
+    name: backend integration (${{ matrix.shard }}/4)
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    services:
+      postgres:
+        image: postgres:18.3-bookworm
+        env:
+          POSTGRES_USER: book
+          POSTGRES_PASSWORD: book-test-only
+          POSTGRES_DB: book_search_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U book -d book_search_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      BOOK_TEST_DATABASE_URL: postgresql+psycopg://book:book-test-only@localhost:5432/book_search_test
+      BOOK_DATABASE_URL: postgresql+psycopg://book:book-test-only@localhost:5432/book_search_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.11.32"
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - run: uv sync --frozen
+      - name: Install media and PostgreSQL 18 client tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg postgresql-common
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client-18
+          echo "/usr/lib/postgresql/18/bin" >> "$GITHUB_PATH"
+      - run: pg_dump --version && pg_restore --version
+      - name: Integration tests
+        timeout-minutes: 10
+        run: >-
+          uv run pytest tests/integration -q -n 2 --dist=worksteal
+          -p scripts.pytest_shard --ci-shard=${{ matrix.shard }}/4
+          --timeout=120 --timeout-method=thread --max-worker-restart=0
+          --durations=25 --junitxml=test-results/backend-${{ matrix.shard }}.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-integration-${{ matrix.shard }}-evidence
+          path: test-results/
+  # Preserve the backend status-check name for branch protection.
+  backend:
+    if: always()
+    needs: [backend-checks, backend-integration]
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Require all backend checks
+        env:
+          CHECKS_RESULT: ${{ needs.backend-checks.result }}
+          INTEGRATION_RESULT: ${{ needs.backend-integration.result }}
+        run: test "$CHECKS_RESULT" = success && test "$INTEGRATION_RESULT" = success
   frontend:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     defaults:
       run:
         working-directory: apps/web
@@ -67,6 +153,7 @@ jobs:
       - run: npm run format:check
   browser:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     services:
       postgres:
         image: postgres:18.3-bookworm
@@ -85,9 +172,13 @@ jobs:
       - uses: astral-sh/setup-uv@v6
         with:
           version: "0.11.32"
+          enable-cache: true
+          cache-dependency-glob: uv.lock
       - uses: actions/setup-node@v4
         with:
           node-version: "24.13.0"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
       - run: uv sync --frozen
       - name: Install media and PostgreSQL 18 client tools
         run: |
@@ -109,6 +200,7 @@ jobs:
           path: apps/web/test-results/
   image:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - run: docker build --tag dewarr:ci .
