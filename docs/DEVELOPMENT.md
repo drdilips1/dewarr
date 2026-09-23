@@ -63,6 +63,40 @@ Install `ffmpeg` and PostgreSQL client tools matching your test server’s major
 
 The URL above is an example; create the database and use your own local credentials. Tests clear their dedicated databases. Never use an installation database.
 
+### Release checks and test timing
+
+`Publish container` calls the reusable `Application checks` workflow and publishes only
+after every check succeeds. Main and release-tag pushes enter through the publish
+workflow, so they do not also launch a duplicate standalone check run. Pull requests,
+other branches, and manual check runs still run checks directly. A newer commit cancels
+obsolete checks on the same branch; different release tags remain independent.
+
+Backend lint, schema, unit, and contract checks run separately from four integration
+shards. Each shard uses two pytest workers with independent databases. Shards partition
+the collected test IDs deterministically, including parameterized cases, so every case
+runs exactly once across the four shards. To reproduce a shard, set
+`BOOK_TEST_DATABASE_URL` as above and run:
+
+```sh
+uv run pytest tests/integration -q -n 2 --dist=worksteal \
+  -p scripts.pytest_shard --ci-shard=1/4 \
+  --timeout=120 --timeout-method=thread --max-worker-restart=0 --durations=25
+```
+
+CI limits each test (including fixtures) to two minutes. The timeout terminates the
+stuck worker and identifies its test; worker replacement is disabled so the shard
+fails instead of repeatedly restarting. Integration steps have a ten-minute limit and
+their jobs have a twelve-minute limit, leaving time to upload evidence after a step
+timeout. Shards finish independently even if another fails, preserving failure evidence.
+The `backend` aggregate check requires both the quick checks and every integration shard
+to pass. Each shard uploads its own JUnit report and prints its slowest tests in the log.
+Local pytest runs have no time limit unless the timeout options are supplied.
+
+Schema drift is checked by explicitly migrating a fresh database before `alembic check`;
+it does not rely on databases created by pytest workers. Dependency caches are keyed by
+their lockfiles. Workflow improvements do not suppress failing application tests: a
+failed test, timeout, or skipped backend dependency prevents publishing.
+
 Browser tests require a second database ending in `_browser_test`:
 
 ```sh
