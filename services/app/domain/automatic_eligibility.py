@@ -20,6 +20,45 @@ PACK = re.compile(
 DEFAULT_MAXIMUM = {"ebook": 1024**3, "audio": 10 * 1024**3}
 
 
+TRACK_START = re.compile(r"(?:(?:disc|cd|part)\s*(\d+)\s*)?(?:(?:track|chapter)\s*)?(\d+)\b")
+TRACK_END = re.compile(r"(?:(?:disc|cd|part)\s*(\d+)\s*)?(?:(?:track|chapter)\s*)?(\d+)$")
+
+
+def bare_track_numbers(stems, title):
+    book_title = normalized(title)
+    return all(
+        re.fullmatch(
+            r"(?:(?:disc|cd|part)\s*\d+\s*)?(?:(?:track|chapter)\s*)?\d+",
+            normalized(stem).removeprefix(book_title).strip(),
+        )
+        for stem in stems
+    )
+
+
+def track_sequence(stems, title):
+    """Every file carries one track number, and each disc's numbers run without gaps.
+
+    Names like "01 - Chapter title" or "Book Title 01" qualify; the check still
+    rejects duplicates, gaps and files without a number, which signal a mixed or
+    incomplete set.
+    """
+    book_title = normalized(title)
+    numbers = []
+    for stem in stems:
+        text = normalized(stem).removeprefix(book_title).strip()
+        match = TRACK_START.match(text) or TRACK_END.search(text)
+        if not match:
+            return False
+        numbers.append((int(match[1] or 0), int(match[2])))
+    if len(set(numbers)) != len(numbers):
+        return False
+    for disc in {disc for disc, _ in numbers}:
+        tracks = sorted(track for d, track in numbers if d == disc)
+        if tracks[-1] - tracks[0] + 1 != len(tracks) or tracks[0] > 1:
+            return False
+    return True
+
+
 def limit_bytes(preferences, medium, *, pack=False):
     ceiling = pack_coverage.MAX_PACK_BYTES if pack else DEFAULT_MAXIMUM[medium]
     return min(preferences.maximum_bytes or ceiling, ceiling)
@@ -157,17 +196,15 @@ def eligibility(
                 )
             if len({PurePosixPath(f.path).suffix.lower() for f in primary}) != 1:
                 reasons.append("Alternative audio encodings need recording review")
-            if len(primary) > 1:
-                stems = [normalized(PurePosixPath(f.path).stem) for f in primary]
-                book_title = normalized(work["title"])
-                if any(
-                    not re.fullmatch(
-                        r"(?:(?:disc|cd|part)\s*\d+\s*)?(?:(?:track|chapter)\s*)?\d+",
-                        stem.removeprefix(book_title).strip(),
-                    )
-                    for stem in stems
-                ):
-                    reasons.append("Audio filenames do not establish one numbered track sequence")
+            stems = [PurePosixPath(f.path).stem for f in primary]
+            # Titled MP3 chapters are normal; several titled M4B files are usually several books.
+            chapters = all(PurePosixPath(f.path).suffix.lower() == ".mp3" for f in primary)
+            if len(primary) > 1 and not (
+                track_sequence(stems, work["title"])
+                if chapters
+                else bare_track_numbers(stems, work["title"])
+            ):
+                reasons.append("Audio filenames do not establish one numbered track sequence")
         if not proof and (
             PACK.search(descriptor.name) or any(PACK.search(f.path) for f in primary)
         ):
