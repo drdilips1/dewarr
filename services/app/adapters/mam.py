@@ -26,6 +26,9 @@ from app.adapters.http import configured_url
 from app.domain.catalog_network import retry_delay
 
 MAX_RESPONSE_BYTES = 8 * 1024 * 1024
+# Some routes to MAM drop new connections intermittently. A connect timeout means
+# the request never reached MAM, so retrying it cannot repeat a purchase or wedge.
+CONNECT_RETRY_DELAYS = (1.0, 2.0)
 SEARCH_PATH = "tor/js/loadSearchJSONbasic.php"
 VIP_POINTS_PER_WEEK = 1250
 VIP_MAX_WEEKS = 12.85
@@ -692,6 +695,20 @@ class MAMClient:
         await self.client.aclose()
 
     async def request(self, path, payload=None, *, binary=False, params=None, authenticated=True):
+        for delay in (*CONNECT_RETRY_DELAYS, None):
+            try:
+                return await self._request_once(
+                    path, payload, binary=binary, params=params, authenticated=authenticated
+                )
+            except AdapterError as error:
+                if delay is None or not isinstance(error.__cause__, httpx.ConnectTimeout):
+                    raise
+                logger.info("MAM connection timed out; retrying in %.0f s", delay)
+                await asyncio.sleep(delay)
+
+    async def _request_once(
+        self, path, payload=None, *, binary=False, params=None, authenticated=True
+    ):
         headers = {}
         if binary:
             headers["Accept"] = "application/x-bittorrent"

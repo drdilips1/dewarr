@@ -265,6 +265,30 @@ def test_freeleech_preference_ranks_free_then_vip_after_eligibility():
     assert ReleasePreferences(criteria=everything).criteria == everything
 
 
+def test_subtitle_on_either_side_still_corroborates_the_same_book():
+    preferences = ReleasePreferences()
+    work = {"title": "The Feather Thief", "authors": ["Kirk Wallace Johnson"]}
+
+    def identity(title, authors=("Kirk Wallace Johnson",), catalog=work):
+        release = candidate().model_copy(update={"title": title, "authors": list(authors)})
+        return assess_release(release, catalog, preferences).identity
+
+    subtitle = "The Feather Thief: Beauty, Obsession, and the Natural History Heist of the Century"
+    assert identity(subtitle) == "corroborated"
+    assert identity("The Feather Thief") == "corroborated"
+    assert identity(subtitle, authors=("Someone Else",)) == "unmatched"
+    assert identity(subtitle, catalog={**work, "title": subtitle}) == "corroborated"
+    assert identity("The Feather Thief", catalog={**work, "title": subtitle}) == "corroborated"
+    for edition in [
+        "The Feather Thief: Book 2",
+        "The Feather Thief: The Graphic Novel",
+        "The Feather Thief: Dramatized Adaptation",
+        "The Feather Thief: A Summary",
+    ]:
+        assert identity(edition) == "possible"
+    assert identity("Feather: The Thief") == "unmatched"
+
+
 @pytest.mark.parametrize(
     "options",
     [

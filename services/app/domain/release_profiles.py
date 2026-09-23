@@ -335,16 +335,32 @@ class ReleaseAssessment(BaseModel):
     source_origin: str
 
 
+SUBTITLE_EDITION_WORDS = re.compile(
+    r"\b(book|books|vol|volume|volumes|part|parts|collection|omnibus|series|box|set|"
+    r"graphic|dramati[sz]ed|abridged|summary|study|guide|sequel)\b|\d"
+)
+
+
+def main_title(value):
+    """The title before a subtitle colon, unless the subtitle names an edition or part."""
+    head, separator, subtitle = value.partition(":")
+    if not separator or SUBTITLE_EDITION_WORDS.search(normalized(subtitle)):
+        return None
+    return normalized(head) or None
+
+
 def assess_release(release, work, preferences, medium="all"):
-    title, expected = (
-        normalized(getattr(release, "title", release.raw_title)),
-        normalized(work["title"]),
-    )
+    raw_title = getattr(release, "title", release.raw_title)
+    title, expected = normalized(raw_title), normalized(work["title"])
     authors = {normalized(a) for a in release.authors}
     work_authors = {normalized(a) for a in work["authors"]}
+    # "Title: Subtitle" on one side and "Title" on the other is the same book.
+    same_title = title == expected or bool(
+        expected and (main_title(raw_title) == expected or main_title(work["title"]) == title)
+    )
     identity = (
         "corroborated"
-        if title == expected and authors & work_authors
+        if same_title and authors & work_authors
         else "possible"
         if title == expected or (expected and expected in title)
         else "unmatched"

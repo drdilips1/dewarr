@@ -308,3 +308,47 @@ def test_mam_badges_accept_explicit_boolean_and_numeric_flags(value, expected):
     )
     assert page.items[0].freeleech is expected
     assert page.items[0].vip is expected
+
+
+async def test_connect_timeouts_are_retried_but_other_failures_are_not(monkeypatch):
+    sleeps = []
+
+    async def no_wait(delay):
+        sleeps.append(delay)
+
+    monkeypatch.setattr("app.adapters.mam.asyncio.sleep", no_wait)
+    attempts = []
+
+    def flaky(request):
+        attempts.append(request.method)
+        if len(attempts) < 3:
+            raise httpx.ConnectTimeout("dropped", request=request)
+        return httpx.Response(200, json=search_response())
+
+    async with MAMClient("https://mam.test", "fixture", transport=httpx.MockTransport(flaky)) as c:
+        result = await c.search(MAMSearch(q="Harbor"))
+    assert len(result.items) == 1 and attempts == ["POST"] * 3 and sleeps == [1.0, 2.0]
+
+    attempts.clear()
+
+    def down(request):
+        attempts.append(request.method)
+        raise httpx.ConnectTimeout("dropped", request=request)
+
+    async with MAMClient("https://mam.test", "fixture", transport=httpx.MockTransport(down)) as c:
+        with pytest.raises(AdapterError, match="did not respond in time") as error:
+            await c.search(MAMSearch(q="Harbor"))
+    assert error.value.kind == FailureKind.TIMEOUT and len(attempts) == 3
+
+    attempts.clear()
+
+    def slow_reply(request):
+        attempts.append(request.method)
+        raise httpx.ReadTimeout("sent but no answer", request=request)
+
+    async with MAMClient(
+        "https://mam.test", "fixture", transport=httpx.MockTransport(slow_reply)
+    ) as c:
+        with pytest.raises(AdapterError, match="did not respond in time"):
+            await c.search(MAMSearch(q="Harbor"))
+    assert len(attempts) == 1
