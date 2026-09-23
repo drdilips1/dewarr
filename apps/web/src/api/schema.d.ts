@@ -9586,7 +9586,12 @@ export interface components {
       source_order?: string[];
       /** Criteria */
       criteria?: (
-        "format" | "source" | "seeders" | "narrator" | "popularity"
+        | "format"
+        | "source"
+        | "seeders"
+        | "narrator"
+        | "popularity"
+        | "freeleech"
       )[];
       /** Preferred Narrators */
       preferred_narrators?: string[];
@@ -10471,7 +10476,14 @@ export interface components {
        *       "seeders"
        *     ]
        */
-      criteria: ("format" | "source" | "seeders" | "narrator" | "popularity")[];
+      criteria: (
+        | "format"
+        | "source"
+        | "seeders"
+        | "narrator"
+        | "popularity"
+        | "freeleech"
+      )[];
       /** Preferred Narrators */
       preferred_narrators?: string[];
       /** Blocked Formats */

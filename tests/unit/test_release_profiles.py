@@ -14,6 +14,7 @@ from app.domain.release_profiles import (
     assess_release,
     enforce_inspected_profile,
     enforce_profile,
+    freeleech_rank,
     overlay_profile,
     ranking_key,
     resolve_preferences,
@@ -241,11 +242,35 @@ def test_popularity_does_not_change_legacy_snapshots_or_deterministic_ties():
     assert cleared.preferences.criteria == legacy.criteria
 
 
+def test_freeleech_preference_ranks_free_then_vip_after_eligibility():
+    preferences = ReleasePreferences(criteria=["freeleech", "format", "source", "seeders"])
+    paid = candidate(id=1, free=0, vip=0, seeders=900, filetype="M4B")
+    vip = candidate(id=2, free=0, vip=1, seeders=50, filetype="M4B")
+    free = candidate(id=3, free=1, vip=0, seeders=5, filetype="MP3")
+    personal = candidate(id=4, free=0, personal_freeleech=1, seeders=4, filetype="MP3")
+    vip_free = candidate(id=5, free=0, fl_vip=1, vip=1, seeders=3, filetype="MP3")
+    wrong = candidate(id=6, free=1, seeders=999999).model_copy(update={"title": "Wrong title"})
+    assert [freeleech_rank(r) for r in (paid, vip, free, personal, vip_free)] == [2, 1, 0, 0, 0]
+    assert [
+        r.source_id for r in ordered([wrong, paid, vip, vip_free, personal, free], preferences)
+    ] == ["3", "4", "5", "2", "1", "6"]
+    foreign = paid.model_copy(update={"source": "prowlarr", "indexer_id": "7"})
+    assert freeleech_rank(foreign) == 2
+    assert ordered([paid, free], ReleasePreferences())[0] is paid
+    assert "Freeleech on MAM; downloading it does not count against ratio" in (
+        assess_release(free, WORK, preferences).explanation
+    )
+    assert "Not freeleech" not in assess_release(paid, WORK, ReleasePreferences()).explanation
+    everything = ["freeleech", "narrator", "format", "source", "popularity", "seeders"]
+    assert ReleasePreferences(criteria=everything).criteria == everything
+
+
 @pytest.mark.parametrize(
     "options",
     [
         {"criteria": ["format"]},
         {"criteria": ["format", "format", "source"]},
+        {"criteria": ["freeleech", "format", "source"]},
         {"ebook_formats": []},
         {"ebook_formats": ["mp3"]},
         {"audio_formats": ["epub"]},

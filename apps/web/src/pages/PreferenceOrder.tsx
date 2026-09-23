@@ -25,6 +25,7 @@ export default function PreferenceOrder({
       source: "Source",
       seeders: "Seeders",
       popularity: "Popularity",
+      freeleech: "Freeleech / VIP",
       narrator: "Narrator",
     }[value] ||
     value.toUpperCase();

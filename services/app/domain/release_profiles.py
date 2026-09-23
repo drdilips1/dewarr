@@ -68,9 +68,9 @@ class ReleasePreferences(ScopePreferences):
     )
     source_fallback: bool = Field(default=True, exclude_if=lambda value: value is True)
     source_order: list[str] = Field(default=["mam", "prowlarr"], min_length=1, max_length=100)
-    criteria: list[Literal["format", "source", "seeders", "narrator", "popularity"]] = Field(
-        default=["format", "source", "seeders"], min_length=3, max_length=5
-    )
+    criteria: list[
+        Literal["format", "source", "seeders", "narrator", "popularity", "freeleech"]
+    ] = Field(default=["format", "source", "seeders"], min_length=3, max_length=6)
     preferred_narrators: NarratorNames = Field(default_factory=list)
     blocked_formats: list[str] = Field(default_factory=list, max_length=20)
     maximum_bytes: int | None = Field(default=None, gt=0, le=2**53 - 1)
@@ -90,13 +90,15 @@ class ReleasePreferences(ScopePreferences):
     @field_validator("criteria")
     @classmethod
     def order(cls, values):
-        if len(set(values)) != len(values) or set(values) - {"narrator", "popularity"} != {
+        optional = {"narrator", "popularity", "freeleech"}
+        if len(set(values)) != len(values) or set(values) - optional != {
             "format",
             "source",
             "seeders",
         }:
             raise ValueError(
-                "Include format, source and seeders once each; narrator and popularity are optional"
+                "Include format, source and seeders once each; "
+                "narrator, popularity and freeleech are optional"
             )
         if "popularity" in values and values.index("popularity") < values.index("source"):
             raise ValueError("Source preference must precede source-local popularity")
@@ -412,6 +414,13 @@ def assess_release(release, work, preferences, medium="all"):
             "Popularity groups each tracker/indexer by source preference; "
             "equal source priorities use stable source identifiers, not cross-source counts"
         )
+    if "freeleech" in preferences.criteria:
+        explanation.append(
+            {
+                0: "Freeleech on MAM; downloading it does not count against ratio",
+                1: "VIP torrent on MAM; not marked freeleech",
+            }.get(freeleech_rank(release), "Not freeleech")
+        )
     return ReleaseAssessment(
         identity=identity,
         blocked=blocked,
@@ -426,6 +435,16 @@ def source_popularity(release):
     """Only adapter-defined counters qualify; never substitute seeds or generic details."""
     count = getattr(release, "snatches", None) if release.source == "mam" else None
     return count if isinstance(count, int) and not isinstance(count, bool) and count >= 0 else None
+
+
+def freeleech_rank(release):
+    """0 for freeleech of any kind, 1 for VIP, 2 otherwise. Only MAM reports these flags."""
+    if any(
+        getattr(release, flag, None) is True
+        for flag in ("freeleech", "personal_freeleech", "vip_freeleech")
+    ):
+        return 0
+    return 1 if getattr(release, "vip", None) is True else 2
 
 
 def ranking_key(release, assessment, preferences):
@@ -457,6 +476,7 @@ def ranking_key(release, assessment, preferences):
         "source": (source_rank, origin) if "popularity" in preferences.criteria else (source_rank,),
         "seeders": (release.seeders is None, -(release.seeders or 0)),
         "popularity": (popularity is None, -(popularity or 0)),
+        "freeleech": (freeleech_rank(release),),
     }
     # Identity/capability checks precede preferences; no seed count can rescue a wrong book.
     return (

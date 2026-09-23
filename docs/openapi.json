@@ -28066,11 +28066,12 @@
                 "source",
                 "seeders",
                 "narrator",
-                "popularity"
+                "popularity",
+                "freeleech"
               ]
             },
             "type": "array",
-            "maxItems": 5,
+            "maxItems": 6,
             "minItems": 3,
             "title": "Criteria"
           },
@@ -30481,11 +30482,12 @@
                 "source",
                 "seeders",
                 "narrator",
-                "popularity"
+                "popularity",
+                "freeleech"
               ]
             },
             "type": "array",
-            "maxItems": 5,
+            "maxItems": 6,
             "minItems": 3,
             "title": "Criteria",
             "default": [

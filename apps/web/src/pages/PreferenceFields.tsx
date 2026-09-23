@@ -172,6 +172,28 @@ export default function PreferenceFields({
               Ranks popularity within each source, after source priority.
             </SettingHelp>
           </div>
+          <div className="setting-inline-option">
+            <label className="check-label">
+              <input
+                type="checkbox"
+                checked={effective.criteria?.includes("freeleech") || false}
+                onChange={(event) => {
+                  const criteria: Preferences["criteria"] = (
+                    effective.criteria || ["format", "source", "seeders"]
+                  ).filter((value) => value !== "freeleech");
+                  if (event.target.checked) criteria.unshift("freeleech");
+                  onChange({ ...overrides, criteria });
+                }}
+              />
+              Prefer freeleech and VIP releases
+            </label>
+            <SettingHelp label="freeleech preference">
+              Ranks MyAnonamouse freeleech releases (global, personal or VIP)
+              first, then VIP releases, then the rest. Other sources never
+              report freeleech. Drag Freeleech / VIP in Ranking priorities to
+              change where it applies.
+            </SettingHelp>
+          </div>
         </section>
         <section className="priority-block">
           <label>
