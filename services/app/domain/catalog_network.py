@@ -7,6 +7,7 @@ import re
 from datetime import UTC, datetime, timedelta
 from email.utils import parsedate_to_datetime
 
+import httpx
 from sqlalchemy import delete, select
 
 from app.adapters.contracts import AdapterError, FailureKind, MutationError
@@ -17,6 +18,9 @@ from app.db.session import session_factory
 from app.domain.operations import transaction_lock
 
 REQUEST_INTERVAL = 1.1
+# Some routes drop new connections intermittently. A failed connect never
+# reached the provider, so retrying it cannot repeat a list write.
+CONNECT_RETRY_DELAYS = (1.0, 2.0)
 
 
 def retry_delay(headers, now):
@@ -95,6 +99,18 @@ class CatalogGateway:
             if record:
                 record.blocked_until = max(record.blocked_until or deadline, deadline)
 
+    async def send(self, method, path, params, json):
+        for delay in (*CONNECT_RETRY_DELAYS, None):
+            try:
+                return await self.http.request(method, path, params=params, json=json)
+            except AdapterError as error:
+                connect_failed = isinstance(
+                    error.__cause__, (httpx.ConnectTimeout, httpx.ConnectError)
+                )
+                if delay is None or not connect_failed:
+                    raise
+                await asyncio.sleep(delay)
+
     async def request(self, method, path, *, params=None, json=None):
         material = [self.provider, self.endpoint, self.scope, method, path, params, json]
         key = hashlib.sha256(json_module.dumps(material, sort_keys=True).encode()).hexdigest()
@@ -109,7 +125,7 @@ class CatalogGateway:
         try:
             await self.reserve()
             try:
-                response = await self.http.request(method, path, params=params, json=json)
+                response = await self.send(method, path, params, json)
             except AdapterError as error:
                 delay = retry_delay(self.http.response_headers, datetime.now(UTC))
                 if error.kind == FailureKind.RATE_LIMIT:
